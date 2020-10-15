@@ -64,12 +64,13 @@ namespace KyoS.Web.Controllers
         public IActionResult Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
-                  message == ManageMessageId.ChangePasswordSuccess ? "Your password changed successfully"
+                  message == ManageMessageId.ChangePasswordSuccess ? "Your password was changed successfully"
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
                 : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
                 : message == ManageMessageId.Error ? "An error has occured"
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.ErrorDeleting ? "An error has occured, unabled to delete logged-in current user"
                 : "";
 
             return View(_userHelper.GetUsers());
@@ -184,7 +185,7 @@ namespace KyoS.Web.Controllers
 
             if (user_to_eliminate == user_in)
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.ErrorDeleting });
             }
             await _userHelper.DeleteUserAsync(user_to_eliminate);
             return RedirectToAction(nameof(Index));
