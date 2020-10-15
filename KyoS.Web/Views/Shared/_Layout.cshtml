@@ -38,7 +38,8 @@
                     else
                     if (User.Identity.IsAuthenticated && (User.IsInRole("Operator")))
                     {
-                        <li><a asp-area="" asp-controller="Sports" asp-action="Index">Clinics</a></li>                        
+                        <li><a asp-area="" asp-controller="Sports" asp-action="Index">Clinics</a></li>      
+                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
                     { 

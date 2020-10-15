@@ -1,6 +1,7 @@
 ﻿using KyoS.Web.Data.Entities;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace KyoS.Web.Helpers
@@ -8,6 +9,8 @@ namespace KyoS.Web.Helpers
     public interface IUserHelper
     {
         Task<UserEntity> GetUserByEmailAsync(string email);
+
+        Task<UserEntity> GetUserByIdAsync(string id);
 
         Task<IdentityResult> AddUserAsync(UserEntity user, string password);
 
@@ -21,5 +24,8 @@ namespace KyoS.Web.Helpers
 
         Task LogoutAsync();
 
+        IEnumerable<Users_in_Role_ViewModel> GetUsers();
+        Task<IdentityResult> ChangePasswordAsync(UserEntity user, string oldPassword, string newPassword);
+        Task<IdentityResult> DeleteUserAsync(UserEntity user);
     }
 }
