@@ -4,62 +4,22 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201017233550_AddClinicEntityAndOther")]
+    partial class AddClinicEntityAndOther
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.ActivityEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.Property<int?>("ThemeId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ThemeId");
-
-                    b.ToTable("Activities");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.ClientEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ClinicId");
-
-                    b.Property<string>("Code");
-
-                    b.Property<int>("Gender");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClinicId");
-
-                    b.ToTable("Clients");
-                });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClinicEntity", b =>
                 {
@@ -103,29 +63,6 @@ namespace KyoS.Web.Migrations
                         .IsUnique();
 
                     b.ToTable("Facilitators");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.NoteEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ActivityId");
-
-                    b.Property<string>("AnswerClient")
-                        .IsRequired()
-                        .HasMaxLength(1000);
-
-                    b.Property<string>("AnswerFacilitator")
-                        .IsRequired()
-                        .HasMaxLength(1000);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActivityId");
-
-                    b.ToTable("Notes");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.SupervisorEntity", b =>
@@ -359,20 +296,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.ActivityEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ThemeEntity", "Theme")
-                        .WithMany()
-                        .HasForeignKey("ThemeId");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.ClientEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
-                        .WithMany()
-                        .HasForeignKey("ClinicId");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.FacilitatorEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
@@ -380,24 +303,17 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("ClinicId");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.NoteEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ActivityEntity", "Activity")
-                        .WithMany()
-                        .HasForeignKey("ActivityId");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.SupervisorEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
-                        .WithMany("Supervisors")
+                        .WithMany()
                         .HasForeignKey("ClinicId");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ThemeEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
-                        .WithMany("Themes")
+                        .WithMany()
                         .HasForeignKey("ClinicId");
                 });
 

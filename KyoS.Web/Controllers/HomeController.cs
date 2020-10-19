@@ -12,7 +12,8 @@ namespace KyoS.Web.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            //return View();
+            return RedirectToAction("Login", "Account");
         }
 
         public IActionResult About()

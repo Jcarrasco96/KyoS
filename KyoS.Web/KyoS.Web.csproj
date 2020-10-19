@@ -14,4 +14,8 @@
     <ProjectReference Include="..\KyoS.Common\KyoS.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\Clinics\" />
+  </ItemGroup>
+
 </Project>
