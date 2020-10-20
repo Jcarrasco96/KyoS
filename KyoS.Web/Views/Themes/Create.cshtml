@@ -1,0 +1,68 @@
+﻿@model KyoS.Web.Models.ThemeViewModel
+@{
+    ViewData["Title"] = "Create Theme";    
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create</title>
+</head>
+<body>
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("Themes", "Index", "Themes")
+            </li>
+            <li class="active">Create</li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+    <h4>Create new theme</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            @if (ViewBag.Creado == "Y")
+            {
+                <div class="alert alert-block alert-success">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok green"></i>
+                    <strong class="green">
+                        Theme has been successfully created
+                    </strong>
+
+                </div>
+            }
+            @if (ViewBag.Creado == "E")
+            {
+                <div class="alert alert-block alert-warning">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. Theme already exist
+                    </strong>
+                </div>
+            }
+        </div>
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <partial name="_Themes" />
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

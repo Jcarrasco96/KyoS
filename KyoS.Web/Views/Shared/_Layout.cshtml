@@ -28,7 +28,7 @@
                 </button>
                 <a asp-area="" asp-controller="Desktop" asp-action="Index" class="navbar-brand">KyoS Notes</a>
             </div>
-            <div class="navbar-collapse collapse">
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="nav navbar-nav">
                     @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")))
                     {
@@ -36,18 +36,27 @@
                         <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
                         <li><a asp-area="" asp-controller="Faciltators" asp-action="Index">Facilitators</a></li>
                         <li><a asp-area="" asp-controller="Clients" asp-action="Index">Clients</a></li>
-                        <li><a asp-area="" asp-controller="Clients" asp-action="Index">Themes</a></li>
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
+                                Themes <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Themes", "Index", "Themes")</li>
+                                <li>@Html.ActionLink("Activities", "Index", "Ativities")</li>
+                                <li>@Html.ActionLink("Notes", "Index", "Notes")</li>
+                            </ul>
+                        </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                    if (User.Identity.IsAuthenticated && (User.IsInRole("Operator")))
-                        {
-                            <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
-                        }
-                        else
-                        {
-                            @*<li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>*@
-                        }
+              if (User.Identity.IsAuthenticated && (User.IsInRole("Operator")))
+                    {
+                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                    }
+                    else
+                    {
+                        @*<li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>*@
+                    }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (User.Identity.IsAuthenticated)

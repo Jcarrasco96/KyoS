@@ -32,5 +32,23 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboDays()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = DayOfWeekType.Monday.ToString(), Value = "1"},
+                                  new SelectListItem { Text = DayOfWeekType.Tuesday.ToString(), Value = "2"},
+                                  new SelectListItem { Text = DayOfWeekType.Wednesday.ToString(), Value = "3"},
+                                  new SelectListItem { Text = DayOfWeekType.Thursday.ToString(), Value = "4"},
+                                  new SelectListItem { Text = DayOfWeekType.Friday.ToString(), Value = "5"}};
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select a day...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

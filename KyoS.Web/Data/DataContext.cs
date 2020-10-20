@@ -10,7 +10,7 @@ namespace KyoS.Web.Data
         {
 
         }
-
+        
         public DbSet<ClinicEntity> Clinics { get; set; }
         public DbSet<ClientEntity> Clients { get; set; }
         public DbSet<SupervisorEntity> Supervisors { get; set; }
@@ -18,6 +18,7 @@ namespace KyoS.Web.Data
         public DbSet<ThemeEntity> Themes { get; set; }
         public DbSet<ActivityEntity> Activities { get; set; }
         public DbSet<NoteEntity> Notes { get; set; }
+        public DbSet<Clinic_Theme> Clinics_Themes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

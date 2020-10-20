@@ -6,6 +6,6 @@ namespace KyoS.Web.Helpers
     public interface ICombosHelper
     {
         IEnumerable<SelectListItem> GetComboRoles();
-        
+        IEnumerable<SelectListItem> GetComboDays();
     }
 }
