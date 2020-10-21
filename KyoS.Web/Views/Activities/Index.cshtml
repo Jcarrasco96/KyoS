@@ -1,0 +1,116 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.ActivityEntity>
+    @{
+        ViewData["Title"] = "Activities";
+    }
+
+    <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("Desktop", "Index", "Desktop")
+            </li>
+            <li class="active">Activities</li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+    <p>
+        <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Activity</a>
+    </p>
+
+    <div class="row">
+        @*<div class="col-md-12">
+                @if ((ViewBag.StatusMessage == "An error has occured") || (ViewBag.StatusMessage == "An error has occured, unabled to delete logged-in current user"))
+                {
+                    <div class="alert alert-block alert-warning">
+                        <button type="button" class="close" data-dismiss="alert">
+                            <i class="icon-remove"></i>
+                        </button>
+                        <i class="icon-ok red"></i>
+                        <strong class="red">
+                            @ViewBag.StatusMessage
+                        </strong>
+                    </div>
+                }
+                else
+              if (ViewBag.StatusMessage != string.Empty)
+                {
+                    <div class="alert alert-block alert-success">
+                        <button type="button" class="close" data-dismiss="alert">
+                            <i class="icon-remove"></i>
+                        </button>
+                        <i class="icon-ok green"></i>
+                        <strong class="green">
+                            @ViewBag.StatusMessage
+                        </strong>
+                    </div>
+                }
+            </div>*@
+
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Activities</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover table-responsive table-striped" id="MyTable">
+                        <thead>
+                            <tr>
+                                <th class="col-md-3">
+                                    @Html.DisplayNameFor(model => model.Theme.Name)
+                                </th>
+                                <th class="col-md-7">
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </th>
+                                <th class="col-md-2">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Theme.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td align="right">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <partial name="_DeleteDialog" />
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        <script src="~/js/jquery.dataTables.min.js"></script>
+
+        <script type="text/javascript">
+                        $(document).ready(function () {
+                            $('#MyTable').DataTable();
+
+                            // Delete item
+                            var item_to_delete;
+
+                            $('.deleteItem').click((e) => {
+                                item_to_delete = e.currentTarget.dataset.id;
+                            });
+
+                            $("#btnYesDelete").click(function () {
+                                window.location.href = '/Activities/Delete/' + item_to_delete;
+                            });
+                        });
+        </script>
+    }
+

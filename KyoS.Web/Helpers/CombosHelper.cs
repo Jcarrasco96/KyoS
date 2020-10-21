@@ -50,5 +50,22 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboThemes()
+        {
+            List<SelectListItem> list = _context.Themes.Select(t => new SelectListItem
+            {
+                Text = $"{t.Day.ToString()} - {t.Name}",
+                Value = $"{t.Id}"
+            }).OrderBy(t => t.Text).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select a theme...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

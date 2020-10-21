@@ -3,6 +3,7 @@ using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace KyoS.Web.Helpers
 {
@@ -58,6 +59,27 @@ namespace KyoS.Web.Helpers
                 Day = themeEntity.Day,
                 Days = _combosHelper.GetComboDays(),
                 DayId = Convert.ToInt32(themeEntity.Day) + 1
+            };
+        }
+
+        public async Task<ActivityEntity>  ToActivityEntity(ActivityViewModel model, bool isNew)
+        {
+            return new ActivityEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                Theme = await _context.Themes.FindAsync(model.IdTheme)
+            };
+        }
+
+        public ActivityViewModel ToActivityViewModel(ActivityEntity activityEntity)
+        {
+            return new ActivityViewModel
+            {
+                Id = activityEntity.Id,
+                Name = activityEntity.Name,
+                Themes = _combosHelper.GetComboThemes(),
+                IdTheme = activityEntity.Theme.Id
             };
         }
     }
