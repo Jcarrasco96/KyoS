@@ -82,5 +82,33 @@ namespace KyoS.Web.Helpers
                 IdTheme = activityEntity.Theme.Id
             };
         }
+
+        public async Task<NoteEntity> ToNoteEntity(NoteViewModel model, bool isNew)
+        {
+            return new NoteEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Activity = await _context.Activities.FindAsync(model.IdActivity),
+                AnswerClient = model.AnswerClient,
+                AnswerFacilitator = model.AnswerFacilitator,
+                Clasificacion = NoteClassificationUtils.GetClassificationByIndex(model.IdClassification)
+            };
+        }
+
+        public NoteViewModel ToNoteViewModel(NoteEntity noteEntity)
+        {
+            return new NoteViewModel
+            {
+                Id = noteEntity.Id,
+                AnswerClient = noteEntity.AnswerClient,
+                AnswerFacilitator = noteEntity.AnswerFacilitator,
+                IdActivity = noteEntity.Activity.Id,
+                Activities = _combosHelper.GetComboActivities(),
+                IdClassification = Convert.ToInt32(noteEntity.Clasificacion) + 1,
+                Classifications = _combosHelper.GetComboClassifications(),
+                Clients = _combosHelper.GetComboClients(),
+                Facilitators = _combosHelper.GetComboFacilitators()
+            };
+        }
     }
 }

@@ -12,5 +12,7 @@ namespace KyoS.Web.Helpers
         ThemeViewModel ToThemeViewModel(ThemeEntity model);
         Task<ActivityEntity> ToActivityEntity(ActivityViewModel model, bool isNew);
         ActivityViewModel ToActivityViewModel(ActivityEntity model);
+        Task<NoteEntity> ToNoteEntity(NoteViewModel model, bool isNew);
+        NoteViewModel ToNoteViewModel(NoteEntity model);
     }
 }

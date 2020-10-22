@@ -8,5 +8,10 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboRoles();
         IEnumerable<SelectListItem> GetComboDays();
         IEnumerable<SelectListItem> GetComboThemes();
+
+        IEnumerable<SelectListItem> GetComboFacilitators();
+        IEnumerable<SelectListItem> GetComboClients();
+        IEnumerable<SelectListItem> GetComboActivities();
+        IEnumerable<SelectListItem> GetComboClassifications();
     }
 }

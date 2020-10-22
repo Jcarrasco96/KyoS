@@ -26,7 +26,7 @@ namespace KyoS.Web.Helpers
             
             list.Insert(0, new SelectListItem
             {
-                Text = "[Select a rol...]",
+                Text = "[Select rol...]",
                 Value = "0"
             });
 
@@ -44,7 +44,7 @@ namespace KyoS.Web.Helpers
 
             list.Insert(0, new SelectListItem
             {
-                Text = "[Select a day...]",
+                Text = "[Select day...]",
                 Value = "0"
             });
 
@@ -61,11 +61,95 @@ namespace KyoS.Web.Helpers
 
             list.Insert(0, new SelectListItem
             {
-                Text = "[Select a theme...]",
+                Text = "[Select topic...]",
                 Value = "0"
             });
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboFacilitators()
+        {
+            List<SelectListItem> list = _context.Facilitators.Select(f => new SelectListItem
+            {
+                Text = $"{f.Name}",
+                Value = $"{f.Id}"
+            }).OrderBy(f => f.Text).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select facilitator...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboClients()
+        {
+            List<SelectListItem> list = _context.Clients.Select(c => new SelectListItem
+            {
+                Text = $"{c.Name}",
+                Value = $"{c.Id}"
+            }).OrderBy(c => c.Text).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select client...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboActivities()
+        {
+            List<SelectListItem> list = _context.Activities.Select(a => new SelectListItem
+            {
+                Text = $"{a.Id.ToString()} - {a.Name}",
+                Value = $"{a.Id}"
+            }).OrderBy(a => a.Value).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select activity...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboClassifications()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = NoteClassification.Depressed.ToString(), Value = "1"},
+                                  new SelectListItem { Text = NoteClassification.Negativistic.ToString(), Value = "2"},
+                                  new SelectListItem { Text = NoteClassification.Sadness.ToString(), Value = "3"},
+                                  new SelectListItem { Text = NoteClassification.Anxious.ToString(), Value = "4"},
+                                  new SelectListItem { Text = NoteClassification.SleepProblems.ToString(), Value = "5"},
+                                  new SelectListItem { Text = NoteClassification.Insomnia.ToString(), Value = "6" },
+                                  new SelectListItem { Text = NoteClassification.Socialization.ToString(), Value = "7" },
+                                  new SelectListItem { Text = NoteClassification.Isolation.ToString(), Value = "8" },
+                                  new SelectListItem { Text = NoteClassification.Community.ToString(), Value = "9" },
+                                  new SelectListItem { Text = NoteClassification.Motivation.ToString(), Value = "10" },
+                                  new SelectListItem { Text = NoteClassification.Irritable.ToString(), Value = "11"},
+                                  new SelectListItem { Text = NoteClassification.SelfEsteem.ToString(), Value = "12"},
+                                  new SelectListItem { Text = NoteClassification.Concentration.ToString(), Value = "13"},
+                                  new SelectListItem { Text = NoteClassification.Memory.ToString(), Value = "14"},
+                                  new SelectListItem { Text = NoteClassification.Independent.ToString(), Value = "15"},
+                                  new SelectListItem { Text = NoteClassification.MedicalManagenent.ToString(), Value = "16" },
+                                  new SelectListItem { Text = NoteClassification.SelfCare.ToString(), Value = "17" },
+                                  new SelectListItem { Text = NoteClassification.PositiveSelfTalk.ToString(), Value = "18" },
+                                  new SelectListItem { Text = NoteClassification.NegativeSelfTalk.ToString(), Value = "19" }};
+
+
+        list.Insert(0, new SelectListItem
+            {
+                Text = "[Select classification of note...]",
+                Value = "0"
+            });
+
+            return list;
+        }        
     }
 }
