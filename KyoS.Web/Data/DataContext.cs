@@ -34,11 +34,7 @@ namespace KyoS.Web.Data
 
             modelBuilder.Entity<SupervisorEntity>()
                 .HasIndex(s => s.Name)
-                .IsUnique();
-
-            modelBuilder.Entity<ThemeEntity>()
-                .HasIndex(s => s.Name)
-                .IsUnique();
+                .IsUnique();            
         }
     }
 }

@@ -78,7 +78,7 @@ namespace KyoS.Web.Controllers
                     {
                         if (ex.InnerException.Message.Contains("duplicate"))
                         {
-                            ModelState.AddModelError(string.Empty, $"Already exists the theme: ${themeEntity.Day.ToString()} - {themeEntity.Name}");
+                            ModelState.AddModelError(string.Empty, $"Already exists the theme: {themeEntity.Day.ToString()} - {themeEntity.Name}");
                         }
                         else
                         {

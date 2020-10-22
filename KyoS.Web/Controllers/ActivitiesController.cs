@@ -28,11 +28,12 @@ namespace KyoS.Web.Controllers
             return View(await _context.Activities.Include(a => a.Theme).OrderBy(a => a.Theme.Name).ToListAsync());
         }
 
-        public IActionResult Create(int id = 0)
+        public IActionResult Create(int id = 0, int idActivity = 0)
         {
             if (id == 1)
             {
                 ViewBag.Creado = "Y";
+                ViewBag.IdCreado = idActivity.ToString();
             }
             else
             {
@@ -69,13 +70,14 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("Create", new { id = 1 });
+                        ActivityEntity activityEntityCreated = await _context.Activities.LastAsync();
+                        return RedirectToAction("Create", new { id = 1, idActivity = activityEntityCreated.Id });
                     }
                     catch (System.Exception ex)
                     {
                         if (ex.InnerException.Message.Contains("duplicate"))
                         {
-                            ModelState.AddModelError(string.Empty, $"Already exists the activity: ${activityEntity.Theme.Name} - {activityEntity.Name}");
+                            ModelState.AddModelError(string.Empty, $"Already exists the activity: {activityEntity.Theme.Name} - {activityEntity.Name}");
                         }
                         else
                         {

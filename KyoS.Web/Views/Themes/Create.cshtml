@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.ThemeViewModel
 @{
-    ViewData["Title"] = "Create Theme";    
+    ViewData["Title"] = "Create Topic";    
 }
 
 <!DOCTYPE html>
@@ -16,13 +16,13 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("Themes", "Index", "Themes")
+                @Html.ActionLink("Topics", "Index", "Themes")
             </li>
             <li class="active">Create</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Create new theme</h4>
+    <h4>Create new topic</h4>
     <hr />
     <div class="row">
         <div class="col-md-12">
@@ -34,7 +34,7 @@
                     </button>
                     <i class="icon-ok green"></i>
                     <strong class="green">
-                        Theme has been successfully created
+                        Topic has been successfully created
                     </strong>
 
                 </div>
@@ -47,7 +47,7 @@
                     </button>
                     <i class="icon-ok red"></i>
                     <strong class="red">
-                        Error. Theme already exist
+                        Error. Topic already exist
                     </strong>
                 </div>
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KyoS.Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -19,5 +20,8 @@ namespace KyoS.Web.Data.Entities
         public string AnswerFacilitator { get; set; }
 
         public ActivityEntity Activity { get; set; }
+
+        [Display(Name = "Classification")]
+        public NoteClassification Clasificacion { get; set; }
     }
 }
