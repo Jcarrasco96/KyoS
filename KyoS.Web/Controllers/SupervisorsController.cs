@@ -1,20 +1,22 @@
-﻿using KyoS.Web.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    public class FacilitatorsController : Controller
+    public class SupervisorsController : Controller
     {
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
-        public FacilitatorsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
+        public SupervisorsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
@@ -22,9 +24,8 @@ namespace KyoS.Web.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Facilitators.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
+            return View(await _context.Supervisors.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
         }
-
         public IActionResult Create(int id = 0)
         {
             if (id == 1)
@@ -43,7 +44,7 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            FacilitatorViewModel model = new FacilitatorViewModel
+            SupervisorViewModel model = new SupervisorViewModel
             {
                 Clinics = _combosHelper.GetComboClinics()
             };
@@ -52,16 +53,16 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(FacilitatorViewModel facilitatorViewModel)
+        public async Task<IActionResult> Create(SupervisorViewModel supervisorViewModel)
         {
             if (ModelState.IsValid)
             {
-                FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.Name == facilitatorViewModel.Name);
-                if (facilitator == null)
+                SupervisorEntity supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.Name == supervisorViewModel.Name);
+                if (supervisor == null)
                 {
-                    FacilitatorEntity facilitatorEntity = await _converterHelper.ToFacilitatorEntity(facilitatorViewModel, true);
+                    SupervisorEntity supervisorEntity = await _converterHelper.ToSupervisorEntity(supervisorViewModel, true);
 
-                    _context.Add(facilitatorEntity);
+                    _context.Add(supervisorEntity);
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -71,7 +72,7 @@ namespace KyoS.Web.Controllers
                     {
                         if (ex.InnerException.Message.Contains("duplicate"))
                         {
-                            ModelState.AddModelError(string.Empty, $"Already exists the facilitator: {facilitatorEntity.Name}");
+                            ModelState.AddModelError(string.Empty, $"Already exists the supervisor: {supervisorEntity.Name}");
                         }
                         else
                         {
@@ -84,7 +85,7 @@ namespace KyoS.Web.Controllers
                     return RedirectToAction("Create", new { id = 2 });
                 }
             }
-            return View(facilitatorViewModel);
+            return View(supervisorViewModel);
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -94,13 +95,13 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            FacilitatorEntity facilitatorEntity = await _context.Facilitators.FirstOrDefaultAsync(t => t.Id == id);
-            if (facilitatorEntity == null)
+            SupervisorEntity supervisorEntity = await _context.Supervisors.FirstOrDefaultAsync(s => s.Id == id);
+            if (supervisorEntity == null)
             {
                 return NotFound();
             }
 
-            _context.Facilitators.Remove(facilitatorEntity);
+            _context.Supervisors.Remove(supervisorEntity);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -112,29 +113,29 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            FacilitatorEntity facilitatorEntity = await _context.Facilitators.Include(f => f.Clinic).FirstOrDefaultAsync(f => f.Id == id);
-            if (facilitatorEntity == null)
+            SupervisorEntity supervisorEntity = await _context.Supervisors.Include(s => s.Clinic).FirstOrDefaultAsync(s => s.Id == id);
+            if (supervisorEntity == null)
             {
                 return NotFound();
             }
 
-            FacilitatorViewModel facilitatorViewModel = _converterHelper.ToFacilitatorViewModel(facilitatorEntity);
-            return View(facilitatorViewModel);
+            SupervisorViewModel supervisorViewModel = _converterHelper.ToSupervisorViewModel(supervisorEntity);
+            return View(supervisorViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, FacilitatorViewModel facilitatorViewModel)
+        public async Task<IActionResult> Edit(int id, SupervisorViewModel supervisorViewModel)
         {
-            if (id != facilitatorViewModel.Id)
+            if (id != supervisorViewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                FacilitatorEntity facilitatorEntity = await _converterHelper.ToFacilitatorEntity(facilitatorViewModel, false);
-                _context.Update(facilitatorEntity);
+                SupervisorEntity supervisorEntity = await _converterHelper.ToSupervisorEntity(supervisorViewModel, false);
+                _context.Update(supervisorEntity);
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -144,7 +145,7 @@ namespace KyoS.Web.Controllers
                 {
                     if (ex.InnerException.Message.Contains("duplicate"))
                     {
-                        ModelState.AddModelError(string.Empty, $"Already exists the facilitator: {facilitatorEntity.Name}");
+                        ModelState.AddModelError(string.Empty, $"Already exists the supervisor: {supervisorEntity.Name}");
                     }
                     else
                     {
@@ -152,7 +153,7 @@ namespace KyoS.Web.Controllers
                     }
                 }
             }
-            return View(facilitatorViewModel);
+            return View(supervisorViewModel);
         }
     }
 }

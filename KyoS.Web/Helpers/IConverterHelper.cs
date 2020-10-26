@@ -18,5 +18,7 @@ namespace KyoS.Web.Helpers
         FacilitatorViewModel ToFacilitatorViewModel(FacilitatorEntity model);
         Task<ClientEntity> ToClientEntity(ClientViewModel model, bool isNew);
         ClientViewModel ToClientViewModel(ClientEntity model);
+        Task<SupervisorEntity> ToSupervisorEntity(SupervisorViewModel model, bool isNew);
+        SupervisorViewModel ToSupervisorViewModel(SupervisorEntity model);
     }
 }

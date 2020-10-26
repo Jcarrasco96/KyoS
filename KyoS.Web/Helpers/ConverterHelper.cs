@@ -170,5 +170,28 @@ namespace KyoS.Web.Helpers
                 GenderList = _combosHelper.GetComboGender(),
             };
         }
+
+        public async Task<SupervisorEntity> ToSupervisorEntity(SupervisorViewModel model, bool isNew)
+        {
+            return new SupervisorEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
+                Code = model.Code,
+                Name = model.Name
+            };
+        }
+
+        public SupervisorViewModel ToSupervisorViewModel(SupervisorEntity supervisorEntity)
+        {
+            return new SupervisorViewModel
+            {
+                Id = supervisorEntity.Id,
+                Name = supervisorEntity.Name,
+                Code = supervisorEntity.Code,
+                IdClinic = supervisorEntity.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics()
+            };
+        }
     }
 }
