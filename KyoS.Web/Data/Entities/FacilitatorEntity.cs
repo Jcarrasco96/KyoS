@@ -10,8 +10,8 @@ namespace KyoS.Web.Data.Entities
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string Name { get; set; }
 
-        [Display(Name = "Firm")]
-        public string Firm { get; set; }
+        [Display(Name = "Code")]
+        public string Codigo { get; set; }
 
         public ClinicEntity Clinic { get; set; }
     }

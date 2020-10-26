@@ -14,5 +14,9 @@ namespace KyoS.Web.Helpers
         ActivityViewModel ToActivityViewModel(ActivityEntity model);
         Task<NoteEntity> ToNoteEntity(NoteViewModel model, bool isNew);
         NoteViewModel ToNoteViewModel(NoteEntity model);
+        Task<FacilitatorEntity> ToFacilitatorEntity(FacilitatorViewModel model, bool isNew);
+        FacilitatorViewModel ToFacilitatorViewModel(FacilitatorEntity model);
+        Task<ClientEntity> ToClientEntity(ClientViewModel model, bool isNew);
+        ClientViewModel ToClientViewModel(ClientEntity model);
     }
 }

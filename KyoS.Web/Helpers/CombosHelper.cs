@@ -150,6 +150,53 @@ namespace KyoS.Web.Helpers
             });
 
             return list;
-        }        
+        }
+
+        public IEnumerable<SelectListItem> GetComboClinics()
+        {
+            List<SelectListItem> list = _context.Clinics.Select(a => new SelectListItem
+            {
+                Text = $"{a.Name}",
+                Value = $"{a.Id}"
+            }).OrderBy(a => a.Value).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select clinic...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboGender()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = GenderType.Female.ToString(), Value = "1"},
+                                  new SelectListItem { Text = GenderType.Male.ToString(), Value = "2"}};
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select gender...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboClientStatus()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = StatusType.Open.ToString(), Value = "1"},
+                                  new SelectListItem { Text = StatusType.Close.ToString(), Value = "2"}};
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select status...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

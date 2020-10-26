@@ -110,5 +110,65 @@ namespace KyoS.Web.Helpers
                 Facilitators = _combosHelper.GetComboFacilitators()
             };
         }
+
+        public async Task<FacilitatorEntity> ToFacilitatorEntity(FacilitatorViewModel model, bool isNew)
+        {
+            return new FacilitatorEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
+                Codigo = model.Codigo,
+                Name = model.Name                
+            };
+        }
+
+        public FacilitatorViewModel ToFacilitatorViewModel(FacilitatorEntity facilitatorEntity)
+        {
+            return new FacilitatorViewModel
+            {
+                Id = facilitatorEntity.Id,
+                Name = facilitatorEntity.Name,
+                Codigo = facilitatorEntity.Codigo,
+                IdClinic = facilitatorEntity.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics()                
+            };
+        }
+
+        public async Task<ClientEntity> ToClientEntity(ClientViewModel model, bool isNew)
+        {
+            FacilitatorEntity facilitator = null;
+            if (model.IdFacilitator != 0)
+                facilitator = await _context.Facilitators.FindAsync(model.IdFacilitator);
+
+            return new ClientEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                Gender = GenderUtils.GetGenderByIndex(model.IdGender),
+                DateOfBirth = model.DateOfBirth,
+                Code = model.Code,
+                MedicalID = model.MedicalID,
+                Facilitator = facilitator,
+                Status = StatusUtils.GetStatusByIndex(model.IdStatus)
+            };
+        }
+
+        public ClientViewModel ToClientViewModel(ClientEntity clientEntity)
+        {
+            return new ClientViewModel
+            {
+                Id = clientEntity.Id,
+                Name = clientEntity.Name,
+                Code = clientEntity.Code,
+                MedicalID = clientEntity.MedicalID,
+                DateOfBirth = clientEntity.DateOfBirth,
+                IdStatus = (clientEntity.Status == StatusType.Open) ? 1 : 2,
+                StatusList = _combosHelper.GetComboClientStatus(),
+                IdFacilitator = (clientEntity.Facilitator != null) ? clientEntity.Facilitator.Id : 0,
+                Facilitators = _combosHelper.GetComboFacilitators(),
+                IdGender = (clientEntity.Gender == GenderType.Female) ? 1 : 2,
+                GenderList = _combosHelper.GetComboGender(),
+            };
+        }
     }
 }

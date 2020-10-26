@@ -13,5 +13,8 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboClients();
         IEnumerable<SelectListItem> GetComboActivities();
         IEnumerable<SelectListItem> GetComboClassifications();
+        IEnumerable<SelectListItem> GetComboClinics();
+        IEnumerable<SelectListItem> GetComboGender();
+        IEnumerable<SelectListItem> GetComboClientStatus();
     }
 }

@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201023155547_ModifyFacilitatorEntity")]
+    partial class ModifyFacilitatorEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,25 +46,19 @@ namespace KyoS.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("ClinicId");
+
                     b.Property<string>("Code");
 
-                    b.Property<DateTime>("DateOfBirth");
-
-                    b.Property<int?>("FacilitatorId");
-
                     b.Property<int>("Gender");
-
-                    b.Property<string>("MedicalID");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100);
 
-                    b.Property<int>("Status");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("FacilitatorId");
+                    b.HasIndex("ClinicId");
 
                     b.ToTable("Clients");
                 });
@@ -393,9 +389,9 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClientEntity", b =>
                 {
-                    b.HasOne("KyoS.Web.Data.Entities.FacilitatorEntity", "Facilitator")
+                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
                         .WithMany()
-                        .HasForeignKey("FacilitatorId");
+                        .HasForeignKey("ClinicId");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.Clinic_Theme", b =>

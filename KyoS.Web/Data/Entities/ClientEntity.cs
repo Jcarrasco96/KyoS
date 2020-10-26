@@ -1,4 +1,5 @@
 ﻿using KyoS.Common.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
@@ -11,11 +12,24 @@ namespace KyoS.Web.Data.Entities
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string Name { get; set; }
 
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public GenderType Gender { get; set; }
+
+        [Display(Name = "Date of birth")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public DateTime DateOfBirth { get; set; }
 
         [Display(Name = "Code")]
         public string Code { get; set; }
 
-        public ClinicEntity Clinic { get; set; }
+        [Display(Name = "Medical ID")]
+        public string MedicalID { get; set; }
+
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public StatusType Status { get; set; }        
+
+        public FacilitatorEntity Facilitator { get; set; }
     }
 }
