@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201026233231_AddGoal_ObjetiveEntity")]
+    partial class AddGoal_ObjetiveEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,20 +38,6 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("ThemeId");
 
                     b.ToTable("Activities");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.ClassificationEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Classifications");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClientEntity", b =>
@@ -185,7 +173,7 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("MTPId");
 
-                    b.ToTable("Goals");
+                    b.ToTable("GoalEntity");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.MTPEntity", b =>
@@ -246,25 +234,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("Notes");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.Objetive_Classification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ClassificationId");
-
-                    b.Property<int?>("ObjetiveId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassificationId");
-
-                    b.HasIndex("ObjetiveId");
-
-                    b.ToTable("Objetives_Classifications");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.ObjetiveEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -292,7 +261,7 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("GoalId");
 
-                    b.ToTable("Objetives");
+                    b.ToTable("ObjetiveEntity");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.SupervisorEntity", b =>
@@ -580,17 +549,6 @@ namespace KyoS.Web.Migrations
                     b.HasOne("KyoS.Web.Data.Entities.ActivityEntity", "Activity")
                         .WithMany()
                         .HasForeignKey("ActivityId");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.Objetive_Classification", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClassificationEntity", "Classification")
-                        .WithMany()
-                        .HasForeignKey("ClassificationId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.ObjetiveEntity", "Objetive")
-                        .WithMany()
-                        .HasForeignKey("ObjetiveId");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ObjetiveEntity", b =>

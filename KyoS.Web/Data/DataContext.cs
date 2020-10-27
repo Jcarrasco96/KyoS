@@ -19,6 +19,12 @@ namespace KyoS.Web.Data
         public DbSet<ActivityEntity> Activities { get; set; }
         public DbSet<NoteEntity> Notes { get; set; }
         public DbSet<Clinic_Theme> Clinics_Themes { get; set; }
+        public DbSet<DiagnosisEntity> Diagnoses { get; set; }
+        public DbSet<MTPEntity> MTPs { get; set; }
+        public DbSet<GoalEntity> Goals { get; set; }
+        public DbSet<ObjetiveEntity> Objetives { get; set; }
+        public DbSet<ClassificationEntity> Classifications { get; set; }
+        public DbSet<Objetive_Classification> Objetives_Classifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
