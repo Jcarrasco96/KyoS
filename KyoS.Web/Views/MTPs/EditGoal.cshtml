@@ -1,0 +1,35 @@
+﻿@model KyoS.Web.Models.GoalViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h4>Edit goal</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="EditGoal">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IdMTP" />
+
+            <h5 style="font-weight:bold;"> MTP - @Model.MTP.Client.Name </h5>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AreaOfFocus" class="control-label"></label>
+                <textarea asp-for="AreaOfFocus" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="AreaOfFocus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" /> |
+                <a asp-action="UpdateGoals" class="btn btn-success" asp-route-id="@Model.MTP.Id">Back</a> |
+                <a asp-action="UpdateObjectives" class="btn btn-warning" asp-route-id="@Model.Id">Updates objectives</a>
+            </div>
+        </form>
+    </div>
+</div>

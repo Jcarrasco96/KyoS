@@ -1,0 +1,69 @@
+﻿@model KyoS.Web.Models.ObjectiveViewModel
+<div>
+    <div class="col-md-12">
+        <h5 style="font-weight:bold;">Objective of Goal @Model.Goal.Name</h5>
+        <h5 style="font-weight:bold;">MTP - @Model.Goal.MTP.Client.Name</h5>
+    </div>
+</div>
+<div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="Objetive" class="control-label"></label>
+            <input asp-for="Objetive" class="form-control"/>
+            <span asp-validation-for="Objetive" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="DateOpened" class="control-label"></label>
+            <input asp-for="DateOpened" class="form-control" />
+            <span asp-validation-for="DateOpened" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="DateTarget" class="control-label"></label>
+            <input asp-for="DateTarget" class="form-control" />
+            <span asp-validation-for="DateTarget" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="DateResolved" class="control-label"></label>
+            <input asp-for="DateResolved" class="form-control" />
+            <span asp-validation-for="DateResolved" class="text-danger"></span>
+        </div>
+    </div>    
+</div>
+<div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="Intervention" class="control-label"></label>
+            <textarea asp-for="Intervention" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Intervention" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">Classification</label>
+            @Html.ListBox("classification", ViewData["classification"] as MultiSelectList, new { @class = "chosen-select", @style = "width:100%;" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">            
+        </div>
+    </div>
+</div>
+
+

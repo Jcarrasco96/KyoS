@@ -20,5 +20,11 @@ namespace KyoS.Web.Helpers
         ClientViewModel ToClientViewModel(ClientEntity model);
         Task<SupervisorEntity> ToSupervisorEntity(SupervisorViewModel model, bool isNew);
         SupervisorViewModel ToSupervisorViewModel(SupervisorEntity model);
+        Task<MTPEntity> ToMTPEntity(MTPViewModel model, bool isNew);
+        MTPViewModel ToMTPViewModel(MTPEntity model);
+        Task<DiagnosisEntity> ToDiagnosisEntity(DiagnosisViewModel model, bool isNew);
+        DiagnosisViewModel ToDiagnosisViewModel(DiagnosisEntity model);
+        Task<GoalEntity> ToGoalEntity(GoalViewModel model, bool isNew);
+        GoalViewModel ToGoalViewModel(GoalEntity model);
     }
 }

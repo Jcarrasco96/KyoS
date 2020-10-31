@@ -20,6 +20,7 @@ namespace KyoS.Web.Data
         public DbSet<NoteEntity> Notes { get; set; }
         public DbSet<Clinic_Theme> Clinics_Themes { get; set; }
         public DbSet<DiagnosisEntity> Diagnoses { get; set; }
+        public DbSet<DiagnosisTempEntity> DiagnosesTemp { get; set; }
         public DbSet<MTPEntity> MTPs { get; set; }
         public DbSet<GoalEntity> Goals { get; set; }
         public DbSet<ObjetiveEntity> Objetives { get; set; }
@@ -40,7 +41,10 @@ namespace KyoS.Web.Data
 
             modelBuilder.Entity<SupervisorEntity>()
                 .HasIndex(s => s.Name)
-                .IsUnique();            
+                .IsUnique();
+
+            modelBuilder.Entity<DiagnosisEntity>()
+                .HasOne(d => d.MTP).WithMany(m => m.Diagnosis).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

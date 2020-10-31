@@ -193,5 +193,89 @@ namespace KyoS.Web.Helpers
                 Clinics = _combosHelper.GetComboClinics()
             };
         }
+
+        public async Task<MTPEntity> ToMTPEntity(MTPViewModel model, bool isNew)
+        {
+            return new MTPEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = await _context.Clients.FindAsync(model.IdClient),
+                AdmisionDate = model.AdmisionDate,
+                MTPDevelopedDate = model.MTPDevelopedDate,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime,
+                LevelCare = model.LevelCare,
+                InitialDischargeCriteria = model.InitialDischargeCriteria,
+                Modality = model.Modality,
+                Frecuency = model.Frecuency,
+                NumberOfMonths = model.NumberOfMonths
+            };
+        }
+
+        public MTPViewModel ToMTPViewModel(MTPEntity mtpEntity)
+        {
+            return new MTPViewModel
+            {
+                Id = mtpEntity.Id,
+                IdClient = mtpEntity.Client.Id,
+                Clients = _combosHelper.GetComboClients(),
+                AdmisionDate = mtpEntity.AdmisionDate,
+                MTPDevelopedDate = mtpEntity.MTPDevelopedDate,
+                StartTime = mtpEntity.StartTime,
+                EndTime = mtpEntity.EndTime,
+                LevelCare = mtpEntity.LevelCare,
+                InitialDischargeCriteria = mtpEntity.InitialDischargeCriteria,
+                Modality = mtpEntity.Modality,
+                Frecuency = mtpEntity.Frecuency,
+                NumberOfMonths = mtpEntity.NumberOfMonths,
+                Diagnosis = mtpEntity.Diagnosis
+            };
+        }
+
+        public async Task<DiagnosisEntity> ToDiagnosisEntity(DiagnosisViewModel model, bool isNew)
+        {
+            return new DiagnosisEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Code = model.Code,
+                Description = model.Description,
+                MTP = await _context.MTPs.FindAsync(model.IdMTP)
+            };
+        }
+
+        public DiagnosisViewModel ToDiagnosisViewModel(DiagnosisEntity diagnosisEntity)
+        {
+            return new DiagnosisViewModel
+            {
+                Id = diagnosisEntity.Id,
+                MTP = diagnosisEntity.MTP,
+                IdMTP = diagnosisEntity.MTP.Id,
+                Code = diagnosisEntity.Code,
+                Description = diagnosisEntity.Description
+            };
+        }
+
+        public async Task<GoalEntity> ToGoalEntity(GoalViewModel model, bool isNew)
+        {
+            return new GoalEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                AreaOfFocus = model.AreaOfFocus,
+                MTP = await _context.MTPs.FindAsync(model.IdMTP)
+            };
+        }
+
+        public GoalViewModel ToGoalViewModel(GoalEntity goalEntity)
+        {
+            return new GoalViewModel
+            {
+                Id = goalEntity.Id,
+                MTP = goalEntity.MTP,
+                IdMTP = goalEntity.MTP.Id,
+                Name = goalEntity.Name,
+                AreaOfFocus = goalEntity.AreaOfFocus
+            };
+        }
     }
 }

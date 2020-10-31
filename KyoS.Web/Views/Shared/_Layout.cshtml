@@ -14,6 +14,7 @@
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
     </environment>
 </head>
 <body>
@@ -41,7 +42,7 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
-                                <li>@Html.ActionLink("MTP", "Index", "MTPs")</li>                                
+                                <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
@@ -57,7 +58,7 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-              if (User.Identity.IsAuthenticated && (User.IsInRole("Operator")))
+             if (User.Identity.IsAuthenticated && (User.IsInRole("Operator")))
                     {
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
