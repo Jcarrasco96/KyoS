@@ -26,6 +26,7 @@ namespace KyoS.Web.Data
         public DbSet<ObjetiveEntity> Objetives { get; set; }
         public DbSet<ClassificationEntity> Classifications { get; set; }
         public DbSet<Objetive_Classification> Objetives_Classifications { get; set; }
+        public DbSet<StatusClientEntity> StatusClient { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

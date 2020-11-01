@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KyoS.Web.Controllers
 {
+    [Authorize]
     public class DesktopController : Controller
     {
         [Authorize]

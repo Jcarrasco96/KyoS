@@ -6,11 +6,13 @@ using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace KyoS.Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class SupervisorsController : Controller
     {
         private readonly DataContext _context;

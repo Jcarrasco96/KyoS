@@ -3,6 +3,7 @@ using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class NotesController : Controller
     {
         private readonly DataContext _context;
