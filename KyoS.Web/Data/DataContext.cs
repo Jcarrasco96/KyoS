@@ -46,6 +46,12 @@ namespace KyoS.Web.Data
 
             modelBuilder.Entity<DiagnosisEntity>()
                 .HasOne(d => d.MTP).WithMany(m => m.Diagnosis).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<GoalEntity>()
+                .HasOne(g => g.MTP).WithMany(m => m.Goals).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<ObjetiveEntity>()
+                .HasOne(o => o.Goal).WithMany(g => g.Objetives).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Objetive_Classification>()
+                .HasOne(oc => oc.Objetive).WithMany(o => o.Classifications).OnDelete(DeleteBehavior.Cascade);            
         }
     }
 }

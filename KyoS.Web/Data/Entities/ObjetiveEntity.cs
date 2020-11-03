@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
@@ -35,5 +36,7 @@ namespace KyoS.Web.Data.Entities
         public string Intervention { get; set; }
 
         public GoalEntity Goal { get; set; }
+
+        public IEnumerable<Objetive_Classification> Classifications { get; set; }
     }
 }

@@ -31,13 +31,13 @@
                     <table class="table table-hover table-responsive table-striped" id="MyTable">
                         <thead>
                             <tr>
-                                <th class="col-md-1">
+                                <th class="col-md-1" align="center">
                                     Objective
                                 </th>
-                                <th class="col-md-6">
+                                <th class="col-md-5">
                                     Description
                                 </th>
-                                <th class="col-md-3">
+                                <th class="col-md-4">
                                     Intervention
                                 </th>
                                 <th class="col-md-2">
@@ -48,7 +48,7 @@
                             @foreach (var item in Model.Objetives)
                             {
                                 <tr>
-                                    <td>
+                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.Objetive)
                                     </td>
                                     <td>

@@ -26,5 +26,7 @@ namespace KyoS.Web.Helpers
         DiagnosisViewModel ToDiagnosisViewModel(DiagnosisEntity model);
         Task<GoalEntity> ToGoalEntity(GoalViewModel model, bool isNew);
         GoalViewModel ToGoalViewModel(GoalEntity model);
+        Task<ObjetiveEntity> ToObjectiveEntity(ObjectiveViewModel model, bool isNew);
+        ObjectiveViewModel ToObjectiveViewModel(ObjetiveEntity model);
     }
 }

@@ -6,13 +6,13 @@
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
 <div class="breadcrumbs" id="breadcrumbs">
-   <ul class="breadcrumb">
-      <li>
-         <i class="icon-home"></i>
-         @Html.ActionLink("MTPs", "Index", "MTPs")
-      </li>
-      <li class="active">Details</li>
-   </ul><!--.breadcrumb-->
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("MTPs", "Index", "MTPs")
+        </li>
+        <li class="active">Details</li>
+    </ul><!--.breadcrumb-->
 </div>
 
 <h4>Master Treatment Plan</h4>
@@ -21,110 +21,119 @@
     @*<h4>Details</h4>*@
     <hr />
     <div class="row">
-                <div class="col-md-12">
-                    @if (!string.IsNullOrEmpty(Model.Client.Facilitator.Clinic.LogoPath))
-                    {
-                    <div class="col-md-4">
-                        <img src="@Url.Content(Model.Client.Facilitator.Clinic.LogoPath)" alt="Image" style="width:130px;height:130px;max-width: 100%; height: auto;" />
-                    </div>
-                    <div class="col-md-8">
-                        <h4>@Model.Client.Facilitator.Clinic.Name</h4>
-                    </div>
-                    <div class="col-md-12">
-                        <hr />
-                    </div>
-                    }                    
+        <div class="col-md-12">
+            @if (!string.IsNullOrEmpty(Model.Client.Facilitator.Clinic.LogoPath))
+            {
+                <div class="col-md-4">
+                    <img src="@Url.Content(Model.Client.Facilitator.Clinic.LogoPath)" alt="Image" style="width:130px;height:130px;max-width: 100%; height: auto;" />
+                </div>
+                <div class="col-md-8">
+                    <h4>@Model.Client.Facilitator.Clinic.Name</h4>
                 </div>
                 <div class="col-md-12">
-                    <dl class="dl-horizontal">
-                        <dt>
-                            Cliente
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.Client.Name)
-                        </dd>
-                        <dt>
-                            Facilitator
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.Client.Facilitator.Name)
-                        </dd>
-                        <dt>
-                            @Html.DisplayNameFor(model => model.AdmisionDate)
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.AdmisionDate)
-                        </dd>
-                        <dt>
-                            MTP developed date
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.MTPDevelopedDate)
-                        </dd>
-                        <dt>
-                            @Html.DisplayNameFor(model => model.StartTime)
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.StartTime)
-                        </dd>
-                        <dt>
-                            @Html.DisplayNameFor(model => model.EndTime)
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.EndTime)
-                        </dd>
-                        <dt>
-                            @Html.DisplayNameFor(model => model.LevelCare)
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.LevelCare)
-                        </dd>
-                        <dt>
-                            @Html.DisplayNameFor(model => model.InitialDischargeCriteria)
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.InitialDischargeCriteria)
-                        </dd>
-                    </dl>
-                </div>                
-            </div>
-</div>
-<div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h5 style="font-weight:bold;">Diagnosis of MTP</h5>
-            </div>
-            <div class="panel-body">
-                <table class="table table-hover table-responsive table-striped" id="MyTable">
-                    <thead>
-                        <tr>
-                            <th class="col-md-3">
-                                Code
-                            </th>
-                            <th class="col-md-6">
-                                Diagnosis
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.Diagnosis)
-                        {
+                    <hr />
+                </div>
+            }
+        </div>
+        <div class="col-md-6">
+            <dl class="dl-horizontal">
+                <dt>
+                    Cliente
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Client.Name)
+                </dd>
+                <dt>
+                    Facilitator
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Client.Facilitator.Name)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.AdmisionDate)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.AdmisionDate)
+                </dd>
+                <dt>
+                    MTP developed date
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.MTPDevelopedDate)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.StartTime)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.StartTime)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.EndTime)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.EndTime)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.LevelCare)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.LevelCare)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.InitialDischargeCriteria)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.InitialDischargeCriteria)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h5 style="font-weight:bold;">Diagnosis of MTP</h5>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover table-responsive table-striped" id="MyTable">
+                        <thead>
                             <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Code)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Description)
-                                </td>
+                                <th class="col-md-3">
+                                    Code
+                                </th>
+                                <th class="col-md-6">
+                                    Diagnosis
+                                </th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Diagnosis)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+        <div class="col-md-12">   
+            <p>
+                <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create MTP</a> |
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update MTP</a> |
+                <a asp-action="UpdateDiagnosis" asp-route-id="@Model.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update diagnosis</a> |
+                <a asp-action="UpdateGoals" asp-route-id="@Model.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update goals</a>
+            </p>
+        </div>
+
     </div>
-    <div class="col-md-6">
+</div>
+<div class="row">    
+    <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h5 style="font-weight:bold;">Goals of MTP</h5>
@@ -133,7 +142,10 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-3">
+                            <th class="col-md-1">
+
+                            </th>
+                            <th class="col-md-5">
                                 Name
                             </th>
                             <th class="col-md-6">
@@ -145,6 +157,33 @@
                         @foreach (var item in Model.Goals)
                         {
                             <tr>
+                                <td align="center">
+                                    @if (item.Objetives.Count() != 0)
+                                    {
+                                        <a class="icon-plus-sign-alt" ></a>                                     
+                                    }
+                                    else
+                                    {
+                                        
+                                    }
+                                    <div style="display:none">
+                                        <table class="table table-striped table-bordered">
+                                            <tr>
+                                                <th class="col-md-1">Objetive</th>
+                                                <th class="col-md-6">Description</th>
+                                                <th class="col-md-5">Intervention</th>                                                
+                                            </tr>
+                                            @foreach (var product in item.Objetives)
+                                            {
+                                                <tr>
+                                                    <td>@Html.DisplayFor(modelItem => product.Objetive)</td>
+                                                    <td>@Html.DisplayFor(modelItem => product.Description)</td>
+                                                    <td>@Html.DisplayFor(modelItem => product.Intervention)</td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    </div>
+                                </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
@@ -159,81 +198,23 @@
         </div>
     </div>
 </div>
-@*<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
-    <a asp-action="AddGroup" asp-route-id="@Model.Id" class="btn btn-primary">Add Group</a>
-    <a asp-action="Index" class="btn btn-success">Back to List</a>
-</div>
-<br />
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Groups</h3>
-            </div>
-            <div class="panel-body">
-                <table class="table table-hover table-responsive table-striped" id="MyTable">
-                    <thead>
-                        <tr>
-                            <th class="col-md-3">
-                                @Html.DisplayNameFor(model => model.Name)
-                            </th>
-                            <th class="col-md-3">
-                                # Teams
-                            </th>
-                            <th class="col-md-3">
-                                # Matches
-                            </th>
-                            <th class="col-md-3"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.Groups.OrderBy(g => g.Name))
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.GroupDetails.Count)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Matches.Count)
-                                </td>
-                                <td align="right">
-                                    <a asp-action="EditGroup" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <a asp-action="DetailsGroup" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon glyphicon-align-justify"></i></a>
-                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>*@
 
-@*<partial name="_DeleteDialog" />
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/jquery.dataTables.min.js"></script>
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#MyTable').DataTable();
-
-            // Delete item
-            var item_to_delete;
-
-            $('.deleteItem').click((e) => {
-                item_to_delete = e.currentTarget.dataset.id;
-            });
-
-            $("#btnYesDelete").click(function () {
-                window.location.href = '/Tournaments/DeleteGroup/' + item_to_delete;
-            });
+@section scripts {
+<script type="text/javascript">
+    $(function () {
+        
+        //Assign Click event to Plus Image.
+        $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+            $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+            $(this).attr("class", "icon-minus-sign-alt");
         });
-    </script>
-}*@
+        //Assign Click event to Minus Image.
+        $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+            $(this).attr("class", "icon-plus-sign-alt");
+            $(this).closest("tr").next().remove();
+        });
+    });
+
+</script>
+}
+

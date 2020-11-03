@@ -3,10 +3,12 @@ using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -539,9 +541,158 @@ namespace KyoS.Web.Controllers
                 DateTarget = DateTime.Now
             };
 
-            MultiSelectList classification_list = new MultiSelectList(await _context.Classifications.ToListAsync(), "Id","Name");
+            MultiSelectList classification_list = new MultiSelectList(await _context.Classifications.ToListAsync(), "Id", "Name");
             ViewData["classification"] = classification_list;
 
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateObjective(ObjectiveViewModel model, IFormCollection form)
+        {
+            if (ModelState.IsValid)
+            {
+                ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, true);
+                _context.Add(objective);
+
+                if (!string.IsNullOrEmpty(form["classifications"]))
+                {
+                    string[] classifications = form["classifications"].ToString().Split(',');
+                    Objetive_Classification objclassification;
+                    foreach (string value in classifications)
+                    {
+                        objclassification = new Objetive_Classification()
+                        {
+                            Objetive = objective,
+                            Classification = await _context.Classifications.FindAsync(Convert.ToInt32(value))
+                        };
+                        _context.Add(objclassification);
+                    }
+                }
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction($"{nameof(UpdateObjectives)}/{model.IdGoal}");
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Already exists the objective");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            GoalEntity goalEntity = await _context.Goals.Include(g => g.MTP)
+                                                        .ThenInclude(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdGoal);
+            model.Goal = goalEntity;
+            model.IdGoal = goalEntity.Id;
+            MultiSelectList classification_list = new MultiSelectList(await _context.Classifications.ToListAsync(), "Id", "Name");
+            ViewData["classification"] = classification_list;
+            return View(model);
+        }
+
+        public async Task<IActionResult> DeleteObjective(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            ObjetiveEntity objectiveEntity = await _context.Objetives.Include(o => o.Goal).FirstOrDefaultAsync(o => o.Id == id);
+            if (objectiveEntity == null)
+            {
+                return NotFound();
+            }
+
+            _context.Objetives.Remove(objectiveEntity);
+            await _context.SaveChangesAsync();
+            return RedirectToAction($"{nameof(UpdateObjectives)}/{objectiveEntity.Goal.Id}");
+        }
+
+        public async Task<IActionResult> EditObjective(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            ObjetiveEntity objectiveEntity = await _context.Objetives.Include(o => o.Goal)
+                                                                       .ThenInclude(g => g.MTP)
+                                                                       .ThenInclude(m => m.Client)
+                                                                       .Include(o => o.Classifications)
+                                                                       .ThenInclude(oc => oc.Classification).FirstOrDefaultAsync(d => d.Id == id);
+            ObjectiveViewModel model = _converterHelper.ToObjectiveViewModel(objectiveEntity);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            List<ClassificationEntity> list = await (from cl in _context.Classifications
+                                                     join c in model.Classifications on cl.Id equals c.Classification.Id
+                                                     select cl).ToListAsync();
+
+            MultiSelectList classification_list = new MultiSelectList(await _context.Classifications.ToListAsync(), "Id", "Name", list.Select(l => l.Id));
+            ViewData["classification"] = classification_list;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditObjective(ObjectiveViewModel model, IFormCollection form)
+        {
+            if (ModelState.IsValid)
+            {
+                ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, false);
+                _context.Update(objective);
+
+                ObjetiveEntity original_classifications = await _context.Objetives.Include(o => o.Classifications)
+                                                                                  .ThenInclude(oc => oc.Classification).FirstOrDefaultAsync(d => d.Id == model.Id);
+                _context.RemoveRange(original_classifications.Classifications);
+
+                if (!string.IsNullOrEmpty(form["classifications"]))
+                {
+                    string[] classifications = form["classifications"].ToString().Split(',');
+                    Objetive_Classification objclassification;
+                    foreach (string value in classifications)
+                    {
+                        objclassification = new Objetive_Classification()
+                        {
+                            Objetive = objective,
+                            Classification = await _context.Classifications.FindAsync(Convert.ToInt32(value))
+                        };
+                        _context.Add(objclassification);
+                    }
+                }
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction($"{nameof(UpdateObjectives)}/{model.IdGoal}");
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Already exists the objective");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            GoalEntity goalEntity = await _context.Goals.Include(g => g.MTP)
+                                                        .ThenInclude(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdGoal);
+            model.Goal = goalEntity;
             return View(model);
         }
     }

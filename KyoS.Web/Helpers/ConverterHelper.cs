@@ -277,5 +277,37 @@ namespace KyoS.Web.Helpers
                 AreaOfFocus = goalEntity.AreaOfFocus
             };
         }
+
+        public async Task<ObjetiveEntity> ToObjectiveEntity(ObjectiveViewModel model, bool isNew)
+        {
+            return new ObjetiveEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Objetive = model.Objetive,
+                DateOpened = model.DateOpened,
+                DateTarget = model.DateTarget,
+                DateResolved = model.DateResolved,
+                Description = model.Description,
+                Intervention = model.Intervention,
+                Goal = await _context.Goals.FindAsync(model.IdGoal)                
+            };
+        }
+
+        public ObjectiveViewModel ToObjectiveViewModel(ObjetiveEntity objectiveEntity)
+        {
+            return new ObjectiveViewModel 
+            {
+                Id = objectiveEntity.Id,
+                Objetive = objectiveEntity.Objetive,
+                Goal = objectiveEntity.Goal,
+                IdGoal = objectiveEntity.Goal.Id,
+                DateOpened = objectiveEntity.DateOpened,
+                DateResolved = objectiveEntity.DateResolved,
+                DateTarget = objectiveEntity.DateTarget,
+                Description = objectiveEntity.Description,
+                Classifications = objectiveEntity.Classifications,
+                Intervention = objectiveEntity.Intervention
+            };
+        }
     }
 }
