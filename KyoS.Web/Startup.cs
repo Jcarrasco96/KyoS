@@ -55,7 +55,8 @@ namespace KyoS.Web
             services.AddScoped<ICombosHelper, CombosHelper>();
             services.AddScoped<IClassificationHelper, ClassificationHelper>();
             services.AddScoped<IRenderHelper, RenderHelper>();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddScoped<IReportService, ReportService>();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
 

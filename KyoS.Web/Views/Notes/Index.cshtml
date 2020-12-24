@@ -16,39 +16,12 @@
 </div>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Note</a>
+    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Note</a> |
+    <a asp-action="GenerateNotes" class="btn btn-warning"><i class="glyphicon glyphicon-align-justify"></i> Auto. generate</a> |
     <a asp-action="Index" class="btn btn-success"><i class="glyphicon glyphicon-book"></i> Notes used</a>
 </p>
 
 <div class="row">
-    @*<div class="col-md-12">
-            @if ((ViewBag.StatusMessage == "An error has occured") || (ViewBag.StatusMessage == "An error has occured, unabled to delete logged-in current user"))
-            {
-                <div class="alert alert-block alert-warning">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <i class="icon-remove"></i>
-                    </button>
-                    <i class="icon-ok red"></i>
-                    <strong class="red">
-                        @ViewBag.StatusMessage
-                    </strong>
-                </div>
-            }
-            else
-          if (ViewBag.StatusMessage != string.Empty)
-            {
-                <div class="alert alert-block alert-success">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <i class="icon-remove"></i>
-                    </button>
-                    <i class="icon-ok green"></i>
-                    <strong class="green">
-                        @ViewBag.StatusMessage
-                    </strong>
-                </div>
-            }
-        </div>*@
-
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -68,7 +41,7 @@
                                 @Html.DisplayNameFor(model => model.AnswerClient)
                             </th>
                             <th class="col-md-1">
-                                @Html.DisplayNameFor(model => model.Clasificacion)
+                                @*@Html.DisplayNameFor(model => model.Clasificacion)*@
                             </th>
                             <th class="col-md-2">
                             </th>
@@ -88,7 +61,7 @@
                                 @Html.DisplayFor(modelItem => item.AnswerClient)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Clasificacion)
+                                @*@Html.DisplayFor(modelItem => item.Clasificacion)*@
                             </td>
                             <td align="right">
                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>

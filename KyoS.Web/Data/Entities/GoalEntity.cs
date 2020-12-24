@@ -10,6 +10,10 @@ namespace KyoS.Web.Data.Entities
     {
         public int Id { get; set; }
 
+        [Display(Name = "Number of Goal")]
+        [Range(1, 10, ErrorMessage = "You must select a valid number of goal.")]
+        public int Number { get; set; }
+
         [Display(Name = "Name")]        
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string Name { get; set; }

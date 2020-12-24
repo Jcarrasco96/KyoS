@@ -90,8 +90,7 @@ namespace KyoS.Web.Helpers
                 Id = isNew ? 0 : model.Id,
                 Activity = await _context.Activities.FindAsync(model.IdActivity),
                 AnswerClient = model.AnswerClient,
-                AnswerFacilitator = model.AnswerFacilitator,
-                Clasificacion = NoteClassificationUtils.GetClassificationByIndex(model.IdClassification)
+                AnswerFacilitator = model.AnswerFacilitator               
             };
         }
 
@@ -104,8 +103,7 @@ namespace KyoS.Web.Helpers
                 AnswerFacilitator = noteEntity.AnswerFacilitator,
                 IdActivity = noteEntity.Activity.Id,
                 Activities = _combosHelper.GetComboActivities(),
-                IdClassification = Convert.ToInt32(noteEntity.Clasificacion) + 1,
-                Classifications = _combosHelper.GetComboClassifications(),
+                Classifications = noteEntity.Classifications,
                 Clients = _combosHelper.GetComboClients(),
                 Facilitators = _combosHelper.GetComboFacilitators()
             };
@@ -136,9 +134,9 @@ namespace KyoS.Web.Helpers
 
         public async Task<ClientEntity> ToClientEntity(ClientViewModel model, bool isNew)
         {
-            FacilitatorEntity facilitator = null;
-            if (model.IdFacilitator != 0)
-                facilitator = await _context.Facilitators.FindAsync(model.IdFacilitator);
+            ClinicEntity clinic = null;
+            if (model.IdClinic != 0)
+                clinic = await _context.Clinics.FindAsync(model.IdClinic);
 
             return new ClientEntity
             {
@@ -148,7 +146,7 @@ namespace KyoS.Web.Helpers
                 DateOfBirth = model.DateOfBirth,
                 Code = model.Code,
                 MedicalID = model.MedicalID,
-                Facilitator = facilitator,
+                Clinic = clinic,
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus)
             };
         }
@@ -164,8 +162,8 @@ namespace KyoS.Web.Helpers
                 DateOfBirth = clientEntity.DateOfBirth,
                 IdStatus = (clientEntity.Status == StatusType.Open) ? 1 : 2,
                 StatusList = _combosHelper.GetComboClientStatus(),
-                IdFacilitator = (clientEntity.Facilitator != null) ? clientEntity.Facilitator.Id : 0,
-                Facilitators = _combosHelper.GetComboFacilitators(),
+                IdClinic = (clientEntity.Clinic != null) ? clientEntity.Clinic.Id : 0,
+                Clinics = _combosHelper.GetComboClinics(),
                 IdGender = (clientEntity.Gender == GenderType.Female) ? 1 : 2,
                 GenderList = _combosHelper.GetComboGender(),
             };
@@ -260,6 +258,7 @@ namespace KyoS.Web.Helpers
             return new GoalEntity
             {
                 Id = isNew ? 0 : model.Id,
+                Number = model.Number,
                 Name = model.Name,
                 AreaOfFocus = model.AreaOfFocus,
                 MTP = await _context.MTPs.FindAsync(model.IdMTP)
@@ -271,6 +270,7 @@ namespace KyoS.Web.Helpers
             return new GoalViewModel
             {
                 Id = goalEntity.Id,
+                Number = goalEntity.Number,
                 MTP = goalEntity.MTP,
                 IdMTP = goalEntity.MTP.Id,
                 Name = goalEntity.Name,
@@ -307,6 +307,31 @@ namespace KyoS.Web.Helpers
                 Description = objectiveEntity.Description,
                 Classifications = objectiveEntity.Classifications,
                 Intervention = objectiveEntity.Intervention
+            };
+        }
+
+        public async Task<GroupEntity> ToGroupEntity(GroupViewModel model, bool isNew)
+        {
+            return new GroupEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Am = model.Am,
+                Pm = model.Pm,
+                Facilitator = await _context.Facilitators.FindAsync(model.IdFacilitator)
+            };
+        }
+
+        public GroupViewModel ToGroupViewModel(GroupEntity groupEntity)
+        {
+            return new GroupViewModel
+            {
+                Id = groupEntity.Id,
+                Facilitator = groupEntity.Facilitator,
+                IdFacilitator = groupEntity.Facilitator.Id,
+                Facilitators = _combosHelper.GetComboFacilitators(),
+                Am = groupEntity.Am,
+                Pm = groupEntity.Pm,                
+                Clients = groupEntity.Clients
             };
         }
     }

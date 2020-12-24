@@ -16,6 +16,7 @@ namespace KyoS.Web.Data.Entities
 
         public ICollection<FacilitatorEntity> Facilitators { get; set; }
         public ICollection<SupervisorEntity> Supervisors { get; set; }
-        public ICollection<ThemeEntity> Themes { get; set; }
+        public ICollection<Clinic_Theme> Clinics_Themes { get; set; }
+        public ICollection<ClientEntity> Clients { get; set; }
     }
 }

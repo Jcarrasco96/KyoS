@@ -19,12 +19,6 @@ namespace KyoS.Web.Models
 
         [Display(Name = "Client")]
         public int IdClient { get; set; }
-        public IEnumerable<SelectListItem> Clients { get; set; }
-
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
-        [Display(Name = "Classification")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a classification.")]
-        public int IdClassification { get; set; }
-        public IEnumerable<SelectListItem> Classifications { get; set; }
+        public IEnumerable<SelectListItem> Clients { get; set; }        
     }
 }

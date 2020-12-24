@@ -61,7 +61,7 @@
                                 Client
                             </th>
                             <th class="col-md-5">
-                                Facilitator
+                                Clinic
                             </th>                            
                             <th class="col-md-2">
                             </th>
@@ -75,7 +75,7 @@
                                     @Html.DisplayFor(modelItem => item.Client.Name)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Client.Facilitator.Name)
+                                    @Html.DisplayFor(modelItem => item.Client.Clinic.Name)
                                 </td>                                
                                 <td align="right">
                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>

@@ -62,10 +62,7 @@
                             </th>
                             <th class="col-md-2">
                                 Birth's date
-                            </th>                            
-                            <th class="col-md-2">
-                                Facilitator
-                            </th>
+                            </th>                   
                             <th class="col-md-2">
                                 Clinic
                             </th>
@@ -87,10 +84,7 @@
                                 @Html.DisplayFor(modelItem => item.DateOfBirth)
                             </td>                            
                             <td>
-                                @Html.DisplayFor(modelItem => item.Facilitator.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Facilitator.Clinic.Name)
+                                @Html.DisplayFor(modelItem => item.Clinic.Name)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Status)

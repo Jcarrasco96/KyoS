@@ -18,6 +18,7 @@ namespace KyoS.Web.Data
         public DbSet<ThemeEntity> Themes { get; set; }
         public DbSet<ActivityEntity> Activities { get; set; }
         public DbSet<NoteEntity> Notes { get; set; }
+        public DbSet<Note_Classification> Notes_Classifications { get; set; }
         public DbSet<Clinic_Theme> Clinics_Themes { get; set; }
         public DbSet<DiagnosisEntity> Diagnoses { get; set; }
         public DbSet<DiagnosisTempEntity> DiagnosesTemp { get; set; }
@@ -25,8 +26,12 @@ namespace KyoS.Web.Data
         public DbSet<GoalEntity> Goals { get; set; }
         public DbSet<ObjetiveEntity> Objetives { get; set; }
         public DbSet<ClassificationEntity> Classifications { get; set; }
-        public DbSet<Objetive_Classification> Objetives_Classifications { get; set; }
-        public DbSet<StatusClientEntity> StatusClient { get; set; }
+        public DbSet<Objetive_Classification> Objetives_Classifications { get; set; }       
+        public DbSet<GroupEntity> Groups { get; set; }
+        public DbSet<DailySessionEntity> DailySessions  { get; set; }
+        public DbSet<Note_DailySession_Client> Notes_DailySessions_Clients { get; set; }
+        public DbSet<PlanEntity> Plans { get; set; }
+        public DbSet<Plan_Classification> Plans_Classifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -51,7 +56,11 @@ namespace KyoS.Web.Data
             modelBuilder.Entity<ObjetiveEntity>()
                 .HasOne(o => o.Goal).WithMany(g => g.Objetives).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Objetive_Classification>()
-                .HasOne(oc => oc.Objetive).WithMany(o => o.Classifications).OnDelete(DeleteBehavior.Cascade);            
+                .HasOne(oc => oc.Objetive).WithMany(o => o.Classifications).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Note_Classification>()
+                .HasOne(nc => nc.Note).WithMany(n => n.Classifications).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Plan_Classification>()
+                .HasOne(nc => nc.Plan).WithMany(n => n.Classifications).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

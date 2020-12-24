@@ -28,5 +28,7 @@ namespace KyoS.Web.Helpers
         GoalViewModel ToGoalViewModel(GoalEntity model);
         Task<ObjetiveEntity> ToObjectiveEntity(ObjectiveViewModel model, bool isNew);
         ObjectiveViewModel ToObjectiveViewModel(ObjetiveEntity model);
+        Task<GroupEntity> ToGroupEntity(GroupViewModel model, bool isNew);
+        GroupViewModel ToGroupViewModel(GroupEntity model);
     }
 }

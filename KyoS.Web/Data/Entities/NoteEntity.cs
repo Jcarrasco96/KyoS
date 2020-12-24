@@ -1,4 +1,4 @@
-﻿using KyoS.Common.Enums;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
@@ -19,7 +19,6 @@ namespace KyoS.Web.Data.Entities
 
         public ActivityEntity Activity { get; set; }
 
-        [Display(Name = "Classification")]
-        public NoteClassification Clasificacion { get; set; }
+        public ICollection<Note_Classification> Classifications { get; set; }
     }
 }

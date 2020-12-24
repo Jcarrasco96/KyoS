@@ -7,9 +7,9 @@ namespace KyoS.Web.Models
 {
     public class ClientViewModel : ClientEntity
     {
-        [Display(Name = "Facilitator")]
-        public int IdFacilitator { get; set; }
-        public IEnumerable<SelectListItem> Facilitators { get; set; }
+        [Display(Name = "Clinic")]
+        public int IdClinic { get; set; }
+        public IEnumerable<SelectListItem> Clinics { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Status")]

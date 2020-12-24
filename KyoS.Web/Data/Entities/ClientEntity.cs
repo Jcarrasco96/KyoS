@@ -30,6 +30,8 @@ namespace KyoS.Web.Data.Entities
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public StatusType Status { get; set; }        
 
-        public FacilitatorEntity Facilitator { get; set; }
+        public ClinicEntity Clinic { get; set; }
+
+        public GroupEntity Group { get; set; }
     }
 }

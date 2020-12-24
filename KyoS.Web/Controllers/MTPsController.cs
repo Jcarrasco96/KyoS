@@ -31,7 +31,7 @@ namespace KyoS.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.MTPs.Include(m => m.Client).ThenInclude(c => c.Facilitator).OrderBy(m => m.Client.Facilitator.Name).ToListAsync());
+            return View(await _context.MTPs.Include(m => m.Client).ThenInclude(c => c.Clinic).OrderBy(m => m.Client.Clinic.Name).ToListAsync());
         }
 
         public async Task<IActionResult> Create(int id = 0)
@@ -249,8 +249,7 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            MTPEntity mtpEntity = await _context.MTPs.Include(m => m.Client)
-                                                                 .ThenInclude(c => c.Facilitator)
+            MTPEntity mtpEntity = await _context.MTPs.Include(m => m.Client)                                                                 
                                                                  .ThenInclude(f => f.Clinic)
                                                                  .Include(m => m.Diagnosis)
                                                                  .Include(m => m.Goals)

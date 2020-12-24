@@ -1,18 +1,18 @@
 ﻿@model KyoS.Web.Models.NoteViewModel
-    <div class="form-group">
-        <div class="col-md-12">
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
             <label asp-for="IdActivity" class="control-label"></label>
             <select asp-for="IdActivity" asp-items="Model.Activities" class="form-control"></select>
             <span asp-validation-for="IdActivity" class="text-danger"></span>
         </div>
     </div>
-    <div class="form-group">
-        <div class="col-md-6">
+    <div class="col-md-push-12">
+        <div class="form-group col-md-6">
             <label asp-for="IdClient" class="control-label"></label>
             <select asp-for="IdClient" asp-items="Model.Clients" class="form-control"></select>
             <span asp-validation-for="IdClient" class="text-danger"></span>
         </div>
-        <div class="col-md-6">
+        <div class="form-group col-md-6">
             <label asp-for="IdFacilitator" class="control-label"></label>
             <select asp-for="IdFacilitator" asp-items="Model.Facilitators" class="form-control"></select>
             <span asp-validation-for="IdFacilitator" class="text-danger"></span>
@@ -30,11 +30,13 @@
             <span asp-validation-for="AnswerFacilitator" class="text-danger"></span>
         </div>
     </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
     <div class="form-group">
         <div class="col-md-6">
-            <label asp-for="IdClassification" class="control-label"></label>
-            <select asp-for="IdClassification" asp-items="Model.Classifications" class="form-control"></select>
-            <span asp-validation-for="IdClassification" class="text-danger"></span>
+            <label class="control-label">Classification</label>
+            @Html.ListBox("classifications", ViewData["classification"] as MultiSelectList, new { @class = "chosen-select", @style = "width:100%;" })
         </div>
     </div>
 

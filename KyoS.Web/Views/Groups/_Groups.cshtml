@@ -1,0 +1,37 @@
+﻿@model KyoS.Web.Models.GroupViewModel
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <label asp-for="IdFacilitator" class="control-label"></label>
+        <select asp-for="IdFacilitator" asp-items="Model.Facilitators" class="form-control"></select>
+        <span asp-validation-for="IdFacilitator" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        &nbsp;
+    </div>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-12">
+    <div class="form-group">
+        <input type="radio" name="Meridian" value="Am" checked="checked" />
+        <label style="font-weight: bold;"> AM</label>
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="form-group">
+        <input type="radio" name="Meridian" value="Pm" />
+        <label style="font-weight: bold;"> PM</label>
+    </div>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <label class="control-label">Clients</label>
+            @Html.ListBox("clients", ViewData["clients"] as MultiSelectList, new { @class = "chosen-select", @style = "width:100%;" })
+        </div>
+    </div>
+</div>

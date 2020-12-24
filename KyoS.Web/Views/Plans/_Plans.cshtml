@@ -1,0 +1,11 @@
+﻿@model KyoS.Web.Data.Entities.PlanEntity
+    <div class="form-group">       
+            <label asp-for="Text" class="control-label"></label>
+            <textarea asp-for="Text" class="form-control" rows="5"></textarea>
+            <span asp-validation-for="Text" class="text-danger"></span>        
+    </div>    
+    <div class="form-group">        
+            <label class="control-label">Classification</label>
+            @Html.ListBox("classifications", ViewData["classification"] as MultiSelectList, new { @class = "chosen-select", @style = "width:100%;" })        
+    </div>
+    

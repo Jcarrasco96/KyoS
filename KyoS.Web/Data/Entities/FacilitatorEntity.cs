@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -14,5 +15,7 @@ namespace KyoS.Web.Data.Entities
         public string Codigo { get; set; }
 
         public ClinicEntity Clinic { get; set; }
+
+        public IEnumerable<GroupEntity> Groups { get; set; }
     }
 }

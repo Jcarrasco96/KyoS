@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -9,5 +10,8 @@ namespace KyoS.Web.Data.Entities
         [Display(Name = "Name")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string Name { get; set; }
+
+        public ICollection<Note_Classification> NotesClassification { get; set; }
+        public ICollection<Objetive_Classification> ObjetivesClassification { get; set; }
     }
 }

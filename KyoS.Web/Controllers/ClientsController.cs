@@ -26,7 +26,7 @@ namespace KyoS.Web.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Clients.Include(c => c.Facilitator).ThenInclude(f => f.Clinic).OrderBy(c => c.Facilitator.Clinic.Name).ToListAsync());
+            return View(await _context.Clients.Include(c => c.Clinic).OrderBy(c => c.Clinic.Name).ToListAsync());
         }
         public IActionResult Create(int id = 0)
         {
@@ -49,7 +49,7 @@ namespace KyoS.Web.Controllers
             ClientViewModel model = new ClientViewModel
             {
                 DateOfBirth = DateTime.Today.AddYears(-60),
-                Facilitators = _combosHelper.GetComboFacilitators(),
+                Clinics = _combosHelper.GetComboClinics(),
                 IdGender = 1,
                 GenderList = _combosHelper.GetComboGender(),
                 IdStatus = 1,
@@ -119,7 +119,7 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            ClientEntity clientEntity = await _context.Clients.Include(c => c.Facilitator).FirstOrDefaultAsync(c => c.Id == id);
+            ClientEntity clientEntity = await _context.Clients.Include(c => c.Clinic).FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
             {
                 return NotFound();

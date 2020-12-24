@@ -198,5 +198,22 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboGroups()
+        {
+            List<SelectListItem> list = _context.Groups.Select(g => new SelectListItem
+            {
+                Text = $"{g.Facilitator.Name} - {g.Meridian}",
+                Value = $"{g.Id}"
+            }).OrderBy(g => g.Text).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select group...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }
