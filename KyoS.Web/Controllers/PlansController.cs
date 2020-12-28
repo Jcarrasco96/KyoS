@@ -1,6 +1,7 @@
 ﻿using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
+using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -87,7 +88,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                             await _context.SaveChangesAsync();
-                            PlanEntity planEntityCreated = await _context.Plans.LastAsync();
+                            PlanEntity planEntityCreated = await _context.Plans.OrderBy(p => p.Id).LastAsync();
 
                             classification_list = new MultiSelectList(await _context.Classifications.ToListAsync(), "Id", "Name");
                             ViewData["classification"] = classification_list;
@@ -143,18 +144,25 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            PlanEntity planEntity = await _context.Plans.Include(p => p.Classifications).FirstOrDefaultAsync(p => p.Id == id);
+            PlanEntity planEntity = await _context.Plans.Include(p => p.Classifications).
+                                                         ThenInclude(pc => pc.Classification).FirstOrDefaultAsync(p => p.Id == id);
             
             if (planEntity == null)
             {
                 return NotFound();
             }
 
-            List<ClassificationEntity> list = await (from cl in _context.Classifications
-                                                     join c in planEntity.Classifications on cl.Id equals c.Classification.Id
-                                                     select cl).ToListAsync();
+            PlanViewModel planViewModel = _converterHelper.ToPlanViewModel(planEntity);
 
-            MultiSelectList classification_list = new MultiSelectList(await _context.Classifications.ToListAsync(), "Id", "Name", list.Select(l => l.Id));
+            List<ClassificationEntity> list = new List<ClassificationEntity>();
+            ClassificationEntity classification;
+            foreach (Plan_Classification item in planViewModel.Classifications)
+            {
+                classification = await _context.Classifications.FindAsync(item.Classification.Id);
+                list.Add(classification);
+            }
+
+            MultiSelectList classification_list = new MultiSelectList(await _context.Classifications.ToListAsync(), "Id", "Name", list.Select(p => p.Id));
             ViewData["classification"] = classification_list;
 
             return View(planEntity);

@@ -70,7 +70,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        ActivityEntity activityEntityCreated = await _context.Activities.LastAsync();
+                        ActivityEntity activityEntityCreated = await _context.Activities.OrderBy(a => a.Id).LastAsync();
                         return RedirectToAction("Create", new { id = 1, idActivity = activityEntityCreated.Id });
                     }
                     catch (System.Exception ex)

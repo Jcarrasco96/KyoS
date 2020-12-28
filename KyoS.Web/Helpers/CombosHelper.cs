@@ -57,7 +57,7 @@ namespace KyoS.Web.Helpers
             {
                 Text = $"{t.Day.ToString()} - {t.Name}",
                 Value = $"{t.Id}"
-            }).OrderBy(t => t.Text).ToList();
+            }).ToList();
 
             list.Insert(0, new SelectListItem
             {
@@ -74,7 +74,7 @@ namespace KyoS.Web.Helpers
             {
                 Text = $"{f.Name}",
                 Value = $"{f.Id}"
-            }).OrderBy(f => f.Text).ToList();
+            }).ToList();
 
             list.Insert(0, new SelectListItem
             {
@@ -91,7 +91,7 @@ namespace KyoS.Web.Helpers
             {
                 Text = $"{c.Name}",
                 Value = $"{c.Id}"
-            }).OrderBy(c => c.Text).ToList();
+            }).ToList();
 
             list.Insert(0, new SelectListItem
             {
@@ -108,7 +108,7 @@ namespace KyoS.Web.Helpers
             {
                 Text = $"{a.Id.ToString()} - {a.Name}",
                 Value = $"{a.Id}"
-            }).OrderBy(a => a.Value).ToList();
+            }).ToList();
 
             list.Insert(0, new SelectListItem
             {
@@ -158,7 +158,7 @@ namespace KyoS.Web.Helpers
             {
                 Text = $"{a.Name}",
                 Value = $"{a.Id}"
-            }).OrderBy(a => a.Value).ToList();
+            }).ToList();
 
             list.Insert(0, new SelectListItem
             {
@@ -205,7 +205,7 @@ namespace KyoS.Web.Helpers
             {
                 Text = $"{g.Facilitator.Name} - {g.Meridian}",
                 Value = $"{g.Id}"
-            }).OrderBy(g => g.Text).ToList();
+            }).ToList();
 
             list.Insert(0, new SelectListItem
             {

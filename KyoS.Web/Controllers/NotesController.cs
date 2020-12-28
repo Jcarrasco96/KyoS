@@ -98,7 +98,7 @@ namespace KyoS.Web.Controllers
                         try
                         {
                             await _context.SaveChangesAsync();
-                            NoteEntity noteEntityCreated = await _context.Notes.LastAsync();
+                            NoteEntity noteEntityCreated = await _context.Notes.OrderBy(n => n.Id).LastAsync();
 
                             classification_list = new MultiSelectList(await _context.Classifications.ToListAsync(), "Id", "Name");
                             ViewData["classification"] = classification_list;
@@ -170,9 +170,13 @@ namespace KyoS.Web.Controllers
 
             NoteViewModel noteViewModel = _converterHelper.ToNoteViewModel(noteEntity);
 
-            List<ClassificationEntity> list = await (from cl in _context.Classifications
-                                                     join c in noteViewModel.Classifications on cl.Id equals c.Classification.Id
-                                                     select cl).ToListAsync();
+            List<ClassificationEntity> list = new List<ClassificationEntity>();
+            ClassificationEntity classification;
+            foreach (Note_Classification item in noteViewModel.Classifications)
+            {
+                classification = await _context.Classifications.FindAsync(item.Classification.Id);
+                list.Add(classification);
+            }
 
             MultiSelectList classification_list = new MultiSelectList(await _context.Classifications.ToListAsync(), "Id", "Name", list.Select(l => l.Id));
             ViewData["classification"] = classification_list;

@@ -20,7 +20,7 @@ namespace KyoS.Web.Controllers
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
-        private IReportService _reportService;
+        private readonly IReportService _reportService;
         public GroupsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IReportService reportService)
         {
             _context = context;
@@ -145,13 +145,9 @@ namespace KyoS.Web.Controllers
             }
 
             GroupViewModel groupViewModel = _converterHelper.ToGroupViewModel(groupEntity);
-            ViewData["am"] = groupViewModel.Am ? "true" : "false";
-            
-            List<ClientEntity> list = await (from cl in _context.Clients
-                                                     join g in groupViewModel.Clients on cl.Id equals g.Id
-                                                     select cl).ToListAsync();
+            ViewData["am"] = groupViewModel.Am ? "true" : "false";            
 
-            MultiSelectList client_list = new MultiSelectList(await _context.Clients.ToListAsync(), "Id", "Name", list.Select(c => c.Id));
+            MultiSelectList client_list = new MultiSelectList(await _context.Clients.ToListAsync(), "Id", "Name", groupViewModel.Clients.Select(c=>c.Id));
             ViewData["clients"] = client_list;
 
             return View(groupViewModel);
@@ -181,7 +177,7 @@ namespace KyoS.Web.Controllers
                         break;
                 }
 
-                GroupEntity group = await _converterHelper.ToGroupEntity(model, false);                
+                GroupEntity group = await _converterHelper.ToGroupEntity(model, false);
                 _context.Update(group);
 
                 GroupEntity original_group = await _context.Groups.Include(g => g.Clients)
@@ -231,11 +227,11 @@ namespace KyoS.Web.Controllers
             GroupViewModel groupViewModel = _converterHelper.ToGroupViewModel(groupEntity);
             ViewData["am"] = groupViewModel.Am ? "true" : "false";
 
-            List<ClientEntity> list = await (from cl in _context.Clients
-                                             join g in groupViewModel.Clients on cl.Id equals g.Id
-                                             select cl).ToListAsync();
+            //List<ClientEntity> list = await (from cl in _context.Clients
+            //                                 join g in groupViewModel.Clients on cl.Id equals g.Id
+            //                                 select cl).ToListAsync();
 
-            MultiSelectList client_list = new MultiSelectList(await _context.Clients.ToListAsync(), "Id", "Name", list.Select(c => c.Id));
+            MultiSelectList client_list = new MultiSelectList(await _context.Clients.ToListAsync(), "Id", "Name", groupViewModel.Clients.Select(c => c.Id));
             ViewData["clients"] = client_list;
 
             return View(groupViewModel);
@@ -243,8 +239,8 @@ namespace KyoS.Web.Controllers
 
         public ActionResult Print(int? id)
         {
-            var reportName = "Group.rdlc";
-            var returnString = _reportService.GenerateReportAsync(reportName);
+            string reportName = "Group.rdlc";
+            byte[] returnString = _reportService.GenerateReportAsync(reportName);
             return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + ".pdf");
         }
 

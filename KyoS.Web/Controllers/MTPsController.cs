@@ -168,9 +168,10 @@ namespace KyoS.Web.Controllers
                 _context.Add(model);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction($"{nameof(UpdateDiagnosis)}/{id}");
+                //return RedirectToAction($"{nameof(UpdateDiagnosis)}/{id}");
+                return RedirectToAction("UpdateDiagnosis", new { id });
             }
-            return RedirectToAction($"{nameof(UpdateDiagnosis)}/{id}");
+            return RedirectToAction("UpdateDiagnosis", new { id });
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -316,8 +317,8 @@ namespace KyoS.Web.Controllers
                 _context.Update(diagnosisEntity);
                 try
                 {
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction($"{nameof(UpdateDiagnosis)}/{model.IdMTP}");
+                    await _context.SaveChangesAsync();                    
+                    return RedirectToAction("UpdateDiagnosis", new { id = model.IdMTP });                    
                 }
                 catch (System.Exception ex)
                 {
@@ -349,7 +350,8 @@ namespace KyoS.Web.Controllers
 
             _context.Diagnoses.Remove(diagnosisEntity);
             await _context.SaveChangesAsync();
-            return RedirectToAction($"{nameof(UpdateDiagnosis)}/{diagnosisEntity.MTP.Id}");
+            //return RedirectToAction($"{nameof(UpdateDiagnosis)}/{diagnosisEntity.MTP.Id}");
+            return RedirectToAction("UpdateDiagnosis", new { diagnosisEntity.MTP.Id });
         }
 
         public async Task<IActionResult> UpdateGoals(int? id)
@@ -410,7 +412,8 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction($"{nameof(UpdateGoals)}/{model.IdMTP}");
+                    //return RedirectToAction($"{nameof(UpdateGoals)}/{model.IdMTP}");
+                    return RedirectToAction("UpdateGoals", new { id = model.IdMTP });
                 }
                 catch (System.Exception ex)
                 {
@@ -442,7 +445,8 @@ namespace KyoS.Web.Controllers
 
             _context.Goals.Remove(goalEntity);
             await _context.SaveChangesAsync();
-            return RedirectToAction($"{nameof(UpdateGoals)}/{goalEntity.MTP.Id}");
+            //return RedirectToAction($"{nameof(UpdateGoals)}/{goalEntity.MTP.Id}");
+            return RedirectToAction("UpdateGoals", new { id = goalEntity.MTP.Id });
         }
 
         public async Task<IActionResult> EditGoal(int? id)
@@ -481,7 +485,8 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction($"{nameof(UpdateGoals)}/{model.IdMTP}");
+                    //return RedirectToAction($"{nameof(UpdateGoals)}/{model.IdMTP}");
+                    return RedirectToAction("UpdateGoals", new { id = model.IdMTP });
                 }
                 catch (System.Exception ex)
                 {
@@ -573,7 +578,8 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction($"{nameof(UpdateObjectives)}/{model.IdGoal}");
+                    //return RedirectToAction($"{nameof(UpdateObjectives)}/{model.IdGoal}");
+                    return RedirectToAction("UpdateObjectives", new { id = model.IdGoal });
                 }
                 catch (System.Exception ex)
                 {
@@ -612,7 +618,8 @@ namespace KyoS.Web.Controllers
 
             _context.Objetives.Remove(objectiveEntity);
             await _context.SaveChangesAsync();
-            return RedirectToAction($"{nameof(UpdateObjectives)}/{objectiveEntity.Goal.Id}");
+            //return RedirectToAction($"{nameof(UpdateObjectives)}/{objectiveEntity.Goal.Id}");
+            return RedirectToAction("UpdateObjectives", new { objectiveEntity.Goal.Id });
         }
 
         public async Task<IActionResult> EditObjective(int? id)
@@ -633,11 +640,15 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            List<ClassificationEntity> list = await (from cl in _context.Classifications
-                                                     join c in model.Classifications on cl.Id equals c.Classification.Id
-                                                     select cl).ToListAsync();
+            List<ClassificationEntity> list = new List<ClassificationEntity>();
+            ClassificationEntity classification;
+            foreach (Objetive_Classification item in model.Classifications)
+            {
+                classification = await _context.Classifications.FindAsync(item.Classification.Id);
+                list.Add(classification);
+            }
 
-            MultiSelectList classification_list = new MultiSelectList(await _context.Classifications.ToListAsync(), "Id", "Name", list.Select(l => l.Id));
+            MultiSelectList classification_list = new MultiSelectList(await _context.Classifications.ToListAsync(), "Id", "Name", list.Select(c => c.Id));
             ViewData["classification"] = classification_list;
 
             return View(model);
@@ -674,7 +685,8 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction($"{nameof(UpdateObjectives)}/{model.IdGoal}");
+                    //return RedirectToAction($"{nameof(UpdateObjectives)}/{model.IdGoal}");
+                    return RedirectToAction("UpdateObjectives", new { id = model.IdGoal });
                 }
                 catch (System.Exception ex)
                 {

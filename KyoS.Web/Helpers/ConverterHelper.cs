@@ -334,5 +334,23 @@ namespace KyoS.Web.Helpers
                 Clients = groupEntity.Clients
             };
         }
+
+        public async Task<PlanEntity> ToPlanEntity(PlanViewModel model, bool isNew)
+        {
+            return new PlanEntity
+            {
+                
+            };
+        }
+
+        public PlanViewModel ToPlanViewModel(PlanEntity planEntity)
+        {
+            return new PlanViewModel
+            {
+                Id = planEntity.Id,
+                Text = planEntity.Text,
+                Classifications = planEntity.Classifications               
+            };
+        }
     }
 }

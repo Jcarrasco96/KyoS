@@ -30,5 +30,7 @@ namespace KyoS.Web.Helpers
         ObjectiveViewModel ToObjectiveViewModel(ObjetiveEntity model);
         Task<GroupEntity> ToGroupEntity(GroupViewModel model, bool isNew);
         GroupViewModel ToGroupViewModel(GroupEntity model);
+        Task<PlanEntity> ToPlanEntity(PlanViewModel model, bool isNew);
+        PlanViewModel ToPlanViewModel(PlanEntity model);
     }
 }
