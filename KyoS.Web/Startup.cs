@@ -55,7 +55,6 @@ namespace KyoS.Web
             services.AddScoped<ICombosHelper, CombosHelper>();
             services.AddScoped<IClassificationHelper, ClassificationHelper>();
             services.AddScoped<IRenderHelper, RenderHelper>();
-            services.AddScoped<IReportService, ReportService>();
             //services.AddControllers();
             //services.AddControllersWithViews();
             services.AddRazorPages();            

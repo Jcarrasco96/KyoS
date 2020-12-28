@@ -13,7 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Reports\Groups\rptGroup.rdlc" />
+    <EmbeddedResource Include="Reports\Groups\rptGroup.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -28,36 +30,39 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.10" />
+    <PackageReference Include="System.CodeDom" Version="5.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\KyoS.Common\KyoS.Common.csproj" />
+    <ProjectReference Include="..\RDLCDesign\RDLCDesign.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Properties\DataSources\" />
     <Folder Include="wwwroot\images\Clinics\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Dataset\DataSet1.Designer.cs">
-      <DependentUpon>DataSet1.xsd</DependentUpon>
+    <Compile Update="Dataset\dsKyoS.Designer.cs">
+      <DependentUpon>dsKyoS.xsd</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Dataset\DataSet1.xsc">
-      <DependentUpon>DataSet1.xsd</DependentUpon>
+    <None Update="Dataset\dsKyoS.xsc">
+      <DependentUpon>dsKyoS.xsd</DependentUpon>
     </None>
-    <None Update="Dataset\DataSet1.xsd">
+    <None Update="Dataset\dsKyoS.xsd">
       <SubType>Designer</SubType>
-      <LastGenOutput>DataSet1.Designer.cs</LastGenOutput>
+      <LastGenOutput>dsKyoS.Designer.cs</LastGenOutput>
       <Generator>MSDataSetGenerator</Generator>
     </None>
-    <None Update="Dataset\DataSet1.xss">
-      <DependentUpon>DataSet1.xsd</DependentUpon>
+    <None Update="Dataset\dsKyoS.xss">
+      <DependentUpon>dsKyoS.xsd</DependentUpon>
     </None>
   </ItemGroup>
 
