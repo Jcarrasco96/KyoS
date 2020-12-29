@@ -266,15 +266,15 @@ namespace KyoS.Web.Controllers
             report.AddDataSource("dsFacilitators", facilitators);
             report.AddDataSource("dsClients", clients);
 
-            var sesion = (groupEntity.Am) ? "Session: AM" : "Session: PM";
-            parameters.Add("sesion", sesion);
+            /*var sesion = (groupEntity.Am) ? "Session: AM" : "Session: PM";
+            parameters.Add("sesion", sesion);*/
 
             //var logopath = Url.Content(groupEntity.Facilitator.Clinic.LogoPath);
             //var logopath = new Uri("C:\\logo.jpg");
             //var logopath = "05fad053-f1c1-4ce8-a816-778ae3387173.jpg";
             //var logopath = "wwwroot\\images\\Clinics\\05fad053-f1c1-4ce8-a816-778ae3387173.jpg";
-            var logopath = "";
-            parameters.Add("logopath", logopath);
+            /*var logopath = "";
+            parameters.Add("logopath", logopath);*/
 
             //string paramValue = "";
             //using (var b = new Bitmap(@"YOUR IMAGE"))
