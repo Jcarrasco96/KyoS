@@ -55,11 +55,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dataset\dsKyoS.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsKyoS.xsd</DependentUpon>
-    </Compile>
+    <Compile Include="DBF\Client.cs" />
+    <Compile Include="DBF\Clinic.cs" />
+    <Compile Include="DBF\Facilitator.cs" />
+    <Compile Include="DBF\Group.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,17 +77,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Reports\rptGroup.rdlc" />
-    <None Include="Dataset\dsKyoS.xsc">
-      <DependentUpon>dsKyoS.xsd</DependentUpon>
-    </None>
-    <None Include="Dataset\dsKyoS.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>dsKyoS.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="Dataset\dsKyoS.xss">
-      <DependentUpon>dsKyoS.xsd</DependentUpon>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

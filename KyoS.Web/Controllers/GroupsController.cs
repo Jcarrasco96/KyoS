@@ -250,7 +250,6 @@ namespace KyoS.Web.Controllers
             Dictionary<string, string> parameters = new Dictionary<string, string>();            
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             System.Text.Encoding.GetEncoding("windows-1252");
-            //parameters.Add("", "");
             LocalReport report = new LocalReport(rdlcFilePath);
             
             GroupEntity groupEntity = _context.Groups.Include(f => f.Facilitator).
@@ -260,7 +259,7 @@ namespace KyoS.Web.Controllers
             List<GroupEntity> groups = new List<GroupEntity> { groupEntity };
             List<ClientEntity> clients = _context.Clients.Where(c => c.Group.Id == groupEntity.Id).ToList();
 
-            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { groupEntity.Facilitator };            
+            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { groupEntity.Facilitator };
 
             report.AddDataSource("dsGroups", groups);
             report.AddDataSource("dsClinics", clinics);
@@ -277,10 +276,19 @@ namespace KyoS.Web.Controllers
             var logopath = "";
             parameters.Add("logopath", logopath);
 
+            //string paramValue = "";
+            //using (var b = new Bitmap(@"YOUR IMAGE"))
+            //{
+            //    using (var ms = new System.IO.MemoryStream())
+            //    {
+            //        b.Save(ms, ImageFormat.Bmp);
+            //        paramValue = Convert.ToBase64String(ms.ToArray());
+            //    }
+            //}
+
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
             return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet, 
                         $"Group_{groupEntity.Facilitator.Name}_{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}.pdf");
         }
-
     }
 }
