@@ -8,11 +8,12 @@ using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Mannager")]
     public class SupervisorsController : Controller
     {
         private readonly DataContext _context;
@@ -26,7 +27,22 @@ namespace KyoS.Web.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Supervisors.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
+            if (User.IsInRole("Admin"))
+                return View(await _context.Supervisors.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
+            else
+            {
+                UserEntity user_logged = await _context.Users.Include(u => u. Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if(user_logged.Clinic == null)
+                    return View(await _context.Supervisors.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());               
+
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if(clinic != null)                 
+                    return View(await _context.Supervisors.Include(f => f.Clinic)
+                                                          .Where(s => s.Clinic.Id == clinic.Id).OrderBy(f => f.Name).ToListAsync());                     
+                else
+                    return View(await _context.Supervisors.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
+            }
         }
         public IActionResult Create(int id = 0)
         {
@@ -46,11 +62,35 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            SupervisorViewModel model = new SupervisorViewModel
+            SupervisorViewModel model;
+
+            if (!User.IsInRole("Admin"))
             {
-                Clinics = _combosHelper.GetComboClinics()
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = clinic.Name,
+                        Value = $"{clinic.Id}"
+                    });
+                    model = new SupervisorViewModel
+                    {
+                        Clinics = list,
+                        IdClinic = clinic.Id
+                    };                    
+                    return View(model);
+                }
+            }
+            
+            model = new SupervisorViewModel
+            {
+                 Clinics = _combosHelper.GetComboClinics()
             };
-            return View(model);
+            return View(model);                        
         }
 
         [HttpPost]
@@ -122,6 +162,23 @@ namespace KyoS.Web.Controllers
             }
 
             SupervisorViewModel supervisorViewModel = _converterHelper.ToSupervisorViewModel(supervisorEntity);
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = user_logged.Clinic.Name,
+                        Value = $"{user_logged.Clinic.Id}"
+                    });
+                    supervisorViewModel.Clinics = list;
+                }
+            }            
+
             return View(supervisorViewModel);
         }
 

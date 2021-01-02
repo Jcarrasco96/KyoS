@@ -8,7 +8,7 @@ namespace KyoS.Web.Helpers
     {
         ClinicEntity ToClinicEntity(ClinicViewModel model, string path, bool isNew);
         ClinicViewModel ToClinicViewModel(ClinicEntity model);
-        ThemeEntity ToThemeEntity(ThemeViewModel model, bool isNew);
+        Task<ThemeEntity> ToThemeEntity(ThemeViewModel model, bool isNew);
         ThemeViewModel ToThemeViewModel(ThemeEntity model);
         Task<ActivityEntity> ToActivityEntity(ActivityViewModel model, bool isNew);
         ActivityViewModel ToActivityViewModel(ActivityEntity model);

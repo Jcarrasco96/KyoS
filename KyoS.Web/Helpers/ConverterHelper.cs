@@ -38,11 +38,12 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public ThemeEntity ToThemeEntity(ThemeViewModel model, bool isNew)
+        public async Task<ThemeEntity> ToThemeEntity(ThemeViewModel model, bool isNew)
         {
             return new ThemeEntity
             {
                 Id = isNew ? 0 : model.Id,
+                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
                 Day = (model.DayId == 1) ? DayOfWeekType.Monday : (model.DayId == 2) ? DayOfWeekType.Tuesday :
                                     (model.DayId == 3) ? DayOfWeekType.Wednesday : (model.DayId == 4) ? DayOfWeekType.Thursday :
                                     (model.DayId == 5) ? DayOfWeekType.Friday : DayOfWeekType.Monday,
@@ -58,7 +59,9 @@ namespace KyoS.Web.Helpers
                 Name = themeEntity.Name,
                 Day = themeEntity.Day,
                 Days = _combosHelper.GetComboDays(),
-                DayId = Convert.ToInt32(themeEntity.Day) + 1
+                DayId = Convert.ToInt32(themeEntity.Day) + 1,
+                IdClinic = themeEntity.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics()
             };
         }
 

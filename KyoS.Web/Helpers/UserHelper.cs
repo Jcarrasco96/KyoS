@@ -59,16 +59,18 @@ namespace KyoS.Web.Helpers
                          select new
                          {
                              UserId = user.Id,
-                             Username = user.UserName, 
+                             Username = user.UserName,
                              FullName = user.FullName,
                              RoleNames = user.UserType.ToString(),
+                             Clinic = user.Clinic
                          }).ToList().Select(p => new Users_in_Role_ViewModel()
                          {
                              UserId = p.UserId,
                              Username = p.Username,
                              Email = p.Username,
                              Fullname = p.FullName,
-                             Role = p.RoleNames
+                             Role = p.RoleNames,
+                             Clinic = p.Clinic
                          });
             return model;
         }
@@ -97,10 +99,12 @@ namespace KyoS.Web.Helpers
         {
             if (await this.IsUserInRoleAsync(user, UserType.Admin.ToString()))
                 await _userManager.RemoveFromRoleAsync(user, UserType.Admin.ToString());
-            if (await this.IsUserInRoleAsync(user, UserType.Operator.ToString()))
-                await _userManager.RemoveFromRoleAsync(user, UserType.Operator.ToString());
+            if (await this.IsUserInRoleAsync(user, UserType.Mannager.ToString()))
+                await _userManager.RemoveFromRoleAsync(user, UserType.Mannager.ToString());
             if (await this.IsUserInRoleAsync(user, UserType.Facilitator.ToString()))
                 await _userManager.RemoveFromRoleAsync(user, UserType.Facilitator.ToString());
+            if (await this.IsUserInRoleAsync(user, UserType.Supervisor.ToString()))
+                await _userManager.RemoveFromRoleAsync(user, UserType.Supervisor.ToString());
             return await _userManager.DeleteAsync(user);
         }
     }

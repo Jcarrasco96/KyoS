@@ -35,5 +35,7 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "User")]
         public string FullNameWithDocument => $"{FirstName} {LastName} - {Document}";
+
+        public ClinicEntity Clinic { get; set; }
     }
 }

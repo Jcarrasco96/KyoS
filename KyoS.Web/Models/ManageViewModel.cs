@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using KyoS.Web.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,20 +18,23 @@ namespace KyoS.Web.Models
     public class Users_in_Role_ViewModel
     {
         public string UserId { get; set; }
+        [Display(Name = "User Name")]
         public string Username { get; set; }
+        [Display(Name = "Full Name")]
         public string Fullname { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
+        public ClinicEntity Clinic { get; set; }
     }
 
     public class RegisterViewModel
     {
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        [Display(Name = "FirstName")]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        [Display(Name = "LastName")]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
@@ -53,7 +57,11 @@ namespace KyoS.Web.Models
         [DataType(DataType.Password)]
         [Display(Name = "Repeat password")]
         [Compare("Password", ErrorMessage = "Password and confirmation do not match")]
-        public string ConfirmPassword { get; set; }        
+        public string ConfirmPassword { get; set; }
+
+        [Display(Name = "Clinic")]
+        public int IdClinic { get; set; }
+        public IEnumerable<SelectListItem> Clinics { get; set; }
     }
 
     /*public class ManageLoginsViewModel

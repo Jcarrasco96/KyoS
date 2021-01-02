@@ -4,13 +4,15 @@ using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Facilitator")]
     public class ActivitiesController : Controller
     {
         private readonly DataContext _context;
@@ -25,7 +27,18 @@ namespace KyoS.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Activities.Include(a => a.Theme).OrderBy(a => a.Theme.Name).ToListAsync());
+            if (User.IsInRole("Admin"))
+                return View(await _context.Activities.Include(a => a.Theme).ThenInclude(t => t.Clinic).OrderBy(a => a.Theme.Name).ToListAsync());
+            else
+            {
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic == null)
+                    return View(await _context.Activities.Include(a => a.Theme).ThenInclude(t => t.Clinic).OrderBy(a => a.Theme.Name).ToListAsync());
+
+                return View(await _context.Activities.Include(a => a.Theme).ThenInclude(t => t.Clinic)
+                                                         .Where(a => a.Theme.Clinic.Id == user_logged.Clinic.Id).OrderBy(a => a.Theme.Name).ToListAsync());                
+            }
         }
 
         public IActionResult Create(int id = 0, int idActivity = 0)
@@ -47,7 +60,23 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            ActivityViewModel model = new ActivityViewModel
+            ActivityViewModel model;
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {                   
+                    model = new ActivityViewModel
+                    {
+                        Themes = _combosHelper.GetComboThemesByClinic(user_logged.Clinic.Id)                        
+                    };
+                    return View(model);
+                }
+            }
+
+            model = new ActivityViewModel
             {
                 Themes = _combosHelper.GetComboThemes()
             };
@@ -125,6 +154,17 @@ namespace KyoS.Web.Controllers
             }
 
             ActivityViewModel activityViewModel = _converterHelper.ToActivityViewModel(activityEntity);
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    activityViewModel.Themes = _combosHelper.GetComboThemesByClinic(user_logged.Clinic.Id);
+                }
+            }
+
             return View(activityViewModel);
         }
 

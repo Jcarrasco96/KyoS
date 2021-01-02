@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Supervisor, Mannager")]
     public class MTPsController : Controller
     {
         private readonly DataContext _context;
@@ -31,7 +31,26 @@ namespace KyoS.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.MTPs.Include(m => m.Client).ThenInclude(c => c.Clinic).OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+            if (User.IsInRole("Admin"))
+                return View(await _context.MTPs.Include(m => m.Client).ThenInclude(c => c.Clinic).
+                                                                        OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+            else
+            {
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic == null)
+                    return View(await _context.MTPs.Include(m => m.Client).ThenInclude(c => c.Clinic).
+                                                                        OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if (clinic != null)
+                    return View(await _context.MTPs.Include(m => m.Client).ThenInclude(c => c.Clinic).
+                                                                        Where(m => m.Client.Clinic.Id == clinic.Id).
+                                                                        OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+                else
+                    return View(await _context.MTPs.Include(m => m.Client).ThenInclude(c => c.Clinic).
+                                                                        OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+            }
         }
 
         public async Task<IActionResult> Create(int id = 0)
@@ -60,7 +79,25 @@ namespace KyoS.Web.Controllers
             }
             await _context.SaveChangesAsync();
 
-            MTPViewModel model = new MTPViewModel
+            MTPViewModel model = new MTPViewModel();
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    model = new MTPViewModel
+                    {
+                        Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
+                        AdmisionDate = DateTime.Today,
+                        MTPDevelopedDate = DateTime.Today
+                    };
+                    return View(model);
+                }
+            }
+
+            model = new MTPViewModel
             {
                 Clients = _combosHelper.GetComboClients(),
                 AdmisionDate = DateTime.Today,
@@ -207,6 +244,17 @@ namespace KyoS.Web.Controllers
             }
 
             MTPViewModel mtpViewModel = _converterHelper.ToMTPViewModel(mtpEntity);
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    mtpViewModel.Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id);
+                }
+            }
+
             return View(mtpViewModel);
         }
 

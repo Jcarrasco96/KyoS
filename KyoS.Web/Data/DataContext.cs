@@ -18,8 +18,7 @@ namespace KyoS.Web.Data
         public DbSet<ThemeEntity> Themes { get; set; }
         public DbSet<ActivityEntity> Activities { get; set; }
         public DbSet<NoteEntity> Notes { get; set; }
-        public DbSet<Note_Classification> Notes_Classifications { get; set; }
-        public DbSet<Clinic_Theme> Clinics_Themes { get; set; }
+        public DbSet<Note_Classification> Notes_Classifications { get; set; }        
         public DbSet<DiagnosisEntity> Diagnoses { get; set; }
         public DbSet<DiagnosisTempEntity> DiagnosesTemp { get; set; }
         public DbSet<MTPEntity> MTPs { get; set; }

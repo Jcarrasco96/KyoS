@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201230033759_ModifyUserEntity")]
+    partial class ModifyUserEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,6 +122,31 @@ namespace KyoS.Web.Migrations
                         .IsUnique();
 
                     b.ToTable("Clinics");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.Clinic_Theme", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("ClinicId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ThemeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClinicId");
+
+                    b.HasIndex("ThemeId");
+
+                    b.ToTable("Clinics_Themes");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.DailySessionEntity", b =>
@@ -530,9 +557,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("ClinicId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Day")
                         .HasColumnType("int");
 
@@ -542,8 +566,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClinicId");
 
                     b.ToTable("Themes");
                 });
@@ -798,6 +820,21 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Group");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.Clinic_Theme", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
+                        .WithMany("Clinics_Themes")
+                        .HasForeignKey("ClinicId");
+
+                    b.HasOne("KyoS.Web.Data.Entities.ThemeEntity", "Theme")
+                        .WithMany()
+                        .HasForeignKey("ThemeId");
+
+                    b.Navigation("Clinic");
+
+                    b.Navigation("Theme");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.DailySessionEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.GroupEntity", "Group")
@@ -957,15 +994,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Clinic");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.ThemeEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
-                        .WithMany("Themes")
-                        .HasForeignKey("ClinicId");
-
-                    b.Navigation("Clinic");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.UserEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
@@ -1039,11 +1067,11 @@ namespace KyoS.Web.Migrations
                 {
                     b.Navigation("Clients");
 
+                    b.Navigation("Clinics_Themes");
+
                     b.Navigation("Facilitators");
 
                     b.Navigation("Supervisors");
-
-                    b.Navigation("Themes");
 
                     b.Navigation("Users");
                 });

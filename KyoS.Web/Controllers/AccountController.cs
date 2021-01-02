@@ -1,4 +1,5 @@
 ﻿using KyoS.Common.Enums;
+using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
@@ -11,17 +12,21 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly IUserHelper _userHelper;
         private readonly ICombosHelper _combosHelper;
+        private readonly DataContext _context;
 
-        public AccountController(IUserHelper userHelper, ICombosHelper combosHelper)
+        public AccountController(IUserHelper userHelper, ICombosHelper combosHelper, DataContext context)
         {
             _userHelper = userHelper;
             _combosHelper = combosHelper;
+            _context = context;
         }
 
+        [AllowAnonymous]
         public IActionResult Login()
         {
             if (User.Identity.IsAuthenticated)
@@ -33,6 +38,7 @@ namespace KyoS.Web.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
@@ -60,7 +66,6 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [Authorize]
         public IActionResult Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
@@ -97,7 +102,8 @@ namespace KyoS.Web.Controllers
 
             RegisterViewModel model = new RegisterViewModel
             {
-                Roles = _combosHelper.GetComboRoles()
+                Roles = _combosHelper.GetComboRoles(),
+                Clinics = _combosHelper.GetComboClinics()
             };
 
             return View(model);
@@ -105,6 +111,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -121,7 +128,8 @@ namespace KyoS.Web.Controllers
                         PhoneNumber = string.Empty,
                         Address = string.Empty,
                         Document = string.Empty,
-                        UserType = (model.RoleId == 1) ? UserType.Facilitator : (model.RoleId == 2) ? UserType.Operator : (model.RoleId == 3) ? UserType.Admin : UserType.Facilitator
+                        UserType = (model.RoleId == 1) ? UserType.Facilitator : (model.RoleId == 2) ? UserType.Supervisor : (model.RoleId == 3) ? UserType.Mannager : UserType.Admin,
+                        Clinic = (model.IdClinic != 0) ? _context.Clinics.FirstOrDefault(c => c.Id == model.IdClinic) : null
                     };
 
                     try
@@ -140,6 +148,9 @@ namespace KyoS.Web.Controllers
                     return RedirectToAction("Create", new { id = 2 });
                 }
             }
+           
+            model.Clinics = _combosHelper.GetComboClinics();
+            model.Roles = _combosHelper.GetComboRoles();
             return View(model);
         }
 
@@ -174,6 +185,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == string.Empty)

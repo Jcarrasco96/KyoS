@@ -12,5 +12,11 @@ namespace KyoS.Web.Models
         [Range(1, int.MaxValue, ErrorMessage = "You must select a day.")]
         public int DayId { get; set; }
         public IEnumerable<SelectListItem> Days { get; set; }
+
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [Display(Name = "Clinic")]
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a clinic.")]
+        public int IdClinic { get; set; }
+        public IEnumerable<SelectListItem> Clinics { get; set; }
     }
 }

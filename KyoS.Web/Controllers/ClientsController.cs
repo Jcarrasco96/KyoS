@@ -8,11 +8,12 @@ using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Mannager, Supervisor")]
     public class ClientsController : Controller
     {
         private readonly DataContext _context;
@@ -26,7 +27,22 @@ namespace KyoS.Web.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Clients.Include(c => c.Clinic).OrderBy(c => c.Clinic.Name).ToListAsync());
+            if (User.IsInRole("Admin"))
+                return View(await _context.Clients.Include(c => c.Clinic).OrderBy(c => c.Clinic.Name).ToListAsync());
+            else
+            {
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic == null)
+                    return View(await _context.Clients.Include(c => c.Clinic).OrderBy(c => c.Clinic.Name).ToListAsync());
+
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if (clinic != null)
+                    return View(await _context.Clients.Include(c => c.Clinic)
+                                                      .Where(c => c.Clinic.Id == clinic.Id).OrderBy(c => c.Name).ToListAsync());
+                else
+                    return View(await _context.Clients.Include(c => c.Clinic).OrderBy(c => c.Clinic.Name).ToListAsync());
+            }
         }
         public IActionResult Create(int id = 0)
         {
@@ -46,7 +62,36 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            ClientViewModel model = new ClientViewModel
+            ClientViewModel model = new ClientViewModel();
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = clinic.Name,
+                        Value = $"{clinic.Id}"
+                    });
+                    model = new ClientViewModel
+                    {      
+                        DateOfBirth = DateTime.Today.AddYears(-60),
+                        Clinics = list,
+                        IdClinic = clinic.Id,
+                        IdGender = 1,
+                        GenderList = _combosHelper.GetComboGender(),
+                        IdStatus = 1,
+                        StatusList = _combosHelper.GetComboClientStatus()
+                    };
+                    return View(model);
+                }
+            }
+
+            model = new ClientViewModel
             {
                 DateOfBirth = DateTime.Today.AddYears(-60),
                 Clinics = _combosHelper.GetComboClinics(),
@@ -126,6 +171,23 @@ namespace KyoS.Web.Controllers
             }
 
             ClientViewModel clientViewModel = _converterHelper.ToClientViewModel(clientEntity);
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = user_logged.Clinic.Name,
+                        Value = $"{user_logged.Clinic.Id}"
+                    });
+                    clientViewModel.Clinics = list;
+                }
+            }
+
             return View(clientViewModel);
         }
 

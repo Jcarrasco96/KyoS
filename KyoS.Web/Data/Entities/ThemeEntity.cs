@@ -15,5 +15,7 @@ namespace KyoS.Web.Data.Entities
         [Display(Name = "Day of week")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DayOfWeekType Day { get; set; }
+
+        public ClinicEntity Clinic { get; set; }
     }
 }

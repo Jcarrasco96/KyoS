@@ -3,7 +3,8 @@
     public enum UserType
     {
         Admin,
-        Operator,
-        Facilitator
+        Mannager,
+        Supervisor,
+        Facilitator           
     }
 }

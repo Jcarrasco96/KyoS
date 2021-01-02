@@ -63,8 +63,11 @@
                                 <th class="col-md-2">
                                     @Html.DisplayNameFor(model => model.Theme.Name)
                                 </th>
-                                <th class="col-md-7">
+                                <th class="col-md-5">
                                     @Html.DisplayNameFor(model => model.Name)
+                                </th>
+                                <th class="col-md-2">
+                                    Clinic Name
                                 </th>
                                 <th class="col-md-2">
                                 </th>
@@ -82,6 +85,9 @@
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Theme.Clinic.Name)
                                 </td>
                                 <td align="right">
                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>

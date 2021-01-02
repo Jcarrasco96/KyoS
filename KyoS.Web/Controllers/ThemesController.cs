@@ -5,14 +5,16 @@ using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Mannager, Supervisor")]
     public class ThemesController : Controller
     {
         private readonly DataContext _context;
@@ -26,7 +28,22 @@ namespace KyoS.Web.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Themes.OrderBy(t => t.Day).ToListAsync());
+            if (User.IsInRole("Admin"))
+                return View(await _context.Themes.Include(t => t.Clinic).OrderBy(t => t.Day).ToListAsync());
+            else
+            {
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic == null)
+                    return View(await _context.Themes.Include(t => t.Clinic).OrderBy(t => t.Day).ToListAsync());
+
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if (clinic != null)
+                    return View(await _context.Themes.Include(t => t.Clinic)
+                                                          .Where(t => t.Clinic.Id == clinic.Id).OrderBy(f => f.Day).ToListAsync());
+                else
+                    return View(await _context.Themes.Include(t => t.Clinic).OrderBy(t => t.Day).ToListAsync());
+            }
         }
 
         public IActionResult Create(int id = 0)
@@ -47,9 +64,35 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            ThemeViewModel model = new ThemeViewModel
+            ThemeViewModel model = new ThemeViewModel();
+
+            if (!User.IsInRole("Admin"))
             {
-                Days = _combosHelper.GetComboDays()
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = clinic.Name,
+                        Value = $"{clinic.Id}"
+                    });
+                    model = new ThemeViewModel
+                    {
+                        Clinics = list,
+                        IdClinic = clinic.Id,
+                        Days = _combosHelper.GetComboDays()
+                    };
+                    return View(model);
+                }
+            }
+
+            model = new ThemeViewModel
+            {
+                Days = _combosHelper.GetComboDays(),
+                Clinics = _combosHelper.GetComboClinics(),
             };
             return View(model);
         }
@@ -63,10 +106,10 @@ namespace KyoS.Web.Controllers
                 DayOfWeekType day = (themeViewModel.DayId == 1) ? DayOfWeekType.Monday : (themeViewModel.DayId == 2) ? DayOfWeekType.Tuesday :
                                     (themeViewModel.DayId == 3) ? DayOfWeekType.Wednesday : (themeViewModel.DayId == 4) ? DayOfWeekType.Thursday :
                                     (themeViewModel.DayId == 5) ? DayOfWeekType.Friday : DayOfWeekType.Monday;
-                ThemeEntity theme = await _context.Themes.FirstOrDefaultAsync((t => (t.Name == themeViewModel.Name && t.Day == day)));
+                ThemeEntity theme = await _context.Themes.FirstOrDefaultAsync((t => (t.Name == themeViewModel.Name && t.Day == day && t.Clinic.Id == themeViewModel.IdClinic)));
                 if (theme == null)
                 {
-                    ThemeEntity themeEntity = _converterHelper.ToThemeEntity(themeViewModel, true);
+                    ThemeEntity themeEntity = await _converterHelper.ToThemeEntity(themeViewModel, true);
 
                     _context.Add(themeEntity);
                     try
@@ -119,13 +162,30 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            ThemeEntity themeEntity = await _context.Themes.FindAsync(id);
+            ThemeEntity themeEntity = await _context.Themes.Include(t => t.Clinic).FirstOrDefaultAsync(t => t.Id == id);
             if (themeEntity == null)
             {
                 return NotFound();
             }
 
-            ThemeEntity themeViewModel = _converterHelper.ToThemeViewModel(themeEntity);
+            ThemeViewModel themeViewModel = _converterHelper.ToThemeViewModel(themeEntity);
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = user_logged.Clinic.Name,
+                        Value = $"{user_logged.Clinic.Id}"
+                    });
+                    themeViewModel.Clinics = list;
+                }
+            }
+
             return View(themeViewModel);
         }
 
@@ -140,7 +200,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                ThemeEntity themeEntity = _converterHelper.ToThemeEntity(themeViewModel, false);
+                ThemeEntity themeEntity = await _converterHelper.ToThemeEntity(themeViewModel, false);
                 _context.Update(themeEntity);
                 try
                 {

@@ -54,6 +54,8 @@
 <div class="col-md-12">
     &nbsp;
 </div>
+@if(User.IsInRole("Admin"))
+{ 
 <div>
     <div class="col-md-6">
         <div class="form-group">
@@ -66,5 +68,6 @@
         </div>
     </div>
 </div>
+}
 
 

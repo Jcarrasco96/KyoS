@@ -21,8 +21,10 @@ namespace KyoS.Web.Helpers
         {
             List<SelectListItem> list = new List<SelectListItem>
                                 { new SelectListItem { Text = UserType.Facilitator.ToString(), Value = "1"},
-                                  new SelectListItem { Text = UserType.Operator.ToString(), Value = "2"},
-                                  new SelectListItem { Text = UserType.Admin.ToString(), Value = "3"}};
+                                  new SelectListItem { Text = UserType.Supervisor.ToString(), Value = "2"},
+                                  new SelectListItem { Text = UserType.Mannager.ToString(), Value = "3"},
+                                  new SelectListItem { Text = UserType.Admin.ToString(), Value = "4"}
+            };
             
             list.Insert(0, new SelectListItem
             {
@@ -68,6 +70,23 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboThemesByClinic(int idClinic)
+        {
+            List<SelectListItem> list = _context.Themes.Where(t => t.Clinic.Id == idClinic).Select(t => new SelectListItem
+            {
+                Text = $"{t.Day.ToString()} - {t.Name}",
+                Value = $"{t.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select topic...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
         public IEnumerable<SelectListItem> GetComboFacilitators()
         {
             List<SelectListItem> list = _context.Facilitators.Select(f => new SelectListItem
@@ -85,9 +104,43 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboFacilitatorsByClinic(int idClinic)
+        {
+            List<SelectListItem> list = _context.Facilitators.Where(f => f.Clinic.Id == idClinic).Select(f => new SelectListItem
+            {
+                Text = $"{f.Name}",
+                Value = $"{f.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select facilitator...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
         public IEnumerable<SelectListItem> GetComboClients()
         {
             List<SelectListItem> list = _context.Clients.Select(c => new SelectListItem
+            {
+                Text = $"{c.Name}",
+                Value = $"{c.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select client...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboClientsByClinic(int idClinic)
+        {
+            List<SelectListItem> list = _context.Clients.Where(c => c.Clinic.Id == idClinic).Select(c => new SelectListItem
             {
                 Text = $"{c.Name}",
                 Value = $"{c.Id}"
@@ -214,6 +267,6 @@ namespace KyoS.Web.Helpers
             });
 
             return list;
-        }
+        }        
     }
 }

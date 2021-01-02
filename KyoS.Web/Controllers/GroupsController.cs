@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Mannager")]
     public class GroupsController : Controller
     {
         private readonly DataContext _context;
@@ -36,7 +36,22 @@ namespace KyoS.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Groups.Include(g => g.Facilitator).Include(g => g.Clients).OrderBy(g => g.Facilitator.Name).ToListAsync());
+            if (User.IsInRole("Admin"))
+                return View(await _context.Groups.Include(g => g.Facilitator).Include(g => g.Clients).OrderBy(g => g.Facilitator.Name).ToListAsync());
+            else
+            {
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic == null)
+                    return View(await _context.Groups.Include(g => g.Facilitator).Include(g => g.Clients).OrderBy(g => g.Facilitator.Name).ToListAsync());
+
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if (clinic != null)
+                    return View(await _context.Groups.Include(g => g.Facilitator).Include(g => g.Clients)
+                                                     .Where(g => g.Facilitator.Clinic.Id == clinic.Id).OrderBy(g => g.Facilitator.Name).ToListAsync());
+                else
+                    return View(await _context.Groups.Include(g => g.Facilitator).Include(g => g.Clients).OrderBy(g => g.Facilitator.Name).ToListAsync());
+            }
         }
 
         public async Task<IActionResult> Create(int id = 0)
@@ -57,12 +72,32 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            GroupViewModel model = new GroupViewModel
+            GroupViewModel model;
+            MultiSelectList client_list;
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    model = new GroupViewModel
+                    {
+                        Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id)
+                    };
+                    client_list = new MultiSelectList(await _context.Clients.Where(c => c.Clinic.Id == user_logged.Clinic.Id)
+                                                                            .OrderBy(c => c.Name).ToListAsync(), "Id", "Name");
+                    ViewData["clients"] = client_list;
+                    return View(model);
+                }
+            }
+
+            model = new GroupViewModel
             {
                 Facilitators = _combosHelper.GetComboFacilitators()
             };
 
-            MultiSelectList client_list = new MultiSelectList(await _context.Clients.OrderBy(c => c.Name).ToListAsync(), "Id", "Name");
+            client_list = new MultiSelectList(await _context.Clients.OrderBy(c => c.Name).ToListAsync(), "Id", "Name");
             ViewData["clients"] = client_list;
             return View(model);
         }
@@ -149,12 +184,27 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
+            MultiSelectList client_list;
             GroupViewModel groupViewModel = _converterHelper.ToGroupViewModel(groupEntity);
-            ViewData["am"] = groupViewModel.Am ? "true" : "false";            
+            ViewData["am"] = groupViewModel.Am ? "true" : "false";
 
-            MultiSelectList client_list = new MultiSelectList(await _context.Clients.ToListAsync(), "Id", "Name", groupViewModel.Clients.Select(c=>c.Id));
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    groupViewModel.Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id);
+                    
+                    client_list = new MultiSelectList(await _context.Clients.Where(c => c.Clinic.Id == user_logged.Clinic.Id)
+                                                                            .OrderBy(c => c.Name).ToListAsync(), "Id", "Name", groupViewModel.Clients.Select(c => c.Id));
+                    ViewData["clients"] = client_list;
+                    return View(groupViewModel);
+                }
+            }
+
+            client_list = new MultiSelectList(await _context.Clients.ToListAsync(), "Id", "Name", groupViewModel.Clients.Select(c=>c.Id));
             ViewData["clients"] = client_list;
-
             return View(groupViewModel);
         }
 
@@ -258,7 +308,6 @@ namespace KyoS.Web.Controllers
             List<ClinicEntity> clinics = new List <ClinicEntity> { groupEntity.Facilitator.Clinic };
             List<GroupEntity> groups = new List<GroupEntity> { groupEntity };
             List<ClientEntity> clients = _context.Clients.Where(c => c.Group.Id == groupEntity.Id).ToList();
-
             List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { groupEntity.Facilitator };
 
             report.AddDataSource("dsGroups", groups);
@@ -266,15 +315,15 @@ namespace KyoS.Web.Controllers
             report.AddDataSource("dsFacilitators", facilitators);
             report.AddDataSource("dsClients", clients);
 
-            /*var sesion = (groupEntity.Am) ? "Session: AM" : "Session: PM";
-            parameters.Add("sesion", sesion);*/
+            var sesion = (groupEntity.Am) ? "Session: AM" : "Session: PM";
+            parameters.Add("sesion", sesion);
 
             //var logopath = Url.Content(groupEntity.Facilitator.Clinic.LogoPath);
             //var logopath = new Uri("C:\\logo.jpg");
             //var logopath = "05fad053-f1c1-4ce8-a816-778ae3387173.jpg";
             //var logopath = "wwwroot\\images\\Clinics\\05fad053-f1c1-4ce8-a816-778ae3387173.jpg";
-            /*var logopath = "";
-            parameters.Add("logopath", logopath);*/
+            var logopath = "";
+            parameters.Add("logopath", logopath);
 
             //string paramValue = "";
             //using (var b = new Bitmap(@"YOUR IMAGE"))

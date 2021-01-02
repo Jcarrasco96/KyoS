@@ -4,13 +4,15 @@ using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Mannager")]
     public class FacilitatorsController : Controller
     {
         private readonly DataContext _context;
@@ -24,7 +26,22 @@ namespace KyoS.Web.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Facilitators.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
+            if (User.IsInRole("Admin"))
+               return View(await _context.Facilitators.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
+            else
+            {
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic == null)
+                   return View(await _context.Facilitators.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
+
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if (clinic != null)
+                    return View(await _context.Facilitators.Include(f => f.Clinic)
+                                                          .Where(f => f.Clinic.Id == clinic.Id).OrderBy(f => f.Name).ToListAsync());
+                else
+                    return View(await _context.Facilitators.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
+            }
         }
 
         public IActionResult Create(int id = 0)
@@ -45,7 +62,31 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            FacilitatorViewModel model = new FacilitatorViewModel
+            FacilitatorViewModel model;
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = clinic.Name,
+                        Value = $"{clinic.Id}"
+                    });
+                    model = new FacilitatorViewModel
+                    {
+                        Clinics = list,
+                        IdClinic = clinic.Id
+                    };
+                    return View(model);
+                }
+            }
+
+            model = new FacilitatorViewModel
             {
                 Clinics = _combosHelper.GetComboClinics()
             };
@@ -121,6 +162,23 @@ namespace KyoS.Web.Controllers
             }
 
             FacilitatorViewModel facilitatorViewModel = _converterHelper.ToFacilitatorViewModel(facilitatorEntity);
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = user_logged.Clinic.Name,
+                        Value = $"{user_logged.Clinic.Id}"
+                    });
+                    facilitatorViewModel.Clinics = list;
+                }
+            }
+
             return View(facilitatorViewModel);
         }
 

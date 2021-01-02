@@ -26,7 +26,7 @@ namespace KyoS.Web.Data
 
             await CheckUserAsync("84070314209", "Oscar", "Hernández Baute", "elpuya84@gmail.com", "230 939 2747", "Ave 54", UserType.Admin);
             await CheckUserAsync("81110214209", "Yoanky", "Madrazo", "ymadrazovalladares@gmail.com", "230 349 2747", "Fort Laurdale", UserType.Admin);
-            await CheckUserAsync("91110214209", "Leyanis", "Albo", "leyanis.albo@gmail.com", "230 349 2747", "Ave 60", UserType.Operator);
+            await CheckUserAsync("91110214209", "Leyanis", "Albo", "leyanis.albo@gmail.com", "230 349 2747", "Ave 60", UserType.Admin);
 
             await CheckClassificationAsync("Depressed");
             await CheckClassificationAsync("Negativistic");
@@ -75,7 +75,8 @@ namespace KyoS.Web.Data
         private async Task CheckRolesAsync()
         {
             await _userHelper.CheckRoleAsync(UserType.Admin.ToString());
-            await _userHelper.CheckRoleAsync(UserType.Operator.ToString());
+            await _userHelper.CheckRoleAsync(UserType.Mannager.ToString());
+            await _userHelper.CheckRoleAsync(UserType.Supervisor.ToString());
             await _userHelper.CheckRoleAsync(UserType.Facilitator.ToString());
         }
 
