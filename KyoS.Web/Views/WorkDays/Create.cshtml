@@ -1,0 +1,61 @@
+﻿@model KyoS.Web.Models.WeekViewModel
+@{
+    ViewData["Title"] = "Create Workdays";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create</title>
+    <link rel="stylesheet" href="~/css/datepicker.min.css">
+</head>
+<body>
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("Workdays", "Index", "WorkDays")
+            </li>
+            <li class="active">Create</li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+    <h4>Create new workdays</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="IdClinic" class="control-label"></label>
+                    <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control"></select>
+                    <span asp-validation-for="IdClinic" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Select workdays</label><br />
+                    <input type="text" asp-for="Workdays"
+                           class="datepicker-here"
+                           data-language='en'
+                           data-multiple-dates="4"
+                           data-multiple-dates-separator="," 
+                           style="width:100%;"
+                           data-position="right top" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+        <script src="~/js/datepicker.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="~/js/datepicker.en.js" type="text/javascript" charset="utf-8"></script>        
+    }
+</body>
+</html>

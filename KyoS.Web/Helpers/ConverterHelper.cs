@@ -86,9 +86,9 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<NoteEntity> ToNoteEntity(NoteViewModel model, bool isNew)
+        public async Task<NotePrototypeEntity> ToNoteEntity(NoteViewModel model, bool isNew)
         {
-            return new NoteEntity
+            return new NotePrototypeEntity
             {
                 Id = isNew ? 0 : model.Id,
                 Activity = await _context.Activities.FindAsync(model.IdActivity),
@@ -97,7 +97,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public NoteViewModel ToNoteViewModel(NoteEntity noteEntity)
+        public NoteViewModel ToNoteViewModel(NotePrototypeEntity noteEntity)
         {
             return new NoteViewModel
             {

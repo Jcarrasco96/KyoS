@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -12,5 +13,7 @@ namespace KyoS.Web.Data.Entities
         public string Name { get; set; }
 
         public ThemeEntity Theme { get; set; }
+
+        public ICollection<Note_Activity> Notes_Activities { get; set; }
     }
 }

@@ -15,12 +15,12 @@ using System.Threading.Tasks;
 namespace KyoS.Web.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class NotesController : Controller
+    public class NotesPrototypesController : Controller
     {
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
-        public NotesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
+        public NotesPrototypesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
@@ -28,7 +28,7 @@ namespace KyoS.Web.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Notes.Include(n => n.Activity).ThenInclude(a => a.Theme).OrderBy(n => n.Activity.Theme.Name).ToListAsync());
+            return View(await _context.NotesPrototypes.Include(n => n.Activity).ThenInclude(a => a.Theme).OrderBy(n => n.Activity.Theme.Name).ToListAsync());
         }
         public async Task<IActionResult> Create(int id = 0, int idNote = 0)
         {
@@ -72,21 +72,21 @@ namespace KyoS.Web.Controllers
                 if ((noteViewModel.IdClient == 0) && (noteViewModel.IdFacilitator == 0))    //only insert into Note table
                 {
                     ActivityEntity activityEntity = await _context.Activities.FirstOrDefaultAsync(t => t.Id == noteViewModel.IdActivity);
-                    NoteEntity note = await _context.Notes.FirstOrDefaultAsync((n => (n.AnswerClient == noteViewModel.AnswerClient
+                    NotePrototypeEntity note = await _context.NotesPrototypes.FirstOrDefaultAsync((n => (n.AnswerClient == noteViewModel.AnswerClient
                                                                                 && n.AnswerFacilitator == noteViewModel.AnswerFacilitator
                                                                                 && n.Activity.Id == activityEntity.Id)));
                     if (note == null)
                     {
-                        NoteEntity noteEntity = await _converterHelper.ToNoteEntity(noteViewModel, true);
+                        NotePrototypeEntity noteEntity = await _converterHelper.ToNoteEntity(noteViewModel, true);
                         _context.Add(noteEntity);
 
                         if (!string.IsNullOrEmpty(form["classifications"]))
                         {
                             string[] classifications = form["classifications"].ToString().Split(',');
-                            Note_Classification noteclassification;
+                            NotePrototype_Classification noteclassification;
                             foreach (string value in classifications)
                             {
-                                noteclassification = new Note_Classification()
+                                noteclassification = new NotePrototype_Classification()
                                 {
                                     Note = noteEntity,
                                     Classification = await _context.Classifications.FindAsync(Convert.ToInt32(value))
@@ -98,7 +98,7 @@ namespace KyoS.Web.Controllers
                         try
                         {
                             await _context.SaveChangesAsync();
-                            NoteEntity noteEntityCreated = await _context.Notes.OrderBy(n => n.Id).LastAsync();
+                            NotePrototypeEntity noteEntityCreated = await _context.NotesPrototypes.OrderBy(n => n.Id).LastAsync();
 
                             classification_list = new MultiSelectList(await _context.Classifications.ToListAsync(), "Id", "Name");
                             ViewData["classification"] = classification_list;
@@ -142,13 +142,13 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            NoteEntity noteEntity = await _context.Notes.FirstOrDefaultAsync(n => n.Id == id);
+            NotePrototypeEntity noteEntity = await _context.NotesPrototypes.FirstOrDefaultAsync(n => n.Id == id);
             if (noteEntity == null)
             {
                 return NotFound();
             }
 
-            _context.Notes.Remove(noteEntity);
+            _context.NotesPrototypes.Remove(noteEntity);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -160,7 +160,7 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            NoteEntity noteEntity = await _context.Notes.Include(n => n.Activity)
+            NotePrototypeEntity noteEntity = await _context.NotesPrototypes.Include(n => n.Activity)
                                                         .Include(n => n.Classifications)
                                                         .ThenInclude(cl => cl.Classification).FirstOrDefaultAsync(n => n.Id == id);
             if (noteEntity == null)
@@ -172,7 +172,7 @@ namespace KyoS.Web.Controllers
 
             List<ClassificationEntity> list = new List<ClassificationEntity>();
             ClassificationEntity classification;
-            foreach (Note_Classification item in noteViewModel.Classifications)
+            foreach (NotePrototype_Classification item in noteViewModel.Classifications)
             {
                 classification = await _context.Classifications.FindAsync(item.Classification.Id);
                 list.Add(classification);
@@ -190,20 +190,20 @@ namespace KyoS.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                NoteEntity noteEntity = await _converterHelper.ToNoteEntity(noteViewModel, false);
+                NotePrototypeEntity noteEntity = await _converterHelper.ToNoteEntity(noteViewModel, false);
                 _context.Update(noteEntity);
 
-                NoteEntity original_classifications = await _context.Notes.Include(n => n.Classifications)
+                NotePrototypeEntity original_classifications = await _context.NotesPrototypes.Include(n => n.Classifications)
                                                                                   .ThenInclude(nc => nc.Classification).FirstOrDefaultAsync(d => d.Id == noteViewModel.Id);
                 _context.RemoveRange(original_classifications.Classifications);
 
                 if (!string.IsNullOrEmpty(form["classifications"]))
                 {
                     string[] classifications = form["classifications"].ToString().Split(',');
-                    Note_Classification noteclassification;
+                    NotePrototype_Classification noteclassification;
                     foreach (string value in classifications)
                     {
-                        noteclassification = new Note_Classification()
+                        noteclassification = new NotePrototype_Classification()
                         {
                             Note = noteEntity,
                             Classification = await _context.Classifications.FindAsync(Convert.ToInt32(value))

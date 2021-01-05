@@ -1,5 +1,6 @@
 ﻿using KyoS.Common.Enums;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
@@ -28,10 +29,12 @@ namespace KyoS.Web.Data.Entities
         public string MedicalID { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public StatusType Status { get; set; }        
+        public StatusType Status { get; set; }
 
         public ClinicEntity Clinic { get; set; }
 
         public GroupEntity Group { get; set; }
+
+        public ICollection<Workday_Client> Workdays_Clients { get; set; }
     }
 }

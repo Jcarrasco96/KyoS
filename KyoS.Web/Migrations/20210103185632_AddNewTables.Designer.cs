@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210103185632_AddNewTables")]
+    partial class AddNewTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -320,7 +322,7 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("PlanNote")
+                    b.Property<string>("Plan")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
@@ -713,9 +715,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<DateTime>("InitDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("WeekOfYear")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

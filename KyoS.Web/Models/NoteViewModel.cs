@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Models
 {
-    public class NoteViewModel : NoteEntity
+    public class NoteViewModel : NotePrototypeEntity
     {
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Activity")]

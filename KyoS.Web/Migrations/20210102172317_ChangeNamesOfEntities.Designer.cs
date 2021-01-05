@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210102172317_ChangeNamesOfEntities")]
+    partial class ChangeNamesOfEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -313,29 +315,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("MTPs");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.NoteEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("PlanNote")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Workday_CientId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Workday_CientId");
-
-                    b.ToTable("Notes");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.NotePrototypeEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -415,38 +394,6 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("PlanId");
 
                     b.ToTable("NotesPrototypes_DailySessions_Clients_Plans");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.Note_Activity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ActivityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AnswerClient")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("AnswerFacilitator")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<int?>("NoteId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActivityId");
-
-                    b.HasIndex("NoteId");
-
-                    b.ToTable("Notes_Activities");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ObjetiveEntity", b =>
@@ -698,74 +645,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.WeekEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ClinicId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("FinalDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("InitDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("WeekOfYear")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClinicId");
-
-                    b.ToTable("Weeks");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.WorkdayEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("WeekId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("WeekId");
-
-                    b.ToTable("Workdays");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.Workday_Client", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("WorkdayId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("WorkdayId");
-
-                    b.ToTable("Workdays_Clients");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -977,15 +856,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.NoteEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.Workday_Client", "Workday_Cient")
-                        .WithMany()
-                        .HasForeignKey("Workday_CientId");
-
-                    b.Navigation("Workday_Cient");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.NotePrototypeEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ActivityEntity", "Activity")
@@ -1036,21 +906,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Note");
 
                     b.Navigation("Plan");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.Note_Activity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ActivityEntity", "Activity")
-                        .WithMany("Notes_Activities")
-                        .HasForeignKey("ActivityId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.NoteEntity", "Note")
-                        .WithMany("Notes_Activities")
-                        .HasForeignKey("NoteId");
-
-                    b.Navigation("Activity");
-
-                    b.Navigation("Note");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ObjetiveEntity", b =>
@@ -1122,39 +977,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Clinic");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.WeekEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
-                        .WithMany("Weeks")
-                        .HasForeignKey("ClinicId");
-
-                    b.Navigation("Clinic");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.WorkdayEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.WeekEntity", "Week")
-                        .WithMany("Days")
-                        .HasForeignKey("WeekId");
-
-                    b.Navigation("Week");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.Workday_Client", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
-                        .WithMany("Workdays_Clients")
-                        .HasForeignKey("ClientId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.WorkdayEntity", "Workday")
-                        .WithMany("Workdays_Clients")
-                        .HasForeignKey("WorkdayId");
-
-                    b.Navigation("Client");
-
-                    b.Navigation("Workday");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -1206,11 +1028,6 @@ namespace KyoS.Web.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.ActivityEntity", b =>
-                {
-                    b.Navigation("Notes_Activities");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClassificationEntity", b =>
                 {
                     b.Navigation("NotesClassification");
@@ -1218,11 +1035,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("ObjetivesClassification");
 
                     b.Navigation("PlansClassification");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.ClientEntity", b =>
-                {
-                    b.Navigation("Workdays_Clients");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClinicEntity", b =>
@@ -1236,8 +1048,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Themes");
 
                     b.Navigation("Users");
-
-                    b.Navigation("Weeks");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.FacilitatorEntity", b =>
@@ -1262,11 +1072,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Goals");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.NoteEntity", b =>
-                {
-                    b.Navigation("Notes_Activities");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.NotePrototypeEntity", b =>
                 {
                     b.Navigation("Classifications");
@@ -1280,16 +1085,6 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.PlanEntity", b =>
                 {
                     b.Navigation("Classifications");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.WeekEntity", b =>
-                {
-                    b.Navigation("Days");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.WorkdayEntity", b =>
-                {
-                    b.Navigation("Workdays_Clients");
                 });
 #pragma warning restore 612, 618
         }

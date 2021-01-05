@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class Note_Classification
+    public class NotePrototype_Classification
     {
         public int Id { get; set; }
 
-        public NoteEntity Note { get; set; }
+        public NotePrototypeEntity Note { get; set; }
 
         public ClassificationEntity Classification { get; set; }
     }

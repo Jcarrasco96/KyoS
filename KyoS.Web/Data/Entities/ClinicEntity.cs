@@ -19,6 +19,7 @@ namespace KyoS.Web.Data.Entities
         public ICollection<ThemeEntity> Themes { get; set; }
         public ICollection<ClientEntity> Clients { get; set; }
         public ICollection<UserEntity> Users { get; set; }
+        public ICollection<WeekEntity> Weeks { get; set; }
 
     }
 }

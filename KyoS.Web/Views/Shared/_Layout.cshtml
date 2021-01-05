@@ -59,6 +59,14 @@
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" asp-controller="Workdays" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
+                                Workdays <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Workdays", "Index", "Workdays")</li>
+                            </ul>
+                        </li>
+                        <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
                                 Topics <span class="caret"></span>
                             </a>
@@ -72,14 +80,14 @@
                                 Prototypes <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Notes", "Index", "Notes")</li>
+                                <li>@Html.ActionLink("Notes", "Index", "NotesPrototypes")</li>
                                 <li>@Html.ActionLink("Plans", "Index", "Plans")</li>
                             </ul>
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                      if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
+                    if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
                     {
                         <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
 
@@ -102,6 +110,14 @@
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" asp-controller="Workdays" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
+                                Workdays <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Workdays", "Index", "Workdays")</li>
+                            </ul>
+                        </li>
+                        <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
                                 Topics <span class="caret"></span>
                             </a>
@@ -112,8 +128,8 @@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
-                      else
-                          if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
+                    else
+                        if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
@@ -135,8 +151,8 @@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
-                          else
-                              if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
+                    else
+                            if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
