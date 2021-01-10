@@ -1,5 +1,6 @@
 ﻿using KyoS.Common.Enums;
 using KyoS.Web.Data;
+using KyoS.Web.Data.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,35 @@ namespace KyoS.Web.Helpers
             list.Insert(0, new SelectListItem
             {
                 Text = "[Select rol...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboUserNamesByRolesClinic(UserType userType, int idClinic)
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            if (idClinic == 0)
+            {
+                list = _context.Users.Where(u => u.UserType == userType).Select(u => new SelectListItem
+                {
+                    Text = $"{u.UserName}",
+                    Value = $"{u.Id}"
+                }).ToList();
+            }
+            else
+            {
+                list = _context.Users.Where(u => (u.UserType == userType && u.Clinic.Id == idClinic)).Select(u => new SelectListItem
+                {
+                    Text = $"{u.UserName}",
+                    Value = $"{u.Id}"
+                }).ToList();
+            }
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select linked user...]",
                 Value = "0"
             });
 
@@ -161,6 +191,23 @@ namespace KyoS.Web.Helpers
             {
                 Text = $"{a.Id.ToString()} - {a.Name}",
                 Value = $"{a.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select activity...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboActivitiesByTheme(int idTheme)
+        {
+            List<SelectListItem> list = _context.Activities.Where(a => a.Theme.Id == idTheme).Select(t => new SelectListItem
+            {
+                Text = $"{t.Id.ToString()} - {t.Name}",
+                Value = $"{t.Id}"
             }).ToList();
 
             list.Insert(0, new SelectListItem

@@ -16,5 +16,16 @@ namespace KyoS.Web.Data.Entities
         public IEnumerable<WorkdayEntity> Days { get; set; }
         public ClinicEntity Clinic { get; set; }
         public int WeekOfYear { get; set; }
+        public string Alias
+        {
+            get
+            {
+                var month = (InitDate.Month < 10) ? $"0{InitDate.Month}" : InitDate.Month.ToString();
+                var initday = (InitDate.Day < 10) ? $"0{InitDate.Day}" : InitDate.Day.ToString();
+                var finalday = (FinalDate.Day < 10) ? $"0{FinalDate.Day}" : FinalDate.Day.ToString();
+
+                return $"{month}_{initday}{finalday}_{InitDate.Year}";
+            }
+        }
     }
 }

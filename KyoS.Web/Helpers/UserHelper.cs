@@ -75,6 +75,22 @@ namespace KyoS.Web.Helpers
             return model;
         }
 
+        public string GetUserNameById(string id)
+        {
+            var model = _userManager.Users.FirstOrDefault(u => u.Id == id);
+            if (model == null)
+                return string.Empty;
+            return model.UserName;
+        }
+
+        public string GetIdByUserName(string userName)
+        {
+            var model = _userManager.Users.FirstOrDefault(u => u.UserName == userName);
+            if (model == null)
+                return string.Empty;
+            return model.Id;
+        }
+
         public async Task<bool> IsUserInRoleAsync(UserEntity user, string roleName)
         {
             return await _userManager.IsInRoleAsync(user, roleName);
@@ -106,6 +122,6 @@ namespace KyoS.Web.Helpers
             if (await this.IsUserInRoleAsync(user, UserType.Supervisor.ToString()))
                 await _userManager.RemoveFromRoleAsync(user, UserType.Supervisor.ToString());
             return await _userManager.DeleteAsync(user);
-        }
+        }        
     }
 }

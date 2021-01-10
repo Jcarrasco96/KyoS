@@ -159,7 +159,6 @@
                                 Activities <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                @*<li>@Html.ActionLink("Topics", "Index", "Themes")</li>*@
                                 <li>@Html.ActionLink("Activities", "Index", "Activities")</li>
                             </ul>
                         </li>
@@ -168,8 +167,7 @@
                                 Notes <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Notes", "Index", "Notes")</li>
-                                @*<li>@Html.ActionLink("Plans", "Index", "Plans")</li>*@
+                                <li>@Html.ActionLink("Notes", "Index", "Notes")</li>                                
                             </ul>
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
@@ -196,7 +194,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2020 - KyoS Notes</p>
+            <p>&copy; 2021 - KyoS Notes</p>
         </footer>
     </div>
 

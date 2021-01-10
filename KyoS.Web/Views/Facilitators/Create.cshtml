@@ -52,11 +52,11 @@
                 </div>
             }
         </div>
-        <div class="col-md-6">
+        <div>
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <partial name="_Facilitators" />
-                <div class="form-group">
+                <div class="form-group col-md-12">
                     <input type="submit" value="Create" class="btn btn-primary" />
                     <a asp-action="Index" class="btn btn-success">Back</a>
                 </div>

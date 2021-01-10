@@ -49,7 +49,7 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            NoteViewModel model = new NoteViewModel
+            NotePrototypeViewModel model = new NotePrototypeViewModel
             {
                 Activities = _combosHelper.GetComboActivities(),
                 Facilitators = _combosHelper.GetComboFacilitators(),
@@ -64,7 +64,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(NoteViewModel noteViewModel, IFormCollection form)
+        public async Task<IActionResult> Create(NotePrototypeViewModel noteViewModel, IFormCollection form)
         {
             MultiSelectList classification_list;
             if (ModelState.IsValid)
@@ -77,7 +77,7 @@ namespace KyoS.Web.Controllers
                                                                                 && n.Activity.Id == activityEntity.Id)));
                     if (note == null)
                     {
-                        NotePrototypeEntity noteEntity = await _converterHelper.ToNoteEntity(noteViewModel, true);
+                        NotePrototypeEntity noteEntity = await _converterHelper.ToNotePrototypeEntity(noteViewModel, true);
                         _context.Add(noteEntity);
 
                         if (!string.IsNullOrEmpty(form["classifications"]))
@@ -168,7 +168,7 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            NoteViewModel noteViewModel = _converterHelper.ToNoteViewModel(noteEntity);
+            NotePrototypeViewModel noteViewModel = _converterHelper.ToNotePrototypeViewModel(noteEntity);
 
             List<ClassificationEntity> list = new List<ClassificationEntity>();
             ClassificationEntity classification;
@@ -186,11 +186,11 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(NoteViewModel noteViewModel, IFormCollection form)
+        public async Task<IActionResult> Edit(NotePrototypeViewModel noteViewModel, IFormCollection form)
         {
             if (ModelState.IsValid)
             {
-                NotePrototypeEntity noteEntity = await _converterHelper.ToNoteEntity(noteViewModel, false);
+                NotePrototypeEntity noteEntity = await _converterHelper.ToNotePrototypeEntity(noteViewModel, false);
                 _context.Update(noteEntity);
 
                 NotePrototypeEntity original_classifications = await _context.NotesPrototypes.Include(n => n.Classifications)

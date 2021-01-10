@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using KyoS.Common.Enums;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
@@ -13,6 +14,11 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Code")]
         public string Codigo { get; set; }
+
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public StatusType Status { get; set; }
+
+        public string LinkedUser { get; set; }
 
         public ClinicEntity Clinic { get; set; }
 

@@ -1,0 +1,132 @@
+﻿@model KyoS.Web.Models.NoteViewModel
+<div class="col-md-12">
+    @*<hr />*@
+    <h4 style="font-weight:bold;"><span class="label label-info">@Model.Workday_Cient.Client.Name</span></h4>
+    <h5>Facilitator: @Model.Workday_Cient.Client.Group.Facilitator.Name</h5>
+    <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString()</h5>
+    <h5>Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
+    <hr />
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <label asp-for="IdTopic1" class="control-label"></label>
+        <select asp-for="IdTopic1" asp-items="Model.Topics1" class="form-control" id="cbTopic1"></select>
+        <span asp-validation-for="IdTopic1" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="IdActivity1" class="control-label"></label>
+        <select asp-for="IdActivity1" asp-items="Model.Activities1" class="form-control" id="cbActivity1"></select>
+        <span asp-validation-for="IdActivity1" class="text-danger"></span>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-6">
+        <label asp-for="AnswerClient1" class="control-label"></label>
+        <textarea asp-for="AnswerClient1" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="AnswerClient1" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="AnswerFacilitator1" class="control-label"></label>
+        <textarea asp-for="AnswerFacilitator1" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="AnswerFacilitator1" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <label asp-for="IdTopic2" class="control-label"></label>
+        <select asp-for="IdTopic2" asp-items="Model.Topics2" class="form-control" id="cbTopic2"></select>
+        <span asp-validation-for="IdTopic2" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="IdActivity2" class="control-label"></label>
+        <select asp-for="IdActivity2" asp-items="Model.Activities2" class="form-control" id="cbActivity2"></select>
+        <span asp-validation-for="IdActivity2" class="text-danger"></span>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-6">
+        <label asp-for="AnswerClient2" class="control-label"></label>
+        <textarea asp-for="AnswerClient2" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="AnswerClient2" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="AnswerFacilitator2" class="control-label"></label>
+        <textarea asp-for="AnswerFacilitator2" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="AnswerFacilitator2" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <label asp-for="IdTopic3" class="control-label"></label>
+        <select asp-for="IdTopic3" asp-items="Model.Topics3" class="form-control" id="cbTopic3"></select>
+        <span asp-validation-for="IdTopic3" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="IdActivity3" class="control-label"></label>
+        <select asp-for="IdActivity3" asp-items="Model.Activities3" class="form-control" id="cbActivity3"></select>
+        <span asp-validation-for="IdActivity3" class="text-danger"></span>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-6">
+        <label asp-for="AnswerClient3" class="control-label"></label>
+        <textarea asp-for="AnswerClient3" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="AnswerClient3" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="AnswerFacilitator3" class="control-label"></label>
+        <textarea asp-for="AnswerFacilitator3" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="AnswerFacilitator3" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <label asp-for="IdTopic4" class="control-label"></label>
+        <select asp-for="IdTopic4" asp-items="Model.Topics4" class="form-control" id="cbTopic4"></select>
+        <span asp-validation-for="IdTopic4" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="IdActivity4" class="control-label"></label>
+        <select asp-for="IdActivity4" asp-items="Model.Activities4" class="form-control" id="cbActivity4"></select>
+        <span asp-validation-for="IdActivity4" class="text-danger"></span>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-6">
+        <label asp-for="AnswerClient4" class="control-label"></label>
+        <textarea asp-for="AnswerClient4" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="AnswerClient4" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="AnswerFacilitator4" class="control-label"></label>
+        <textarea asp-for="AnswerFacilitator4" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="AnswerFacilitator4" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <label asp-for="PlanNote" class="control-label"></label>
+        <textarea asp-for="PlanNote" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="PlanNote" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">        
+    </div>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+
+
+

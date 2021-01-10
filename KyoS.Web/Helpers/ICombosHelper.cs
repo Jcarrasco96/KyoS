@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using KyoS.Common.Enums;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 
 namespace KyoS.Web.Helpers
@@ -6,6 +7,7 @@ namespace KyoS.Web.Helpers
     public interface ICombosHelper
     {
         IEnumerable<SelectListItem> GetComboRoles();
+        IEnumerable<SelectListItem> GetComboUserNamesByRolesClinic(UserType userType, int idClinic);
         IEnumerable<SelectListItem> GetComboDays();
         IEnumerable<SelectListItem> GetComboThemes();
         IEnumerable<SelectListItem> GetComboThemesByClinic(int idClinic);
@@ -14,6 +16,7 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboClients();
         IEnumerable<SelectListItem> GetComboClientsByClinic(int idClinic);
         IEnumerable<SelectListItem> GetComboActivities();
+        IEnumerable<SelectListItem> GetComboActivitiesByTheme(int idTheme);
         IEnumerable<SelectListItem> GetComboClassifications();
         IEnumerable<SelectListItem> GetComboClinics();
         IEnumerable<SelectListItem> GetComboGender();

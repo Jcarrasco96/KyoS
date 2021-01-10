@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
@@ -92,6 +93,7 @@ namespace KyoS.Web.Controllers
                 Dictionary<int, DateTime> numofweeks = new Dictionary<int, DateTime>();
                 WorkdayEntity workday_entity;
                 WeekEntity week_entity;
+                ClinicEntity clinic_entity;
 
                 if (!string.IsNullOrEmpty(entity.Workdays))
                 {
@@ -145,6 +147,7 @@ namespace KyoS.Web.Controllers
                                             Date = item1,
                                             Week = week
                                         };
+                                        clinic_entity = week.Clinic;
                                     }
                                     else
                                     {
@@ -153,8 +156,30 @@ namespace KyoS.Web.Controllers
                                             Date = item1,
                                             Week = week_entity
                                         };
+                                        clinic_entity = week_entity.Clinic;
                                     }
                                     _context.Add(workday);
+
+                                    //obtengo los clientes que esten activos de la clinica para generarles la asistencia del dia acabado de crear
+                                    var clients = await _context.Clients
+                                                                .Include(c => c.Group)
+                                                                .ThenInclude(g => g.Facilitator)
+                                                                .Where(c => (c.Group.Facilitator.Clinic.Id == clinic_entity.Id 
+                                                                             && c.Status == StatusType.Open 
+                                                                             && c.Group.Facilitator.Status == StatusType.Open)).ToListAsync();
+
+                                    Workday_Client workday_client;
+                                    foreach (ClientEntity client in clients)
+                                    {
+                                        workday_client = new Workday_Client
+                                        {
+                                            Workday = workday,
+                                            Client = client,
+                                            Session = client.Group.Meridian,
+                                            Present = true
+                                        };
+                                        _context.Add(workday_client);
+                                    }
                                 }                           
                             }
                         }                        

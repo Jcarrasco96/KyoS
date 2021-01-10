@@ -10,12 +10,7 @@ namespace KyoS.Web.Data.Entities
         public int Id { get; set; }
         public WorkdayEntity Workday { get; set; }
         public ClientEntity Client { get; set; }
-        public string Session 
-        { 
-            get 
-            { 
-                return this.Client.Group.Meridian; 
-            } 
-        }
+        public string Session{ get; set; }
+        public bool Present { get; set; }        
     }
 }

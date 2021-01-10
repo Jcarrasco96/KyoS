@@ -2,6 +2,7 @@
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
@@ -11,11 +12,13 @@ namespace KyoS.Web.Helpers
     {
         private readonly DataContext _context;
         private readonly ICombosHelper _combosHelper;
+        private readonly IUserHelper _userHelper;
 
-        public ConverterHelper(DataContext context, ICombosHelper combosHelper)
+        public ConverterHelper(DataContext context, ICombosHelper combosHelper, IUserHelper userHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
+            _userHelper = userHelper;
         }
 
         public ClinicEntity ToClinicEntity(ClinicViewModel model, string path, bool isNew)
@@ -86,7 +89,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<NotePrototypeEntity> ToNoteEntity(NoteViewModel model, bool isNew)
+        public async Task<NotePrototypeEntity> ToNotePrototypeEntity(NotePrototypeViewModel model, bool isNew)
         {
             return new NotePrototypeEntity
             {
@@ -97,9 +100,9 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public NoteViewModel ToNoteViewModel(NotePrototypeEntity noteEntity)
+        public NotePrototypeViewModel ToNotePrototypeViewModel(NotePrototypeEntity noteEntity)
         {
-            return new NoteViewModel
+            return new NotePrototypeViewModel
             {
                 Id = noteEntity.Id,
                 AnswerClient = noteEntity.AnswerClient,
@@ -119,11 +122,13 @@ namespace KyoS.Web.Helpers
                 Id = isNew ? 0 : model.Id,
                 Clinic = await _context.Clinics.FindAsync(model.IdClinic),
                 Codigo = model.Codigo,
-                Name = model.Name                
+                Name = model.Name,
+                Status = StatusUtils.GetStatusByIndex(model.IdStatus),
+                LinkedUser = _userHelper.GetUserNameById(model.IdUser)
             };
         }
 
-        public FacilitatorViewModel ToFacilitatorViewModel(FacilitatorEntity facilitatorEntity)
+        public FacilitatorViewModel ToFacilitatorViewModel(FacilitatorEntity facilitatorEntity, int idClinic)
         {
             return new FacilitatorViewModel
             {
@@ -131,7 +136,11 @@ namespace KyoS.Web.Helpers
                 Name = facilitatorEntity.Name,
                 Codigo = facilitatorEntity.Codigo,
                 IdClinic = facilitatorEntity.Clinic.Id,
-                Clinics = _combosHelper.GetComboClinics()                
+                Clinics = _combosHelper.GetComboClinics(),
+                IdStatus = (facilitatorEntity.Status == StatusType.Open) ? 1 : 2,
+                StatusList = _combosHelper.GetComboClientStatus(),
+                IdUser = _userHelper.GetIdByUserName(facilitatorEntity.LinkedUser),
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, idClinic)
             };
         }
 
@@ -353,6 +362,29 @@ namespace KyoS.Web.Helpers
                 Id = planEntity.Id,
                 Text = planEntity.Text,
                 Classifications = planEntity.Classifications               
+            };
+        }
+
+        public async Task<NoteEntity> ToNoteEntity(NoteViewModel model, bool isNew)
+        {
+            NoteEntity entity = await _context.Notes.FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
+            return new NoteEntity
+            {
+                Id = isNew ? 0 : entity.Id,
+                Workday_Cient = await _context.Workdays_Clients.FindAsync(model.Id),
+                PlanNote = model.PlanNote,
+                Status = NoteStatus.InProcess
+            };
+        }
+
+        public NoteViewModel ToNoteViewModel(NoteEntity model)
+        {
+            return new NoteViewModel
+            {
+                Id = model.Id,
+                PlanNote = model.PlanNote,
+                Status = model.Status,
+                Workday_Cient = model.Workday_Cient
             };
         }
     }

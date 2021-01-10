@@ -12,10 +12,10 @@ namespace KyoS.Web.Helpers
         ThemeViewModel ToThemeViewModel(ThemeEntity model);
         Task<ActivityEntity> ToActivityEntity(ActivityViewModel model, bool isNew);
         ActivityViewModel ToActivityViewModel(ActivityEntity model);
-        Task<NotePrototypeEntity> ToNoteEntity(NoteViewModel model, bool isNew);
-        NoteViewModel ToNoteViewModel(NotePrototypeEntity model);
+        Task<NotePrototypeEntity> ToNotePrototypeEntity(NotePrototypeViewModel model, bool isNew);
+        NotePrototypeViewModel ToNotePrototypeViewModel(NotePrototypeEntity model);
         Task<FacilitatorEntity> ToFacilitatorEntity(FacilitatorViewModel model, bool isNew);
-        FacilitatorViewModel ToFacilitatorViewModel(FacilitatorEntity model);
+        FacilitatorViewModel ToFacilitatorViewModel(FacilitatorEntity model, int idClinic);
         Task<ClientEntity> ToClientEntity(ClientViewModel model, bool isNew);
         ClientViewModel ToClientViewModel(ClientEntity model);
         Task<SupervisorEntity> ToSupervisorEntity(SupervisorViewModel model, bool isNew);
@@ -32,5 +32,7 @@ namespace KyoS.Web.Helpers
         GroupViewModel ToGroupViewModel(GroupEntity model);
         Task<PlanEntity> ToPlanEntity(PlanViewModel model, bool isNew);
         PlanViewModel ToPlanViewModel(PlanEntity model);
+        Task<NoteEntity> ToNoteEntity(NoteViewModel model, bool isNew);
+        NoteViewModel ToNoteViewModel(NoteEntity model);
     }
 }

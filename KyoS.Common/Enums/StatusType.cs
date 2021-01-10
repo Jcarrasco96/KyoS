@@ -13,4 +13,10 @@
                    (index == 2) ? StatusType.Close: StatusType.Open;
         }
     }
+    public enum NoteStatus
+    {
+        InProcess,
+        Pending,
+        Approved
+    }
 }

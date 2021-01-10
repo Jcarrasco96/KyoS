@@ -25,7 +25,13 @@ namespace KyoS.Web.Helpers
         Task LogoutAsync();
 
         IEnumerable<Users_in_Role_ViewModel> GetUsers();
+
+        string GetUserNameById(string id);
+
+        string GetIdByUserName(string userName);
+
         Task<IdentityResult> ChangePasswordAsync(UserEntity user, string oldPassword, string newPassword);
+
         Task<IdentityResult> DeleteUserAsync(UserEntity user);
     }
 }

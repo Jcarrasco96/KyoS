@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210105180027_ModifyFacilitatorEntity2")]
+    partial class ModifyFacilitatorEntity2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,9 +205,6 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("Codigo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LinkedUser")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -329,8 +328,8 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("PlanNote")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Workday_CientId")
                         .HasColumnType("int");
@@ -434,10 +433,12 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("AnswerClient")
+                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("AnswerFacilitator")
+                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
@@ -757,12 +758,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<int?>("ClientId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("Present")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Session")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("WorkdayId")
                         .HasColumnType("int");

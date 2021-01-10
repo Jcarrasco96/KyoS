@@ -1,4 +1,5 @@
-﻿using KyoS.Web.Data;
+﻿using KyoS.Common.Enums;
+using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
@@ -80,7 +81,9 @@ namespace KyoS.Web.Controllers
                     model = new FacilitatorViewModel
                     {
                         Clinics = list,
-                        IdClinic = clinic.Id
+                        IdClinic = clinic.Id,
+                        StatusList = _combosHelper.GetComboClientStatus(),
+                        UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, user_logged.Clinic.Id)
                     };
                     return View(model);
                 }
@@ -88,7 +91,10 @@ namespace KyoS.Web.Controllers
 
             model = new FacilitatorViewModel
             {
-                Clinics = _combosHelper.GetComboClinics()
+                Clinics = _combosHelper.GetComboClinics(),
+                IdStatus = 1,
+                StatusList = _combosHelper.GetComboClientStatus(),
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, 0)
             };
             return View(model);
         }
@@ -161,12 +167,12 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            FacilitatorViewModel facilitatorViewModel = _converterHelper.ToFacilitatorViewModel(facilitatorEntity);
-
+            FacilitatorViewModel facilitatorViewModel;
             if (!User.IsInRole("Admin"))
             {
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                facilitatorViewModel = _converterHelper.ToFacilitatorViewModel(facilitatorEntity, user_logged.Clinic.Id);
                 if (user_logged.Clinic != null)
                 {
                     List<SelectListItem> list = new List<SelectListItem>();
@@ -177,7 +183,10 @@ namespace KyoS.Web.Controllers
                     });
                     facilitatorViewModel.Clinics = list;
                 }
+
             }
+            else
+                facilitatorViewModel = _converterHelper.ToFacilitatorViewModel(facilitatorEntity, 0);
 
             return View(facilitatorViewModel);
         }
