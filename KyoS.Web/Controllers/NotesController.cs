@@ -1,4 +1,5 @@
-﻿using KyoS.Web.Data;
+﻿using KyoS.Common.Enums;
+using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
@@ -52,9 +53,9 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(wc => wc.Client)
                                                 .ThenInclude(c => c.Group)
                                                 .ThenInclude(g => g.Facilitator)
-                                                /*.Include(w => w.Days)
+                                                .Include(w => w.Days)
                                                 .ThenInclude(d => d.Workdays_Clients)
-                                                .ThenInclude(wc => wc.)*/
+                                                .ThenInclude(wc => wc.Note)
                                                 .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
                                                 .ToListAsync());
             }
@@ -408,6 +409,22 @@ namespace KyoS.Web.Controllers
             }
 
             return View(model);
+        }
+
+        public async Task<IActionResult> FinishEditing(int id)
+        {
+            Workday_Client workday_Client = await _context.Workdays_Clients.FirstOrDefaultAsync(wc => wc.Id == id);
+            if (workday_Client == null)
+            {
+                return NotFound();
+            }
+
+            NoteEntity note = await _context.Notes.Include(n => n.Workday_Cient).FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+            note.Status = NoteStatus.Pending;
+            _context.Update(note);
+            
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));           
         }
 
         public JsonResult GetActivityList(int idTheme)

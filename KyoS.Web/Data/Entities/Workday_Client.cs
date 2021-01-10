@@ -11,6 +11,7 @@ namespace KyoS.Web.Data.Entities
         public WorkdayEntity Workday { get; set; }
         public ClientEntity Client { get; set; }
         public string Session{ get; set; }
-        public bool Present { get; set; }        
+        public bool Present { get; set; }
+        public NoteEntity Note { get; set; }
     }
 }

@@ -15,7 +15,7 @@
     }
     public enum NoteStatus
     {
-        InProcess,
+        Edition,
         Pending,
         Approved
     }

@@ -373,7 +373,7 @@ namespace KyoS.Web.Helpers
                 Id = isNew ? 0 : entity.Id,
                 Workday_Cient = await _context.Workdays_Clients.FindAsync(model.Id),
                 PlanNote = model.PlanNote,
-                Status = NoteStatus.InProcess
+                Status = NoteStatus.Edition
             };
         }
 

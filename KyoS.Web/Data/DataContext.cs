@@ -66,8 +66,13 @@ namespace KyoS.Web.Data
             modelBuilder.Entity<Plan_Classification>()
                 .HasOne(nc => nc.Plan).WithMany(n => n.Classifications).OnDelete(DeleteBehavior.Cascade);
 
-            //modelBuilder.Entity<NoteEntity>()
-            //    .HasOne(n => n.Workday_Cient).WithOne().HasForeignKey<Workday_Client>();
+            modelBuilder.Entity<Workday_Client>()
+           .HasOne(wd => wd.Note)
+           .WithOne(n => n.Workday_Cient)
+           .HasForeignKey<NoteEntity>(n => n.Workday_Client_FK);
+
+            modelBuilder.Entity<Workday_Client>()
+                .HasOne(wd => wd.Note).WithOne(n => n.Workday_Cient).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
