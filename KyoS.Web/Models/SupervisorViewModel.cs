@@ -12,5 +12,9 @@ namespace KyoS.Web.Models
         [Range(1, int.MaxValue, ErrorMessage = "You must select a clinic.")]
         public int IdClinic { get; set; }
         public IEnumerable<SelectListItem> Clinics { get; set; }
+
+        [Display(Name = "Linked user")]
+        public string IdUser { get; set; }
+        public IEnumerable<SelectListItem> UserList { get; set; }
     }
 }

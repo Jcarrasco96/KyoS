@@ -1,0 +1,110 @@
+﻿@model KyoS.Web.Models.NoteViewModel
+<div class="col-md-8">
+    @*<hr />*@
+    <h4 style="font-weight:bold;"><span class="label label-info">@Model.Workday_Cient.Client.Name</span></h4>
+    <h5>Facilitator: @Model.Workday_Cient.Client.Group.Facilitator.Name</h5>
+    <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString()</h5>
+    <h5>Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
+    <hr />
+</div>
+<div class="col-md-8">
+    <p style="font-weight:bold;">Description of Client’s Mental Status (As evidenced by): Client.</p>
+</div>
+<div class="col-md-8">
+    <table border="1" width="100%">
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Orientation</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="OrientedX3" /> OrientedX3
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="NotTime" /> Not Time
+                <input type="checkbox" asp-for="NotPlace" /> Not Place
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="NotPerson" /> Not Person
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Insight/Judgment</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Present" /> Present
+                <input type="checkbox" asp-for="Adequate" /> Adequate
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Limited" /> Limited
+                <input type="checkbox" asp-for="Impaired" /> Impaired
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Faulty" /> Faulty
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Mood/ Affect</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Euthymic" /> Euthymic
+                <input type="checkbox" asp-for="Congruent" /> Congruent
+                <br />
+                <input type="checkbox" asp-for="Negativistic" /> Negativistic
+                <input type="checkbox" asp-for="Depressed" /> Depressed
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Euphoric " /> Euphoric
+                <input type="checkbox" asp-for="Optimistic" /> Optimistic
+                <br />
+                <input type="checkbox" asp-for="Anxious" /> Anxious
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Hostile " /> Hostile
+                <input type="checkbox" asp-for="Withdrawn " /> withdrawn
+                <br />
+                <input type="checkbox" asp-for="Irritable " /> Irritable
+                <input type="checkbox" asp-for="Dramatized " /> Dramatized
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Attitude & Cooperation</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="AdequateAC" /> Adequate
+                <input type="checkbox" asp-for="Inadequate" /> Inadequate
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Fair" />Fair
+                <input type="checkbox" asp-for="Unmotivated" /> Unmotivated
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Motivated  " /> Motivated
+                <input type="checkbox" asp-for="Guarded " /> Guarded
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Attention/Concentration</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Normal " /> Normal
+                <input type="checkbox" asp-for="ShortSpanned" /> Short Spanned
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="MildlyImpaired" /> Mildly Impaired
+                
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="SeverelyImpaired" /> Severely Impaired                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+

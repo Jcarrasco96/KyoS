@@ -1,0 +1,110 @@
+﻿@model KyoS.Web.Models.NoteViewModel
+<div class="col-md-8">
+    @*<hr />*@
+    <h4 style="font-weight:bold;"><span class="label label-info">@Model.Workday_Cient.Client.Name</span></h4>
+    <h5>Facilitator: @Model.Workday_Cient.Client.Group.Facilitator.Name</h5>
+    <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString()</h5>
+    <h5>Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
+    <hr />
+</div>
+<div class="col-md-8">
+    <p style="font-weight:bold;">Description of Client’s Mental Status (As evidenced by): Client.</p>
+</div>
+<div class="col-md-8">
+    <table border="1" width="100%">
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Orientation</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="OrientedX3" disabled/> OrientedX3
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="NotTime" disabled/> Not Time
+                <input type="checkbox" asp-for="NotPlace" disabled/> Not Place
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="NotPerson" disabled/> Not Person
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Insight/Judgment</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Present" disabled/> Present
+                <input type="checkbox" asp-for="Adequate" disabled/> Adequate
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Limited" disabled/> Limited
+                <input type="checkbox" asp-for="Impaired" disabled/> Impaired
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Faulty" disabled/> Faulty
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Mood/ Affect</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Euthymic" disabled/> Euthymic
+                <input type="checkbox" asp-for="Congruent" disabled/> Congruent
+                <br />
+                <input type="checkbox" asp-for="Negativistic" disabled/> Negativistic
+                <input type="checkbox" asp-for="Depressed" disabled/> Depressed
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Euphoric " disabled/> Euphoric
+                <input type="checkbox" asp-for="Optimistic" disabled/> Optimistic
+                <br />
+                <input type="checkbox" asp-for="Anxious" disabled/> Anxious
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Hostile " disabled/> Hostile
+                <input type="checkbox" asp-for="Withdrawn " disabled/> withdrawn
+                <br />
+                <input type="checkbox" asp-for="Irritable " disabled/> Irritable
+                <input type="checkbox" asp-for="Dramatized " disabled/> Dramatized
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Attitude & Cooperation</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="AdequateAC" disabled/> Adequate
+                <input type="checkbox" asp-for="Inadequate" disabled/> Inadequate
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Fair" disabled/>Fair
+                <input type="checkbox" asp-for="Unmotivated" disabled/> Unmotivated
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Motivated  " disabled/> Motivated
+                <input type="checkbox" asp-for="Guarded " disabled/> Guarded
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Attention/Concentration</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Normal " disabled/> Normal
+                <input type="checkbox" asp-for="ShortSpanned" disabled/> Short Spanned
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="MildlyImpaired" disabled/> Mildly Impaired
+                
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="SeverelyImpaired" disabled/> Severely Impaired                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+

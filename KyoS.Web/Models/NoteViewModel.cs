@@ -84,5 +84,15 @@ namespace KyoS.Web.Models
 
         [Display(Name = "Facilitator Answer #4")]
         public string AnswerFacilitator4 { get; set; }
+
+        //estos campos solo se usan para el modo solo lectura
+        public string Topic1 { get; set; }
+        public string Activity1 { get; set; }
+        public string Topic2 { get; set; }
+        public string Activity2 { get; set; }
+        public string Topic3 { get; set; }
+        public string Activity3 { get; set; }
+        public string Topic4 { get; set; }
+        public string Activity4 { get; set; }
     }
 }

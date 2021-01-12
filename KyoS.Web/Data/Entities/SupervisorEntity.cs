@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -15,7 +16,8 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Code")]
         public string Code { get; set; }
-
+        public string LinkedUser { get; set; }
         public ClinicEntity Clinic { get; set; }
+        public ICollection<NoteEntity> Notes { get; set; }
     }
 }

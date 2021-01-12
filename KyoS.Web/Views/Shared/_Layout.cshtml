@@ -7,8 +7,8 @@
     <link href="~/css/font-awesome.css" rel="stylesheet">
     <link href="~/css/font-awesome.min.css" rel="stylesheet">
     <link href="~/css/font-awesome-ie7.css" rel="stylesheet">
-    <link href="~/css/font-awesome-ie7.min.css" rel="stylesheet">    
-
+    <link href="~/css/font-awesome-ie7.min.css" rel="stylesheet">   
+    
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />        
@@ -87,91 +87,99 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                    if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
-                    {
-                        <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
+                        if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
+                        {
+                            <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
 
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Facilitators" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
-                                Facilitators <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Facilitators", "Index", "Facilitators")</li>
-                                <li>@Html.ActionLink("Groups", "Index", "Groups")</li>
-                            </ul>
-                        </li>
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
-                                Clients <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
-                                <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
-                            </ul>
-                        </li>
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Workdays" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
-                                Workdays <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Workdays", "Index", "Workdays")</li>
-                            </ul>
-                        </li>
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
-                                Topics <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Topics", "Index", "Themes")</li>
-                                @*<li>@Html.ActionLink("Activities", "Index", "Activities")</li>*@
-                            </ul>
-                        </li>
-                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
-                    }
-                    else
-                        if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
-                    {
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
-                                Clients <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
-                                <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
-                            </ul>
-                        </li>
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
-                                Topics <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Topics", "Index", "Themes")</li>
-                                @*<li>@Html.ActionLink("Activities", "Index", "Activities")</li>*@
-                            </ul>
-                        </li>
-                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
-                    }
-                    else
-                            if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
-                    {
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
-                                Activities <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Activities", "Index", "Activities")</li>
-                            </ul>
-                        </li>
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
-                                Notes <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Notes", "Index", "Notes")</li>                                
-                            </ul>
-                        </li>
-                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
-                    }
+                            <li class="class=" dropdown open"">
+                                <a asp-area="" class="dropdown-toggle" asp-controller="Facilitators" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
+                                    Facilitators <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>@Html.ActionLink("Facilitators", "Index", "Facilitators")</li>
+                                    <li>@Html.ActionLink("Groups", "Index", "Groups")</li>
+                                </ul>
+                            </li>
+                            <li class="class=" dropdown open"">
+                                <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
+                                    Clients <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
+                                    <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
+                                </ul>
+                            </li>
+                            <li class="class=" dropdown open"">
+                                <a asp-area="" class="dropdown-toggle" asp-controller="Workdays" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
+                                    Workdays <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>@Html.ActionLink("Workdays", "Index", "Workdays")</li>
+                                </ul>
+                            </li>
+                            <li class="class=" dropdown open"">
+                                <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
+                                    Topics <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>@Html.ActionLink("Topics", "Index", "Themes")</li>
+                                    @*<li>@Html.ActionLink("Activities", "Index", "Activities")</li>*@
+                                </ul>
+                            </li>
+                            <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                        }
+                        else
+                            if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
+                            {
+                                <li class="class=" dropdown open"">
+                                    <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
+                                        Clients <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
+                                        <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
+                                    </ul>
+                                </li>
+                                <li class="class=" dropdown open"">
+                                    <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
+                                        Topics <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>@Html.ActionLink("Topics", "Index", "Themes")</li>
+                                        @*<li>@Html.ActionLink("Activities", "Index", "Activities")</li>*@
+                                    </ul>
+                                </li>
+                                <li class="class=" dropdown open"">
+                                    <a asp-area="" class="dropdown-toggle" asp-controller="Notes" data-toggle="dropdown" role="button" aria-expanded="true">
+                                        Notes <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>@Html.ActionLink("Approve notes", "NotesSupervision", "Notes")</li>                               
+                                    </ul>
+                                </li>
+                                <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                            }
+                            else
+                                if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
+                                {
+                                    <li class="class=" dropdown open"">
+                                        <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
+                                            Activities <span class="caret"></span>
+                                        </a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li>@Html.ActionLink("Activities", "Index", "Activities")</li>
+                                        </ul>
+                                    </li>
+                                    <li class="class=" dropdown open"">
+                                        <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
+                                            Notes <span class="caret"></span>
+                                        </a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li>@Html.ActionLink("Notes", "Index", "Notes")</li>
+                                        </ul>
+                                    </li>
+                                    <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                                }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (User.Identity.IsAuthenticated)

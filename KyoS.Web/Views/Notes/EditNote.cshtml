@@ -3,7 +3,6 @@
     ViewData["Title"] = "Note management";
 }
 
-
 <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
         <li>
@@ -19,19 +18,40 @@
 <div class="row">
     <div>
         <form asp-action="EditNote" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <partial name="_Notes" />
+            <div class="form-group col-md-12">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#note" aria-controls="note" role="tab" data-toggle="tab">Note</a></li>
+                    <li role="presentation"><a href="#cms" aria-controls="cms" role="tab" data-toggle="tab">Client's Mental Status</a></li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="note">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <partial name="_Notes" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="cms">
+                        <br />
+                        <partial name="_MCS" />
+                    </div>
+                </div>
+            </div>
             <div class="form-group col-md-12">
             </div>
             <div class="form-group col-md-12">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-success">Back</a> |
-                <a asp-action="FinishEditing" class="btn btn-warning" asp-route-id="@Model.Id">Finish Editing</a>
+                <div class="col-md-12">
+                    <input type="submit" value="Save All" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                    @if (Model.Status.ToString() == "Edition")
+                    {                        
+                        <a asp-action="FinishEditing" class="btn btn-warning" asp-route-id="@Model.Id" title="Finish editing the note">Finish Editing</a>
+                    }
+                </div>
             </div>
         </form>
     </div>
-</div>
+</div>      
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -39,43 +59,39 @@
         $(document).ready(function () {
             $("#cbTopic1").change(function () {
                 $.get("/Notes/GetActivityList", { idTheme: $("#cbTopic1").val() }, function (data) {
-                    $("#cbActivity1").empty();                    
-                    $.each(data, function (index, row)
-                    {
+                    $("#cbActivity1").empty();
+                    $.each(data, function (index, row) {
                         $("#cbActivity1").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
                     });
                 });
             })
             $("#cbTopic2").change(function () {
                 $.get("/Notes/GetActivityList", { idTheme: $("#cbTopic2").val() }, function (data) {
-                    $("#cbActivity2").empty();                    
-                    $.each(data, function (index, row)
-                    {
+                    $("#cbActivity2").empty();
+                    $.each(data, function (index, row) {
                         $("#cbActivity2").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
                     });
                 });
             })
             $("#cbTopic3").change(function () {
                 $.get("/Notes/GetActivityList", { idTheme: $("#cbTopic3").val() }, function (data) {
-                    $("#cbActivity3").empty();                    
-                    $.each(data, function (index, row)
-                    {
+                    $("#cbActivity3").empty();
+                    $.each(data, function (index, row) {
                         $("#cbActivity3").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
                     });
                 });
             })
             $("#cbTopic4").change(function () {
                 $.get("/Notes/GetActivityList", { idTheme: $("#cbTopic4").val() }, function (data) {
-                    $("#cbActivity4").empty();                    
-                    $.each(data, function (index, row)
-                    {
+                    $("#cbActivity4").empty();
+                    $.each(data, function (index, row) {
                         $("#cbActivity4").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
                     });
                 });
             })
         });
     </script>
-}    
+}
 
 
 

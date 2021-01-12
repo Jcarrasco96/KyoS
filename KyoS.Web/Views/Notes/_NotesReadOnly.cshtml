@@ -1,0 +1,117 @@
+﻿@model KyoS.Web.Models.NoteViewModel
+<div class="col-md-12">
+    @*<hr />*@
+    <h4 style="font-weight:bold;"><span class="label label-info">@Model.Workday_Cient.Client.Name</span></h4>
+    <h5>Facilitator: @Model.Workday_Cient.Client.Group.Facilitator.Name</h5>
+    <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString()</h5>
+    <h5>Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
+    <hr />
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <label asp-for="Topic1" class="control-label"></label>
+        <input asp-for="Topic1" class="form-control" readonly/>
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="Activity1" class="control-label"></label>  
+        <input asp-for="Activity1" class="form-control" readonly />
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-6">
+        <label asp-for="AnswerClient1" class="control-label"></label>
+        <textarea asp-for="AnswerClient1" class="form-control" rows="3" readonly></textarea>        
+    </div>
+    <div class="col-md-6">
+        <label asp-for="AnswerFacilitator1" class="control-label"></label>
+        <textarea asp-for="AnswerFacilitator1" class="form-control" rows="3" readonly></textarea>        
+    </div>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <label asp-for="Topic2" class="control-label"></label>
+        <input asp-for="Topic2" class="form-control" readonly />
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="Activity2" class="control-label"></label>
+        <input asp-for="Activity2" class="form-control" readonly />
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-6">
+        <label asp-for="AnswerClient2" class="control-label"></label>
+        <textarea asp-for="AnswerClient2" class="form-control" rows="3" readonly></textarea>
+        
+    </div>
+    <div class="col-md-6">
+        <label asp-for="AnswerFacilitator2" class="control-label"></label>
+        <textarea asp-for="AnswerFacilitator2" class="form-control" rows="3" readonly></textarea>
+        
+    </div>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <label asp-for="Topic3" class="control-label"></label>
+        <input asp-for="Topic3" class="form-control" readonly />
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="Activity3" class="control-label"></label>
+        <input asp-for="Activity3" class="form-control" readonly />
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-6">
+        <label asp-for="AnswerClient3" class="control-label"></label>
+        <textarea asp-for="AnswerClient3" class="form-control" rows="3" readonly></textarea>        
+    </div>
+    <div class="col-md-6">
+        <label asp-for="AnswerFacilitator3" class="control-label"></label>
+        <textarea asp-for="AnswerFacilitator3" class="form-control" rows="3" readonly></textarea>        
+    </div>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <label asp-for="Topic4" class="control-label"></label>
+        <input asp-for="Topic4" class="form-control" readonly />
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="Activity4" class="control-label"></label>
+        <input asp-for="Activity4" class="form-control" readonly />
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-6">
+        <label asp-for="AnswerClient4" class="control-label"></label>
+        <textarea asp-for="AnswerClient4" class="form-control" rows="3" readonly></textarea>        
+    </div>
+    <div class="col-md-6">
+        <label asp-for="AnswerFacilitator4" class="control-label"></label>
+        <textarea asp-for="AnswerFacilitator4" class="form-control" rows="3" readonly></textarea>        
+    </div>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <label asp-for="PlanNote" class="control-label"></label>
+        <textarea asp-for="PlanNote" class="form-control" rows="3" readonly></textarea>        
+    </div>
+    <div class="form-group col-md-6">        
+    </div>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+
+
+

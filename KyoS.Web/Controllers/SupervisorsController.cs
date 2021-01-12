@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
@@ -80,7 +81,8 @@ namespace KyoS.Web.Controllers
                     model = new SupervisorViewModel
                     {
                         Clinics = list,
-                        IdClinic = clinic.Id
+                        IdClinic = clinic.Id,
+                        UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, user_logged.Clinic.Id)
                     };                    
                     return View(model);
                 }
@@ -88,7 +90,8 @@ namespace KyoS.Web.Controllers
             
             model = new SupervisorViewModel
             {
-                 Clinics = _combosHelper.GetComboClinics()
+                 Clinics = _combosHelper.GetComboClinics(),
+                 UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, 0)
             };
             return View(model);                        
         }
@@ -161,12 +164,13 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            SupervisorViewModel supervisorViewModel = _converterHelper.ToSupervisorViewModel(supervisorEntity);
+            SupervisorViewModel supervisorViewModel;
 
             if (!User.IsInRole("Admin"))
             {
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                supervisorViewModel = _converterHelper.ToSupervisorViewModel(supervisorEntity, user_logged.Clinic.Id);
                 if (user_logged.Clinic != null)
                 {
                     List<SelectListItem> list = new List<SelectListItem>();
@@ -178,6 +182,8 @@ namespace KyoS.Web.Controllers
                     supervisorViewModel.Clinics = list;
                 }
             }            
+            else
+                supervisorViewModel = _converterHelper.ToSupervisorViewModel(supervisorEntity, 0);
 
             return View(supervisorViewModel);
         }

@@ -188,11 +188,12 @@ namespace KyoS.Web.Helpers
                 Id = isNew ? 0 : model.Id,
                 Clinic = await _context.Clinics.FindAsync(model.IdClinic),
                 Code = model.Code,
+                LinkedUser = _userHelper.GetUserNameById(model.IdUser),
                 Name = model.Name
             };
         }
 
-        public SupervisorViewModel ToSupervisorViewModel(SupervisorEntity supervisorEntity)
+        public SupervisorViewModel ToSupervisorViewModel(SupervisorEntity supervisorEntity, int idClinic)
         {
             return new SupervisorViewModel
             {
@@ -200,7 +201,9 @@ namespace KyoS.Web.Helpers
                 Name = supervisorEntity.Name,
                 Code = supervisorEntity.Code,
                 IdClinic = supervisorEntity.Clinic.Id,
-                Clinics = _combosHelper.GetComboClinics()
+                Clinics = _combosHelper.GetComboClinics(),
+                IdUser = _userHelper.GetIdByUserName(supervisorEntity.LinkedUser),
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, idClinic)
             };
         }
 
@@ -373,7 +376,37 @@ namespace KyoS.Web.Helpers
                 Id = isNew ? 0 : entity.Id,
                 Workday_Cient = await _context.Workdays_Clients.FindAsync(model.Id),
                 PlanNote = model.PlanNote,
-                Status = NoteStatus.Edition
+                Status = NoteStatus.Edition,
+                OrientedX3 = model.OrientedX3,
+                NotTime = model.NotTime,
+                NotPlace = model.NotPlace,
+                NotPerson = model.NotPerson,
+                Present = model.Present,
+                Adequate = model.Adequate,
+                Limited = model.Limited,
+                Impaired = model.Impaired,
+                Faulty = model.Faulty,
+                Euthymic = model.Euthymic,
+                Congruent = model.Congruent,
+                Negativistic = model.Negativistic,
+                Depressed = model.Depressed,
+                Euphoric = model.Euphoric,
+                Optimistic = model.Optimistic,
+                Anxious = model.Anxious,
+                Hostile = model.Hostile,
+                Withdrawn = model.Withdrawn,
+                Irritable  = model.Irritable,
+                Dramatized = model.Dramatized,
+                AdequateAC = model.AdequateAC,
+                Inadequate = model.Inadequate,
+                Fair = model.Fair,
+                Unmotivated = model.Unmotivated,
+                Motivated = model.Motivated,
+                Guarded = model.Guarded,
+                Normal = model.Normal,
+                ShortSpanned = model.ShortSpanned,
+                MildlyImpaired = model.MildlyImpaired,
+                SeverelyImpaired = model.SeverelyImpaired
             };
         }
 
