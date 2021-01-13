@@ -123,6 +123,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin, Facilitator")]
         public async Task<IActionResult> EditNote(int id)
         {
             Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
@@ -627,6 +628,24 @@ namespace KyoS.Web.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(NotesSupervision));
+        }
+
+        [Authorize(Roles = "Admin, Facilitator")]
+        public async Task<IActionResult> PrintNotes(int id)
+        {
+            WorkdayEntity workday = await _context.Workdays.FirstOrDefaultAsync(w => w.Id == id);
+
+            if (workday == null)
+            {
+                return NotFound();
+            }
+
+            PrintNotesViewModel noteViewModel = new PrintNotesViewModel
+            {
+                DateOfPrint = workday.Date
+            };
+
+            return View(noteViewModel);
         }
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Globalization;
 
 namespace KyoS.Web
 {
@@ -88,6 +89,15 @@ namespace KyoS.Web
             {
                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
+
+            //system culture
+            var cultureInfo = new CultureInfo("en-US");
+            cultureInfo.DateTimeFormat.DateSeparator = "/";
+            cultureInfo.DateTimeFormat.ShortDatePattern = "MM/dd/yyyy";
+            cultureInfo.NumberFormat.NumberDecimalSeparator = ".";
+            cultureInfo.NumberFormat.CurrencyDecimalSeparator = ".";
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
         }
     }
 }

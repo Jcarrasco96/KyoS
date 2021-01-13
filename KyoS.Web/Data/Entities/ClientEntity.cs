@@ -18,7 +18,7 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Date of birth")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
+        //[DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime DateOfBirth { get; set; }
 

@@ -13,13 +13,11 @@ namespace KyoS.Web.Data.Entities
         public ClientEntity Client { get; set; }
 
         [Display(Name = "Date of admission")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
+        [DataType(DataType.Date)]        
         public DateTime AdmisionDate { get; set; }
 
         [Display(Name = "Treatment plan developed date")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
+        [DataType(DataType.Date)]        
         public DateTime MTPDevelopedDate { get; set; }
 
         [Display(Name = "Start Time")]

@@ -7,18 +7,16 @@ namespace KyoS.Web.Data.Entities
     public class WorkdayEntity
     {
         public int Id { get; set; }
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
+        [DataType(DataType.Date)]        
         public DateTime Date { get; set; }
         public WeekEntity Week { get; set; }
         public ICollection<Workday_Client> Workdays_Clients { get; set; }
-        public string Day 
+        public string Day
         {
             get
             {
                 return Date.DayOfWeek.ToString();
-            } 
+            }
         }
-
     }
 }
