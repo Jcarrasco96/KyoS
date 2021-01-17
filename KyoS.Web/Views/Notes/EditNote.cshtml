@@ -30,25 +30,25 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" asp-for="Id" />
                         <partial name="_Notes" />
+                        <div class="form-group col-md-12">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <div class="col-md-12">
+                                <input type="submit" value="Save All" class="btn btn-primary" />
+                                <a asp-action="Index" class="btn btn-success">Back</a>
+                                @if (Model.Status.ToString() == "Edition")
+                                {
+                                    <a asp-action="FinishEditing" class="btn btn-warning" asp-route-id="@Model.Id" title="Finish editing the note">Finish Editing</a>
+                                }
+                            </div>
+                        </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="cms">
                         <br />
                         <partial name="_MCS" />
                     </div>
                 </div>
-            </div>
-            <div class="form-group col-md-12">
-            </div>
-            <div class="form-group col-md-12">
-                <div class="col-md-12">
-                    <input type="submit" value="Save All" class="btn btn-primary" />
-                    <a asp-action="Index" class="btn btn-success">Back</a>
-                    @if (Model.Status.ToString() == "Edition")
-                    {                        
-                        <a asp-action="FinishEditing" class="btn btn-warning" asp-route-id="@Model.Id" title="Finish editing the note">Finish Editing</a>
-                    }
-                </div>
-            </div>
+            </div>            
         </form>
     </div>
 </div>      

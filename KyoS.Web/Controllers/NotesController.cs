@@ -1,4 +1,5 @@
-﻿using KyoS.Common.Enums;
+﻿using AspNetCore.Reporting;
+using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 
@@ -646,6 +648,170 @@ namespace KyoS.Web.Controllers
             };
 
             return View(noteViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Facilitator")]
+        public async Task<IActionResult> PrintNotes(PrintNotesViewModel model, IFormCollection form)
+        {
+            var meridian = (form["classifications"] == "First") ? "AM" : "PM";
+            List<Workday_Client> list = await _context.Workdays_Clients
+                                                      .Include(wc => wc.Client)
+                                                      .ThenInclude(c => c.Group)
+                                                      .ThenInclude(g => g.Facilitator)
+                                                      .Include(wc => wc.Note)
+                                                      .ThenInclude(n => n.Supervisor)
+                                                      .Include(wc => wc.Note)
+                                                      .ThenInclude(n => n.Notes_Activities)
+                                                      .Where(wc => (wc.Workday.Date == model.DateOfPrint 
+                                                          && wc.Client.Group.Facilitator.LinkedUser == User.Identity.Name
+                                                          && wc.Session == meridian
+                                                          && wc.Note.Status == NoteStatus.Approved)).ToListAsync();
+            if (list.Count == 0)
+            {
+                ModelState.AddModelError(string.Empty, "There are not a approved notes on that date");
+            }
+
+            //WorkdayEntity workday = await _context.Workdays.FirstOrDefaultAsync(w => w.Id == id);
+
+            //if (workday == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //PrintNotesViewModel noteViewModel = new PrintNotesViewModel
+            //{
+            //    DateOfPrint = workday.Date
+            //};
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Admin, Facilitator")]
+        public IActionResult PrintNote(int id)
+        {
+            Workday_Client workdayClient = _context.Workdays_Clients
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Group)
+                                                          .ThenInclude(g => g.Facilitator)
+
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.MTPs)
+                                                          .ThenInclude(m => m.Diagnosis)
+
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.MTPs)
+                                                          .ThenInclude(m => m.Goals)
+
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.MTPs)
+                                                          .ThenInclude(m => m.Goals)
+                                                          .ThenInclude(g => g.Objetives)
+
+                                                          .Include(wc => wc.Note)
+                                                          .ThenInclude(n => n.Supervisor)
+                                                          .ThenInclude(s => s.Clinic)
+
+                                                          .Include(wc => wc.Note)
+                                                          .ThenInclude(n => n.Notes_Activities)
+                                                          .ThenInclude(na => na.Activity)
+                                                          .ThenInclude(a => a.Theme)
+
+                                                          .Include(wc => wc.Note)
+                                                          .ThenInclude(n => n.Notes_Activities)
+
+                                                          .Include(wc => wc.Workday)
+                                                          .FirstOrDefault(wc => (wc.Id == id
+                                                                               && wc.Note.Status == NoteStatus.Approved));
+            if (workdayClient == null)
+            {
+                return NotFound();
+            }
+
+            //report
+            string mimetype = "";
+            string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
+            string rdlcFilePath = string.Format("{0}Reports\\Notes\\{1}.rdlc", fileDirPath, $"rptNote{workdayClient.Note.Supervisor.Clinic.Name}");
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            System.Text.Encoding.GetEncoding("windows-1252");
+            LocalReport report = new LocalReport(rdlcFilePath);
+
+            //datasource
+            List<Workday_Client> workdaysclients = new List<Workday_Client> { workdayClient };
+            List<ClientEntity> clients = new List<ClientEntity> { workdayClient.Client };
+            List<NoteEntity> notes = new List<NoteEntity> { workdayClient.Note };
+            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClient.Client.Group.Facilitator };
+            List<SupervisorEntity> supervisors = new List<SupervisorEntity> { workdayClient.Note.Supervisor };
+
+            List<Note_Activity> notesactivities1 = new List<Note_Activity>();
+            List<ActivityEntity> activities1 = new List<ActivityEntity>();
+            List<ThemeEntity> themes1 = new List<ThemeEntity>();
+            List<Note_Activity> notesactivities2 = new List<Note_Activity>();
+            List<ActivityEntity> activities2 = new List<ActivityEntity>();
+            List<ThemeEntity> themes2 = new List<ThemeEntity>();
+            List<Note_Activity> notesactivities3 = new List<Note_Activity>();
+            List<ActivityEntity> activities3 = new List<ActivityEntity>();
+            List<ThemeEntity> themes3 = new List<ThemeEntity>();
+            List<Note_Activity> notesactivities4 = new List<Note_Activity>();
+            List<ActivityEntity> activities4 = new List<ActivityEntity>();
+            List<ThemeEntity> themes4 = new List<ThemeEntity>();
+
+            int i = 0;
+            foreach (Note_Activity item in workdayClient.Note.Notes_Activities)
+            {
+                if (i == 0)
+                {
+                    notesactivities1 = new List<Note_Activity> { item };
+                    activities1 = new List<ActivityEntity> { item.Activity };
+                    themes1 = new List<ThemeEntity> { item.Activity.Theme };
+                }
+                if (i == 1)
+                {
+                    notesactivities2 = new List<Note_Activity> { item };
+                    activities2 = new List<ActivityEntity> { item.Activity };
+                    themes2 = new List<ThemeEntity> { item.Activity.Theme };
+                }
+                if (i == 2)
+                {
+                    notesactivities3 = new List<Note_Activity> { item };
+                    activities3 = new List<ActivityEntity> { item.Activity };
+                    themes3 = new List<ThemeEntity> { item.Activity.Theme };
+                }
+                if (i == 3)
+                {
+                    notesactivities4 = new List<Note_Activity> { item };
+                    activities4 = new List<ActivityEntity> { item.Activity };
+                    themes4 = new List<ThemeEntity> { item.Activity.Theme };
+                }
+                i = ++i;
+            }
+
+            report.AddDataSource("dsWorkdays_Clients", workdaysclients);
+            report.AddDataSource("dsClients", clients);
+            report.AddDataSource("dsNotes", notes);
+            report.AddDataSource("dsFacilitators", facilitators);
+            report.AddDataSource("dsSupervisors", supervisors);
+            report.AddDataSource("dsNotesActivities1", notesactivities1);
+            report.AddDataSource("dsActivities1", activities1);
+            report.AddDataSource("dsThemes1", themes1);
+            report.AddDataSource("dsNotesActivities2", notesactivities2);
+            report.AddDataSource("dsActivities2", activities2);
+            report.AddDataSource("dsThemes2", themes2);
+            report.AddDataSource("dsNotesActivities3", notesactivities3);
+            report.AddDataSource("dsActivities3", activities3);
+            report.AddDataSource("dsThemes3", themes3);
+            report.AddDataSource("dsNotesActivities4", notesactivities4);
+            report.AddDataSource("dsActivities4", activities4);
+            report.AddDataSource("dsThemes4", themes4);
+
+            var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
+            parameters.Add("date", date);
+
+            var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,
+                        $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf");
         }
     }
 }

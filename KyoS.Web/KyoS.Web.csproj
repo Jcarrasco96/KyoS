@@ -10,10 +10,14 @@
 
   <ItemGroup>
     <None Remove="Reports\Groups\rptGroup.rdlc" />
+    <None Remove="Reports\Notes\rptNoteDavila.rdlc" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Reports\Groups\rptGroup.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Notes\rptNoteDAVILA.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

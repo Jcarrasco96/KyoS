@@ -55,10 +55,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DBF\Activity.cs" />
     <Compile Include="DBF\Client.cs" />
     <Compile Include="DBF\Clinic.cs" />
     <Compile Include="DBF\Facilitator.cs" />
     <Compile Include="DBF\Group.cs" />
+    <Compile Include="DBF\Note.cs" />
+    <Compile Include="DBF\Note_Activity.cs" />
+    <Compile Include="DBF\Supervisor.cs" />
+    <Compile Include="DBF\Theme.cs" />
+    <Compile Include="DBF\Workday_Client.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -77,7 +83,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Reports\rptGroup.rdlc" />
+    <EmbeddedResource Include="Reports\rptNoteDavila.rdlc" />
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\RDLCDesign.DBF.Theme.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -91,6 +99,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

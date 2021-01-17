@@ -18,7 +18,6 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Date of birth")]
         [DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime DateOfBirth { get; set; }
 
@@ -35,6 +34,8 @@ namespace KyoS.Web.Data.Entities
 
         public GroupEntity Group { get; set; }
 
+        public ICollection<MTPEntity> MTPs { get; set; }
+    
         public ICollection<Workday_Client> Workdays_Clients { get; set; }
     }
 }

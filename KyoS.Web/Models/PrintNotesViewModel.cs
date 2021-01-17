@@ -10,8 +10,7 @@ namespace KyoS.Web.Models
     {
         [Display(Name = "Print's date")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
+        [DataType(DataType.Date)]        
         public DateTime DateOfPrint { get; set; }
     }
 }
