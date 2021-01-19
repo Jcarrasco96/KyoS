@@ -19,5 +19,7 @@ namespace KyoS.Web.Data.Entities
         [Display(Name = "Facilitator's Answer")]
         [MaxLength(1000, ErrorMessage = "The {0} field can not have more than {1} characters.")]
         public string AnswerFacilitator { get; set; }
+
+        public ObjetiveEntity Objetive { get; set; }
     }
 }

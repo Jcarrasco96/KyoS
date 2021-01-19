@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Data.Entities.MTPEntity
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "MTP Details";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -122,12 +122,15 @@
             </div>
         </div>
         <div class="col-md-12">   
-            <p>
-                <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create MTP</a> |
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update MTP</a> |
-                <a asp-action="UpdateDiagnosis" asp-route-id="@Model.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update diagnosis</a> |
-                <a asp-action="UpdateGoals" asp-route-id="@Model.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update goals - objetives</a>
-            </p>
+            @if(User.IsInRole("Admin") || User.IsInRole("Mannager") || User.IsInRole("Supervisor"))
+            { 
+                <p>
+                    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create MTP</a> |
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update MTP</a> |
+                    <a asp-action="UpdateDiagnosis" asp-route-id="@Model.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update diagnosis</a> |
+                    <a asp-action="UpdateGoals" asp-route-id="@Model.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update goals - objetives</a>
+                </p>
+            }
         </div>
 
     </div>
@@ -145,10 +148,13 @@
                             <th class="col-md-1">
 
                             </th>
+                            <th class="col-md-1">
+                                Goal
+                            </th>
                             <th class="col-md-5">
                                 Name
                             </th>
-                            <th class="col-md-6">
+                            <th class="col-md-5">
                                 Focus
                             </th>
                         </tr>
@@ -156,41 +162,44 @@
                     <tbody>
                         @foreach (var item in Model.Goals)
                         {
-                            <tr>
-                                <td align="center">
-                                    @if (item.Objetives.Count() != 0)
-                                    {
-                                        <a class="icon-plus-sign-alt" ></a>                                     
-                                    }
-                                    else
-                                    {
-                                        
-                                    }
-                                    <div style="display:none">
-                                        <table class="table table-striped table-bordered">
+                        <tr>
+                            <td align="center">
+                                @if (item.Objetives.Count() != 0)
+                                {
+                                    <a class="icon-plus-sign-alt"></a>
+                                }
+                                else
+                                {
+
+                                }
+                                <div style="display:none">
+                                    <table class="table table-striped table-bordered">
+                                        <tr>
+                                            <th class="col-md-1">Objetive</th>
+                                            <th class="col-md-6">Description</th>
+                                            <th class="col-md-5">Intervention</th>
+                                        </tr>
+                                        @foreach (var product in item.Objetives)
+                                        {
                                             <tr>
-                                                <th class="col-md-1">Objetive</th>
-                                                <th class="col-md-6">Description</th>
-                                                <th class="col-md-5">Intervention</th>                                                
+                                                <td>@Html.DisplayFor(modelItem => product.Objetive)</td>
+                                                <td>@Html.DisplayFor(modelItem => product.Description)</td>
+                                                <td>@Html.DisplayFor(modelItem => product.Intervention)</td>
                                             </tr>
-                                            @foreach (var product in item.Objetives)
-                                            {
-                                                <tr>
-                                                    <td>@Html.DisplayFor(modelItem => product.Objetive)</td>
-                                                    <td>@Html.DisplayFor(modelItem => product.Description)</td>
-                                                    <td>@Html.DisplayFor(modelItem => product.Intervention)</td>
-                                                </tr>
-                                            }
-                                        </table>
-                                    </div>
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.AreaOfFocus)
-                                </td>
-                            </tr>
+                                        }
+                                    </table>
+                                </div>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Number)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AreaOfFocus)
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

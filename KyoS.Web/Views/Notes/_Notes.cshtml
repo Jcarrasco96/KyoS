@@ -5,6 +5,7 @@
     <h5>Facilitator: @Model.Workday_Cient.Client.Group.Facilitator.Name</h5>
     <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString()</h5>
     <h5>Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
+    <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">View of MTP</a>
     <hr />
 </div>
 <div class="col-md-push-12">
@@ -19,20 +20,35 @@
         <span asp-validation-for="IdActivity1" class="text-danger"></span>
     </div>
 </div>
-<div class="form-group">
-    <div class="col-md-6">
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
         <label asp-for="AnswerClient1" class="control-label"></label>
         <textarea asp-for="AnswerClient1" class="form-control" rows="3"></textarea>
         <span asp-validation-for="AnswerClient1" class="text-danger"></span>
     </div>
-    <div class="col-md-6">
+    <div class="form-group col-md-6">
         <label asp-for="AnswerFacilitator1" class="control-label"></label>
         <textarea asp-for="AnswerFacilitator1" class="form-control" rows="3"></textarea>
         <span asp-validation-for="AnswerFacilitator1" class="text-danger"></span>
+    </div>    
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="IdGoal1" class="control-label"></label>
+        <select asp-for="IdGoal1" asp-items="Model.Goals1" class="form-control" id="cbGoal1"></select>
+        <span asp-validation-for="IdGoal1" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="IdObjetive1" class="control-label"></label>
+        <select asp-for="IdObjetive1" asp-items="Model.Objetives1" class="form-control" id="cbObjetive1"></select>
+        <span asp-validation-for="IdObjetive1" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-8">
+        &nbsp;
     </div>
 </div>
 <div class="col-md-12">
-    &nbsp;
+    <hr />
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-6">
@@ -46,20 +62,35 @@
         <span asp-validation-for="IdActivity2" class="text-danger"></span>
     </div>
 </div>
-<div class="form-group">
-    <div class="col-md-6">
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
         <label asp-for="AnswerClient2" class="control-label"></label>
         <textarea asp-for="AnswerClient2" class="form-control" rows="3"></textarea>
         <span asp-validation-for="AnswerClient2" class="text-danger"></span>
     </div>
-    <div class="col-md-6">
+    <div class="form-group col-md-6">
         <label asp-for="AnswerFacilitator2" class="control-label"></label>
         <textarea asp-for="AnswerFacilitator2" class="form-control" rows="3"></textarea>
         <span asp-validation-for="AnswerFacilitator2" class="text-danger"></span>
     </div>
 </div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="IdGoal2" class="control-label"></label>
+        <select asp-for="IdGoal2" asp-items="Model.Goals2" class="form-control" id="cbGoal2"></select>
+        <span asp-validation-for="IdGoal2" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="IdObjetive2" class="control-label"></label>
+        <select asp-for="IdObjetive2" asp-items="Model.Objetives2" class="form-control" id="cbObjetive2"></select>
+        <span asp-validation-for="IdObjetive2" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-8">
+        &nbsp;
+    </div>
+</div>
 <div class="col-md-12">
-    &nbsp;
+    <hr />
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-6">
@@ -73,20 +104,35 @@
         <span asp-validation-for="IdActivity3" class="text-danger"></span>
     </div>
 </div>
-<div class="form-group">
-    <div class="col-md-6">
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
         <label asp-for="AnswerClient3" class="control-label"></label>
         <textarea asp-for="AnswerClient3" class="form-control" rows="3"></textarea>
         <span asp-validation-for="AnswerClient3" class="text-danger"></span>
     </div>
-    <div class="col-md-6">
+    <div class="form-group col-md-6">
         <label asp-for="AnswerFacilitator3" class="control-label"></label>
         <textarea asp-for="AnswerFacilitator3" class="form-control" rows="3"></textarea>
         <span asp-validation-for="AnswerFacilitator3" class="text-danger"></span>
     </div>
 </div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="IdGoal3" class="control-label"></label>
+        <select asp-for="IdGoal3" asp-items="Model.Goals3" class="form-control" id="cbGoal3"></select>
+        <span asp-validation-for="IdGoal3" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="IdObjetive3" class="control-label"></label>
+        <select asp-for="IdObjetive3" asp-items="Model.Objetives3" class="form-control" id="cbObjetive3"></select>
+        <span asp-validation-for="IdObjetive3" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-8">
+        &nbsp;
+    </div>
+</div>
 <div class="col-md-12">
-    &nbsp;
+    <hr />
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-6">
@@ -100,29 +146,43 @@
         <span asp-validation-for="IdActivity4" class="text-danger"></span>
     </div>
 </div>
-<div class="form-group">
-    <div class="col-md-6">
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
         <label asp-for="AnswerClient4" class="control-label"></label>
         <textarea asp-for="AnswerClient4" class="form-control" rows="3"></textarea>
         <span asp-validation-for="AnswerClient4" class="text-danger"></span>
     </div>
-    <div class="col-md-6">
+    <div class="form-group col-md-6">
         <label asp-for="AnswerFacilitator4" class="control-label"></label>
         <textarea asp-for="AnswerFacilitator4" class="form-control" rows="3"></textarea>
         <span asp-validation-for="AnswerFacilitator4" class="text-danger"></span>
     </div>
 </div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="IdGoal4" class="control-label"></label>
+        <select asp-for="IdGoal4" asp-items="Model.Goals4" class="form-control" id="cbGoal4"></select>
+        <span asp-validation-for="IdGoal4" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="IdObjetive4" class="control-label"></label>
+        <select asp-for="IdObjetive4" asp-items="Model.Objetives4" class="form-control" id="cbObjetive4"></select>
+        <span asp-validation-for="IdObjetive4" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-8">
+        &nbsp;
+    </div>
+</div>
 <div class="col-md-12">
-    &nbsp;
+    <hr />
 </div>
 <div class="col-md-push-12">
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-12">
         <label asp-for="PlanNote" class="control-label"></label>
         <textarea asp-for="PlanNote" class="form-control" rows="3"></textarea>
         <span asp-validation-for="PlanNote" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-6">        
-    </div>
+        <hr />
+    </div>    
 </div>
 
 

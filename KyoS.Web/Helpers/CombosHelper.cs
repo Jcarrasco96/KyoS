@@ -314,6 +314,40 @@ namespace KyoS.Web.Helpers
             });
 
             return list;
-        }        
+        }
+
+        public IEnumerable<SelectListItem> GetComboGoals(int idMTP)
+        {
+            List<SelectListItem> list = _context.Goals.Where(g => g.MTP.Id == idMTP).Select(g => new SelectListItem
+            {
+                Text = $"{g.Number}",
+                Value = $"{g.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select goal...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboObjetives(int idGoal)
+        {
+            List<SelectListItem> list = _context.Objetives.Where(o => o.Goal.Id == idGoal).Select(o => new SelectListItem
+            {
+                Text = $"{o.Objetive}",
+                Value = $"{o.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select objetive...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

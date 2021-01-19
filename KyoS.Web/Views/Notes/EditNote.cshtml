@@ -29,18 +29,14 @@
                     <div role="tabpanel" class="tab-pane active" id="note">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" asp-for="Id" />
-                        <partial name="_Notes" />
-                        <div class="form-group col-md-12">
-                        </div>
-                        <div class="form-group col-md-12">
-                            <div class="col-md-12">
+                        <partial name="_Notes" />                        
+                        <div class="form-group col-md-12">                            
                                 <input type="submit" value="Save All" class="btn btn-primary" />
                                 <a asp-action="Index" class="btn btn-success">Back</a>
                                 @if (Model.Status.ToString() == "Edition")
                                 {
                                     <a asp-action="FinishEditing" class="btn btn-warning" asp-route-id="@Model.Id" title="Finish editing the note">Finish Editing</a>
-                                }
-                            </div>
+                                }                            
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="cms">
@@ -86,6 +82,38 @@
                     $("#cbActivity4").empty();
                     $.each(data, function (index, row) {
                         $("#cbActivity4").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
+                    });
+                });
+            })
+            $("#cbGoal1").change(function () {
+                $.get("/Notes/GetObjetiveList", { idGoal: $("#cbGoal1").val() }, function (data) {
+                    $("#cbObjetive1").empty();
+                    $.each(data, function (index, row) {
+                        $("#cbObjetive1").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                    });
+                });
+            })
+            $("#cbGoal2").change(function () {
+                $.get("/Notes/GetObjetiveList", { idGoal: $("#cbGoal2").val() }, function (data) {
+                    $("#cbObjetive2").empty();
+                    $.each(data, function (index, row) {
+                        $("#cbObjetive2").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                    });
+                });
+            })
+            $("#cbGoal3").change(function () {
+                $.get("/Notes/GetObjetiveList", { idGoal: $("#cbGoal3").val() }, function (data) {
+                    $("#cbObjetive3").empty();
+                    $.each(data, function (index, row) {
+                        $("#cbObjetive3").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                    });
+                });
+            })
+            $("#cbGoal4").change(function () {
+                $.get("/Notes/GetObjetiveList", { idGoal: $("#cbGoal4").val() }, function (data) {
+                    $("#cbObjetive4").empty();
+                    $.each(data, function (index, row) {
+                        $("#cbObjetive4").append("<option value='" + row.value + "'>" + row.text + "</option>")
                     });
                 });
             })

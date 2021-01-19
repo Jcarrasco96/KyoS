@@ -22,5 +22,7 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboGender();
         IEnumerable<SelectListItem> GetComboClientStatus();
         IEnumerable<SelectListItem> GetComboGroups();
+        IEnumerable<SelectListItem> GetComboGoals(int idMTP);
+        IEnumerable<SelectListItem> GetComboObjetives(int idGoal);
     }
 }

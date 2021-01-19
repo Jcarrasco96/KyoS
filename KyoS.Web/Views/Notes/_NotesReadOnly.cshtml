@@ -5,6 +5,7 @@
     <h5>Facilitator: @Model.Workday_Cient.Client.Group.Facilitator.Name</h5>
     <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString()</h5>
     <h5>Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
+    <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">View of MTP</a>
     <hr />
 </div>
 <div class="col-md-push-12">
@@ -17,18 +18,31 @@
         <input asp-for="Activity1" class="form-control" readonly />
     </div>
 </div>
-<div class="form-group">
-    <div class="col-md-6">
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
         <label asp-for="AnswerClient1" class="control-label"></label>
         <textarea asp-for="AnswerClient1" class="form-control" rows="3" readonly></textarea>        
     </div>
-    <div class="col-md-6">
+    <div class="form-group col-md-6">
         <label asp-for="AnswerFacilitator1" class="control-label"></label>
         <textarea asp-for="AnswerFacilitator1" class="form-control" rows="3" readonly></textarea>        
     </div>
 </div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="Goal1" class="control-label"></label>
+        <input asp-for="Goal1" class="form-control" readonly />
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Objetive1" class="control-label"></label>
+        <input asp-for="Objetive1" class="form-control" readonly />
+    </div>
+    <div class="form-group col-md-8">
+        &nbsp;
+    </div>
+</div>
 <div class="col-md-12">
-    &nbsp;
+    <hr />
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-6">
@@ -40,20 +54,33 @@
         <input asp-for="Activity2" class="form-control" readonly />
     </div>
 </div>
-<div class="form-group">
-    <div class="col-md-6">
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
         <label asp-for="AnswerClient2" class="control-label"></label>
         <textarea asp-for="AnswerClient2" class="form-control" rows="3" readonly></textarea>
         
     </div>
-    <div class="col-md-6">
+    <div class="form-group col-md-6">
         <label asp-for="AnswerFacilitator2" class="control-label"></label>
         <textarea asp-for="AnswerFacilitator2" class="form-control" rows="3" readonly></textarea>
         
     </div>
 </div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="Goal2" class="control-label"></label>
+        <input asp-for="Goal2" class="form-control" readonly />
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Objetive2" class="control-label"></label>
+        <input asp-for="Objetive2" class="form-control" readonly />
+    </div>
+    <div class="form-group col-md-8">
+        &nbsp;
+    </div>
+</div>
 <div class="col-md-12">
-    &nbsp;
+    <hr />
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-6">
@@ -65,18 +92,31 @@
         <input asp-for="Activity3" class="form-control" readonly />
     </div>
 </div>
-<div class="form-group">
-    <div class="col-md-6">
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
         <label asp-for="AnswerClient3" class="control-label"></label>
         <textarea asp-for="AnswerClient3" class="form-control" rows="3" readonly></textarea>        
     </div>
-    <div class="col-md-6">
+    <div class="form-group col-md-6">
         <label asp-for="AnswerFacilitator3" class="control-label"></label>
         <textarea asp-for="AnswerFacilitator3" class="form-control" rows="3" readonly></textarea>        
     </div>
 </div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="Goal3" class="control-label"></label>
+        <input asp-for="Goal3" class="form-control" readonly />
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Objetive3" class="control-label"></label>
+        <input asp-for="Objetive3" class="form-control" readonly />
+    </div>
+    <div class="form-group col-md-8">
+        &nbsp;
+    </div>
+</div>
 <div class="col-md-12">
-    &nbsp;
+    <hr />
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-6">
@@ -88,30 +128,39 @@
         <input asp-for="Activity4" class="form-control" readonly />
     </div>
 </div>
-<div class="form-group">
-    <div class="col-md-6">
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
         <label asp-for="AnswerClient4" class="control-label"></label>
         <textarea asp-for="AnswerClient4" class="form-control" rows="3" readonly></textarea>        
     </div>
-    <div class="col-md-6">
+    <div class="form-group col-md-6">
         <label asp-for="AnswerFacilitator4" class="control-label"></label>
         <textarea asp-for="AnswerFacilitator4" class="form-control" rows="3" readonly></textarea>        
     </div>
 </div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="Goal4" class="control-label"></label>
+        <input asp-for="Goal4" class="form-control" readonly />
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Objetive4" class="control-label"></label>
+        <input asp-for="Objetive4" class="form-control" readonly />
+    </div>
+    <div class="form-group col-md-8">
+        &nbsp;
+    </div>
+</div>
 <div class="col-md-12">
-    &nbsp;
+    <hr />
 </div>
 <div class="col-md-push-12">
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-12">
         <label asp-for="PlanNote" class="control-label"></label>
         <textarea asp-for="PlanNote" class="form-control" rows="3" readonly></textarea>        
-    </div>
-    <div class="form-group col-md-6">        
-    </div>
+    </div>    
 </div>
-<div class="col-md-12">
-    &nbsp;
-</div>
+
 
 
 

@@ -206,8 +206,10 @@ namespace KyoS.Web.Controllers
                 }
             }
 
+            MTPEntity mtp = await _context.MTPs.Include(m => m.Goals).FirstOrDefaultAsync(m => m.Client.Id == workday_Client.Client.Id);
             if (note == null)   //la nota no está creada
-            {
+            {                
+                IEnumerable<SelectListItem> goals = _combosHelper.GetComboGoals(mtp.Id);
                 noteViewModel = new NoteViewModel
                 {
                     Id = id,
@@ -215,18 +217,22 @@ namespace KyoS.Web.Controllers
                     IdTopic1 = (list1.Count != 0) ? topics[0].Id : 0,
                     Topics1 = (list1.Count != 0) ? list1 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
                     Activities1 = (list1.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[0].Id) : null,
+                    Goals1 = goals,
 
                     IdTopic2 = (list2.Count != 0) ? topics[1].Id : 0,
                     Topics2 = (list2.Count != 0) ? list2 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
                     Activities2 = (list2.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[1].Id) : null,
+                    Goals2 = goals,
 
                     IdTopic3 = (list3.Count != 0) ? topics[2].Id : 0,
                     Topics3 = (list3.Count != 0) ? list3 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
                     Activities3 = (list3.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[2].Id) : null,
+                    Goals3 = goals,
 
                     IdTopic4 = (list4.Count != 0) ? topics[3].Id : 0,
                     Topics4 = (list4.Count != 0) ? list4 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
                     Activities4 = (list4.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[3].Id) : null,
+                    Goals4 = goals,
 
                     Workday_Cient = workday_Client
                 };
@@ -235,7 +241,13 @@ namespace KyoS.Web.Controllers
             {
                 List<Note_Activity> note_Activity = await _context.Notes_Activities
                                                                   .Include(na => na.Activity)
-                                                                  .ThenInclude(a => a.Theme).Where(na => na.Note.Id == note.Id).ToListAsync();
+                                                                  .ThenInclude(a => a.Theme)
+                                                                  .Include(na => na.Objetive)
+                                                                  .ThenInclude(o => o.Goal)
+                                                                  .Where(na => na.Note.Id == note.Id).ToListAsync();
+                
+                IEnumerable<SelectListItem> goals = _combosHelper.GetComboGoals(mtp.Id);
+
                 noteViewModel = new NoteViewModel
                 {
                     Id = id,
@@ -280,6 +292,12 @@ namespace KyoS.Web.Controllers
                     Activities1 = _combosHelper.GetComboActivitiesByTheme((note_Activity.Count > 0) ? note_Activity[0].Activity.Theme.Id : 0),
                     AnswerClient1 = note_Activity[0].AnswerClient,
                     AnswerFacilitator1 = note_Activity[0].AnswerFacilitator,
+                    IdGoal1 = ((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Goal.Id : 0,
+                    Goals1 = goals,
+                    IdObjetive1 = ((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Id : 0,
+                    //Paso el IdGoal1 como parametro
+                    Objetives1 = _combosHelper.GetComboObjetives(((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) 
+                                                                        ? note_Activity[0].Objetive.Goal.Id : 0),
 
                     IdTopic2 = (note_Activity.Count > 1) ? note_Activity[1].Activity.Theme.Id : 0,
                     Topics2 = (list2.Count != 0) ? list2 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
@@ -287,6 +305,12 @@ namespace KyoS.Web.Controllers
                     Activities2 = _combosHelper.GetComboActivitiesByTheme((note_Activity.Count > 1) ? note_Activity[1].Activity.Theme.Id : 0),
                     AnswerClient2 = note_Activity[1].AnswerClient,
                     AnswerFacilitator2 = note_Activity[1].AnswerFacilitator,
+                    IdGoal2 = ((note_Activity.Count > 1) && (note_Activity[1].Objetive != null)) ? note_Activity[1].Objetive.Goal.Id : 0,
+                    Goals2 = goals,
+                    IdObjetive2 = ((note_Activity.Count > 1) && (note_Activity[1].Objetive != null)) ? note_Activity[1].Objetive.Id : 0,
+                    //Paso el IdGoal2 como parametro
+                    Objetives2 = _combosHelper.GetComboObjetives(((note_Activity.Count > 1) && (note_Activity[1].Objetive != null))
+                                                                        ? note_Activity[1].Objetive.Goal.Id : 0),
 
                     IdTopic3 = (note_Activity.Count > 2) ? note_Activity[2].Activity.Theme.Id : 0,
                     Topics3 = (list3.Count != 0) ? list3 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
@@ -294,13 +318,25 @@ namespace KyoS.Web.Controllers
                     Activities3 = _combosHelper.GetComboActivitiesByTheme((note_Activity.Count > 2) ? note_Activity[2].Activity.Theme.Id : 0),
                     AnswerClient3 = note_Activity[2].AnswerClient,
                     AnswerFacilitator3 = note_Activity[2].AnswerFacilitator,
+                    IdGoal3 = ((note_Activity.Count > 2) && (note_Activity[2].Objetive != null)) ? note_Activity[2].Objetive.Goal.Id : 0,
+                    Goals3 = goals,
+                    IdObjetive3 = ((note_Activity.Count > 2) && (note_Activity[2].Objetive != null)) ? note_Activity[2].Objetive.Id : 0,
+                    //Paso el IdGoal3 como parametro
+                    Objetives3 = _combosHelper.GetComboObjetives(((note_Activity.Count > 2) && (note_Activity[2].Objetive != null))
+                                                                        ? note_Activity[2].Objetive.Goal.Id : 0),
 
                     IdTopic4 = (note_Activity.Count > 3) ? note_Activity[3].Activity.Theme.Id : 0,
                     Topics4 = (list4.Count != 0) ? list4 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
                     IdActivity4 = (note_Activity.Count > 3) ? note_Activity[3].Activity.Id : 0,
                     Activities4 = _combosHelper.GetComboActivitiesByTheme((note_Activity.Count > 3) ? note_Activity[3].Activity.Theme.Id : 0),
                     AnswerClient4 = note_Activity[3].AnswerClient,
-                    AnswerFacilitator4 = note_Activity[3].AnswerFacilitator
+                    AnswerFacilitator4 = note_Activity[3].AnswerFacilitator,
+                    IdGoal4 = ((note_Activity.Count > 3) && (note_Activity[3].Objetive != null)) ? note_Activity[3].Objetive.Goal.Id : 0,
+                    Goals4 = goals,
+                    IdObjetive4 = ((note_Activity.Count > 3) && (note_Activity[3].Objetive != null)) ? note_Activity[3].Objetive.Id : 0,
+                    //Paso el IdGoal4 como parametro
+                    Objetives4 = _combosHelper.GetComboObjetives(((note_Activity.Count > 3) && (note_Activity[3].Objetive != null))
+                                                                        ? note_Activity[3].Objetive.Goal.Id : 0)
                 };
             }
             return View(noteViewModel);
@@ -337,7 +373,8 @@ namespace KyoS.Web.Controllers
                         Note = noteEntity,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1),
                         AnswerClient = model.AnswerClient1,
-                        AnswerFacilitator = model.AnswerFacilitator1
+                        AnswerFacilitator = model.AnswerFacilitator1,
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
                     };
                     _context.Add(note_Activity);
                     note_Activity = new Note_Activity
@@ -345,7 +382,8 @@ namespace KyoS.Web.Controllers
                         Note = noteEntity,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2),
                         AnswerClient = model.AnswerClient2,
-                        AnswerFacilitator = model.AnswerFacilitator2
+                        AnswerFacilitator = model.AnswerFacilitator2,
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
                     };
                     _context.Add(note_Activity);
                     note_Activity = new Note_Activity
@@ -353,7 +391,8 @@ namespace KyoS.Web.Controllers
                         Note = noteEntity,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity3),
                         AnswerClient = model.AnswerClient3,
-                        AnswerFacilitator = model.AnswerFacilitator3
+                        AnswerFacilitator = model.AnswerFacilitator3,
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive3),
                     };
                     _context.Add(note_Activity);
                     note_Activity = new Note_Activity
@@ -361,7 +400,8 @@ namespace KyoS.Web.Controllers
                         Note = noteEntity,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity4),
                         AnswerClient = model.AnswerClient4,
-                        AnswerFacilitator = model.AnswerFacilitator4
+                        AnswerFacilitator = model.AnswerFacilitator4,
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4),
                     };
                     _context.Add(note_Activity);
                     try
@@ -428,7 +468,8 @@ namespace KyoS.Web.Controllers
                         Note = note,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1),
                         AnswerClient = model.AnswerClient1,
-                        AnswerFacilitator = model.AnswerFacilitator1
+                        AnswerFacilitator = model.AnswerFacilitator1,
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
                     };
                     _context.Add(note_Activity);
                     note_Activity = new Note_Activity
@@ -436,7 +477,8 @@ namespace KyoS.Web.Controllers
                         Note = note,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2),
                         AnswerClient = model.AnswerClient2,
-                        AnswerFacilitator = model.AnswerFacilitator2
+                        AnswerFacilitator = model.AnswerFacilitator2,
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
                     };
                     _context.Add(note_Activity);
                     note_Activity = new Note_Activity
@@ -444,7 +486,8 @@ namespace KyoS.Web.Controllers
                         Note = note,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity3),
                         AnswerClient = model.AnswerClient3,
-                        AnswerFacilitator = model.AnswerFacilitator3
+                        AnswerFacilitator = model.AnswerFacilitator3,
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive3),
                     };
                     _context.Add(note_Activity);
                     note_Activity = new Note_Activity
@@ -452,7 +495,8 @@ namespace KyoS.Web.Controllers
                         Note = note,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity4),
                         AnswerClient = model.AnswerClient4,
-                        AnswerFacilitator = model.AnswerFacilitator4
+                        AnswerFacilitator = model.AnswerFacilitator4,
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4),
                     };
                     _context.Add(note_Activity);
 
@@ -504,6 +548,14 @@ namespace KyoS.Web.Controllers
             return Json(new SelectList(activities, "Id", "Name"));
         }
 
+        [Authorize(Roles = "Admin, Facilitator")]
+        public JsonResult GetObjetiveList(int idGoal)
+        {
+            List<ObjetiveEntity> objetives = _context.Objetives.Where(o => o.Goal.Id == idGoal).ToList();
+
+            return Json(new SelectList(objetives, "Id", "Objetive"));
+        }
+
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> NotesSupervision()
         {
@@ -551,7 +603,10 @@ namespace KyoS.Web.Controllers
                         
             List<Note_Activity> note_Activity = await _context.Notes_Activities
                                                                 .Include(na => na.Activity)
-                                                                .ThenInclude(a => a.Theme).Where(na => na.Note.Id == note.Id).ToListAsync();
+                                                                .ThenInclude(a => a.Theme)
+                                                                .Include(n => n.Objetive)
+                                                                .ThenInclude(o => o.Goal)
+                                                                .Where(na => na.Note.Id == note.Id).ToListAsync();
             noteViewModel = new NoteViewModel
             {
                 Id = id,
@@ -593,21 +648,29 @@ namespace KyoS.Web.Controllers
                 Activity1 = note_Activity[0].Activity.Name,
                 AnswerClient1 = note_Activity[0].AnswerClient,
                 AnswerFacilitator1 = note_Activity[0].AnswerFacilitator,
+                Goal1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Goal.Number.ToString() : string.Empty,
+                Objetive1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Objetive : string.Empty,
 
                 Topic2 = note_Activity[1].Activity.Theme.Name,
                 Activity2 = note_Activity[1].Activity.Name,
                 AnswerClient2 = note_Activity[1].AnswerClient,
                 AnswerFacilitator2 = note_Activity[1].AnswerFacilitator,
+                Goal2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Goal.Number.ToString() : string.Empty,
+                Objetive2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Objetive : string.Empty,
 
                 Topic3 = note_Activity[2].Activity.Theme.Name,
                 Activity3 = note_Activity[2].Activity.Name,
                 AnswerClient3 = note_Activity[2].AnswerClient,
                 AnswerFacilitator3 = note_Activity[2].AnswerFacilitator,
+                Goal3 = (note_Activity[2].Objetive != null) ? note_Activity[2].Objetive.Goal.Number.ToString() : string.Empty,
+                Objetive3 = (note_Activity[2].Objetive != null) ? note_Activity[2].Objetive.Objetive : string.Empty,
 
                 Topic4 = note_Activity[3].Activity.Theme.Name,
                 Activity4 = note_Activity[3].Activity.Name,
                 AnswerClient4 = note_Activity[3].AnswerClient,
-                AnswerFacilitator4 = note_Activity[3].AnswerFacilitator
+                AnswerFacilitator4 = note_Activity[3].AnswerFacilitator,
+                Goal4 = (note_Activity[3].Objetive != null) ? note_Activity[3].Objetive.Goal.Number.ToString() : string.Empty,
+                Objetive4 = (note_Activity[3].Objetive != null) ? note_Activity[3].Objetive.Objetive : string.Empty,
             };
             
             return View(noteViewModel);
@@ -812,6 +875,26 @@ namespace KyoS.Web.Controllers
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
             return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,
                         $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf");
+        }
+
+        [Authorize(Roles = "Admin, Facilitator, Supervisor")]
+        public async Task<IActionResult> MTPView(int id)
+        {
+            Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Client)
+                                                                           .FirstOrDefaultAsync(wc => wc.Id == id);
+
+            if (workday_Client == null)
+            {
+                return NotFound();
+            }
+
+            MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => m.Client.Id == workday_Client.Client.Id);
+            if (mtp == null)
+            {
+                return NotFound();
+            }
+            
+            return RedirectToAction("Details", "MTPs", new {id = mtp.Id});
         }
     }
 }
