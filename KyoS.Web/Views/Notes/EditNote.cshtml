@@ -54,7 +54,8 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#cbTopic1").change(function () {
-                $.get("/Notes/GetActivityList", { idTheme: $("#cbTopic1").val() }, function (data) {
+                var url = "@Url.Action("GetActivityList", "Notes")";
+                $.get(url, { idTheme: $("#cbTopic1").val() }, function (data) {
                     $("#cbActivity1").empty();
                     $.each(data, function (index, row) {
                         $("#cbActivity1").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
@@ -62,7 +63,8 @@
                 });
             })
             $("#cbTopic2").change(function () {
-                $.get("/Notes/GetActivityList", { idTheme: $("#cbTopic2").val() }, function (data) {
+                var url = "@Url.Action("GetActivityList", "Notes")";
+                $.get(url, { idTheme: $("#cbTopic2").val() }, function (data) {
                     $("#cbActivity2").empty();
                     $.each(data, function (index, row) {
                         $("#cbActivity2").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
@@ -70,7 +72,8 @@
                 });
             })
             $("#cbTopic3").change(function () {
-                $.get("/Notes/GetActivityList", { idTheme: $("#cbTopic3").val() }, function (data) {
+                var url = "@Url.Action("GetActivityList", "Notes")";
+                $.get(url, { idTheme: $("#cbTopic3").val() }, function (data) {
                     $("#cbActivity3").empty();
                     $.each(data, function (index, row) {
                         $("#cbActivity3").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
@@ -78,7 +81,8 @@
                 });
             })
             $("#cbTopic4").change(function () {
-                $.get("/Notes/GetActivityList", { idTheme: $("#cbTopic4").val() }, function (data) {
+                var url = "@Url.Action("GetActivityList", "Notes")";
+                $.get(url, { idTheme: $("#cbTopic4").val() }, function (data) {
                     $("#cbActivity4").empty();
                     $.each(data, function (index, row) {
                         $("#cbActivity4").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
@@ -86,7 +90,8 @@
                 });
             })
             $("#cbGoal1").change(function () {
-                $.get("/Notes/GetObjetiveList", { idGoal: $("#cbGoal1").val() }, function (data) {
+                var url = "@Url.Action("GetObjetiveList", "Notes")";
+                $.get(url, { idGoal: $("#cbGoal1").val() }, function (data) {
                     $("#cbObjetive1").empty();
                     $.each(data, function (index, row) {
                         $("#cbObjetive1").append("<option value='" + row.value + "'>" + row.text + "</option>")
@@ -94,7 +99,8 @@
                 });
             })
             $("#cbGoal2").change(function () {
-                $.get("/Notes/GetObjetiveList", { idGoal: $("#cbGoal2").val() }, function (data) {
+                var url = "@Url.Action("GetObjetiveList", "Notes")";
+                $.get(url, { idGoal: $("#cbGoal2").val() }, function (data) {
                     $("#cbObjetive2").empty();
                     $.each(data, function (index, row) {
                         $("#cbObjetive2").append("<option value='" + row.value + "'>" + row.text + "</option>")
@@ -102,7 +108,8 @@
                 });
             })
             $("#cbGoal3").change(function () {
-                $.get("/Notes/GetObjetiveList", { idGoal: $("#cbGoal3").val() }, function (data) {
+                var url = "@Url.Action("GetObjetiveList", "Notes")";
+                $.get(url, { idGoal: $("#cbGoal3").val() }, function (data) {
                     $("#cbObjetive3").empty();
                     $.each(data, function (index, row) {
                         $("#cbObjetive3").append("<option value='" + row.value + "'>" + row.text + "</option>")
@@ -110,7 +117,8 @@
                 });
             })
             $("#cbGoal4").change(function () {
-                $.get("/Notes/GetObjetiveList", { idGoal: $("#cbGoal4").val() }, function (data) {
+                var url = "@Url.Action("GetObjetiveList", "Notes")";
+                $.get(url, { idGoal: $("#cbGoal4").val() }, function (data) {
                     $("#cbObjetive4").empty();
                     $.each(data, function (index, row) {
                         $("#cbObjetive4").append("<option value='" + row.value + "'>" + row.text + "</option>")

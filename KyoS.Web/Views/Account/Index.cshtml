@@ -142,7 +142,8 @@
             });
 
             $("#btnYesDelete").click(function () {
-                window.location.href = '/Account/Delete/' + item_to_delete;
+                var url = "@Url.Action("Delete", "Account")";
+                window.location.href = url + '/' + item_to_delete;
             });
         });
     </script>
