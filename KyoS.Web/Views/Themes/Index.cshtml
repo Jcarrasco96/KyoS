@@ -114,7 +114,8 @@
                             });
 
                             $("#btnYesDelete").click(function () {
-                                window.location.href = '/Themes/Delete/' + item_to_delete;
+                                var url = "@Url.Action("Delete", "Themes")";
+                                window.location.href = url + '/' + item_to_delete;                                  
                             });
                         });
     </script>

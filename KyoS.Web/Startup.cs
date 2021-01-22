@@ -22,14 +22,13 @@ namespace KyoS.Web
 
         public IConfiguration Configuration { get; }
 
-
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+            //services.Configure<CookiePolicyOptions>(options =>
+            //{
+            //    options.CheckConsentNeeded = context => true;
+            //    options.MinimumSameSitePolicy = SameSiteMode.None;
+            //});
 
             //passwords details
             services.AddIdentity<UserEntity, IdentityRole>(cfg =>
@@ -77,7 +76,8 @@ namespace KyoS.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();            
-            app.UseCookiePolicy();
+            
+            //app.UseCookiePolicy();
 
             app.UseRouting();
 

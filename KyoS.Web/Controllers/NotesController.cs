@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -126,8 +127,11 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Admin, Facilitator")]
-        public async Task<IActionResult> EditNote(int id)
+        public async Task<IActionResult> EditNote(int id, int error = 0)
         {
+            if(error == 1)  //la nota no tiene linkeado ningun goal
+                ViewBag.Error = "O";
+
             Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
                                                                            .Include(wc => wc.Client)
                                                                            .ThenInclude(c => c.Clinic)
@@ -208,8 +212,20 @@ namespace KyoS.Web.Controllers
 
             MTPEntity mtp = await _context.MTPs.Include(m => m.Goals).FirstOrDefaultAsync(m => m.Client.Id == workday_Client.Client.Id);
             if (note == null)   //la nota no está creada
-            {                
-                IEnumerable<SelectListItem> goals = _combosHelper.GetComboGoals(mtp.Id);
+            {
+                IEnumerable<SelectListItem> goals = null;
+                IEnumerable<SelectListItem> objs = null;
+                if (mtp != null)
+                {
+                    goals = _combosHelper.GetComboGoals(mtp.Id);
+                    objs = _combosHelper.GetComboObjetives(0);
+                }
+                else
+                {
+                    goals = _combosHelper.GetComboGoals(0);
+                    objs = _combosHelper.GetComboObjetives(0);
+                }
+                
                 noteViewModel = new NoteViewModel
                 {
                     Id = id,
@@ -218,21 +234,25 @@ namespace KyoS.Web.Controllers
                     Topics1 = (list1.Count != 0) ? list1 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
                     Activities1 = (list1.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[0].Id) : null,
                     Goals1 = goals,
+                    Objetives1 = objs,
 
                     IdTopic2 = (list2.Count != 0) ? topics[1].Id : 0,
                     Topics2 = (list2.Count != 0) ? list2 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
                     Activities2 = (list2.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[1].Id) : null,
                     Goals2 = goals,
+                    Objetives2 = objs,
 
                     IdTopic3 = (list3.Count != 0) ? topics[2].Id : 0,
                     Topics3 = (list3.Count != 0) ? list3 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
                     Activities3 = (list3.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[2].Id) : null,
                     Goals3 = goals,
+                    Objetives3 = objs,
 
                     IdTopic4 = (list4.Count != 0) ? topics[3].Id : 0,
                     Topics4 = (list4.Count != 0) ? list4 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
                     Activities4 = (list4.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[3].Id) : null,
                     Goals4 = goals,
+                    Objetives4 = objs,
 
                     Workday_Cient = workday_Client
                 };
@@ -245,8 +265,19 @@ namespace KyoS.Web.Controllers
                                                                   .Include(na => na.Objetive)
                                                                   .ThenInclude(o => o.Goal)
                                                                   .Where(na => na.Note.Id == note.Id).ToListAsync();
-                
-                IEnumerable<SelectListItem> goals = _combosHelper.GetComboGoals(mtp.Id);
+
+                IEnumerable<SelectListItem> goals = null;
+                IEnumerable<SelectListItem> objs = null;
+                if (mtp != null)
+                {
+                    goals = _combosHelper.GetComboGoals(mtp.Id);
+                    objs = _combosHelper.GetComboObjetives(0);
+                }
+                else
+                {
+                    goals = _combosHelper.GetComboGoals(0);
+                    objs = _combosHelper.GetComboObjetives(0);
+                }
 
                 noteViewModel = new NoteViewModel
                 {
@@ -532,12 +563,30 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            NoteEntity note = await _context.Notes.Include(n => n.Workday_Cient).FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
-            note.Status = NoteStatus.Pending;
-            _context.Update(note);
+            NoteEntity note = await _context.Notes.Include(n => n.Workday_Cient)
+                                                  .Include(n => n.Notes_Activities)
+                                                  .ThenInclude(na => na.Objetive)
+                                                  .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            bool exist = false;
+            foreach (Note_Activity item in note.Notes_Activities)
+            {
+                if (item.Objetive != null)
+                    exist = true;
+            }
+
+            if (!exist)     //la nota no tiene goal relaccionado
+            {
+                return RedirectToAction(nameof(EditNote), new {id =  id, error = 1});
+            }
+            else
+            {
+                note.Status = NoteStatus.Pending;
+                _context.Update(note);
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [Authorize(Roles = "Admin, Facilitator")]
@@ -552,7 +601,14 @@ namespace KyoS.Web.Controllers
         public JsonResult GetObjetiveList(int idGoal)
         {
             List<ObjetiveEntity> objetives = _context.Objetives.Where(o => o.Goal.Id == idGoal).ToList();
-
+            if (objetives.Count == 0)
+            {
+                objetives.Insert(0, new ObjetiveEntity
+                {
+                    Objetive = "[First select goal...]",
+                    Id = 0
+                });
+            }
             return Json(new SelectList(objetives, "Id", "Objetive"));
         }
 
@@ -686,13 +742,18 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            NoteEntity note = await _context.Notes.FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
+            NoteEntity note = await _context.Notes
+                                            .Include(n => n.Notes_Activities)
+                                            .FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
+
+            
             note.Status = NoteStatus.Approved;
+            note.DateOfApprove = DateTime.Now;
             note.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
             _context.Update(note);
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(NotesSupervision));
+            return RedirectToAction(nameof(NotesSupervision));      
         }
 
         [Authorize(Roles = "Admin, Facilitator")]
@@ -783,6 +844,11 @@ namespace KyoS.Web.Controllers
 
                                                           .Include(wc => wc.Note)
                                                           .ThenInclude(n => n.Notes_Activities)
+                                                          .ThenInclude(na => na.Objetive)
+                                                          .ThenInclude(o => o.Goal)
+
+                                                          .Include(wc => wc.Note)
+                                                          .ThenInclude(n => n.Notes_Activities)
 
                                                           .Include(wc => wc.Workday)
                                                           .FirstOrDefault(wc => (wc.Id == id
@@ -822,6 +888,10 @@ namespace KyoS.Web.Controllers
             List<ThemeEntity> themes4 = new List<ThemeEntity>();
 
             int i = 0;
+            var num_of_goal = string.Empty;
+            var goal_text = string.Empty;
+            var num_of_obj = string.Empty;
+            var obj_text = string.Empty;
             foreach (Note_Activity item in workdayClient.Note.Notes_Activities)
             {
                 if (i == 0)
@@ -829,24 +899,61 @@ namespace KyoS.Web.Controllers
                     notesactivities1 = new List<Note_Activity> { item };
                     activities1 = new List<ActivityEntity> { item.Activity };
                     themes1 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (item.Objetive != null)
+                    {
+                        num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                        goal_text = item.Objetive.Goal.Name;
+                        num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                        obj_text = item.Objetive.Description;
+                    }
                 }
                 if (i == 1)
                 {
                     notesactivities2 = new List<Note_Activity> { item };
                     activities2 = new List<ActivityEntity> { item.Activity };
                     themes2 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (num_of_goal == string.Empty)
+                    {
+                        if (item.Objetive != null)
+                        {
+                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                            goal_text = item.Objetive.Goal.Name;
+                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                            obj_text = item.Objetive.Description;
+                        }
+                    }
                 }
                 if (i == 2)
                 {
                     notesactivities3 = new List<Note_Activity> { item };
                     activities3 = new List<ActivityEntity> { item.Activity };
                     themes3 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (num_of_goal == string.Empty)
+                    {
+                        if (item.Objetive != null)
+                        {
+                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                            goal_text = item.Objetive.Goal.Name;
+                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                            obj_text = item.Objetive.Description;
+                        }
+                    }
                 }
                 if (i == 3)
                 {
                     notesactivities4 = new List<Note_Activity> { item };
                     activities4 = new List<ActivityEntity> { item.Activity };
                     themes4 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (num_of_goal == string.Empty)
+                    {
+                        if (item.Objetive != null)
+                        {
+                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                            goal_text = item.Objetive.Goal.Name;
+                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                            obj_text = item.Objetive.Description;
+                        }
+                    }
                 }
                 i = ++i;
             }
@@ -870,7 +977,15 @@ namespace KyoS.Web.Controllers
             report.AddDataSource("dsThemes4", themes4);
 
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
+            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+            var dateSupervisor = workdayClient.Note.DateOfApprove.Value.ToShortDateString();
             parameters.Add("date", date);
+            parameters.Add("dateFacilitator", dateFacilitator);
+            parameters.Add("dateSupervisor", dateSupervisor);
+            parameters.Add("num_of_goal", num_of_goal);
+            parameters.Add("goal_text", goal_text);
+            parameters.Add("num_of_obj", num_of_obj);
+            parameters.Add("obj_text", obj_text);
 
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
             return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,

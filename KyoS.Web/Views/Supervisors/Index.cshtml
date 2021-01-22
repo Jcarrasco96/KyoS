@@ -114,7 +114,8 @@
                             });
 
                             $("#btnYesDelete").click(function () {
-                                window.location.href = '/Supervisors/Delete/' + item_to_delete;
+                                var url = "@Url.Action("Delete", "Supervisors")";
+                                window.location.href = url + '/' + item_to_delete;                                
                             });
                         });
     </script>

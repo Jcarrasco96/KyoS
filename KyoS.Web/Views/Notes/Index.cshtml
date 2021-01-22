@@ -256,7 +256,8 @@
             });
 
             $("#btnYesDelete").click(function () {
-                window.location.href = '/WorkDays/Delete/' + item_to_delete;
+                var url = "@Url.Action("Delete", "WorkDays")";
+                window.location.href = url + '/' + item_to_delete;                
             });
         });
         $(function () {

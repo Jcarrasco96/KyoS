@@ -110,7 +110,8 @@
                             });
 
                             $("#btnYesDelete").click(function () {
-                                window.location.href = '/Clinics/Delete/' + item_to_delete;
+                                var url = "@Url.Action("Delete", "Clinics")";
+                                window.location.href = url + '/' + item_to_delete;                                       
                             });
                         });
     </script>

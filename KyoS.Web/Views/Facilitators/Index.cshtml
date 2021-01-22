@@ -120,7 +120,8 @@
                             });
 
                             $("#btnYesDelete").click(function () {
-                                window.location.href = '/Facilitators/Delete/' + item_to_delete;
+                                var url = "@Url.Action("Delete", "Facilitators")";
+                                window.location.href = url + '/' + item_to_delete;                                
                             });
                         });
     </script>

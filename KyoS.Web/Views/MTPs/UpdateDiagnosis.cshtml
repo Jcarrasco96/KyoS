@@ -82,7 +82,8 @@
                             });
 
                             $("#btnYesDelete").click(function () {
-                                window.location.href = '/MTPs/DeleteDiagnosis/' + item_to_delete;
+                                var url = "@Url.Action("DeleteDiagnosis", "MTPs")";
+                                window.location.href = url + '/' + item_to_delete;                                       
                             });
                         });
     </script>

@@ -120,7 +120,8 @@
                             });
 
                             $("#btnYesDelete").click(function () {
-                                window.location.href = '/Clients/Delete/' + item_to_delete;
+                                var url = "@Url.Action("Delete", "Clients")";
+                                window.location.href = url + '/' + item_to_delete;                                  
                             });
                         });
     </script>

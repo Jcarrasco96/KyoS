@@ -18,7 +18,10 @@ namespace KyoS.Web.Data.Entities
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string PlanNote { get; set; }
         public NoteStatus Status { get; set; }
-        
+
+        [DataType(DataType.Date)]
+        public DateTime? DateOfApprove { get; set; }
+
         //Client mental status
         public bool OrientedX3 { get; set; }
         public bool NotTime { get; set; }

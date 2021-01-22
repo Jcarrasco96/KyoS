@@ -89,7 +89,8 @@
                             });
 
                             $("#btnYesDelete").click(function () {
-                                window.location.href = '/MTPs/DeleteObjective/' + item_to_delete;
+                                var url = "@Url.Action("DeleteObjective", "MTPs")";
+                                window.location.href = url + '/' + item_to_delete;                                  
                             });
                         });
     </script>

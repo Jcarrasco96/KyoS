@@ -343,7 +343,7 @@ namespace KyoS.Web.Helpers
 
             list.Insert(0, new SelectListItem
             {
-                Text = "[Select objetive...]",
+                Text = "[First select goal...]",
                 Value = "0"
             });
 

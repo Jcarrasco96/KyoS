@@ -80,7 +80,8 @@
                             });
 
                             $("#btnYesDelete").click(function () {
-                                window.location.href = '/Plans/Delete/' + item_to_delete;
+                                var url = "@Url.Action("Delete", "Plans")";
+                                window.location.href = url + '/' + item_to_delete;                                   
                             });
                         });
     </script>

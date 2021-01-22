@@ -94,7 +94,8 @@
                             });
 
                             $("#btnYesDelete").click(function () {
-                                window.location.href = '/Notes/Delete/' + item_to_delete;
+                                var url = "@Url.Action("Delete", "Notes")";
+                                window.location.href = url + '/' + item_to_delete;                                  
                             });
                         });
     </script>
