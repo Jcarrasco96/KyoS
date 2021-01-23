@@ -12,9 +12,10 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
-
+using System.Web;
 
 namespace KyoS.Web.Controllers
 {
@@ -32,8 +33,13 @@ namespace KyoS.Web.Controllers
             _dateHelper = dateHelper;
         }
         [Authorize(Roles = "Admin, Facilitator")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int id = 0)
         {
+            if (id == 1)
+            {
+                ViewBag.FinishEdition = "Y";
+            }
+
             if (User.IsInRole("Admin"))
             {
                 return View(await _context.Weeks.Include(w => w.Clinic)
@@ -585,7 +591,7 @@ namespace KyoS.Web.Controllers
                 _context.Update(note);
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { id = 1});
             }
         }
 
@@ -856,7 +862,7 @@ namespace KyoS.Web.Controllers
             if (workdayClient == null)
             {
                 return NotFound();
-            }
+            }            
 
             //report
             string mimetype = "";
@@ -1010,6 +1016,27 @@ namespace KyoS.Web.Controllers
             }
             
             return RedirectToAction("Details", "MTPs", new {id = mtp.Id});
+        }
+
+        public JsonResult Translate(string text)
+        {
+            var toLanguage = "en";//English
+            var fromLanguage = "es";//Spanish
+            var url = $"https://translate.googleapis.com/translate_a/single?client=gtx&sl={fromLanguage}&tl={toLanguage}&dt=t&q={HttpUtility.UrlEncode(text)}";
+            var webClient = new WebClient
+            {
+                Encoding = System.Text.Encoding.UTF8
+            };
+            try
+            {
+                var result = webClient.DownloadString(url);
+                result = result.Substring(4, result.IndexOf("\"", 4, StringComparison.Ordinal) - 4);
+                return Json(text = result);
+            }
+            catch
+            {
+                return Json(text = "Error. It's not possible to translate");
+            }
         }
     }
 }

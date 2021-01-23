@@ -49,7 +49,7 @@
                             <a asp-action="Index" class="btn btn-success">Back</a>
                             @if (Model.Status.ToString() == "Edition")
                             {
-                                <a asp-action="FinishEditing" class="btn btn-warning" asp-route-id="@Model.Id" title="Finish editing the note">Finish Editing</a>
+                                <a asp-action="FinishEditing" class="btn btn-warning" asp-route-id="@Model.Id" title="Finish edition of note">Finish Editing</a>
                             }
                         </div>
                     </div>
@@ -137,6 +137,60 @@
                     $.each(data, function (index, row) {
                         $("#cbObjetive4").append("<option value='" + row.value + "'>" + row.text + "</option>")
                     });
+                });
+            })
+            $("#EnglishAnswerClient1").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#AnswerClient1").val() }, function (data) {
+                    $("#AnswerClient1").val(data);                    
+                });
+            })
+            $("#EnglishAnswerFacilitator1").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#AnswerFacilitator1").val() }, function (data) {
+                    $("#AnswerFacilitator1").val(data);                    
+                });
+            })
+            $("#EnglishAnswerClient2").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#AnswerClient2").val() }, function (data) {
+                    $("#AnswerClient2").val(data);                    
+                });
+            })
+            $("#EnglishAnswerFacilitator2").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#AnswerFacilitator2").val() }, function (data) {
+                    $("#AnswerFacilitator2").val(data);                    
+                });
+            })
+            $("#EnglishAnswerClient3").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#AnswerClient3").val() }, function (data) {
+                    $("#AnswerClient3").val(data);                    
+                });
+            })
+            $("#EnglishAnswerFacilitator3").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#AnswerFacilitator3").val() }, function (data) {
+                    $("#AnswerFacilitator3").val(data);                    
+                });
+            })
+            $("#EnglishAnswerClient4").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#AnswerClient4").val() }, function (data) {
+                    $("#AnswerClient4").val(data);                    
+                });
+            })
+            $("#EnglishAnswerFacilitator4").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#AnswerFacilitator4").val() }, function (data) {
+                    $("#AnswerFacilitator4").val(data);                    
+                });
+            })
+            $("#EnglishPlanNote").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#PlanNote").val() }, function (data) {
+                    $("#PlanNote").val(data);                    
                 });
             })
         });
