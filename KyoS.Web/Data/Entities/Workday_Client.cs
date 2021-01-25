@@ -10,6 +10,7 @@ namespace KyoS.Web.Data.Entities
         public int Id { get; set; }
         public WorkdayEntity Workday { get; set; }
         public ClientEntity Client { get; set; }
+        public FacilitatorEntity Facilitator { get; set; }
         public string Session{ get; set; }
         public bool Present { get; set; }
         public NoteEntity Note { get; set; }

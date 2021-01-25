@@ -61,9 +61,11 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(wc => wc.Client)
                                                 .ThenInclude(c => c.Group)
                                                 .ThenInclude(g => g.Facilitator)
+
                                                 .Include(w => w.Days)
                                                 .ThenInclude(d => d.Workdays_Clients)
                                                 .ThenInclude(wc => wc.Note)
+
                                                 .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
                                                 .ToListAsync());
             }
@@ -142,8 +144,8 @@ namespace KyoS.Web.Controllers
                                                                            .Include(wc => wc.Client)
                                                                            .ThenInclude(c => c.Clinic)
                                                                            .Include(wc => wc.Client)
-                                                                           .ThenInclude(c => c.Group)
-                                                                           .ThenInclude(g => g.Facilitator)
+                                                                           .ThenInclude(c => c.Group)                                                                           
+                                                                           .Include(wc => wc.Facilitator)
                                                                            .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
@@ -645,7 +647,7 @@ namespace KyoS.Web.Controllers
                                                                            .ThenInclude(c => c.Clinic)
                                                                            .Include(wc => wc.Client)
                                                                            .ThenInclude(c => c.Group)
-                                                                           .ThenInclude(g => g.Facilitator)
+                                                                           .Include(wc => wc.Facilitator)
                                                                            .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
@@ -822,9 +824,7 @@ namespace KyoS.Web.Controllers
         public IActionResult PrintNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
-                                                          .Include(wc => wc.Client)
-                                                          .ThenInclude(c => c.Group)
-                                                          .ThenInclude(g => g.Facilitator)
+                                                          .Include(wc => wc.Facilitator)
 
                                                           .Include(wc => wc.Client)
                                                           .ThenInclude(c => c.MTPs)
@@ -877,7 +877,7 @@ namespace KyoS.Web.Controllers
             List<Workday_Client> workdaysclients = new List<Workday_Client> { workdayClient };
             List<ClientEntity> clients = new List<ClientEntity> { workdayClient.Client };
             List<NoteEntity> notes = new List<NoteEntity> { workdayClient.Note };
-            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClient.Client.Group.Facilitator };
+            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClient.Facilitator };
             List<SupervisorEntity> supervisors = new List<SupervisorEntity> { workdayClient.Note.Supervisor };
 
             List<Note_Activity> notesactivities1 = new List<Note_Activity>();

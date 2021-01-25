@@ -74,6 +74,7 @@ namespace KyoS.Web.Controllers
 
             GroupViewModel model;
             MultiSelectList client_list;
+            List<ClientEntity> clients = new List<ClientEntity>();
 
             if (!User.IsInRole("Admin"))
             {
@@ -85,8 +86,11 @@ namespace KyoS.Web.Controllers
                     {
                         Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id)
                     };
-                    client_list = new MultiSelectList(await _context.Clients.Where(c => c.Clinic.Id == user_logged.Clinic.Id)
-                                                                            .OrderBy(c => c.Name).ToListAsync(), "Id", "Name");
+                    clients = await _context.Clients.Include(c => c.MTPs)
+                                          .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
+                                          .OrderBy(c => c.Name).ToListAsync();
+                    clients = clients.Where(c => c.MTPs.Count > 0).ToList();
+                    client_list = new MultiSelectList(clients, "Id", "Name");
                     ViewData["clients"] = client_list;
                     return View(model);
                 }
@@ -97,7 +101,11 @@ namespace KyoS.Web.Controllers
                 Facilitators = _combosHelper.GetComboFacilitators()
             };
 
-            client_list = new MultiSelectList(await _context.Clients.OrderBy(c => c.Name).ToListAsync(), "Id", "Name");
+            clients = await _context.Clients
+                                    .Include(c => c.MTPs)
+                                    .OrderBy(c => c.Name).ToListAsync();
+            clients = clients.Where(c => c.MTPs.Count > 0).ToList();
+            client_list = new MultiSelectList(clients, "Id", "Name");
             ViewData["clients"] = client_list;
             return View(model);
         }
@@ -187,23 +195,29 @@ namespace KyoS.Web.Controllers
             MultiSelectList client_list;
             GroupViewModel groupViewModel = _converterHelper.ToGroupViewModel(groupEntity);
             ViewData["am"] = groupViewModel.Am ? "true" : "false";
+            List<ClientEntity> clients = new List<ClientEntity>();
 
             if (!User.IsInRole("Admin"))
             {
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic != null)
                 {
                     groupViewModel.Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id);
-                    
-                    client_list = new MultiSelectList(await _context.Clients.Where(c => c.Clinic.Id == user_logged.Clinic.Id)
-                                                                            .OrderBy(c => c.Name).ToListAsync(), "Id", "Name", groupViewModel.Clients.Select(c => c.Id));
+
+                    clients = await _context.Clients
+                                            .Include(c => c.MTPs)
+                                            .Where(c => c.Clinic.Id == user_logged.Clinic.Id).OrderBy(c => c.Name).ToListAsync();
+                    clients = clients.Where(c => c.MTPs.Count > 0).ToList();
+                    client_list = new MultiSelectList(clients, "Id", "Name", groupViewModel.Clients.Select(c => c.Id));
                     ViewData["clients"] = client_list;
                     return View(groupViewModel);
                 }
             }
 
-            client_list = new MultiSelectList(await _context.Clients.ToListAsync(), "Id", "Name", groupViewModel.Clients.Select(c=>c.Id));
+            clients = await _context.Clients.Include(c => c.MTPs).ToListAsync();
+            clients = clients.Where(c => c.MTPs.Count > 0).ToList();
+            client_list = new MultiSelectList(clients, "Id", "Name", groupViewModel.Clients.Select(c=>c.Id));
             ViewData["clients"] = client_list;
             return View(groupViewModel);
         }
@@ -248,13 +262,52 @@ namespace KyoS.Web.Controllers
                 {
                     string[] clients = form["clients"].ToString().Split(',');
                     ClientEntity client;
+                    DateTime admission_date;
+                    List<WorkdayEntity> workdays;
+                    Workday_Client workday_client;
                     foreach (string value in clients)
                     {
-                        client = await _context.Clients.FindAsync(Convert.ToInt32(value));
+                        client = await _context.Clients
+                                               .Include(c => c.MTPs)
+                                               .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(value));
                         if (client != null)
                         {
                             client.Group = group;
                             _context.Update(client);
+                        
+                            //verifico que el cliente tenga la asistencia necesaria dada su fecha de admision
+                            admission_date = client.MTPs.First().AdmisionDate;
+                            workdays = await _context.Workdays
+                                                     .Include(w => w.Workdays_Clients)
+                                                     .ThenInclude(wc => wc.Client)
+                                                     .Where(w => w.Date >= admission_date)
+                                                     .ToListAsync();
+                            foreach (WorkdayEntity item in workdays)
+                            {
+                                //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
+                                if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
+                                {
+                                    workday_client = new Workday_Client
+                                    {
+                                        Workday = item,
+                                        Client = client,
+                                        Facilitator = client.Group.Facilitator,
+                                        Session = client.Group.Meridian,
+                                        Present = true
+                                    };
+                                    _context.Add(workday_client);
+                                }
+                                else  //si tiene asistencia, solo hay que verificar que la session(am o pm) sea la misma
+                                {
+                                    workday_client = item.Workdays_Clients.FirstOrDefault(wc => wc.Client.Id == client.Id);
+                                    if (workday_client.Session != client.Group.Meridian)
+                                    {
+                                        workday_client.Session = client.Group.Meridian;                                        
+                                    }
+                                    workday_client.Facilitator = group.Facilitator;
+                                    _context.Update(workday_client);
+                                }                                
+                            }
                         }
                     }
                 }

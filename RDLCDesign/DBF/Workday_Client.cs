@@ -14,6 +14,8 @@ namespace RDLCDesign.DBF
 
         public int? ClientId { get; set; }
 
+        public int? FacilitatorId { get; set; }
+
         public bool Present { get; set; }
 
         public string Session { get; set; }

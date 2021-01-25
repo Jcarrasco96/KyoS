@@ -175,6 +175,7 @@ namespace KyoS.Web.Controllers
                                         {
                                             Workday = workday,
                                             Client = client,
+                                            Facilitator = client.Group.Facilitator,
                                             Session = client.Group.Meridian,
                                             Present = true
                                         };

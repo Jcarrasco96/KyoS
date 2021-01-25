@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace KyoS.Web.Controllers
 {
@@ -199,6 +202,27 @@ namespace KyoS.Web.Controllers
                 }
             }
             return View(activityViewModel);
+        }
+
+        public JsonResult Translate(string text)
+        {
+            var toLanguage = "en";//English
+            var fromLanguage = "es";//Spanish
+            var url = $"https://translate.googleapis.com/translate_a/single?client=gtx&sl={fromLanguage}&tl={toLanguage}&dt=t&q={HttpUtility.UrlEncode(text)}";
+            var webClient = new WebClient
+            {
+                Encoding = System.Text.Encoding.UTF8
+            };
+            try
+            {
+                var result = webClient.DownloadString(url);
+                result = result.Substring(4, result.IndexOf("\"", 4, StringComparison.Ordinal) - 4);
+                return Json(text = result);
+            }
+            catch
+            {
+                return Json(text = "Error. It's not possible to translate");
+            }
         }
     }
 }

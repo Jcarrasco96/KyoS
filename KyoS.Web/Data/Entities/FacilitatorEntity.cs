@@ -23,5 +23,7 @@ namespace KyoS.Web.Data.Entities
         public ClinicEntity Clinic { get; set; }
 
         public IEnumerable<GroupEntity> Groups { get; set; }
+
+        public ICollection<Workday_Client> Workdays_Clients { get; set; }
     }
 }

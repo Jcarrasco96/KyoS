@@ -96,7 +96,7 @@
                                                                     <th class="col-md-3"></th>
                                                                     <th></th>
                                                                 </tr>
-                                                                @foreach (var day_client in day.Workdays_Clients.Where(dc => dc.Client.Group.Facilitator.LinkedUser == User.Identity.Name))
+                                                                @foreach (var day_client in day.Workdays_Clients.Where(dc => dc.Facilitator.LinkedUser == User.Identity.Name))
                                                                 {
                                                                     @if (day_client.Present)
                                                                     {

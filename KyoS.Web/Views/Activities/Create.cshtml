@@ -34,7 +34,7 @@
                     </button>
                     <i class="icon-ok green"></i>
                     <strong class="green">
-                       Activity with Id @ViewBag.IdCreado been successfully created
+                        Activity with Id @ViewBag.IdCreado been successfully created
                     </strong>
 
                 </div>
@@ -63,7 +63,19 @@
             </form>
         </div>
     </div>
-
 </body>
 </html>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#EnglishName").click(function () {
+                var url = "@Url.Action("Translate", "Activities")";
+                $.get(url, { text: $("#Name").val() }, function (data) {
+                    $("#Name").val(data);
+                });
+            })
+        });
+    </script>
+}
 
