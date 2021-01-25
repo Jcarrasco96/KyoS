@@ -144,10 +144,47 @@ namespace KyoS.Web.Controllers
                     foreach (string value in clients)
                     {
                         client = await _context.Clients.FindAsync(Convert.ToInt32(value));
+                        DateTime admission_date;
+                        List<WorkdayEntity> workdays;
+                        Workday_Client workday_client;
                         if (client != null)
                         {
                             client.Group = group;
                             _context.Update(client);
+
+                            //verifico que el cliente tenga la asistencia necesaria dada su fecha de admision
+                            admission_date = client.MTPs.First().AdmisionDate;
+                            workdays = await _context.Workdays
+                                                     .Include(w => w.Workdays_Clients)
+                                                     .ThenInclude(wc => wc.Client)
+                                                     .Where(w => w.Date >= admission_date)
+                                                     .ToListAsync();
+                            foreach (WorkdayEntity item in workdays)
+                            {
+                                //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
+                                if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
+                                {
+                                    workday_client = new Workday_Client
+                                    {
+                                        Workday = item,
+                                        Client = client,
+                                        Facilitator = client.Group.Facilitator,
+                                        Session = client.Group.Meridian,
+                                        Present = true
+                                    };
+                                    _context.Add(workday_client);
+                                }
+                                else  //si tiene asistencia, solo hay que verificar que la session(am o pm) sea la misma
+                                {
+                                    workday_client = item.Workdays_Clients.FirstOrDefault(wc => wc.Client.Id == client.Id);
+                                    if (workday_client.Session != client.Group.Meridian)
+                                    {
+                                        workday_client.Session = client.Group.Meridian;
+                                    }
+                                    workday_client.Facilitator = group.Facilitator;
+                                    _context.Update(workday_client);
+                                }
+                            }
                         }
                     }
                 }
