@@ -72,27 +72,30 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Admin, Facilitator")]
-        public async Task<IActionResult> Present(int id)
+        public async Task<IActionResult> Present(int id, int origin = 0)
         {
-            return View(await _context.Workdays_Clients.Include(wc => wc.Workday)
+            Workday_Client workdayClient = await _context.Workdays_Clients.Include(wc => wc.Workday)
                                                        .Include(wc => wc.Client)
                                                        .ThenInclude(c => c.Group)
                                                        .ThenInclude(g => g.Facilitator)
-                                                       .FirstOrDefaultAsync(wc => wc.Id == id));
+                                                       .FirstOrDefaultAsync(wc => wc.Id == id);
+            Workday_ClientViewModel model = _converterHelper.ToWorkdayClientViewModel(workdayClient);
+            model.Origin = origin;
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Facilitator")]
-        public async Task<IActionResult> Present(int id, IFormCollection form)
+        public async Task<IActionResult> Present(Workday_ClientViewModel model, IFormCollection form)
         {
-            Workday_Client model = await _context.Workdays_Clients.Include(wc => wc.Workday)
+            Workday_Client entity = await _context.Workdays_Clients.Include(wc => wc.Workday)
                                                        .Include(wc => wc.Client)
                                                        .ThenInclude(c => c.Group)
                                                        .ThenInclude(g => g.Facilitator)
-                                                       .FirstOrDefaultAsync(wc => wc.Id == id);
+                                                       .FirstOrDefaultAsync(wc => wc.Id == model.Id);
 
-            if (model == null)
+            if (entity == null)
             {
                 return NotFound();
             }
@@ -101,23 +104,28 @@ namespace KyoS.Web.Controllers
             {
                 case "present":
                     {
-                        model.Present = true;
+                        entity.Present = true;
                         break;
                     }
                 case "nopresent":
                     {
-                        model.Present = false;
+                        entity.Present = false;
                         break;
                     }
                 default:
                     break;
             }
 
-            _context.Update(model);
+            _context.Update(entity);
             try
             {
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (model.Origin == 0)
+                    return RedirectToAction(nameof(Index));
+                if (model.Origin == 1)
+                    return RedirectToAction(nameof(NotStartedNotes));
+                if (model.Origin == 2)
+                    return RedirectToAction(nameof(NotesInEdit));
             }
             catch (System.Exception ex)
             {
@@ -131,11 +139,11 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            return View(model);
+            return View(_converterHelper.ToWorkdayClientViewModel(entity));
         }
 
         [Authorize(Roles = "Admin, Facilitator")]
-        public async Task<IActionResult> EditNote(int id, int error = 0)
+        public async Task<IActionResult> EditNote(int id, int error = 0, int origin = 0)
         {
             if(error == 1)  //la nota no tiene linkeado ningun goal
                 ViewBag.Error = "O";
@@ -238,6 +246,7 @@ namespace KyoS.Web.Controllers
                 {
                     Id = id,
                     Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
+                    Origin = origin,
                     IdTopic1 = (list1.Count != 0) ? topics[0].Id : 0,
                     Topics1 = (list1.Count != 0) ? list1 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
                     Activities1 = (list1.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[0].Id) : null,
@@ -290,6 +299,7 @@ namespace KyoS.Web.Controllers
                 noteViewModel = new NoteViewModel
                 {
                     Id = id,
+                    Origin = origin,
                     Workday_Cient = workday_Client,
                     PlanNote = note.PlanNote,
                     Status = note.Status,
@@ -446,7 +456,10 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction(nameof(Index));
+                        if(model.Origin == 0)
+                            return RedirectToAction(nameof(Index));
+                        if (model.Origin == 1)
+                            return RedirectToAction(nameof(NotStartedNotes));
                     }
                     catch (System.Exception ex)
                     {
@@ -542,7 +555,14 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction(nameof(Index));
+                        if (model.Origin == 0)
+                            return RedirectToAction(nameof(Index));
+                        if (model.Origin == 1)
+                            return RedirectToAction(nameof(NotStartedNotes));
+                        if (model.Origin == 2)
+                            return RedirectToAction(nameof(NotesInEdit));
+                        if (model.Origin == 3)
+                            return RedirectToAction(nameof(PendingNotes));
                     }
                     catch (System.Exception ex)
                     {
@@ -563,7 +583,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Admin, Facilitator")]
-        public async Task<IActionResult> FinishEditing(int id)
+        public async Task<IActionResult> FinishEditing(int id, int origin = 0)
         {
             Workday_Client workday_Client = await _context.Workdays_Clients.FirstOrDefaultAsync(wc => wc.Id == id);
             if (workday_Client == null)
@@ -585,16 +605,20 @@ namespace KyoS.Web.Controllers
 
             if (!exist)     //la nota no tiene goal relaccionado
             {
-                return RedirectToAction(nameof(EditNote), new {id =  id, error = 1});
+                if(origin == 0)
+                    return RedirectToAction(nameof(EditNote), new {id =  id, error = 1, origin = 0});                
+                if (origin == 2)
+                    return RedirectToAction(nameof(EditNote), new {id = id, error = 1, origin = 2});
             }
-            else
-            {
-                note.Status = NoteStatus.Pending;
-                _context.Update(note);
+            
+            note.Status = NoteStatus.Pending;
+            _context.Update(note);
 
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), new { id = 1});
-            }
+            await _context.SaveChangesAsync();
+            if (origin == 2)
+                return RedirectToAction(nameof(NotesInEdit), new { id = 1 });
+            else
+                return RedirectToAction(nameof(Index), new { id = 1});                        
         }
 
         [Authorize(Roles = "Admin, Facilitator")]
@@ -1037,6 +1061,61 @@ namespace KyoS.Web.Controllers
             {
                 return Json(text = "Error. It's not possible to translate");
             }
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> NotStartedNotes()
+        {           
+          return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+                                                     .Include(wc => wc.Facilitator)
+                                                     .Include(wc => wc.Client)
+                                                     .Include(wc => wc.Workday)
+                                                     .ThenInclude(w => w.Week)
+                                                     .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                                      && wc.Note == null))
+                                                     .ToListAsync());                        
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> NotesInEdit(int id  = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.FinishEdition = "Y";
+            }
+            return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+                                                       .Include(wc => wc.Facilitator)
+                                                       .Include(wc => wc.Client)
+                                                       .Include(wc => wc.Workday)
+                                                       .ThenInclude(w => w.Week)
+                                                       .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                                        && wc.Note.Status == NoteStatus.Edition))
+                                                       .ToListAsync());
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> PendingNotes(int id = 0)
+        {
+            return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+                                                       .Include(wc => wc.Facilitator)
+                                                       .Include(wc => wc.Client)
+                                                       .Include(wc => wc.Workday)
+                                                       .ThenInclude(w => w.Week)
+                                                       .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                                  && wc.Note.Status == NoteStatus.Pending))
+                                                       .ToListAsync());
+        }
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> ApprovedNotes(int id = 0)
+        {
+            return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+                                                       .Include(wc => wc.Facilitator)
+                                                       .Include(wc => wc.Client)
+                                                       .Include(wc => wc.Workday)
+                                                       .ThenInclude(w => w.Week)
+                                                       .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                                  && wc.Note.Status == NoteStatus.Approved))
+                                                       .ToListAsync());
         }
     }
 }

@@ -34,5 +34,6 @@ namespace KyoS.Web.Helpers
         PlanViewModel ToPlanViewModel(PlanEntity model);
         Task<NoteEntity> ToNoteEntity(NoteViewModel model, bool isNew);
         NoteViewModel ToNoteViewModel(NoteEntity model);
+        Workday_ClientViewModel ToWorkdayClientViewModel(Workday_Client model);
     }
 }

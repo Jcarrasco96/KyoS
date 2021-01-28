@@ -1,12 +1,8 @@
-﻿@model KyoS.Web.Data.Entities.Workday_Client
+﻿@model KyoS.Web.Models.Workday_ClientViewModel
 
 @{
     ViewData["Title"] = "Client attendance";
 }
-
-@*<link rel="stylesheet" href="~/css/style.css">
-<link rel="stylesheet" href="~/css/prism.css">
-<link rel="stylesheet" href="~/css/chosen.css">*@
 
 <h4>Client attendance </h4>
 <hr />
@@ -14,6 +10,7 @@
     <form asp-action="Present">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Origin" />
         <div>
             <div class="col-md-12">
                 <h4 style="font-weight:bold;"><span class="label label-info">@Model.Client.Name</span></h4>
@@ -22,7 +19,7 @@
                 <h5 style="font-weight:bold;">Session: @Model.Session</h5>
                 <hr />
             </div>
-        </div>        
+        </div>
         <div class="col-md-12">
             @if (Model.Present)
             {
@@ -48,7 +45,18 @@
         <div class="form-group col-md-12"></div>
         <div class="form-group col-md-12">
             <input type="submit" value="Save" class="btn btn-primary" />
-            <a asp-action="Index" class="btn btn-success">Back</a>
+            @if (Model.Origin == 0) //viene de la pagina Index de las notas
+            {
+                <a asp-action="Index" class="btn btn-success">Back</a>
+            }
+            @if (Model.Origin == 1) //viene de la pagina NotStartedNotes de las notas
+            {
+                <a asp-action="NotStartedNotes" class="btn btn-success">Back</a>
+            }
+            @if (Model.Origin == 2) //viene de la pagina NotesInEdit de las notas
+            {
+                <a asp-action="NotesInEdit" class="btn btn-success">Back</a>
+            }
         </div>
     </form>
 </div>

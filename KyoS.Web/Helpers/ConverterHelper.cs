@@ -420,5 +420,19 @@ namespace KyoS.Web.Helpers
                 Workday_Cient = model.Workday_Cient
             };
         }
+
+        public Workday_ClientViewModel ToWorkdayClientViewModel(Workday_Client model)
+        {
+            return new Workday_ClientViewModel
+            {
+                Id = model.Id,
+                Workday = model.Workday,
+                Client = model.Client,
+                Facilitator = model.Facilitator,
+                Session = model.Session,
+                Present = model.Present,
+                Note = model.Note                
+            };
+        }
     }
 }

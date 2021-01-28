@@ -116,6 +116,9 @@ namespace KyoS.Web.Models
         public int IdObjetive4 { get; set; }
         public IEnumerable<SelectListItem> Objetives4 { get; set; }
 
+        //este campo lo uso para saber de que pagina se viene
+        public int Origin { get; set; }
+
         //estos campos solo se usan para el modo solo lectura
         public string Topic1 { get; set; }
         public string Activity1 { get; set; }
