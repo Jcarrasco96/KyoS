@@ -58,10 +58,14 @@
     <Compile Include="DBF\Activity.cs" />
     <Compile Include="DBF\Client.cs" />
     <Compile Include="DBF\Clinic.cs" />
+    <Compile Include="DBF\Diagnosis.cs" />
     <Compile Include="DBF\Facilitator.cs" />
+    <Compile Include="DBF\Goal.cs" />
     <Compile Include="DBF\Group.cs" />
+    <Compile Include="DBF\MTP.cs" />
     <Compile Include="DBF\Note.cs" />
     <Compile Include="DBF\Note_Activity.cs" />
+    <Compile Include="DBF\Objetive.cs" />
     <Compile Include="DBF\Supervisor.cs" />
     <Compile Include="DBF\Theme.cs" />
     <Compile Include="DBF\Workday_Client.cs" />
@@ -83,6 +87,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Reports\rptGroup.rdlc" />
+    <EmbeddedResource Include="Reports\rptMTPDavila.rdlc" />
     <EmbeddedResource Include="Reports\rptNoteDavila.rdlc" />
     <None Include="packages.config" />
     <None Include="Properties\DataSources\RDLCDesign.DBF.Theme.datasource" />

@@ -20,34 +20,6 @@
 </p>
 
 <div class="row">
-    @*<div class="col-md-12">
-            @if ((ViewBag.StatusMessage == "An error has occured") || (ViewBag.StatusMessage == "An error has occured, unabled to delete logged-in current user"))
-            {
-                <div class="alert alert-block alert-warning">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <i class="icon-remove"></i>
-                    </button>
-                    <i class="icon-ok red"></i>
-                    <strong class="red">
-                        @ViewBag.StatusMessage
-                    </strong>
-                </div>
-            }
-            else
-          if (ViewBag.StatusMessage != string.Empty)
-            {
-                <div class="alert alert-block alert-success">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <i class="icon-remove"></i>
-                    </button>
-                    <i class="icon-ok green"></i>
-                    <strong class="green">
-                        @ViewBag.StatusMessage
-                    </strong>
-                </div>
-            }
-        </div>*@
-
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -60,10 +32,10 @@
                             <th class="col-md-5">
                                 Client
                             </th>
-                            <th class="col-md-5">
+                            <th class="col-md-4">
                                 Clinic
                             </th>                            
-                            <th class="col-md-2">
+                            <th class="col-md-3">
                             </th>
                         </tr>
                     </thead>
@@ -79,6 +51,7 @@
                                 </td>                                
                                 <td align="right">
                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP"><i class="glyphicon glyphicon-print"></i></a>
                                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
                                     <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
                                 </td>

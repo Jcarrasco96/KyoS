@@ -1,4 +1,5 @@
-﻿using KyoS.Web.Data;
+﻿using AspNetCore.Reporting;
+using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
@@ -778,6 +780,124 @@ namespace KyoS.Web.Controllers
                                                         .ThenInclude(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdGoal);
             model.Goal = goalEntity;
             return View(model);
+        }
+
+        public IActionResult PrintMTP(int id)
+        {
+            MTPEntity mtpEntity = _context.MTPs.Include(m => m.Client)
+                                               .ThenInclude(c => c.Clinic)
+
+                                               .Include(m => m.Goals)
+                                               .ThenInclude(g => g.Objetives)
+                                               
+                                               .Include(m => m.Diagnosis)
+
+                                               .FirstOrDefault(m => (m.Id == id));
+            if (mtpEntity == null)
+            {
+                return NotFound();
+            }
+
+            //report
+            string mimetype = "";
+            string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
+            string rdlcFilePath = string.Format("{0}Reports\\MTPs\\{1}.rdlc", fileDirPath, $"rptMTP{mtpEntity.Client.Clinic.Name}");
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            System.Text.Encoding.GetEncoding("windows-1252");
+            LocalReport report = new LocalReport(rdlcFilePath);
+
+            //datasource
+            List<ClientEntity> clients = new List<ClientEntity> { mtpEntity.Client };
+            List<MTPEntity> mtps = new List<MTPEntity> { mtpEntity };
+            List<DiagnosisEntity> diagnosis = mtpEntity.Diagnosis.ToList();
+            List<GoalEntity> goals1 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives1 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals2 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives2 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals3 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives3 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals4 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives4 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals5 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives5 = new List<ObjetiveEntity>();
+
+            int i = 0;
+            
+            foreach (GoalEntity item in mtpEntity.Goals)
+            {
+                if (i == 0)
+                {
+                    goals1 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives1 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 1)
+                {
+                    goals2 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives2 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 2)
+                {
+                    goals3 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives3 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 3)
+                {
+                    goals4 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives4 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 4)
+                {
+                    goals5 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives5 = item.Objetives.ToList();
+                    }
+                }
+                i = ++i;
+            }          
+
+            //report.AddDataSource("dsWorkdays_Clients", workdaysclients);
+            report.AddDataSource("dsClients", clients);
+            report.AddDataSource("dsMTPs", mtps);
+            report.AddDataSource("dsDiagnosis", diagnosis);
+            report.AddDataSource("dsGoals1", goals1);
+            report.AddDataSource("dsObjetives1", objetives1);
+            report.AddDataSource("dsGoals2", goals2);
+            report.AddDataSource("dsObjetives2", objetives2);
+            report.AddDataSource("dsGoals3", goals3);
+            report.AddDataSource("dsObjetives3", objetives3);
+            report.AddDataSource("dsGoals4", goals4);
+            report.AddDataSource("dsObjetives4", objetives4);
+            report.AddDataSource("dsGoals5", goals5);
+            report.AddDataSource("dsObjetives5", objetives5);
+            
+            //var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
+            //var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+            //var dateSupervisor = workdayClient.Note.DateOfApprove.Value.ToShortDateString();
+            //parameters.Add("date", date);
+            //parameters.Add("dateFacilitator", dateFacilitator);
+            //parameters.Add("dateSupervisor", dateSupervisor);
+            //parameters.Add("num_of_goal", num_of_goal);
+            //parameters.Add("goal_text", goal_text);
+            //parameters.Add("num_of_obj", num_of_obj);
+            //parameters.Add("obj_text", obj_text);
+
+            var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,
+                        $"{mtpEntity.Client.Name} - MTP.pdf");
         }
     }
 }
