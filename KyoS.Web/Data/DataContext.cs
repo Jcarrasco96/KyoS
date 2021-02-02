@@ -36,6 +36,7 @@ namespace KyoS.Web.Data
         public DbSet<Workday_Client> Workdays_Clients { get; set; }
         public DbSet<NoteEntity> Notes { get; set; }
         public DbSet<Note_Activity> Notes_Activities { get; set; }
+        public DbSet<MessageEntity> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

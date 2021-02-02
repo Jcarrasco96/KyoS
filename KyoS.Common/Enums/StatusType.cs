@@ -19,4 +19,9 @@
         Pending,
         Approved
     }
+    public enum MessageStatus
+    {
+        Read,
+        NotRead
+    }
 }

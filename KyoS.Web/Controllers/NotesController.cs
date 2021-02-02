@@ -603,7 +603,7 @@ namespace KyoS.Web.Controllers
                     exist = true;
             }
 
-            if (!exist)     //la nota no tiene goal relaccionado
+            if (!exist)     //la nota no tiene goal relacionado
             {
                 if(origin == 0)
                     return RedirectToAction(nameof(EditNote), new {id =  id, error = 1, origin = 0});                
@@ -664,7 +664,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Facilitator")]
-        public async Task<IActionResult> ApproveNote(int id)
+        public async Task<IActionResult> ApproveNote(int id, int origin = 0)
         {
             Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
                                                                            .Include(wc => wc.Client)
@@ -700,6 +700,7 @@ namespace KyoS.Web.Controllers
                 Id = id,
                 Workday_Cient = workday_Client,
                 PlanNote = note.PlanNote,
+                Origin = origin,
 
                 OrientedX3 = note.OrientedX3,
                 NotTime = note.NotTime,
@@ -784,8 +785,12 @@ namespace KyoS.Web.Controllers
             note.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
             _context.Update(note);
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(NotesSupervision));      
+            await _context.SaveChangesAsync();           
+                
+            if (model.Origin == 3)  ///viene de la pagina PendingNotes
+                return RedirectToAction(nameof(PendingNotes));
+
+            return RedirectToAction(nameof(NotesSupervision));
         }
 
         [Authorize(Roles = "Admin, Facilitator")]
@@ -1093,10 +1098,12 @@ namespace KyoS.Web.Controllers
                                                        .ToListAsync());
         }
 
-        [Authorize(Roles = "Facilitator")]
+        [Authorize(Roles = "Facilitator, Supervisor")]
         public async Task<IActionResult> PendingNotes(int id = 0)
         {
-            return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+            if (User.IsInRole("Facilitator"))
+            {
+                return View(await _context.Workdays_Clients.Include(wc => wc.Note)
                                                        .Include(wc => wc.Facilitator)
                                                        .Include(wc => wc.Client)
                                                        .Include(wc => wc.Workday)
@@ -1104,6 +1111,27 @@ namespace KyoS.Web.Controllers
                                                        .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                   && wc.Note.Status == NoteStatus.Pending))
                                                        .ToListAsync());
+            }
+
+            if (User.IsInRole("Supervisor"))
+            {
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+                                                       .Include(wc => wc.Facilitator)
+                                                       .ThenInclude(f => f.Clinic)
+                                                       .Include(wc => wc.Client)
+                                                       .Include(wc => wc.Workday)
+                                                       .ThenInclude(w => w.Week)
+                                                       .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                                  && wc.Note.Status == NoteStatus.Pending))
+                                                       .ToListAsync());
+                }
+            }
+
+            return View();
         }
         [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> ApprovedNotes(int id = 0)

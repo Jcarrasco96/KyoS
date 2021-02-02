@@ -122,11 +122,11 @@
                                 <h2 style="text-align:right">@ViewBag.PendingNotes</h2>
                                 @if (ViewBag.PendingNotes == "0")
                                 {
-                                    <p><a asp-controller="Notes" asp-action="NotesSupervision" class="btn btn-warning disabled">Go</a></p>
+                                    <p><a class="btn btn-warning disabled">Go</a></p>
                                 }
                                 else
                                 {
-                                    <p><a asp-controller="Notes" asp-action="NotesSupervision" class="btn btn-warning">Go</a></p>
+                                    <p><a asp-controller="Notes" asp-action="PendingNotes" class="btn btn-warning">Go</a></p>
                                 }
                             </div>
                         </div>

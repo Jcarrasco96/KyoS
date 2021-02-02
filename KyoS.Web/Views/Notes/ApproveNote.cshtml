@@ -44,6 +44,7 @@
                     <div role="tabpanel" class="tab-pane active" id="note">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="Origin" />
                         <partial name="_NotesReadOnly" />
                     </div>
                     <div role="tabpanel" class="tab-pane" id="cms">
@@ -56,8 +57,16 @@
                 <div class="col-md-12">
                     @if (User.IsInRole("Supervisor"))
                     {
-                        <input type="submit" value="Approve Note" class="btn btn-primary" title="Approve note and it enable print" />
-                        <a asp-action="NotesSupervision" class="btn btn-success">Back</a>
+                        <input type="submit" value="Approve" class="btn btn-primary" title="Approve note and enable it to print" />
+                        <a asp-action="NotesSupervision" class="btn btn-danger" title="Not approved note due to problems">Not Approve</a>
+                        @if (Model.Origin == 0) //viene de la pagina NotesSupervision
+                        {
+                            <a asp-action="NotesSupervision" class="btn btn-success">Back</a>
+                        }
+                        @if (Model.Origin == 3) //viene de la pagina PendingNotes
+                        {
+                            <a asp-action="PendingNotes" class="btn btn-success">Back</a>
+                        }
                     }
                     @if (User.IsInRole("Facilitator"))
                     {
