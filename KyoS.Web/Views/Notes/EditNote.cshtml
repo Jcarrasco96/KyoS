@@ -63,6 +63,10 @@
                             {
                                 <a asp-action="PendingNotes" class="btn btn-success">Back</a>
                             }
+                            @if (Model.Origin == 4) //viene de la pagina NotesWithReview de las notas
+                            {
+                                <a asp-action="NotesWithReview" class="btn btn-success">Back</a>
+                            }
 
                             @if (Model.Status.ToString() == "Edition")
                             {

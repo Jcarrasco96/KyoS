@@ -23,5 +23,9 @@ namespace KyoS.Web.Data.Entities
         public MessageStatus Status { get; set; }
 
         public Workday_Client Workday_Client { get; set; }
+
+        public string From { get; set; }
+
+        public string To { get; set; }
     }
 }

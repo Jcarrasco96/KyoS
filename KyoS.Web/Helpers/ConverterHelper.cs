@@ -434,5 +434,21 @@ namespace KyoS.Web.Helpers
                 Note = model.Note                
             };
         }
+
+        public async Task<MessageEntity> ToMessageEntity(MessageViewModel model, bool isNew)
+        {
+            
+            return new MessageEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Workday_Client = await _context.Workdays_Clients
+                                               .Include(wc => wc.Facilitator)
+                                               .FirstOrDefaultAsync(wc => wc.Id == model.IdWorkdayClient),
+                Title = model.Title,
+                Text = model.Text,
+                DateCreated = DateTime.Now,
+                Status = MessageStatus.NotRead                
+            };
+        }
     }
 }

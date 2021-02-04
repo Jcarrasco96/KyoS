@@ -43,6 +43,13 @@ namespace KyoS.Web.Controllers
                                                           .Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).ToListAsync();
                 not_started_list = not_started_list.Where(wc => wc.Note == null).ToList();
                 ViewBag.NotStartedNotes = not_started_list.Count.ToString();
+
+                List<Workday_Client> notes_review_list = await _context.Workdays_Clients
+                                                                 .Include(wc => wc.Messages)
+                                                                 .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                                            && wc.Note.Status == NoteStatus.Pending)).ToListAsync();
+                notes_review_list = notes_review_list.Where(wc => wc.Messages.Count() > 0).ToList();
+                ViewBag.NotesWithReview = notes_review_list.Count.ToString();
             }
             if (User.IsInRole("Supervisor"))
             {
@@ -58,6 +65,13 @@ namespace KyoS.Web.Controllers
                                                           .Where(c => c.Clinic.Id == user_logged.Clinic.Id).ToListAsync();
                 client = client.Where(wc => wc.MTPs.Count == 0).ToList();
                 ViewBag.MTPMissing = client.Count.ToString();
+
+                List<Workday_Client> notes_review_list = await _context.Workdays_Clients
+                                                                       .Include(wc => wc.Messages)
+                                                                       .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                                               && wc.Note.Status == NoteStatus.Pending)).ToListAsync();
+                notes_review_list = notes_review_list.Where(wc => wc.Messages.Count() > 0).ToList();
+                ViewBag.NotesWithReview = notes_review_list.Count.ToString();
             }
             return View();
         }

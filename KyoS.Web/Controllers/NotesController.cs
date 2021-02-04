@@ -411,7 +411,9 @@ namespace KyoS.Web.Controllers
             NoteEntity noteEntity;
             if (ModelState.IsValid)
             {
-                NoteEntity note = await _context.Notes.Include(n => n.Workday_Cient).FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
+                NoteEntity note = await _context.Notes.Include(n => n.Workday_Cient)
+                                                      .ThenInclude(wc => wc.Messages)
+                                                      .FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
                 Note_Activity note_Activity;
                 if (note == null)   //la nota no está creada
                 {
@@ -508,8 +510,8 @@ namespace KyoS.Web.Controllers
                     note.SeverelyImpaired = model.SeverelyImpaired;
                     _context.Update(note);
                     List<Note_Activity> noteActivities_list = await _context.Notes_Activities
-                                                                             .Where(na => na.Note.Id == note.Id)
-                                                                             .ToListAsync();
+                                                                            .Where(na => na.Note.Id == note.Id)
+                                                                            .ToListAsync();
                     foreach (Note_Activity item in noteActivities_list)
                     {
                         _context.Remove(item);
@@ -552,6 +554,14 @@ namespace KyoS.Web.Controllers
                     };
                     _context.Add(note_Activity);
 
+                    //todos los mensajes que tiene el Workday_Client de la nota los pongo como leidos
+                    foreach (MessageEntity value in note.Workday_Cient.Messages)
+                    {
+                        value.Status = MessageStatus.Read;
+                        value.DateRead = DateTime.Now;
+                        _context.Update(value);
+                    }
+
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -563,6 +573,8 @@ namespace KyoS.Web.Controllers
                             return RedirectToAction(nameof(NotesInEdit));
                         if (model.Origin == 3)
                             return RedirectToAction(nameof(PendingNotes));
+                        if (model.Origin == 4)
+                            return RedirectToAction(nameof(NotesWithReview));
                     }
                     catch (System.Exception ex)
                     {
@@ -667,11 +679,15 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> ApproveNote(int id, int origin = 0)
         {
             Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
+
                                                                            .Include(wc => wc.Client)
                                                                            .ThenInclude(c => c.Clinic)
+
                                                                            .Include(wc => wc.Client)
                                                                            .ThenInclude(c => c.Group)
+
                                                                            .Include(wc => wc.Facilitator)
+                                                                           
                                                                            .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
@@ -789,6 +805,8 @@ namespace KyoS.Web.Controllers
                 
             if (model.Origin == 3)  ///viene de la pagina PendingNotes
                 return RedirectToAction(nameof(PendingNotes));
+            if (model.Origin == 4)  ///viene de la pagina NotesWithReview
+                return RedirectToAction(nameof(NotesWithReview));
 
             return RedirectToAction(nameof(NotesSupervision));
         }
@@ -1144,6 +1162,97 @@ namespace KyoS.Web.Controllers
                                                        .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                   && wc.Note.Status == NoteStatus.Approved))
                                                        .ToListAsync());
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public IActionResult AddMessageEntity(int id = 0, int origin = 0)
+        {
+            if (id == 0)
+            {
+                return View(new MessageViewModel());
+            }
+            else
+            {
+                MessageViewModel model = new MessageViewModel()
+                {
+                    IdWorkdayClient = id,
+                    Origin = origin
+                };
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> AddMessageEntity(MessageViewModel messageViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                MessageEntity model = await _converterHelper.ToMessageEntity(messageViewModel, true);
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                model.From = user_logged.UserName;
+                model.To = model.Workday_Client.Facilitator.LinkedUser;
+                _context.Add(model);
+                await _context.SaveChangesAsync();                
+            }
+            if(messageViewModel.Origin == 3)
+                return RedirectToAction("PendingNotes");
+            if (messageViewModel.Origin == 4)
+                return RedirectToAction("NotesWithReview");
+            return RedirectToAction("NotesSupervision");
+        }
+
+        [Authorize(Roles = "Facilitator, Supervisor")]
+        public async Task<IActionResult> NotesWithReview(int id = 0)
+        {
+            if (User.IsInRole("Facilitator"))
+            {
+                return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+
+                                                           .Include(wc => wc.Facilitator)
+
+                                                           .Include(wc => wc.Client)
+
+                                                           .Include(wc => wc.Workday)
+                                                           .ThenInclude(w => w.Week)
+
+                                                           .Include(wc => wc.Messages)
+
+                                                           .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                                  && wc.Note.Status == NoteStatus.Pending
+                                                                  && wc.Messages.Count() > 0))
+                                                           .ToListAsync());
+            }
+
+            if (User.IsInRole("Supervisor"))
+            {
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+
+                                                               .Include(wc => wc.Facilitator)
+                                                               .ThenInclude(f => f.Clinic)
+
+                                                               .Include(wc => wc.Client)
+
+                                                               .Include(wc => wc.Workday)
+                                                               .ThenInclude(w => w.Week)
+
+                                                               .Include(wc => wc.Messages)
+
+                                                               .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                                   && wc.Note.Status == NoteStatus.Pending
+                                                                   && wc.Messages.Count() > 0))
+                                                               .ToListAsync());
+                }
+            }
+
+            return View();
         }
     }
 }

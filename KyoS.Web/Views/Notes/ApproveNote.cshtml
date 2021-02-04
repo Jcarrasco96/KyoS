@@ -58,7 +58,7 @@
                     @if (User.IsInRole("Supervisor"))
                     {
                         <input type="submit" value="Approve" class="btn btn-primary" title="Approve note and enable it to print" />
-                        <a asp-action="NotesSupervision" class="btn btn-danger" title="Not approved note due to problems">Not Approve</a>
+                        <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","Notes",new {id = Model.Workday_Cient.Id, origin = Model.Origin},Context.Request.Scheme)','Add message to facilitator')" title="Not approved note due to problems">Review</a>
                         @if (Model.Origin == 0) //viene de la pagina NotesSupervision
                         {
                             <a asp-action="NotesSupervision" class="btn btn-success">Back</a>
@@ -66,6 +66,10 @@
                         @if (Model.Origin == 3) //viene de la pagina PendingNotes
                         {
                             <a asp-action="PendingNotes" class="btn btn-success">Back</a>
+                        }
+                        @if (Model.Origin == 4) //viene de la pagina NotesWithReview
+                        {
+                            <a asp-action="NotesWithReview" class="btn btn-success">Back</a>
                         }
                     }
                     @if (User.IsInRole("Facilitator"))
@@ -77,6 +81,8 @@
         </form>
     </div>
 </div>
+
+<partial name="_ModalPopup" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
