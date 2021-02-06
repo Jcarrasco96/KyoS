@@ -1254,5 +1254,95 @@ namespace KyoS.Web.Controllers
 
             return View();
         }
+
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> NotNotesSummary()
+        {
+            UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                         .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            List<FacilitatorEntity> facilitators = await _context.Facilitators
+                                                                 .Where(f => f.Clinic.Id == user_logged.Clinic.Id) 
+                                                                 .ToListAsync();
+            int cant;
+            List<NotesSummary> notStarted = new List<NotesSummary>();
+            foreach (FacilitatorEntity item in facilitators)
+            {
+                cant = await _context.Workdays_Clients.CountAsync(wc => (wc.Facilitator.Id == item.Id 
+                                                                      && wc.Note == null && wc.Facilitator.Status == StatusType.Open));
+
+                notStarted.Add(new NotesSummary {FacilitatorName = item.Name, NotStarted = cant});
+            }
+            
+            return View(notStarted);
+        }
+
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> EditingSummary()
+        {
+            UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                         .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            List<FacilitatorEntity> facilitators = await _context.Facilitators
+                                                                 .Where(f => f.Clinic.Id == user_logged.Clinic.Id)
+                                                                 .ToListAsync();
+            int cant;
+            List<NotesSummary> editing = new List<NotesSummary>();
+            foreach (FacilitatorEntity item in facilitators)
+            {
+                cant = await _context.Workdays_Clients.CountAsync(wc => (wc.Facilitator.Id == item.Id
+                                                                      && wc.Note.Status == NoteStatus.Edition && wc.Facilitator.Status == StatusType.Open));
+
+                editing.Add(new NotesSummary { FacilitatorName = item.Name, Editing = cant });
+            }
+
+            return View(editing);
+        }
+
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> PendingSummary()
+        {
+            UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                         .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            List<FacilitatorEntity> facilitators = await _context.Facilitators
+                                                                 .Where(f => f.Clinic.Id == user_logged.Clinic.Id)
+                                                                 .ToListAsync();
+            int cant;
+            List<NotesSummary> pending = new List<NotesSummary>();
+            foreach (FacilitatorEntity item in facilitators)
+            {
+                cant = await _context.Workdays_Clients.CountAsync(wc => (wc.Facilitator.Id == item.Id
+                                                                      && wc.Note.Status == NoteStatus.Pending && wc.Facilitator.Status == StatusType.Open));
+
+                pending.Add(new NotesSummary { FacilitatorName = item.Name, Editing = cant });
+            }
+
+            return View(pending);
+        }
+
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> ReviewSummary()
+        {
+            UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                         .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            List<FacilitatorEntity> facilitators = await _context.Facilitators
+                                                                 .Where(f => f.Clinic.Id == user_logged.Clinic.Id)
+                                                                 .ToListAsync();
+            int cant;
+            List<NotesSummary> review = new List<NotesSummary>();
+            foreach (FacilitatorEntity item in facilitators)
+            {
+                cant = await _context.Workdays_Clients.CountAsync(wc => (wc.Facilitator.Id == item.Id
+                                                                      && wc.Note.Status == NoteStatus.Pending 
+                                                                      && wc.Facilitator.Status == StatusType.Open
+                                                                      && wc.Messages.Count() > 0));
+
+                review.Add(new NotesSummary { FacilitatorName = item.Name, Editing = cant });
+            }
+
+            return View(review);
+        }
     }
 }

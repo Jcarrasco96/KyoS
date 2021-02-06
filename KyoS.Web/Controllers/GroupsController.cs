@@ -412,8 +412,8 @@ namespace KyoS.Web.Controllers
             //var logopath = new Uri("C:\\logo.jpg");
             //var logopath = "05fad053-f1c1-4ce8-a816-778ae3387173.jpg";
             //var logopath = "wwwroot\\images\\Clinics\\05fad053-f1c1-4ce8-a816-778ae3387173.jpg";
-            var logopath = "";
-            parameters.Add("logopath", logopath);
+            //var logopath = "";
+            //parameters.Add("logopath", logopath);
 
             //string paramValue = "";
             //using (var b = new Bitmap(@"YOUR IMAGE"))

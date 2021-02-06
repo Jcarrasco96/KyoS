@@ -117,7 +117,9 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-            $('#MyTable').DataTable();
+            $('#MyTable').DataTable({
+                "pageLength": 50
+            });
 
             // Delete item
             //var item_to_delete;

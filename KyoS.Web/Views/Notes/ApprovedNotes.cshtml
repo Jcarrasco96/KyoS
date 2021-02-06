@@ -71,7 +71,9 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#MyTable').DataTable();
+            $('#MyTable').DataTable({
+              "pageLength": 100
+            });
         });
     </script>
 }

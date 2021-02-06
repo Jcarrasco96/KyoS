@@ -150,7 +150,10 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#MyTable').DataTable();
+            $('#MyTable').DataTable({
+                                "order": [[1, "asc"]],
+                                "pageLength": 25
+                            });
 
             // Delete item
             var item_to_delete;

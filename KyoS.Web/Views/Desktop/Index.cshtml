@@ -167,6 +167,95 @@
                         &nbsp;
                     </div>
                 }
+                @if (User.IsInRole("Mannager"))
+                {
+                    <div class="col-md-1">
+                        &nbsp;
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-danger">
+                            <div class="caption">
+                                <h4 style="align-content:end;">Clients without MTP</h4>
+                                <h3 style="text-align:right">@ViewBag.MTPMissing</h3>
+                                @if (ViewBag.MTPMissing == "0")
+                                {
+                                    <p><a asp-controller="MTPs" asp-action="Index" class="btn btn-danger disabled">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="MTPs" asp-action="Index" class="btn btn-danger">Go</a></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-danger">
+                            <div class="caption">
+                                <h4 style="align-content:end;">Not Started Notes</h4>
+                                <h3 style="text-align:right">@ViewBag.NotStartedNotes</h3>
+                                @if (ViewBag.NotStartedNotes == "0")
+                                {
+                                    <p><a href="#" class="btn btn-danger disabled" role="button">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="Notes" asp-action="NotNotesSummary" class="btn btn-danger" role="button">Go</a></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-warning">
+                            <div class="caption">
+                                <h4 style="align-content:end;">Notes in <br>Edit</h4>
+                                <h3 style="text-align:right">@ViewBag.InProgressNotes</h3>
+                                @if (ViewBag.InProgressNotes == "0")
+                                {
+                                    <p><a href="#" class="btn btn-warning disabled" role="button">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="Notes" asp-action="EditingSummary" class="btn btn-warning" role="button">Go</a></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <div class="caption">
+                                <h4 style="align-content:end;">Pending Notes</h4>
+                                <h3 style="text-align:right">@ViewBag.PendingNotes</h3>
+                                @if (ViewBag.PendingNotes == "0")
+                                {
+                                    <p><a class="btn btn-info disabled">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="Notes" asp-action="PendingSummary" class="btn btn-info">Go</a></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-warning">
+                            <div class="caption">
+                                <h4>Notes with review</h4>
+                                <h3 style="text-align:right">@ViewBag.NotesWithReview</h3>
+                                @if (ViewBag.NotesWithReview == "0")
+                                {
+                                    <p><a href="#" class="btn btn-warning disabled" role="button">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="Notes" asp-action="ReviewSummary" class="btn btn-warning" role="button">Go</a></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        &nbsp;
+                    </div>
+                }
             </div>
         </div>
     </div>
