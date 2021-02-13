@@ -28,7 +28,7 @@
     <hr />
     <div class="row">        
         <div>
-            <form asp-action="GeneratesNotes" enctype="multipart/form-data">
+            <form asp-action="GenerateNotes" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group col-md-6">
                     <label asp-for="IdGroup" class="control-label"></label>
@@ -39,6 +39,15 @@
                     <label asp-for="DayId" class="control-label"></label>
                     <select asp-for="DayId" asp-items="Model.Days" class="form-control"></select>
                     <span asp-validation-for="DayId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-12">
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Date" class="control-label"></label>
+                    <input asp-for="Date" class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
                 </div>
                 <div class="form-group col-md-12">
                 </div>

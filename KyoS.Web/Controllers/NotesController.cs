@@ -145,20 +145,45 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Admin, Facilitator")]
         public async Task<IActionResult> EditNote(int id, int error = 0, int origin = 0)
         {
-            if(error == 1)  //la nota no tiene linkeado ningun goal
+            NoteViewModel noteViewModel;
+            List<ThemeEntity> topics;
+            List<SelectListItem> list1 = new List<SelectListItem>();
+            List<SelectListItem> list2 = new List<SelectListItem>();
+            List<SelectListItem> list3 = new List<SelectListItem>();
+            List<SelectListItem> list4 = new List<SelectListItem>();
+
+            //la nota no tiene linkeado ningun goal
+            if (error == 1)  
                 ViewBag.Error = "O";
 
             Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
+                                                                           .ThenInclude(w => w.Workdays_Activities_Facilitators)
+                                                                           .ThenInclude(waf => waf.Activity)
+                                                                           .ThenInclude(a => a.Theme)
+
                                                                            .Include(wc => wc.Client)
                                                                            .ThenInclude(c => c.Clinic)
+
                                                                            .Include(wc => wc.Client)
-                                                                           .ThenInclude(c => c.Group)                                                                           
+                                                                           .ThenInclude(c => c.Group)      
+                                                                           
                                                                            .Include(wc => wc.Facilitator)
                                                                            .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
             {
                 return NotFound();
+            }
+
+            //el dia no tiene actividad asociada por lo tanto no se puede crear la nota
+            if (workday_Client.Workday.Workdays_Activities_Facilitators.Count == 0)
+            {
+                ViewBag.Error = "1";
+                noteViewModel = new NoteViewModel
+                {
+                    Id = workday_Client.Workday.Id,
+                };
+                return View(noteViewModel);
             }
 
             NoteEntity note = await _context.Notes.Include(n => n.Workday_Cient)
@@ -168,13 +193,6 @@ namespace KyoS.Web.Controllers
                                                   .Include(n => n.Notes_Activities)
                                                   .ThenInclude(na => na.Activity)
                                                   .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
-
-            NoteViewModel noteViewModel;
-            List<ThemeEntity> topics;
-            List<SelectListItem> list1 = new List<SelectListItem>();
-            List<SelectListItem> list2 = new List<SelectListItem>();
-            List<SelectListItem> list3 = new List<SelectListItem>();
-            List<SelectListItem> list4 = new List<SelectListItem>();
 
             topics = await _context.Themes.Where(t => t.Clinic.Id == workday_Client.Client.Clinic.Id)
                                               .ToListAsync();
@@ -227,6 +245,9 @@ namespace KyoS.Web.Controllers
             }
 
             MTPEntity mtp = await _context.MTPs.Include(m => m.Goals).FirstOrDefaultAsync(m => m.Client.Id == workday_Client.Client.Id);
+
+            List<Workday_Activity_Facilitator> activities = workday_Client.Workday.Workdays_Activities_Facilitators.ToList();
+
             if (note == null)   //la nota no está creada
             {
                 IEnumerable<SelectListItem> goals = null;
@@ -240,34 +261,38 @@ namespace KyoS.Web.Controllers
                 {
                     goals = _combosHelper.GetComboGoals(0);
                     objs = _combosHelper.GetComboObjetives(0);
-                }
-                
+                }                
+
                 noteViewModel = new NoteViewModel
                 {
                     Id = id,
                     Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
                     Origin = origin,
-                    IdTopic1 = (list1.Count != 0) ? topics[0].Id : 0,
-                    Topics1 = (list1.Count != 0) ? list1 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
-                    Activities1 = (list1.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[0].Id) : null,
+                    //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
+                    Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
+                    IdActivity1 = (activities.Count > 0) ? activities[0].Activity.Id : 0,
+                    Activity1 = (activities.Count > 0) ? activities[0].Activity.Name : string.Empty,
                     Goals1 = goals,
                     Objetives1 = objs,
 
-                    IdTopic2 = (list2.Count != 0) ? topics[1].Id : 0,
-                    Topics2 = (list2.Count != 0) ? list2 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
-                    Activities2 = (list2.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[1].Id) : null,
+                    //IdTopic2 = (activities.Count > 1) ? activities[1].Activity.Theme.Id : 0,
+                    Topic2 = (activities.Count > 1) ? activities[1].Activity.Theme.Name : string.Empty,
+                    IdActivity2 = (activities.Count > 1) ? activities[1].Activity.Id : 0,
+                    Activity2 = (activities.Count > 1) ? activities[1].Activity.Name : string.Empty,
                     Goals2 = goals,
                     Objetives2 = objs,
 
-                    IdTopic3 = (list3.Count != 0) ? topics[2].Id : 0,
-                    Topics3 = (list3.Count != 0) ? list3 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
-                    Activities3 = (list3.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[2].Id) : null,
+                    //IdTopic3 = (activities.Count > 2) ? activities[2].Activity.Theme.Id : 0,
+                    Topic3 = (activities.Count > 2) ? activities[2].Activity.Theme.Name : string.Empty,
+                    IdActivity3 = (activities.Count > 2) ? activities[2].Activity.Id : 0,
+                    Activity3 = (activities.Count > 2) ? activities[2].Activity.Name : string.Empty,
                     Goals3 = goals,
                     Objetives3 = objs,
 
-                    IdTopic4 = (list4.Count != 0) ? topics[3].Id : 0,
-                    Topics4 = (list4.Count != 0) ? list4 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
-                    Activities4 = (list4.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[3].Id) : null,
+                    //IdTopic4 = (activities.Count > 3) ? activities[3].Activity.Theme.Id : 0,
+                    Topic4 = (activities.Count > 3) ? activities[3].Activity.Theme.Name : string.Empty,
+                    IdActivity4 = (activities.Count > 3) ? activities[3].Activity.Id : 0,
+                    Activity4 = (activities.Count > 3) ? activities[3].Activity.Name : string.Empty,
                     Goals4 = goals,
                     Objetives4 = objs,
 
@@ -335,10 +360,10 @@ namespace KyoS.Web.Controllers
                     MildlyImpaired = note.MildlyImpaired,
                     SeverelyImpaired = note.SeverelyImpaired,
 
-                    IdTopic1 = (note_Activity.Count > 0) ? note_Activity[0].Activity.Theme.Id : 0,
-                    Topics1 = (list1.Count != 0) ? list1 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
-                    IdActivity1 = (note_Activity.Count > 0) ? note_Activity[0].Activity.Id : 0,
-                    Activities1 = _combosHelper.GetComboActivitiesByTheme((note_Activity.Count > 0) ? note_Activity[0].Activity.Theme.Id : 0),
+                    //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
+                    Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
+                    IdActivity1 = (activities.Count > 0) ? activities[0].Activity.Id : 0,
+                    Activity1 = (activities.Count > 0) ? activities[0].Activity.Name : string.Empty,
                     AnswerClient1 = note_Activity[0].AnswerClient,
                     AnswerFacilitator1 = note_Activity[0].AnswerFacilitator,
                     IdGoal1 = ((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Goal.Id : 0,
@@ -348,10 +373,10 @@ namespace KyoS.Web.Controllers
                     Objetives1 = _combosHelper.GetComboObjetives(((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) 
                                                                         ? note_Activity[0].Objetive.Goal.Id : 0),
 
-                    IdTopic2 = (note_Activity.Count > 1) ? note_Activity[1].Activity.Theme.Id : 0,
-                    Topics2 = (list2.Count != 0) ? list2 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
-                    IdActivity2 = (note_Activity.Count > 1) ? note_Activity[1].Activity.Id : 0,
-                    Activities2 = _combosHelper.GetComboActivitiesByTheme((note_Activity.Count > 1) ? note_Activity[1].Activity.Theme.Id : 0),
+                    //IdTopic2 = (activities.Count > 1) ? activities[1].Activity.Theme.Id : 0,
+                    Topic2 = (activities.Count > 1) ? activities[1].Activity.Theme.Name : string.Empty,
+                    IdActivity2 = (activities.Count > 1) ? activities[1].Activity.Id : 0,
+                    Activity2 = (activities.Count > 1) ? activities[1].Activity.Name : string.Empty,
                     AnswerClient2 = note_Activity[1].AnswerClient,
                     AnswerFacilitator2 = note_Activity[1].AnswerFacilitator,
                     IdGoal2 = ((note_Activity.Count > 1) && (note_Activity[1].Objetive != null)) ? note_Activity[1].Objetive.Goal.Id : 0,
@@ -361,10 +386,10 @@ namespace KyoS.Web.Controllers
                     Objetives2 = _combosHelper.GetComboObjetives(((note_Activity.Count > 1) && (note_Activity[1].Objetive != null))
                                                                         ? note_Activity[1].Objetive.Goal.Id : 0),
 
-                    IdTopic3 = (note_Activity.Count > 2) ? note_Activity[2].Activity.Theme.Id : 0,
-                    Topics3 = (list3.Count != 0) ? list3 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
-                    IdActivity3 = (note_Activity.Count > 2) ? note_Activity[2].Activity.Id : 0,
-                    Activities3 = _combosHelper.GetComboActivitiesByTheme((note_Activity.Count > 2) ? note_Activity[2].Activity.Theme.Id : 0),
+                    //IdTopic3 = (activities.Count > 2) ? activities[2].Activity.Theme.Id : 0,
+                    Topic3 = (activities.Count > 2) ? activities[2].Activity.Theme.Name : string.Empty,
+                    IdActivity3 = (activities.Count > 2) ? activities[2].Activity.Id : 0,
+                    Activity3 = (activities.Count > 2) ? activities[2].Activity.Name : string.Empty,
                     AnswerClient3 = note_Activity[2].AnswerClient,
                     AnswerFacilitator3 = note_Activity[2].AnswerFacilitator,
                     IdGoal3 = ((note_Activity.Count > 2) && (note_Activity[2].Objetive != null)) ? note_Activity[2].Objetive.Goal.Id : 0,
@@ -374,10 +399,10 @@ namespace KyoS.Web.Controllers
                     Objetives3 = _combosHelper.GetComboObjetives(((note_Activity.Count > 2) && (note_Activity[2].Objetive != null))
                                                                         ? note_Activity[2].Objetive.Goal.Id : 0),
 
-                    IdTopic4 = (note_Activity.Count > 3) ? note_Activity[3].Activity.Theme.Id : 0,
-                    Topics4 = (list4.Count != 0) ? list4 : _combosHelper.GetComboThemesByClinic(workday_Client.Client.Clinic.Id),
-                    IdActivity4 = (note_Activity.Count > 3) ? note_Activity[3].Activity.Id : 0,
-                    Activities4 = _combosHelper.GetComboActivitiesByTheme((note_Activity.Count > 3) ? note_Activity[3].Activity.Theme.Id : 0),
+                    //IdTopic4 = (activities.Count > 3) ? activities[3].Activity.Theme.Id : 0,
+                    Topic4 = (activities.Count > 3) ? activities[3].Activity.Theme.Name : string.Empty,
+                    IdActivity4 = (activities.Count > 3) ? activities[3].Activity.Id : 0,
+                    Activity4 = (activities.Count > 3) ? activities[3].Activity.Name : string.Empty,
                     AnswerClient4 = note_Activity[3].AnswerClient,
                     AnswerFacilitator4 = note_Activity[3].AnswerFacilitator,
                     IdGoal4 = ((note_Activity.Count > 3) && (note_Activity[3].Objetive != null)) ? note_Activity[3].Objetive.Goal.Id : 0,

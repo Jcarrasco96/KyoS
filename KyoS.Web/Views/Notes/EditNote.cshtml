@@ -20,74 +20,91 @@
         <div class="col-md-12">
             @if (ViewBag.Error == "O")
             {
-            <div class="alert alert-block alert-warning">
-                <button type="button" class="close" data-dismiss="alert">
-                    <i class="icon-remove"></i>
-                </button>
-                <i class="icon-ok red"></i>
-                <strong class="red">
-                    Error. The note must have at least one related goal.
-                </strong>
-            </div>
-            }            
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. The note must have at least one related goal.
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.Error == "1")
+            {
+                <div class="alert alert-block alert-danger">
+                   <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. There are no activities for this date. Please must create them.
+                    </strong>
+                    <a asp-action="CreateActivitiesWeek" asp-controller="Activities" asp-route-id="@Model.Id">Activities per day</a>
+                </div>
+            }
         </div>
-        <form asp-action="EditNote" enctype="multipart/form-data">
-            <div class="form-group col-md-12">
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#note" aria-controls="note" role="tab" data-toggle="tab">Note</a></li>
-                    <li role="presentation"><a href="#cms" aria-controls="cms" role="tab" data-toggle="tab">Client's Mental Status</a></li>
-                </ul>
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="note">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="Id" />
-                        <input type="hidden" asp-for="Origin" />
-                        <partial name="_Notes" />
-                        <div class="form-group col-md-12">
-                            <input type="submit" value="Save All" class="btn btn-primary" />
-                            @if (Model.Origin == 0) //viene de la pagina Index de las notas
-                            {
-                                <a asp-action="Index" class="btn btn-success">Back</a>
-                            }
-                            @if (Model.Origin == 1) //viene de la pagina NotStartedNotes de las notas
-                            {
-                                <a asp-action="NotStartedNotes" class="btn btn-success">Back</a>
-                            }
-                            @if (Model.Origin == 2) //viene de la pagina NotesInEdit de las notas
-                            {
-                                <a asp-action="NotesInEdit" class="btn btn-success">Back</a>
-                            }
-                            @if (Model.Origin == 3) //viene de la pagina PendingNotes de las notas
-                            {
-                                <a asp-action="PendingNotes" class="btn btn-success">Back</a>
-                            }
-                            @if (Model.Origin == 4) //viene de la pagina NotesWithReview de las notas
-                            {
-                                <a asp-action="NotesWithReview" class="btn btn-success">Back</a>
-                            }
-
-                            @if (Model.Status.ToString() == "Edition")
-                            {
+        @if (ViewBag.Error != "1")  //se puede crear o editar la nota
+        { 
+            <form asp-action="EditNote" enctype="multipart/form-data">
+                <div class="form-group col-md-12">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#note" aria-controls="note" role="tab" data-toggle="tab">Note</a></li>
+                        <li role="presentation"><a href="#cms" aria-controls="cms" role="tab" data-toggle="tab">Client's Mental Status</a></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="note">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="IdActivity1" />
+                            <input type="hidden" asp-for="IdActivity2" />
+                            <input type="hidden" asp-for="IdActivity3" />
+                            <input type="hidden" asp-for="IdActivity4" />
+                            <input type="hidden" asp-for="Origin" />
+                            <partial name="_Notes" />
+                            <div class="form-group col-md-12">
+                                <input type="submit" value="Save All" class="btn btn-primary" />
                                 @if (Model.Origin == 0) //viene de la pagina Index de las notas
                                 {
-                                    <a asp-action="FinishEditing" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="0" title="Finish edition of note">Finish Editing</a>
+                                    <a asp-action="Index" class="btn btn-success">Back</a>
+                                }
+                                @if (Model.Origin == 1) //viene de la pagina NotStartedNotes de las notas
+                                {
+                                    <a asp-action="NotStartedNotes" class="btn btn-success">Back</a>
                                 }
                                 @if (Model.Origin == 2) //viene de la pagina NotesInEdit de las notas
                                 {
-                                    <a asp-action="FinishEditing" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="2" title="Finish edition of note">Finish Editing</a>
+                                    <a asp-action="NotesInEdit" class="btn btn-success">Back</a>
                                 }
-                            }
+                                @if (Model.Origin == 3) //viene de la pagina PendingNotes de las notas
+                                {
+                                    <a asp-action="PendingNotes" class="btn btn-success">Back</a>
+                                }
+                                @if (Model.Origin == 4) //viene de la pagina NotesWithReview de las notas
+                                {
+                                    <a asp-action="NotesWithReview" class="btn btn-success">Back</a>
+                                }
+
+                                @if (Model.Status.ToString() == "Edition")
+                                {
+                                    @if (Model.Origin == 0) //viene de la pagina Index de las notas
+                                    {
+                                        <a asp-action="FinishEditing" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="0" title="Finish edition of note">Finish Editing</a>
+                                    }
+                                    @if (Model.Origin == 2) //viene de la pagina NotesInEdit de las notas
+                                    {
+                                        <a asp-action="FinishEditing" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="2" title="Finish edition of note">Finish Editing</a>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="cms">
+                            <br />
+                            <partial name="_MCS" />
                         </div>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="cms">
-                        <br />
-                        <partial name="_MCS" />
-                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        }
     </div>
 </div>      
 

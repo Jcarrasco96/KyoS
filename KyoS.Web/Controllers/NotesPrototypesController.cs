@@ -20,6 +20,7 @@ namespace KyoS.Web.Controllers
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
+
         public NotesPrototypesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
         {
             _context = context;
@@ -237,9 +238,25 @@ namespace KyoS.Web.Controllers
             GenerateNotesViewModel model = new GenerateNotesViewModel
             {
                 Groups = _combosHelper.GetComboGroups(),
-                Days = _combosHelper.GetComboDays()
+                Days = _combosHelper.GetComboDays(),
+                Date = DateTime.Now.Date
             };
 
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GenerateNotes(GenerateNotesViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                GroupEntity group = await _context.Groups
+                                                  .Include(g => g.Clients)
+                                                  .FirstOrDefaultAsync(g => g.Id == model.IdGroup);
+
+
+            }
             return View(model);
         }
     }

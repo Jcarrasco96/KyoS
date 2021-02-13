@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210208184708_AddGenratedNotesEntity")]
+    partial class AddGenratedNotesEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1008,33 +1010,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("Workdays");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.Workday_Activity_Facilitator", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ActivityId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("FacilitatorId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("WorkdayId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActivityId");
-
-                    b.HasIndex("FacilitatorId");
-
-                    b.HasIndex("WorkdayId");
-
-                    b.ToTable("Workdays_Activities_Facilitators");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.Workday_Client", b =>
                 {
                     b.Property<int>("Id")
@@ -1472,27 +1447,6 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("WeekId");
 
                     b.Navigation("Week");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.Workday_Activity_Facilitator", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ActivityEntity", "Activity")
-                        .WithMany()
-                        .HasForeignKey("ActivityId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.FacilitatorEntity", "Facilitator")
-                        .WithMany()
-                        .HasForeignKey("FacilitatorId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.WorkdayEntity", "Workday")
-                        .WithMany()
-                        .HasForeignKey("WorkdayId");
-
-                    b.Navigation("Activity");
-
-                    b.Navigation("Facilitator");
-
-                    b.Navigation("Workday");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.Workday_Client", b =>

@@ -19,5 +19,9 @@ namespace KyoS.Web.Models
         public int DayId { get; set; }
         public IEnumerable<SelectListItem> Days { get; set; }
 
+        [Display(Name = "Date")]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [DataType(DataType.Date)]
+        public DateTime Date { get; set; }
     }
 }

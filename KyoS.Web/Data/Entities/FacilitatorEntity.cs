@@ -25,5 +25,7 @@ namespace KyoS.Web.Data.Entities
         public IEnumerable<GroupEntity> Groups { get; set; }
 
         public ICollection<Workday_Client> Workdays_Clients { get; set; }
+
+        public ICollection<Workday_Activity_Facilitator> Workdays_Activities_Facilitators { get; set; }
     }
 }

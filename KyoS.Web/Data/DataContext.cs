@@ -28,7 +28,8 @@ namespace KyoS.Web.Data
         public DbSet<Objetive_Classification> Objetives_Classifications { get; set; }       
         public DbSet<GroupEntity> Groups { get; set; }
         public DbSet<DailySessionEntity> DailySessions  { get; set; }
-        public DbSet<NotePrototype_DailySession_Client_Plan> NotesPrototypes_DailySessions_Clients_Plans { get; set; }
+        public DbSet<GeneratedNoteEntity> GeneratedNotes { get; set; }
+        public DbSet<GeneratedNote_NotePrototype> GeneratedNotes_NotesPrototypes { get; set; }
         public DbSet<PlanEntity> Plans { get; set; }
         public DbSet<Plan_Classification> Plans_Classifications { get; set; }
         public DbSet<WeekEntity> Weeks { get; set; }
@@ -37,6 +38,7 @@ namespace KyoS.Web.Data
         public DbSet<NoteEntity> Notes { get; set; }
         public DbSet<Note_Activity> Notes_Activities { get; set; }
         public DbSet<MessageEntity> Messages { get; set; }
+        public DbSet<Workday_Activity_Facilitator> Workdays_Activities_Facilitators { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

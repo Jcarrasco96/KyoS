@@ -15,5 +15,7 @@ namespace KyoS.Web.Data.Entities
         public ThemeEntity Theme { get; set; }
 
         public ICollection<Note_Activity> Notes_Activities { get; set; }
+
+        public ICollection<Workday_Activity_Facilitator> Workdays_Activities_Facilitators { get; set; }
     }
 }
