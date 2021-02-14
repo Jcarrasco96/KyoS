@@ -7,147 +7,211 @@
     <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
     <hr />
 </div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-12">
-        <strong>Focus of the 1st group: @Model.Topic1</strong>
-        <br />
-        <strong>Activity Provided: </strong>@Model.Activity1
+@if (Model.Schema == KyoS.Common.Enums.SchemaType.Schema1)
+{
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Focus of the 1st group: @Model.Topic1</strong>
+            <br />
+            <strong>Activity Provided: </strong>@Model.Activity1
+        </div>
     </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-6">
-        <label asp-for="AnswerClient1" class="control-label"></label>
-        <textarea asp-for="AnswerClient1" class="form-control" rows="4" readonly></textarea>        
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Focus of the 2nd group: @Model.Topic2</strong>
+            <br />
+            <strong>Activity Provided: </strong>@Model.Activity2
+        </div>
     </div>
-    <div class="form-group col-md-6">
-        <label asp-for="AnswerFacilitator1" class="control-label"></label>
-        <textarea asp-for="AnswerFacilitator1" class="form-control" rows="4" readonly></textarea>        
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Focus of the 3rd group: @Model.Topic3</strong>
+            <br />
+            <strong>Activity Provided: </strong>@Model.Activity3
+        </div>
     </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-2">
-        <label asp-for="IdGoal1" class="control-label"></label>
-        <input asp-for="Goal1" class="form-control" readonly />
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Focus of the 4th group: @Model.Topic4</strong>
+            <br />
+            <strong>Activity Provided: </strong>@Model.Activity4
+        </div>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="IdObjetive1" class="control-label"></label>
-        <input asp-for="Objetive1" class="form-control" readonly />
+    <div class="col-md-push-12">
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerClient1" class="control-label"></label>
+            <textarea asp-for="AnswerClient1" class="form-control" rows="4" readonly></textarea>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerFacilitator1" class="control-label"></label>
+            <textarea asp-for="AnswerFacilitator1" class="form-control" rows="4" readonly></textarea>
+        </div>
     </div>
-    <div class="form-group col-md-8">
-        &nbsp;
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="IdGoal1" class="control-label"></label>
+            <input asp-for="Goal1" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdObjetive1" class="control-label"></label>
+            <input asp-for="Objetive1" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-8">
+            &nbsp;
+        </div>
+    </div> 
+    <div class="col-md-12">
+        <hr />
     </div>
-</div>
-<div class="col-md-12">
-    <hr />
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-12">
-        <strong>Focus of the 2nd group: @Model.Topic2</strong>
-        <br />
-        <strong>Activity Provided: </strong>@Model.Activity2
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <label asp-for="PlanNote" class="control-label"></label>
+            <textarea asp-for="PlanNote" class="form-control" rows="3" readonly></textarea>
+        </div>
     </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-6">
-        <label asp-for="AnswerClient2" class="control-label"></label>
-        <textarea asp-for="AnswerClient2" class="form-control" rows="4" readonly></textarea>
-        
+}
+@if (Model.Schema == KyoS.Common.Enums.SchemaType.Schema2)
+{
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Focus of the 1st group: @Model.Topic1</strong>
+            <br />
+            <strong>Activity Provided: </strong>@Model.Activity1
+        </div>
     </div>
-    <div class="form-group col-md-6">
-        <label asp-for="AnswerFacilitator2" class="control-label"></label>
-        <textarea asp-for="AnswerFacilitator2" class="form-control" rows="4" readonly></textarea>
-        
+    <div class="col-md-push-12">
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerClient1" class="control-label"></label>
+            <textarea asp-for="AnswerClient1" class="form-control" rows="4" readonly></textarea>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerFacilitator1" class="control-label"></label>
+            <textarea asp-for="AnswerFacilitator1" class="form-control" rows="4" readonly></textarea>
+        </div>
     </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-2">
-        <label asp-for="IdGoal2" class="control-label"></label>
-        <input asp-for="Goal2" class="form-control" readonly />
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="IdGoal1" class="control-label"></label>
+            <input asp-for="Goal1" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdObjetive1" class="control-label"></label>
+            <input asp-for="Objetive1" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-8">
+            &nbsp;
+        </div>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="IdObjetive2" class="control-label"></label>
-        <input asp-for="Objetive2" class="form-control" readonly />
+    <div class="col-md-12">
+        <hr />
     </div>
-    <div class="form-group col-md-8">
-        &nbsp;
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Focus of the 2nd group: @Model.Topic2</strong>
+            <br />
+            <strong>Activity Provided: </strong>@Model.Activity2
+        </div>
     </div>
-</div>
-<div class="col-md-12">
-    <hr />
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-12">
-        <strong>Focus of the 3rd group: @Model.Topic3</strong>
-        <br />
-        <strong>Activity Provided: </strong>@Model.Activity3
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-6">
-        <label asp-for="AnswerClient3" class="control-label"></label>
-        <textarea asp-for="AnswerClient3" class="form-control" rows="4" readonly></textarea>        
-    </div>
-    <div class="form-group col-md-6">
-        <label asp-for="AnswerFacilitator3" class="control-label"></label>
-        <textarea asp-for="AnswerFacilitator3" class="form-control" rows="4" readonly></textarea>        
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-2">
-        <label asp-for="IdGoal3" class="control-label"></label>
-        <input asp-for="Goal3" class="form-control" readonly />
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="IdObjetive3" class="control-label"></label>
-        <input asp-for="Objetive3" class="form-control" readonly />
-    </div>
-    <div class="form-group col-md-8">
-        &nbsp;
-    </div>
-</div>
-<div class="col-md-12">
-    <hr />
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-12">
-        <strong>Focus of the 4th group: @Model.Topic4</strong>
-        <br />
-        <strong>Activity Provided: </strong>@Model.Activity4
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-6">
-        <label asp-for="AnswerClient4" class="control-label"></label>
-        <textarea asp-for="AnswerClient4" class="form-control" rows="4" readonly></textarea>        
-    </div>
-    <div class="form-group col-md-6">
-        <label asp-for="AnswerFacilitator4" class="control-label"></label>
-        <textarea asp-for="AnswerFacilitator4" class="form-control" rows="4" readonly></textarea>        
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-2">
-        <label asp-for="IdGoal4" class="control-label"></label>
-        <input asp-for="Goal4" class="form-control" readonly />
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="IdObjetive4" class="control-label"></label>
-        <input asp-for="Objetive4" class="form-control" readonly />
-    </div>
-    <div class="form-group col-md-8">
-        &nbsp;
-    </div>
-</div>
-<div class="col-md-12">
-    <hr />
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-12">
-        <label asp-for="PlanNote" class="control-label"></label>
-        <textarea asp-for="PlanNote" class="form-control" rows="3" readonly></textarea>        
-    </div>    
-</div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerClient2" class="control-label"></label>
+            <textarea asp-for="AnswerClient2" class="form-control" rows="4" readonly></textarea>
 
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerFacilitator2" class="control-label"></label>
+            <textarea asp-for="AnswerFacilitator2" class="form-control" rows="4" readonly></textarea>
 
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="IdGoal2" class="control-label"></label>
+            <input asp-for="Goal2" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdObjetive2" class="control-label"></label>
+            <input asp-for="Objetive2" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-8">
+            &nbsp;
+        </div>
+    </div>
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Focus of the 3rd group: @Model.Topic3</strong>
+            <br />
+            <strong>Activity Provided: </strong>@Model.Activity3
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerClient3" class="control-label"></label>
+            <textarea asp-for="AnswerClient3" class="form-control" rows="4" readonly></textarea>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerFacilitator3" class="control-label"></label>
+            <textarea asp-for="AnswerFacilitator3" class="form-control" rows="4" readonly></textarea>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="IdGoal3" class="control-label"></label>
+            <input asp-for="Goal3" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdObjetive3" class="control-label"></label>
+            <input asp-for="Objetive3" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-8">
+            &nbsp;
+        </div>
+    </div>
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Focus of the 4th group: @Model.Topic4</strong>
+            <br />
+            <strong>Activity Provided: </strong>@Model.Activity4
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerClient4" class="control-label"></label>
+            <textarea asp-for="AnswerClient4" class="form-control" rows="4" readonly></textarea>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerFacilitator4" class="control-label"></label>
+            <textarea asp-for="AnswerFacilitator4" class="form-control" rows="4" readonly></textarea>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="IdGoal4" class="control-label"></label>
+            <input asp-for="Goal4" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdObjetive4" class="control-label"></label>
+            <input asp-for="Objetive4" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-8">
+            &nbsp;
+        </div>
+    </div>
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <label asp-for="PlanNote" class="control-label"></label>
+            <textarea asp-for="PlanNote" class="form-control" rows="3" readonly></textarea>
+        </div>
+    </div>
+}
 
 

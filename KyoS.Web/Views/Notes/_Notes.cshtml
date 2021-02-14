@@ -4,249 +4,348 @@
     <h4 style="font-weight:bold;"><span class="label label-info">@Model.Workday_Cient.Client.Name</span></h4>
     <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">View of MTP</a>
     @*<h5>Facilitator: @Model.Workday_Cient.Facilitator.Name</h5>*@
-    <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>    
+    <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
     <hr />
 </div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-12">
-        <strong>Focus of the 1st group: @Model.Topic1</strong>
-        <br />
-        <strong>Activity Provided: </strong>@Model.Activity1
+@if (Model.Schema == KyoS.Common.Enums.SchemaType.Schema1)
+{
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Focus of the 1st group: @Model.Topic1</strong>
+            <br />
+            <strong>Activity Provided: </strong>@Model.Activity1
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Focus of the 2nd group: @Model.Topic2</strong>
+            <br />
+            <strong>Activity Provided: </strong>@Model.Activity2
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Focus of the 3rd group: @Model.Topic3</strong>
+            <br />
+            <strong>Activity Provided: </strong>@Model.Activity3
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Focus of the 4th group: @Model.Topic4</strong>
+            <br />
+            <strong>Activity Provided: </strong>@Model.Activity4
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerClient1" class="control-label"></label>
+            <textarea asp-for="AnswerClient1" class="form-control" rows="3" id="AnswerClient1"></textarea>
+            <span asp-validation-for="AnswerClient1" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerFacilitator1" class="control-label"></label>
+            <textarea asp-for="AnswerFacilitator1" class="form-control" rows="3" id="AnswerFacilitator1"></textarea>
+            <span asp-validation-for="AnswerFacilitator1" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-6">
+            <a class="btn btn-info" id="EnglishAnswerClient1">English</a>
+        </div>
+        <div class="form-group col-md-6">
+            <a class="btn btn-info" id="EnglishAnswerFacilitator1">English</a>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="IdGoal1" class="control-label"></label>
+            <select asp-for="IdGoal1" asp-items="Model.Goals1" class="form-control" id="cbGoal1"></select>
+            <span asp-validation-for="IdGoal1" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdObjetive1" class="control-label"></label>
+            <select asp-for="IdObjetive1" asp-items="Model.Objetives1" class="form-control" id="cbObjetive1"></select>
+            <span asp-validation-for="IdObjetive1" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-8">
+            &nbsp;
+        </div>
+    </div>
+    @if (Model.Goals1.Count() == 1)
+    {
+        <div class="col-md-12">
+            <div class="alert alert-warning form-group col-md-4">
+                <i class="icon-info-sign"></i>
+                The client must have MTP, it is mandatory.
+            </div>
+            <div class="form-group col-md-4">
+                &nbsp;
+            </div>
+        </div>
+    }
+    <div class="col-md-12">
+        <hr />
     </div>    
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-6">
-        <label asp-for="AnswerClient1" class="control-label"></label>
-        <textarea asp-for="AnswerClient1" class="form-control" rows="3" id="AnswerClient1"></textarea>
-        <span asp-validation-for="AnswerClient1" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-6">
-        <label asp-for="AnswerFacilitator1" class="control-label"></label>
-        <textarea asp-for="AnswerFacilitator1" class="form-control" rows="3" id="AnswerFacilitator1"></textarea>
-        <span asp-validation-for="AnswerFacilitator1" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-6">
-        <a class="btn btn-info" id="EnglishAnswerClient1">English</a>        
-    </div>
-    <div class="form-group col-md-6">
-        <a class="btn btn-info" id="EnglishAnswerFacilitator1">English</a>        
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-2">
-        <label asp-for="IdGoal1" class="control-label"></label>
-        <select asp-for="IdGoal1" asp-items="Model.Goals1" class="form-control" id="cbGoal1"></select>
-        <span asp-validation-for="IdGoal1" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="IdObjetive1" class="control-label"></label>
-        <select asp-for="IdObjetive1" asp-items="Model.Objetives1" class="form-control" id="cbObjetive1"></select>
-        <span asp-validation-for="IdObjetive1" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-8">
-        &nbsp;
-    </div>
-</div>
-@if (Model.Goals1.Count() == 1)
-{
-    <div class="col-md-12">
-        <div class="alert alert-warning form-group col-md-4">
-            <i class="icon-info-sign"></i>
-            The client must have MTP, it is mandatory.
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <label asp-for="PlanNote" class="control-label"></label>
+            <textarea asp-for="PlanNote" class="form-control" rows="3" id="PlanNote"></textarea>
+            <span asp-validation-for="PlanNote" class="text-danger"></span>
         </div>
-        <div class="form-group col-md-4">
-            &nbsp;
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <a class="btn btn-info" id="EnglishPlanNote">English</a>
+            <hr />
         </div>
     </div>
 }
-<div class="col-md-12">
-    <hr />
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-12">
-        <strong>Focus of the 2nd group: @Model.Topic2</strong>
-        <br />
-        <strong>Activity Provided: </strong>@Model.Activity2
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-6">
-        <label asp-for="AnswerClient2" class="control-label"></label>
-        <textarea asp-for="AnswerClient2" class="form-control" rows="3" id="AnswerClient2"></textarea>
-        <span asp-validation-for="AnswerClient2" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-6">
-        <label asp-for="AnswerFacilitator2" class="control-label"></label>
-        <textarea asp-for="AnswerFacilitator2" class="form-control" rows="3" id="AnswerFacilitator2"></textarea>
-        <span asp-validation-for="AnswerFacilitator2" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-6">
-        <a class="btn btn-info" id="EnglishAnswerClient2">English</a>
-    </div>
-    <div class="form-group col-md-6">
-        <a class="btn btn-info" id="EnglishAnswerFacilitator2">English</a>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-2">
-        <label asp-for="IdGoal2" class="control-label"></label>
-        <select asp-for="IdGoal2" asp-items="Model.Goals2" class="form-control" id="cbGoal2"></select>
-        <span asp-validation-for="IdGoal2" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="IdObjetive2" class="control-label"></label>
-        <select asp-for="IdObjetive2" asp-items="Model.Objetives2" class="form-control" id="cbObjetive2"></select>
-        <span asp-validation-for="IdObjetive2" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-8">
-        &nbsp;
-    </div>
-</div>
-@if (Model.Goals1.Count() == 1)
+@if (Model.Schema == KyoS.Common.Enums.SchemaType.Schema2)
 {
-    <div class="col-md-12">
-        <div class="alert alert-warning form-group col-md-4">
-            <i class="icon-info-sign"></i>
-            The client must have MTP, it is mandatory.
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Focus of the 1st group: @Model.Topic1</strong>
+            <br />
+            <strong>Activity Provided: </strong>@Model.Activity1
         </div>
-        <div class="form-group col-md-4">
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerClient1" class="control-label"></label>
+            <textarea asp-for="AnswerClient1" class="form-control" rows="3" id="AnswerClient1"></textarea>
+            <span asp-validation-for="AnswerClient1" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerFacilitator1" class="control-label"></label>
+            <textarea asp-for="AnswerFacilitator1" class="form-control" rows="3" id="AnswerFacilitator1"></textarea>
+            <span asp-validation-for="AnswerFacilitator1" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-6">
+            <a class="btn btn-info" id="EnglishAnswerClient1">English</a>
+        </div>
+        <div class="form-group col-md-6">
+            <a class="btn btn-info" id="EnglishAnswerFacilitator1">English</a>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="IdGoal1" class="control-label"></label>
+            <select asp-for="IdGoal1" asp-items="Model.Goals1" class="form-control" id="cbGoal1"></select>
+            <span asp-validation-for="IdGoal1" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdObjetive1" class="control-label"></label>
+            <select asp-for="IdObjetive1" asp-items="Model.Objetives1" class="form-control" id="cbObjetive1"></select>
+            <span asp-validation-for="IdObjetive1" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-8">
             &nbsp;
         </div>
     </div>
-}
-<div class="col-md-12">
-    <hr />
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-12">
-        <strong>Focus of the 3rd group: @Model.Topic3</strong>
-        <br />
-        <strong>Activity Provided: </strong>@Model.Activity3
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-6">
-        <label asp-for="AnswerClient3" class="control-label"></label>
-        <textarea asp-for="AnswerClient3" class="form-control" rows="3" id="AnswerClient3"></textarea>
-        <span asp-validation-for="AnswerClient3" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-6">
-        <label asp-for="AnswerFacilitator3" class="control-label"></label>
-        <textarea asp-for="AnswerFacilitator3" class="form-control" rows="3" id="AnswerFacilitator3"></textarea>
-        <span asp-validation-for="AnswerFacilitator3" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-6">
-        <a class="btn btn-info" id="EnglishAnswerClient3">English</a>
-    </div>
-    <div class="form-group col-md-6">
-        <a class="btn btn-info" id="EnglishAnswerFacilitator3">English</a>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-2">
-        <label asp-for="IdGoal3" class="control-label"></label>
-        <select asp-for="IdGoal3" asp-items="Model.Goals3" class="form-control" id="cbGoal3"></select>
-        <span asp-validation-for="IdGoal3" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="IdObjetive3" class="control-label"></label>
-        <select asp-for="IdObjetive3" asp-items="Model.Objetives3" class="form-control" id="cbObjetive3"></select>
-        <span asp-validation-for="IdObjetive3" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-8">
-        &nbsp;
-    </div>
-</div>
-@if (Model.Goals1.Count() == 1)
-{
+    @if (Model.Goals1.Count() == 1)
+    {
+        <div class="col-md-12">
+            <div class="alert alert-warning form-group col-md-4">
+                <i class="icon-info-sign"></i>
+                The client must have MTP, it is mandatory.
+            </div>
+            <div class="form-group col-md-4">
+                &nbsp;
+            </div>
+        </div>
+    }
     <div class="col-md-12">
-        <div class="alert alert-warning form-group col-md-4">
-            <i class="icon-info-sign"></i>
-            The client must have MTP, it is mandatory.
-        </div>
-        <div class="form-group col-md-4">
-            &nbsp;
-        </div>
-    </div>
-}
-<div class="col-md-12">
-    <hr />
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-12">
-        <strong>Focus of the 4th group: @Model.Topic4</strong>
-        <br />
-        <strong>Activity Provided: </strong>@Model.Activity4
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-6">
-        <label asp-for="AnswerClient4" class="control-label"></label>
-        <textarea asp-for="AnswerClient4" class="form-control" rows="3" id="AnswerClient4"></textarea>
-        <span asp-validation-for="AnswerClient4" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-6">
-        <label asp-for="AnswerFacilitator4" class="control-label"></label>
-        <textarea asp-for="AnswerFacilitator4" class="form-control" rows="3" id="AnswerFacilitator4"></textarea>
-        <span asp-validation-for="AnswerFacilitator4" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-6">
-        <a class="btn btn-info" id="EnglishAnswerClient4">English</a>
-    </div>
-    <div class="form-group col-md-6">
-        <a class="btn btn-info" id="EnglishAnswerFacilitator4">English</a>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-2">
-        <label asp-for="IdGoal4" class="control-label"></label>
-        <select asp-for="IdGoal4" asp-items="Model.Goals4" class="form-control" id="cbGoal4"></select>
-        <span asp-validation-for="IdGoal4" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="IdObjetive4" class="control-label"></label>
-        <select asp-for="IdObjetive4" asp-items="Model.Objetives4" class="form-control" id="cbObjetive4"></select>
-        <span asp-validation-for="IdObjetive4" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-8">
-        &nbsp;
-    </div>
-</div>
-@if (Model.Goals1.Count() == 1)
-{
-    <div class="col-md-12">
-        <div class="alert alert-warning form-group col-md-4">
-            <i class="icon-info-sign"></i>
-            The client must have MTP, it is mandatory.
-        </div>
-        <div class="form-group col-md-4">
-            &nbsp;
-        </div>
-    </div>
-}
-<div class="col-md-12">
-    <hr />
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-12">
-        <label asp-for="PlanNote" class="control-label"></label>
-        <textarea asp-for="PlanNote" class="form-control" rows="3" id="PlanNote"></textarea>
-        <span asp-validation-for="PlanNote" class="text-danger"></span>        
-    </div>    
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-12">
-        <a class="btn btn-info" id="EnglishPlanNote">English</a>
         <hr />
     </div>
-</div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Focus of the 2nd group: @Model.Topic2</strong>
+            <br />
+            <strong>Activity Provided: </strong>@Model.Activity2
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerClient2" class="control-label"></label>
+            <textarea asp-for="AnswerClient2" class="form-control" rows="3" id="AnswerClient2"></textarea>
+            <span asp-validation-for="AnswerClient2" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerFacilitator2" class="control-label"></label>
+            <textarea asp-for="AnswerFacilitator2" class="form-control" rows="3" id="AnswerFacilitator2"></textarea>
+            <span asp-validation-for="AnswerFacilitator2" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-6">
+            <a class="btn btn-info" id="EnglishAnswerClient2">English</a>
+        </div>
+        <div class="form-group col-md-6">
+            <a class="btn btn-info" id="EnglishAnswerFacilitator2">English</a>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="IdGoal2" class="control-label"></label>
+            <select asp-for="IdGoal2" asp-items="Model.Goals2" class="form-control" id="cbGoal2"></select>
+            <span asp-validation-for="IdGoal2" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdObjetive2" class="control-label"></label>
+            <select asp-for="IdObjetive2" asp-items="Model.Objetives2" class="form-control" id="cbObjetive2"></select>
+            <span asp-validation-for="IdObjetive2" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-8">
+            &nbsp;
+        </div>
+    </div>
+    @if (Model.Goals1.Count() == 1)
+    {
+        <div class="col-md-12">
+            <div class="alert alert-warning form-group col-md-4">
+                <i class="icon-info-sign"></i>
+                The client must have MTP, it is mandatory.
+            </div>
+            <div class="form-group col-md-4">
+                &nbsp;
+            </div>
+        </div>
+    }
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Focus of the 3rd group: @Model.Topic3</strong>
+            <br />
+            <strong>Activity Provided: </strong>@Model.Activity3
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerClient3" class="control-label"></label>
+            <textarea asp-for="AnswerClient3" class="form-control" rows="3" id="AnswerClient3"></textarea>
+            <span asp-validation-for="AnswerClient3" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerFacilitator3" class="control-label"></label>
+            <textarea asp-for="AnswerFacilitator3" class="form-control" rows="3" id="AnswerFacilitator3"></textarea>
+            <span asp-validation-for="AnswerFacilitator3" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-6">
+            <a class="btn btn-info" id="EnglishAnswerClient3">English</a>
+        </div>
+        <div class="form-group col-md-6">
+            <a class="btn btn-info" id="EnglishAnswerFacilitator3">English</a>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="IdGoal3" class="control-label"></label>
+            <select asp-for="IdGoal3" asp-items="Model.Goals3" class="form-control" id="cbGoal3"></select>
+            <span asp-validation-for="IdGoal3" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdObjetive3" class="control-label"></label>
+            <select asp-for="IdObjetive3" asp-items="Model.Objetives3" class="form-control" id="cbObjetive3"></select>
+            <span asp-validation-for="IdObjetive3" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-8">
+            &nbsp;
+        </div>
+    </div>
+    @if (Model.Goals1.Count() == 1)
+    {
+        <div class="col-md-12">
+            <div class="alert alert-warning form-group col-md-4">
+                <i class="icon-info-sign"></i>
+                The client must have MTP, it is mandatory.
+            </div>
+            <div class="form-group col-md-4">
+                &nbsp;
+            </div>
+        </div>
+    }
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Focus of the 4th group: @Model.Topic4</strong>
+            <br />
+            <strong>Activity Provided: </strong>@Model.Activity4
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerClient4" class="control-label"></label>
+            <textarea asp-for="AnswerClient4" class="form-control" rows="3" id="AnswerClient4"></textarea>
+            <span asp-validation-for="AnswerClient4" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="AnswerFacilitator4" class="control-label"></label>
+            <textarea asp-for="AnswerFacilitator4" class="form-control" rows="3" id="AnswerFacilitator4"></textarea>
+            <span asp-validation-for="AnswerFacilitator4" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-6">
+            <a class="btn btn-info" id="EnglishAnswerClient4">English</a>
+        </div>
+        <div class="form-group col-md-6">
+            <a class="btn btn-info" id="EnglishAnswerFacilitator4">English</a>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="IdGoal4" class="control-label"></label>
+            <select asp-for="IdGoal4" asp-items="Model.Goals4" class="form-control" id="cbGoal4"></select>
+            <span asp-validation-for="IdGoal4" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdObjetive4" class="control-label"></label>
+            <select asp-for="IdObjetive4" asp-items="Model.Objetives4" class="form-control" id="cbObjetive4"></select>
+            <span asp-validation-for="IdObjetive4" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-8">
+            &nbsp;
+        </div>
+    </div>
+    @if (Model.Goals1.Count() == 1)
+    {
+        <div class="col-md-12">
+            <div class="alert alert-warning form-group col-md-4">
+                <i class="icon-info-sign"></i>
+                The client must have MTP, it is mandatory.
+            </div>
+            <div class="form-group col-md-4">
+                &nbsp;
+            </div>
+        </div>
+    }
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <label asp-for="PlanNote" class="control-label"></label>
+            <textarea asp-for="PlanNote" class="form-control" rows="3" id="PlanNote"></textarea>
+            <span asp-validation-for="PlanNote" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <a class="btn btn-info" id="EnglishPlanNote">English</a>
+            <hr />
+        </div>
+    </div>
+}
+
+
 
 

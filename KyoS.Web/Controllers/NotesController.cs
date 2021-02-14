@@ -268,6 +268,7 @@ namespace KyoS.Web.Controllers
                     Id = id,
                     Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
                     Origin = origin,
+                    Schema = workday_Client.Client.Clinic.Schema,
                     //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
                     Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
                     IdActivity1 = (activities.Count > 0) ? activities[0].Activity.Id : 0,
@@ -326,6 +327,7 @@ namespace KyoS.Web.Controllers
                     Id = id,
                     Origin = origin,
                     Workday_Cient = workday_Client,
+                    Schema = workday_Client.Client.Clinic.Schema,
                     PlanNote = note.PlanNote,
                     Status = note.Status,
 
@@ -742,6 +744,7 @@ namespace KyoS.Web.Controllers
                 Workday_Cient = workday_Client,
                 PlanNote = note.PlanNote,
                 Origin = origin,
+                Schema = workday_Client.Client.Clinic.Schema,
 
                 OrientedX3 = note.OrientedX3,
                 NotTime = note.NotTime,
