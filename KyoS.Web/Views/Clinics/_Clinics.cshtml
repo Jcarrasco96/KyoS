@@ -9,3 +9,24 @@
     <input asp-for="LogoFile" type="file" class="form-control" />
     <span asp-validation-for="LogoFile" class="text-danger"></span>
 </div>
+<div class="form-group">
+    @if (ViewBag.Schema == "1")
+    {
+        <input type="radio" name="Schema" value="Schema1" checked="checked" />
+    }
+    else
+    {
+        <input type="radio" name="Schema" value="Schema1" />
+    }
+    <label style="font-weight: bold;"> Schema 1</label>
+    <br />
+    @if (ViewBag.Schema == "2")
+    {
+        <input type="radio" name="Schema" value="Schema2" checked="checked"/>
+    }
+    else
+    {
+        <input type="radio" name="Schema" value="Schema2" />
+    }    
+    <label style="font-weight: bold;"> Schema 2</label>
+</div>

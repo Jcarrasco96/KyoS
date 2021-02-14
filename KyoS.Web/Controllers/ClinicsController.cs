@@ -1,8 +1,10 @@
-﻿using KyoS.Web.Data;
+﻿using KyoS.Common.Enums;
+using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -48,12 +50,13 @@ namespace KyoS.Web.Controllers
                 }
             }
 
+            ViewBag.Schema = "1";
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ClinicViewModel clinicViewModel)
+        public async Task<IActionResult> Create(ClinicViewModel clinicViewModel, IFormCollection form)
         {
             if (ModelState.IsValid)
             {
@@ -68,7 +71,7 @@ namespace KyoS.Web.Controllers
                     }
 
                     ClinicEntity clinicEntity = _converterHelper.ToClinicEntity(clinicViewModel, path, true);
-
+                    clinicEntity.Schema = (form["Schema"] == "Schema1") ? SchemaType.Schema1 : SchemaType.Schema2;
                     _context.Add(clinicEntity);
                     try
                     {
@@ -127,12 +130,13 @@ namespace KyoS.Web.Controllers
             }
 
             ClinicViewModel clinicViewModel = _converterHelper.ToClinicViewModel(clinicEntity);
+            ViewBag.Schema = (clinicEntity.Schema == 0) ? "1" : "2";
             return View(clinicViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ClinicViewModel clinicViewModel)
+        public async Task<IActionResult> Edit(int id, ClinicViewModel clinicViewModel, IFormCollection form)
         {
             if (id != clinicViewModel.Id)
             {
@@ -149,6 +153,7 @@ namespace KyoS.Web.Controllers
                 }
 
                 ClinicEntity clinicEntity = _converterHelper.ToClinicEntity(clinicViewModel, path, false);
+                clinicEntity.Schema = (form["Schema"] == "Schema1") ? SchemaType.Schema1 : SchemaType.Schema2;
                 _context.Update(clinicEntity);
                 try
                 {

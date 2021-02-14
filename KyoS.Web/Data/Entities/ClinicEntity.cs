@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using KyoS.Common.Enums;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
@@ -13,6 +14,8 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Logo")]
         public string LogoPath { get; set; }
+
+        public SchemaType Schema { get; set; }
 
         public ICollection<FacilitatorEntity> Facilitators { get; set; }
         public ICollection<SupervisorEntity> Supervisors { get; set; }
