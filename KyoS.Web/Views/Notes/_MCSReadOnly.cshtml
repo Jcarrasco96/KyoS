@@ -1,13 +1,11 @@
 ﻿@model KyoS.Web.Models.NoteViewModel
-<div class="col-md-8">
-    @*<hr />*@
-    <h4 style="font-weight:bold;"><span class="label label-info">@Model.Workday_Cient.Client.Name</span></h4>
-    <h5>Facilitator: @Model.Workday_Cient.Facilitator.Name</h5>
-    <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString()</h5>
-    <h5>Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
-    <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">View of MTP</a>
-    <hr />
-</div>
+    <div class="col-md-12">
+        <h4 style="font-weight:bold;"><span class="label label-info">@Model.Workday_Cient.Client.Name</span></h4>
+        <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">View of MTP</a>
+        <h5>Facilitator: @Model.Workday_Cient.Facilitator.Name</h5>
+        <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
+        <hr />
+    </div>
 <div class="col-md-8">
     <p style="font-weight:bold;">Description of Client’s Mental Status (As evidenced by): Client.</p>
 </div>
@@ -103,6 +101,9 @@
             </td>
         </tr>
     </table>
+</div>
+<div class="col-md-12">
+    <hr />
 </div>
 
 

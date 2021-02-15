@@ -421,7 +421,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Facilitator")]
-        public async Task<IActionResult> EditNote(NoteViewModel model)
+        public async Task<IActionResult> EditNote(NoteViewModel model, IFormCollection form)
         {
             Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
                                                                            .Include(wc => wc.Client)
@@ -442,8 +442,21 @@ namespace KyoS.Web.Controllers
                                                       .ThenInclude(wc => wc.Messages)
                                                       .FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
                 Note_Activity note_Activity;
+                string progress;
                 if (note == null)   //la nota no está creada
                 {
+                    //actualizo el progress seleccionado en el plan
+                    progress = (form["Progress"] == "SignificantProgress") ? "Significant progress " :
+                                (form["Progress"] == "ModerateProgress") ? "Moderate progress " :
+                                 (form["Progress"] == "MinimalProgress") ? "Minimal progress " :
+                                  (form["Progress"] == "NoProgress") ? "No progress " :
+                                   (form["Progress"] == "Regression") ? "Regression " :
+                                    (form["Progress"] == "Decompensating") ? "Decompensating " :
+                                     (form["Progress"] == "Unable") ? "Unable "
+                                      : string.Empty;
+                    progress = $"{progress}{RandomGenerator()}";
+                    model.PlanNote = $"{progress}{model.PlanNote}";
+
                     noteEntity = await _converterHelper.ToNoteEntity(model, true);
                     _context.Add(noteEntity);
                     note_Activity = new Note_Activity
@@ -1371,6 +1384,18 @@ namespace KyoS.Web.Controllers
             }
 
             return View(review);
+        }
+
+        public string RandomGenerator()
+        {
+            Random random = new Random();
+            int value = random.Next(1, 5);
+            string text = (value == 1) ? "detected. " :
+                           (value == 2) ? "observed. " :
+                            (value == 3) ? "reached. " :
+                             (value == 4) ? "attained. " :
+                              (value == 5) ? "done. " : string.Empty;
+            return text;
         }
     }
 }

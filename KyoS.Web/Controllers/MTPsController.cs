@@ -56,7 +56,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Admin, Supervisor, Mannager")]
-        public async Task<IActionResult> Create(int id = 0)
+        public async Task<IActionResult> Create(int id = 0, int idClient = 0)
         {
             if (id == 1)
             {
@@ -90,12 +90,31 @@ namespace KyoS.Web.Controllers
                                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic != null)
                 {
-                    model = new MTPViewModel
+                    List<SelectListItem> list = _context.Clients.Where(c => c.Id == idClient).Select(c => new SelectListItem
                     {
-                        Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                        AdmisionDate = DateTime.Today,
-                        MTPDevelopedDate = DateTime.Today
-                    };
+                        Text = $"{c.Name}",
+                        Value = $"{c.Id}"
+                    }).ToList();
+
+                    if (list.Count() > 0)
+                    {
+                        model = new MTPViewModel
+                        {
+                            IdClient = idClient,
+                            Clients = list,
+                            AdmisionDate = DateTime.Today,
+                            MTPDevelopedDate = DateTime.Today
+                        };
+                    }
+                    else
+                    { 
+                        model = new MTPViewModel
+                        {
+                            Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
+                            AdmisionDate = DateTime.Today,
+                            MTPDevelopedDate = DateTime.Today
+                        };
+                    }
                     return View(model);
                 }
             }

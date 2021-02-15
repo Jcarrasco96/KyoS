@@ -1,12 +1,12 @@
 ﻿@model KyoS.Web.Models.NoteViewModel
-<div class="col-md-12">
-    @*<hr />*@
+@*<div class="col-md-12">
+    <hr />
     <h4 style="font-weight:bold;"><span class="label label-info">@Model.Workday_Cient.Client.Name</span></h4>
     <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">View of MTP</a>
-    @*<h5>Facilitator: @Model.Workday_Cient.Facilitator.Name</h5>*@
+    <h5>Facilitator: @Model.Workday_Cient.Facilitator.Name</h5>
     <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
     <hr />
-</div>
+</div>*@
 @if (Model.Schema == KyoS.Common.Enums.SchemaType.Schema1)
 {
     <div class="col-md-push-12">
@@ -86,7 +86,7 @@
     }
     <div class="col-md-12">
         <hr />
-    </div>    
+    </div>
     <div class="col-md-push-12">
         <div class="form-group col-md-12">
             <label asp-for="PlanNote" class="control-label"></label>
@@ -97,8 +97,40 @@
     <div class="col-md-push-12">
         <div class="form-group col-md-12">
             <a class="btn btn-info" id="EnglishPlanNote">English</a>
-            <hr />
         </div>
+    </div>
+    //si se va a crear la nota doy la posibilidad de seleccionar el avance del plan para que despues se agregue al futuro plan
+    @if (@Model.Workday_Cient.Note == null)
+    {
+        <div class="col-md-push-12">
+            <div class="form-group col-md-12">
+                <label style="font-weight: bold;">Update of progress toward meeting goals and objectives on treatment plan (check only one)</label>
+                <br />
+                <input type="radio" name="Progress" value="SignificantProgress" />
+                Significant progress
+                &nbsp;&nbsp;
+                <input type="radio" name="Progress" value="ModerateProgress" />
+                Moderate progress
+                &nbsp;&nbsp;
+                <input type="radio" name="Progress" value="MinimalProgress" checked="checked" />
+                Minimal progress
+                &nbsp;&nbsp;
+                <input type="radio" name="Progress" value="NoProgress" />
+                No Progress
+                <br />
+                <input type="radio" name="Progress" value="Regression" />
+                Regression
+                &nbsp;&nbsp;
+                <input type="radio" name="Progress" value="Decompensating" />
+                Decompensating
+                &nbsp;&nbsp;
+                <input type="radio" name="Progress" value="Unable" />
+                Unable to determine at this time
+            </div>
+        </div>
+    }
+    <div class="col-md-12">
+        <hr />
     </div>
 }
 @if (Model.Schema == KyoS.Common.Enums.SchemaType.Schema2)
@@ -341,8 +373,40 @@
     <div class="col-md-push-12">
         <div class="form-group col-md-12">
             <a class="btn btn-info" id="EnglishPlanNote">English</a>
-            <hr />
         </div>
+    </div>
+    //si se va a crear la nota doy la posibilidad de seleccionar el avance del plan para que despues se agregue al futuro plan
+    @if (@Model.Workday_Cient.Note == null)
+    {
+        <div class="col-md-push-12">
+            <div class="form-group col-md-12">
+                <label style="font-weight: bold;">Update of progress toward meeting goals and objectives on treatment plan (check only one)</label>
+                <br />
+                <input type="radio" name="Progress" value="SignificantProgress" />
+                Significant progress
+                &nbsp;&nbsp;
+                <input type="radio" name="Progress" value="ModerateProgress" />
+                Moderate progress
+                &nbsp;&nbsp;
+                <input type="radio" name="Progress" value="MinimalProgress" checked="checked" />
+                Minimal progress
+                &nbsp;&nbsp;
+                <input type="radio" name="Progress" value="NoProgress" />
+                No Progress
+                <br />
+                <input type="radio" name="Progress" value="Regression" />
+                Regression
+                &nbsp;&nbsp;
+                <input type="radio" name="Progress" value="Decompensating" />
+                Decompensating
+                &nbsp;&nbsp;
+                <input type="radio" name="Progress" value="Unable" />
+                Unable to determine at this time
+            </div>
+        </div>
+    }
+    <div class="col-md-12">
+        <hr />
     </div>
 }
 

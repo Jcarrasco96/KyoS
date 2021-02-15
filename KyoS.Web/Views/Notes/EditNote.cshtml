@@ -44,15 +44,15 @@
         @if (ViewBag.Error != "1")  //se puede crear o editar la nota
         { 
             <form asp-action="EditNote" enctype="multipart/form-data">
-                <div class="form-group col-md-12">
+                @*<div class="form-group col-md-12">*@
                     <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
+                    @*<ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#note" aria-controls="note" role="tab" data-toggle="tab">Note</a></li>
                         <li role="presentation"><a href="#cms" aria-controls="cms" role="tab" data-toggle="tab">Client's Mental Status</a></li>
-                    </ul>
+                    </ul>*@
                     <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="note">
+                    @*<div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="note">*@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <input type="hidden" asp-for="Id" />
                             <input type="hidden" asp-for="IdActivity1" />
@@ -60,6 +60,7 @@
                             <input type="hidden" asp-for="IdActivity3" />
                             <input type="hidden" asp-for="IdActivity4" />
                             <input type="hidden" asp-for="Origin" />
+                            <partial name="_MCS" />
                             <partial name="_Notes" />
                             <div class="form-group col-md-12">
                                 <input type="submit" value="Save All" class="btn btn-primary" />
@@ -96,13 +97,13 @@
                                     }
                                 }
                             </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="cms">
-                            <br />
-                            <partial name="_MCS" />
-                        </div>
-                    </div>
-                </div>
+                        @*</div>
+                        <div role="tabpanel" class="tab-pane" id="cms">*@
+                            @*<br />*@
+                            
+                        @*</div>*@
+                        @*</div>*@
+                @*</div>*@
             </form>
         }
     </div>
