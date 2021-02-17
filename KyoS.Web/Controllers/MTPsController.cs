@@ -34,24 +34,30 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> Index()
         {
             if (User.IsInRole("Admin"))
+            {
+                ViewBag.Count = _context.Clients.Where(c => c.MTPs.Count == 0)
+                                                          .Count().ToString();
                 return View(await _context.MTPs.Include(m => m.Client).ThenInclude(c => c.Clinic).
                                                                         OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+            }
             else
             {
                 UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
                                                              .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic == null)
-                    return View(await _context.MTPs.Include(m => m.Client).ThenInclude(c => c.Clinic).
-                                                                        OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+                    return View(null);
 
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
                 if (clinic != null)
+                {
+                    ViewBag.Count = _context.Clients.Where(c => (c.MTPs.Count == 0 && c.Clinic.Id == clinic.Id))
+                                                          .Count().ToString();
                     return View(await _context.MTPs.Include(m => m.Client).ThenInclude(c => c.Clinic).
                                                                         Where(m => m.Client.Clinic.Id == clinic.Id).
                                                                         OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+                }
                 else
-                    return View(await _context.MTPs.Include(m => m.Client).ThenInclude(c => c.Clinic).
-                                                                        OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+                    return View(null);
             }
         }
 

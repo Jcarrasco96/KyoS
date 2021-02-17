@@ -25,12 +25,14 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IDateHelper _dateHelper;
-        public NotesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IDateHelper dateHelper)
+        private readonly ITranslateHelper _translateHelper;
+        public NotesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IDateHelper dateHelper, ITranslateHelper translateHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _dateHelper = dateHelper;
+            _translateHelper = translateHelper;
         }
         [Authorize(Roles = "Admin, Facilitator")]
         public async Task<IActionResult> Index(int id = 0)
@@ -1108,23 +1110,7 @@ namespace KyoS.Web.Controllers
 
         public JsonResult Translate(string text)
         {
-            var toLanguage = "en";//English
-            var fromLanguage = "es";//Spanish
-            var url = $"https://translate.googleapis.com/translate_a/single?client=gtx&sl={fromLanguage}&tl={toLanguage}&dt=t&q={HttpUtility.UrlEncode(text)}";
-            var webClient = new WebClient
-            {
-                Encoding = System.Text.Encoding.UTF8
-            };
-            try
-            {
-                var result = webClient.DownloadString(url);
-                result = result.Substring(4, result.IndexOf("\"", 4, StringComparison.Ordinal) - 4);
-                return Json(text = result);
-            }
-            catch
-            {
-                return Json(text = "Error. It's not possible to translate");
-            }
+            return Json(text = _translateHelper.TranslateText("es", "en", text));            
         }
 
         [Authorize(Roles = "Facilitator")]

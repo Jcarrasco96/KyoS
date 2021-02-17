@@ -21,11 +21,13 @@ namespace KyoS.Web.Controllers
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
-        public ActivitiesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
+        private readonly ITranslateHelper _translateHelper;
+        public ActivitiesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, ITranslateHelper translateHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
+            _translateHelper = translateHelper;
         }
 
         public async Task<IActionResult> Index()
@@ -206,23 +208,7 @@ namespace KyoS.Web.Controllers
 
         public JsonResult Translate(string text)
         {
-            var toLanguage = "en";//English
-            var fromLanguage = "es";//Spanish
-            var url = $"https://translate.googleapis.com/translate_a/single?client=gtx&sl={fromLanguage}&tl={toLanguage}&dt=t&q={HttpUtility.UrlEncode(text)}";
-            var webClient = new WebClient
-            {
-                Encoding = System.Text.Encoding.UTF8
-            };
-            try
-            {
-                var result = webClient.DownloadString(url);
-                result = result.Substring(4, result.IndexOf("\"", 4, StringComparison.Ordinal) - 4);
-                return Json(text = result);
-            }
-            catch
-            {
-                return Json(text = "Error. It's not possible to translate");
-            }
+            return Json(text = _translateHelper.TranslateText("es", "en", text));
         }
 
         public async Task<IActionResult> ActivitiesPerWeek()
