@@ -16,38 +16,10 @@
 </div>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Topic</a>
+    <a asp-action="Create" class="btn btn-primary" title="Create new topic"><i class="glyphicon glyphicon-plus"></i> Create Topic</a>
 </p>
 
-<div class="row">
-    @*<div class="col-md-12">
-            @if ((ViewBag.StatusMessage == "An error has occured") || (ViewBag.StatusMessage == "An error has occured, unabled to delete logged-in current user"))
-            {
-                <div class="alert alert-block alert-warning">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <i class="icon-remove"></i>
-                    </button>
-                    <i class="icon-ok red"></i>
-                    <strong class="red">
-                        @ViewBag.StatusMessage
-                    </strong>
-                </div>
-            }
-            else
-          if (ViewBag.StatusMessage != string.Empty)
-            {
-                <div class="alert alert-block alert-success">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <i class="icon-remove"></i>
-                    </button>
-                    <i class="icon-ok green"></i>
-                    <strong class="green">
-                        @ViewBag.StatusMessage
-                    </strong>
-                </div>
-            }
-        </div>*@
-
+<div class="row">    
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -57,13 +29,13 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-2">
+                            <th class="col-md-2" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Day)
                             </th>
-                            <th class="col-md-5">
+                            <th class="col-md-3">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            <th class="col-md-3">
+                            <th class="col-md-5" style="text-align:center;">
                                 Clinic Name
                             </th>
                             <th class="col-md-2">
@@ -74,18 +46,18 @@
                         @foreach (var item in Model)
                         {
                         <tr>
-                            <td>
+                            <td align="center">
                                 @Html.DisplayFor(modelItem => item.Day)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
-                            <td>
+                            <td  align="center">
                                 @Html.DisplayFor(modelItem => item.Clinic.Name)
                             </td>
                             <td align="right">
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit topic"><i class="glyphicon glyphicon-pencil"></i></a>
+                                <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete topic"><i class="glyphicon glyphicon-trash"></i></button>
                             </td>
                         </tr>
                         }

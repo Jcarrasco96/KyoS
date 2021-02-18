@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using KyoS.Common.Enums;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
@@ -13,6 +15,18 @@ namespace KyoS.Web.Data.Entities
         public string Name { get; set; }
 
         public ThemeEntity Theme { get; set; }
+
+        public ActivityStatus Status { get; set; }
+
+        //Facilitator que crea la activity
+        public FacilitatorEntity Facilitator { get; set; }
+
+        public DateTime? DateCreated { get; set; }
+
+        //Supervisor que aprueba la activity
+        public SupervisorEntity Supervisor { get; set; }
+
+        public DateTime? DateOfApprove { get; set; }
 
         public ICollection<Note_Activity> Notes_Activities { get; set; }
 

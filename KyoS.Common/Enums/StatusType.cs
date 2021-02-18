@@ -24,4 +24,9 @@
         Read,
         NotRead
     }
+    public enum ActivityStatus
+    {
+        Pending,
+        Approved
+    }
 }

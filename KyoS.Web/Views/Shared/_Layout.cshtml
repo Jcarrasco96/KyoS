@@ -180,11 +180,11 @@
                         </li>
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
-                                Topics <span class="caret"></span>
+                                Topics / Activities <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Topics", "Index", "Themes")</li>
-                                @*<li>@Html.ActionLink("Activities", "Index", "Activities")</li>*@
+                                <li>@Html.ActionLink("Activities", "ActivitiesSupervision", "Activities")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">

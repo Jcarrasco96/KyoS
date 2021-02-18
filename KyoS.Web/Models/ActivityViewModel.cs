@@ -11,6 +11,7 @@ namespace KyoS.Web.Models
         [Display(Name = "Theme")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a theme.")]
         public int IdTheme { get; set; }
+        public int Origin { get; set; }
         public IEnumerable<SelectListItem> Themes { get; set; }
     }
 }

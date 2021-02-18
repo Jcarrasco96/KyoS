@@ -75,6 +75,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 Name = model.Name,
+                Status = ActivityStatus.Pending,
                 Theme = await _context.Themes.FindAsync(model.IdTheme)
             };
         }

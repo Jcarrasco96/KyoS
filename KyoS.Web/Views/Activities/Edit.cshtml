@@ -14,7 +14,14 @@
             <partial name="_Activities" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-success">Back</a>
+                @if (Model.Origin == 0)
+                {
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                }
+                @if (Model.Origin == 1)
+                {
+                    <a asp-action="ActivitiesSupervision" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>

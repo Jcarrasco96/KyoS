@@ -15,7 +15,6 @@ using System.Web;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Facilitator")]
     public class ActivitiesController : Controller
     {
         private readonly DataContext _context;
@@ -30,6 +29,7 @@ namespace KyoS.Web.Controllers
             _translateHelper = translateHelper;
         }
 
+        [Authorize(Roles = "Admin, Facilitator")]
         public async Task<IActionResult> Index()
         {
             if (User.IsInRole("Admin"))
@@ -46,6 +46,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Facilitator")]
         public IActionResult Create(int id = 0, int idActivity = 0)
         {
             if (id == 1)
@@ -88,6 +89,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin, Facilitator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ActivityViewModel activityViewModel)
@@ -98,8 +100,11 @@ namespace KyoS.Web.Controllers
                 ActivityEntity activity = await _context.Activities.FirstOrDefaultAsync((t => (t.Name == activityViewModel.Name && t.Theme.Name == themeEntity.Name)));
                 if (activity == null)
                 {
+                    FacilitatorEntity facilitator_logged = await _context.Facilitators.Include(u => u.Clinic)
+                                                                                      .FirstOrDefaultAsync(u => u.LinkedUser == User.Identity.Name);
                     ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, true);
-
+                    activityEntity.Facilitator = facilitator_logged;
+                    activityEntity.DateCreated = DateTime.Now;
                     _context.Add(activityEntity);
                     try
                     {
@@ -127,6 +132,7 @@ namespace KyoS.Web.Controllers
             return View(activityViewModel);
         }
 
+        [Authorize(Roles = "Admin, Facilitator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -145,7 +151,8 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Edit(int? id)
+        [Authorize(Roles = "Admin, Supervisor, Facilitator")]
+        public async Task<IActionResult> Edit(int? id, int origin = 0)
         {
             if (id == null)
             {
@@ -169,10 +176,11 @@ namespace KyoS.Web.Controllers
                     activityViewModel.Themes = _combosHelper.GetComboThemesByClinic(user_logged.Clinic.Id);
                 }
             }
-
+            activityViewModel.Origin = origin;
             return View(activityViewModel);
         }
 
+        [Authorize(Roles = "Admin, Supervisor, Facilitator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ActivityViewModel activityViewModel)
@@ -189,7 +197,10 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    if(activityViewModel.Origin == 0)
+                        return RedirectToAction(nameof(Index));
+                    if (activityViewModel.Origin == 1)
+                        return RedirectToAction(nameof(ActivitiesSupervision));
                 }
                 catch (System.Exception ex)
                 {
@@ -206,11 +217,13 @@ namespace KyoS.Web.Controllers
             return View(activityViewModel);
         }
 
+        [Authorize(Roles = "Admin, Facilitator")]
         public JsonResult Translate(string text)
         {
             return Json(text = _translateHelper.TranslateText("es", "en", text));
         }
 
+        [Authorize(Roles = "Admin, Facilitator")]
         public async Task<IActionResult> ActivitiesPerWeek()
         {
             if (User.IsInRole("Admin"))
@@ -232,6 +245,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Facilitator")]
         public async Task<IActionResult> CreateActivitiesWeek(int id = 0)
         {
             List<ThemeEntity> topics;
@@ -437,6 +451,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin, Facilitator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateActivitiesWeek(Workday_Activity_FacilitatorViewModel model)
@@ -512,6 +527,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin, Facilitator")]
         public JsonResult GetActivityList(int idTheme)
         {
             List<ActivityEntity> activities = _context.Activities.Where(a => a.Theme.Id == idTheme).ToList();
@@ -532,6 +548,54 @@ namespace KyoS.Web.Controllers
             }
             else
                 return false;
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ActivitiesSupervision(int id = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.Approve = "Y";
+            }
+
+            if (User.IsInRole("Admin"))
+                return View(await _context.Activities.Include(a => a.Theme)
+                                                     .Include(a => a.Facilitator)
+                                                     .ThenInclude(t => t.Clinic)
+                                                     .OrderBy(a => a.Theme.Name).ToListAsync());
+            else
+            {
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic == null)
+                    return View(null);
+
+                return View(await _context.Activities
+                                          .Include(a => a.Theme)
+                                          .Include(a => a.Facilitator)
+                                          .ThenInclude(t => t.Clinic)
+                                          .Where(a => a.Theme.Clinic.Id == user_logged.Clinic.Id)
+                                          .OrderBy(a => a.Theme.Name).ToListAsync());
+            }
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ApproveActivity(int id)
+        {
+            ActivityEntity activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == id);
+            if (activity == null)
+            {
+                return NotFound();
+            }
+
+            activity.Status = Common.Enums.ActivityStatus.Approved;
+            activity.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(u => u.LinkedUser == User.Identity.Name);
+            activity.DateOfApprove = DateTime.Now;
+
+            _context.Update(activity);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(ActivitiesSupervision), new { id = 1 });            
         }
     }
 }
