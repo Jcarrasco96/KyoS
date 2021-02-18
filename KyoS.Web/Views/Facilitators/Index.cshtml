@@ -20,34 +20,6 @@
 </p>
 
 <div class="row">
-    @*<div class="col-md-12">
-            @if ((ViewBag.StatusMessage == "An error has occured") || (ViewBag.StatusMessage == "An error has occured, unabled to delete logged-in current user"))
-            {
-                <div class="alert alert-block alert-warning">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <i class="icon-remove"></i>
-                    </button>
-                    <i class="icon-ok red"></i>
-                    <strong class="red">
-                        @ViewBag.StatusMessage
-                    </strong>
-                </div>
-            }
-            else
-          if (ViewBag.StatusMessage != string.Empty)
-            {
-                <div class="alert alert-block alert-success">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <i class="icon-remove"></i>
-                    </button>
-                    <i class="icon-ok green"></i>
-                    <strong class="green">
-                        @ViewBag.StatusMessage
-                    </strong>
-                </div>
-            }
-        </div>*@
-
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -83,8 +55,19 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Codigo)
                             </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.Status)
+                            <td align="center">                                
+                                @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                {
+                                    <span class="label label-success">
+                                        Open
+                                    </span>
+                                }
+                                @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                {
+                                    <span class="label label-default">
+                                        Close
+                                    </span>
+                                }
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Clinic.Name)

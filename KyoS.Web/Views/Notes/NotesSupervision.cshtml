@@ -95,7 +95,9 @@
                                                                                     @Html.DisplayFor(modelItem => day_client.Client.Group.Facilitator.Name)
                                                                                 </td>
                                                                                 <td align="center">
-                                                                                    <p style="color:blue">Pending</p>
+                                                                                    <span class="label label-info">
+                                                                                        Pending
+                                                                                    </span>
                                                                                 </td>
                                                                                 <td align="right">
                                                                                     <a asp-action="ApproveNote" asp-route-id="@day_client.Id" class="btn btn-primary" title="Approve Note"><i class="glyphicon glyphicon-ok"></i></a>

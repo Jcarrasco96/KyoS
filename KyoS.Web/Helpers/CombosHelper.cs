@@ -205,7 +205,8 @@ namespace KyoS.Web.Helpers
 
         public IEnumerable<SelectListItem> GetComboActivitiesByTheme(int idTheme)
         {
-            List<SelectListItem> list = _context.Activities.Where(a => a.Theme.Id == idTheme).Select(t => new SelectListItem
+            List<SelectListItem> list = _context.Activities.Where(a => (a.Theme.Id == idTheme && a.Status == ActivityStatus.Approved))
+                                                           .Select(t => new SelectListItem
             {
                 Text = $"{t.Id.ToString()} - {t.Name}",
                 Value = $"{t.Id}"

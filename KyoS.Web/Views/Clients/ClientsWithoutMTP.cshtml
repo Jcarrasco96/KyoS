@@ -55,7 +55,18 @@
                                     @Html.DisplayFor(modelItem => item.Clinic.Name)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Status)
+                                    @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                    {
+                                        <span class="label label-success">
+                                            Open
+                                        </span>
+                                    }
+                                    @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                    {
+                                        <span class="label label-info">
+                                            Close
+                                        </span>
+                                    }
                                 </td>
                                 <td align="right">
                                     <a asp-action="Create" asp-controller="MTPs" asp-route-idClient="@item.Id" class="btn btn-primary" title="Create MTP"><i class="glyphicon glyphicon-plus"></i></a>                                    

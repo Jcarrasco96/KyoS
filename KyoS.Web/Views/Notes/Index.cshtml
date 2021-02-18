@@ -113,25 +113,33 @@
                                                                         <td align="center">
                                                                             @if (day_client.Note == null)
                                                                             {
-                                                                                <p style="color:red">Not Started</p>
+                                                                                <span class="label label-danger">
+                                                                                    Not Started
+                                                                                </span>
                                                                             }
                                                                             else
                                                                             {
                                                                                 if (day_client.Note.Status.ToString() == "Edition")
                                                                                 {
-                                                                                    <p style="color:black">Edition</p>
+                                                                                    <span class="label label-default">
+                                                                                        Edition
+                                                                                    </span>
                                                                                 }
                                                                                 else
                                                                                 {
                                                                                     if (day_client.Note.Status.ToString() == "Pending")
                                                                                     {
-                                                                                        <p style="color:blue">Pending</p>
+                                                                                        <span class="label label-info">
+                                                                                            Pending
+                                                                                        </span>
                                                                                     }
                                                                                     else
                                                                                     {
                                                                                         if (day_client.Note.Status.ToString() == "Approved")
                                                                                         {
-                                                                                            <p style="color:green">Approved</p>
+                                                                                            <span class="label label-success">
+                                                                                                Approved
+                                                                                            </span>
                                                                                         }
                                                                                     }
                                                                                 }
@@ -183,25 +191,33 @@
                                                                     <td align="center">
                                                                         @if (day_client.Note == null)
                                                                         {
-                                                                            <p style="color:red">Not Started</p>
+                                                                            <span class="label label-danger">
+                                                                                Not Started
+                                                                            </span>
                                                                         }
                                                                         else
                                                                         {
                                                                             if (day_client.Note.Status.ToString() == "Edition")
                                                                             {
-                                                                                <p style="color:black">Edition</p>
+                                                                                <span class="label label-default">
+                                                                                    Edition
+                                                                                </span>
                                                                             }
                                                                             else
                                                                             {
                                                                                 if (day_client.Note.Status.ToString() == "Pending")
                                                                                 {
-                                                                                    <p style="color:blue">Pending</p>
+                                                                                    <span class="label label-info">
+                                                                                        Pending
+                                                                                    </span>
                                                                                 }
                                                                                 else
                                                                                 {
                                                                                     if (day_client.Note.Status.ToString() == "Approved")
                                                                                     {
-                                                                                        <p style="color:green">Approved</p>
+                                                                                        <span class="label label-success">
+                                                                                            Approved
+                                                                                        </span>
                                                                                     }
                                                                                 }
                                                                             }

@@ -49,8 +49,10 @@
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => day_client.Present)
                                 </td>
-                                <td align="center">
-                                    <p style="color:green">Approved</p>
+                                <td align="center">                                    
+                                    <span class="label label-success">
+                                        Approved
+                                    </span>
                                 </td>
                                 <td align="right">
                                     <a asp-action="PrintNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print note"><i class="glyphicon glyphicon-print"></i></a>

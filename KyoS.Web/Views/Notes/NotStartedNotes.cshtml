@@ -52,7 +52,9 @@
                                         @Html.DisplayFor(modelItem => day_client.Present)
                                     </td>
                                     <td align="center">
-                                        <p style="color:red">Not Started</p>
+                                        <span class="label label-danger">
+                                            Not Started
+                                        </span>
                                     </td>
                                     <td align="right">
                                         <a asp-action="EditNote" asp-route-id="@day_client.Id" asp-route-origin="1" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
@@ -76,7 +78,9 @@
                                         @Html.DisplayFor(modelItem => day_client.Present)
                                     </td>
                                     <td align="center">
-                                        <p style="color:red">Not Started</p>
+                                        <span class="label label-danger">
+                                            Not Started
+                                        </span>
                                     </td>
                                     <td align="right">
                                         <a asp-action="EditNote" asp-route-id="@day_client.Id" class="btn btn-warning disabled" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
