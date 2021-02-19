@@ -166,7 +166,7 @@
                 </li>*@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
-                    else
+                       else
                            if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
                     {
                         <li class="class=" dropdown open"">
@@ -197,7 +197,7 @@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
-                    else
+                           else
                                if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
                     {
                         <li class="class=" dropdown open"">
@@ -223,8 +223,45 @@
                 <ul class="nav navbar-nav navbar-right">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li><a asp-area="" asp-controller="Account" asp-action="Index">@User.Identity.Name</a></li>
-                        <li><a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
+                                @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
+                                @*<div class="user-info">*@
+                                <span class="name pdd-right-5">@User.Identity.Name</span>
+                                @*<i class="ti-angle-down font-size-10"></i>*@
+                                <span class="caret"></span>
+                                @*</div>*@
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                @*<li>
+                                    <a href="#">
+                                        <i class="ti-settings pdd-right-10"></i>
+                                        <span>Setting</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="ti-user pdd-right-10"></i>
+                                        <span>Profile</span>
+                                    </a>
+                                </li>*@
+                                <li>
+                                    <a href="#">
+                                        <i class="ti-email pdd-right-10"></i>
+                                        <span>Inbox</span>
+                                    </a>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li>                            
+                                    <a asp-area="" asp-controller="Account" asp-action="Logout">
+                                        <i class="ti-power-off pdd-right-10"></i>
+                                        <span>Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            @*<a asp-area="" asp-controller="Account" asp-action="Index">@User.Identity.Name</a>*@
+                        </li>
+                        @*<li><a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>*@
                     }                    
                 </ul>                
             </div>

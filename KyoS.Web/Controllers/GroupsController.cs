@@ -143,7 +143,9 @@ namespace KyoS.Web.Controllers
                     ClientEntity client;
                     foreach (string value in clients)
                     {
-                        client = await _context.Clients.FindAsync(Convert.ToInt32(value));
+                        client = await _context.Clients
+                                               .Include(c => c.MTPs)
+                                               .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(value));
                         DateTime admission_date;
                         List<WorkdayEntity> workdays;
                         Workday_Client workday_client;
@@ -198,7 +200,7 @@ namespace KyoS.Web.Controllers
                 {
                     if (ex.InnerException.Message.Contains("duplicate"))
                     {
-                        ModelState.AddModelError(string.Empty, "Already exists the objective");
+                        ModelState.AddModelError(string.Empty, "Already exists the group");
                     }
                     else
                     {

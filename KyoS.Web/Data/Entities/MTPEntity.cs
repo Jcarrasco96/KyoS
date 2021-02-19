@@ -47,5 +47,7 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Months of treatment")]
         public int? NumberOfMonths { get; set; }
+
+        public string Setting { get; set; }
     }
 }

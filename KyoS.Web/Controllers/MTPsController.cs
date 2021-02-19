@@ -109,7 +109,11 @@ namespace KyoS.Web.Controllers
                             IdClient = idClient,
                             Clients = list,
                             AdmisionDate = DateTime.Today,
-                            MTPDevelopedDate = DateTime.Today
+                            MTPDevelopedDate = DateTime.Today,
+                            NumberOfMonths = 6,
+                            Modality = "PSR",
+                            Frecuency = "Four times per week",
+                            Setting = "53"
                         };
                     }
                     else
@@ -118,7 +122,11 @@ namespace KyoS.Web.Controllers
                         {
                             Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
                             AdmisionDate = DateTime.Today,
-                            MTPDevelopedDate = DateTime.Today
+                            MTPDevelopedDate = DateTime.Today,
+                            NumberOfMonths = 6,
+                            Modality = "PSR",
+                            Frecuency = "Four times per week",
+                            Setting = "53"
                         };
                     }
                     return View(model);
@@ -137,11 +145,13 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Supervisor, Mannager")]
-        public async Task<IActionResult> Create(MTPViewModel mtpViewModel)
+        public async Task<IActionResult> Create(MTPViewModel mtpViewModel, IFormCollection form)
         {
             if (ModelState.IsValid)
             {
                 MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, true);
+                mtpEntity.Setting = form["Setting"].ToString();
+                
                 _context.Add(mtpEntity);
 
                 IQueryable<DiagnosisTempEntity> list_to_delete = _context.DiagnosesTemp;
@@ -281,12 +291,15 @@ namespace KyoS.Web.Controllers
 
             if (!User.IsInRole("Admin"))
             {
-                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
-                if (user_logged.Clinic != null)
+                
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Insert(0, new SelectListItem
                 {
-                    mtpViewModel.Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id);
-                }
+                    Text = mtpEntity.Client.Name,
+                    Value = $"{mtpEntity.Client.Id}"
+                });
+                mtpViewModel.Clients = list;
+                
             }
 
             return View(mtpViewModel);
@@ -295,7 +308,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Supervisor, Mannager")]
-        public async Task<IActionResult> Edit(int id, MTPViewModel mtpViewModel)
+        public async Task<IActionResult> Edit(int id, MTPViewModel mtpViewModel, IFormCollection form)
         {
             if (id != mtpViewModel.Id)
             {
@@ -305,6 +318,7 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, false);
+                mtpEntity.Setting = form["Setting"].ToString();
                 _context.Update(mtpEntity);
                 try
                 {
@@ -469,7 +483,10 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            MTPEntity mtpEntity = await _context.MTPs.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == id);
+            MTPEntity mtpEntity = await _context.MTPs
+                                                .Include(m => m.Client)
+                                                .Include(m => m.Goals)
+                                                .FirstOrDefaultAsync(m => m.Id == id);
             if (mtpEntity == null)
             {
                 return NotFound();
@@ -478,7 +495,8 @@ namespace KyoS.Web.Controllers
             GoalViewModel model = new GoalViewModel
             {
                 MTP = mtpEntity,
-                IdMTP = mtpEntity.Id
+                IdMTP = mtpEntity.Id,
+                Number = mtpEntity.Goals.Count() + 1
             };
 
             return View(model);
@@ -626,19 +644,23 @@ namespace KyoS.Web.Controllers
             }
 
             GoalEntity goalEntity = await _context.Goals.Include(g => g.MTP)
-                                                        .ThenInclude(m => m.Client).FirstOrDefaultAsync(m => m.Id == id);
+                                                        .ThenInclude(m => m.Client)
+                                                        .Include(g => g.Objetives)
+                                                        .FirstOrDefaultAsync(m => m.Id == id);
             if (goalEntity == null)
             {
                 return NotFound();
             }
 
+            string objetive = $"{goalEntity.Number}.{goalEntity.Objetives.Count() + 1}";
             ObjectiveViewModel model = new ObjectiveViewModel
             {
                 Goal = goalEntity,
                 IdGoal = goalEntity.Id,
-                DateOpened = DateTime.Now,
-                DateResolved = DateTime.Now,
-                DateTarget = DateTime.Now
+                DateOpened = goalEntity.MTP.AdmisionDate,
+                DateResolved = goalEntity.MTP.AdmisionDate.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
+                DateTarget = goalEntity.MTP.AdmisionDate.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
+                Objetive = objetive
             };
 
             MultiSelectList classification_list = new MultiSelectList(await _context.Classifications.ToListAsync(), "Id", "Name");

@@ -243,7 +243,8 @@ namespace KyoS.Web.Helpers
                 Modality = mtpEntity.Modality,
                 Frecuency = mtpEntity.Frecuency,
                 NumberOfMonths = mtpEntity.NumberOfMonths,
-                Diagnosis = mtpEntity.Diagnosis
+                Diagnosis = mtpEntity.Diagnosis,
+                Setting = mtpEntity.Setting
             };
         }
 

@@ -30,5 +30,7 @@ namespace RDLCDesign.DBF
         public string Frecuency { get; set; }
 
         public int? NumberOfMonths { get; set; }
+
+        public string Setting { get; set; }
     }
 }

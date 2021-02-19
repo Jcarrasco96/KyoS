@@ -746,7 +746,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>53</Value>
+                <Value>=First(Fields!Setting.Value, "dsMTPs")</Value>
                 <Style>
                   <FontFamily>times New Roman</FontFamily>
                   <FontWeight>Bold</FontWeight>
@@ -1119,14 +1119,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox39">
+                    <Textbox Name="Modality">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>PSR Groups</Value>
+                              <Value>=Fields!Modality.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
                               </Style>
@@ -1137,7 +1137,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox39</rd:DefaultName>
+                      <rd:DefaultName>Modality</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -1152,14 +1152,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox41">
+                    <Textbox Name="Frecuency">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Four times per week.</Value>
+                              <Value>=Fields!Frecuency.Value</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
@@ -1174,7 +1174,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox41</rd:DefaultName>
+                      <rd:DefaultName>Frecuency</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -1208,7 +1208,7 @@
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
-        <DataSetName>dsDiagnosis</DataSetName>
+        <DataSetName>dsMTPs</DataSetName>
         <Top>3.65104in</Top>
         <Left>0.28958in</Left>
         <Height>0.5in</Height>
@@ -2117,7 +2117,7 @@
         <Top>5.18194in</Top>
         <Left>0.28958in</Left>
         <Height>0.90625in</Height>
-        <Width>7.47375in</Width>
+        <Width>7.47374in</Width>
         <ZIndex>28</ZIndex>
         <Visibility>
           <Hidden>=Sum(Fields!Id.Value, "dsObjetives1") = 0</Hidden>
@@ -7118,6 +7118,10 @@
         <Field Name="NumberOfMonths">
           <DataField>NumberOfMonths</DataField>
           <rd:TypeName>System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="Setting">
+          <DataField>Setting</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="StartTime">
           <DataField>StartTime</DataField>

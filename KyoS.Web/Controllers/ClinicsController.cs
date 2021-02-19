@@ -49,8 +49,7 @@ namespace KyoS.Web.Controllers
                     ViewBag.Creado = "N";
                 }
             }
-
-            ViewBag.Schema = "1";
+            
             return View();
         }
 
