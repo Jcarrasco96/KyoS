@@ -578,14 +578,17 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=FormatDateTime(First(Fields!AdmisionDate.Value, "dsMTPs"), DateFormat.ShortDate)</Value>
+                <Value>=First(Fields!AdmisionDate.Value, "dsMTPs")</Value>
                 <Style>
                   <FontFamily>times New Roman</FontFamily>
+                  <Format>MM/dd/yyyy</Format>
                   <TextDecoration>Underline</TextDecoration>
                 </Style>
               </TextRun>
             </TextRuns>
-            <Style />
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>AdmisionDate</rd:DefaultName>
@@ -611,14 +614,17 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=FormatDateTime(First(Fields!MTPDevelopedDate.Value, "dsMTPs"), Microsoft.VisualBasic.DateFormat.ShortDate)</Value>
+                <Value>=First(Fields!MTPDevelopedDate.Value, "dsMTPs")</Value>
                 <Style>
                   <FontFamily>times New Roman</FontFamily>
+                  <Format>MM/dd/yyyy</Format>
                   <TextDecoration>Underline</TextDecoration>
                 </Style>
               </TextRun>
             </TextRuns>
-            <Style />
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>AdmisionDate</rd:DefaultName>
@@ -1720,9 +1726,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!DateOpened.Value, DateFormat.ShortDate)</Value>
+                              <Value>=Fields!DateOpened.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
+                                <Format>MM/dd/yyyy</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1766,9 +1773,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!DateTarget.Value, DateFormat.ShortDate)</Value>
+                              <Value>=Fields!DateTarget.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
+                                <Format>MM/dd/yyyy</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1812,9 +1820,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!DateResolved.Value, DateFormat.ShortDate)</Value>
+                              <Value>=Fields!DateResolved.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
+                                <Format>MM/dd/yyyy</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2605,9 +2614,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!DateOpened.Value, Microsoft.VisualBasic.DateFormat.ShortDate)</Value>
+                              <Value>=Fields!DateOpened.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
+                                <Format>MM/dd/yyyy</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2651,9 +2661,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!DateTarget.Value, Microsoft.VisualBasic.DateFormat.ShortDate)</Value>
+                              <Value>=Fields!DateTarget.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
+                                <Format>MM/dd/yyyy</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2697,9 +2708,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!DateResolved.Value, Microsoft.VisualBasic.DateFormat.ShortDate)</Value>
+                              <Value>=Fields!DateResolved.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
+                                <Format>MM/dd/yyyy</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -3490,9 +3502,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!DateOpened.Value, Microsoft.VisualBasic.DateFormat.ShortDate)</Value>
+                              <Value>=Fields!DateOpened.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
+                                <Format>MM/dd/yyyy</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -3536,9 +3549,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!DateTarget.Value, Microsoft.VisualBasic.DateFormat.ShortDate)</Value>
+                              <Value>=Fields!DateTarget.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
+                                <Format>MM/dd/yyyy</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -3582,9 +3596,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!DateResolved.Value, Microsoft.VisualBasic.DateFormat.ShortDate)</Value>
+                              <Value>=Fields!DateResolved.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
+                                <Format>MM/dd/yyyy</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -4375,9 +4390,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!DateOpened.Value, Microsoft.VisualBasic.DateFormat.ShortDate)</Value>
+                              <Value>=Fields!DateOpened.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
+                                <Format>MM/dd/yyyy</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -4421,9 +4437,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!DateTarget.Value, Microsoft.VisualBasic.DateFormat.ShortDate)</Value>
+                              <Value>=Fields!DateTarget.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
+                                <Format>MM/dd/yyyy</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -4467,9 +4484,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!DateResolved.Value, Microsoft.VisualBasic.DateFormat.ShortDate)</Value>
+                              <Value>=Fields!DateResolved.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
+                                <Format>MM/dd/yyyy</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -5260,9 +5278,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!DateOpened.Value, Microsoft.VisualBasic.DateFormat.ShortDate)</Value>
+                              <Value>=Fields!DateOpened.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
+                                <Format>MM/dd/yyyy</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -5306,9 +5325,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!DateTarget.Value, Microsoft.VisualBasic.DateFormat.ShortDate)</Value>
+                              <Value>=Fields!DateTarget.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
+                                <Format>MM/dd/yyyy</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -5352,9 +5372,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!DateResolved.Value, Microsoft.VisualBasic.DateFormat.ShortDate)</Value>
+                              <Value>=Fields!DateResolved.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
+                                <Format>MM/dd/yyyy</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
