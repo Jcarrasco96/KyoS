@@ -223,6 +223,34 @@
                 <ul class="nav navbar-nav navbar-right">
                     @if (User.Identity.IsAuthenticated)
                     {
+                        <li>
+                            <a class="">
+                                @if (User.IsInRole("Facilitator"))
+                                {
+                                    <span class="label label-default">
+                                        Facilitator
+                                    </span>
+                                }
+                                @if (User.IsInRole("Supervisor"))
+                                {
+                                    <span class="label label-default">
+                                        Supervisor
+                                    </span>
+                                }
+                                @if (User.IsInRole("Mannager"))
+                                {
+                                    <span class="label label-default">
+                                        Manager
+                                    </span>
+                                }
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <span class="label label-default">
+                                        Administrator
+                                    </span>
+                                }
+                            </a>
+                        </li>
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
                                 @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@

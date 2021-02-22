@@ -74,6 +74,12 @@
                     @Html.DisplayFor(model => model.EndTime)
                 </dd>
                 <dt>
+                    @Html.DisplayNameFor(model => model.Setting)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Setting)
+                </dd>
+                <dt>
                     @Html.DisplayNameFor(model => model.LevelCare)
                 </dt>
                 <dd>
@@ -125,7 +131,7 @@
             @if(User.IsInRole("Admin") || User.IsInRole("Mannager") || User.IsInRole("Supervisor"))
             { 
                 <p>
-                    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create MTP</a> |
+                    <a asp-action="PrintMTP" asp-route-id="@Model.Id" class="btn btn-success"><i class="glyphicon glyphicon-print"></i> Print MTP</a> |
                     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update MTP</a> |
                     <a asp-action="UpdateDiagnosis" asp-route-id="@Model.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update diagnosis</a> |
                     <a asp-action="UpdateGoals" asp-route-id="@Model.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update goals - objetives</a>

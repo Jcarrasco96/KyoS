@@ -56,6 +56,11 @@ namespace KyoS.Web.Controllers
                 UserEntity user_logged = await _context.Users
                                                        .Include(u => u.Clinic)
                                                        .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                ViewBag.PendingActivities = _context.Activities
+                                                    .Count(a => (a.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                              && a.Status == ActivityStatus.Pending)).ToString();
+
                 ViewBag.PendingNotes = _context.Workdays_Clients
                                                .Count(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                               && wc.Note.Status == NoteStatus.Pending)).ToString();

@@ -551,7 +551,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> ActivitiesSupervision(int id = 0)
+        public async Task<IActionResult> ActivitiesSupervision(int id = 0, int pending = 0)
         {
             if (id == 1)
             {
@@ -570,11 +570,19 @@ namespace KyoS.Web.Controllers
                 if (user_logged.Clinic == null)
                     return View(null);
 
-                return View(await _context.Activities
+                if(pending == 0)
+                    return View(await _context.Activities
                                           .Include(a => a.Theme)
                                           .Include(a => a.Facilitator)
                                           .ThenInclude(t => t.Clinic)
                                           .Where(a => a.Theme.Clinic.Id == user_logged.Clinic.Id)
+                                          .OrderBy(a => a.Theme.Name).ToListAsync());
+                else
+                    return View(await _context.Activities
+                                          .Include(a => a.Theme)
+                                          .Include(a => a.Facilitator)
+                                          .ThenInclude(t => t.Clinic)
+                                          .Where(a => (a.Theme.Clinic.Id == user_logged.Clinic.Id && a.Status == Common.Enums.ActivityStatus.Pending))
                                           .OrderBy(a => a.Theme.Name).ToListAsync());
             }
         }
