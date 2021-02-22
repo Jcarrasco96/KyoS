@@ -105,6 +105,12 @@ namespace KyoS.Web.Controllers
                 SupervisorEntity supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.Name == supervisorViewModel.Name);
                 if (supervisor == null)
                 {
+                    if (supervisorViewModel.IdUser == "0")
+                    {
+                        ModelState.AddModelError(string.Empty, "You must select a linked user");
+                        return View(supervisorViewModel);
+                    }
+
                     SupervisorEntity supervisorEntity = await _converterHelper.ToSupervisorEntity(supervisorViewModel, true);
 
                     _context.Add(supervisorEntity);

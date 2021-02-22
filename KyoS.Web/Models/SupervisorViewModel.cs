@@ -13,7 +13,7 @@ namespace KyoS.Web.Models
         public int IdClinic { get; set; }
         public IEnumerable<SelectListItem> Clinics { get; set; }
 
-        [Display(Name = "Linked user")]
+        [Display(Name = "Linked user")]              
         public string IdUser { get; set; }
         public IEnumerable<SelectListItem> UserList { get; set; }
     }

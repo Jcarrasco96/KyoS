@@ -108,6 +108,12 @@ namespace KyoS.Web.Controllers
                 FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.Name == facilitatorViewModel.Name);
                 if (facilitator == null)
                 {
+                    if (facilitatorViewModel.IdUser == "0")
+                    {
+                        ModelState.AddModelError(string.Empty, "You must select a linked user");
+                        return View(facilitatorViewModel);
+                    }
+
                     FacilitatorEntity facilitatorEntity = await _converterHelper.ToFacilitatorEntity(facilitatorViewModel, true);
 
                     _context.Add(facilitatorEntity);
