@@ -155,8 +155,14 @@
                     $("#cbObjetive1").empty();
                     $.each(data, function (index, row) {
                         $("#cbObjetive1").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                    });    
+
+                    //actualizo el label con la intervention que corresponde al obj seleccionado
+                    url = "@Url.Action("GetIntervention", "Notes")";
+                    $.get(url, { idObjetive: $("#cbObjetive1").val() }, function (data) {                    
+                        $("#lbIntervention1").text(data);                         
                     });
-                });
+                });                
             })
             $("#cbGoal2").change(function () {
                 var url = "@Url.Action("GetObjetiveList", "Notes")";
@@ -165,7 +171,13 @@
                     $.each(data, function (index, row) {
                         $("#cbObjetive2").append("<option value='" + row.value + "'>" + row.text + "</option>")
                     });
-                });
+
+                    //actualizo el label con la intervention que corresponde al obj seleccionado
+                    url = "@Url.Action("GetIntervention", "Notes")";
+                    $.get(url, { idObjetive: $("#cbObjetive2").val() }, function (data) {                    
+                        $("#lbIntervention2").text(data);  
+                    });
+                });                
             })
             $("#cbGoal3").change(function () {
                 var url = "@Url.Action("GetObjetiveList", "Notes")";
@@ -174,7 +186,13 @@
                     $.each(data, function (index, row) {
                         $("#cbObjetive3").append("<option value='" + row.value + "'>" + row.text + "</option>")
                     });
-                });
+
+                    //actualizo el label con la intervention que corresponde al obj seleccionado
+                    url = "@Url.Action("GetIntervention", "Notes")";
+                    $.get(url, { idObjetive: $("#cbObjetive3").val() }, function (data) {                    
+                        $("#lbIntervention3").text(data);  
+                    });
+                });                
             })
             $("#cbGoal4").change(function () {
                 var url = "@Url.Action("GetObjetiveList", "Notes")";
@@ -183,6 +201,36 @@
                     $.each(data, function (index, row) {
                         $("#cbObjetive4").append("<option value='" + row.value + "'>" + row.text + "</option>")
                     });
+
+                    //actualizo el label con la intervention que corresponde al obj seleccionado
+                    url = "@Url.Action("GetIntervention", "Notes")";
+                    $.get(url, { idObjetive: $("#cbObjetive4").val() }, function (data) {                    
+                        $("#lbIntervention4").text(data);  
+                    });
+                });                
+            })
+            $("#cbObjetive1").change(function () {
+                var url = "@Url.Action("GetIntervention", "Notes")";
+                $.get(url, { idObjetive: $("#cbObjetive1").val() }, function (data) {                    
+                    $("#lbIntervention1").text(data);                         
+                });
+            })
+            $("#cbObjetive2").change(function () {
+                var url = "@Url.Action("GetIntervention", "Notes")";
+                $.get(url, { idObjetive: $("#cbObjetive2").val() }, function (data) {                    
+                    $("#lbIntervention2").text(data);                         
+                });
+            })
+            $("#cbObjetive3").change(function () {
+                var url = "@Url.Action("GetIntervention", "Notes")";
+                $.get(url, { idObjetive: $("#cbObjetive3").val() }, function (data) {                    
+                    $("#lbIntervention3").text(data);                         
+                });
+            })
+            $("#cbObjetive4").change(function () {
+                var url = "@Url.Action("GetIntervention", "Notes")";
+                $.get(url, { idObjetive: $("#cbObjetive4").val() }, function (data) {                    
+                    $("#lbIntervention4").text(data);                         
                 });
             })
             $("#EnglishAnswerClient1").click(function () {

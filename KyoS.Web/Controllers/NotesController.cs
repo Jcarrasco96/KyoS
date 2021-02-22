@@ -62,6 +62,9 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(d => d.Workdays_Clients)
                                                 .ThenInclude(wc => wc.Client)
                                                 .ThenInclude(c => c.Group)
+
+                                                .Include(w => w.Days)
+                                                .ThenInclude(d => d.Workdays_Clients)
                                                 .ThenInclude(g => g.Facilitator)
 
                                                 .Include(w => w.Days)
@@ -76,11 +79,13 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Admin, Facilitator")]
         public async Task<IActionResult> Present(int id, int origin = 0)
         {
-            Workday_Client workdayClient = await _context.Workdays_Clients.Include(wc => wc.Workday)
-                                                       .Include(wc => wc.Client)
-                                                       .ThenInclude(c => c.Group)
-                                                       .ThenInclude(g => g.Facilitator)
-                                                       .FirstOrDefaultAsync(wc => wc.Id == id);
+            Workday_Client workdayClient = await _context.Workdays_Clients
+                                                         .Include(wc => wc.Workday)
+                                                         .Include(wc => wc.Client)
+                                                         .ThenInclude(c => c.Group)
+
+                                                         .Include(g => g.Facilitator)
+                                                         .FirstOrDefaultAsync(wc => wc.Id == id);
             Workday_ClientViewModel model = _converterHelper.ToWorkdayClientViewModel(workdayClient);
             model.Origin = origin;
             return View(model);
@@ -91,11 +96,12 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Admin, Facilitator")]
         public async Task<IActionResult> Present(Workday_ClientViewModel model, IFormCollection form)
         {
-            Workday_Client entity = await _context.Workdays_Clients.Include(wc => wc.Workday)
-                                                       .Include(wc => wc.Client)
-                                                       .ThenInclude(c => c.Group)
-                                                       .ThenInclude(g => g.Facilitator)
-                                                       .FirstOrDefaultAsync(wc => wc.Id == model.Id);
+            Workday_Client entity = await _context.Workdays_Clients
+                                                  .Include(wc => wc.Workday)
+                                                  .Include(wc => wc.Client)
+                                                  .ThenInclude(c => c.Group)
+                                                  .Include(wc => wc.Facilitator)
+                                                  .FirstOrDefaultAsync(wc => wc.Id == model.Id);
 
             if (entity == null)
             {
@@ -191,7 +197,10 @@ namespace KyoS.Web.Controllers
             NoteEntity note = await _context.Notes.Include(n => n.Workday_Cient)
                                                   .ThenInclude(wc => wc.Client)
                                                   .ThenInclude(c => c.Group)
+
+                                                  .Include(n => n.Workday_Cient)
                                                   .ThenInclude(g => g.Facilitator)
+
                                                   .Include(n => n.Notes_Activities)
                                                   .ThenInclude(na => na.Activity)
                                                   .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
@@ -307,8 +316,10 @@ namespace KyoS.Web.Controllers
                 List<Note_Activity> note_Activity = await _context.Notes_Activities
                                                                   .Include(na => na.Activity)
                                                                   .ThenInclude(a => a.Theme)
+
                                                                   .Include(na => na.Objetive)
                                                                   .ThenInclude(o => o.Goal)
+
                                                                   .Where(na => na.Note.Id == note.Id).ToListAsync();
 
                 IEnumerable<SelectListItem> goals = null;
@@ -376,6 +387,7 @@ namespace KyoS.Web.Controllers
                     //Paso el IdGoal1 como parametro
                     Objetives1 = _combosHelper.GetComboObjetives(((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) 
                                                                         ? note_Activity[0].Objetive.Goal.Id : 0),
+                    Intervention1 = ((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Intervention : string.Empty,
 
                     //IdTopic2 = (activities.Count > 1) ? activities[1].Activity.Theme.Id : 0,
                     Topic2 = (activities.Count > 1) ? activities[1].Activity.Theme.Name : string.Empty,
@@ -389,6 +401,7 @@ namespace KyoS.Web.Controllers
                     //Paso el IdGoal2 como parametro
                     Objetives2 = _combosHelper.GetComboObjetives(((note_Activity.Count > 1) && (note_Activity[1].Objetive != null))
                                                                         ? note_Activity[1].Objetive.Goal.Id : 0),
+                    Intervention2 = ((note_Activity.Count > 1) && (note_Activity[1].Objetive != null)) ? note_Activity[1].Objetive.Intervention : string.Empty,
 
                     //IdTopic3 = (activities.Count > 2) ? activities[2].Activity.Theme.Id : 0,
                     Topic3 = (activities.Count > 2) ? activities[2].Activity.Theme.Name : string.Empty,
@@ -402,6 +415,7 @@ namespace KyoS.Web.Controllers
                     //Paso el IdGoal3 como parametro
                     Objetives3 = _combosHelper.GetComboObjetives(((note_Activity.Count > 2) && (note_Activity[2].Objetive != null))
                                                                         ? note_Activity[2].Objetive.Goal.Id : 0),
+                    Intervention3 = ((note_Activity.Count > 2) && (note_Activity[2].Objetive != null)) ? note_Activity[2].Objetive.Intervention : string.Empty,
 
                     //IdTopic4 = (activities.Count > 3) ? activities[3].Activity.Theme.Id : 0,
                     Topic4 = (activities.Count > 3) ? activities[3].Activity.Theme.Name : string.Empty,
@@ -414,7 +428,8 @@ namespace KyoS.Web.Controllers
                     IdObjetive4 = ((note_Activity.Count > 3) && (note_Activity[3].Objetive != null)) ? note_Activity[3].Objetive.Id : 0,
                     //Paso el IdGoal4 como parametro
                     Objetives4 = _combosHelper.GetComboObjetives(((note_Activity.Count > 3) && (note_Activity[3].Objetive != null))
-                                                                        ? note_Activity[3].Objetive.Goal.Id : 0)
+                                                                        ? note_Activity[3].Objetive.Goal.Id : 0),
+                    Intervention4 = ((note_Activity.Count > 3) && (note_Activity[3].Objetive != null)) ? note_Activity[3].Objetive.Intervention : string.Empty,
                 };
             }
             return View(noteViewModel);
@@ -426,11 +441,15 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> EditNote(NoteViewModel model, IFormCollection form)
         {
             Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
+
                                                                            .Include(wc => wc.Client)
                                                                            .ThenInclude(c => c.Clinic)
+
                                                                            .Include(wc => wc.Client)
                                                                            .ThenInclude(c => c.Group)
-                                                                           .ThenInclude(g => g.Facilitator)
+
+                                                                           .Include(wc => wc.Facilitator)
+                                                                           
                                                                            .FirstOrDefaultAsync(wc => wc.Id == model.Id);
             if (workday_Client == null)
             {
@@ -698,6 +717,18 @@ namespace KyoS.Web.Controllers
             return Json(new SelectList(objetives, "Id", "Objetive"));
         }
 
+        [Authorize(Roles = "Admin, Facilitator")]
+        public JsonResult GetIntervention(int idObjetive)
+        {
+            ObjetiveEntity objetive = _context.Objetives.FirstOrDefault(o => o.Id == idObjetive);
+            string text = string.Empty;
+            if (objetive != null)
+            {
+                text = objetive.Intervention;
+            }
+            return Json(text);
+        }
+
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> NotesSupervision()
         {
@@ -705,14 +736,19 @@ namespace KyoS.Web.Controllers
                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             List<WeekEntity> weeks = (await _context.Weeks.Include(w => w.Days)
-                                            .ThenInclude(d => d.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Client)
-                                            .ThenInclude(c => c.Group)
-                                            .ThenInclude(g => g.Facilitator)
-                                            .Include(w => w.Days)
-                                            .ThenInclude(d => d.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Note)
-                                            .Where(w => (w.Clinic.Id == user_logged.Clinic.Id)).ToListAsync());
+                                                          .ThenInclude(d => d.Workdays_Clients)
+                                                          .ThenInclude(wc => wc.Client)
+                                                          .ThenInclude(c => c.Group)
+
+                                                          .Include(w => w.Days)
+                                                          .ThenInclude(d => d.Workdays_Clients)
+                                                          .ThenInclude(g => g.Facilitator)
+
+                                                          .Include(w => w.Days)
+                                                          .ThenInclude(d => d.Workdays_Clients)
+                                                          .ThenInclude(wc => wc.Note)
+                                                          .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
+                                                          .ToListAsync());
             
             return View(weeks);
         }
@@ -881,11 +917,15 @@ namespace KyoS.Web.Controllers
             List<Workday_Client> list = await _context.Workdays_Clients
                                                       .Include(wc => wc.Client)
                                                       .ThenInclude(c => c.Group)
-                                                      .ThenInclude(g => g.Facilitator)
+
+                                                      .Include(wc => wc.Facilitator)
+                                                      
                                                       .Include(wc => wc.Note)
                                                       .ThenInclude(n => n.Supervisor)
+
                                                       .Include(wc => wc.Note)
                                                       .ThenInclude(n => n.Notes_Activities)
+
                                                       .Where(wc => (wc.Workday.Date == model.DateOfPrint 
                                                           && wc.Client.Group.Facilitator.LinkedUser == User.Identity.Name
                                                           && wc.Session == meridian

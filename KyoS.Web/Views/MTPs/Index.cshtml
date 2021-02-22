@@ -51,6 +51,15 @@
                         {
                             <tr>
                                 <td>
+                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
                                     @Html.DisplayFor(modelItem => item.Client.Name)
                                 </td>
                                 <td>

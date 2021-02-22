@@ -1,12 +1,4 @@
 ﻿@model KyoS.Web.Models.NoteViewModel
-@*<div class="col-md-12">
-    <hr />
-    <h4 style="font-weight:bold;"><span class="label label-info">@Model.Workday_Cient.Client.Name</span></h4>
-    <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">View of MTP</a>
-    <h5>Facilitator: @Model.Workday_Cient.Facilitator.Name</h5>
-    <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
-    <hr />
-</div>*@
 @if (Model.Schema == KyoS.Common.Enums.SchemaType.Schema1)
 {
     <div class="col-md-push-12">
@@ -40,12 +32,12 @@
     <div class="col-md-push-12">
         <div class="form-group col-md-6">
             <label asp-for="AnswerClient1" class="control-label"></label>
-            <textarea asp-for="AnswerClient1" class="form-control" rows="3" id="AnswerClient1"></textarea>
+            <textarea asp-for="AnswerClient1" class="form-control" rows="4" id="AnswerClient1"></textarea>
             <span asp-validation-for="AnswerClient1" class="text-danger"></span>
         </div>
         <div class="form-group col-md-6">
             <label asp-for="AnswerFacilitator1" class="control-label"></label>
-            <textarea asp-for="AnswerFacilitator1" class="form-control" rows="3" id="AnswerFacilitator1"></textarea>
+            <textarea asp-for="AnswerFacilitator1" class="form-control" rows="4" id="AnswerFacilitator1"></textarea>
             <span asp-validation-for="AnswerFacilitator1" class="text-danger"></span>
         </div>
     </div>
@@ -69,7 +61,9 @@
             <span asp-validation-for="IdObjetive1" class="text-danger"></span>
         </div>
         <div class="form-group col-md-8">
-            &nbsp;
+            <label class="control-label">Intervention</label>            
+            <br />
+            <label id="lbIntervention1" style="font-weight:normal">@Model.Intervention1</label>
         </div>
     </div>
     @if (Model.Goals1.Count() == 1)
@@ -173,8 +167,10 @@
             <select asp-for="IdObjetive1" asp-items="Model.Objetives1" class="form-control" id="cbObjetive1"></select>
             <span asp-validation-for="IdObjetive1" class="text-danger"></span>
         </div>
-        <div class="form-group col-md-8">
-            &nbsp;
+        <div class="form-group col-md-8">            
+                <label class="control-label">Intervention</label>
+                <br />
+                <label id="lbIntervention1" style="font-weight:normal">@Model.Intervention1</label>            
         </div>
     </div>
     @if (Model.Goals1.Count() == 1)
@@ -230,8 +226,10 @@
             <select asp-for="IdObjetive2" asp-items="Model.Objetives2" class="form-control" id="cbObjetive2"></select>
             <span asp-validation-for="IdObjetive2" class="text-danger"></span>
         </div>
-        <div class="form-group col-md-8">
-            &nbsp;
+        <div class="form-group col-md-8">            
+                <label class="control-label">Intervention</label>
+                <br />
+                <label id="lbIntervention2" style="font-weight:normal">@Model.Intervention2</label>            
         </div>
     </div>
     @if (Model.Goals1.Count() == 1)
@@ -287,8 +285,10 @@
             <select asp-for="IdObjetive3" asp-items="Model.Objetives3" class="form-control" id="cbObjetive3"></select>
             <span asp-validation-for="IdObjetive3" class="text-danger"></span>
         </div>
-        <div class="form-group col-md-8">
-            &nbsp;
+        <div class="form-group col-md-8">            
+                <label class="control-label">Intervention</label>
+                <br />
+                <label id="lbIntervention3" style="font-weight:normal">@Model.Intervention3</label>            
         </div>
     </div>
     @if (Model.Goals1.Count() == 1)
@@ -344,8 +344,10 @@
             <select asp-for="IdObjetive4" asp-items="Model.Objetives4" class="form-control" id="cbObjetive4"></select>
             <span asp-validation-for="IdObjetive4" class="text-danger"></span>
         </div>
-        <div class="form-group col-md-8">
-            &nbsp;
+        <div class="form-group col-md-8">           
+                <label class="control-label">Intervention</label>
+                <br />
+                <label id="lbIntervention4" style="font-weight:normal">@Model.Intervention4</label>            
         </div>
     </div>
     @if (Model.Goals1.Count() == 1)

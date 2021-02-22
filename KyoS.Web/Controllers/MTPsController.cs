@@ -657,9 +657,9 @@ namespace KyoS.Web.Controllers
             {
                 Goal = goalEntity,
                 IdGoal = goalEntity.Id,
-                DateOpened = goalEntity.MTP.AdmisionDate,
-                DateResolved = goalEntity.MTP.AdmisionDate.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
-                DateTarget = goalEntity.MTP.AdmisionDate.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
+                DateOpened = goalEntity.MTP.MTPDevelopedDate,
+                DateResolved = goalEntity.MTP.MTPDevelopedDate.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
+                DateTarget = goalEntity.MTP.MTPDevelopedDate.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
                 Objetive = objetive
             };
 

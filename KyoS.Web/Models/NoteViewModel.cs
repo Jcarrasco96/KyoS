@@ -30,6 +30,8 @@ namespace KyoS.Web.Models
         public int IdObjetive1 { get; set; }
         public IEnumerable<SelectListItem> Objetives1 { get; set; }
 
+        public string Intervention1 { get; set; }
+
         public int IdActivity2 { get; set; }
         
         [Display(Name = "Client Answer #2")]
@@ -45,6 +47,8 @@ namespace KyoS.Web.Models
         [Display(Name = "Objetive")]
         public int IdObjetive2 { get; set; }
         public IEnumerable<SelectListItem> Objetives2 { get; set; }
+        
+        public string Intervention2 { get; set; }
 
         public int IdActivity3 { get; set; }        
 
@@ -61,6 +65,7 @@ namespace KyoS.Web.Models
         [Display(Name = "Objetive")]
         public int IdObjetive3 { get; set; }
         public IEnumerable<SelectListItem> Objetives3 { get; set; }
+        public string Intervention3 { get; set; }
 
         public int IdActivity4 { get; set; }        
 
@@ -77,6 +82,7 @@ namespace KyoS.Web.Models
         [Display(Name = "Objetive")]
         public int IdObjetive4 { get; set; }
         public IEnumerable<SelectListItem> Objetives4 { get; set; }
+        public string Intervention4 { get; set; }
 
         //este campo lo uso para saber de que pagina se viene
         public int Origin { get; set; }
