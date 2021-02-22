@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using KyoS.Web.Data.Entities
+@inject UserManager<UserEntity> UserManager
+@{
+    UserEntity user = await UserManager.GetUserAsync(User);
+    string name = string.Empty;
+    if (user != null)
+    {
+        name = $"{user.FirstName} {user.LastName}";
+    }    
+ }
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -254,8 +266,8 @@
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
                                 @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
-                                @*<div class="user-info">*@
-                                <span class="name pdd-right-5">@User.Identity.Name</span>
+                                @*<div class="user-info">*@                               
+                                <span class="name pdd-right-5">@name</span>
                                 @*<i class="ti-angle-down font-size-10"></i>*@
                                 <span class="caret"></span>
                                 @*</div>*@

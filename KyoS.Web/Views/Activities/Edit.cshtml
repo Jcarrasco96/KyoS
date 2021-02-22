@@ -23,6 +23,10 @@
                 {
                     <a asp-action="ActivitiesSupervision" class="btn btn-success">Back</a>
                 }
+                @if (Model.Origin == 2)
+                {
+                    <a asp-action="ActivitiesSupervision" class="btn btn-success" asp-route-pending="1">Back</a>
+                }
             </div>
         </form>
     </div>

@@ -201,6 +201,8 @@ namespace KyoS.Web.Controllers
                         return RedirectToAction(nameof(Index));
                     if (activityViewModel.Origin == 1)
                         return RedirectToAction(nameof(ActivitiesSupervision));
+                    if (activityViewModel.Origin == 2)
+                        return RedirectToAction(nameof(ActivitiesSupervision), new {pending = 1});
                 }
                 catch (System.Exception ex)
                 {
@@ -570,7 +572,7 @@ namespace KyoS.Web.Controllers
                 if (user_logged.Clinic == null)
                     return View(null);
 
-                if(pending == 0)
+                if (pending == 0)
                     return View(await _context.Activities
                                           .Include(a => a.Theme)
                                           .Include(a => a.Facilitator)
@@ -578,17 +580,20 @@ namespace KyoS.Web.Controllers
                                           .Where(a => a.Theme.Clinic.Id == user_logged.Clinic.Id)
                                           .OrderBy(a => a.Theme.Name).ToListAsync());
                 else
+                {
+                    ViewBag.Pending = "1";
                     return View(await _context.Activities
                                           .Include(a => a.Theme)
                                           .Include(a => a.Facilitator)
                                           .ThenInclude(t => t.Clinic)
                                           .Where(a => (a.Theme.Clinic.Id == user_logged.Clinic.Id && a.Status == Common.Enums.ActivityStatus.Pending))
                                           .OrderBy(a => a.Theme.Name).ToListAsync());
+                }
             }
         }
 
         [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> ApproveActivity(int id)
+        public async Task<IActionResult> ApproveActivity(int id, int origin = 0)
         {
             ActivityEntity activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == id);
             if (activity == null)
@@ -603,7 +608,14 @@ namespace KyoS.Web.Controllers
             _context.Update(activity);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(ActivitiesSupervision), new { id = 1 });            
+            if (origin == 0)
+            {
+                return RedirectToAction(nameof(ActivitiesSupervision), new { id = 1 });
+            }
+            else
+            {
+                return RedirectToAction(nameof(ActivitiesSupervision), new { id = 1, pending = 1});
+            }              
         }
     }
 }
