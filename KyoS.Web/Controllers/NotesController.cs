@@ -1,16 +1,19 @@
 ﻿using AspNetCore.Reporting;
 using KyoS.Common.Enums;
+using KyoS.Common.Helpers;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -23,16 +26,21 @@ namespace KyoS.Web.Controllers
     {
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
+        private readonly IImageHelper _imageHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IDateHelper _dateHelper;
         private readonly ITranslateHelper _translateHelper;
-        public NotesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IDateHelper dateHelper, ITranslateHelper translateHelper)
+        private readonly IWebHostEnvironment _webhostEnvironment;
+
+        public NotesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IDateHelper dateHelper, ITranslateHelper translateHelper, IWebHostEnvironment webHostEnvironment, IImageHelper imageHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _dateHelper = dateHelper;
             _translateHelper = translateHelper;
+            _webhostEnvironment = webHostEnvironment;
+            _imageHelper = imageHelper;
         }
         [Authorize(Roles = "Admin, Facilitator")]
         public async Task<IActionResult> Index(int id = 0)
@@ -1003,12 +1011,28 @@ namespace KyoS.Web.Controllers
             System.Text.Encoding.GetEncoding("windows-1252");
             LocalReport report = new LocalReport(rdlcFilePath);
 
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(workdayClient.Note.Supervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Note.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(workdayClient.Facilitator.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
             //datasource
             List<Workday_Client> workdaysclients = new List<Workday_Client> { workdayClient };
             List<ClientEntity> clients = new List<ClientEntity> { workdayClient.Client };
             List<NoteEntity> notes = new List<NoteEntity> { workdayClient.Note };
             List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClient.Facilitator };
             List<SupervisorEntity> supervisors = new List<SupervisorEntity> { workdayClient.Note.Supervisor };
+            List<ImageArray> images = new List<ImageArray> { new ImageArray { ImageStream1 = stream1, ImageStream2 = stream2 }  };
 
             List<Note_Activity> notesactivities1 = new List<Note_Activity>();
             List<ActivityEntity> activities1 = new List<ActivityEntity>();
@@ -1111,6 +1135,7 @@ namespace KyoS.Web.Controllers
             report.AddDataSource("dsNotesActivities4", notesactivities4);
             report.AddDataSource("dsActivities4", activities4);
             report.AddDataSource("dsThemes4", themes4);
+            report.AddDataSource("dsImages", images);
 
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
@@ -1122,7 +1147,6 @@ namespace KyoS.Web.Controllers
             parameters.Add("goal_text", goal_text);
             parameters.Add("num_of_obj", num_of_obj);
             parameters.Add("obj_text", obj_text);
-
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
             return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,
                         $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf");

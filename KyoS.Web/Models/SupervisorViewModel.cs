@@ -1,4 +1,5 @@
 ﻿using KyoS.Web.Data.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,5 +17,8 @@ namespace KyoS.Web.Models
         [Display(Name = "Linked user")]              
         public string IdUser { get; set; }
         public IEnumerable<SelectListItem> UserList { get; set; }
+
+        [Display(Name = "Signature")]
+        public IFormFile SignatureFile { get; set; }
     }
 }

@@ -121,6 +121,20 @@
       </ConnectionProperties>
       <rd:DataSourceID>0f41d284-6651-49b7-93e7-3983b2000f03</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="RDLCDesignDBF17">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>d953f155-c835-4d48-9ddc-33b8c3cffb06</rd:DataSourceID>
+    </DataSource>
+    <DataSource Name="KyoSCommonHelpers">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>c45a56d6-5e36-424a-8c90-47d7cfbb60a5</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="dsWorkdays_Clients">
@@ -774,6 +788,27 @@
         <rd:DataSetName>RDLCDesign.DBF</rd:DataSetName>
         <rd:TableName>Note_Activity</rd:TableName>
         <rd:ObjectDataSourceType>RDLCDesign.DBF.Note_Activity, RDLCDesign, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+    <DataSet Name="dsImages">
+      <Query>
+        <DataSourceName>KyoSCommonHelpers</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="ImageStream1">
+          <DataField>ImageStream1</DataField>
+          <rd:TypeName>System.Byte[]</rd:TypeName>
+        </Field>
+        <Field Name="ImageStream2">
+          <DataField>ImageStream2</DataField>
+          <rd:TypeName>System.Byte[]</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>KyoS.Common.Helpers</rd:DataSetName>
+        <rd:TableName>ImageArray</rd:TableName>
+        <rd:ObjectDataSourceType>KyoS.Common.Helpers.ImageArray, KyoS.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
@@ -4770,6 +4805,38 @@
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
+            <Image Name="Image3">
+              <Source>Database</Source>
+              <Value>=First(Fields!ImageStream1.Value, "dsImages")</Value>
+              <MIMEType>image/jpeg</MIMEType>
+              <Sizing>FitProportional</Sizing>
+              <Top>0.47665in</Top>
+              <Left>0.62792in</Left>
+              <Height>0.22051in</Height>
+              <Width>0.70833in</Width>
+              <ZIndex>12</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+              </Style>
+            </Image>
+            <Image Name="Image5">
+              <Source>Database</Source>
+              <Value>=First(Fields!ImageStream2.Value, "dsImages")</Value>
+              <MIMEType>image/jpeg</MIMEType>
+              <Sizing>FitProportional</Sizing>
+              <Top>0.03633in</Top>
+              <Left>0.60973in</Left>
+              <Height>0.22051in</Height>
+              <Width>0.70833in</Width>
+              <ZIndex>13</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+              </Style>
+            </Image>
           </ReportItems>
           <Style>
             <Border>

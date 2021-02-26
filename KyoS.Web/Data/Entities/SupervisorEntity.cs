@@ -16,8 +16,14 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Code")]
         public string Code { get; set; }
+
         public string LinkedUser { get; set; }
+        
+        [Display(Name = "Signature")]
+        public string SignaturePath { get; set; }
+
         public ClinicEntity Clinic { get; set; }
+
         public ICollection<NoteEntity> Notes { get; set; }
     }
 }

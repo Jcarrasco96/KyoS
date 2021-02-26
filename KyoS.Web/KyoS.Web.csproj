@@ -51,6 +51,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\Clinics\" />
+    <Folder Include="wwwroot\images\Signatures\" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

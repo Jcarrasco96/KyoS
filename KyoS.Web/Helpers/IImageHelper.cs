@@ -5,5 +5,7 @@ namespace KyoS.Web.Helpers
     public interface IImageHelper
     {
         Task<string> UploadImageAsync(IFormFile imageFile, string folder);
+        byte[] ImageToByteArray(string imagePath);
+        string TrimPath(string path);
     }
 }

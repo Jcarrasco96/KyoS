@@ -20,11 +20,13 @@ namespace KyoS.Web.Controllers
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
-        public SupervisorsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
+        private readonly IImageHelper _imageHelper;
+        public SupervisorsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IImageHelper imageHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
+            _imageHelper = imageHelper;
         }
         public async Task<IActionResult> Index()
         {
@@ -111,7 +113,13 @@ namespace KyoS.Web.Controllers
                         return View(supervisorViewModel);
                     }
 
-                    SupervisorEntity supervisorEntity = await _converterHelper.ToSupervisorEntity(supervisorViewModel, true);
+                    string path = string.Empty;
+                    if (supervisorViewModel.SignatureFile != null)
+                    {
+                        path = await _imageHelper.UploadImageAsync(supervisorViewModel.SignatureFile, "Signatures");
+                    }
+
+                    SupervisorEntity supervisorEntity = await _converterHelper.ToSupervisorEntity(supervisorViewModel, path, true);
 
                     _context.Add(supervisorEntity);
                     try
@@ -205,7 +213,12 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                SupervisorEntity supervisorEntity = await _converterHelper.ToSupervisorEntity(supervisorViewModel, false);
+                string path = string.Empty;
+                if (supervisorViewModel.SignatureFile != null)
+                {
+                    path = await _imageHelper.UploadImageAsync(supervisorViewModel.SignatureFile, "Signatures");
+                }
+                SupervisorEntity supervisorEntity = await _converterHelper.ToSupervisorEntity(supervisorViewModel, path, false);
                 _context.Update(supervisorEntity);
                 try
                 {

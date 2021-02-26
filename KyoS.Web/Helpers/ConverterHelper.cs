@@ -117,7 +117,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<FacilitatorEntity> ToFacilitatorEntity(FacilitatorViewModel model, bool isNew)
+        public async Task<FacilitatorEntity> ToFacilitatorEntity(FacilitatorViewModel model, string signaturePath, bool isNew)
         {
             return new FacilitatorEntity
             {
@@ -126,7 +126,8 @@ namespace KyoS.Web.Helpers
                 Codigo = model.Codigo,
                 Name = model.Name,
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus),
-                LinkedUser = _userHelper.GetUserNameById(model.IdUser)
+                LinkedUser = _userHelper.GetUserNameById(model.IdUser),
+                SignaturePath = signaturePath
             };
         }
 
@@ -142,7 +143,8 @@ namespace KyoS.Web.Helpers
                 IdStatus = (facilitatorEntity.Status == StatusType.Open) ? 1 : 2,
                 StatusList = _combosHelper.GetComboClientStatus(),
                 IdUser = _userHelper.GetIdByUserName(facilitatorEntity.LinkedUser),
-                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, idClinic)
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, idClinic),
+                SignaturePath = facilitatorEntity.SignaturePath
             };
         }
 
@@ -183,7 +185,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<SupervisorEntity> ToSupervisorEntity(SupervisorViewModel model, bool isNew)
+        public async Task<SupervisorEntity> ToSupervisorEntity(SupervisorViewModel model, string signaturePath, bool isNew)
         {
             return new SupervisorEntity
             {
@@ -191,7 +193,8 @@ namespace KyoS.Web.Helpers
                 Clinic = await _context.Clinics.FindAsync(model.IdClinic),
                 Code = model.Code,
                 LinkedUser = _userHelper.GetUserNameById(model.IdUser),
-                Name = model.Name
+                Name = model.Name,
+                SignaturePath = signaturePath
             };
         }
 
@@ -205,7 +208,8 @@ namespace KyoS.Web.Helpers
                 IdClinic = supervisorEntity.Clinic.Id,
                 Clinics = _combosHelper.GetComboClinics(),
                 IdUser = _userHelper.GetIdByUserName(supervisorEntity.LinkedUser),
-                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, idClinic)
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, idClinic),
+                SignaturePath = supervisorEntity.SignaturePath
             };
         }
 

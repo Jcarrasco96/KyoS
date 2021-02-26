@@ -3,10 +3,10 @@
 @inject UserManager<UserEntity> UserManager
 @{
     UserEntity user = await UserManager.GetUserAsync(User);
-    string name = string.Empty;
+    var name = string.Empty;
     if (user != null)
     {
-        name = $"{user.FirstName} {user.LastName}";
+        name = user.FullName;
     }    
  }
 

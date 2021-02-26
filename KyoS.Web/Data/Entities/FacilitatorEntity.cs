@@ -20,6 +20,9 @@ namespace KyoS.Web.Data.Entities
 
         public string LinkedUser { get; set; }
 
+        [Display(Name = "Signature")]
+        public string SignaturePath { get; set; }
+
         public ClinicEntity Clinic { get; set; }
 
         public IEnumerable<GroupEntity> Groups { get; set; }

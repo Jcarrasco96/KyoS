@@ -14,11 +14,11 @@ namespace KyoS.Web.Helpers
         ActivityViewModel ToActivityViewModel(ActivityEntity model);
         Task<NotePrototypeEntity> ToNotePrototypeEntity(NotePrototypeViewModel model, bool isNew);
         NotePrototypeViewModel ToNotePrototypeViewModel(NotePrototypeEntity model);
-        Task<FacilitatorEntity> ToFacilitatorEntity(FacilitatorViewModel model, bool isNew);
+        Task<FacilitatorEntity> ToFacilitatorEntity(FacilitatorViewModel model, string signaturePath, bool isNew);
         FacilitatorViewModel ToFacilitatorViewModel(FacilitatorEntity model, int idClinic);
         Task<ClientEntity> ToClientEntity(ClientViewModel model, bool isNew);
         ClientViewModel ToClientViewModel(ClientEntity model);
-        Task<SupervisorEntity> ToSupervisorEntity(SupervisorViewModel model, bool isNew);
+        Task<SupervisorEntity> ToSupervisorEntity(SupervisorViewModel model, string signaturePath, bool isNew);
         SupervisorViewModel ToSupervisorViewModel(SupervisorEntity model, int idClinic);
         Task<MTPEntity> ToMTPEntity(MTPViewModel model, bool isNew);
         MTPViewModel ToMTPViewModel(MTPEntity model);

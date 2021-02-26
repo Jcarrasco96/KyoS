@@ -19,11 +19,13 @@ namespace KyoS.Web.Controllers
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
-        public FacilitatorsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
+        private readonly IImageHelper _imageHelper;
+        public FacilitatorsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IImageHelper imageHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
+            _imageHelper = imageHelper;
         }
         public async Task<IActionResult> Index()
         {
@@ -114,7 +116,13 @@ namespace KyoS.Web.Controllers
                         return View(facilitatorViewModel);
                     }
 
-                    FacilitatorEntity facilitatorEntity = await _converterHelper.ToFacilitatorEntity(facilitatorViewModel, true);
+                    string path = string.Empty;
+                    if (facilitatorViewModel.SignatureFile != null)
+                    {
+                        path = await _imageHelper.UploadImageAsync(facilitatorViewModel.SignatureFile, "Signatures");
+                    }
+
+                    FacilitatorEntity facilitatorEntity = await _converterHelper.ToFacilitatorEntity(facilitatorViewModel, path, true);
 
                     _context.Add(facilitatorEntity);
                     try
@@ -208,7 +216,12 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                FacilitatorEntity facilitatorEntity = await _converterHelper.ToFacilitatorEntity(facilitatorViewModel, false);
+                string path = string.Empty;
+                if (facilitatorViewModel.SignatureFile != null)
+                {
+                    path = await _imageHelper.UploadImageAsync(facilitatorViewModel.SignatureFile, "Signatures");
+                }
+                FacilitatorEntity facilitatorEntity = await _converterHelper.ToFacilitatorEntity(facilitatorViewModel, path, false);
                 _context.Update(facilitatorEntity);
                 try
                 {
