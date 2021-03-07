@@ -18,7 +18,7 @@
 <div class="row">
     <div>
         <div class="col-md-12">
-            @if (ViewBag.Error == "O")
+            @if (ViewBag.Error == "0")
             {
                 <div class="alert alert-block alert-danger">
                     <button type="button" class="close" data-dismiss="alert">
@@ -33,11 +33,23 @@
             @if (ViewBag.Error == "1")
             {
                 <div class="alert alert-block alert-danger">
-                   <i class="icon-ok red"></i>
+                    <i class="icon-ok red"></i>
                     <strong class="red">
                         Error. There are no activities for this date. Please must create them.
                     </strong>
                     <a asp-action="CreateActivitiesWeek" asp-controller="Activities" asp-route-id="@Model.Id">Activities per day</a>
+                </div>
+            }
+            @if (ViewBag.Error == "2")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. The note has fields mandatory.
+                    </strong>
                 </div>
             }
         </div>

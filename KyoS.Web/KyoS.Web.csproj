@@ -11,14 +11,22 @@
   <ItemGroup>
     <None Remove="Reports\Groups\rptGroup.rdlc" />
     <None Remove="Reports\MTPs\rptMTPDavila.rdlc" />
+    <None Remove="Reports\MTPs\rptMTPLarkinBehavior.rdlc" />
     <None Remove="Reports\Notes\rptNoteDavila.rdlc" />
+    <None Remove="Reports\Notes\rptNoteLARKINBEHAVIOR.rdlc" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Reports\Groups\rptGroup.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\MTPs\rptMTPLarkinBehavior.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\MTPs\rptMTPDavila.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Notes\rptNoteLARKINBEHAVIOR.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Notes\rptNoteDAVILA.rdlc">
