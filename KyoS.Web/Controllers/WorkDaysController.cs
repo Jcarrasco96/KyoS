@@ -136,7 +136,8 @@ namespace KyoS.Web.Controllers
                         {
                             if (item1.Date >= week.InitDate && item1.Date <= week.FinalDate)
                             {
-                                workday_entity = await _context.Workdays.FirstOrDefaultAsync(w => w.Date == item1);
+                                workday_entity = await _context.Workdays.FirstOrDefaultAsync(w => (w.Date == item1 
+                                                                                                && w.Week.Clinic.Id == entity.IdClinic));
                                 if (workday_entity == null)
                                 {
                                     WorkdayEntity workday;

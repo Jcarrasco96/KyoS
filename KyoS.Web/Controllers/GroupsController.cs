@@ -133,6 +133,8 @@ namespace KyoS.Web.Controllers
                     default:
                         break;
                 }
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 GroupEntity group = await _converterHelper.ToGroupEntity(model, true);
                 _context.Add(group);
@@ -159,7 +161,8 @@ namespace KyoS.Web.Controllers
                             workdays = await _context.Workdays
                                                      .Include(w => w.Workdays_Clients)
                                                      .ThenInclude(wc => wc.Client)
-                                                     .Where(w => w.Date >= admission_date)
+                                                     .Where(w => (w.Date >= admission_date
+                                                                  && w.Week.Clinic.Id == user_logged.Clinic.Id))
                                                      .ToListAsync();
                             foreach (WorkdayEntity item in workdays)
                             {
@@ -176,7 +179,7 @@ namespace KyoS.Web.Controllers
                                     };
                                     _context.Add(workday_client);
                                 }
-                                else  //si tiene asistencia, solo hay que verificar que la session(am o pm) sea la misma
+                                /*else  //si tiene asistencia, solo hay que verificar que la session(am o pm) sea la misma
                                 {
                                     workday_client = item.Workdays_Clients.FirstOrDefault(wc => wc.Client.Id == client.Id);
                                     if (workday_client.Session != client.Group.Meridian)
@@ -185,7 +188,7 @@ namespace KyoS.Web.Controllers
                                     }
                                     workday_client.Facilitator = group.Facilitator;
                                     _context.Update(workday_client);
-                                }
+                                }*/
                             }
                         }
                     }
@@ -285,6 +288,9 @@ namespace KyoS.Web.Controllers
                         break;
                 }
 
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
                 GroupEntity group = await _converterHelper.ToGroupEntity(model, false);
                 _context.Update(group);
 
@@ -319,7 +325,8 @@ namespace KyoS.Web.Controllers
                             workdays = await _context.Workdays
                                                      .Include(w => w.Workdays_Clients)
                                                      .ThenInclude(wc => wc.Client)
-                                                     .Where(w => w.Date >= admission_date)
+                                                     .Where(w => (w.Date >= admission_date
+                                                                  && w.Week.Clinic.Id == user_logged.Clinic.Id))
                                                      .ToListAsync();
                             foreach (WorkdayEntity item in workdays)
                             {
@@ -336,7 +343,7 @@ namespace KyoS.Web.Controllers
                                     };
                                     _context.Add(workday_client);
                                 }
-                                else  //si tiene asistencia, solo hay que verificar que la session(am o pm) sea la misma
+                                /*else  //si tiene asistencia, solo hay que verificar que la session(am o pm) sea la misma
                                 {
                                     workday_client = item.Workdays_Clients.FirstOrDefault(wc => wc.Client.Id == client.Id);
                                     if (workday_client.Session != client.Group.Meridian)
@@ -345,7 +352,7 @@ namespace KyoS.Web.Controllers
                                     }
                                     workday_client.Facilitator = group.Facilitator;
                                     _context.Update(workday_client);
-                                }                                
+                                } */                               
                             }
                         }
                     }

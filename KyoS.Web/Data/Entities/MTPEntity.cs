@@ -20,7 +20,8 @@ namespace KyoS.Web.Data.Entities
         public DateTime AdmisionDate { get; set; }
 
         [Display(Name = "Treatment plan developed date")]
-        [DataType(DataType.Date)]        
+        [DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime MTPDevelopedDate { get; set; }
 
         [Display(Name = "Start Time")]
