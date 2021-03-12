@@ -167,7 +167,7 @@ namespace KyoS.Web.Controllers
             List<SelectListItem> list2 = new List<SelectListItem>();
             List<SelectListItem> list3 = new List<SelectListItem>();
             List<SelectListItem> list4 = new List<SelectListItem>();
-
+            
             //la nota no tiene linkeado ningun goal
             if (error == 1)  
                 ViewBag.Error = "0";
@@ -195,8 +195,11 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            //el dia no tiene actividad asociada por lo tanto no se puede crear la nota
-            if (workday_Client.Workday.Workdays_Activities_Facilitators.Count == 0)
+            FacilitatorEntity facilitator_logged = _context.Facilitators
+                                                           .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
+
+            //el dia no tiene actividad asociada para el facilitator logueado por lo tanto no se puede crear la nota
+            if (workday_Client.Workday.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator == facilitator_logged).Count() == 0)
             {
                 ViewBag.Error = "1";
                 noteViewModel = new NoteViewModel
@@ -218,9 +221,9 @@ namespace KyoS.Web.Controllers
                                                   .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
             topics = await _context.Themes.Where(t => t.Clinic.Id == workday_Client.Client.Clinic.Id)
-                                              .ToListAsync();
+                                          .ToListAsync();
             topics = topics.Where(t => t.Day.ToString() == workday_Client.Workday.Day)
-                                          .ToList();
+                                            .ToList();
 
             int index = 0;
             foreach (ThemeEntity value in topics)
@@ -269,7 +272,10 @@ namespace KyoS.Web.Controllers
 
             MTPEntity mtp = await _context.MTPs.Include(m => m.Goals).FirstOrDefaultAsync(m => m.Client.Id == workday_Client.Client.Id);
 
-            List<Workday_Activity_Facilitator> activities = workday_Client.Workday.Workdays_Activities_Facilitators.ToList();
+            List<Workday_Activity_Facilitator> activities = workday_Client.Workday
+                                                                          .Workdays_Activities_Facilitators
+                                                                          .Where(waf => waf.Facilitator == facilitator_logged)
+                                                                          .ToList();
 
             if (note == null)   //la nota no está creada
             {

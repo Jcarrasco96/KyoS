@@ -82,7 +82,7 @@
                                             {
                                                 <tr>
                                                     <td align="center">
-                                                        @if (day.Workdays_Clients.Count() != 0)
+                                                        @if (day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() != 0)
                                                         {
                                                             <a class="icon-plus-sign-alt"></a>
                                                         }                                                       

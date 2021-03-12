@@ -242,7 +242,12 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(d => d.Workdays_Activities_Facilitators)
                                                 .ThenInclude(waf => waf.Activity)
                                                 .ThenInclude(a => a.Theme)
-                                                .Where(w => w.Clinic.Id == user_logged.Clinic.Id)
+
+                                                .Include(w => w.Days)
+                                                .ThenInclude(d => d.Workdays_Activities_Facilitators)
+                                                .ThenInclude(waf =>waf.Facilitator)
+
+                                                .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
                                                 .ToListAsync());
             }
         }
@@ -266,7 +271,7 @@ namespace KyoS.Web.Controllers
 
                                                            .FirstOrDefaultAsync(w => w.Id == id);
             
-            //el workday ya tiene notas creadas por tanto no es posible su edición
+            //el workday ya tiene notas creadas por el facilitator logueado por tanto no es posible su edición
             if (WorkdayReadOnly(workday))
             {
                 ViewBag.Error = "0";
@@ -541,9 +546,11 @@ namespace KyoS.Web.Controllers
         {
             if (workday.Workdays_Clients.Count > 0)
             {
+                FacilitatorEntity facilitator_logged = _context.Facilitators
+                                                               .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
                 foreach (Workday_Client item in workday.Workdays_Clients)
                 {
-                    if (item.Note != null)
+                    if ((item.Note != null) && (item.Facilitator == facilitator_logged))
                         return true;
                 }
                 return false;

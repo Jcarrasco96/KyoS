@@ -581,6 +581,7 @@
                 <Value>=First(Fields!AdmisionDate.Value, "dsMTPs")</Value>
                 <Style>
                   <FontFamily>times New Roman</FontFamily>
+                  <Format>MM/dd/yyyy</Format>
                   <TextDecoration>Underline</TextDecoration>
                 </Style>
               </TextRun>

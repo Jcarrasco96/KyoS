@@ -59,9 +59,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>0.25694in</Top>
-        <Left>3.91542in</Left>
+        <Left>3.70156in</Left>
         <Height>0.21in</Height>
-        <Width>1.9375in</Width>
+        <Width>2.15136in</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
@@ -582,6 +582,7 @@
                 <Value>=First(Fields!AdmisionDate.Value, "dsMTPs")</Value>
                 <Style>
                   <FontFamily>times New Roman</FontFamily>
+                  <Format>MM/dd/yyyy</Format>
                   <TextDecoration>Underline</TextDecoration>
                 </Style>
               </TextRun>

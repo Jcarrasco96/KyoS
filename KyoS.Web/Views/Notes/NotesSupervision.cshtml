@@ -47,7 +47,7 @@
                         {
                             <tr>
                                 <td align="center">
-                                    @if (item.Days.Count() != 0)
+                                    @if (item.Days.Where(w => w.Workdays_Clients.Where(wc => (wc.Note != null && wc.Note.Status.ToString() == "Pending")).Count() != 0).Count() != 0)
                                     {
                                         <a class="icon-plus-sign-alt"></a>
                                     }
@@ -63,7 +63,7 @@
                                             {
                                                 <tr>
                                                     <td align="center">
-                                                        @if (day.Workdays_Clients.Count != 0)
+                                                        @if (day.Workdays_Clients.Where(wc => (wc.Note != null && wc.Note.Status.ToString() == "Pending")).Count() != 0)
                                                         {
                                                             <a class="icon-plus-sign-alt"></a>
                                                             @*<a class="glyphicon glyphicon-plus"></a>*@
