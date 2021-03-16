@@ -495,8 +495,7 @@
                       <Value>ABSENT NOTE</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontFamily>Agency FB</FontFamily>
-                        <FontSize>11pt</FontSize>
+                        <FontSize>9pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -973,41 +972,6 @@
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-            <Textbox Name="dateFacilitator2">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Parameters!dateSupervisor.Value</Value>
-                      <Style>
-                        <FontFamily>times New Roman</FontFamily>
-                        <FontWeight>Bold</FontWeight>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Center</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>dateFacilitator</rd:DefaultName>
-              <Top>0.48959in</Top>
-              <Left>3.55323in</Left>
-              <Height>0.22553in</Height>
-              <Width>1in</Width>
-              <ZIndex>11</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
             <Image Name="Image3">
               <Source>Database</Source>
               <Value>=First(Fields!ImageStream1.Value, "dsImages")</Value>
@@ -1017,7 +981,7 @@
               <Left>0.62792in</Left>
               <Height>0.22051in</Height>
               <Width>0.70833in</Width>
-              <ZIndex>12</ZIndex>
+              <ZIndex>11</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1033,7 +997,7 @@
               <Left>0.60973in</Left>
               <Height>0.22051in</Height>
               <Width>0.70833in</Width>
-              <ZIndex>13</ZIndex>
+              <ZIndex>12</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>

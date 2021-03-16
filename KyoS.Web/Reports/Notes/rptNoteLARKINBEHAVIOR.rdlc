@@ -837,7 +837,7 @@
             <Top>0.07531in</Top>
             <Left>0.11333in</Left>
             <Height>0.205in</Height>
-            <Width>4.03011in</Width>
+            <Width>4.32193in</Width>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -872,9 +872,9 @@
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
             <Top>0.07531in</Top>
-            <Left>4.14875in</Left>
+            <Left>4.43526in</Left>
             <Height>0.205in</Height>
-            <Width>2.08522in</Width>
+            <Width>1.79871in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -3811,7 +3811,7 @@
             <Top>0.4417in</Top>
             <Left>0.10292in</Left>
             <Height>0.21in</Height>
-            <Width>4.30456in</Width>
+            <Width>4.33234in</Width>
             <ZIndex>95</ZIndex>
             <Style>
               <Border>
@@ -4615,7 +4615,7 @@
       <Width>8.3in</Width>
       <Page>
         <PageHeader>
-          <Height>1.35678in</Height>
+          <Height>1.3672in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -4643,8 +4643,6 @@
                       <Value>DAILY PROGRESS NOTE - PSYCHOSOCIAL REHABILITATION ON SITE</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontFamily>Agency FB</FontFamily>
-                        <FontSize>11pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -4655,10 +4653,10 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox1</rd:DefaultName>
-              <Top>0.42167in</Top>
-              <Left>2.39458in</Left>
+              <Top>0.38417in</Top>
+              <Left>2.19458in</Left>
               <Height>0.25in</Height>
-              <Width>3.83939in</Width>
+              <Width>4.91792in</Width>
               <ZIndex>1</ZIndex>
               <Style>
                 <Border>
@@ -4680,8 +4678,7 @@
                       <Value>SERVICE DAY/DATE:</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontFamily>Agency FB</FontFamily>
-                        <FontSize>11pt</FontSize>
+                        <FontSize>9pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -4718,8 +4715,7 @@
                     <TextRun>
                       <Value>=Parameters!date.Value</Value>
                       <Style>
-                        <FontFamily>Agency FB</FontFamily>
-                        <FontSize>11pt</FontSize>
+                        <FontSize>9pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
@@ -4755,8 +4751,7 @@
                       <Value>Service Code H2017</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontFamily>Agency FB</FontFamily>
-                        <FontSize>11pt</FontSize>
+                        <FontSize>9pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -4772,7 +4767,7 @@
               <Top>0.63833in</Top>
               <Left>5.75875in</Left>
               <Height>0.23in</Height>
-              <Width>1.34264in</Width>
+              <Width>1.41208in</Width>
               <ZIndex>4</ZIndex>
               <Style>
                 <Border>
@@ -4794,8 +4789,7 @@
                       <Value>Begind-End Time</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontFamily>Agency FB</FontFamily>
-                        <FontSize>11pt</FontSize>
+                        <FontSize>9pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -4808,7 +4802,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>0.87028in</Top>
+              <Top>0.86333in</Top>
               <Left>0.11521in</Left>
               <Height>0.23in</Height>
               <Width>1.55312in</Width>
@@ -4833,8 +4827,7 @@
                       <Value>Session Number/units</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontFamily>Agency FB</FontFamily>
-                        <FontSize>11pt</FontSize>
+                        <FontSize>9pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -4847,7 +4840,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>1.10521in</Top>
+              <Top>1.09271in</Top>
               <Left>0.11521in</Left>
               <Height>0.23in</Height>
               <Width>1.55312in</Width>
@@ -4872,8 +4865,7 @@
                       <Value>Session 1:4 Units</Value>
                       <Style>
                         <FontStyle>Italic</FontStyle>
-                        <FontFamily>Agency FB</FontFamily>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -4886,7 +4878,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>1.10469in</Top>
+              <Top>1.09219in</Top>
               <Left>1.66094in</Left>
               <Height>0.23in</Height>
               <Width>1.39474in</Width>
@@ -4911,8 +4903,7 @@
                       <Value>Session 2:4 Units</Value>
                       <Style>
                         <FontStyle>Italic</FontStyle>
-                        <FontFamily>Agency FB</FontFamily>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -4925,7 +4916,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>1.10469in</Top>
+              <Top>1.09219in</Top>
               <Left>3.05042in</Left>
               <Height>0.23in</Height>
               <Width>1.35706in</Width>
@@ -4950,8 +4941,7 @@
                       <Value>Session 3:4 Units</Value>
                       <Style>
                         <FontStyle>Italic</FontStyle>
-                        <FontFamily>Agency FB</FontFamily>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -4964,7 +4954,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>1.10469in</Top>
+              <Top>1.09219in</Top>
               <Left>4.40586in</Left>
               <Height>0.23in</Height>
               <Width>1.35706in</Width>
@@ -4989,8 +4979,7 @@
                       <Value>Session 4:4 Units</Value>
                       <Style>
                         <FontStyle>Italic</FontStyle>
-                        <FontFamily>Agency FB</FontFamily>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -5003,7 +4992,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>1.10469in</Top>
+              <Top>1.09219in</Top>
               <Left>5.76292in</Left>
               <Height>0.23in</Height>
               <Width>2.4343in</Width>
@@ -5027,8 +5016,7 @@
                     <TextRun>
                       <Value>=IIf(First(Fields!Session.Value, "dsWorkdays_Clients") = "AM","8:00 am – 9:00 am","1:00 pm – 2:00 pm")</Value>
                       <Style>
-                        <FontFamily>Agency FB</FontFamily>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
@@ -5039,7 +5027,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Session</rd:DefaultName>
-              <Top>0.87583in</Top>
+              <Top>0.86333in</Top>
               <Left>1.66278in</Left>
               <Height>0.23in</Height>
               <Width>1.3929in</Width>
@@ -5063,8 +5051,7 @@
                     <TextRun>
                       <Value>=IIf(First(Fields!Session.Value, "dsWorkdays_Clients") = "AM","9:00 am – 10:00 am","2:00 pm – 3:00 pm")</Value>
                       <Style>
-                        <FontFamily>Agency FB</FontFamily>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
@@ -5075,7 +5062,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Session1</rd:DefaultName>
-              <Top>0.87583in</Top>
+              <Top>0.86333in</Top>
               <Left>3.05042in</Left>
               <Height>0.23in</Height>
               <Width>1.35644in</Width>
@@ -5099,8 +5086,7 @@
                     <TextRun>
                       <Value>=IIf(First(Fields!Session.Value, "dsWorkdays_Clients") = "AM", "10:15 am – 11:15 am", "3:15 pm – 4:15 pm")</Value>
                       <Style>
-                        <FontFamily>Agency FB</FontFamily>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
@@ -5111,7 +5097,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Session1</rd:DefaultName>
-              <Top>0.87583in</Top>
+              <Top>0.86333in</Top>
               <Left>4.40586in</Left>
               <Height>0.23in</Height>
               <Width>1.35189in</Width>
@@ -5135,8 +5121,7 @@
                     <TextRun>
                       <Value>=IIf(First(Fields!Session.Value, "dsWorkdays_Clients") = "AM", "11:15 am – 12:15 pm", "4:15 pm – 5:15 pm")</Value>
                       <Style>
-                        <FontFamily>Agency FB</FontFamily>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
@@ -5147,7 +5132,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Session1</rd:DefaultName>
-              <Top>0.87583in</Top>
+              <Top>0.86333in</Top>
               <Left>5.75875in</Left>
               <Height>0.23in</Height>
               <Width>2.43847in</Width>
@@ -5172,8 +5157,7 @@
                       <Value>Setting: 53</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontFamily>Agency FB</FontFamily>
-                        <FontSize>11pt</FontSize>
+                        <FontSize>9pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -5187,9 +5171,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
               <Top>0.63833in</Top>
-              <Left>7.10139in</Left>
+              <Left>7.17083in</Left>
               <Height>0.23in</Height>
-              <Width>1.09583in</Width>
+              <Width>1.02639in</Width>
               <ZIndex>15</ZIndex>
               <Style>
                 <Border>
@@ -5650,41 +5634,6 @@
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-            <Textbox Name="dateFacilitator2">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Parameters!dateSupervisor.Value</Value>
-                      <Style>
-                        <FontFamily>times New Roman</FontFamily>
-                        <FontWeight>Bold</FontWeight>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Center</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>dateFacilitator</rd:DefaultName>
-              <Top>0.48959in</Top>
-              <Left>3.55323in</Left>
-              <Height>0.22553in</Height>
-              <Width>1in</Width>
-              <ZIndex>11</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
             <Image Name="Image3">
               <Source>Database</Source>
               <Value>=First(Fields!ImageStream1.Value, "dsImages")</Value>
@@ -5694,7 +5643,7 @@
               <Left>0.62792in</Left>
               <Height>0.22051in</Height>
               <Width>0.70833in</Width>
-              <ZIndex>12</ZIndex>
+              <ZIndex>11</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -5710,7 +5659,7 @@
               <Left>0.60973in</Left>
               <Height>0.22051in</Height>
               <Width>0.70833in</Width>
-              <ZIndex>13</ZIndex>
+              <ZIndex>12</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
