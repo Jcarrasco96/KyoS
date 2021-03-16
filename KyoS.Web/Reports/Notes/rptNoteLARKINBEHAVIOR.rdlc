@@ -3796,6 +3796,7 @@
                     <Style>
                       <FontStyle>Normal</FontStyle>
                       <FontFamily>Times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
                       <FontWeight>Bold</FontWeight>
                       <TextDecoration>Underline</TextDecoration>
                     </Style>
@@ -3810,7 +3811,7 @@
             <Top>0.4417in</Top>
             <Left>0.10292in</Left>
             <Height>0.21in</Height>
-            <Width>4.77364in</Width>
+            <Width>4.30456in</Width>
             <ZIndex>95</ZIndex>
             <Style>
               <Border>
@@ -3843,9 +3844,9 @@
             </Paragraphs>
             <rd:DefaultName>diagnosis</rd:DefaultName>
             <Top>0.27059in</Top>
-            <Left>4.10052in</Left>
+            <Left>4.43526in</Left>
             <Height>0.21in</Height>
-            <Width>4.0967in</Width>
+            <Width>3.76196in</Width>
             <ZIndex>96</ZIndex>
             <Style>
               <Border>
@@ -4657,7 +4658,7 @@
               <Top>0.42167in</Top>
               <Left>2.39458in</Left>
               <Height>0.25in</Height>
-              <Width>3.6052in</Width>
+              <Width>3.83939in</Width>
               <ZIndex>1</ZIndex>
               <Style>
                 <Border>

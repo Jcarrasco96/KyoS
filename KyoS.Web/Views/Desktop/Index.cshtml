@@ -23,9 +23,6 @@
             <div class="col-md-12" @*style="align-content:center;"*@>
                 @if (User.IsInRole("Facilitator"))
                 {
-                    <div class="col-sm-3 col-md-1">
-                        &nbsp;
-                    </div>
                     <div class="col-sm-3 col-md-2">
                         <div class="thumbnail list-group-item list-group-item-danger">
                             <div class="caption">
@@ -105,9 +102,22 @@
                                 }
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-3 col-md-1">
-                        &nbsp;
+                    </div>                    
+                    <div class="col-sm-3 col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <div class="caption">
+                                <h4>Absence <br>Notes</h4>
+                                <h3 style="text-align:right">@ViewBag.NotPresentNotes</h3>
+                                @if (ViewBag.NotPresentNotes == "0")
+                                {
+                                    <p><a href="#" class="btn btn-default disabled" role="button">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="Notes" asp-action="NotPresentNotes" class="btn btn-default" role="button">Go</a></p>
+                                }
+                            </div>
+                        </div>
                     </div>
                 }
                 @if (User.IsInRole("Supervisor"))
@@ -142,7 +152,7 @@
                                 }
                                 else
                                 {
-                                    <p><a asp-controller="Activities" asp-action="ActivitiesSupervision" asp-route-pending= "1" class="btn btn-info">Go</a></p>
+                                    <p><a asp-controller="Activities" asp-action="ActivitiesSupervision" asp-route-pending="1" class="btn btn-info">Go</a></p>
                                 }
                             </div>
                         </div>

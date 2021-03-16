@@ -654,6 +654,7 @@
                 <Value>=FormatDateTime(First(Fields!StartTime.Value, "dsMTPs"), Microsoft.VisualBasic.DateFormat.ShortTime)</Value>
                 <Style>
                   <FontFamily>times New Roman</FontFamily>
+                  <Format>h:mm tt</Format>
                   <TextDecoration>Underline</TextDecoration>
                 </Style>
               </TextRun>
@@ -687,6 +688,7 @@
                 <Value>=FormatDateTime(First(Fields!EndTime.Value, "dsMTPs"), Microsoft.VisualBasic.DateFormat.ShortTime)</Value>
                 <Style>
                   <FontFamily>times New Roman</FontFamily>
+                  <Format>h:mm tt</Format>
                   <TextDecoration>Underline</TextDecoration>
                 </Style>
               </TextRun>

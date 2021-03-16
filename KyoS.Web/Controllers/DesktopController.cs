@@ -50,6 +50,11 @@ namespace KyoS.Web.Controllers
                                                                             && wc.Note.Status == NoteStatus.Pending)).ToListAsync();
                 notes_review_list = notes_review_list.Where(wc => wc.Messages.Count() > 0).ToList();
                 ViewBag.NotesWithReview = notes_review_list.Count.ToString();
+
+                ViewBag.NotPresentNotes = _context.Workdays_Clients
+                                                  .Include(wc => wc.Note)
+                                                  .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                              && wc.Present == false)).ToString();
             }
             if (User.IsInRole("Supervisor"))
             {

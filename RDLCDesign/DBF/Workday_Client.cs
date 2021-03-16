@@ -19,5 +19,7 @@ namespace RDLCDesign.DBF
         public bool Present { get; set; }
 
         public string Session { get; set; }
+
+        public string CauseOfNotPresent { get; set; }
     }
 }

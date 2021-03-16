@@ -96,6 +96,8 @@ namespace KyoS.Web.Controllers
                                                          .FirstOrDefaultAsync(wc => wc.Id == id);
             Workday_ClientViewModel model = _converterHelper.ToWorkdayClientViewModel(workdayClient);
             model.Origin = origin;
+            model.CauseOfNotPresent = (string.IsNullOrEmpty(workdayClient.CauseOfNotPresent)) ?
+                                            "The client was absent to PSR session today, because of a personal matter." : workdayClient.CauseOfNotPresent;
             return View(model);
         }
 
@@ -121,11 +123,13 @@ namespace KyoS.Web.Controllers
                 case "present":
                     {
                         entity.Present = true;
+                        entity.CauseOfNotPresent = string.Empty;
                         break;
                     }
                 case "nopresent":
                     {
                         entity.Present = false;
+                        entity.CauseOfNotPresent = model.CauseOfNotPresent;
                         break;
                     }
                 default:
@@ -1030,17 +1034,17 @@ namespace KyoS.Web.Controllers
             
             if (workdayClient.Note.Supervisor.Clinic.Name == "DAVILA")
             {
-                return DavilaReport(workdayClient);
+                return DavilaNoteReport(workdayClient);
             }
             if (workdayClient.Note.Supervisor.Clinic.Name == "LARKIN BEHAVIOR")
             {
-                return LarkinReport(workdayClient);
+                return LarkinNoteReport(workdayClient);
             }
 
             return null;
         }
 
-        private IActionResult DavilaReport(Workday_Client workdayClient)
+        private IActionResult DavilaNoteReport(Workday_Client workdayClient)
         {
             //report
             string mimetype = "";
@@ -1192,7 +1196,7 @@ namespace KyoS.Web.Controllers
                         $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf");
         }
 
-        private IActionResult LarkinReport(Workday_Client workdayClient)
+        private IActionResult LarkinNoteReport(Workday_Client workdayClient)
         {
             //report
             string mimetype = "";
@@ -1259,7 +1263,7 @@ namespace KyoS.Web.Controllers
             var goal_obj_activity2 = string.Empty;
             var goal_obj_activity3 = string.Empty;
             var goal_obj_activity4 = string.Empty;
-            foreach (GoalEntity item in workdayClient.Client.MTPs.FirstOrDefault().Goals)
+            foreach (GoalEntity item in workdayClient.Client.MTPs.FirstOrDefault().Goals.OrderBy(g => g.Number))
             {
                 if (i == 0)
                 {
@@ -1438,6 +1442,16 @@ namespace KyoS.Web.Controllers
                         $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf");
         }
 
+        private IActionResult LarkinAbsenceNoteReport(Workday_Client workdayClient)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IActionResult DavilaAbsenceNoteReport(Workday_Client workdayClient)
+        {
+            throw new NotImplementedException();
+        }
+
         [Authorize(Roles = "Admin, Facilitator, Supervisor")]
         public async Task<IActionResult> MTPView(int id)
         {
@@ -1528,6 +1542,7 @@ namespace KyoS.Web.Controllers
 
             return View();
         }
+
         [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> ApprovedNotes(int id = 0)
         {
@@ -1733,5 +1748,73 @@ namespace KyoS.Web.Controllers
                               (value == 5) ? "done. " : string.Empty;
             return text;
         }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> NotPresentNotes(int id = 0)
+        {
+            return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+                                                       .Include(wc => wc.Facilitator)
+                                                       .Include(wc => wc.Client)
+                                                       .Include(wc => wc.Workday)
+                                                       .ThenInclude(w => w.Week)
+                                                       .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                                  && wc.Present == false))
+                                                       .ToListAsync());
+        }
+
+        public IActionResult PrintAbsenceNote(int id)
+        {
+            Workday_Client workdayClient = _context.Workdays_Clients
+                                                          .Include(wc => wc.Facilitator)
+
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.MTPs)
+                                                          .ThenInclude(m => m.Diagnosis)
+
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.MTPs)
+                                                          .ThenInclude(m => m.Goals)
+
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.MTPs)
+                                                          .ThenInclude(m => m.Goals)
+                                                          .ThenInclude(g => g.Objetives)
+
+                                                          .Include(wc => wc.Note)
+                                                          .ThenInclude(n => n.Supervisor)
+                                                          .ThenInclude(s => s.Clinic)
+
+                                                          .Include(wc => wc.Note)
+                                                          .ThenInclude(n => n.Notes_Activities)
+                                                          .ThenInclude(na => na.Activity)
+                                                          .ThenInclude(a => a.Theme)
+
+                                                          .Include(wc => wc.Note)
+                                                          .ThenInclude(n => n.Notes_Activities)
+                                                          .ThenInclude(na => na.Objetive)
+                                                          .ThenInclude(o => o.Goal)
+
+                                                          .Include(wc => wc.Note)
+                                                          .ThenInclude(n => n.Notes_Activities)
+
+                                                          .Include(wc => wc.Workday)
+                                                          .FirstOrDefault(wc => (wc.Id == id
+                                                                               && wc.Note.Status == NoteStatus.Approved));
+            if (workdayClient == null)
+            {
+                return NotFound();
+            }
+
+            if (workdayClient.Note.Supervisor.Clinic.Name == "DAVILA")
+            {
+                return DavilaAbsenceNoteReport(workdayClient);
+            }
+            if (workdayClient.Note.Supervisor.Clinic.Name == "LARKIN BEHAVIOR")
+            {
+                return LarkinAbsenceNoteReport(workdayClient);
+            }
+
+            return null;
+        }        
     }
 }

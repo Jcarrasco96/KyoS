@@ -15,5 +15,6 @@ namespace KyoS.Web.Data.Entities
         public bool Present { get; set; }
         public NoteEntity Note { get; set; }
         public IEnumerable<MessageEntity> Messages { get; set; }
+        public string CauseOfNotPresent { get; set; }
     }
 }
