@@ -445,20 +445,6 @@
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
-            <Image Name="Image1">
-              <Source>Embedded</Source>
-              <Value>larkin</Value>
-              <Sizing>FitProportional</Sizing>
-              <Top>0.0125in</Top>
-              <Left>0.61333in</Left>
-              <Height>0.53139in</Height>
-              <Width>0.65625in</Width>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Image>
             <Textbox Name="Textbox1">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
@@ -486,7 +472,6 @@
               <Left>3.64458in</Left>
               <Height>0.25in</Height>
               <Width>1.09478in</Width>
-              <ZIndex>1</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -497,97 +482,12 @@
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-            <Textbox Name="Textbox12">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>LARKIN BEHAVIOR HEALTH</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontSize>12pt</FontSize>
-                        <FontWeight>Bold</FontWeight>
-                        <TextDecoration>None</TextDecoration>
-                        <Color>#000000</Color>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox1</rd:DefaultName>
-              <Top>0.0125in</Top>
-              <Left>1.76958in</Left>
-              <Height>0.20833in</Height>
-              <Width>3.6052in</Width>
-              <ZIndex>2</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox64">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>Community Mental and Behavioral Health Center</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontWeight>Normal</FontWeight>
-                        <TextDecoration>None</TextDecoration>
-                        <Color>#000000</Color>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox1</rd:DefaultName>
-              <Top>0.18834in</Top>
-              <Left>1.76958in</Left>
-              <Height>0.22916in</Height>
-              <Width>3.6052in</Width>
-              <ZIndex>3</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <VerticalAlign>Top</VerticalAlign>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Line Name="Line3">
-              <Top>0.0125in</Top>
-              <Left>1.69458in</Left>
-              <Height>0.3875in</Height>
-              <Width>0in</Width>
-              <ZIndex>4</ZIndex>
-              <Style>
-                <Border>
-                  <Style>Solid</Style>
-                  <Width>2pt</Width>
-                </Border>
-              </Style>
-            </Line>
             <Line Name="Line4">
               <Top>0.70651in</Top>
               <Left>8.20208in</Left>
               <Height>0in</Height>
               <Width>-8.08333in</Width>
-              <ZIndex>5</ZIndex>
+              <ZIndex>1</ZIndex>
               <Style>
                 <Border>
                   <Style>Solid</Style>
@@ -595,6 +495,20 @@
                 </Border>
               </Style>
             </Line>
+            <Image Name="Image1">
+              <Source>Embedded</Source>
+              <Value>davila</Value>
+              <Top>0.06798in</Top>
+              <Left>3.66771in</Left>
+              <Height>0.28125in</Height>
+              <Width>0.98958in</Width>
+              <ZIndex>2</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+              </Style>
+            </Image>
           </ReportItems>
           <Style>
             <Border>
@@ -1006,6 +920,13 @@ AUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUA
 QAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFA
 BQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAF
 ABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQB/9k=</ImageData>
+    </EmbeddedImage>
+    <EmbeddedImage Name="davila">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>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</ImageData>
     </EmbeddedImage>
   </EmbeddedImages>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>

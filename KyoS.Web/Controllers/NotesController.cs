@@ -1444,13 +1444,67 @@ namespace KyoS.Web.Controllers
 
         private IActionResult LarkinAbsenceNoteReport(Workday_Client workdayClient)
         {
-            throw new NotImplementedException();
+            //report
+            string mimetype = "";
+            string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
+            string rdlcFilePath = string.Format("{0}Reports\\Notes\\{1}.rdlc", fileDirPath, $"rptAbsenceNoteLARKINBEHAVIOR");
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            System.Text.Encoding.GetEncoding("windows-1252");
+            LocalReport report = new LocalReport(rdlcFilePath);
+
+            //datasource
+            List<Workday_Client> workdaysclients = new List<Workday_Client> { workdayClient };
+            List<ClientEntity> clients = new List<ClientEntity> { workdayClient.Client };
+            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClient.Facilitator };
+                        
+            report.AddDataSource("dsWorkdays_Clients", workdaysclients);
+            report.AddDataSource("dsClients", clients);            
+            report.AddDataSource("dsFacilitators", facilitators);
+            report.AddDataSource("dsSupervisors", null);            
+            
+            var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
+            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();                       
+
+            parameters.Add("date", date);
+            parameters.Add("dateFacilitator", dateFacilitator);                      
+
+            var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,
+                        $"AbsenceNoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf");
         }
 
         private IActionResult DavilaAbsenceNoteReport(Workday_Client workdayClient)
         {
-            throw new NotImplementedException();
-        }
+            //report
+            string mimetype = "";
+            string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
+            string rdlcFilePath = string.Format("{0}Reports\\Notes\\{1}.rdlc", fileDirPath, $"rptAbsenceNoteDAVILA");
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            System.Text.Encoding.GetEncoding("windows-1252");
+            LocalReport report = new LocalReport(rdlcFilePath);
+
+            //datasource
+            List<Workday_Client> workdaysclients = new List<Workday_Client> { workdayClient };
+            List<ClientEntity> clients = new List<ClientEntity> { workdayClient.Client };
+            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClient.Facilitator };
+
+            report.AddDataSource("dsWorkdays_Clients", workdaysclients);
+            report.AddDataSource("dsClients", clients);
+            report.AddDataSource("dsFacilitators", facilitators);
+            report.AddDataSource("dsSupervisors", null);
+
+            var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
+            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+
+            parameters.Add("date", date);
+            parameters.Add("dateFacilitator", dateFacilitator);
+
+            var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,
+                        $"AbsenceNoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf");
+        }        
 
         [Authorize(Roles = "Admin, Facilitator, Supervisor")]
         public async Task<IActionResult> MTPView(int id)
@@ -1768,48 +1822,20 @@ namespace KyoS.Web.Controllers
                                                           .Include(wc => wc.Facilitator)
 
                                                           .Include(wc => wc.Client)
-                                                          .ThenInclude(c => c.MTPs)
-                                                          .ThenInclude(m => m.Diagnosis)
-
-                                                          .Include(wc => wc.Client)
-                                                          .ThenInclude(c => c.MTPs)
-                                                          .ThenInclude(m => m.Goals)
-
-                                                          .Include(wc => wc.Client)
-                                                          .ThenInclude(c => c.MTPs)
-                                                          .ThenInclude(m => m.Goals)
-                                                          .ThenInclude(g => g.Objetives)
-
-                                                          .Include(wc => wc.Note)
-                                                          .ThenInclude(n => n.Supervisor)
-                                                          .ThenInclude(s => s.Clinic)
-
-                                                          .Include(wc => wc.Note)
-                                                          .ThenInclude(n => n.Notes_Activities)
-                                                          .ThenInclude(na => na.Activity)
-                                                          .ThenInclude(a => a.Theme)
-
-                                                          .Include(wc => wc.Note)
-                                                          .ThenInclude(n => n.Notes_Activities)
-                                                          .ThenInclude(na => na.Objetive)
-                                                          .ThenInclude(o => o.Goal)
-
-                                                          .Include(wc => wc.Note)
-                                                          .ThenInclude(n => n.Notes_Activities)
-
+                                                          .ThenInclude(c => c.Clinic)
+                                                          
                                                           .Include(wc => wc.Workday)
-                                                          .FirstOrDefault(wc => (wc.Id == id
-                                                                               && wc.Note.Status == NoteStatus.Approved));
+                                                          .FirstOrDefault(wc => wc.Id == id);
             if (workdayClient == null)
             {
                 return NotFound();
             }
 
-            if (workdayClient.Note.Supervisor.Clinic.Name == "DAVILA")
+            if (workdayClient.Client.Clinic.Name == "DAVILA")
             {
                 return DavilaAbsenceNoteReport(workdayClient);
             }
-            if (workdayClient.Note.Supervisor.Clinic.Name == "LARKIN BEHAVIOR")
+            if (workdayClient.Client.Clinic.Name == "LARKIN BEHAVIOR")
             {
                 return LarkinAbsenceNoteReport(workdayClient);
             }

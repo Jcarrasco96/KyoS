@@ -12,6 +12,7 @@
     <None Remove="Reports\Groups\rptGroup.rdlc" />
     <None Remove="Reports\MTPs\rptMTPDavila.rdlc" />
     <None Remove="Reports\MTPs\rptMTPLarkinBehavior.rdlc" />
+    <None Remove="Reports\Notes\rptAbsenceNoteDAVILA.rdlc" />
     <None Remove="Reports\Notes\rptAbsenceNoteLARKINBEHAVIOR.rdlc" />
     <None Remove="Reports\Notes\rptNoteDavila.rdlc" />
     <None Remove="Reports\Notes\rptNoteLARKINBEHAVIOR.rdlc" />
@@ -25,6 +26,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\MTPs\rptMTPDavila.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Notes\rptAbsenceNoteDAVILA.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Notes\rptAbsenceNoteLARKINBEHAVIOR.rdlc">

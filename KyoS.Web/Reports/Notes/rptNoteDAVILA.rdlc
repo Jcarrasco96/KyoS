@@ -895,7 +895,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>="Client ID #: " &amp; First(Fields!MedicalID.Value, "dsClients")</Value>
+                    <Value>="Client ID #: " &amp; First(Fields!Code.Value, "dsClients")</Value>
                     <Style>
                       <FontFamily>Times New Roman</FontFamily>
                       <FontSize>11pt</FontSize>
