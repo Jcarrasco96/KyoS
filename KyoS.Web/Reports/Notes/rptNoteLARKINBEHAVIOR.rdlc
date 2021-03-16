@@ -893,7 +893,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>="Client ID #: " &amp; First(Fields!MedicalID.Value, "dsClients")</Value>
+                    <Value>="Client ID #: " &amp; First(Fields!Code.Value, "dsClients")</Value>
                     <Style>
                       <FontFamily>Times New Roman</FontFamily>
                       <FontWeight>Bold</FontWeight>
@@ -4025,7 +4025,7 @@
             <Top>0.4892in</Top>
             <Left>0.95083in</Left>
             <Height>0.21in</Height>
-            <Width>3.48443in</Width>
+            <Width>4.23334in</Width>
             <ZIndex>101</ZIndex>
             <Style>
               <Border>
@@ -4057,7 +4057,7 @@
             <Top>0.69086in</Top>
             <Left>0.95083in</Left>
             <Height>0.21in</Height>
-            <Width>3.48443in</Width>
+            <Width>4.23334in</Width>
             <ZIndex>102</ZIndex>
             <Style>
               <Border>
@@ -4089,7 +4089,7 @@
             <Top>0.88362in</Top>
             <Left>0.95083in</Left>
             <Height>0.21in</Height>
-            <Width>3.48443in</Width>
+            <Width>4.23334in</Width>
             <ZIndex>103</ZIndex>
             <Style>
               <Border>
@@ -4121,7 +4121,7 @@
             <Top>1.08362in</Top>
             <Left>0.95083in</Left>
             <Height>0.21in</Height>
-            <Width>3.48443in</Width>
+            <Width>4.23334in</Width>
             <ZIndex>104</ZIndex>
             <Visibility>
               <Hidden>=Parameters!goal_text4.Value = ""</Hidden>
@@ -4393,7 +4393,7 @@
             <Top>1.27278in</Top>
             <Left>0.95088in</Left>
             <Height>0.21in</Height>
-            <Width>3.48438in</Width>
+            <Width>4.23662in</Width>
             <ZIndex>114</ZIndex>
             <Visibility>
               <Hidden>=Parameters!goal_text5.Value = ""</Hidden>
