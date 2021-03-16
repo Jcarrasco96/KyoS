@@ -1407,9 +1407,9 @@ namespace KyoS.Web.Controllers
             foreach (var item in workdayClient.Client.MTPs.FirstOrDefault().Diagnosis)
             {
                 if (i == 0)
-                   diagnosis = item.Description;                
+                   diagnosis = item.Code;                
                 else                
-                    diagnosis = $"{diagnosis}, {item.Description}";                
+                    diagnosis = $"{diagnosis}, {item.Code}";                
                 i = ++i;
             }
 
