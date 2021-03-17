@@ -40,7 +40,8 @@ namespace KyoS.Web.Controllers
                                 
                 List <Workday_Client> not_started_list = await _context.Workdays_Clients
                                                           .Include(wc => wc.Note)
-                                                          .Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).ToListAsync();
+                                                          .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                                 && wc.Present == true)).ToListAsync();
                 not_started_list = not_started_list.Where(wc => wc.Note == null).ToList();
                 ViewBag.NotStartedNotes = not_started_list.Count.ToString();
 
