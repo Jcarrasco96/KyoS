@@ -3421,6 +3421,7 @@
                     <Value>="Group 1. " &amp; First(Fields!Name.Value, "dsThemes1") &amp; ":"</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
                       <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
@@ -3455,6 +3456,7 @@
                     <Value>="Activity Provided: " &amp; First(Fields!Name.Value, "dsActivities1")</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -3486,6 +3488,7 @@
                     <Value>="Group 2. " &amp; First(Fields!Name.Value, "dsThemes2") &amp; ":"</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
                       <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
@@ -3520,6 +3523,7 @@
                     <Value>="Activity Provided: " &amp; First(Fields!Name.Value, "dsActivities2")</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -3551,6 +3555,7 @@
                     <Value>="Group 3. " &amp; First(Fields!Name.Value, "dsThemes3") &amp; ":"</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
                       <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
@@ -3585,6 +3590,7 @@
                     <Value>="Activity Provided: " &amp; First(Fields!Name.Value, "dsActivities3")</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -3618,6 +3624,7 @@
                     <Value>="Activity Provided: " &amp; First(Fields!Name.Value, "dsActivities4")</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -3649,6 +3656,7 @@
                     <Value>="Group 4. " &amp; First(Fields!Name.Value, "dsThemes4") &amp; ":"</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
                       <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
@@ -3683,6 +3691,7 @@
                     <Value>="Group 1. Client Response: " &amp; Parameters!goal_obj_activity1.Value &amp; First(Fields!AnswerClient.Value, "dsNotesActivities1") &amp; " " &amp; First(Fields!AnswerFacilitator.Value, "dsNotesActivities1")</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -3716,6 +3725,7 @@
                     <Value>="Comments/Progress towards goals: " &amp; First(Fields!PlanNote.Value, "dsNotes")</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -4006,7 +4016,6 @@
             </Style>
           </Textbox>
           <Textbox Name="goal_text1">
-            <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
@@ -4038,7 +4047,6 @@
             </Style>
           </Textbox>
           <Textbox Name="goal_text2">
-            <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
@@ -4070,7 +4078,6 @@
             </Style>
           </Textbox>
           <Textbox Name="goal_text3">
-            <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
@@ -4102,7 +4109,6 @@
             </Style>
           </Textbox>
           <Textbox Name="goal_text4">
-            <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
@@ -4374,7 +4380,6 @@
             </Style>
           </Textbox>
           <Textbox Name="goal_text5">
-            <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
@@ -4512,6 +4517,7 @@
                     <Value>="Group 2. Client Response: " &amp; Parameters!goal_obj_activity2.Value &amp; First(Fields!AnswerClient.Value, "dsNotesActivities2") &amp; " " &amp; First(Fields!AnswerFacilitator.Value, "dsNotesActivities2")</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -4545,6 +4551,7 @@
                     <Value>="Group 3. Client Response: " &amp; Parameters!goal_obj_activity3.Value &amp; First(Fields!AnswerClient.Value, "dsNotesActivities3") &amp; " " &amp; First(Fields!AnswerFacilitator.Value, "dsNotesActivities3")</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -4578,6 +4585,7 @@
                     <Value>="Group 4. Client Response: " &amp; Parameters!goal_obj_activity4.Value &amp; First(Fields!AnswerClient.Value, "dsNotesActivities4") &amp; " " &amp; First(Fields!AnswerFacilitator.Value, "dsNotesActivities4")</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
