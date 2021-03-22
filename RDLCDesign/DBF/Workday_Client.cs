@@ -21,5 +21,7 @@ namespace RDLCDesign.DBF
         public string Session { get; set; }
 
         public string CauseOfNotPresent { get; set; }
+
+        public string ClientName { get; set; }
     }
 }

@@ -16,5 +16,12 @@ namespace KyoS.Web.Data.Entities
         public NoteEntity Note { get; set; }
         public IEnumerable<MessageEntity> Messages { get; set; }
         public string CauseOfNotPresent { get; set; }
+        public string ClientName 
+        {
+            get
+            {
+                return Client.Name;
+            }
+        }
     }
 }

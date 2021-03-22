@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Reports\Generics\rptDailyAssistance.rdlc" />
     <None Remove="Reports\Groups\rptGroup.rdlc" />
     <None Remove="Reports\MTPs\rptMTPDavila.rdlc" />
     <None Remove="Reports\MTPs\rptMTPLarkinBehavior.rdlc" />
@@ -22,6 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Reports\Generics\rptDailyAssistance.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Groups\rptGroup.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

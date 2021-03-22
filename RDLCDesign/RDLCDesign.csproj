@@ -86,6 +86,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Reports\rptDailyAssistance.rdlc" />
     <EmbeddedResource Include="Reports\rptGroup.rdlc" />
     <EmbeddedResource Include="Reports\rptMTPDavila.rdlc" />
     <EmbeddedResource Include="Reports\rptNoteDavila.rdlc" />
