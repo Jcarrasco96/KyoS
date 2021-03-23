@@ -20,6 +20,10 @@ namespace KyoS.Web.Data.Entities
         {
             get
             {
+                if (Client == null)
+                {
+                    return string.Empty;
+                }
                 return Client.Name;
             }
         }
