@@ -84,25 +84,16 @@ namespace KyoS.Web.Controllers
             {
                 return NotFound();
             }
-
-            List<Workday_Client> am_list = workdayClientList.Where(wc => wc.Session == "AM").ToList();
-            List<Workday_Client> pm_list = workdayClientList.Where(wc => wc.Session == "PM").ToList();
-
-            if(am_list.Count() != 0)
-                return DailyAssistanceReport(am_list);
-            if (pm_list.Count() != 0)
-                return DailyAssistanceReport(pm_list);
-
-            return null;
-        }
-
-        private IActionResult DailyAssistanceSolAndVidaReport(List<Workday_Client> workdayClientList)
-        {
-            throw new NotImplementedException();
+                       
+            return DailyAssistanceReport(workdayClientList);           
+            
         }
 
         private IActionResult DailyAssistanceReport(List<Workday_Client> workdayClientList)
         {
+            List<Workday_Client> am_list = workdayClientList.Where(wc => wc.Session == "AM").ToList();
+            List<Workday_Client> pm_list = workdayClientList.Where(wc => wc.Session == "PM").ToList();
+
             //report
             string mimetype = "";
             string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
@@ -127,36 +118,61 @@ namespace KyoS.Web.Controllers
             List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClientList.First().Facilitator };
             List<ImageArray> images = new List<ImageArray> { new ImageArray { ImageStream1 = stream1, ImageStream2 = stream2 } };
 
-            report.AddDataSource("dsWorkdays_Clients", workdayClientList);
+            int to = 14 - am_list.Count();
+            for (int i = 0; i < to; i++)
+            {
+                am_list.Add(null);
+            }
+            to = 14 - pm_list.Count();
+            for (int k = 0; k < to; k++)
+            {
+                pm_list.Add(null);
+            }
+            report.AddDataSource("dsWorkdays_Clients1", am_list);
+            report.AddDataSource("dsWorkdays_Clients2", pm_list);
             report.AddDataSource("dsClinics", clinics);
             report.AddDataSource("dsFacilitators", facilitators);
             report.AddDataSource("dsImages", images);
 
             var date = workdayClientList.First().Workday.Date.ToShortDateString();
-            var additionalComments = string.Empty;
-            foreach (Workday_Client item in workdayClientList)
+            var additionalComments1 = string.Empty;
+            var additionalComments2 = string.Empty;
+            foreach (Workday_Client item in am_list)
             {
-                if (!item.Present)
+                if(item != null)
+                { 
+                    if (!item.Present)
+                    {
+                        if(additionalComments1 != string.Empty)
+                            additionalComments1 = $"{additionalComments1}\n{item.ClientName} - {item.CauseOfNotPresent}"; 
+                        else
+                            additionalComments1 = $"{item.ClientName} - {item.CauseOfNotPresent}";
+                    }
+                }
+            }
+            foreach (Workday_Client item in pm_list)
+            {
+                if (item != null)
                 {
-                    if(additionalComments != string.Empty)
-                        additionalComments = $"{additionalComments}\n{item.ClientName} - {item.CauseOfNotPresent}"; 
-                    else
-                        additionalComments = $"{item.ClientName} - {item.CauseOfNotPresent}";
+                    if (!item.Present)
+                    {
+                        if (additionalComments2 != string.Empty)
+                            additionalComments2 = $"{additionalComments2}\n{item.ClientName} - {item.CauseOfNotPresent}";
+                        else
+                            additionalComments2 = $"{item.ClientName} - {item.CauseOfNotPresent}";
+                    }
                 }
             }
 
             parameters.Add("date", date);
-            parameters.Add("session", workdayClientList.First().Session);
-            parameters.Add("AdditionalComments", additionalComments);
+            parameters.Add("session1", "AM");
+            parameters.Add("session2", "PM");
+            parameters.Add("AdditionalComments1", additionalComments1);
+            parameters.Add("AdditionalComments2", additionalComments2);
 
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
             return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,
                         $"DailyAssistance_{workdayClientList.First().Workday.Date.ToShortDateString()}.pdf");
-        }
-
-        private IActionResult DailyAssistanceDavilaReport(List<Workday_Client> workdayClientList)
-        {
-            throw new NotImplementedException();
-        }
+        }        
     }
 }

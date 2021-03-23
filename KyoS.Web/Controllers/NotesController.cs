@@ -500,7 +500,16 @@ namespace KyoS.Web.Controllers
                     progress = $"{progress}{RandomGenerator()}";
                     model.PlanNote = $"{progress}{model.PlanNote}";
 
-                    noteEntity = await _converterHelper.ToNoteEntity(model, true);
+                    noteEntity = await _converterHelper.ToNoteEntity(model, true);      
+                    //Update plan progress
+                    noteEntity.SignificantProgress = (form["Progress"] == "SignificantProgress") ? true : false;
+                    noteEntity.ModerateProgress = (form["Progress"] == "ModerateProgress") ? true : false;
+                    noteEntity.MinimalProgress = (form["Progress"] == "MinimalProgress") ? true : false;
+                    noteEntity.NoProgress = (form["Progress"] == "NoProgress") ? true : false;
+                    noteEntity.Regression = (form["Progress"] == "Regression") ? true : false;
+                    noteEntity.Decompensating = (form["Progress"] == "Decompensating") ? true : false;
+                    noteEntity.UnableToDetermine = (form["Progress"] == "Unable") ? true : false;
+
                     _context.Add(noteEntity);
                     note_Activity = new Note_Activity
                     {

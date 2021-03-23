@@ -245,6 +245,10 @@
           <DataField>Congruent</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
         </Field>
+        <Field Name="Decompensating">
+          <DataField>Decompensating</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
         <Field Name="Depressed">
           <DataField>Depressed</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
@@ -301,12 +305,24 @@
           <DataField>MildlyImpaired</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
         </Field>
+        <Field Name="MinimalProgress">
+          <DataField>MinimalProgress</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="ModerateProgress">
+          <DataField>ModerateProgress</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
         <Field Name="Motivated">
           <DataField>Motivated</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
         </Field>
         <Field Name="Negativistic">
           <DataField>Negativistic</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="NoProgress">
+          <DataField>NoProgress</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
         </Field>
         <Field Name="Normal">
@@ -341,12 +357,20 @@
           <DataField>Present</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
         </Field>
+        <Field Name="Regression">
+          <DataField>Regression</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
         <Field Name="SeverelyImpaired">
           <DataField>SeverelyImpaired</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
         </Field>
         <Field Name="ShortSpanned">
           <DataField>ShortSpanned</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="SignificantProgress">
+          <DataField>SignificantProgress</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
         </Field>
         <Field Name="Status">
@@ -356,6 +380,10 @@
         <Field Name="SupervisorId">
           <DataField>SupervisorId</DataField>
           <rd:TypeName>System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="UnableToDetermine">
+          <DataField>UnableToDetermine</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
         </Field>
         <Field Name="Unmotivated">
           <DataField>Unmotivated</DataField>

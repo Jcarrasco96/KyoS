@@ -77,5 +77,19 @@ namespace RDLCDesign.DBF
         public bool Unmotivated { get; set; }
 
         public bool Withdrawn { get; set; }
+
+        public bool SignificantProgress { get; set; }
+
+        public bool ModerateProgress { get; set; }
+
+        public bool MinimalProgress { get; set; }
+
+        public bool NoProgress { get; set; }
+
+        public bool Regression { get; set; }
+
+        public bool Decompensating { get; set; }
+
+        public bool UnableToDetermine { get; set; }
     }
 }

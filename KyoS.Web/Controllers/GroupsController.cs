@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Mannager")]
+    [Authorize(Roles = "Mannager")]
     public class GroupsController : Controller
     {
         private readonly DataContext _context;

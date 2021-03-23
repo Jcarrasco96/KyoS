@@ -54,6 +54,14 @@ namespace KyoS.Web.Data.Entities
         public bool MildlyImpaired { get; set; }
         public bool SeverelyImpaired { get; set; }
 
+        public bool SignificantProgress { get; set; }
+        public bool ModerateProgress { get; set; }
+        public bool MinimalProgress { get; set; }
+        public bool NoProgress { get; set; }
+        public bool Regression { get; set; }
+        public bool Decompensating { get; set; }
+        public bool UnableToDetermine { get; set; }
+
         public SupervisorEntity Supervisor { get; set; }
         public ICollection<Note_Activity> Notes_Activities { get; set; }
     }
