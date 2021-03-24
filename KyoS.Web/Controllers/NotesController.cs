@@ -41,6 +41,7 @@ namespace KyoS.Web.Controllers
             _translateHelper = translateHelper;
             _webhostEnvironment = webHostEnvironment;
             _imageHelper = imageHelper;
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
         }
         [Authorize(Roles = "Admin, Facilitator")]
         public async Task<IActionResult> Index(int id = 0)
@@ -1063,9 +1064,8 @@ namespace KyoS.Web.Controllers
             string mimetype = "";
             string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
             string rdlcFilePath = string.Format("{0}Reports\\Notes\\{1}.rdlc", fileDirPath, $"rptNoteDAVILA");
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            System.Text.Encoding.GetEncoding("windows-1252");
+            Dictionary<string, string> parameters = new Dictionary<string, string>();            
+            
             LocalReport report = new LocalReport(rdlcFilePath);
 
             //signatures images 
@@ -1205,7 +1205,7 @@ namespace KyoS.Web.Controllers
             parameters.Add("num_of_obj", num_of_obj);
             parameters.Add("obj_text", obj_text);
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*,
+            return File(result.MainStream, "application/pdf"/*,
                         $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf"*/);
         }
 
@@ -1216,8 +1216,7 @@ namespace KyoS.Web.Controllers
             string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
             string rdlcFilePath = string.Format("{0}Reports\\Notes\\{1}.rdlc", fileDirPath, $"rptNoteLARKINBEHAVIOR");
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            System.Text.Encoding.GetEncoding("windows-1252");
+            
             LocalReport report = new LocalReport(rdlcFilePath);
 
             //signatures images 
@@ -1426,6 +1425,8 @@ namespace KyoS.Web.Controllers
                 i = ++i;
             }
 
+            var setting = $"Setting: {workdayClient.Client.MTPs.FirstOrDefault().Setting}";
+
             parameters.Add("date", date);
             parameters.Add("dateFacilitator", dateFacilitator);
             parameters.Add("dateSupervisor", dateSupervisor);
@@ -1449,9 +1450,10 @@ namespace KyoS.Web.Controllers
             parameters.Add("num_of_goal5", num_of_goal5);
             parameters.Add("goal_text5", goal_text5);
             parameters.Add("goal5", goal5.ToString());
+            parameters.Add("setting", setting);
 
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*,
+            return File(result.MainStream, "application/pdf"/*,
                         $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf"*/);
         }
 
@@ -1462,8 +1464,7 @@ namespace KyoS.Web.Controllers
             string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
             string rdlcFilePath = string.Format("{0}Reports\\Notes\\{1}.rdlc", fileDirPath, $"rptNoteSolAndVida");
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            System.Text.Encoding.GetEncoding("windows-1252");
+            
             LocalReport report = new LocalReport(rdlcFilePath);
 
             //signatures images 
@@ -1603,7 +1604,7 @@ namespace KyoS.Web.Controllers
             parameters.Add("num_of_obj", num_of_obj);
             parameters.Add("obj_text", obj_text);
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*,
+            return File(result.MainStream, "application/pdf"/*,
                         $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf"*/);
         }
 
@@ -1614,8 +1615,7 @@ namespace KyoS.Web.Controllers
             string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
             string rdlcFilePath = string.Format("{0}Reports\\Notes\\{1}.rdlc", fileDirPath, $"rptAbsenceNoteLARKINBEHAVIOR");
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            System.Text.Encoding.GetEncoding("windows-1252");
+            
             LocalReport report = new LocalReport(rdlcFilePath);
 
             //datasource
@@ -1646,8 +1646,7 @@ namespace KyoS.Web.Controllers
             string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
             string rdlcFilePath = string.Format("{0}Reports\\Notes\\{1}.rdlc", fileDirPath, $"rptAbsenceNoteSolAndVida");
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            System.Text.Encoding.GetEncoding("windows-1252");
+            
             LocalReport report = new LocalReport(rdlcFilePath);
 
             //datasource
@@ -1678,8 +1677,7 @@ namespace KyoS.Web.Controllers
             string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
             string rdlcFilePath = string.Format("{0}Reports\\Notes\\{1}.rdlc", fileDirPath, $"rptAbsenceNoteDAVILA");
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            System.Text.Encoding.GetEncoding("windows-1252");
+            
             LocalReport report = new LocalReport(rdlcFilePath);
 
             //datasource
@@ -1692,7 +1690,7 @@ namespace KyoS.Web.Controllers
             report.AddDataSource("dsFacilitators", facilitators);
             report.AddDataSource("dsSupervisors", null);
 
-            var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
+            var date = workdayClient.Workday.Date.ToShortDateString();
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
 
             parameters.Add("date", date);

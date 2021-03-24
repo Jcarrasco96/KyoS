@@ -22,7 +22,7 @@ namespace KyoS.Web.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly IDateHelper _dateHelper;
         private readonly IWebHostEnvironment _webhostEnvironment;
-        private readonly IImageHelper _imageHelper;
+        private readonly IImageHelper _imageHelper;        
 
         public ReportsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IDateHelper dateHelper, IWebHostEnvironment webHostEnvironment, IImageHelper imageHelper)
         {
@@ -32,6 +32,11 @@ namespace KyoS.Web.Controllers
             _dateHelper = dateHelper;
             _webhostEnvironment = webHostEnvironment;
             _imageHelper = imageHelper;
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+        }
+        ~ReportsController()
+        {
+            GC.Collect();
         }
 
         public IActionResult Index()
@@ -95,12 +100,12 @@ namespace KyoS.Web.Controllers
 
             //report
             string mimetype = "";
+            int extension = 1;
             //string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
             string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Generics\\rptDailyAssistance.rdlc";
             //string rdlcFilePath = string.Format("{0}Reports\\Generics\\{1}.rdlc", fileDirPath, "rptDailyAssistance");
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            System.Text.Encoding.GetEncoding("windows-1252");
+            Dictionary<string, string> parameters = new Dictionary<string, string>();            
+            
             LocalReport report = new LocalReport(rdlcFilePath);
 
             //signatures images 
@@ -170,9 +175,42 @@ namespace KyoS.Web.Controllers
             parameters.Add("AdditionalComments1", additionalComments1);
             parameters.Add("AdditionalComments2", additionalComments2);
 
-            var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
+            var result = report.Execute(RenderType.Pdf, extension, parameters, mimetype);
             return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf /*,
                         $"DailyAssistance_{workdayClientList.First().Workday.Date.ToShortDateString()}.pdf"*/);
-        }        
+        }
+
+        public IActionResult PrintGroup(int? id)
+        {
+            string mimetype = "";
+            int extension = 1;
+            //string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Groups\\rptGroup.rdlc";
+            //string rdlcFilePath = string.Format("{0}Reports\\Groups\\{1}.rdlc", fileDirPath, "rptGroup");
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            
+            LocalReport report = new LocalReport(rdlcFilePath);
+
+            /*GroupEntity groupEntity = _context.Groups.Include(f => f.Facilitator)
+                                                     .ThenInclude(c => c.Clinic).FirstOrDefault(g => g.Id == id);
+
+            List<ClinicEntity> clinics = new List<ClinicEntity> { groupEntity.Facilitator.Clinic };
+            List<GroupEntity> groups = new List<GroupEntity> { groupEntity };
+            List<ClientEntity> clients = _context.Clients.Where(c => c.Group.Id == groupEntity.Id).ToList();
+            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { groupEntity.Facilitator };
+
+            report.AddDataSource("dsGroups", groups);
+            report.AddDataSource("dsClinics", clinics);
+            report.AddDataSource("dsFacilitators", facilitators);
+            report.AddDataSource("dsClients", clients);*/
+
+            //var sesion = (groupEntity.Am) ? "Session: AM" : "Session: PM";
+            //var sesion = "Session: AM";
+            //parameters.Add("sesion", sesion);
+
+            var result = report.Execute(RenderType.Pdf, extension, parameters, mimetype);
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*, 
+                        $"Group_{groupEntity.Facilitator.Name}_{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}.pdf"*/);
+        }
     }
 }
