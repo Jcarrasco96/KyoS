@@ -239,6 +239,9 @@
             <Left>0.025in</Left>
             <Height>0.25in</Height>
             <Width>1.05208in</Width>
+            <Visibility>
+              <Hidden>=First(Fields!Session.Value, "dsWorkdays_Clients1") = ""</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -276,6 +279,9 @@
             <Height>0.25in</Height>
             <Width>3.53125in</Width>
             <ZIndex>1</ZIndex>
+            <Visibility>
+              <Hidden>=First(Fields!Session.Value, "dsWorkdays_Clients1") = ""</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -310,6 +316,9 @@
             <Height>0.25in</Height>
             <Width>0.8125in</Width>
             <ZIndex>2</ZIndex>
+            <Visibility>
+              <Hidden>=First(Fields!Session.Value, "dsWorkdays_Clients1") = ""</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -345,6 +354,9 @@
             <Height>0.25in</Height>
             <Width>1.13542in</Width>
             <ZIndex>3</ZIndex>
+            <Visibility>
+              <Hidden>=First(Fields!Session.Value, "dsWorkdays_Clients1") = ""</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -380,6 +392,9 @@
             <Height>0.25in</Height>
             <Width>1.16667in</Width>
             <ZIndex>4</ZIndex>
+            <Visibility>
+              <Hidden>=First(Fields!Session.Value, "dsWorkdays_Clients1") = ""</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -412,6 +427,9 @@
             <Height>0.25in</Height>
             <Width>1in</Width>
             <ZIndex>5</ZIndex>
+            <Visibility>
+              <Hidden>=First(Fields!Session.Value, "dsWorkdays_Clients1") = ""</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -598,6 +616,9 @@
             <Height>0.5in</Height>
             <Width>6.42084in</Width>
             <ZIndex>6</ZIndex>
+            <Visibility>
+              <Hidden>=First(Fields!Session.Value, "dsWorkdays_Clients1") = ""</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -629,6 +650,9 @@
             <Height>0.25in</Height>
             <Width>1.47014in</Width>
             <ZIndex>7</ZIndex>
+            <Visibility>
+              <Hidden>=First(Fields!Session.Value, "dsWorkdays_Clients1") = ""</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -663,6 +687,9 @@
             <Height>0.25in</Height>
             <Width>5.74028in</Width>
             <ZIndex>8</ZIndex>
+            <Visibility>
+              <Hidden>=First(Fields!Session.Value, "dsWorkdays_Clients1") = ""</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -683,7 +710,7 @@
             <Width>7.22986in</Width>
             <ZIndex>9</ZIndex>
             <Visibility>
-              <Hidden>=First(Fields!Session.Value, "dsWorkdays_Clients2") = ""</Hidden>
+              <Hidden>=First(Fields!Session.Value, "dsWorkdays_Clients2") = "" or First(Fields!Session.Value, "dsWorkdays_Clients1") = ""</Hidden>
             </Visibility>
             <Style>
               <Border>

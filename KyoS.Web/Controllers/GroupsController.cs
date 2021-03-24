@@ -23,15 +23,14 @@ namespace KyoS.Web.Controllers
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
-        
-        //private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IWebHostEnvironment _webhostEnvironment;        
 
-        public GroupsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
+        public GroupsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
-            //_webHostEnvironment = webHostEnvironment;
+            _webhostEnvironment = webHostEnvironment;
         }
 
         public async Task<IActionResult> Index()
@@ -394,15 +393,16 @@ namespace KyoS.Web.Controllers
         public IActionResult Print(int? id)
         {
             string mimetype = "";
-            string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
-            string rdlcFilePath = string.Format("{0}Reports\\Groups\\{1}.rdlc", fileDirPath, "rptGroup");
+            //string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Groups\\rptGroup.rdlc";
+            //string rdlcFilePath = string.Format("{0}Reports\\Groups\\{1}.rdlc", fileDirPath, "rptGroup");
             Dictionary<string, string> parameters = new Dictionary<string, string>();            
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             System.Text.Encoding.GetEncoding("windows-1252");
             LocalReport report = new LocalReport(rdlcFilePath);
             
-            GroupEntity groupEntity = _context.Groups.Include(f => f.Facilitator).
-                                              ThenInclude(c => c.Clinic).FirstOrDefault(g => g.Id == id);
+            GroupEntity groupEntity = _context.Groups.Include(f => f.Facilitator)
+                                                     .ThenInclude(c => c.Clinic).FirstOrDefault(g => g.Id == id);
             
             List<ClinicEntity> clinics = new List <ClinicEntity> { groupEntity.Facilitator.Clinic };
             List<GroupEntity> groups = new List<GroupEntity> { groupEntity };
@@ -417,26 +417,9 @@ namespace KyoS.Web.Controllers
             var sesion = (groupEntity.Am) ? "Session: AM" : "Session: PM";
             parameters.Add("sesion", sesion);
 
-            //var logopath = Url.Content(groupEntity.Facilitator.Clinic.LogoPath);
-            //var logopath = new Uri("C:\\logo.jpg");
-            //var logopath = "05fad053-f1c1-4ce8-a816-778ae3387173.jpg";
-            //var logopath = "wwwroot\\images\\Clinics\\05fad053-f1c1-4ce8-a816-778ae3387173.jpg";
-            //var logopath = "";
-            //parameters.Add("logopath", logopath);
-
-            //string paramValue = "";
-            //using (var b = new Bitmap(@"YOUR IMAGE"))
-            //{
-            //    using (var ms = new System.IO.MemoryStream())
-            //    {
-            //        b.Save(ms, ImageFormat.Bmp);
-            //        paramValue = Convert.ToBase64String(ms.ToArray());
-            //    }
-            //}
-
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet, 
-                        $"Group_{groupEntity.Facilitator.Name}_{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}.pdf");
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*, 
+                        $"Group_{groupEntity.Facilitator.Name}_{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}.pdf"*/);
         }
     }
 }

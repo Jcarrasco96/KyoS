@@ -1205,8 +1205,8 @@ namespace KyoS.Web.Controllers
             parameters.Add("num_of_obj", num_of_obj);
             parameters.Add("obj_text", obj_text);
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,
-                        $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf");
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*,
+                        $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf"*/);
         }
 
         private IActionResult LarkinNoteReport(Workday_Client workdayClient)
@@ -1451,8 +1451,8 @@ namespace KyoS.Web.Controllers
             parameters.Add("goal5", goal5.ToString());
 
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,
-                        $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf");
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*,
+                        $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf"*/);
         }
 
         private IActionResult SolAndVidaNoteReport(Workday_Client workdayClient)
@@ -1603,8 +1603,8 @@ namespace KyoS.Web.Controllers
             parameters.Add("num_of_obj", num_of_obj);
             parameters.Add("obj_text", obj_text);
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,
-                        $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf");
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*,
+                        $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf"*/);
         }
 
         private IActionResult LarkinAbsenceNoteReport(Workday_Client workdayClient)
@@ -1635,8 +1635,8 @@ namespace KyoS.Web.Controllers
             parameters.Add("dateFacilitator", dateFacilitator);                      
 
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,
-                        $"AbsenceNoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf");
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*,
+                        $"AbsenceNoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf"*/);
         }
 
         private IActionResult SolAndVidaAbsenceNoteReport(Workday_Client workdayClient)
@@ -1667,8 +1667,8 @@ namespace KyoS.Web.Controllers
             parameters.Add("dateFacilitator", dateFacilitator);
 
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,
-                        $"AbsenceNoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf");
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*,
+                        $"AbsenceNoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf"*/);
         }
 
         private IActionResult DavilaAbsenceNoteReport(Workday_Client workdayClient)
@@ -1699,8 +1699,8 @@ namespace KyoS.Web.Controllers
             parameters.Add("dateFacilitator", dateFacilitator);
 
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,
-                        $"AbsenceNoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf");
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*,
+                        $"AbsenceNoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf"*/);
         }        
 
         [Authorize(Roles = "Admin, Facilitator, Supervisor")]

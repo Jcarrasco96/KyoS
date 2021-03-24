@@ -949,20 +949,9 @@ namespace KyoS.Web.Controllers
             report.AddDataSource("dsGoals5", goals5);
             report.AddDataSource("dsObjetives5", objetives5);
 
-            //var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
-            //var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
-            //var dateSupervisor = workdayClient.Note.DateOfApprove.Value.ToShortDateString();
-            //parameters.Add("date", date);
-            //parameters.Add("dateFacilitator", dateFacilitator);
-            //parameters.Add("dateSupervisor", dateSupervisor);
-            //parameters.Add("num_of_goal", num_of_goal);
-            //parameters.Add("goal_text", goal_text);
-            //parameters.Add("num_of_obj", num_of_obj);
-            //parameters.Add("obj_text", obj_text);
-
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,
-                        $"{mtpEntity.Client.Name} - MTP.pdf");
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*,
+                        $"{mtpEntity.Client.Name} - MTP.pdf"*/);
         }
 
         private IActionResult LarkinReport(MTPEntity mtpEntity)
@@ -1051,22 +1040,11 @@ namespace KyoS.Web.Controllers
             report.AddDataSource("dsGoals4", goals4);
             report.AddDataSource("dsObjetives4", objetives4);
             report.AddDataSource("dsGoals5", goals5);
-            report.AddDataSource("dsObjetives5", objetives5);
-
-            //var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
-            //var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
-            //var dateSupervisor = workdayClient.Note.DateOfApprove.Value.ToShortDateString();
-            //parameters.Add("date", date);
-            //parameters.Add("dateFacilitator", dateFacilitator);
-            //parameters.Add("dateSupervisor", dateSupervisor);
-            //parameters.Add("num_of_goal", num_of_goal);
-            //parameters.Add("goal_text", goal_text);
-            //parameters.Add("num_of_obj", num_of_obj);
-            //parameters.Add("obj_text", obj_text);
+            report.AddDataSource("dsObjetives5", objetives5);            
 
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,
-                        $"{mtpEntity.Client.Name} - MTP.pdf");
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*,
+                        $"{mtpEntity.Client.Name} - MTP.pdf"*/);
         }
 
         private IActionResult SolAndVidaReport(MTPEntity mtpEntity)
@@ -1157,20 +1135,9 @@ namespace KyoS.Web.Controllers
             report.AddDataSource("dsGoals5", goals5);
             report.AddDataSource("dsObjetives5", objetives5);
 
-            //var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
-            //var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
-            //var dateSupervisor = workdayClient.Note.DateOfApprove.Value.ToShortDateString();
-            //parameters.Add("date", date);
-            //parameters.Add("dateFacilitator", dateFacilitator);
-            //parameters.Add("dateSupervisor", dateSupervisor);
-            //parameters.Add("num_of_goal", num_of_goal);
-            //parameters.Add("goal_text", goal_text);
-            //parameters.Add("num_of_obj", num_of_obj);
-            //parameters.Add("obj_text", obj_text);
-
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,
-                        $"{mtpEntity.Client.Name} - MTP.pdf");
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*,
+                        $"{mtpEntity.Client.Name} - MTP.pdf"*/);
         }
     }
 }

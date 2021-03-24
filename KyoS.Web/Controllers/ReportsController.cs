@@ -85,8 +85,7 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
                        
-            return DailyAssistanceReport(workdayClientList);           
-            
+            return DailyAssistanceReport(workdayClientList);    
         }
 
         private IActionResult DailyAssistanceReport(List<Workday_Client> workdayClientList)
@@ -96,8 +95,9 @@ namespace KyoS.Web.Controllers
 
             //report
             string mimetype = "";
-            string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
-            string rdlcFilePath = string.Format("{0}Reports\\Generics\\{1}.rdlc", fileDirPath, $"rptDailyAssistance");
+            //string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Generics\\rptDailyAssistance.rdlc";
+            //string rdlcFilePath = string.Format("{0}Reports\\Generics\\{1}.rdlc", fileDirPath, "rptDailyAssistance");
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             System.Text.Encoding.GetEncoding("windows-1252");
@@ -171,8 +171,8 @@ namespace KyoS.Web.Controllers
             parameters.Add("AdditionalComments2", additionalComments2);
 
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Octet,
-                        $"DailyAssistance_{workdayClientList.First().Workday.Date.ToShortDateString()}.pdf");
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf /*,
+                        $"DailyAssistance_{workdayClientList.First().Workday.Date.ToShortDateString()}.pdf"*/);
         }        
     }
 }
