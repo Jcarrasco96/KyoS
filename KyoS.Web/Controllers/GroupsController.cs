@@ -23,14 +23,16 @@ namespace KyoS.Web.Controllers
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
-        private readonly IWebHostEnvironment _webhostEnvironment;        
+        private readonly IWebHostEnvironment _webhostEnvironment;
+        private readonly IReportHelper _reportHelper;
 
-        public GroupsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IWebHostEnvironment webHostEnvironment)
+        public GroupsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IWebHostEnvironment webHostEnvironment, IReportHelper reportHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _webhostEnvironment = webHostEnvironment;
+            _reportHelper = reportHelper;
         }
 
         public async Task<IActionResult> Index()
@@ -390,35 +392,10 @@ namespace KyoS.Web.Controllers
             return View(groupViewModel);
         }
 
-        public IActionResult Print(int? id)
+        public async Task<IActionResult> Print(int id)
         {
-            string mimetype = "";
-            //string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
-            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Groups\\rptGroup.rdlc";
-            //string rdlcFilePath = string.Format("{0}Reports\\Groups\\{1}.rdlc", fileDirPath, "rptGroup");
-            Dictionary<string, string> parameters = new Dictionary<string, string>();            
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            System.Text.Encoding.GetEncoding("windows-1252");
-            LocalReport report = new LocalReport(rdlcFilePath);
-            
-            GroupEntity groupEntity = _context.Groups.Include(f => f.Facilitator)
-                                                     .ThenInclude(c => c.Clinic).FirstOrDefault(g => g.Id == id);
-            
-            List<ClinicEntity> clinics = new List <ClinicEntity> { groupEntity.Facilitator.Clinic };
-            List<GroupEntity> groups = new List<GroupEntity> { groupEntity };
-            List<ClientEntity> clients = _context.Clients.Where(c => c.Group.Id == groupEntity.Id).ToList();
-            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { groupEntity.Facilitator };
-
-            report.AddDataSource("dsGroups", groups);
-            report.AddDataSource("dsClinics", clinics);
-            report.AddDataSource("dsFacilitators", facilitators);
-            report.AddDataSource("dsClients", clients);
-
-            var sesion = (groupEntity.Am) ? "Session: AM" : "Session: PM";
-            parameters.Add("sesion", sesion);
-
-            var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*, 
+            var result = await _reportHelper.GroupAsyncReport(id);
+            return File(result, System.Net.Mime.MediaTypeNames.Application.Pdf/*, 
                         $"Group_{groupEntity.Facilitator.Name}_{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}.pdf"*/);
         }
     }

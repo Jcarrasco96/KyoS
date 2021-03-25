@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\Reports\Generics\rptDailyAssistance.rdlc" />
-    <Content Remove="wwwroot\Reports\Groups\rptGroup.rdlc" />
   </ItemGroup>
 
   <ItemGroup>
@@ -63,9 +62,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="wwwroot\Reports\Generics\rptDailyAssistance.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="wwwroot\Reports\Groups\rptGroup.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

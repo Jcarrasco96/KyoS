@@ -22,9 +22,10 @@ namespace KyoS.Web.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly IDateHelper _dateHelper;
         private readonly IWebHostEnvironment _webhostEnvironment;
-        private readonly IImageHelper _imageHelper;        
+        private readonly IImageHelper _imageHelper;
+        private readonly IReportHelper _reportHelper;
 
-        public ReportsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IDateHelper dateHelper, IWebHostEnvironment webHostEnvironment, IImageHelper imageHelper)
+        public ReportsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IDateHelper dateHelper, IWebHostEnvironment webHostEnvironment, IImageHelper imageHelper, IReportHelper reportHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
@@ -32,13 +33,9 @@ namespace KyoS.Web.Controllers
             _dateHelper = dateHelper;
             _webhostEnvironment = webHostEnvironment;
             _imageHelper = imageHelper;
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            _reportHelper = reportHelper;            
         }
-        ~ReportsController()
-        {
-            GC.Collect();
-        }
-
+                
         public IActionResult Index()
         {
             return View();
@@ -89,8 +86,10 @@ namespace KyoS.Web.Controllers
             {
                 return NotFound();
             }
-                       
-            return DailyAssistanceReport(workdayClientList);    
+
+            var result = await _reportHelper.DailyAssistanceAsyncReport(workdayClientList);
+            return File(result, System.Net.Mime.MediaTypeNames.Application.Pdf /*,
+                        $"DailyAssistance_{workdayClientList.First().Workday.Date.ToShortDateString()}.pdf"*/);
         }
 
         private IActionResult DailyAssistanceReport(List<Workday_Client> workdayClientList)

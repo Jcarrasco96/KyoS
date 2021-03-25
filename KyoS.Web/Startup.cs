@@ -24,12 +24,6 @@ namespace KyoS.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.Configure<CookiePolicyOptions>(options =>
-            //{
-            //    options.CheckConsentNeeded = context => true;
-            //    options.MinimumSameSitePolicy = SameSiteMode.None;
-            //});
-
             //passwords details
             services.AddIdentity<UserEntity, IdentityRole>(cfg =>
             {
@@ -57,6 +51,7 @@ namespace KyoS.Web
             services.AddScoped<IRenderHelper, RenderHelper>();
             services.AddScoped<IDateHelper, DateHelper>();
             services.AddScoped<ITranslateHelper, TranslateHelper>();
+            services.AddScoped<IReportHelper, ReportHelper>();
             //services.AddControllers();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();            
