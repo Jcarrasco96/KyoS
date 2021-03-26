@@ -1,10 +1,8 @@
-﻿using AspNetCore.Reporting;
-using KyoS.Web.Data;
+﻿using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -23,15 +21,13 @@ namespace KyoS.Web.Controllers
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
-        private readonly IWebHostEnvironment _webhostEnvironment;
         private readonly IReportHelper _reportHelper;
 
-        public GroupsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IWebHostEnvironment webHostEnvironment, IReportHelper reportHelper)
+        public GroupsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IReportHelper reportHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
-            _webhostEnvironment = webHostEnvironment;
             _reportHelper = reportHelper;
         }
 
@@ -260,7 +256,7 @@ namespace KyoS.Web.Controllers
 
             clients = await _context.Clients.Include(c => c.MTPs).ToListAsync();
             clients = clients.Where(c => c.MTPs.Count > 0).ToList();
-            client_list = new MultiSelectList(clients, "Id", "Name", groupViewModel.Clients.Select(c=>c.Id));
+            client_list = new MultiSelectList(clients, "Id", "Name", groupViewModel.Clients.Select(c => c.Id));
             ViewData["clients"] = client_list;
             return View(groupViewModel);
         }
@@ -320,7 +316,7 @@ namespace KyoS.Web.Controllers
                         {
                             client.Group = group;
                             _context.Update(client);
-                        
+
                             //verifico que el cliente tenga la asistencia necesaria dada su fecha de admision
                             admission_date = client.MTPs.First().AdmisionDate;
                             workdays = await _context.Workdays
@@ -353,7 +349,7 @@ namespace KyoS.Web.Controllers
                                     }
                                     workday_client.Facilitator = group.Facilitator;
                                     _context.Update(workday_client);
-                                } */                               
+                                } */
                             }
                         }
                     }
@@ -396,7 +392,7 @@ namespace KyoS.Web.Controllers
         {
             var result = await _reportHelper.GroupAsyncReport(id);
             return File(result, System.Net.Mime.MediaTypeNames.Application.Pdf/*, 
-                        $"Group_{groupEntity.Facilitator.Name}_{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}.pdf"*/);
-        }
+                        $"Group_{groupEntity.Facilitator.Name}_{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}.pdf"*/);            
+        }        
     }
 }

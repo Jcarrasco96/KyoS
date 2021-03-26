@@ -6102,9 +6102,9 @@
               </Paragraphs>
               <rd:DefaultName>Name3</rd:DefaultName>
               <Top>0.02917in</Top>
-              <Left>5.57198in</Left>
+              <Left>5.05417in</Left>
               <Height>0.24583in</Height>
-              <Width>2.63597in</Width>
+              <Width>3.15378in</Width>
               <ZIndex>4</ZIndex>
               <Style>
                 <Border>
@@ -6247,7 +6247,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=First(Fields!Name.Value, "dsSupervisors")</Value>
+                      <Value>=First(Fields!Name.Value, "dsSupervisors") &amp; " " &amp; First(Fields!Code.Value, "dsSupervisors")</Value>
                       <Style>
                         <FontFamily>times New Roman</FontFamily>
                         <FontWeight>Bold</FontWeight>
@@ -6261,9 +6261,9 @@
               </Paragraphs>
               <rd:DefaultName>Name4</rd:DefaultName>
               <Top>0.49311in</Top>
-              <Left>5.68336in</Left>
+              <Left>5.05417in</Left>
               <Height>0.22553in</Height>
-              <Width>2.52459in</Width>
+              <Width>3.15378in</Width>
               <ZIndex>9</ZIndex>
               <Style>
                 <Border>

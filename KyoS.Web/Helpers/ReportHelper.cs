@@ -34,7 +34,8 @@ namespace KyoS.Web.Helpers
             System.Text.Encoding.GetEncoding("windows-1252");
             LocalReport report = new LocalReport(rdlcFilePath);
 
-            GroupEntity groupEntity = await _context.Groups.Include(f => f.Facilitator)
+            GroupEntity groupEntity = await _context.Groups
+                                                    .Include(f => f.Facilitator)
                                                     .ThenInclude(c => c.Clinic).FirstOrDefaultAsync(g => g.Id == id);
 
             List<ClinicEntity> clinics = new List<ClinicEntity> { groupEntity.Facilitator.Clinic };
@@ -66,6 +67,8 @@ namespace KyoS.Web.Helpers
             string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Generics\\rptDailyAssistance.rdlc";
             //string rdlcFilePath = string.Format("{0}Reports\\Generics\\{1}.rdlc", fileDirPath, "rptDailyAssistance");
             Dictionary<string, string> parameters = new Dictionary<string, string>();
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            System.Text.Encoding.GetEncoding("windows-1252");
 
             LocalReport report = new LocalReport(rdlcFilePath);
 
