@@ -31,8 +31,9 @@ namespace KyoS.Web.Controllers
         private readonly IDateHelper _dateHelper;
         private readonly ITranslateHelper _translateHelper;
         private readonly IWebHostEnvironment _webhostEnvironment;
+        private readonly IReportHelper _reportHelper;
 
-        public NotesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IDateHelper dateHelper, ITranslateHelper translateHelper, IWebHostEnvironment webHostEnvironment, IImageHelper imageHelper)
+        public NotesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IDateHelper dateHelper, ITranslateHelper translateHelper, IWebHostEnvironment webHostEnvironment, IImageHelper imageHelper, IReportHelper reportHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
@@ -41,6 +42,7 @@ namespace KyoS.Web.Controllers
             _translateHelper = translateHelper;
             _webhostEnvironment = webHostEnvironment;
             _imageHelper = imageHelper;
+            _reportHelper = reportHelper;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
         }
         [Authorize(Roles = "Admin, Facilitator")]
@@ -1608,35 +1610,10 @@ namespace KyoS.Web.Controllers
                         $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf"*/);
         }
 
-        private IActionResult LarkinAbsenceNoteReport(Workday_Client workdayClient)
+        private async Task<IActionResult> LarkinAbsenceNoteReport(Workday_Client workdayClient)
         {
-            //report
-            string mimetype = "";
-            string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
-            string rdlcFilePath = string.Format("{0}Reports\\Notes\\{1}.rdlc", fileDirPath, $"rptAbsenceNoteLARKINBEHAVIOR");
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            
-            LocalReport report = new LocalReport(rdlcFilePath);
-
-            //datasource
-            List<Workday_Client> workdaysclients = new List<Workday_Client> { workdayClient };
-            List<ClientEntity> clients = new List<ClientEntity> { workdayClient.Client };
-            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClient.Facilitator };
-                        
-            report.AddDataSource("dsWorkdays_Clients", workdaysclients);
-            report.AddDataSource("dsClients", clients);            
-            report.AddDataSource("dsFacilitators", facilitators);
-            report.AddDataSource("dsSupervisors", null);            
-            
-            var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
-            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();                       
-
-            parameters.Add("date", date);
-            parameters.Add("dateFacilitator", dateFacilitator);                      
-
-            var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*,
-                        $"AbsenceNoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf"*/);
+            var result = await _reportHelper.LarkinAbsenceNoteAsyncReport(workdayClient);
+            return await Task.Run(() => File(result, System.Net.Mime.MediaTypeNames.Application.Pdf));
         }
 
         private IActionResult SolAndVidaAbsenceNoteReport(Workday_Client workdayClient)
@@ -2011,7 +1988,7 @@ namespace KyoS.Web.Controllers
                                                        .ToListAsync());
         }
 
-        public IActionResult PrintAbsenceNote(int id)
+        public async Task<IActionResult> PrintAbsenceNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
                                                           .Include(wc => wc.Facilitator)
@@ -2032,7 +2009,7 @@ namespace KyoS.Web.Controllers
             }
             if (workdayClient.Client.Clinic.Name == "LARKIN BEHAVIOR")
             {
-                return LarkinAbsenceNoteReport(workdayClient);
+                return await LarkinAbsenceNoteReport(workdayClient);
             }
             if (workdayClient.Client.Clinic.Name == "SOL & VIDA")
             {

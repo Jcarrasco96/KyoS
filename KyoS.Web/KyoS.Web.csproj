@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\Reports\Generics\rptDailyAssistance.rdlc" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Reports\Generics\rptDailyAssistance.rdlc" />
     <None Remove="Reports\Groups\rptGroup.rdlc" />
     <None Remove="Reports\MTPs\rptMTPDavila.rdlc" />
@@ -49,7 +45,7 @@
     <EmbeddedResource Include="Reports\Notes\rptAbsenceNoteSolAndVida.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Notes\rptAbsenceNoteLARKINBEHAVIOR.rdlc">
+    <EmbeddedResource Include="wwwroot\Reports\Notes\rptAbsenceNoteLARKINBEHAVIOR.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Notes\rptNoteSolAndVida.rdlc">
@@ -59,9 +55,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Notes\rptNoteDAVILA.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="wwwroot\Reports\Generics\rptDailyAssistance.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
@@ -94,6 +87,18 @@
     <Folder Include="Reports\Groups\" />
     <Folder Include="wwwroot\images\Clinics\" />
     <Folder Include="wwwroot\images\Signatures\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\Reports\Generics\rptDailyAssistance.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\Reports\Groups\rptGroup.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\Reports\Notes\rptAbsenceNoteLARKINBEHAVIOR.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

@@ -10,5 +10,6 @@ namespace KyoS.Web.Helpers
     {
         Task<byte[]>  GroupAsyncReport(int id);
         Task<byte[]>  DailyAssistanceAsyncReport(List<Workday_Client> workdayClientList);
+        Task<byte[]> LarkinAbsenceNoteAsyncReport(Workday_Client workdayClient);
     }
 }

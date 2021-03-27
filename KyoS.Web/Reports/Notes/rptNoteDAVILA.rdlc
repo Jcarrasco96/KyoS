@@ -4579,6 +4579,7 @@
                       <Value>=First(Fields!Name.Value, "dsFacilitators") &amp; ", BS"</Value>
                       <Style>
                         <FontFamily>times New Roman</FontFamily>
+                        <FontSize>9pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
@@ -4738,6 +4739,7 @@
                       <Value>=First(Fields!Name.Value, "dsSupervisors")</Value>
                       <Style>
                         <FontFamily>times New Roman</FontFamily>
+                        <FontSize>9pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
@@ -4773,6 +4775,7 @@
                       <Value>=Parameters!dateFacilitator.Value</Value>
                       <Style>
                         <FontFamily>times New Roman</FontFamily>
+                        <FontSize>9pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>

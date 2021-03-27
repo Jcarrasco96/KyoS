@@ -26,12 +26,11 @@ namespace KyoS.Web.Helpers
         public async Task<byte[]> GroupAsyncReport(int id)
         {
             string mimetype = "";
-            //string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
-            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Groups\\rptGroup.rdlc";
-            //string rdlcFilePath = string.Format("{0}Reports\\Groups\\{1}.rdlc", fileDirPath, "rptGroup");
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Groups\\rptGroup.rdlc";            
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             System.Text.Encoding.GetEncoding("windows-1252");
+            
             LocalReport report = new LocalReport(rdlcFilePath);
 
             GroupEntity groupEntity = await _context.Groups
@@ -48,8 +47,8 @@ namespace KyoS.Web.Helpers
             report.AddDataSource("dsFacilitators", facilitators);
             report.AddDataSource("dsClients", clients);
 
-            var sesion = (groupEntity.Am) ? "Session: AM" : "Session: PM";
-            parameters.Add("sesion", sesion);
+            /*var sesion = (groupEntity.Am) ? "Session: AM" : "Session: PM";
+            parameters.Add("sesion", sesion);*/
 
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
             return result.MainStream;
@@ -62,10 +61,8 @@ namespace KyoS.Web.Helpers
 
             //report
             string mimetype = "";
-            int extension = 1;
-            //string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
-            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Generics\\rptDailyAssistance.rdlc";
-            //string rdlcFilePath = string.Format("{0}Reports\\Generics\\{1}.rdlc", fileDirPath, "rptDailyAssistance");
+            int extension = 1;           
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Generics\\rptDailyAssistance.rdlc";            
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             System.Text.Encoding.GetEncoding("windows-1252");
@@ -81,27 +78,6 @@ namespace KyoS.Web.Helpers
                 path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClientList.First().Facilitator.Clinic.LogoPath)}");
                 stream1 = _imageHelper.ImageToByteArray(path);
             }
-
-            //datasource            
-            List<ClinicEntity> clinics = new List<ClinicEntity> { workdayClientList.First().Facilitator.Clinic };
-            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClientList.First().Facilitator };
-            List<ImageArray> images = new List<ImageArray> { new ImageArray { ImageStream1 = stream1, ImageStream2 = stream2 } };
-
-            int to = 14 - am_list.Count();
-            for (int i = 0; i < to; i++)
-            {
-                am_list.Add(null);
-            }
-            to = 14 - pm_list.Count();
-            for (int k = 0; k < to; k++)
-            {
-                pm_list.Add(null);
-            }
-            report.AddDataSource("dsWorkdays_Clients1", am_list);
-            report.AddDataSource("dsWorkdays_Clients2", pm_list);
-            report.AddDataSource("dsClinics", clinics);
-            report.AddDataSource("dsFacilitators", facilitators);
-            report.AddDataSource("dsImages", images);
 
             var date = workdayClientList.First().Workday.Date.ToShortDateString();
             var additionalComments1 = string.Empty;
@@ -133,14 +109,68 @@ namespace KyoS.Web.Helpers
                 }
             }
 
-            parameters.Add("date", date);
-            parameters.Add("session1", "AM");
-            parameters.Add("session2", "PM");
-            parameters.Add("AdditionalComments1", additionalComments1);
-            parameters.Add("AdditionalComments2", additionalComments2);
+            //datasource            
+            List<ClinicEntity> clinics = new List<ClinicEntity> { workdayClientList.First().Facilitator.Clinic };
+            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClientList.First().Facilitator };
+            List<ImageArray> images = new List<ImageArray> { new ImageArray { ImageStream1 = stream1, ImageStream2 = stream2 } };
+            List<ParametersOfDailyAssistance> parametersList = new List<ParametersOfDailyAssistance> { new ParametersOfDailyAssistance 
+                                                                                                         {
+                                                                                                          date = date,
+                                                                                                          session1 = "AM",
+                                                                                                          session2 = "PM",
+                                                                                                          AdditionalComments1 = additionalComments1,
+                                                                                                          AdditionalComments2 = additionalComments2
+                                                                                                          } 
+                                                                                                      };
+            int to = 14 - am_list.Count();
+            for (int i = 0; i < to; i++)
+            {
+                am_list.Add(null);
+            }
+            to = 14 - pm_list.Count();
+            for (int k = 0; k < to; k++)
+            {
+                pm_list.Add(null);
+            }
+            report.AddDataSource("dsWorkdays_Clients1", am_list);
+            report.AddDataSource("dsWorkdays_Clients2", pm_list);
+            report.AddDataSource("dsClinics", clinics);
+            report.AddDataSource("dsFacilitators", facilitators);
+            report.AddDataSource("dsImages", images);
+            report.AddDataSource("dsParameters", parametersList);          
 
-            var result = report.Execute(RenderType.Pdf, extension, parameters, mimetype);
+            var result = report.Execute(RenderType.Pdf, extension, parameters, mimetype);            
             return result.MainStream;
-        }        
+        }
+
+        public async Task<byte[]> LarkinAbsenceNoteAsyncReport(Workday_Client workdayClient)
+        {
+            //report
+            string mimetype = "";
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Notes\\rptAbsenceNoteLARKINBEHAVIOR.rdlc";
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            System.Text.Encoding.GetEncoding("windows-1252");
+
+            LocalReport report = new LocalReport(rdlcFilePath);
+
+            var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
+            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+
+            //datasource
+            List<Workday_Client> workdaysclients = new List<Workday_Client> { workdayClient };
+            List<ClientEntity> clients = new List<ClientEntity> { workdayClient.Client };
+            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClient.Facilitator };
+            List<ParametersOfAbsenceNoteLarkin> parametersList = new List<ParametersOfAbsenceNoteLarkin> { new ParametersOfAbsenceNoteLarkin { date = date, dateFacilitator = dateFacilitator } };
+
+            report.AddDataSource("dsWorkdays_Clients", workdaysclients);
+            report.AddDataSource("dsClients", clients);
+            report.AddDataSource("dsFacilitators", facilitators);
+            report.AddDataSource("dsSupervisors", null);
+            report.AddDataSource("dsParameters", parametersList);
+
+            var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);            
+            return result.MainStream;
+        }
     }
 }

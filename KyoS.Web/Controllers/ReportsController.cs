@@ -87,9 +87,8 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            var result = await _reportHelper.DailyAssistanceAsyncReport(workdayClientList);
-            return File(result, System.Net.Mime.MediaTypeNames.Application.Pdf /*,
-                        $"DailyAssistance_{workdayClientList.First().Workday.Date.ToShortDateString()}.pdf"*/);
+            var result = await _reportHelper.DailyAssistanceAsyncReport(workdayClientList);            
+            return await Task.Run(() => File(result, System.Net.Mime.MediaTypeNames.Application.Pdf));       
         }
     }
 }

@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
@@ -22,7 +21,7 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IReportHelper _reportHelper;
-
+        
         public GroupsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IReportHelper reportHelper)
         {
             _context = context;
@@ -389,10 +388,9 @@ namespace KyoS.Web.Controllers
         }
 
         public async Task<IActionResult> Print(int id)
-        {
+        {            
             var result = await _reportHelper.GroupAsyncReport(id);
-            return File(result, System.Net.Mime.MediaTypeNames.Application.Pdf/*, 
-                        $"Group_{groupEntity.Facilitator.Name}_{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}.pdf"*/);            
+            return await Task.Run(() => File(result, System.Net.Mime.MediaTypeNames.Application.Pdf));            
         }        
     }
 }

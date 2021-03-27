@@ -44,6 +44,13 @@
       </ConnectionProperties>
       <rd:DataSourceID>f66d0d5b-5728-422b-a3be-154feb5991be</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="KyoSCommonHelpers1">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>7e8ddfdf-d834-4408-84ea-91f0afece755</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="dsImages">
@@ -211,6 +218,39 @@
         <rd:ObjectDataSourceType>RDLCDesign.DBF.Workday_Client, RDLCDesign, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
+    <DataSet Name="dsParameters">
+      <Query>
+        <DataSourceName>KyoSCommonHelpers1</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="AdditionalComments1">
+          <DataField>AdditionalComments1</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AdditionalComments2">
+          <DataField>AdditionalComments2</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="date">
+          <DataField>date</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="session1">
+          <DataField>session1</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="session2">
+          <DataField>session2</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>KyoS.Common.Helpers</rd:DataSetName>
+        <rd:TableName>ParametersOfDailyAssistance</rd:TableName>
+        <rd:ObjectDataSourceType>KyoS.Common.Helpers.ParametersOfDailyAssistance, KyoS.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
   </DataSets>
   <ReportSections>
     <ReportSection>
@@ -336,7 +376,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=Parameters!date.Value</Value>
+                    <Value>=First(Fields!date.Value, "dsParameters")</Value>
                     <Style>
                       <FontFamily>TIMEs New Roman</FontFamily>
                       <TextDecoration>Underline</TextDecoration>
@@ -412,7 +452,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=Parameters!session1.Value</Value>
+                    <Value>=First(Fields!session1.Value, "dsParameters")</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
                     </Style>
@@ -671,7 +711,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=Parameters!AdditionalComments1.Value</Value>
+                    <Value>=First(Fields!AdditionalComments1.Value, "dsParameters")</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
                       <TextDecoration>Underline</TextDecoration>
@@ -839,7 +879,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=Parameters!date.Value</Value>
+                    <Value>=First(Fields!date.Value, "dsParameters")</Value>
                     <Style>
                       <FontFamily>TIMEs New Roman</FontFamily>
                       <TextDecoration>Underline</TextDecoration>
@@ -915,7 +955,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=Parameters!session2.Value</Value>
+                    <Value>=First(Fields!session2.Value, "dsParameters")</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
                     </Style>
@@ -1174,7 +1214,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=Parameters!AdditionalComments2.Value</Value>
+                    <Value>=First(Fields!AdditionalComments2.Value, "dsParameters")</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
                       <TextDecoration>Underline</TextDecoration>
@@ -1334,63 +1374,10 @@
       </Page>
     </ReportSection>
   </ReportSections>
-  <ReportParameters>
-    <ReportParameter Name="date">
-      <DataType>String</DataType>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="session1">
-      <DataType>String</DataType>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="AdditionalComments1">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="session2">
-      <DataType>String</DataType>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="AdditionalComments2">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-  </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
       <NumberOfColumns>4</NumberOfColumns>
       <NumberOfRows>2</NumberOfRows>
-      <CellDefinitions>
-        <CellDefinition>
-          <ColumnIndex>0</ColumnIndex>
-          <RowIndex>0</RowIndex>
-          <ParameterName>date</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>1</ColumnIndex>
-          <RowIndex>0</RowIndex>
-          <ParameterName>session1</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>2</ColumnIndex>
-          <RowIndex>0</RowIndex>
-          <ParameterName>AdditionalComments1</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>3</ColumnIndex>
-          <RowIndex>0</RowIndex>
-          <ParameterName>session2</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>0</ColumnIndex>
-          <RowIndex>1</RowIndex>
-          <ParameterName>AdditionalComments2</ParameterName>
-        </CellDefinition>
-      </CellDefinitions>
     </GridLayoutDefinition>
   </ReportParametersLayout>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
