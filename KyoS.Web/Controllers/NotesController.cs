@@ -1595,6 +1595,19 @@ namespace KyoS.Web.Controllers
             report.AddDataSource("dsThemes4", themes4);
             report.AddDataSource("dsImages", images);
 
+            i = 0;
+            var diagnosis = string.Empty;
+            foreach (var item in workdayClient.Client.MTPs.FirstOrDefault().Diagnosis)
+            {
+                if (i == 0)
+                    diagnosis = item.Code;
+                else
+                    diagnosis = $"{diagnosis}, {item.Code}";
+                i = ++i;
+            }
+
+            var setting = $"Setting: {workdayClient.Client.MTPs.FirstOrDefault().Setting}";
+
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.Note.DateOfApprove.Value.ToShortDateString();
@@ -1605,9 +1618,10 @@ namespace KyoS.Web.Controllers
             parameters.Add("goal_text", goal_text);
             parameters.Add("num_of_obj", num_of_obj);
             parameters.Add("obj_text", obj_text);
+            parameters.Add("diagnosis", diagnosis);
+            parameters.Add("setting", setting);
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, "application/pdf"/*,
-                        $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf"*/);
+            return File(result.MainStream, "application/pdf");
         }
 
         private async Task<IActionResult> LarkinAbsenceNoteReport(Workday_Client workdayClient)
@@ -1616,35 +1630,10 @@ namespace KyoS.Web.Controllers
             return await Task.Run(() => File(result, System.Net.Mime.MediaTypeNames.Application.Pdf));
         }
 
-        private IActionResult SolAndVidaAbsenceNoteReport(Workday_Client workdayClient)
+        private async Task<IActionResult> SolAndVidaAbsenceNoteReport(Workday_Client workdayClient)
         {
-            //report
-            string mimetype = "";
-            string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
-            string rdlcFilePath = string.Format("{0}Reports\\Notes\\{1}.rdlc", fileDirPath, $"rptAbsenceNoteSolAndVida");
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            
-            LocalReport report = new LocalReport(rdlcFilePath);
-
-            //datasource
-            List<Workday_Client> workdaysclients = new List<Workday_Client> { workdayClient };
-            List<ClientEntity> clients = new List<ClientEntity> { workdayClient.Client };
-            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClient.Facilitator };
-
-            report.AddDataSource("dsWorkdays_Clients", workdaysclients);
-            report.AddDataSource("dsClients", clients);
-            report.AddDataSource("dsFacilitators", facilitators);
-            report.AddDataSource("dsSupervisors", null);
-
-            var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
-            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
-
-            parameters.Add("date", date);
-            parameters.Add("dateFacilitator", dateFacilitator);
-
-            var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*,
-                        $"AbsenceNoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf"*/);
+            var result = await _reportHelper.SolAndVidaAbsenceNoteAsyncReport(workdayClient);
+            return await Task.Run(() => File(result, System.Net.Mime.MediaTypeNames.Application.Pdf));
         }
 
         private IActionResult DavilaAbsenceNoteReport(Workday_Client workdayClient)
@@ -2013,7 +2002,7 @@ namespace KyoS.Web.Controllers
             }
             if (workdayClient.Client.Clinic.Name == "SOL & VIDA")
             {
-                return SolAndVidaAbsenceNoteReport(workdayClient);
+                return await SolAndVidaAbsenceNoteReport(workdayClient);
             }
 
             return null;

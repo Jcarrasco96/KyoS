@@ -69,9 +69,6 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> PrintDailyAssistance(int id)
         {
-            UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
-                                                         .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-
             List<Workday_Client> workdayClientList = await _context.Workdays_Clients
                                                                .Include(wc => wc.Facilitator)
                                                                .ThenInclude(f => f.Clinic)

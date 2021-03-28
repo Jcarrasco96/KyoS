@@ -135,6 +135,13 @@
       </ConnectionProperties>
       <rd:DataSourceID>c45a56d6-5e36-424a-8c90-47d7cfbb60a5</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="KyoSCommonHelpers1">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>4bdb04a6-223d-44a6-9d0f-4f1fcd7aabe8</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="dsWorkdays_Clients">
@@ -254,6 +261,27 @@
         <rd:DataSetName>RDLCDesign.DBF</rd:DataSetName>
         <rd:TableName>Facilitator</rd:TableName>
         <rd:ObjectDataSourceType>RDLCDesign.DBF.Facilitator, RDLCDesign, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+    <DataSet Name="dsParameters">
+      <Query>
+        <DataSourceName>KyoSCommonHelpers1</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="date">
+          <DataField>date</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="dateFacilitator">
+          <DataField>dateFacilitator</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>KyoS.Common.Helpers</rd:DataSetName>
+        <rd:TableName>ParametersOfAbsenceNoteLarkin</rd:TableName>
+        <rd:ObjectDataSourceType>KyoS.Common.Helpers.ParametersOfAbsenceNoteLarkin, KyoS.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
@@ -400,7 +428,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=Parameters!date.Value</Value>
+                    <Value>=First(Fields!date.Value, "dsParameters")</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
                       <FontWeight>Bold</FontWeight>
@@ -861,7 +889,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Parameters!dateFacilitator.Value</Value>
+                      <Value>=First(Fields!dateFacilitator.Value, "dsParameters")</Value>
                       <Style>
                         <FontFamily>times New Roman</FontFamily>
                         <FontWeight>Bold</FontWeight>

@@ -16,8 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Reports\Generics\rptDailyAssistance.rdlc" />
-    <None Remove="Reports\Groups\rptGroup.rdlc" />
     <None Remove="Reports\MTPs\rptMTPDavila.rdlc" />
     <None Remove="Reports\MTPs\rptMTPLarkinBehavior.rdlc" />
     <None Remove="Reports\MTPs\rptMTPSolAndVida.rdlc" />
@@ -42,7 +40,7 @@
     <EmbeddedResource Include="Reports\Notes\rptAbsenceNoteDAVILA.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Notes\rptAbsenceNoteSolAndVida.rdlc">
+    <EmbeddedResource Include="wwwroot\Reports\Notes\rptAbsenceNoteSolAndVida.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="wwwroot\Reports\Notes\rptAbsenceNoteLARKINBEHAVIOR.rdlc">
@@ -83,8 +81,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Reports\Generics\" />
-    <Folder Include="Reports\Groups\" />
     <Folder Include="wwwroot\images\Clinics\" />
     <Folder Include="wwwroot\images\Signatures\" />
   </ItemGroup>
@@ -97,6 +93,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\Reports\Notes\rptAbsenceNoteLARKINBEHAVIOR.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\Reports\Notes\rptAbsenceNoteSolAndVida.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

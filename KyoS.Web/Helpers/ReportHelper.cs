@@ -172,5 +172,38 @@ namespace KyoS.Web.Helpers
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);            
             return result.MainStream;
         }
+
+        public async Task<byte[]> SolAndVidaAbsenceNoteAsyncReport(Workday_Client workdayClient)
+        {
+            //report
+            string mimetype = "";            
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Notes\\rptAbsenceNoteSolAndVida.rdlc";
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            System.Text.Encoding.GetEncoding("windows-1252");
+
+            LocalReport report = new LocalReport(rdlcFilePath);
+
+            var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
+            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+
+            //datasource
+            List<Workday_Client> workdaysclients = new List<Workday_Client> { workdayClient };
+            List<ClientEntity> clients = new List<ClientEntity> { workdayClient.Client };
+            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClient.Facilitator };
+            List<ParametersOfAbsenceNoteLarkin> parametersList = new List<ParametersOfAbsenceNoteLarkin> { new ParametersOfAbsenceNoteLarkin { date = date, dateFacilitator = dateFacilitator } };
+
+            report.AddDataSource("dsWorkdays_Clients", workdaysclients);
+            report.AddDataSource("dsClients", clients);
+            report.AddDataSource("dsFacilitators", facilitators);
+            report.AddDataSource("dsSupervisors", null);
+            report.AddDataSource("dsParameters", parametersList);
+
+            parameters.Add("date", date);
+            parameters.Add("dateFacilitator", dateFacilitator);
+
+            var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
+            return result.MainStream;
+        }
     }
 }
