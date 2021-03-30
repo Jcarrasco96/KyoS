@@ -14,14 +14,12 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Date of admission")]
         [DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = false)]
-        //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
-        //[DisplayFormat(DataFormatString = "{0:dd'/'MM'/'yyyy}", ApplyFormatInEditMode = true)]
+        
         public DateTime AdmisionDate { get; set; }
 
         [Display(Name = "Treatment plan developed date")]
         [DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        
         public DateTime MTPDevelopedDate { get; set; }
 
         [Display(Name = "Start Time")]

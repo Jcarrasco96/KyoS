@@ -19,7 +19,6 @@
     <None Remove="Reports\MTPs\rptMTPDavila.rdlc" />
     <None Remove="Reports\MTPs\rptMTPLarkinBehavior.rdlc" />
     <None Remove="Reports\MTPs\rptMTPSolAndVida.rdlc" />
-    <None Remove="Reports\Notes\rptAbsenceNoteDAVILA.rdlc" />
     <None Remove="Reports\Notes\rptAbsenceNoteLARKINBEHAVIOR.rdlc" />
     <None Remove="Reports\Notes\rptAbsenceNoteSolAndVida.rdlc" />
     <None Remove="Reports\Notes\rptNoteDavila.rdlc" />
@@ -35,9 +34,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\MTPs\rptMTPDavila.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Notes\rptAbsenceNoteDAVILA.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="wwwroot\Reports\Notes\rptAbsenceNoteSolAndVida.rdlc">
@@ -59,6 +55,9 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
+    <PackageReference Include="FastReport.OpenSource.Data.MsSql" Version="2021.2.0" />
+    <PackageReference Include="FastReport.OpenSource.Export.PdfSimple" Version="2021.2.0" />
+    <PackageReference Include="FastReport.OpenSource.Web" Version="2021.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.1" />

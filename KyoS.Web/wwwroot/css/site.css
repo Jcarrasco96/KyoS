@@ -35,3 +35,32 @@ body {
         display: none;
     }
 }
+
+.container {
+    display: flex;
+}
+
+.reports {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+    .reports > a {
+        font-family: "Segoe UI",Arial,sans-serif;
+        font-size: 17px;
+        text-decoration: none;
+        padding: 3px 24px 4px 24px;
+        color: black;
+    }
+
+        .reports > a:hover {
+            background-color: rgb(54, 173, 244);
+            box-shadow: 0px 2px 10px -2px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+
+.webreport {
+    padding-left: 20px;
+    padding-right: 24px;
+}

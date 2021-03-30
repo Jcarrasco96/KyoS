@@ -1,6 +1,7 @@
 ﻿using KyoS.Web.Data.Entities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,7 +11,8 @@ namespace KyoS.Web.Helpers
     {
         Task<byte[]>  GroupAsyncReport(int id);
         Task<byte[]>  DailyAssistanceAsyncReport(List<Workday_Client> workdayClientList);
-        Task<byte[]> LarkinAbsenceNoteAsyncReport(Workday_Client workdayClient);
-        Task<byte[]> SolAndVidaAbsenceNoteAsyncReport(Workday_Client workdayClient);
+        Stream LarkinAbsenceNoteReport(Workday_Client workdayClient);
+        Stream SolAndVidaAbsenceNoteReport(Workday_Client workdayClient);
+        Stream DavilaAbsenceNoteReport(Workday_Client workdayClient);
     }
 }

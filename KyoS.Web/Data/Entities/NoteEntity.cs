@@ -61,6 +61,8 @@ namespace KyoS.Web.Data.Entities
         public bool Regression { get; set; }
         public bool Decompensating { get; set; }
         public bool UnableToDetermine { get; set; }
+        
+        public string Setting { get; set; }
 
         public SupervisorEntity Supervisor { get; set; }
         public ICollection<Note_Activity> Notes_Activities { get; set; }

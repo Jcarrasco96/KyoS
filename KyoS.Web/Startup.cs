@@ -70,10 +70,9 @@ namespace KyoS.Web
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();            
+            app.UseStaticFiles();
+            app.UseFastReport();
             
-            //app.UseCookiePolicy();
-
             app.UseRouting();
 
             app.UseAuthentication();

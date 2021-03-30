@@ -1,5 +1,9 @@
 ﻿using KyoS.Web.Data;
 using Microsoft.AspNetCore.Hosting;
+using FastReport.Web;
+using FastReport.Data;
+using FastReport.Utils;
+using FastReport.Export.PdfSimple;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +12,8 @@ using System.Threading.Tasks;
 using KyoS.Web.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using KyoS.Common.Helpers;
+using System.IO;
+using System.Data;
 
 namespace KyoS.Web.Helpers
 {
@@ -143,67 +149,193 @@ namespace KyoS.Web.Helpers
             return result.MainStream;
         }
 
-        public async Task<byte[]> LarkinAbsenceNoteAsyncReport(Workday_Client workdayClient)
+        public Stream LarkinAbsenceNoteReport(Workday_Client workdayClient)
         {
-            //report
-            string mimetype = "";
-            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Notes\\rptAbsenceNoteLARKINBEHAVIOR.rdlc";
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            System.Text.Encoding.GetEncoding("windows-1252");
+            WebReport WebReport = new WebReport();
+            
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Notes\\rptAbsenceNoteLARKINBEHAVIOR.frx";
 
-            LocalReport report = new LocalReport(rdlcFilePath);
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            var dataSet = new DataSet();
+            dataSet.Tables.Add(GetWorkdayClientDS(workdayClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Clients");
+            var dataSet1 = new DataSet();
+            dataSet1.Tables.Add(GetClientDS(workdayClient.Client));
+            WebReport.Report.RegisterData(dataSet1.Tables[0], "Clients");
+            var dataSet2 = new DataSet();
+            dataSet2.Tables.Add(GetFacilitatorDS(workdayClient.Facilitator));
+            WebReport.Report.RegisterData(dataSet2.Tables[0], "Facilitators");
 
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+            WebReport.Report.SetParameterValue("dateNote", date);
+            WebReport.Report.SetParameterValue("dateFacilitator", dateFacilitator);
 
-            //datasource
-            List<Workday_Client> workdaysclients = new List<Workday_Client> { workdayClient };
-            List<ClientEntity> clients = new List<ClientEntity> { workdayClient.Client };
-            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClient.Facilitator };
-            List<ParametersOfAbsenceNoteLarkin> parametersList = new List<ParametersOfAbsenceNoteLarkin> { new ParametersOfAbsenceNoteLarkin { date = date, dateFacilitator = dateFacilitator } };
+            WebReport.Report.Prepare();
 
-            report.AddDataSource("dsWorkdays_Clients", workdaysclients);
-            report.AddDataSource("dsClients", clients);
-            report.AddDataSource("dsFacilitators", facilitators);
-            report.AddDataSource("dsSupervisors", null);
-            report.AddDataSource("dsParameters", parametersList);
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+            
+            return stream;
+        }        
 
-            var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);            
-            return result.MainStream;
-        }
-
-        public async Task<byte[]> SolAndVidaAbsenceNoteAsyncReport(Workday_Client workdayClient)
+        public Stream SolAndVidaAbsenceNoteReport(Workday_Client workdayClient)
         {
-            //report
-            string mimetype = "";            
-            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Notes\\rptAbsenceNoteSolAndVida.rdlc";
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            System.Text.Encoding.GetEncoding("windows-1252");
+            WebReport WebReport = new WebReport();
 
-            LocalReport report = new LocalReport(rdlcFilePath);
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Notes\\rptAbsenceNoteSolAndVida.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            var dataSet = new DataSet();
+            dataSet.Tables.Add(GetWorkdayClientDS(workdayClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Clients");
+            var dataSet1 = new DataSet();
+            dataSet1.Tables.Add(GetClientDS(workdayClient.Client));
+            WebReport.Report.RegisterData(dataSet1.Tables[0], "Clients");
+            var dataSet2 = new DataSet();
+            dataSet2.Tables.Add(GetFacilitatorDS(workdayClient.Facilitator));
+            WebReport.Report.RegisterData(dataSet2.Tables[0], "Facilitators");
 
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+            WebReport.Report.SetParameterValue("dateNote", date);
+            WebReport.Report.SetParameterValue("dateFacilitator", dateFacilitator);
 
-            //datasource
-            List<Workday_Client> workdaysclients = new List<Workday_Client> { workdayClient };
-            List<ClientEntity> clients = new List<ClientEntity> { workdayClient.Client };
-            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClient.Facilitator };
-            List<ParametersOfAbsenceNoteLarkin> parametersList = new List<ParametersOfAbsenceNoteLarkin> { new ParametersOfAbsenceNoteLarkin { date = date, dateFacilitator = dateFacilitator } };
+            WebReport.Report.Prepare();
 
-            report.AddDataSource("dsWorkdays_Clients", workdaysclients);
-            report.AddDataSource("dsClients", clients);
-            report.AddDataSource("dsFacilitators", facilitators);
-            report.AddDataSource("dsSupervisors", null);
-            report.AddDataSource("dsParameters", parametersList);
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
 
-            parameters.Add("date", date);
-            parameters.Add("dateFacilitator", dateFacilitator);
-
-            var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return result.MainStream;
+            return stream;
         }
+
+        public Stream DavilaAbsenceNoteReport(Workday_Client workdayClient)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Notes\\rptAbsenceNoteDavila.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            var dataSet = new DataSet();
+            dataSet.Tables.Add(GetWorkdayClientDS(workdayClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Clients");
+            var dataSet1 = new DataSet();
+            dataSet1.Tables.Add(GetClientDS(workdayClient.Client));
+            WebReport.Report.RegisterData(dataSet1.Tables[0], "Clients");
+            var dataSet2 = new DataSet();
+            dataSet2.Tables.Add(GetFacilitatorDS(workdayClient.Facilitator));
+            WebReport.Report.RegisterData(dataSet2.Tables[0], "Facilitators");
+
+            var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
+            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+            WebReport.Report.SetParameterValue("dateNote", date);
+            WebReport.Report.SetParameterValue("dateFacilitator", dateFacilitator);
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+
+        #region System.Data function 
+        private DataTable GetWorkdayClientDS(Workday_Client workdayClient)
+        {
+            DataTable dt = new DataTable();
+            dt.TableName = "Workday_Client";
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("WorkdayId", typeof(int));
+            dt.Columns.Add("ClientId", typeof(int));
+            dt.Columns.Add("Session", typeof(string));
+            dt.Columns.Add("Present", typeof(bool));
+            dt.Columns.Add("FacilitatorId", typeof(int));
+            dt.Columns.Add("CauseOfNotPresent", typeof(string));
+
+            dt.Rows.Add(new object[]
+                                        {
+                                            workdayClient.Id,
+                                            workdayClient.Workday.Id,
+                                            workdayClient.Client.Id,
+                                            workdayClient.Session,
+                                            workdayClient.Present,
+                                            workdayClient.Facilitator.Id,
+                                            workdayClient.CauseOfNotPresent
+                                        });
+
+            return dt;
+        }
+
+        private DataTable GetClientDS(ClientEntity client)
+        {
+            DataTable dt = new DataTable();
+            dt.TableName = "Client";
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Gender", typeof(int));
+            dt.Columns.Add("Code", typeof(string));
+            dt.Columns.Add("ClinicId", typeof(int));
+            dt.Columns.Add("DateOfBirth", typeof(DateTime));
+            dt.Columns.Add("MedicalID", typeof(string));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("GroupId", typeof(int));
+
+            dt.Rows.Add(new object[]
+                                        {
+                                            client.Id,
+                                            client.Name,
+                                            client.Gender,
+                                            client.Code,
+                                            client.Clinic.Id,
+                                            client.DateOfBirth,
+                                            client.MedicalID,
+                                            client.Status,
+                                            client.Group.Id
+                                        });
+
+            return dt;
+        }
+
+        private DataTable GetFacilitatorDS(FacilitatorEntity facilitator)
+        {
+            DataTable dt = new DataTable();
+            dt.TableName = "Facilitator";
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Codigo", typeof(string));
+            dt.Columns.Add("ClinicId", typeof(int));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("LinkedUser", typeof(string));
+            dt.Columns.Add("SignaturePath", typeof(string));
+
+            dt.Rows.Add(new object[]
+                                        {
+                                            facilitator.Id,
+                                            facilitator.Name,
+                                            facilitator.Codigo,
+                                            facilitator.Clinic.Id,
+                                            facilitator.Status,
+                                            facilitator.LinkedUser,
+                                            facilitator.SignaturePath
+                                        });
+
+            return dt;
+        }
+        #endregion
     }
 }
