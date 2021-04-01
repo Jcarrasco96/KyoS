@@ -79,9 +79,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="wwwroot\Reports\Generics\rptDailyAssistance.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Update="wwwroot\Reports\Groups\rptGroup.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

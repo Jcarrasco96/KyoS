@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/01/2021 12:16:58" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/01/2021 14:45:59" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3gdSdCEL4wrJnF1m0Xf3Ctg==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3zo9AQ+4MAaQpPJlS3kIppg==">
       <TableDataSource Name="Workdays_Clients1" DataType="System.Int32" Enabled="true" TableName="Workdays_Clients">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="WorkdayId" DataType="System.Int32"/>
@@ -12,7 +12,7 @@
         <Column Name="CauseOfNotPresent" DataType="System.String"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3PJ+/GSgyc0eYyIaMRSSdLQ==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3MNCQ6GoUnOvqGyP7Zyvb6g==">
       <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -116,8 +116,8 @@
         <TableColumn Name="Column5" Width="434.7"/>
         <TableColumn Name="Column6" Width="170.11"/>
         <TableRow Name="Row3">
-          <TableCell Name="Cell5" Border.Lines="All" Text="[Workdays_Clients.Session]" Font="Arial, 10pt"/>
-          <TableCell Name="Cell6" Border.Lines="All" Text="[IIf([Workdays_Clients.Present] == false,&quot;Absent&quot;,&quot;&quot;)]" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell5" Border.Lines="All" Text="[Workdays_Clients1.Session]" Font="Arial, 10pt"/>
+          <TableCell Name="Cell6" Border.Lines="All" Text="[IIf([Workdays_Clients1.Present] == false,&quot;Absent&quot;,&quot;&quot;)]" HorzAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
       </TableObject>
       <DataHeaderBand Name="DataHeader2" Top="153.53" Width="778.3" Height="28.35">
