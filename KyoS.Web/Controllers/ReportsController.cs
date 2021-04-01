@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -84,8 +85,8 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            var result = await _reportHelper.DailyAssistanceAsyncReport(workdayClientList);            
-            return await Task.Run(() => File(result, System.Net.Mime.MediaTypeNames.Application.Pdf));       
+            Stream stream = _reportHelper.DailyAssistanceReport(workdayClientList);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
     }
 }

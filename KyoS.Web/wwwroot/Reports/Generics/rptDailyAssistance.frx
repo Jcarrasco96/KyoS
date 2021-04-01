@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/01/2021 12:16:58" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3gdSdCEL4wrJnF1m0Xf3Ctg==">
+      <TableDataSource Name="Workdays_Clients1" DataType="System.Int32" Enabled="true" TableName="Workdays_Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="WorkdayId" DataType="System.Int32"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="Session" DataType="System.String"/>
+        <Column Name="Present" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FacilitatorId" DataType="System.Int32"/>
+        <Column Name="CauseOfNotPresent" DataType="System.String"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3PJ+/GSgyc0eYyIaMRSSdLQ==">
+      <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Codigo" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="Workdays_Clients" DataType="System.Int32" Enabled="true" TableName="Workdays_Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="WorkdayId" DataType="System.Int32"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="Session" DataType="System.String"/>
+        <Column Name="Present" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FacilitatorId" DataType="System.Int32"/>
+        <Column Name="CauseOfNotPresent" DataType="System.String"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="dateNote" DataType="System.String"/>
+    <Parameter Name="session1" DataType="System.String"/>
+    <Parameter Name="additionalComments1" DataType="System.String"/>
+    <Parameter Name="additionalComments2" DataType="System.String"/>
+    <Parameter Name="session2" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="85.05">
+      <TextObject Name="Textbox12" Left="170.1" Top="9.45" Width="383.9" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="170.1" Top="31.33" Width="383.9" Height="22" CanGrow="true" Text="PSR ATTENDANCE LOG" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold"/>
+      <LineObject Name="Line3" Left="160.65" Top="10.45" Height="37.2"/>
+      <LineObject Name="Line4" Left="774.52" Top="75.6" Width="-776"/>
+      <PictureObject Name="Picture1" Left="18.9" Top="9.45" Width="75.6" Height="56.7" Image=""/>
+      <LineObject Name="Line6" Left="159.65" Top="9.45" Height="37.8"/>
+      <LineObject Name="Line7" Left="774.9" Top="75.15" Width="-776"/>
+    </ReportTitleBand>
+    <PageHeaderBand Name="PageHeader1" Top="89.05" Width="778.3" Height="60.48">
+      <TextObject Name="Text12" Left="513.65" Top="10" Width="56.7" Height="18.9" Text="Group" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text13" Left="504.2" Top="30.9" Width="66.15" Height="18.9" Text="DATE:" HorzAlign="Right" Font="Arial, 10pt"/>
+      <TextObject Name="Text14" Left="570.35" Top="10.45" Width="94.5" Height="18.9" Text="[session1]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text15" Left="570.35" Top="30.9" Width="122.85" Height="18.9" Text="[dateNote]" Font="Arial, 10pt"/>
+      <TextObject Name="Text16" Left="14.8" Top="30.9" Width="122.85" Height="18.9" Text="Therapist Name:" HorzAlign="Right" Font="Arial, 10pt"/>
+      <TextObject Name="Text17" Left="137.65" Top="30.9" Width="330.75" Height="18.9" Text="[Facilitators.Name]" Font="Arial, 10pt"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="185.88" Width="778.3" Height="18.9" Guides="0" DataSource="Workdays_Clients">
+      <TableObject Name="Table1" Left="37.8" Top="-0.1" Width="604.81" Height="18.9">
+        <TableColumn Name="Column1" Width="434.7"/>
+        <TableColumn Name="Column2" Width="170.11"/>
+        <TableRow Name="Row1">
+          <TableCell Name="Cell1" Border.Lines="All" Text="[Workdays_Clients.Session]" Font="Arial, 10pt"/>
+          <TableCell Name="Cell2" Border.Lines="All" Text="[IIf([Workdays_Clients.Present] == false,&quot;Absent&quot;,&quot;&quot;)]" HorzAlign="Center" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+      <DataHeaderBand Name="DataHeader1" Top="153.53" Width="778.3" Height="28.35">
+        <TableObject Name="Table2" Left="37.8" Top="9.45" Width="604.81" Height="18.9">
+          <TableColumn Name="Column3" Width="434.7"/>
+          <TableColumn Name="Column4" Width="170.11"/>
+          <TableRow Name="Row2">
+            <TableCell Name="Cell3" Border.Lines="All" Fill.Color="Gainsboro" Text="CLIENT NAME" Font="Arial, 10pt, style=Bold"/>
+            <TableCell Name="Cell4" Border.Lines="All" Fill.Color="Gainsboro" Text="Comments:" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          </TableRow>
+        </TableObject>
+      </DataHeaderBand>
+      <DataFooterBand Name="DataFooter1" Top="208.78" Width="778.3" Height="56.7">
+        <TextObject Name="Text26" Left="13.35" Top="26.9" Width="160.65" Height="18.9" Text="Additional Comments:" HorzAlign="Right" Font="Arial, 10pt"/>
+        <TextObject Name="Text27" Left="170.9" Top="26.9" Width="604.8" Height="18.9" CanGrow="true" Text="[additionalComments1]" Font="Arial, 10pt, style=Underline"/>
+      </DataFooterBand>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="269.48" Width="778.3" Height="56.7">
+      <LineObject Name="Line9" Left="773.45" Top="27.25" Width="-776"/>
+      <TextObject Name="Text28" Left="10" Top="30.25" Width="207.9" Height="18.9" Text="Group Facilitator / Credentials" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text30" Left="527.75" Top="30.8" Width="245.7" Height="18.9" Text="Group Facilitator (print legibly)" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text11" Left="527.75" Top="8.45" Width="245.7" Height="18.9" Text="[Facilitators.Name]" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page2" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle2" Width="778.3" Height="85.05">
+      <TextObject Name="Text1" Left="170.1" Top="9.45" Width="383.9" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text2" Left="170.1" Top="31.33" Width="383.9" Height="22" CanGrow="true" Text="PSR ATTENDANCE LOG" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold"/>
+      <LineObject Name="Line1" Left="160.65" Top="10.45" Height="37.2"/>
+      <LineObject Name="Line2" Left="774.52" Top="75.6" Width="-776"/>
+      <PictureObject Name="Picture2" Left="18.9" Top="9.45" Width="75.6" Height="56.7" Image=""/>
+      <LineObject Name="Line5" Left="159.65" Top="9.45" Height="37.8"/>
+      <LineObject Name="Line8" Left="774.9" Top="75.15" Width="-776"/>
+    </ReportTitleBand>
+    <PageHeaderBand Name="PageHeader2" Top="89.05" Width="778.3" Height="60.48">
+      <TextObject Name="Text3" Left="513.65" Top="10" Width="56.7" Height="18.9" Text="Group" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text4" Left="504.2" Top="30.9" Width="66.15" Height="18.9" Text="DATE:" HorzAlign="Right" Font="Arial, 10pt"/>
+      <TextObject Name="Text5" Left="570.35" Top="10.45" Width="94.5" Height="18.9" Text="[session2]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text6" Left="570.35" Top="30.9" Width="122.85" Height="18.9" Text="[dateNote]" Font="Arial, 10pt"/>
+      <TextObject Name="Text7" Left="14.8" Top="30.9" Width="122.85" Height="18.9" Text="Therapist Name:" HorzAlign="Right" Font="Arial, 10pt"/>
+      <TextObject Name="Text8" Left="137.65" Top="30.9" Width="330.75" Height="18.9" Text="[Facilitators.Name]" Font="Arial, 10pt"/>
+    </PageHeaderBand>
+    <DataBand Name="Data2" Top="185.88" Width="778.3" Height="18.9" Guides="0" DataSource="Workdays_Clients1">
+      <TableObject Name="Table3" Left="37.8" Top="-0.1" Width="604.81" Height="18.9">
+        <TableColumn Name="Column5" Width="434.7"/>
+        <TableColumn Name="Column6" Width="170.11"/>
+        <TableRow Name="Row3">
+          <TableCell Name="Cell5" Border.Lines="All" Text="[Workdays_Clients.Session]" Font="Arial, 10pt"/>
+          <TableCell Name="Cell6" Border.Lines="All" Text="[IIf([Workdays_Clients.Present] == false,&quot;Absent&quot;,&quot;&quot;)]" HorzAlign="Center" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+      <DataHeaderBand Name="DataHeader2" Top="153.53" Width="778.3" Height="28.35">
+        <TableObject Name="Table4" Left="37.8" Top="9.45" Width="604.81" Height="18.9">
+          <TableColumn Name="Column7" Width="434.7"/>
+          <TableColumn Name="Column8" Width="170.11"/>
+          <TableRow Name="Row4">
+            <TableCell Name="Cell7" Border.Lines="All" Fill.Color="Gainsboro" Text="CLIENT NAME" Font="Arial, 10pt, style=Bold"/>
+            <TableCell Name="Cell8" Border.Lines="All" Fill.Color="Gainsboro" Text="Comments:" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          </TableRow>
+        </TableObject>
+      </DataHeaderBand>
+      <DataFooterBand Name="DataFooter2" Top="208.78" Width="778.3" Height="56.7">
+        <TextObject Name="Text9" Left="13.35" Top="26.9" Width="160.65" Height="18.9" Text="Additional Comments:" HorzAlign="Right" Font="Arial, 10pt"/>
+        <TextObject Name="Text10" Left="170.9" Top="26.9" Width="604.8" Height="18.9" CanGrow="true" Text="[additionalComments2]" Font="Arial, 10pt, style=Underline"/>
+      </DataFooterBand>
+    </DataBand>
+    <PageFooterBand Name="PageFooter2" Top="269.48" Width="778.3" Height="56.7">
+      <LineObject Name="Line10" Left="772.9" Top="27.25" Width="-776"/>
+      <TextObject Name="Text31" Left="10.45" Top="30.8" Width="207.9" Height="18.9" Text="Group Facilitator / Credentials" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text32" Left="528.2" Top="30.35" Width="245.7" Height="18.9" Text="Group Facilitator (print legibly)" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text33" Left="528.2" Top="9" Width="245.7" Height="18.9" Text="[Facilitators.Name]" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+    </PageFooterBand>
+  </ReportPage>
+</Report>

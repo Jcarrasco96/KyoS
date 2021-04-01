@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using KyoS.Common.Helpers;
 using System.IO;
 using System.Data;
+using FastReport;
+using System.Drawing;
 
 namespace KyoS.Web.Helpers
 {
@@ -60,13 +62,125 @@ namespace KyoS.Web.Helpers
             return result.MainStream;
         }
 
-        public async Task<byte[]> DailyAssistanceAsyncReport(List<Workday_Client> workdayClientList)
+        public Stream DailyAssistanceReport(List<Workday_Client> workdayClientList)
         {
             List<Workday_Client> am_list = workdayClientList.Where(wc => wc.Session == "AM").ToList();
             List<Workday_Client> pm_list = workdayClientList.Where(wc => wc.Session == "PM").ToList();
 
-            //report
-            string mimetype = "";
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Generics\\rptDailyAssistance.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            var dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(workdayClientList.First().Facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(workdayClientList.First().Facilitator.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            DataTable dt = GetWorkdaysClientsDS(am_list);
+            int to = 14 - am_list.Count();
+            for (int i = 0; i < to; i++)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            true,
+                                            0,
+                                            string.Empty
+                                        });
+            }
+
+            dataSet.Tables.Add(dt);
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Clients");
+
+            dataSet = new DataSet();
+            dt = GetWorkdaysClientsDS(pm_list);
+            to = 14 - pm_list.Count();
+            for (int i = 0; i < to; i++)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            true,
+                                            0,
+                                            string.Empty
+                                        });
+            }            
+
+            dataSet.Tables.Add(dt);
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Clients1");
+
+            var date = workdayClientList.First().Workday.Date.ToShortDateString();
+            var additionalComments1 = string.Empty;
+            var additionalComments2 = string.Empty;
+            foreach (Workday_Client item in am_list)
+            {
+                if (item != null)
+                {
+                    if (!item.Present)
+                    {
+                        if (additionalComments1 != string.Empty)
+                            additionalComments1 = $"{additionalComments1}\n{item.ClientName} - {item.CauseOfNotPresent}";
+                        else
+                            additionalComments1 = $"{item.ClientName} - {item.CauseOfNotPresent}";
+                    }
+                }
+            }
+            foreach (Workday_Client item in pm_list)
+            {
+                if (item != null)
+                {
+                    if (!item.Present)
+                    {
+                        if (additionalComments2 != string.Empty)
+                            additionalComments2 = $"{additionalComments2}\n{item.ClientName} - {item.CauseOfNotPresent}";
+                        else
+                            additionalComments2 = $"{item.ClientName} - {item.CauseOfNotPresent}";
+                    }
+                }
+            }
+
+            //signatures images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(workdayClientList.First().Facilitator.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClientList.First().Facilitator.Clinic.LogoPath)}");                
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            PictureObject pic2 = WebReport.Report.FindObject("Picture2") as PictureObject;
+            pic2.Image = new Bitmap(path);
+
+            WebReport.Report.SetParameterValue("dateNote", date);
+            WebReport.Report.SetParameterValue("session1", "AM");
+            WebReport.Report.SetParameterValue("session2", "PM");
+            WebReport.Report.SetParameterValue("additionalComments1", additionalComments1);
+            WebReport.Report.SetParameterValue("additionalComments2", additionalComments2);
+            
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+
+            //////////////////////report
+            /*string mimetype = "";
             int extension = 1;           
             string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Generics\\rptDailyAssistance.rdlc";            
             Dictionary<string, string> parameters = new Dictionary<string, string>();
@@ -146,7 +260,7 @@ namespace KyoS.Web.Helpers
             report.AddDataSource("dsParameters", parametersList);          
 
             var result = report.Execute(RenderType.Pdf, extension, parameters, mimetype);            
-            return result.MainStream;
+            return result.MainStream;*/
         }
 
         public Stream LarkinAbsenceNoteReport(Workday_Client workdayClient)
@@ -277,6 +391,37 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetWorkdaysClientsDS(List<Workday_Client> listWorkdayClient)
+        {
+            DataTable dt = new DataTable();
+            dt.TableName = "Workday_Client";
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("WorkdayId", typeof(int));
+            dt.Columns.Add("ClientId", typeof(int));
+            dt.Columns.Add("Session", typeof(string));
+            dt.Columns.Add("Present", typeof(bool));
+            dt.Columns.Add("FacilitatorId", typeof(int));
+            dt.Columns.Add("CauseOfNotPresent", typeof(string));
+
+            foreach (Workday_Client item in listWorkdayClient)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            item.Id,
+                                            item.Workday.Id,
+                                            item.Client.Id,
+                                            item.ClientName,
+                                            item.Present,
+                                            item.Facilitator.Id,
+                                            item.CauseOfNotPresent
+                                        });
+            }           
+
+            return dt;
+        }
+
         private DataTable GetClientDS(ClientEntity client)
         {
             DataTable dt = new DataTable();
@@ -332,6 +477,28 @@ namespace KyoS.Web.Helpers
                                             facilitator.Status,
                                             facilitator.LinkedUser,
                                             facilitator.SignaturePath
+                                        });
+
+            return dt;
+        }
+
+        private DataTable GetClinicDS(ClinicEntity clinic)
+        {
+            DataTable dt = new DataTable();
+            dt.TableName = "Clinic";
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("LogoPath", typeof(string));
+            dt.Columns.Add("Schema", typeof(int));           
+
+            dt.Rows.Add(new object[]
+                                        {
+                                            clinic.Id,
+                                            clinic.Name,
+                                            clinic.LogoPath,
+                                            clinic.Schema                                            
                                         });
 
             return dt;
