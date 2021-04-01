@@ -448,7 +448,7 @@ namespace KyoS.Web.Helpers
                                             client.DateOfBirth,
                                             client.MedicalID,
                                             client.Status,
-                                            client.Group.Id
+                                            0
                                         });
 
             return dt;
