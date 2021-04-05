@@ -14,5 +14,8 @@ namespace KyoS.Web.Helpers
         Stream LarkinAbsenceNoteReport(Workday_Client workdayClient);
         Stream SolAndVidaAbsenceNoteReport(Workday_Client workdayClient);
         Stream DavilaAbsenceNoteReport(Workday_Client workdayClient);
+        Stream LarkinMTPReport(MTPEntity mtp);
+        Stream SolAndVidaMTPReport(MTPEntity mtp);
+        Stream DavilaMTPReport(MTPEntity mtp);
     }
 }

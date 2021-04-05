@@ -16,9 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Reports\MTPs\rptMTPDavila.rdlc" />
-    <None Remove="Reports\MTPs\rptMTPLarkinBehavior.rdlc" />
-    <None Remove="Reports\MTPs\rptMTPSolAndVida.rdlc" />
     <None Remove="Reports\Notes\rptAbsenceNoteLARKINBEHAVIOR.rdlc" />
     <None Remove="Reports\Notes\rptAbsenceNoteSolAndVida.rdlc" />
     <None Remove="Reports\Notes\rptNoteDavila.rdlc" />
@@ -27,15 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Reports\MTPs\rptMTPSolAndVida.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\MTPs\rptMTPLarkinBehavior.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\MTPs\rptMTPDavila.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Notes\rptNoteSolAndVida.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

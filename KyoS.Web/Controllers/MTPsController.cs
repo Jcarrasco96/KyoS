@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -22,12 +23,14 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IRenderHelper _renderHelper;
-        public MTPsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper)
+        private readonly IReportHelper _reportHelper;
+        public MTPsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IReportHelper reportHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _renderHelper = renderHelper;
+            _reportHelper = reportHelper;
         }
 
         [Authorize(Roles = "Admin, Supervisor, Mannager")]
@@ -847,21 +850,24 @@ namespace KyoS.Web.Controllers
 
             if (mtpEntity.Client.Clinic.Name == "DAVILA")
             {
-                return DavilaReport(mtpEntity);
+                Stream stream = _reportHelper.DavilaMTPReport(mtpEntity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             if (mtpEntity.Client.Clinic.Name == "LARKIN BEHAVIOR")
             {
-                return LarkinReport(mtpEntity);
+                Stream stream = _reportHelper.LarkinMTPReport(mtpEntity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             if (mtpEntity.Client.Clinic.Name == "SOL & VIDA")
             {
-                return SolAndVidaReport(mtpEntity);
+                Stream stream = _reportHelper.SolAndVidaMTPReport(mtpEntity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
             return null;            
         }
 
-        private IActionResult DavilaReport(MTPEntity mtpEntity)
+        /*private IActionResult DavilaReport(MTPEntity mtpEntity)
         {
             //report
             string mimetype = "";
@@ -950,11 +956,10 @@ namespace KyoS.Web.Controllers
             report.AddDataSource("dsObjetives5", objetives5);
 
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*,
-                        $"{mtpEntity.Client.Name} - MTP.pdf"*/);
-        }
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*);
+        }*/
 
-        private IActionResult LarkinReport(MTPEntity mtpEntity)
+        /*private IActionResult LarkinReport(MTPEntity mtpEntity)
         {
             //report
             string mimetype = "";
@@ -1043,11 +1048,10 @@ namespace KyoS.Web.Controllers
             report.AddDataSource("dsObjetives5", objetives5);            
 
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*,
-                        $"{mtpEntity.Client.Name} - MTP.pdf"*/);
-        }
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }*/
 
-        private IActionResult SolAndVidaReport(MTPEntity mtpEntity)
+        /*private IActionResult SolAndVidaReport(MTPEntity mtpEntity)
         {
             //report
             string mimetype = "";
@@ -1136,8 +1140,7 @@ namespace KyoS.Web.Controllers
             report.AddDataSource("dsObjetives5", objetives5);
 
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf/*,
-                        $"{mtpEntity.Client.Name} - MTP.pdf"*/);
-        }
+            return File(result.MainStream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }*/
     }
 }

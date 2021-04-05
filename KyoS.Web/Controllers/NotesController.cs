@@ -1940,6 +1940,7 @@ namespace KyoS.Web.Controllers
                                                        .ToListAsync());
         }
 
+        [Authorize(Roles = "Facilitator")]
         public IActionResult PrintAbsenceNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
