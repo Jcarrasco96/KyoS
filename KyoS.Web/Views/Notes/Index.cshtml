@@ -280,7 +280,8 @@
     <script type="text/javascript">
         $(document).ready(function () {            
             $('#MyTable').DataTable({
-               "order": [[1, "asc"]]
+                "order": [[1, "asc"]],
+                "pageLength": 100
             });
             // Delete item
             var item_to_delete;

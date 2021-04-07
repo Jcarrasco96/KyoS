@@ -2,6 +2,7 @@
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -203,22 +204,55 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboActivitiesByTheme(int idTheme)
+        public IEnumerable<SelectListItem> GetComboActivitiesByTheme(int idTheme, int idFacilitator, DateTime date)
         {
-            List<SelectListItem> list = _context.Activities.Where(a => (a.Theme.Id == idTheme && a.Status == ActivityStatus.Approved))
-                                                           .Select(t => new SelectListItem
+            List<ActivityEntity> activities = _context.Activities
+
+                                                      .Include(a => a.Workdays_Activities_Facilitators)
+                                                      .ThenInclude(waf => waf.Workday)
+
+                                                      .Include(a => a.Workdays_Activities_Facilitators)
+                                                      .ThenInclude(waf => waf.Facilitator)
+
+                                                      .Where(a => (a.Theme.Id == idTheme && a.Status == ActivityStatus.Approved))                                                      
+
+                                                      .ToList();
+
+            List<SelectListItem> list = new List<SelectListItem>();            
+            Workday_Activity_Facilitator waf;
+            TimeSpan daysCount;
+            int weeks;
+            
+            foreach (ActivityEntity item in activities)
             {
-                Text = $"{t.Id.ToString()} - {t.Name}",
-                Value = $"{t.Id}"
-            }).ToList();
+                waf = item.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator.Id == idFacilitator).Max();
+                if ((waf == null) || (date == waf.Workday.Date))    //Actividad no usada por el facilitator
+                {
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = $"{item.Id.ToString()} - NU - {item.Name}",
+                        Value = $"{item.Id}"
+                    });
+                }
+                else
+                {
+                    daysCount = date - waf.Workday.Date;                    
+                    weeks = Convert.ToInt32(Math.Round(Convert.ToDouble(daysCount.Days) / 7, 0, MidpointRounding.AwayFromZero));
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = $"{item.Id.ToString()} - {weeks}w - {item.Name}",
+                        Value = $"{item.Id}"
+                    });
+                }                
+            }
 
             list.Insert(0, new SelectListItem
             {
                 Text = "[Select activity...]",
                 Value = "0"
             });
-
-            return list;
+            
+            return list.OrderBy(l => Convert.ToInt32(l.Value));
         }
 
         public IEnumerable<SelectListItem> GetComboClassifications()

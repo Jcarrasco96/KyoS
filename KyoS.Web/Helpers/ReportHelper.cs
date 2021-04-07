@@ -54,9 +54,6 @@ namespace KyoS.Web.Helpers
             report.AddDataSource("dsFacilitators", facilitators);
             report.AddDataSource("dsClients", clients);
 
-            /*var sesion = (groupEntity.Am) ? "Session: AM" : "Session: PM";
-            parameters.Add("sesion", sesion);*/
-
             ReportResult result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
             return result.MainStream;
         }
@@ -184,90 +181,7 @@ namespace KyoS.Web.Helpers
             WebReport.Report.Export(new PDFSimpleExport(), stream);
             stream.Position = 0;
 
-            return stream;
-
-            //////////////////////report
-            /*string mimetype = "";
-            int extension = 1;           
-            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Generics\\rptDailyAssistance.rdlc";            
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            System.Text.Encoding.GetEncoding("windows-1252");
-
-            LocalReport report = new LocalReport(rdlcFilePath);
-
-            //signatures images 
-            byte[] stream1 = null;
-            byte[] stream2 = null;
-            string path;
-            if (!string.IsNullOrEmpty(workdayClientList.First().Facilitator.Clinic.LogoPath))
-            {
-                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClientList.First().Facilitator.Clinic.LogoPath)}");
-                stream1 = _imageHelper.ImageToByteArray(path);
-            }
-
-            var date = workdayClientList.First().Workday.Date.ToShortDateString();
-            var additionalComments1 = string.Empty;
-            var additionalComments2 = string.Empty;
-            foreach (Workday_Client item in am_list)
-            {
-                if (item != null)
-                {
-                    if (!item.Present)
-                    {
-                        if (additionalComments1 != string.Empty)
-                            additionalComments1 = $"{additionalComments1}\n{item.ClientName} - {item.CauseOfNotPresent}";
-                        else
-                            additionalComments1 = $"{item.ClientName} - {item.CauseOfNotPresent}";
-                    }
-                }
-            }
-            foreach (Workday_Client item in pm_list)
-            {
-                if (item != null)
-                {
-                    if (!item.Present)
-                    {
-                        if (additionalComments2 != string.Empty)
-                            additionalComments2 = $"{additionalComments2}\n{item.ClientName} - {item.CauseOfNotPresent}";
-                        else
-                            additionalComments2 = $"{item.ClientName} - {item.CauseOfNotPresent}";
-                    }
-                }
-            }
-
-            //datasource            
-            List<ClinicEntity> clinics = new List<ClinicEntity> { workdayClientList.First().Facilitator.Clinic };
-            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClientList.First().Facilitator };
-            List<ImageArray> images = new List<ImageArray> { new ImageArray { ImageStream1 = stream1, ImageStream2 = stream2 } };
-            List<ParametersOfDailyAssistance> parametersList = new List<ParametersOfDailyAssistance> { new ParametersOfDailyAssistance 
-                                                                                                         {
-                                                                                                          date = date,
-                                                                                                          session1 = "AM",
-                                                                                                          session2 = "PM",
-                                                                                                          AdditionalComments1 = additionalComments1,
-                                                                                                          AdditionalComments2 = additionalComments2
-                                                                                                          } 
-                                                                                                      };
-            int to = 14 - am_list.Count();
-            for (int i = 0; i < to; i++)
-            {
-                am_list.Add(null);
-            }
-            to = 14 - pm_list.Count();
-            for (int k = 0; k < to; k++)
-            {
-                pm_list.Add(null);
-            }
-            report.AddDataSource("dsWorkdays_Clients1", am_list);
-            report.AddDataSource("dsWorkdays_Clients2", pm_list);
-            report.AddDataSource("dsClinics", clinics);
-            report.AddDataSource("dsFacilitators", facilitators);
-            report.AddDataSource("dsImages", images);
-            report.AddDataSource("dsParameters", parametersList);          
-
-            var result = report.Execute(RenderType.Pdf, extension, parameters, mimetype);            
-            return result.MainStream;*/
+            return stream;            
         }
 
         public Stream LarkinAbsenceNoteReport(Workday_Client workdayClient)
