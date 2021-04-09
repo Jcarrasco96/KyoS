@@ -43,7 +43,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Desktop" asp-action="Index" class="navbar-brand">KyoS Notes</a>
+                <span class="navbar-brand">
+                    KyoS Notes
+                </span>                    
             </div>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="nav navbar-nav">
@@ -58,27 +60,10 @@
                                 <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
                                 <li>@Html.ActionLink("Facilitators", "Index", "Facilitators")</li>
                                 <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
-                                <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
-                                @*<li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Groups", "Index", "Groups")</li>
-                                <li>@Html.ActionLink("Workdays", "Index", "Workdays")</li>
-                                <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Topics", "Index", "Themes")</li>
-                                <li>@Html.ActionLink("Activities", "Index", "Activities")</li>*@
-                                @*<li role="separator" class="divider"></li>*@
-                                @*<li><a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>*@
+                                <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>                                
                             </ul>
                         </li>
-
-                        @*<li class="class=" dropdown open"">
-                <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
-                    Prototypes <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu" role="menu">
-                    <li>@Html.ActionLink("Notes", "Index", "NotesPrototypes")</li>
-                    <li>@Html.ActionLink("Plans", "Index", "Plans")</li>
-                </ul>
-            </li>*@
+                        
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
@@ -96,9 +81,7 @@
                                 <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Workdays", "Index", "Workdays")</li>
-                                <li>@Html.ActionLink("Topics", "Index", "Themes")</li>
-                                @*<li role="separator" class="divider"></li>
-                    <li><a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>*@
+                                <li>@Html.ActionLink("Topics", "Index", "Themes")</li>                                
                             </ul>
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
@@ -233,8 +216,7 @@
                                 </li>
                             </ul>
                             @*<a asp-area="" asp-controller="Account" asp-action="Index">@User.Identity.Name</a>*@
-                        </li>
-                        @*<li><a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>*@
+                        </li>                        
                     }                    
                 </ul>                
             </div>

@@ -27,5 +27,24 @@ namespace KyoS.Web.Data.Entities
                 return $"{month}_{initday}{finalday}_{InitDate.Year}";
             }
         }
+        public int Units 
+        {
+            get
+            {
+                return Notes * 16;
+            }
+        }
+        public int Notes
+        {
+            get
+            {
+                int count = 0;
+                foreach (var item in this.Days)
+                {
+                    count += item.Workdays_Clients.Where(wc => wc.Present == true).Count();
+                }
+                return count;
+            }
+        }
     }
 }

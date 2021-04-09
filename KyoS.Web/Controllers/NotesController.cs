@@ -1977,6 +1977,32 @@ namespace KyoS.Web.Controllers
             }
 
             return null;
-        }        
+        }
+
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> BillingReport()
+        {                     
+            UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                            .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic == null)
+            {
+                return NotFound();
+            }
+            return View(await _context.Weeks.Include(w => w.Days)
+                                            .ThenInclude(d => d.Workdays_Clients)
+                                            .ThenInclude(wc => wc.Client)
+                                            .ThenInclude(c => c.Group)
+
+                                            .Include(w => w.Days)
+                                            .ThenInclude(d => d.Workdays_Clients)
+                                            .ThenInclude(g => g.Facilitator)
+
+                                            .Include(w => w.Days)
+                                            .ThenInclude(d => d.Workdays_Clients)
+                                            .ThenInclude(wc => wc.Note)
+
+                                            .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
+                                            .ToListAsync());            
+        }
     }
 }
