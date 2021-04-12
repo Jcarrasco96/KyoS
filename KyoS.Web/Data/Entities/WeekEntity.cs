@@ -39,9 +39,12 @@ namespace KyoS.Web.Data.Entities
             get
             {
                 int count = 0;
-                foreach (var item in this.Days)
-                {
-                    count += item.Workdays_Clients.Where(wc => wc.Present == true).Count();
+                if(this.Days != null)
+                { 
+                    foreach (var item in this.Days)
+                    {
+                        count += item.Workdays_Clients.Where(wc => wc.Present == true).Count();
+                    }
                 }
                 return count;
             }
