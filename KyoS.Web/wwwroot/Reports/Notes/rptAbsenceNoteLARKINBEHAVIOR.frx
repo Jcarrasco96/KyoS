@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/29/2021 01:35:19" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/13/2021 11:06:40" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3XqXUkHjuHr7dQZEog1GQpg==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u35WdOnYJ4F07C/73/MbBYuA==">
       <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -53,13 +53,17 @@
       <TextObject Name="Text4" Top="5.86" Width="774.9" Height="22.68" Border.Lines="Left, Right, Top" Text="COMMENTS" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text5" Top="28.8" Width="774.9" Height="85.05" Border.Lines="All" Text="[Workdays_Clients.CauseOfNotPresent]" Font="Arial, 9pt, style=Bold"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="280.83" Width="778.3" Height="56.7">
+    <PageFooterBand Name="PageFooter1" Top="280.83" Width="778.3" Height="103.95">
       <LineObject Name="Line5" Left="774.9" Top="28.35" Width="-776"/>
       <TextObject Name="Text7" Left="1.45" Top="33.8" Width="207.9" Height="18.9" Text="Group Facilitator / Credentials" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text8" Left="330.2" Top="33.8" Width="122.85" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text9" Left="537.65" Top="33.35" Width="236.25" Height="18.9" Text="Group Facilitator (print legibly)" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text10" Left="321.75" Top="11" Width="141.75" Height="18.9" Text="[dateFacilitator]" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text11" Left="538.65" Top="11" Width="236.25" Height="18.9" Text="[Facilitators.Name]" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <LineObject Name="Line6" Left="774.45" Top="76.6" Width="-776"/>
+      <TextObject Name="Text12" Left="1" Top="81.05" Width="207.9" Height="18.9" Text="Supervisor / Credentials" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text13" Left="329.75" Top="81.05" Width="122.85" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text14" Left="537.2" Top="80.6" Width="236.25" Height="18.9" Text="Supervisor (print legibly)" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
     </PageFooterBand>
   </ReportPage>
 </Report>
