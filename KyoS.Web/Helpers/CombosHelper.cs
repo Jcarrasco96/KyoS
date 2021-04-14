@@ -225,7 +225,7 @@ namespace KyoS.Web.Helpers
             
             foreach (ActivityEntity item in activities)
             {
-                waf = item.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator.Id == idFacilitator).Max();
+                waf = item.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator.Id == idFacilitator).LastOrDefault();
                 if ((waf == null) || (date == waf.Workday.Date))    //Actividad no usada por el facilitator
                 {
                     list.Insert(0, new SelectListItem

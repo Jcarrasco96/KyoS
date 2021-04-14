@@ -1975,6 +1975,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.SolAndVidaAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (workdayClient.Client.Clinic.Name == "HEALTH & BEAUTY NGB, INC")
+            {
+                Stream stream = _reportHelper.HealthAndBeautyAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }

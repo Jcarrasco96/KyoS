@@ -862,6 +862,11 @@ namespace KyoS.Web.Controllers
             {
                 Stream stream = _reportHelper.SolAndVidaMTPReport(mtpEntity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }            
+            if (mtpEntity.Client.Clinic.Name == "HEALTH & BEAUTY NGB, INC")
+            {
+                Stream stream = _reportHelper.HealthAndBeautyMTPReport(mtpEntity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
             return null;            
