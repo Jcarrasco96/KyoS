@@ -1915,7 +1915,7 @@ namespace KyoS.Web.Controllers
                                                      .Include(wc => wc.Workday)
                                                      .ThenInclude(w => w.Week)
                                                      .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                                      && wc.Note == null))
+                                                                      && wc.Note == null && wc.Present == true))
                                                      .ToListAsync());                        
         }
 
@@ -2090,7 +2090,7 @@ namespace KyoS.Web.Controllers
             foreach (FacilitatorEntity item in facilitators)
             {
                 cant = await _context.Workdays_Clients.CountAsync(wc => (wc.Facilitator.Id == item.Id 
-                                                                      && wc.Note == null && wc.Facilitator.Status == StatusType.Open));
+                                                                      && wc.Note == null && wc.Facilitator.Status == StatusType.Open && wc.Present == true));
 
                 notStarted.Add(new NotesSummary {FacilitatorName = item.Name, NotStarted = cant});
             }
