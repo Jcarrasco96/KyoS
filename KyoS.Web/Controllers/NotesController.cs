@@ -2257,6 +2257,12 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(d => d.Workdays_Clients)
                                             .ThenInclude(wc => wc.Note)
 
+                                            .Include(w => w.Days)
+                                            .ThenInclude(d => d.Workdays_Clients)
+                                            .ThenInclude(wc => wc.Client)
+                                            .ThenInclude(c => c.MTPs)
+                                            .ThenInclude(m => m.Diagnosis)
+
                                             .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
                                             .ToListAsync());            
         }
