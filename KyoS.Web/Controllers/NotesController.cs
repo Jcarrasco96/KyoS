@@ -2235,6 +2235,28 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> PrintIndividualSign(int id, int idWeek)
+        {
+            List<Workday_Client> workdayClientList = await _context.Workdays_Clients
+
+                                                            .Include(wc => wc.Facilitator)
+                                                            .ThenInclude(c => c.Clinic)
+
+                                                            .Include(wc => wc.Client)                                                  
+
+                                                            .Include(wc => wc.Workday)
+
+                                                            .Where(wc => (wc.Client.Id == id && wc.Workday.Week.Id == idWeek)).ToListAsync();
+            if (workdayClientList.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            Stream stream = _reportHelper.PrintIndividualSign(workdayClientList);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);            
+        }
+
         [Authorize(Roles = "Mannager")]
         public async Task<IActionResult> BillingReport()
         {                     
@@ -2265,6 +2287,37 @@ namespace KyoS.Web.Controllers
 
                                             .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
                                             .ToListAsync());            
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> IndividualSignInSheet()
+        {
+            UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                         .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic == null)
+                return View(null);
+
+            return View(await _context.Weeks.Include(w => w.Days)
+                                            .ThenInclude(d => d.Workdays_Clients)
+                                            .ThenInclude(wc => wc.Client)
+                                            .ThenInclude(c => c.Group)
+
+                                            .Include(w => w.Days)
+                                            .ThenInclude(d => d.Workdays_Clients)
+                                            .ThenInclude(g => g.Facilitator)
+
+                                            .Include(w => w.Days)
+                                            .ThenInclude(d => d.Workdays_Clients)
+                                            .ThenInclude(wc => wc.Note)
+
+                                            .Include(w => w.Days)
+                                            .ThenInclude(d => d.Workdays_Clients)
+                                            .ThenInclude(wc => wc.Client)
+                                            .ThenInclude(c => c.MTPs)
+                                            .ThenInclude(m => m.Diagnosis)
+
+                                            .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
+                                            .ToListAsync());
         }
     }
 }

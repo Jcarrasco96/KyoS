@@ -11,6 +11,7 @@ namespace KyoS.Web.Helpers
     {
         Task<byte[]>  GroupAsyncReport(int id);
         Stream DailyAssistanceReport(List<Workday_Client> workdayClientList);
+        Stream PrintIndividualSign(List<Workday_Client> workdayClientList);
         Stream LarkinAbsenceNoteReport(Workday_Client workdayClient);
         Stream HealthAndBeautyAbsenceNoteReport(Workday_Client workdayClient);
         Stream SolAndVidaAbsenceNoteReport(Workday_Client workdayClient);

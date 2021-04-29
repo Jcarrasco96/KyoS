@@ -119,7 +119,7 @@
                     }
                     else
                               if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
-                                {
+                              {
                                     <li class="class=" dropdown open"">
                                         <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
                                             Activities <span class="caret"></span>
@@ -143,10 +143,11 @@
                                         </a>
                                         <ul class="dropdown-menu" role="menu">
                                             <li>@Html.ActionLink("Daily assistance", "DailyAssistance", "Reports")</li>
+                                            <li>@Html.ActionLink("Individual sign in sheet", "IndividualSignInSheet", "Notes")</li>
                                         </ul>
                                     </li>
                                     <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
-                                }
+                              }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (User.Identity.IsAuthenticated)

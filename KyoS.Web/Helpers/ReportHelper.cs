@@ -184,6 +184,53 @@ namespace KyoS.Web.Helpers
             return stream;            
         }
 
+        public Stream PrintIndividualSign(List<Workday_Client> workdayClientList)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Generics\\rptIndividualSign.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(workdayClientList.First().Facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(workdayClientList.First().Facilitator.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(workdayClientList.First().Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetWorkdaysItemsDS(workdayClientList));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "WorkdaysItems");                    
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(workdayClientList.First().Facilitator.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClientList.First().Facilitator.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);            
+
+            string session = workdayClientList.First().Session;
+            WebReport.Report.SetParameterValue("session1", session);           
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+
         public Stream LarkinAbsenceNoteReport(Workday_Client workdayClient)
         {
             WebReport WebReport = new WebReport();
@@ -892,6 +939,31 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetWorkdaysItemsDS(List<Workday_Client> listWorkdayClient)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "WorkdaysItems"
+            };
+
+            // Create columns
+            dt.Columns.Add("DayOfWeek", typeof(string));
+            dt.Columns.Add("Date", typeof(DateTime));
+            dt.Columns.Add("Present", typeof(bool));            
+
+            foreach (Workday_Client item in listWorkdayClient)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            item.Workday.Day,
+                                            item.Workday.Date,
+                                            item.Present
+                                        });
+            }
+
+            return dt;
+        }
+
         private DataTable GetClientDS(ClientEntity client)
         {
             DataTable dt = new DataTable
@@ -1112,7 +1184,7 @@ namespace KyoS.Web.Helpers
             }
 
             return dt;
-        }
+        }        
         #endregion
     }
 }
