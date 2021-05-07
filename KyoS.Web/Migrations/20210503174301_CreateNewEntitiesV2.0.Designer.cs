@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210503174301_CreateNewEntitiesV2.0")]
+    partial class CreateNewEntitiesV20
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -400,41 +402,6 @@ namespace KyoS.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Doctors");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.DocumentDiagnosticEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DiagnosticId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FileName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DiagnosticId");
-
-                    b.ToTable("DocumentDiagnostics");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.EmergencyContactEntity", b =>
@@ -1775,15 +1742,6 @@ namespace KyoS.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("MTP");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.DocumentDiagnosticEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.DiagnosticEntity", "Diagnostic")
-                        .WithMany()
-                        .HasForeignKey("DiagnosticId");
-
-                    b.Navigation("Diagnostic");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.FacilitatorEntity", b =>

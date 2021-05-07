@@ -161,7 +161,7 @@ namespace KyoS.Web.Helpers
                 Gender = GenderUtils.GetGenderByIndex(model.IdGender),
                 DateOfBirth = model.DateOfBirth,
                 Code = model.Code,
-                MedicalID = model.MedicalID,
+                MedicaidID = model.MedicaidID,
                 Clinic = clinic,
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus)
             };
@@ -174,7 +174,7 @@ namespace KyoS.Web.Helpers
                 Id = clientEntity.Id,
                 Name = clientEntity.Name,
                 Code = clientEntity.Code,
-                MedicalID = clientEntity.MedicalID,
+                MedicaidID = clientEntity.MedicaidID,
                 DateOfBirth = clientEntity.DateOfBirth,
                 IdStatus = (clientEntity.Status == StatusType.Open) ? 1 : 2,
                 StatusList = _combosHelper.GetComboClientStatus(),

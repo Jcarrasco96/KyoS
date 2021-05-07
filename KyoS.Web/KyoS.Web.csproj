@@ -18,6 +18,7 @@
   <ItemGroup>
     <None Remove="Reports\Notes\rptAbsenceNoteLARKINBEHAVIOR.rdlc" />
     <None Remove="Reports\Notes\rptAbsenceNoteSolAndVida.rdlc" />
+    <None Remove="Reports\Notes\rptNoteAdvancedGroupMC.rdlc" />
     <None Remove="Reports\Notes\rptNoteDavila.rdlc" />
     <None Remove="Reports\Notes\rptNoteHealthAndBeauty.rdlc" />
     <None Remove="Reports\Notes\rptNoteLARKINBEHAVIOR.rdlc" />
@@ -26,6 +27,9 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Reports\Notes\rptNoteHealthAndBeauty.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Notes\rptNoteAdvancedGroupMC.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Notes\rptNoteSolAndVida.rdlc">

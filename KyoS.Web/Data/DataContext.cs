@@ -39,6 +39,14 @@ namespace KyoS.Web.Data
         public DbSet<Note_Activity> Notes_Activities { get; set; }
         public DbSet<MessageEntity> Messages { get; set; }
         public DbSet<Workday_Activity_Facilitator> Workdays_Activities_Facilitators { get; set; }
+        public DbSet<ReferredEntity> Referreds { get; set; }
+        public DbSet<LegalGuardianEntity> LegalGuardians { get; set; }
+        public DbSet<EmergencyContactEntity> EmergencyContacts { get; set; }
+        public DbSet<DoctorEntity> Doctors { get; set; }
+        public DbSet<PsychiatristEntity> Psychiatrists { get; set; }
+        public DbSet<DiagnosticEntity> Diagnostics { get; set; }
+        public DbSet<Client_Diagnostic> Clients_Diagnostics { get; set; }
+        public DbSet<DocumentDiagnosticEntity> DocumentDiagnostics { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -54,6 +62,10 @@ namespace KyoS.Web.Data
 
             modelBuilder.Entity<SupervisorEntity>()
                 .HasIndex(s => s.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<ClientEntity>()
+                .HasIndex(c => c.Name)
                 .IsUnique();
 
             modelBuilder.Entity<DiagnosisEntity>()
