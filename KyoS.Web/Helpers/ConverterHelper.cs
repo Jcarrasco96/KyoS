@@ -2,7 +2,6 @@
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
@@ -69,7 +68,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<ActivityEntity>  ToActivityEntity(ActivityViewModel model, bool isNew)
+        public async Task<ActivityEntity> ToActivityEntity(ActivityViewModel model, bool isNew)
         {
             return new ActivityEntity
             {
@@ -98,7 +97,7 @@ namespace KyoS.Web.Helpers
                 Id = isNew ? 0 : model.Id,
                 Activity = await _context.Activities.FindAsync(model.IdActivity),
                 AnswerClient = model.AnswerClient,
-                AnswerFacilitator = model.AnswerFacilitator               
+                AnswerFacilitator = model.AnswerFacilitator
             };
         }
 
@@ -152,7 +151,9 @@ namespace KyoS.Web.Helpers
         {
             ClinicEntity clinic = null;
             if (model.IdClinic != 0)
+            {
                 clinic = await _context.Clinics.FindAsync(model.IdClinic);
+            }
 
             return new ClientEntity
             {
@@ -311,13 +312,13 @@ namespace KyoS.Web.Helpers
                 DateResolved = model.DateResolved,
                 Description = model.Description,
                 Intervention = model.Intervention,
-                Goal = await _context.Goals.FindAsync(model.IdGoal)                
+                Goal = await _context.Goals.FindAsync(model.IdGoal)
             };
         }
 
         public ObjectiveViewModel ToObjectiveViewModel(ObjetiveEntity objectiveEntity)
         {
-            return new ObjectiveViewModel 
+            return new ObjectiveViewModel
             {
                 Id = objectiveEntity.Id,
                 Objetive = objectiveEntity.Objetive,
@@ -352,7 +353,7 @@ namespace KyoS.Web.Helpers
                 IdFacilitator = groupEntity.Facilitator.Id,
                 Facilitators = _combosHelper.GetComboFacilitators(),
                 Am = groupEntity.Am,
-                Pm = groupEntity.Pm,                
+                Pm = groupEntity.Pm,
                 Clients = groupEntity.Clients
             };
         }
@@ -361,7 +362,7 @@ namespace KyoS.Web.Helpers
         {
             return new PlanEntity
             {
-                
+
             };
         }
 
@@ -371,7 +372,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = planEntity.Id,
                 Text = planEntity.Text,
-                Classifications = planEntity.Classifications               
+                Classifications = planEntity.Classifications
             };
         }
 
@@ -402,7 +403,7 @@ namespace KyoS.Web.Helpers
                 Anxious = model.Anxious,
                 Hostile = model.Hostile,
                 Withdrawn = model.Withdrawn,
-                Irritable  = model.Irritable,
+                Irritable = model.Irritable,
                 Dramatized = model.Dramatized,
                 AdequateAC = model.AdequateAC,
                 Inadequate = model.Inadequate,
@@ -438,13 +439,13 @@ namespace KyoS.Web.Helpers
                 Facilitator = model.Facilitator,
                 Session = model.Session,
                 Present = model.Present,
-                Note = model.Note                
+                Note = model.Note
             };
         }
 
         public async Task<MessageEntity> ToMessageEntity(MessageViewModel model, bool isNew)
         {
-            
+
             return new MessageEntity
             {
                 Id = isNew ? 0 : model.Id,
@@ -454,7 +455,215 @@ namespace KyoS.Web.Helpers
                 Title = model.Title,
                 Text = model.Text,
                 DateCreated = DateTime.Now,
-                Status = MessageStatus.NotRead                
+                Status = MessageStatus.NotRead
+            };
+        }
+
+        public DoctorEntity ToDoctorEntity(DoctorViewModel model, bool isNew, string userId)
+        {
+            return new DoctorEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                Address = model.Address,
+                Telephone = model.Telephone,
+                Email = model.Email,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+            };
+        }
+
+        public PsychiatristEntity ToPsychiatristEntity(PsychiatristViewModel model, bool isNew, string userId)
+        {
+            return new PsychiatristEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                Address = model.Address,
+                Telephone = model.Telephone,
+                Email = model.Email,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+            };
+        }
+
+        public LegalGuardianEntity ToLegalGuardianEntity(LegalGuardianViewModel model, bool isNew, string userId)
+        {
+            return new LegalGuardianEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                Address = model.Address,
+                Telephone = model.Telephone,
+                Email = model.Email,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Country = model.Country,
+                City = model.City,
+                State = model.State,
+                ZipCode = model.ZipCode,
+                TelephoneSecondary = model.TelephoneSecondary,
+                AdressLine2 = model.AdressLine2
+            };
+        }
+
+        public EmergencyContactEntity ToEmergencyContactEntity(EmergencyContactViewModel model, bool isNew, string userId)
+        {
+            return new EmergencyContactEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                Address = model.Address,
+                Telephone = model.Telephone,
+                Email = model.Email,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Country = model.Country,
+                City = model.City,
+                State = model.State,
+                ZipCode = model.ZipCode,
+                TelephoneSecondary = model.TelephoneSecondary,
+                AdressLine2 = model.AdressLine2
+            };
+        }
+
+        public ReferredEntity ToReferredEntity(ReferredViewModel model, bool isNew, string userId)
+        {
+            return new ReferredEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                ReferredNote = model.ReferredNote,
+                Name = model.Name,
+                Address = model.Address,
+                Telephone = model.Telephone,
+                Email = model.Email,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+            };
+        }
+
+        public DiagnosticEntity ToDiagnosticEntity(DiagnosticViewModel model, bool isNew, string userId)
+        {
+            return new DiagnosticEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Code = model.Code,
+                Description = model.Description,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+            };
+        }
+
+        public DoctorViewModel ToDoctorViewModel(DoctorEntity model)
+        {
+            return new DoctorViewModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Address = model.Address,
+                Telephone = model.Telephone,
+                Email = model.Email,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn
+            };
+        }
+
+        public PsychiatristViewModel ToPsychiatristViewModel(PsychiatristEntity model)
+        {
+            return new PsychiatristViewModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Address = model.Address,
+                Telephone = model.Telephone,
+                Email = model.Email,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn
+            };
+        }
+
+        public ReferredViewModel ToReferredViewModel(ReferredEntity model)
+        {
+            return new ReferredViewModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Address = model.Address,
+                Telephone = model.Telephone,
+                Email = model.Email,
+                ReferredNote = model.ReferredNote,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn
+            };
+        }
+
+        public LegalGuardianViewModel ToLegalGuardianViewModel(LegalGuardianEntity model)
+        {
+            return new LegalGuardianViewModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Address = model.Address,
+                Telephone = model.Telephone,
+                Email = model.Email,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                Country = model.Country,
+                City = model.City,
+                State = model.State,
+                ZipCode = model.ZipCode,
+                TelephoneSecondary = model.TelephoneSecondary,
+                AdressLine2 = model.AdressLine2
+            };
+        }
+
+        public EmergencyContactViewModel ToEmergencyContactViewModel(EmergencyContactEntity model)
+        {
+            return new EmergencyContactViewModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Address = model.Address,
+                Telephone = model.Telephone,
+                Email = model.Email,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                Country = model.Country,
+                City = model.City,
+                State = model.State,
+                ZipCode = model.ZipCode,
+                TelephoneSecondary = model.TelephoneSecondary,
+                AdressLine2 = model.AdressLine2
+            };
+        }
+
+        public DiagnosticViewModel ToDiagnosticViewModel(DiagnosticEntity model)
+        {
+            return new DiagnosticViewModel
+            {
+                Id = model.Id,
+                Code = model.Code,
+                Description = model.Description,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
             };
         }
     }

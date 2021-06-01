@@ -396,6 +396,39 @@ namespace KyoS.Web.Helpers
             return stream;
         }
 
+        public Stream FloridaSocialHSAbsenceNoteReport(Workday_Client workdayClient)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Notes\\rptAbsenceNoteFloridaSocialHS.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetWorkdayClientDS(workdayClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Clients");
+            DataSet dataSet1 = new DataSet();
+            dataSet1.Tables.Add(GetClientDS(workdayClient.Client));
+            WebReport.Report.RegisterData(dataSet1.Tables[0], "Clients");
+            DataSet dataSet2 = new DataSet();
+            dataSet2.Tables.Add(GetFacilitatorDS(workdayClient.Facilitator));
+            WebReport.Report.RegisterData(dataSet2.Tables[0], "Facilitators");
+
+            string date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
+            string dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+            WebReport.Report.SetParameterValue("dateNote", date);
+            WebReport.Report.SetParameterValue("dateFacilitator", dateFacilitator);
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+
         public Stream LarkinMTPReport(MTPEntity mtp)
         {
             WebReport WebReport = new WebReport();
@@ -1036,6 +1069,134 @@ namespace KyoS.Web.Helpers
             return stream;
         }
 
+        public Stream FloridaSocialHSMTPReport(MTPEntity mtp)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\MTPs\\rptMTPFloridaSocialHS.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(mtp.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMtpDS(mtp));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosesListDS(mtp.Diagnosis.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnoses");
+
+            List<GoalEntity> goals1 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives1 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals2 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives2 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals3 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives3 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals4 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives4 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals5 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives5 = new List<ObjetiveEntity>();
+
+            int i = 0;
+
+            foreach (GoalEntity item in mtp.Goals)
+            {
+                if (i == 0)
+                {
+                    goals1 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives1 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 1)
+                {
+                    goals2 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives2 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 2)
+                {
+                    goals3 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives3 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 3)
+                {
+                    goals4 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives4 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 4)
+                {
+                    goals5 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives5 = item.Objetives.ToList();
+                    }
+                }
+                i = ++i;
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals1));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals1");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives1));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives1");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals2");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives2");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals3));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals3");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives3));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives3");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals4");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives4");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals5));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals5");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives5));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives5");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+
         #region System.Data function 
         private DataTable GetWorkdayClientDS(Workday_Client workdayClient)
         {
@@ -1347,7 +1508,8 @@ namespace KyoS.Web.Helpers
             }
 
             return dt;
-        }        
+        }
+        
         #endregion
     }
 }

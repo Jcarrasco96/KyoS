@@ -12,24 +12,22 @@ using System.Threading.Tasks;
 namespace KyoS.Web.Controllers
 {
     [Authorize(Roles = "Admin, Mannager")]
-    public class PsychiatristsController : Controller
+    public class LegalGuardiansController : Controller
     {
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
-        
-        public PsychiatristsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
+        public LegalGuardiansController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
         }
-        
         public async Task<IActionResult> Index()
         {
             if (User.IsInRole("Admin"))
             {
-                return View(await _context.Psychiatrists.OrderBy(d => d.Name).ToListAsync());
+                return View(await _context.LegalGuardians.OrderBy(d => d.Name).ToListAsync());
             }
             else
             {
@@ -37,25 +35,25 @@ namespace KyoS.Web.Controllers
                                                              .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic == null)
                 {
-                    return View(await _context.Psychiatrists.OrderBy(d => d.Name).ToListAsync());
+                    return View(await _context.LegalGuardians.OrderBy(d => d.Name).ToListAsync());
                 }
 
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
 
                 if (clinic != null)
                 {
-                    List<PsychiatristEntity> psychiatrists = await _context.Psychiatrists.OrderBy(d => d.Name).ToListAsync();
-                    List<PsychiatristEntity> psychiatrists_by_clinic = new List<PsychiatristEntity>();
+                    List<LegalGuardianEntity> legalguardians = await _context.LegalGuardians.OrderBy(lg => lg.Name).ToListAsync();
+                    List<LegalGuardianEntity> lg_by_clinic = new List<LegalGuardianEntity>();
                     UserEntity user;
-                    foreach (PsychiatristEntity item in psychiatrists)
+                    foreach (LegalGuardianEntity item in legalguardians)
                     {
                         user = _context.Users.FirstOrDefault(u => u.Id == item.CreatedBy);
                         if (clinic.Users.Contains(user))
                         {
-                            psychiatrists_by_clinic.Add(item);
+                            lg_by_clinic.Add(item);
                         }
                     }
-                    return View(psychiatrists_by_clinic);
+                    return View(lg_by_clinic);
                 }
                 else
                 {
@@ -82,25 +80,30 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            PsychiatristViewModel model = new PsychiatristViewModel();
+            LegalGuardianViewModel model = new LegalGuardianViewModel()
+            {
+                Country = "United States",
+                City = "Miami",
+                State = "Florida"
+            };            
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PsychiatristViewModel psychiatristViewModel)
+        public async Task<IActionResult> Create(LegalGuardianViewModel legalGuardianViewModel)
         {
             if (ModelState.IsValid)
             {
-                PsychiatristEntity psychiatrist = await _context.Psychiatrists.FirstOrDefaultAsync(c => c.Name == psychiatristViewModel.Name);
-                if (psychiatrist == null)
+                LegalGuardianEntity legalGuardian = await _context.LegalGuardians.FirstOrDefaultAsync(c => c.Name == legalGuardianViewModel.Name);
+                if (legalGuardian == null)
                 {
                     UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                    PsychiatristEntity psychiatristEntity = _converterHelper.ToPsychiatristEntity(psychiatristViewModel, true, user_logged.Id);
+                    LegalGuardianEntity legalGuardianEntity = _converterHelper.ToLegalGuardianEntity(legalGuardianViewModel, true, user_logged.Id);
 
-                    _context.Add(psychiatristEntity);
+                    _context.Add(legalGuardianEntity);
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -110,7 +113,7 @@ namespace KyoS.Web.Controllers
                     {
                         if (ex.InnerException.Message.Contains("duplicate"))
                         {
-                            ModelState.AddModelError(string.Empty, $"Already exists the psychiatrist: {psychiatristEntity.Name}");
+                            ModelState.AddModelError(string.Empty, $"Already exists the legal guardian: {legalGuardianEntity.Name}");
                         }
                         else
                         {
@@ -123,7 +126,7 @@ namespace KyoS.Web.Controllers
                     return RedirectToAction("Create", new { id = 2 });
                 }
             }
-            return View(psychiatristViewModel);
+            return View(legalGuardianViewModel);
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -133,22 +136,22 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            PsychiatristEntity psychiatristEntity = await _context.Psychiatrists.FirstOrDefaultAsync(c => c.Id == id);
-            if (psychiatristEntity == null)
+            LegalGuardianEntity legalGuardianEntity = await _context.LegalGuardians.FirstOrDefaultAsync(c => c.Id == id);
+            if (legalGuardianEntity == null)
             {
                 return NotFound();
             }
 
-            PsychiatristViewModel psychiatristViewModel = _converterHelper.ToPsychiatristViewModel(psychiatristEntity);
+            LegalGuardianViewModel legalGuardianViewModel = _converterHelper.ToLegalGuardianViewModel(legalGuardianEntity);
 
-            return View(psychiatristViewModel);
+            return View(legalGuardianViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, PsychiatristViewModel psychiatristViewModel)
+        public async Task<IActionResult> Edit(int id, LegalGuardianViewModel legalGuardianViewModel)
         {
-            if (id != psychiatristViewModel.Id)
+            if (id != legalGuardianViewModel.Id)
             {
                 return NotFound();
             }
@@ -158,8 +161,8 @@ namespace KyoS.Web.Controllers
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                PsychiatristEntity psychiatristEntity = _converterHelper.ToPsychiatristEntity(psychiatristViewModel, false, user_logged.Id);
-                _context.Update(psychiatristEntity);
+                LegalGuardianEntity legalGuardianEntity = _converterHelper.ToLegalGuardianEntity(legalGuardianViewModel, false, user_logged.Id);
+                _context.Update(legalGuardianEntity);
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -169,7 +172,7 @@ namespace KyoS.Web.Controllers
                 {
                     if (ex.InnerException.Message.Contains("duplicate"))
                     {
-                        ModelState.AddModelError(string.Empty, $"Already exists the psychiatrist: {psychiatristEntity.Name}");
+                        ModelState.AddModelError(string.Empty, $"Already exists the legal guardian: {legalGuardianEntity.Name}");
                     }
                     else
                     {
@@ -177,7 +180,7 @@ namespace KyoS.Web.Controllers
                     }
                 }
             }
-            return View(psychiatristViewModel);
+            return View(legalGuardianViewModel);
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -187,13 +190,13 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            PsychiatristEntity psychiatristEntity = await _context.Psychiatrists.FirstOrDefaultAsync(c => c.Id == id);
-            if (psychiatristEntity == null)
+            LegalGuardianEntity legalGuardiansEntity = await _context.LegalGuardians.FirstOrDefaultAsync(c => c.Id == id);
+            if (legalGuardiansEntity == null)
             {
                 return NotFound();
             }
 
-            _context.Psychiatrists.Remove(psychiatristEntity);
+            _context.LegalGuardians.Remove(legalGuardiansEntity);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

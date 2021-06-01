@@ -61,8 +61,10 @@ namespace KyoS.Web.Data.Entities
 
         public string OtherLanguage { get; set; }
 
-        [Display(Name = "Photo")]
+        [Display(Name = "Sign")]
         public string SignPath { get; set; }
+
+        public RelationshipType RelationShipOfLegalGuardian { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public StatusType Status { get; set; }

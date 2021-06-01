@@ -11,6 +11,10 @@ namespace KyoS.Web.Models
         public int IdClinic { get; set; }
         public IEnumerable<SelectListItem> Clinics { get; set; }
 
+        [Display(Name = "Relationship with legal guardian")]
+        public int IdRelationship { get; set; }
+        public IEnumerable<SelectListItem> Relationships { get; set; }
+
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Status")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a status.")]

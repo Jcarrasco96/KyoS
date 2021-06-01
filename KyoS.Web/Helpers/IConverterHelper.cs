@@ -36,5 +36,17 @@ namespace KyoS.Web.Helpers
         NoteViewModel ToNoteViewModel(NoteEntity model);
         Workday_ClientViewModel ToWorkdayClientViewModel(Workday_Client model);
         Task<MessageEntity> ToMessageEntity(MessageViewModel model, bool isNew);
+        DoctorEntity ToDoctorEntity(DoctorViewModel model, bool isNew, string userId);
+        PsychiatristEntity ToPsychiatristEntity(PsychiatristViewModel model, bool isNew, string userId);
+        LegalGuardianEntity ToLegalGuardianEntity(LegalGuardianViewModel model, bool isNew, string userId);
+        EmergencyContactEntity ToEmergencyContactEntity(EmergencyContactViewModel model, bool isNew, string userId);
+        ReferredEntity ToReferredEntity(ReferredViewModel model, bool isNew, string userId);
+        DiagnosticEntity ToDiagnosticEntity(DiagnosticViewModel model, bool isNew, string userId);
+        DoctorViewModel ToDoctorViewModel(DoctorEntity model);
+        PsychiatristViewModel ToPsychiatristViewModel(PsychiatristEntity model);
+        ReferredViewModel ToReferredViewModel(ReferredEntity model);
+        LegalGuardianViewModel ToLegalGuardianViewModel(LegalGuardianEntity model);
+        EmergencyContactViewModel ToEmergencyContactViewModel(EmergencyContactEntity model);
+        DiagnosticViewModel ToDiagnosticViewModel(DiagnosticEntity model);
     }
 }

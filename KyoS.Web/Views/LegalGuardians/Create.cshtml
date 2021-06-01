@@ -1,0 +1,68 @@
+﻿@model KyoS.Web.Models.LegalGuardianViewModel
+@{
+    ViewData["Title"] = "Create Legal Guardian";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create</title>
+</head>
+<body>
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("Legal Guardians", "Index", "LegalGuardians")
+            </li>
+            <li class="active">Create</li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+    <h4>Create new legal guardian</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            @if (ViewBag.Creado == "Y")
+            {
+                <div class="alert alert-block alert-success">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok green"></i>
+                    <strong class="green">
+                        Legal guardian been successfully created
+                    </strong>
+
+                </div>
+            }
+            @if (ViewBag.Creado == "E")
+            {
+                <div class="alert alert-block alert-warning">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. Legal guardian already exist
+                    </strong>
+                </div>
+            }
+        </div>
+        <div>
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <partial name="_LegalGuardians" />
+                <div class="form-group col-md-12">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

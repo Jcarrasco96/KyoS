@@ -385,5 +385,29 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboRelationships()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = RelationshipType.Unknown.ToString(), Value = "0"},
+                new SelectListItem { Text = RelationshipType.Brother.ToString(), Value = "1"},
+                new SelectListItem { Text = RelationshipType.Child.ToString(), Value = "2"},
+                new SelectListItem { Text = RelationshipType.Daugther.ToString(), Value = "3"},
+                new SelectListItem { Text = RelationshipType.Father.ToString(), Value = "4"},
+                new SelectListItem { Text = RelationshipType.Friend.ToString(), Value = "5"},
+                new SelectListItem { Text = RelationshipType.Guardian.ToString(), Value = "6"},
+                new SelectListItem { Text = RelationshipType.Mother.ToString(), Value = "7"},
+                new SelectListItem { Text = RelationshipType.Psychiatrist.ToString(), Value = "8"},
+                new SelectListItem { Text = RelationshipType.Self.ToString(), Value = "9"},
+                new SelectListItem { Text = RelationshipType.Sibling.ToString(), Value = "10"},
+                new SelectListItem { Text = RelationshipType.Sister.ToString(), Value = "11"},
+                new SelectListItem { Text = RelationshipType.Spouse.ToString(), Value = "12"},
+                new SelectListItem { Text = RelationshipType.Son.ToString(), Value = "13"},
+                new SelectListItem { Text = RelationshipType.Other.ToString(), Value = "14"}
+            };
+            
+            return list;
+        }
     }
 }

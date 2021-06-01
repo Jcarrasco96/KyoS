@@ -1,48 +1,46 @@
 ﻿@model KyoS.Web.Models.ClientViewModel
-    <div class="col-md-push-12" >
-        <div class="form-group col-md-6">
-            <label asp-for="Name" class="control-label"></label>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-3">
+            <label asp-for="Name" class="control-label"></label>&nbsp;*
             <input asp-for="Name" class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-3">
             <label asp-for="IdClinic" class="control-label"></label>
             <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control"></select>
             <span asp-validation-for="IdClinic" class="text-danger"></span>
         </div>
+        <div class="form-group col-md-2">
+            <label asp-for="DateOfBirth" class="control-label"></label>&nbsp;*
+            <input asp-for="DateOfBirth" class="form-control" />
+            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdGender" class="control-label"></label>&nbsp;*
+            <select asp-for="IdGender" asp-items="Model.GenderList" class="form-control"></select>
+            <span asp-validation-for="IdGender" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdStatus" class="control-label"></label>&nbsp;*
+            <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
+            <span asp-validation-for="IdStatus" class="text-danger"></span>
+        </div>
     </div>
     <div class="col-md-12">
         &nbsp;
     </div>
-    <div class="col-md-push-12">
-            <div class="form-group col-md-3">
-                <label asp-for="DateOfBirth" class="control-label"></label>
-                <input asp-for="DateOfBirth" class="form-control"/>
-                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-3">
-                <label asp-for="IdGender" class="control-label"></label>
-                <select asp-for="IdGender" asp-items="Model.GenderList" class="form-control"></select>
-                <span asp-validation-for="IdGender" class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-3">
-                <label asp-for="IdStatus" class="control-label"></label>
-                <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
-                <span asp-validation-for="IdStatus" class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-3">
-                <label asp-for="Code" class="control-label"></label>
-                <input asp-for="Code" class="form-control" />
-                <span asp-validation-for="Code" class="text-danger"></span>
-            </div>
-    </div>
-    <div class="col-md-12">
-        &nbsp;
-    </div>
-    <div class="col-md-push-12">
-        <div class="form-group col-md-3">
+    <div class="col-md-push-12">       
+        <div class="form-group col-md-2">
+            <label asp-for="Code" class="control-label"></label>
+            <input asp-for="Code" class="form-control" />
+            <span asp-validation-for="Code" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
             <label asp-for="MedicaidID" class="control-label"></label>
             <input asp-for="MedicaidID" class="form-control" />
             <span asp-validation-for="MedicaidID" class="text-danger"></span>
         </div>
     </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div> 

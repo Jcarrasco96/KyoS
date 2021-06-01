@@ -12,13 +12,12 @@ using System.Threading.Tasks;
 namespace KyoS.Web.Controllers
 {
     [Authorize(Roles = "Admin, Mannager")]
-    public class PsychiatristsController : Controller
+    public class EmergencyContactsController : Controller
     {
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
-        
-        public PsychiatristsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
+        public EmergencyContactsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
@@ -29,7 +28,7 @@ namespace KyoS.Web.Controllers
         {
             if (User.IsInRole("Admin"))
             {
-                return View(await _context.Psychiatrists.OrderBy(d => d.Name).ToListAsync());
+                return View(await _context.EmergencyContacts.OrderBy(d => d.Name).ToListAsync());
             }
             else
             {
@@ -37,25 +36,25 @@ namespace KyoS.Web.Controllers
                                                              .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic == null)
                 {
-                    return View(await _context.Psychiatrists.OrderBy(d => d.Name).ToListAsync());
+                    return View(await _context.EmergencyContacts.OrderBy(d => d.Name).ToListAsync());
                 }
 
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
 
                 if (clinic != null)
                 {
-                    List<PsychiatristEntity> psychiatrists = await _context.Psychiatrists.OrderBy(d => d.Name).ToListAsync();
-                    List<PsychiatristEntity> psychiatrists_by_clinic = new List<PsychiatristEntity>();
+                    List<EmergencyContactEntity> ec = await _context.EmergencyContacts.OrderBy(d => d.Name).ToListAsync();
+                    List<EmergencyContactEntity> ec_by_clinic = new List<EmergencyContactEntity>();
                     UserEntity user;
-                    foreach (PsychiatristEntity item in psychiatrists)
+                    foreach (EmergencyContactEntity item in ec)
                     {
                         user = _context.Users.FirstOrDefault(u => u.Id == item.CreatedBy);
                         if (clinic.Users.Contains(user))
                         {
-                            psychiatrists_by_clinic.Add(item);
+                            ec_by_clinic.Add(item);
                         }
                     }
-                    return View(psychiatrists_by_clinic);
+                    return View(ec_by_clinic);
                 }
                 else
                 {
@@ -63,7 +62,7 @@ namespace KyoS.Web.Controllers
                 }
             }
         }
-
+        
         public IActionResult Create(int id = 0)
         {
             if (id == 1)
@@ -82,25 +81,30 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            PsychiatristViewModel model = new PsychiatristViewModel();
+            EmergencyContactViewModel model = new EmergencyContactViewModel()
+            {
+                Country = "United States",
+                City = "Miami",
+                State = "Florida"
+            };
             return View(model);
         }
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PsychiatristViewModel psychiatristViewModel)
+        public async Task<IActionResult> Create(EmergencyContactViewModel emergencyContactViewModel)
         {
             if (ModelState.IsValid)
             {
-                PsychiatristEntity psychiatrist = await _context.Psychiatrists.FirstOrDefaultAsync(c => c.Name == psychiatristViewModel.Name);
-                if (psychiatrist == null)
+                EmergencyContactEntity emergencyContact = await _context.EmergencyContacts.FirstOrDefaultAsync(c => c.Name == emergencyContactViewModel.Name);
+                if (emergencyContact == null)
                 {
                     UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                    PsychiatristEntity psychiatristEntity = _converterHelper.ToPsychiatristEntity(psychiatristViewModel, true, user_logged.Id);
+                    EmergencyContactEntity emergencyContactEntity = _converterHelper.ToEmergencyContactEntity(emergencyContactViewModel, true, user_logged.Id);
 
-                    _context.Add(psychiatristEntity);
+                    _context.Add(emergencyContactEntity);
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -110,7 +114,7 @@ namespace KyoS.Web.Controllers
                     {
                         if (ex.InnerException.Message.Contains("duplicate"))
                         {
-                            ModelState.AddModelError(string.Empty, $"Already exists the psychiatrist: {psychiatristEntity.Name}");
+                            ModelState.AddModelError(string.Empty, $"Already exists the emergency contact: {emergencyContactEntity.Name}");
                         }
                         else
                         {
@@ -123,7 +127,7 @@ namespace KyoS.Web.Controllers
                     return RedirectToAction("Create", new { id = 2 });
                 }
             }
-            return View(psychiatristViewModel);
+            return View(emergencyContactViewModel);
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -133,22 +137,22 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            PsychiatristEntity psychiatristEntity = await _context.Psychiatrists.FirstOrDefaultAsync(c => c.Id == id);
-            if (psychiatristEntity == null)
+            EmergencyContactEntity emergencyContactEntity = await _context.EmergencyContacts.FirstOrDefaultAsync(c => c.Id == id);
+            if (emergencyContactEntity == null)
             {
                 return NotFound();
             }
 
-            PsychiatristViewModel psychiatristViewModel = _converterHelper.ToPsychiatristViewModel(psychiatristEntity);
+            EmergencyContactViewModel emergencyContactViewModel = _converterHelper.ToEmergencyContactViewModel(emergencyContactEntity);
 
-            return View(psychiatristViewModel);
+            return View(emergencyContactViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, PsychiatristViewModel psychiatristViewModel)
+        public async Task<IActionResult> Edit(int id, EmergencyContactViewModel emergencyContactViewModel)
         {
-            if (id != psychiatristViewModel.Id)
+            if (id != emergencyContactViewModel.Id)
             {
                 return NotFound();
             }
@@ -158,8 +162,8 @@ namespace KyoS.Web.Controllers
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                PsychiatristEntity psychiatristEntity = _converterHelper.ToPsychiatristEntity(psychiatristViewModel, false, user_logged.Id);
-                _context.Update(psychiatristEntity);
+                EmergencyContactEntity emergencyContactEntity = _converterHelper.ToEmergencyContactEntity(emergencyContactViewModel, false, user_logged.Id);
+                _context.Update(emergencyContactEntity);
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -169,7 +173,7 @@ namespace KyoS.Web.Controllers
                 {
                     if (ex.InnerException.Message.Contains("duplicate"))
                     {
-                        ModelState.AddModelError(string.Empty, $"Already exists the psychiatrist: {psychiatristEntity.Name}");
+                        ModelState.AddModelError(string.Empty, $"Already exists the emergency contact: {emergencyContactEntity.Name}");
                     }
                     else
                     {
@@ -177,7 +181,7 @@ namespace KyoS.Web.Controllers
                     }
                 }
             }
-            return View(psychiatristViewModel);
+            return View(emergencyContactViewModel);
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -187,13 +191,13 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            PsychiatristEntity psychiatristEntity = await _context.Psychiatrists.FirstOrDefaultAsync(c => c.Id == id);
-            if (psychiatristEntity == null)
+            EmergencyContactEntity emergencyContactEntity = await _context.EmergencyContacts.FirstOrDefaultAsync(c => c.Id == id);
+            if (emergencyContactEntity == null)
             {
                 return NotFound();
             }
 
-            _context.Psychiatrists.Remove(psychiatristEntity);
+            _context.EmergencyContacts.Remove(emergencyContactEntity);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

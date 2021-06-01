@@ -1,5 +1,6 @@
 ﻿using KyoS.Web.Data.Abstract;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -7,6 +8,7 @@ namespace KyoS.Web.Data.Entities
     {
         public int Id{ get; set; }
 
+        [Display(Name = "Referred Note")]
         public string ReferredNote { get; set; }
 
         public ICollection<ClientEntity> Clients { get; set; }

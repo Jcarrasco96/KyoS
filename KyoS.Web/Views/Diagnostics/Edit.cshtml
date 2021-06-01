@@ -1,0 +1,40 @@
+﻿@model KyoS.Web.Models.DiagnosticViewModel
+
+@{
+    ViewData["Title"] = "Edit diagnostic";
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Diagnostics", "Index", "Diagnostics")
+        </li>
+        <li class="active">Edit</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<h4>Edit diagnostic</h4>
+<hr />
+<div class="row">
+    <div>
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <partial name="_Diagnostics" />
+            <div class="form-group col-md-12">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-success">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+

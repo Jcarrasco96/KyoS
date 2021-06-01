@@ -1,4 +1,5 @@
 ﻿using KyoS.Common.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Abstract
 {
@@ -8,8 +9,9 @@ namespace KyoS.Web.Data.Abstract
         public string City { get; set; }
         public string State { get; set; }
         public string ZipCode { get; set; }
+        [Display(Name = "Telephone Secondary")]
         public string TelephoneSecondary { get; set; }
-        public string AdressLine2 { get; set; }
-        public virtual RelationshipType RelationShip { get; set; }
+        [Display(Name = "Address Line")]
+        public string AdressLine2 { get; set; }        
     }
 }

@@ -12,13 +12,13 @@ using System.Threading.Tasks;
 namespace KyoS.Web.Controllers
 {
     [Authorize(Roles = "Admin, Mannager")]
-    public class PsychiatristsController : Controller
+    public class ReferredsController : Controller
     {
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         
-        public PsychiatristsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
+        public ReferredsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
@@ -29,7 +29,7 @@ namespace KyoS.Web.Controllers
         {
             if (User.IsInRole("Admin"))
             {
-                return View(await _context.Psychiatrists.OrderBy(d => d.Name).ToListAsync());
+                return View(await _context.Referreds.OrderBy(d => d.Name).ToListAsync());
             }
             else
             {
@@ -37,25 +37,25 @@ namespace KyoS.Web.Controllers
                                                              .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic == null)
                 {
-                    return View(await _context.Psychiatrists.OrderBy(d => d.Name).ToListAsync());
+                    return View(await _context.Referreds.OrderBy(d => d.Name).ToListAsync());
                 }
 
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
 
                 if (clinic != null)
                 {
-                    List<PsychiatristEntity> psychiatrists = await _context.Psychiatrists.OrderBy(d => d.Name).ToListAsync();
-                    List<PsychiatristEntity> psychiatrists_by_clinic = new List<PsychiatristEntity>();
+                    List<ReferredEntity> referreds = await _context.Referreds.OrderBy(d => d.Name).ToListAsync();
+                    List<ReferredEntity> referreds_by_clinic = new List<ReferredEntity>();
                     UserEntity user;
-                    foreach (PsychiatristEntity item in psychiatrists)
+                    foreach (ReferredEntity item in referreds)
                     {
                         user = _context.Users.FirstOrDefault(u => u.Id == item.CreatedBy);
                         if (clinic.Users.Contains(user))
                         {
-                            psychiatrists_by_clinic.Add(item);
+                            referreds_by_clinic.Add(item);
                         }
                     }
-                    return View(psychiatrists_by_clinic);
+                    return View(referreds_by_clinic);
                 }
                 else
                 {
@@ -82,25 +82,25 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            PsychiatristViewModel model = new PsychiatristViewModel();
+            ReferredViewModel model = new ReferredViewModel();
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PsychiatristViewModel psychiatristViewModel)
+        public async Task<IActionResult> Create(ReferredViewModel referredViewModel)
         {
             if (ModelState.IsValid)
             {
-                PsychiatristEntity psychiatrist = await _context.Psychiatrists.FirstOrDefaultAsync(c => c.Name == psychiatristViewModel.Name);
-                if (psychiatrist == null)
+                ReferredEntity referred = await _context.Referreds.FirstOrDefaultAsync(c => c.Name == referredViewModel.Name);
+                if (referred == null)
                 {
                     UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                    PsychiatristEntity psychiatristEntity = _converterHelper.ToPsychiatristEntity(psychiatristViewModel, true, user_logged.Id);
+                    ReferredEntity referredEntity = _converterHelper.ToReferredEntity(referredViewModel, true, user_logged.Id);
 
-                    _context.Add(psychiatristEntity);
+                    _context.Add(referredEntity);
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -110,7 +110,7 @@ namespace KyoS.Web.Controllers
                     {
                         if (ex.InnerException.Message.Contains("duplicate"))
                         {
-                            ModelState.AddModelError(string.Empty, $"Already exists the psychiatrist: {psychiatristEntity.Name}");
+                            ModelState.AddModelError(string.Empty, $"Already exists the referred: {referredEntity.Name}");
                         }
                         else
                         {
@@ -123,7 +123,7 @@ namespace KyoS.Web.Controllers
                     return RedirectToAction("Create", new { id = 2 });
                 }
             }
-            return View(psychiatristViewModel);
+            return View(referredViewModel);
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -133,22 +133,22 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            PsychiatristEntity psychiatristEntity = await _context.Psychiatrists.FirstOrDefaultAsync(c => c.Id == id);
-            if (psychiatristEntity == null)
+            ReferredEntity referredEntity = await _context.Referreds.FirstOrDefaultAsync(c => c.Id == id);
+            if (referredEntity == null)
             {
                 return NotFound();
             }
 
-            PsychiatristViewModel psychiatristViewModel = _converterHelper.ToPsychiatristViewModel(psychiatristEntity);
+            ReferredViewModel referredViewModel = _converterHelper.ToReferredViewModel(referredEntity);
 
-            return View(psychiatristViewModel);
+            return View(referredViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, PsychiatristViewModel psychiatristViewModel)
+        public async Task<IActionResult> Edit(int id, ReferredViewModel referredViewModel)
         {
-            if (id != psychiatristViewModel.Id)
+            if (id != referredViewModel.Id)
             {
                 return NotFound();
             }
@@ -158,8 +158,8 @@ namespace KyoS.Web.Controllers
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                PsychiatristEntity psychiatristEntity = _converterHelper.ToPsychiatristEntity(psychiatristViewModel, false, user_logged.Id);
-                _context.Update(psychiatristEntity);
+                ReferredEntity referredEntity = _converterHelper.ToReferredEntity(referredViewModel, false, user_logged.Id);
+                _context.Update(referredEntity);
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -169,7 +169,7 @@ namespace KyoS.Web.Controllers
                 {
                     if (ex.InnerException.Message.Contains("duplicate"))
                     {
-                        ModelState.AddModelError(string.Empty, $"Already exists the psychiatrist: {psychiatristEntity.Name}");
+                        ModelState.AddModelError(string.Empty, $"Already exists the referred: {referredEntity.Name}");
                     }
                     else
                     {
@@ -177,7 +177,7 @@ namespace KyoS.Web.Controllers
                     }
                 }
             }
-            return View(psychiatristViewModel);
+            return View(referredViewModel);
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -187,13 +187,13 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            PsychiatristEntity psychiatristEntity = await _context.Psychiatrists.FirstOrDefaultAsync(c => c.Id == id);
-            if (psychiatristEntity == null)
+            ReferredEntity referredEntity = await _context.Referreds.FirstOrDefaultAsync(c => c.Id == id);
+            if (referredEntity == null)
             {
                 return NotFound();
             }
 
-            _context.Psychiatrists.Remove(psychiatristEntity);
+            _context.Referreds.Remove(referredEntity);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -1,5 +1,4 @@
-﻿using AspNetCore.Reporting;
-using KyoS.Web.Data;
+﻿using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
@@ -12,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
@@ -871,6 +869,11 @@ namespace KyoS.Web.Controllers
             if (mtpEntity.Client.Clinic.Name == "ADVANCED GROUP MEDICAL CENTER")
             {
                 Stream stream = _reportHelper.AdvancedGroupMCMTPReport(mtpEntity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (mtpEntity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            {
+                Stream stream = _reportHelper.FloridaSocialHSMTPReport(mtpEntity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 

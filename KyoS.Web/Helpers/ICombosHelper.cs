@@ -25,5 +25,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboGroups();
         IEnumerable<SelectListItem> GetComboGoals(int idMTP);
         IEnumerable<SelectListItem> GetComboObjetives(int idGoal);
+        IEnumerable<SelectListItem> GetComboRelationships();
     }
 }
