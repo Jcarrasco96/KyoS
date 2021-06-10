@@ -35,8 +35,10 @@ namespace KyoS.Web.Data.Entities
 
         public RaceType Race { get; set; }
 
+        [Display(Name = "Full Address")]
         public string FullAddress { get; set; }
 
+        [Display(Name = "Alternative Address")]
         public string AlternativeAddress { get; set; }
 
         public string City { get; set; }
@@ -51,14 +53,18 @@ namespace KyoS.Web.Data.Entities
 
         public string Telephone { get; set; }
 
+        [Display(Name = "Telephone Secondary")]
         public string TelephoneSecondary { get; set; }
 
+        [Display(Name = "Marital Status")]
         public MaritalStatus MaritalStatus { get; set; }
 
         public EthnicityType Ethnicity { get; set; }
 
+        [Display(Name = "Preferred Language")]
         public virtual PreferredLanguage PreferredLanguage { get; set; }
 
+        [Display(Name = "Other Language")]
         public string OtherLanguage { get; set; }
 
         [Display(Name = "Sign")]

@@ -10,4 +10,14 @@ namespace KyoS.Common.Enums
         HispanicLatino,
         NonHispanicLatino
     }
+
+    public class EthnicityUtils
+    {
+        public static EthnicityType GetEthnicityByIndex(int index)
+        {
+            return (index == 0) ? EthnicityType.Unknown :
+                   (index == 1) ? EthnicityType.HispanicLatino :
+                   (index == 2) ? EthnicityType.NonHispanicLatino : EthnicityType.Unknown;
+        }
+    }
 }

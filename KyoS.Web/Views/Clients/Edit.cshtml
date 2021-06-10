@@ -19,17 +19,60 @@
 <div class="row">
     <div>
         <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />            
-            <partial name="_Clients" />
             <div class="form-group col-md-12">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-success">Back</a>
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">General</a></li>
+                    <li role="presentation"><a href="#others" aria-controls="others" role="tab" data-toggle="tab">Others</a></li>
+                    <li role="presentation"><a href="#diagnostics" aria-controls="diagnostics" role="tab" data-toggle="tab">Diagnostics</a></li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="general">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="PhotoPath" />
+                        <input type="hidden" asp-for="SignPath" />
+                        <input type="hidden" asp-for="CreatedBy" />
+                        <input type="hidden" asp-for="CreatedOn" />
+                        <partial name="_Clients" />
+                        <div class="form-group col-md-12">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                            <a asp-action="Index" class="btn btn-success">Back</a>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="others">
+                        <partial name="_ClientsOthers" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="diagnostics">
+                        <partial name="_ClientsDiagnostics" />
+                    </div>
+                </div>
             </div>
         </form>
-    </div>    
+    </div>
 </div>
+
+<partial name="_ModalPopup" />
+<partial name="_DeleteDialog" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+                        $(document).ready(function () {
+                            // Delete item
+                            var item_to_delete;
+
+                            $('.deleteItem').click((e) => {
+                                item_to_delete = e.currentTarget.dataset.id;
+                            });
+
+                            $("#btnYesDelete").click(function () {
+                                var url = "@Url.Action("DeleteDiagnosticTemp", "Clients")";
+                                window.location.href = url + '/' + item_to_delete;
+                            });
+                        });
+    </script>
 }

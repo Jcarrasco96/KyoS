@@ -21,6 +21,7 @@ namespace KyoS.Web.Data
         public DbSet<NotePrototype_Classification> NotesPrototypes_Classifications { get; set; }        
         public DbSet<DiagnosisEntity> Diagnoses { get; set; }
         public DbSet<DiagnosisTempEntity> DiagnosesTemp { get; set; }
+        public DbSet<DiagnosticTempEntity> DiagnosticsTemp { get; set; }
         public DbSet<MTPEntity> MTPs { get; set; }
         public DbSet<GoalEntity> Goals { get; set; }
         public DbSet<ObjetiveEntity> Objetives { get; set; }

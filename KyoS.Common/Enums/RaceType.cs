@@ -14,4 +14,17 @@ namespace KyoS.Common.Enums
         Asian,
         Other
     }
+    public class RaceUtils
+    {
+        public static RaceType GetRaceByIndex(int index)
+        {
+            return (index == 0) ? RaceType.Unknown :
+                   (index == 1) ? RaceType.White :
+                   (index == 2) ? RaceType.Black :
+                   (index == 3) ? RaceType.NativeAmerican :
+                   (index == 4) ? RaceType.AfricanAmerican :
+                   (index == 5) ? RaceType.Asian :
+                   (index == 6) ? RaceType.Other : RaceType.Unknown;
+        }
+    }
 }

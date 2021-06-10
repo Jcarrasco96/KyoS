@@ -147,14 +147,8 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<ClientEntity> ToClientEntity(ClientViewModel model, bool isNew)
+        public async Task<ClientEntity> ToClientEntity(ClientViewModel model, bool isNew, string photoPath, string signPath, string userId)
         {
-            ClinicEntity clinic = null;
-            if (model.IdClinic != 0)
-            {
-                clinic = await _context.Clinics.FindAsync(model.IdClinic);
-            }
-
             return new ClientEntity
             {
                 Id = isNew ? 0 : model.Id,
@@ -163,13 +157,41 @@ namespace KyoS.Web.Helpers
                 DateOfBirth = model.DateOfBirth,
                 Code = model.Code,
                 MedicaidID = model.MedicaidID,
-                Clinic = clinic,
-                Status = StatusUtils.GetStatusByIndex(model.IdStatus)
+                Clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == model.IdClinic),
+                Status = StatusUtils.GetStatusByIndex(model.IdStatus),
+                Email = model.Email,
+                Telephone = model.Telephone,
+                TelephoneSecondary = model.TelephoneSecondary,
+                SSN = model.SSN,
+                FullAddress = model.FullAddress,
+                AlternativeAddress = model.AlternativeAddress,
+                Country = model.Country,
+                City = model.City,
+                State = model.State,
+                ZipCode = model.ZipCode,
+                Race = RaceUtils.GetRaceByIndex(model.IdRace),
+                MaritalStatus = MaritalUtils.GetMaritalByIndex(model.IdMaritalStatus),
+                Ethnicity = EthnicityUtils.GetEthnicityByIndex(model.IdEthnicity),
+                PreferredLanguage = PreferredLanguageUtils.GetPreferredLanguageByIndex(model.IdPreferredLanguage),
+                OtherLanguage = model.OtherLanguage,
+                PhotoPath = photoPath,
+                SignPath = signPath,
+                Doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == model.IdDoctor),
+                Psychiatrist = await _context.Psychiatrists.FirstOrDefaultAsync(p => p.Id == model.IdPsychiatrist),
+                Referred = await _context.Referreds.FirstOrDefaultAsync(r => r.Id == model.IdReferred),
+                LegalGuardian = await _context.LegalGuardians.FirstOrDefaultAsync(lg => lg.Id == model.IdLegalGuardian),
+                EmergencyContact = await _context.EmergencyContacts.FirstOrDefaultAsync(ec => ec.Id == model.IdEmergencyContact),
+                RelationShipOfLegalGuardian = RelationshipUtils.GetRelationshipByIndex(model.IdRelationship),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
             };
         }
 
-        public ClientViewModel ToClientViewModel(ClientEntity clientEntity)
+        public ClientViewModel ToClientViewModel(ClientEntity clientEntity, string userId)
         {
+
             return new ClientViewModel
             {
                 Id = clientEntity.Id,
@@ -183,6 +205,44 @@ namespace KyoS.Web.Helpers
                 Clinics = _combosHelper.GetComboClinics(),
                 IdGender = (clientEntity.Gender == GenderType.Female) ? 1 : 2,
                 GenderList = _combosHelper.GetComboGender(),
+                CreatedBy = clientEntity.CreatedBy,
+                CreatedOn = clientEntity.CreatedOn,
+                LastModifiedBy = clientEntity.LastModifiedBy,
+                LastModifiedOn = clientEntity.LastModifiedOn,
+                Email = clientEntity.Email,
+                Telephone = clientEntity.Telephone,
+                TelephoneSecondary = clientEntity.TelephoneSecondary,
+                SSN = clientEntity.SSN,
+                FullAddress = clientEntity.FullAddress,
+                AlternativeAddress = clientEntity.AlternativeAddress,
+                Country = clientEntity.Country,
+                City = clientEntity.City,
+                State = clientEntity.State,
+                ZipCode = clientEntity.ZipCode,
+                IdRace = Convert.ToInt32(clientEntity.Race),
+                Races = _combosHelper.GetComboRaces(),
+                IdMaritalStatus = Convert.ToInt32(clientEntity.MaritalStatus),
+                Maritals = _combosHelper.GetComboMaritals(),
+                IdEthnicity = Convert.ToInt32(clientEntity.Ethnicity),
+                Ethnicities = _combosHelper.GetComboEthnicities(),
+                IdPreferredLanguage = Convert.ToInt32(clientEntity.PreferredLanguage),
+                Languages = _combosHelper.GetComboLanguages(),
+                OtherLanguage = clientEntity.OtherLanguage,
+                PhotoPath = clientEntity.PhotoPath,
+                SignPath = clientEntity.SignPath,
+                IdRelationship = Convert.ToInt32(clientEntity.RelationShipOfLegalGuardian),
+                Relationships = _combosHelper.GetComboRelationships(),
+                IdReferred = (clientEntity.Referred != null) ? clientEntity.Referred.Id : 0,
+                Referreds = _combosHelper.GetComboReferredsByClinic(userId),                
+                IdEmergencyContact = (clientEntity.EmergencyContact != null) ? clientEntity.EmergencyContact.Id : 0,
+                EmergencyContacts = _combosHelper.GetComboEmergencyContactsByClinic(userId),
+                IdDoctor = (clientEntity.Doctor != null) ? clientEntity.Doctor.Id : 0,
+                Doctors = _combosHelper.GetComboDoctorsByClinic(userId),
+                IdPsychiatrist = (clientEntity.Psychiatrist != null) ? clientEntity.Psychiatrist.Id : 0,
+                Psychiatrists = _combosHelper.GetComboPsychiatristsByClinic(userId),
+                IdLegalGuardian = (clientEntity.LegalGuardian != null) ? clientEntity.LegalGuardian.Id : 0,
+                LegalsGuardians = _combosHelper.GetComboLegalGuardiansByClinic(userId),
+                DiagnosticTemp = _context.DiagnosticsTemp
             };
         }
 

@@ -409,5 +409,273 @@ namespace KyoS.Web.Helpers
             
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboRaces()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = RaceType.Unknown.ToString(), Value = "0"},
+                new SelectListItem { Text = RaceType.White.ToString(), Value = "1"},
+                new SelectListItem { Text = RaceType.Black.ToString(), Value = "2"},
+                new SelectListItem { Text = RaceType.NativeAmerican.ToString(), Value = "3"},
+                new SelectListItem { Text = RaceType.AfricanAmerican.ToString(), Value = "4"},
+                new SelectListItem { Text = RaceType.Asian.ToString(), Value = "5"},
+                new SelectListItem { Text = RaceType.Other.ToString(), Value = "6"}                
+            };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboMaritals()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = MaritalStatus.Unknown.ToString(), Value = "0"},
+                new SelectListItem { Text = MaritalStatus.Single.ToString(), Value = "1"},
+                new SelectListItem { Text = MaritalStatus.Married.ToString(), Value = "2"},
+                new SelectListItem { Text = MaritalStatus.Cohabiting.ToString(), Value = "3"},
+                new SelectListItem { Text = MaritalStatus.Divorced.ToString(), Value = "4"},
+                new SelectListItem { Text = MaritalStatus.Separated.ToString(), Value = "5"},
+                new SelectListItem { Text = MaritalStatus.Widowed.ToString(), Value = "6"}
+            };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboEthnicities()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = EthnicityType.Unknown.ToString(), Value = "0"},
+                new SelectListItem { Text = EthnicityType.HispanicLatino.ToString(), Value = "1"},
+                new SelectListItem { Text = EthnicityType.NonHispanicLatino.ToString(), Value = "2"}
+                
+            };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboLanguages()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = PreferredLanguage.English.ToString(), Value = "0"},
+                new SelectListItem { Text = PreferredLanguage.Spanish.ToString(), Value = "1"},
+                new SelectListItem { Text = PreferredLanguage.French.ToString(), Value = "2"},
+                new SelectListItem { Text = PreferredLanguage.Portuguese.ToString(), Value = "3"}                
+            };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboReferredsByClinic(string idUser)
+        {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                   .FirstOrDefault(u => u.Id == idUser);
+
+            ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+
+            List<ReferredEntity> referreds = _context.Referreds.OrderBy(d => d.Name).ToList();
+            List<ReferredEntity> referreds_by_clinic = new List<ReferredEntity>();
+            UserEntity user;
+            foreach (ReferredEntity item in referreds)
+            {
+                user = _context.Users.FirstOrDefault(u => u.Id == item.CreatedBy);
+                if (clinic.Users.Contains(user))
+                {
+                    referreds_by_clinic.Add(item);
+                }
+            }
+
+            List<SelectListItem> list = new List<SelectListItem>();
+            list = referreds_by_clinic.Select(r => new SelectListItem
+             {
+                 Text = $"{r.Name}",
+                 Value = $"{r.Id}"
+             }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = string.Empty,
+                Value = "0"
+            });
+
+            return list.OrderBy(l => l.Text);
+        }
+
+        public IEnumerable<SelectListItem> GetComboEmergencyContactsByClinic(string idUser)
+        {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                   .FirstOrDefault(u => u.Id == idUser);
+
+            ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+
+            List<EmergencyContactEntity> contacts = _context.EmergencyContacts.OrderBy(d => d.Name).ToList();
+            List<EmergencyContactEntity> contacts_by_clinic = new List<EmergencyContactEntity>();
+            UserEntity user;
+            foreach (EmergencyContactEntity item in contacts)
+            {
+                user = _context.Users.FirstOrDefault(u => u.Id == item.CreatedBy);
+                if (clinic.Users.Contains(user))
+                {
+                    contacts_by_clinic.Add(item);
+                }
+            }
+
+            List<SelectListItem> list = new List<SelectListItem>();
+            list = contacts_by_clinic.Select(ec => new SelectListItem
+            {
+                Text = $"{ec.Name}",
+                Value = $"{ec.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = string.Empty,
+                Value = "0"
+            });
+
+            return list.OrderBy(l => l.Text);
+        }
+
+        public IEnumerable<SelectListItem> GetComboDoctorsByClinic(string idUser)
+        {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                   .FirstOrDefault(u => u.Id == idUser);
+
+            ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+
+            List<DoctorEntity> doctors = _context.Doctors.OrderBy(d => d.Name).ToList();
+            List<DoctorEntity> doctors_by_clinic = new List<DoctorEntity>();
+            UserEntity user;
+            foreach (DoctorEntity item in doctors)
+            {
+                user = _context.Users.FirstOrDefault(u => u.Id == item.CreatedBy);
+                if (clinic.Users.Contains(user))
+                {
+                    doctors_by_clinic.Add(item);
+                }
+            }
+
+            List<SelectListItem> list = new List<SelectListItem>();
+            list = doctors_by_clinic.Select(d => new SelectListItem
+            {
+                Text = $"{d.Name}",
+                Value = $"{d.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = string.Empty,
+                Value = "0"
+            });
+
+            return list.OrderBy(l => l.Text);
+        }
+
+        public IEnumerable<SelectListItem> GetComboPsychiatristsByClinic(string idUser)
+        {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                   .FirstOrDefault(u => u.Id == idUser);
+
+            ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+
+            List<PsychiatristEntity> psychiatrists = _context.Psychiatrists.OrderBy(d => d.Name).ToList();
+            List<PsychiatristEntity> psychiatrists_by_clinic = new List<PsychiatristEntity>();
+            UserEntity user;
+            foreach (PsychiatristEntity item in psychiatrists)
+            {
+                user = _context.Users.FirstOrDefault(u => u.Id == item.CreatedBy);
+                if (clinic.Users.Contains(user))
+                {
+                    psychiatrists_by_clinic.Add(item);
+                }
+            }
+
+            List<SelectListItem> list = new List<SelectListItem>();
+            list = psychiatrists_by_clinic.Select(p => new SelectListItem
+            {
+                Text = $"{p.Name}",
+                Value = $"{p.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = string.Empty,
+                Value = "0"
+            });
+
+            return list.OrderBy(l => l.Text);
+        }
+
+        public IEnumerable<SelectListItem> GetComboLegalGuardiansByClinic(string idUser)
+        {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                   .FirstOrDefault(u => u.Id == idUser);
+
+            ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+
+            List<LegalGuardianEntity> legalGuardians = _context.LegalGuardians.OrderBy(d => d.Name).ToList();
+            List<LegalGuardianEntity> legalGuardians_by_clinic = new List<LegalGuardianEntity>();
+            UserEntity user;
+            foreach (LegalGuardianEntity item in legalGuardians)
+            {
+                user = _context.Users.FirstOrDefault(u => u.Id == item.CreatedBy);
+                if (clinic.Users.Contains(user))
+                {
+                    legalGuardians_by_clinic.Add(item);
+                }
+            }
+
+            List<SelectListItem> list = new List<SelectListItem>();
+            list = legalGuardians_by_clinic.Select(lg => new SelectListItem
+            {
+                Text = $"{lg.Name}",
+                Value = $"{lg.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = string.Empty,
+                Value = "0"
+            });
+
+            return list.OrderBy(l => l.Text);
+        }
+
+        public IEnumerable<SelectListItem> GetComboDiagnosticsByClinic(string idUser)
+        {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                   .FirstOrDefault(u => u.Id == idUser);
+
+            ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+
+            List<DiagnosticEntity> diagnostics = _context.Diagnostics.OrderBy(d => d.Code).ToList();
+            List<DiagnosticEntity> diagnostics_by_clinic = new List<DiagnosticEntity>();
+            UserEntity user;
+            foreach (DiagnosticEntity item in diagnostics)
+            {
+                user = _context.Users.FirstOrDefault(u => u.Id == item.CreatedBy);
+                if (clinic.Users.Contains(user))
+                {
+                    diagnostics_by_clinic.Add(item);
+                }
+            }
+
+            List<SelectListItem> list = new List<SelectListItem>();
+            list = diagnostics_by_clinic.Select(d => new SelectListItem
+            {
+                Text = $"{d.Code} {d.Description}",
+                Value = $"{d.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select diagnostic...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

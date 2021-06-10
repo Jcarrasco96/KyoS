@@ -26,5 +26,15 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboGoals(int idMTP);
         IEnumerable<SelectListItem> GetComboObjetives(int idGoal);
         IEnumerable<SelectListItem> GetComboRelationships();
+        IEnumerable<SelectListItem> GetComboRaces();
+        IEnumerable<SelectListItem> GetComboMaritals();
+        IEnumerable<SelectListItem> GetComboEthnicities();
+        IEnumerable<SelectListItem> GetComboLanguages();
+        IEnumerable<SelectListItem> GetComboReferredsByClinic(string idUser);
+        IEnumerable<SelectListItem> GetComboEmergencyContactsByClinic(string idUser);
+        IEnumerable<SelectListItem> GetComboDoctorsByClinic(string idUser);
+        IEnumerable<SelectListItem> GetComboPsychiatristsByClinic(string idUser);
+        IEnumerable<SelectListItem> GetComboLegalGuardiansByClinic(string idUser);
+        IEnumerable<SelectListItem> GetComboDiagnosticsByClinic(string idUser);
     }
 }

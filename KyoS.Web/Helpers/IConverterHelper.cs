@@ -16,8 +16,8 @@ namespace KyoS.Web.Helpers
         NotePrototypeViewModel ToNotePrototypeViewModel(NotePrototypeEntity model);
         Task<FacilitatorEntity> ToFacilitatorEntity(FacilitatorViewModel model, string signaturePath, bool isNew);
         FacilitatorViewModel ToFacilitatorViewModel(FacilitatorEntity model, int idClinic);
-        Task<ClientEntity> ToClientEntity(ClientViewModel model, bool isNew);
-        ClientViewModel ToClientViewModel(ClientEntity model);
+        Task<ClientEntity> ToClientEntity(ClientViewModel model, bool isNew, string photoPath, string signPath, string userId);
+        ClientViewModel ToClientViewModel(ClientEntity model, string userId);
         Task<SupervisorEntity> ToSupervisorEntity(SupervisorViewModel model, string signaturePath, bool isNew);
         SupervisorViewModel ToSupervisorViewModel(SupervisorEntity model, int idClinic);
         Task<MTPEntity> ToMTPEntity(MTPViewModel model, bool isNew);
