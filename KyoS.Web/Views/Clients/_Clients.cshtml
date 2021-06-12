@@ -1,8 +1,8 @@
 ﻿@model KyoS.Web.Models.ClientViewModel
-<div class="col-md-12">
+<div class="col-md-push-12">
     &nbsp;
 </div>
-<div class="col-md-push-12">
+<div class="col-push-md-12">
     <div class="form-group col-md-3">
         <label asp-for="Name" class="control-label"></label>&nbsp;*
         <input asp-for="Name" class="form-control" />
@@ -14,6 +14,11 @@
         <span asp-validation-for="IdClinic" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
+        <label asp-for="IdStatus" class="control-label"></label>&nbsp;*
+        <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
+        <span asp-validation-for="IdStatus" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
         <label asp-for="DateOfBirth" class="control-label"></label>&nbsp;*
         <input asp-for="DateOfBirth" class="form-control" />
         <span asp-validation-for="DateOfBirth" class="text-danger"></span>
@@ -23,112 +28,92 @@
         <select asp-for="IdGender" asp-items="Model.GenderList" class="form-control"></select>
         <span asp-validation-for="IdGender" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="IdStatus" class="control-label"></label>&nbsp;*
-        <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
-        <span asp-validation-for="IdStatus" class="text-danger"></span>
-    </div>
 </div>
-<div class="col-md-12">
+<div class="col-md-push-12">
     &nbsp;
 </div>
 <div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="PhotoFile" class="control-label"></label>
+        <input asp-for="PhotoFile" class="form-control" type="file" id="photoBrowser" />
+        <span asp-validation-for="PhotoFile" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="SignFile" class="control-label"></label>
+        <input asp-for="SignFile" class="form-control" type="file" id="signBrowser" />
+        <span asp-validation-for="SignFile" class="text-danger"></span>
+    </div>
     <div class="form-group col-md-1">
         <label asp-for="Code" class="control-label"></label>
         <input asp-for="Code" class="form-control" />
         <span asp-validation-for="Code" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="MedicaidID" class="control-label"></label>
-        <input asp-for="MedicaidID" class="form-control" />
-        <span asp-validation-for="MedicaidID" class="text-danger"></span>
+    <div class="form-group col-md-1">
+        <label asp-for="SSN" class="control-label"></label>
+        <input asp-for="SSN" class="form-control" />
+        <span asp-validation-for="SSN" class="text-danger"></span>
     </div>
     <div class="form-group col-md-3">
         <label asp-for="Email" class="control-label"></label>
         <input asp-for="Email" class="form-control" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Telephone" class="control-label"></label>
-        <input asp-for="Telephone" class="form-control" />
-        <span asp-validation-for="Telephone" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="TelephoneSecondary" class="control-label"></label>
-        <input asp-for="TelephoneSecondary" class="form-control" />
-        <span asp-validation-for="TelephoneSecondary" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="SSN" class="control-label"></label>
-        <input asp-for="SSN" class="form-control" />
-        <span asp-validation-for="SSN" class="text-danger"></span>
-    </div>
-</div>
-@*<div class="col-md-12">
-        &nbsp;
-    </div>*@
-<div class="col-md-push-12">
-    <div class="form-group col-md-3">
-        <label asp-for="FullAddress" class="control-label"></label>
-        <input asp-for="FullAddress" class="form-control" />
-        <span asp-validation-for="FullAddress" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-3">
-        <label asp-for="AlternativeAddress" class="control-label"></label>
-        <input asp-for="AlternativeAddress" class="form-control" />
-        <span asp-validation-for="AlternativeAddress" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Country" class="control-label"></label>
-        <input asp-for="Country" class="form-control" />
-        <span asp-validation-for="Country" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="City" class="control-label"></label>
-        <input asp-for="City" class="form-control" />
-        <span asp-validation-for="City" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="State" class="control-label"></label>
-        <input asp-for="State" class="form-control" />
-        <span asp-validation-for="State" class="text-danger"></span>
-    </div>
-</div>
-@*<div class="col-md-12">
-        &nbsp;
-    </div>*@
-<div class="col-md-push-12">
     <div class="form-group col-md-1">
-        <label asp-for="ZipCode" class="control-label"></label>
-        <input asp-for="ZipCode" class="form-control" />
-        <span asp-validation-for="ZipCode" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Race" class="control-label"></label>
-        <select asp-for="IdRace" asp-items="Model.Races" class="form-control"></select>
-        <span asp-validation-for="IdRace" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-3">
-        <label asp-for="MaritalStatus" class="control-label"></label>
-        <select asp-for="IdMaritalStatus" asp-items="Model.Maritals" class="form-control"></select>
-        <span asp-validation-for="IdMaritalStatus" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Ethnicity" class="control-label"></label>
-        <select asp-for="IdEthnicity" asp-items="Model.Ethnicities" class="form-control"></select>
-        <span asp-validation-for="IdEthnicity" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="PreferredLanguage" class="control-label"></label>
-        <select asp-for="IdPreferredLanguage" asp-items="Model.Languages" class="form-control"></select>
-        <span asp-validation-for="IdPreferredLanguage" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="OtherLanguage" class="control-label"></label>
-        <input asp-for="OtherLanguage" class="form-control" />
-        <span asp-validation-for="OtherLanguage" class="text-danger"></span>
+        <label asp-for="MedicaidID" class="control-label"></label>
+        <input asp-for="MedicaidID" class="form-control" />
+        <span asp-validation-for="MedicaidID" class="text-danger"></span>
     </div>
 </div>
-<div class="col-md-12">
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <div id="imgPreviewPhoto" class="thumbnail">
+            @if (!string.IsNullOrEmpty(Model.PhotoPath))
+            {
+                <img class="img-responsive" id="targetImgPhoto" src="@Url.Content(Model.PhotoPath)" width="150" />
+                <div class="caption" id="lbPhoto">
+                    <center>
+                        <span id="descriptionPhoto"></span>
+                        <a href="#" onclick="ClearPreviewPhoto()"><i class="glyphicon glyphicon-trash"></i></a>
+                    </center>
+                </div>
+            }
+            else
+            {
+                <img class="img-responsive" id="targetImgPhoto" src="~/images/Clients/noImage.png" width="150" />
+                <div class="caption" style="display:none" id="lbPhoto">
+                    <center>
+                        <span id="descriptionPhoto"></span>
+                        <a href="#" onclick="ClearPreviewPhoto()"><i class="glyphicon glyphicon-trash"></i></a>
+                    </center>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="form-group col-md-1">
         &nbsp;
+    </div>
+    <div class="form-group col-md-2">
+        <div id="imgPreviewSign" class="thumbnail">
+            @if (!string.IsNullOrEmpty(Model.SignPath))
+            {
+                <img class="img-responsive" id="targetImgSign" src="@Url.Content(Model.SignPath)" width="150" />
+                <div class="caption" id="lbSign">
+                    <center>
+                        <span id="descriptionSign"></span>
+                        <a href="#" onclick="ClearPreviewSign()"><i class="glyphicon glyphicon-trash"></i></a>
+                    </center>
+                </div>
+            }
+            else
+            {
+                <img class="img-responsive" id="targetImgSign" src="~/images/Clients/noImage.png" width="150" />
+                <div class="caption" style="display:none" id="lbSign">
+                    <center>
+                        <span id="descriptionSign"></span>
+                        <a href="#" onclick="ClearPreviewSign()"><i class="glyphicon glyphicon-trash"></i></a>
+                    </center>
+                </div>
+            }
+        </div>
+    </div>    
 </div>

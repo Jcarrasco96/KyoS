@@ -75,7 +75,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\Clinics\" />
-    <Folder Include="wwwroot\images\Clients\" />
     <Folder Include="wwwroot\images\Signatures\" />
   </ItemGroup>
 

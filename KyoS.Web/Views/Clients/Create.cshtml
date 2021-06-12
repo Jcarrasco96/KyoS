@@ -16,7 +16,7 @@
 </div>
 
 <h4>Create new client</h4>
-<hr />
+@*<hr />*@
 <div class="row">
     <div class="col-md-12">
         @if (ViewBag.Creado == "Y")
@@ -84,19 +84,81 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
-                        $(document).ready(function () {
-                            // Delete item
-                            var item_to_delete;
+        $(document).ready(function () {
+            $("#photoBrowser").change(function () {
 
-                            $('.deleteItem').click((e) => {
-                                item_to_delete = e.currentTarget.dataset.id;
-                            });
+                var File = this.files;
 
-                            $("#btnYesDelete").click(function () {
-                                var url = "@Url.Action("DeleteDiagnosticTemp", "Clients")";
-                                window.location.href = url + '/' + item_to_delete;
-                            });
-                        });
+                if (File && File[0]) {
+                    ReadImagePhoto(File[0]);
+                }                    
+            });
+
+            $("#signBrowser").change(function () {
+
+                var File = this.files;
+
+                if (File && File[0]) {
+                    ReadImageSign(File[0]);
+                }
+            });
+        });
+
+        var ReadImagePhoto = function (file) {
+        var reader = new FileReader;
+        var image = new Image;
+        reader.readAsDataURL(file);
+        reader.onload = function (_file) {
+            image.src = _file.target.result;
+            image.onload = function () {
+                var height = this.height;
+                var width = this.width;
+                var type = file.type;
+                var size = ~~(file.size / 1024) + "KB";
+
+                $("#targetImgPhoto").attr('src', _file.target.result);
+                $("#descriptionPhoto").text(/*"Size:" + */size + ", " + height + "x" + width/* + ", " + type + ""*/);
+                $("#imgPreviewPhoto").show();
+                $("#lbPhoto").show();
+               }
+            }
+        }
+
+        var ReadImageSign = function (file) {
+        var reader = new FileReader;
+        var image = new Image;
+        reader.readAsDataURL(file);
+        reader.onload = function (_file) {
+            image.src = _file.target.result;
+            image.onload = function () {
+                var height = this.height;
+                var width = this.width;
+                var type = file.type;
+                var size = ~~(file.size / 1024) + "KB";
+
+                $("#targetImgSign").attr('src', _file.target.result);
+                $("#descriptionSign").text(/*"Size:" + */size + ", " + height + "x" + width/* + ", " + type + ""*/);
+                $("#imgPreviewSign").show();
+                $("#lbSign").show();
+               }
+            }
+        }  
+
+        var ClearPreviewPhoto = function () {
+            $("#photoBrowser").val('');
+            $("#descriptionPhoto").text('');
+            $("#targetImgPhoto").attr('src', "/images/Clients/noImage.png");
+            $("#lbPhoto").hide();
+            //$("#imgPreviewPhoto").hide();
+        }
+
+        var ClearPreviewSign = function () {
+            $("#signBrowser").val('');
+            $("#descriptionSign").text('');
+            $("#targetImgSign").attr('src', "/images/Clients/noImage.png");
+            $("#lbSign").hide();
+            //$("#imgPreviewSign").hide();
+        }
     </script>
 }
 
