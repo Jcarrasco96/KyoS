@@ -447,8 +447,8 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetDiagnosesListDS(mtp.Diagnosis.ToList()));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnoses");
+            dataSet.Tables.Add(GetDiagnosticsListDS(mtp.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
 
             List<GoalEntity> goals1 = new List<GoalEntity>();
             List<ObjetiveEntity> objetives1 = new List<ObjetiveEntity>();
@@ -575,8 +575,8 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetDiagnosesListDS(mtp.Diagnosis.ToList()));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnoses");
+            dataSet.Tables.Add(GetDiagnosticsListDS(mtp.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
 
             List<GoalEntity> goals1 = new List<GoalEntity>();
             List<ObjetiveEntity> objetives1 = new List<ObjetiveEntity>();
@@ -703,8 +703,8 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetDiagnosesListDS(mtp.Diagnosis.ToList()));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnoses");
+            dataSet.Tables.Add(GetDiagnosticsListDS(mtp.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
 
             List<GoalEntity> goals1 = new List<GoalEntity>();
             List<ObjetiveEntity> objetives1 = new List<ObjetiveEntity>();
@@ -831,8 +831,8 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetDiagnosesListDS(mtp.Diagnosis.ToList()));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnoses");
+            dataSet.Tables.Add(GetDiagnosticsListDS(mtp.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
 
             List<GoalEntity> goals1 = new List<GoalEntity>();
             List<ObjetiveEntity> objetives1 = new List<ObjetiveEntity>();
@@ -959,8 +959,8 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetDiagnosesListDS(mtp.Diagnosis.ToList()));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnoses");
+            dataSet.Tables.Add(GetDiagnosticsListDS(mtp.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
 
             List<GoalEntity> goals1 = new List<GoalEntity>();
             List<ObjetiveEntity> objetives1 = new List<ObjetiveEntity>();
@@ -1087,8 +1087,8 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetDiagnosesListDS(mtp.Diagnosis.ToList()));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnoses");
+            dataSet.Tables.Add(GetDiagnosticsListDS(mtp.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
 
             List<GoalEntity> goals1 = new List<GoalEntity>();
             List<ObjetiveEntity> objetives1 = new List<ObjetiveEntity>();
@@ -1416,28 +1416,34 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
-        private DataTable GetDiagnosesListDS(List<DiagnosisEntity> diagnosesList)
+        private DataTable GetDiagnosticsListDS(List<Client_Diagnostic> diagnosticList)
         {
             DataTable dt = new DataTable
             {
-                TableName = "Diagnoses"
+                TableName = "Diagnostics"
             };
 
             // Create columns
             dt.Columns.Add("Id", typeof(int));
             dt.Columns.Add("Code", typeof(string));
             dt.Columns.Add("Description", typeof(string));
-            dt.Columns.Add("MTPId", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
 
-            foreach (DiagnosisEntity item in diagnosesList)
+            foreach (Client_Diagnostic item in diagnosticList)
             {
 
                 dt.Rows.Add(new object[]
                                         {
-                                            item.Id,
-                                            item.Code,
-                                            item.Description,
-                                            item.MTP.Id
+                                            item.Diagnostic.Id,
+                                            item.Diagnostic.Code,
+                                            item.Diagnostic.Description,
+                                            item.Diagnostic.CreatedBy,
+                                            item.Diagnostic.CreatedOn,
+                                            item.Diagnostic.LastModifiedBy,
+                                            item.Diagnostic.LastModifiedOn,
                                         });
             }
 

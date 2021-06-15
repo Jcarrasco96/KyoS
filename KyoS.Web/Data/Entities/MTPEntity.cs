@@ -38,7 +38,6 @@ namespace KyoS.Web.Data.Entities
         [Display(Name = "Initial discharge criteria")]
         public string InitialDischargeCriteria { get; set; }
 
-        public IEnumerable<DiagnosisEntity> Diagnosis { get; set; }
         public IEnumerable<GoalEntity> Goals { get; set; }
 
         [Display(Name = "Modality")]

@@ -1,66 +1,73 @@
 ﻿@model KyoS.Web.Models.MTPViewModel
-<div>
-    <div class="col-md-4">
+<div class="row">
+    <div class="col-md-3">
         <div class="form-group">
             <label asp-for="IdClient" class="control-label"></label>
             <select asp-for="IdClient" asp-items="Model.Clients" class="form-control"></select>
             <span asp-validation-for="IdClient" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="form-group">
             <label asp-for="AdmisionDate" class="control-label"></label>
-            <input asp-for="AdmisionDate" class="form-control"/>
+            <input asp-for="AdmisionDate" class="form-control" />
             <span asp-validation-for="AdmisionDate" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="form-group">
             <label asp-for="NumberOfMonths" class="control-label"></label>
             <input asp-for="NumberOfMonths" class="form-control" />
             <span asp-validation-for="NumberOfMonths" class="text-danger"></span>
         </div>
     </div>
-</div>
-<div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="form-group">
             <label asp-for="MTPDevelopedDate" class="control-label"></label>
-            <input asp-for="MTPDevelopedDate" class="form-control"/>
+            <input asp-for="MTPDevelopedDate" class="form-control" />
             <span asp-validation-for="MTPDevelopedDate" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-4">
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="MTPDevelopedDate" class="control-label"></label>
+            <input asp-for="MTPDevelopedDate" class="form-control" />
+            <span asp-validation-for="MTPDevelopedDate" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-3">
         <div class="form-group">
             <label asp-for="StartTime" class="control-label"></label>
             <input asp-for="StartTime" class="form-control" />
             <span asp-validation-for="StartTime" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="form-group">
             <label asp-for="EndTime" class="control-label"></label>
             <input asp-for="EndTime" class="form-control" />
             <span asp-validation-for="EndTime" class="text-danger"></span>
         </div>
     </div>
-</div>
-<div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="form-group">
             <label asp-for="Modality" class="control-label"></label>
             <input asp-for="Modality" class="form-control" />
             <span asp-validation-for="Modality" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-4">
+</div>
+<div class="row">    
+    <div class="col-md-3">
         <div class="form-group">
             <label asp-for="Frecuency" class="control-label"></label>
             <input asp-for="Frecuency" class="form-control" />
             <span asp-validation-for="Frecuency" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="form-group">
             <label asp-for="Setting" class="control-label"></label>
             <br />
@@ -84,9 +91,12 @@
             }
             <strong>02</strong>&nbsp;Remote
         </div>
+    </div>    
+    <div class="col-md-6">       
+            &nbsp;      
     </div>
-</div>
-<div>
+    </div>
+<div class="row">
     <div class="col-md-6">
         <div class="form-group">
             <label asp-for="LevelCare" class="control-label"></label>

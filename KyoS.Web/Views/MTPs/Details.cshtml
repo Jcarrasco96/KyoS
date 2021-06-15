@@ -21,19 +21,21 @@
     @*<h4>Details</h4>*@
     <hr />
     <div class="row">
-        <div class="col-md-12">
-            @if (!string.IsNullOrEmpty(Model.Client.Clinic.LogoPath))
-            {
-                <div class="col-md-4">
-                    <img src="@Url.Content(Model.Client.Clinic.LogoPath)" alt="Image" style="width:130px;height:130px;max-width: 100%; height: auto;" />
-                </div>
-                <div class="col-md-8">
-                    <h4>@Model.Client.Clinic.Name</h4>
-                </div>
-                <div class="col-md-12">
-                    <hr />
-                </div>
-            }
+        <div class="col-md-12">            
+                @if (!string.IsNullOrEmpty(Model.Client.Clinic.LogoPath))
+                {
+                    <div class="col-md-2">
+                        <div class="thumbnail">
+                            <img class="img-responsive" src="@Url.Content(Model.Client.Clinic.LogoPath)" alt="Image" style="width:130px;height:130px;max-width: 100%; height: auto;" />
+                        </div>                        
+                    </div>
+                    <div class="col-md-10">
+                        <h4>@Model.Client.Clinic.Name</h4>
+                    </div>
+                    <div class="col-md-12">
+                        <hr />
+                    </div>
+                }            
         </div>
         <div class="col-md-6">
             <dl class="dl-horizontal">
@@ -93,47 +95,12 @@
                 </dd>
             </dl>
         </div>
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h5 style="font-weight:bold;">Diagnosis of MTP</h5>
-                </div>
-                <div class="panel-body">
-                    <table class="table table-hover table-responsive table-striped" id="MyTable">
-                        <thead>
-                            <tr>
-                                <th class="col-md-3">
-                                    Code
-                                </th>
-                                <th class="col-md-6">
-                                    Diagnosis
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.Diagnosis)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Code)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Description)
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
         <div class="col-md-12">   
             @if(User.IsInRole("Admin") || User.IsInRole("Mannager") || User.IsInRole("Supervisor"))
             { 
                 <p>
-                    <a asp-action="PrintMTP" asp-route-id="@Model.Id" class="btn btn-success"><i class="glyphicon glyphicon-print"></i> Print MTP</a> |
+                    <a asp-action="PrintMTP" asp-route-id="@Model.Id" class="btn btn-success" target="_blank"><i class="glyphicon glyphicon-print"></i> Print MTP</a> |
                     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update MTP</a> |
-                    <a asp-action="UpdateDiagnosis" asp-route-id="@Model.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update diagnosis</a> |
                     <a asp-action="UpdateGoals" asp-route-id="@Model.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update goals - objetives</a>
                 </p>
             }

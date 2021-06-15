@@ -63,7 +63,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Admin, Supervisor, Mannager")]
-        public async Task<IActionResult> Create(int id = 0, int idClient = 0)
+        public IActionResult Create(int id = 0, int idClient = 0)
         {
             if (id == 1)
             {
@@ -80,14 +80,6 @@ namespace KyoS.Web.Controllers
                     ViewBag.Creado = "N";
                 }
             }
-
-            //delete all DiagnosisTemp
-            IQueryable<DiagnosisTempEntity> list_to_delete = _context.DiagnosesTemp;
-            foreach (DiagnosisTempEntity item in list_to_delete)
-            {
-                _context.DiagnosesTemp.Remove(item);
-            }
-            await _context.SaveChangesAsync();
 
             MTPViewModel model = new MTPViewModel();
 
@@ -155,20 +147,6 @@ namespace KyoS.Web.Controllers
                 
                 _context.Add(mtpEntity);
 
-                IQueryable<DiagnosisTempEntity> list_to_delete = _context.DiagnosesTemp;
-                DiagnosisEntity diagnosis;
-                foreach (DiagnosisTempEntity item in list_to_delete)
-                {
-                    diagnosis = new DiagnosisEntity
-                    {
-                        Code = item.Code,
-                        Description = item.Description,
-                        MTP = mtpEntity
-                    };
-                    _context.Add(diagnosis);
-                    _context.DiagnosesTemp.Remove(item);
-                }
-
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -187,71 +165,6 @@ namespace KyoS.Web.Controllers
                 }
             }
             return View(mtpViewModel);
-        }
-
-        public IActionResult AddDiagnosis(int id = 0)
-        {
-            if (id == 0)
-            {
-                return View(new DiagnosisTempEntity());
-            }
-            else
-            {
-                //Edit
-                return View(new DiagnosisEntity());
-            }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
-        public async Task<IActionResult> AddDiagnosis(int id, DiagnosisTempEntity diagnosisTempModel)
-        {
-            if (ModelState.IsValid)
-            {
-                if (id == 0)
-                {
-                    _context.Add(diagnosisTempModel);
-                    await _context.SaveChangesAsync();
-                }
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnosis", _context.DiagnosesTemp.ToList()) });
-            }
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddDiagnosis", diagnosisTempModel) });
-        }
-
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
-        public IActionResult AddDiagnosisEntity(int id = 0)
-        {
-            if (id == 0)
-            {
-                return View(new DiagnosisViewModel());
-            }
-            else
-            {
-                DiagnosisViewModel model = new DiagnosisViewModel()
-                {
-                    IdMTP = id
-                };
-
-                return View(model);
-            }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
-        public async Task<IActionResult> AddDiagnosisEntity(int id, DiagnosisViewModel diagnosisViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                DiagnosisEntity model = await _converterHelper.ToDiagnosisEntity(diagnosisViewModel, true);
-                _context.Add(model);
-                await _context.SaveChangesAsync();
-
-                //return RedirectToAction($"{nameof(UpdateDiagnosis)}/{id}");
-                return RedirectToAction("UpdateDiagnosis", new { id });
-            }
-            return RedirectToAction("UpdateDiagnosis", new { id });
         }
 
         [Authorize(Roles = "Admin, Supervisor, Mannager")]
@@ -282,7 +195,7 @@ namespace KyoS.Web.Controllers
             }
 
             MTPEntity mtpEntity = await _context.MTPs.Include(m => m.Client)
-                                                     .Include(m => m.Diagnosis).FirstOrDefaultAsync(m => m.Id == id);
+                                                     .FirstOrDefaultAsync(m => m.Id == id);
             if (mtpEntity == null)
             {
                 return NotFound();
@@ -351,9 +264,15 @@ namespace KyoS.Web.Controllers
 
             MTPEntity mtpEntity = await _context.MTPs.Include(m => m.Client)                                                                 
                                                      .ThenInclude(f => f.Clinic)
-                                                     .Include(m => m.Diagnosis)
+
+                                                     .Include(m => m.Client)
+                                                     .ThenInclude(c => c.Clients_Diagnostics)
+                                                     .ThenInclude(cd => cd.Diagnostic)
+
                                                      .Include(m => m.Goals)
+
                                                      .ThenInclude(g => g.Objetives)
+
                                                      .FirstOrDefaultAsync(m => m.Id == id);
             if (mtpEntity == null)
             {
@@ -361,100 +280,6 @@ namespace KyoS.Web.Controllers
             }
 
             return View(mtpEntity);
-        }
-
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
-        public async Task<IActionResult> UpdateDiagnosis(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            MTPEntity mtpEntity = await _context.MTPs.Include(m => m.Diagnosis)
-                                                     .Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == id);
-
-            if (mtpEntity == null)
-            {
-                return NotFound();
-            }
-
-            return View(mtpEntity);
-        }
-
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
-        public async Task<IActionResult> EditDiagnosis(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            DiagnosisEntity diagnosisEntity = await _context.Diagnoses.Include(d => d.MTP)
-                                                                      .ThenInclude(m => m.Client).FirstOrDefaultAsync(d => d.Id == id);
-            DiagnosisViewModel model = _converterHelper.ToDiagnosisViewModel(diagnosisEntity);
-            if (model == null)
-            {
-                return NotFound();
-            }
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
-        public async Task<IActionResult> EditDiagnosis(int id, DiagnosisViewModel model)
-        {
-            if (id != model.Id)
-            {
-                return NotFound();
-            }
-
-            model.MTP = await _context.MTPs.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdMTP);
-
-            if (ModelState.IsValid)
-            {
-                DiagnosisEntity diagnosisEntity = await _converterHelper.ToDiagnosisEntity(model, false);
-                _context.Update(diagnosisEntity);
-                try
-                {
-                    await _context.SaveChangesAsync();                    
-                    return RedirectToAction("UpdateDiagnosis", new { id = model.IdMTP });                    
-                }
-                catch (System.Exception ex)
-                {
-                    if (ex.InnerException.Message.Contains("duplicate"))
-                    {
-                        ModelState.AddModelError(string.Empty, "Already exists the diagnosis");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                    }
-                }
-            }
-            return View(model);
-        }
-
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
-        public async Task<IActionResult> DeleteDiagnosis(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            DiagnosisEntity diagnosisEntity = await _context.Diagnoses.Include(d => d.MTP).FirstOrDefaultAsync(d => d.Id == id);
-            if (diagnosisEntity == null)
-            {
-                return NotFound();
-            }
-
-            _context.Diagnoses.Remove(diagnosisEntity);
-            await _context.SaveChangesAsync();
-            //return RedirectToAction($"{nameof(UpdateDiagnosis)}/{diagnosisEntity.MTP.Id}");
-            return RedirectToAction("UpdateDiagnosis", new { diagnosisEntity.MTP.Id });
         }
 
         [Authorize(Roles = "Admin, Supervisor, Mannager")]
@@ -838,7 +663,9 @@ namespace KyoS.Web.Controllers
                                                .Include(m => m.Goals)
                                                .ThenInclude(g => g.Objetives)
                                                
-                                               .Include(m => m.Diagnosis)
+                                               .Include(wc => wc.Client)
+                                               .ThenInclude(c => c.Clients_Diagnostics)
+                                               .ThenInclude(cd => cd.Diagnostic)
 
                                                .FirstOrDefault(m => (m.Id == id));
             if (mtpEntity == null)

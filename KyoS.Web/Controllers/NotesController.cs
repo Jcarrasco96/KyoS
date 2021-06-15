@@ -1010,41 +1010,36 @@ namespace KyoS.Web.Controllers
         public IActionResult PrintNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
-                                                          .Include(wc => wc.Facilitator)
+                                                    .Include(wc => wc.Facilitator)
 
-                                                          .Include(wc => wc.Client)
-                                                          .ThenInclude(c => c.MTPs)
-                                                          .ThenInclude(m => m.Diagnosis)
+                                                    .Include(wc => wc.Client)
+                                                    .ThenInclude(c => c.MTPs)
+                                                    .ThenInclude(m => m.Goals)
+                                                    .ThenInclude(g => g.Objetives)
 
-                                                          .Include(wc => wc.Client)
-                                                          .ThenInclude(c => c.MTPs)
-                                                          .ThenInclude(m => m.Goals)
+                                                    .Include(wc => wc.Client)
+                                                    .ThenInclude(c => c.Clients_Diagnostics)
+                                                    .ThenInclude(cd => cd.Diagnostic)                                              
 
-                                                          .Include(wc => wc.Client)
-                                                          .ThenInclude(c => c.MTPs)
-                                                          .ThenInclude(m => m.Goals)
-                                                          .ThenInclude(g => g.Objetives)
+                                                    .Include(wc => wc.Note)
+                                                    .ThenInclude(n => n.Supervisor)
+                                                    .ThenInclude(s => s.Clinic)
 
-                                                          .Include(wc => wc.Note)
-                                                          .ThenInclude(n => n.Supervisor)
-                                                          .ThenInclude(s => s.Clinic)
+                                                    .Include(wc => wc.Note)
+                                                    .ThenInclude(n => n.Notes_Activities)
+                                                    .ThenInclude(na => na.Activity)
+                                                    .ThenInclude(a => a.Theme)
 
-                                                          .Include(wc => wc.Note)
-                                                          .ThenInclude(n => n.Notes_Activities)
-                                                          .ThenInclude(na => na.Activity)
-                                                          .ThenInclude(a => a.Theme)
+                                                    .Include(wc => wc.Note)
+                                                    .ThenInclude(n => n.Notes_Activities)
+                                                    .ThenInclude(na => na.Objetive)
+                                                    .ThenInclude(o => o.Goal)
 
-                                                          .Include(wc => wc.Note)
-                                                          .ThenInclude(n => n.Notes_Activities)
-                                                          .ThenInclude(na => na.Objetive)
-                                                          .ThenInclude(o => o.Goal)
+                                                    .Include(wc => wc.Note)
+                                                    .ThenInclude(n => n.Notes_Activities)
 
-                                                          .Include(wc => wc.Note)
-                                                          .ThenInclude(n => n.Notes_Activities)
-
-                                                          .Include(wc => wc.Workday)
-                                                          .FirstOrDefault(wc => (wc.Id == id
-                                                                               && wc.Note.Status == NoteStatus.Approved));
+                                                    .Include(wc => wc.Workday)
+                                                    .FirstOrDefault(wc => (wc.Id == id && wc.Note.Status == NoteStatus.Approved));
             if (workdayClient == null)
             {
                 return NotFound();
@@ -1435,13 +1430,13 @@ namespace KyoS.Web.Controllers
             var dateSupervisor = workdayClient.Note.DateOfApprove.Value.ToShortDateString();
 
             i = 0;
-            var diagnosis = string.Empty;
-            foreach (var item in workdayClient.Client.MTPs.FirstOrDefault().Diagnosis)
+            var diagnostic = string.Empty;
+            foreach (var item in workdayClient.Client.Clients_Diagnostics)
             {
                 if (i == 0)
-                   diagnosis = item.Code;                
-                else                
-                    diagnosis = $"{diagnosis}, {item.Code}";                
+                    diagnostic = item.Diagnostic.Code;                
+                else
+                    diagnostic = $"{diagnostic}, {item.Diagnostic.Code}";                
                 i = ++i;
             }
 
@@ -1450,7 +1445,7 @@ namespace KyoS.Web.Controllers
             parameters.Add("date", date);
             parameters.Add("dateFacilitator", dateFacilitator);
             parameters.Add("dateSupervisor", dateSupervisor);
-            parameters.Add("diagnosis", diagnosis);
+            parameters.Add("diagnosis", diagnostic);
             parameters.Add("num_of_goal1", num_of_goal1);
             parameters.Add("goal_text1", goal_text1);
             parameters.Add("goal1", goal1.ToString());
@@ -1614,13 +1609,13 @@ namespace KyoS.Web.Controllers
             report.AddDataSource("dsImages", images);
 
             i = 0;
-            var diagnosis = string.Empty;
-            foreach (var item in workdayClient.Client.MTPs.FirstOrDefault().Diagnosis)
+            var diagnostic = string.Empty;
+            foreach (var item in workdayClient.Client.Clients_Diagnostics)
             {
                 if (i == 0)
-                    diagnosis = item.Code;
+                    diagnostic = item.Diagnostic.Code;
                 else
-                    diagnosis = $"{diagnosis}, {item.Code}";
+                    diagnostic = $"{diagnostic}, {item.Diagnostic.Code}";
                 i = ++i;
             }
 
@@ -1636,7 +1631,7 @@ namespace KyoS.Web.Controllers
             parameters.Add("goal_text", goal_text);
             parameters.Add("num_of_obj", num_of_obj);
             parameters.Add("obj_text", obj_text);
-            parameters.Add("diagnosis", diagnosis);
+            parameters.Add("diagnosis", diagnostic);
             parameters.Add("setting", setting);
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
             return File(result.MainStream, "application/pdf");
@@ -1848,13 +1843,13 @@ namespace KyoS.Web.Controllers
             var dateSupervisor = workdayClient.Note.DateOfApprove.Value.ToShortDateString();
 
             i = 0;
-            var diagnosis = string.Empty;
-            foreach (var item in workdayClient.Client.MTPs.FirstOrDefault().Diagnosis)
+            var diagnostic = string.Empty;
+            foreach (var item in workdayClient.Client.Clients_Diagnostics)
             {
                 if (i == 0)
-                    diagnosis = item.Code;
+                    diagnostic = item.Diagnostic.Code;
                 else
-                    diagnosis = $"{diagnosis}, {item.Code}";
+                    diagnostic = $"{diagnostic}, {item.Diagnostic.Code}";
                 i = ++i;
             }
 
@@ -1863,7 +1858,7 @@ namespace KyoS.Web.Controllers
             parameters.Add("date", date);
             parameters.Add("dateFacilitator", dateFacilitator);
             parameters.Add("dateSupervisor", dateSupervisor);
-            parameters.Add("diagnosis", diagnosis);
+            parameters.Add("diagnosis", diagnostic);
             parameters.Add("num_of_goal1", num_of_goal1);
             parameters.Add("goal_text1", goal_text1);
             parameters.Add("goal1", goal1.ToString());
@@ -2095,13 +2090,13 @@ namespace KyoS.Web.Controllers
             var dateSupervisor = workdayClient.Note.DateOfApprove.Value.ToShortDateString();
 
             i = 0;
-            var diagnosis = string.Empty;
-            foreach (var item in workdayClient.Client.MTPs.FirstOrDefault().Diagnosis)
+            var diagnostic = string.Empty;
+            foreach (var item in workdayClient.Client.Clients_Diagnostics)
             {
                 if (i == 0)
-                    diagnosis = item.Code;
+                    diagnostic = item.Diagnostic.Code;
                 else
-                    diagnosis = $"{diagnosis}, {item.Code}";
+                    diagnostic = $"{diagnostic}, {item.Diagnostic.Code}";
                 i = ++i;
             }
 
@@ -2110,7 +2105,7 @@ namespace KyoS.Web.Controllers
             parameters.Add("date", date);
             parameters.Add("dateFacilitator", dateFacilitator);
             parameters.Add("dateSupervisor", dateSupervisor);
-            parameters.Add("diagnosis", diagnosis);
+            parameters.Add("diagnosis", diagnostic);
             parameters.Add("num_of_goal1", num_of_goal1);
             parameters.Add("goal_text1", goal_text1);
             parameters.Add("goal1", goal1.ToString());
@@ -2342,13 +2337,13 @@ namespace KyoS.Web.Controllers
             var dateSupervisor = workdayClient.Note.DateOfApprove.Value.ToShortDateString();
 
             i = 0;
-            var diagnosis = string.Empty;
-            foreach (var item in workdayClient.Client.MTPs.FirstOrDefault().Diagnosis)
+            var diagnostic = string.Empty;
+            foreach (var item in workdayClient.Client.Clients_Diagnostics)
             {
                 if (i == 0)
-                    diagnosis = item.Code;
+                    diagnostic = item.Diagnostic.Code;
                 else
-                    diagnosis = $"{diagnosis}, {item.Code}";
+                    diagnostic = $"{diagnostic}, {item.Diagnostic.Code}";
                 i = ++i;
             }
 
@@ -2357,7 +2352,7 @@ namespace KyoS.Web.Controllers
             parameters.Add("date", date);
             parameters.Add("dateFacilitator", dateFacilitator);
             parameters.Add("dateSupervisor", dateSupervisor);
-            parameters.Add("diagnosis", diagnosis);
+            parameters.Add("diagnosis", diagnostic);
             parameters.Add("num_of_goal1", num_of_goal1);
             parameters.Add("goal_text1", goal_text1);
             parameters.Add("goal1", goal1.ToString());
@@ -2795,7 +2790,12 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(d => d.Workdays_Clients)
                                             .ThenInclude(wc => wc.Client)
                                             .ThenInclude(c => c.MTPs)
-                                            .ThenInclude(m => m.Diagnosis)
+
+                                            .Include(w => w.Days)
+                                            .ThenInclude(d => d.Workdays_Clients)
+                                            .ThenInclude(wc => wc.Client)
+                                            .ThenInclude(c => c.Clients_Diagnostics)
+                                            .ThenInclude(cd => cd.Diagnostic)
 
                                             .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
                                             .ToListAsync());            
@@ -2826,7 +2826,12 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(d => d.Workdays_Clients)
                                             .ThenInclude(wc => wc.Client)
                                             .ThenInclude(c => c.MTPs)
-                                            .ThenInclude(m => m.Diagnosis)
+
+                                            .Include(w => w.Days)
+                                            .ThenInclude(d => d.Workdays_Clients)
+                                            .ThenInclude(wc => wc.Client)
+                                            .ThenInclude(c => c.Clients_Diagnostics)
+                                            .ThenInclude(cd => cd.Diagnostic)
 
                                             .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
                                             .ToListAsync());

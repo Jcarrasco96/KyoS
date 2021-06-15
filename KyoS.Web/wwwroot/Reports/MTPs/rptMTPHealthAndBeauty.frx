@@ -1,7 +1,83 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/13/2021 16:03:06" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="06/13/2021 13:42:01" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3y5gnRJQwkK6CP3FyocYwzg==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3G0Vm50iQ5Blw5yULyEwZQQ==">
+      <TableDataSource Name="Goals1" Alias="Goals2" DataType="System.Int32" Enabled="true" TableName="Goals">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="AreaOfFocus" DataType="System.String"/>
+        <Column Name="MTPId" DataType="System.Int32"/>
+        <Column Name="Number" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="Objetives1" Alias="Objetives2" DataType="System.Int32" Enabled="true" TableName="Objetives">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Objetive" DataType="System.String"/>
+        <Column Name="Description" DataType="System.String"/>
+        <Column Name="DateOpened" DataType="System.DateTime"/>
+        <Column Name="DateTarget" DataType="System.DateTime"/>
+        <Column Name="DateResolved" DataType="System.DateTime"/>
+        <Column Name="Intervention" DataType="System.String"/>
+        <Column Name="GoalId" DataType="System.Int32"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3tyxjXH/JqT3IdSG9l6dd0w==">
+      <TableDataSource Name="Goals2" Alias="Goals3" DataType="System.Int32" Enabled="true" TableName="Goals">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="AreaOfFocus" DataType="System.String"/>
+        <Column Name="MTPId" DataType="System.Int32"/>
+        <Column Name="Number" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="Objetives2" Alias="Objetives3" DataType="System.Int32" Enabled="true" TableName="Objetives">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Objetive" DataType="System.String"/>
+        <Column Name="Description" DataType="System.String"/>
+        <Column Name="DateOpened" DataType="System.DateTime"/>
+        <Column Name="DateTarget" DataType="System.DateTime"/>
+        <Column Name="DateResolved" DataType="System.DateTime"/>
+        <Column Name="Intervention" DataType="System.String"/>
+        <Column Name="GoalId" DataType="System.Int32"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u39ETVv5BidfsGOKnzFpQRgQ==">
+      <TableDataSource Name="Goals3" Alias="Goals4" DataType="System.Int32" Enabled="true" TableName="Goals">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="AreaOfFocus" DataType="System.String"/>
+        <Column Name="MTPId" DataType="System.Int32"/>
+        <Column Name="Number" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="Objetives3" Alias="Objetives4" DataType="System.Int32" Enabled="true" TableName="Objetives">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Objetive" DataType="System.String"/>
+        <Column Name="Description" DataType="System.String"/>
+        <Column Name="DateOpened" DataType="System.DateTime"/>
+        <Column Name="DateTarget" DataType="System.DateTime"/>
+        <Column Name="DateResolved" DataType="System.DateTime"/>
+        <Column Name="Intervention" DataType="System.String"/>
+        <Column Name="GoalId" DataType="System.Int32"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3o10n2o3kkY8FdE8Hj7HRcA==">
+      <TableDataSource Name="Goals4" Alias="Goals5" DataType="System.Int32" Enabled="true" TableName="Goals">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="AreaOfFocus" DataType="System.String"/>
+        <Column Name="MTPId" DataType="System.Int32"/>
+        <Column Name="Number" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="Objetives4" Alias="Objetives5" DataType="System.Int32" Enabled="true" TableName="Objetives">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Objetive" DataType="System.String"/>
+        <Column Name="Description" DataType="System.String"/>
+        <Column Name="DateOpened" DataType="System.DateTime"/>
+        <Column Name="DateTarget" DataType="System.DateTime"/>
+        <Column Name="DateResolved" DataType="System.DateTime"/>
+        <Column Name="Intervention" DataType="System.String"/>
+        <Column Name="GoalId" DataType="System.Int32"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3jC9xX7QbJR59fGOVvdQk6A==">
       <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -27,12 +103,6 @@
         <Column Name="NumberOfMonths" DataType="System.Int32"/>
         <Column Name="Setting" DataType="System.String"/>
       </TableDataSource>
-      <TableDataSource Name="Diagnoses" DataType="System.Int32" Enabled="true" TableName="Diagnoses">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="Code" DataType="System.String"/>
-        <Column Name="Description" DataType="System.String"/>
-        <Column Name="MTPId" DataType="System.Int32"/>
-      </TableDataSource>
       <TableDataSource Name="Goals" Alias="Goals1" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -50,81 +120,14 @@
         <Column Name="Intervention" DataType="System.String"/>
         <Column Name="GoalId" DataType="System.Int32"/>
       </TableDataSource>
-    </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3pHwDTbejIRKCZshuHTt2pA==">
-      <TableDataSource Name="Goals1" Alias="Goals2" DataType="System.Int32" Enabled="true" TableName="Goals">
+      <TableDataSource Name="Diagnostics" DataType="System.Int32" Enabled="true" TableName="Diagnostics">
         <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="Name" DataType="System.String"/>
-        <Column Name="AreaOfFocus" DataType="System.String"/>
-        <Column Name="MTPId" DataType="System.Int32"/>
-        <Column Name="Number" DataType="System.Int32"/>
-      </TableDataSource>
-      <TableDataSource Name="Objetives1" Alias="Objetives2" DataType="System.Int32" Enabled="true" TableName="Objetives">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="Objetive" DataType="System.String"/>
+        <Column Name="Code" DataType="System.String"/>
         <Column Name="Description" DataType="System.String"/>
-        <Column Name="DateOpened" DataType="System.DateTime"/>
-        <Column Name="DateTarget" DataType="System.DateTime"/>
-        <Column Name="DateResolved" DataType="System.DateTime"/>
-        <Column Name="Intervention" DataType="System.String"/>
-        <Column Name="GoalId" DataType="System.Int32"/>
-      </TableDataSource>
-    </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3clLS34HCizvX8flQTefNeg==">
-      <TableDataSource Name="Goals2" Alias="Goals3" DataType="System.Int32" Enabled="true" TableName="Goals">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="Name" DataType="System.String"/>
-        <Column Name="AreaOfFocus" DataType="System.String"/>
-        <Column Name="MTPId" DataType="System.Int32"/>
-        <Column Name="Number" DataType="System.Int32"/>
-      </TableDataSource>
-      <TableDataSource Name="Objetives2" Alias="Objetives3" DataType="System.Int32" Enabled="true" TableName="Objetives">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="Objetive" DataType="System.String"/>
-        <Column Name="Description" DataType="System.String"/>
-        <Column Name="DateOpened" DataType="System.DateTime"/>
-        <Column Name="DateTarget" DataType="System.DateTime"/>
-        <Column Name="DateResolved" DataType="System.DateTime"/>
-        <Column Name="Intervention" DataType="System.String"/>
-        <Column Name="GoalId" DataType="System.Int32"/>
-      </TableDataSource>
-    </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3GMS4ggPX0SuHPi9nqq4nKQ==">
-      <TableDataSource Name="Goals3" Alias="Goals4" DataType="System.Int32" Enabled="true" TableName="Goals">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="Name" DataType="System.String"/>
-        <Column Name="AreaOfFocus" DataType="System.String"/>
-        <Column Name="MTPId" DataType="System.Int32"/>
-        <Column Name="Number" DataType="System.Int32"/>
-      </TableDataSource>
-      <TableDataSource Name="Objetives3" Alias="Objetives4" DataType="System.Int32" Enabled="true" TableName="Objetives">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="Objetive" DataType="System.String"/>
-        <Column Name="Description" DataType="System.String"/>
-        <Column Name="DateOpened" DataType="System.DateTime"/>
-        <Column Name="DateTarget" DataType="System.DateTime"/>
-        <Column Name="DateResolved" DataType="System.DateTime"/>
-        <Column Name="Intervention" DataType="System.String"/>
-        <Column Name="GoalId" DataType="System.Int32"/>
-      </TableDataSource>
-    </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3dgLglOhVrVh1Q6B2JyAJIQ==">
-      <TableDataSource Name="Goals4" Alias="Goals5" DataType="System.Int32" Enabled="true" TableName="Goals">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="Name" DataType="System.String"/>
-        <Column Name="AreaOfFocus" DataType="System.String"/>
-        <Column Name="MTPId" DataType="System.Int32"/>
-        <Column Name="Number" DataType="System.Int32"/>
-      </TableDataSource>
-      <TableDataSource Name="Objetives4" Alias="Objetives5" DataType="System.Int32" Enabled="true" TableName="Objetives">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="Objetive" DataType="System.String"/>
-        <Column Name="Description" DataType="System.String"/>
-        <Column Name="DateOpened" DataType="System.DateTime"/>
-        <Column Name="DateTarget" DataType="System.DateTime"/>
-        <Column Name="DateResolved" DataType="System.DateTime"/>
-        <Column Name="Intervention" DataType="System.String"/>
-        <Column Name="GoalId" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
   </Dictionary>
@@ -168,13 +171,13 @@
       <TextObject Name="Text49" Left="138.75" Top="9.45" Width="160.65" Height="18.9" Text="[MTPs.AdmisionDate]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
       <TextObject Name="Text52" Left="576.45" Top="9.45" Width="198.45" Height="18.9" Text="[MTPs.MTPDevelopedDate]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
     </DataBand>
-    <DataBand Name="Data1" Top="379.6" Width="778.3" Height="18.9" FirstRowStartsNewPage="true" Guides="0,0,0" DataSource="Diagnoses">
+    <DataBand Name="Data1" Top="379.6" Width="778.3" Height="18.9" FirstRowStartsNewPage="true" Guides="0,0,0" DataSource="Diagnostics">
       <TableObject Name="Table1" Left="15.9" Top="-0.1" Width="755.98" Height="18.9">
         <TableColumn Name="Column1" Width="122.83"/>
         <TableColumn Name="Column2" Width="633.15"/>
         <TableRow Name="Row1">
-          <TableCell Name="Cell1" Border.Lines="All" Text="[Diagnoses.Code]" HorzAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell2" Border.Lines="All" Text="[Diagnoses.Description]" HorzAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell1" Border.Lines="All" Text="[Diagnostics.Code]" HorzAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell2" Border.Lines="All" Text="[Diagnostics.Description]" HorzAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
       </TableObject>
       <DataHeaderBand Name="DataHeader1" Top="347.25" Width="778.3" Height="28.35">

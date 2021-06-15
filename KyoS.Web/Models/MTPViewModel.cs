@@ -11,8 +11,6 @@ namespace KyoS.Web.Models
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a client.")]
         public int IdClient { get; set; }
-        public IEnumerable<SelectListItem> Clients { get; set; }
-
-        public IEnumerable<DiagnosisTempEntity> DiagnosesTemp { get; set; }
+        public IEnumerable<SelectListItem> Clients { get; set; }        
     }
 }

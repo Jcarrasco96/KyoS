@@ -18,9 +18,7 @@ namespace KyoS.Web.Data
         public DbSet<ThemeEntity> Themes { get; set; }
         public DbSet<ActivityEntity> Activities { get; set; }
         public DbSet<NotePrototypeEntity> NotesPrototypes { get; set; }
-        public DbSet<NotePrototype_Classification> NotesPrototypes_Classifications { get; set; }        
-        public DbSet<DiagnosisEntity> Diagnoses { get; set; }
-        public DbSet<DiagnosisTempEntity> DiagnosesTemp { get; set; }
+        public DbSet<NotePrototype_Classification> NotesPrototypes_Classifications { get; set; }                
         public DbSet<DiagnosticTempEntity> DiagnosticsTemp { get; set; }
         public DbSet<MTPEntity> MTPs { get; set; }
         public DbSet<GoalEntity> Goals { get; set; }
@@ -69,8 +67,6 @@ namespace KyoS.Web.Data
                 .HasIndex(c => c.Name)
                 .IsUnique();
 
-            modelBuilder.Entity<DiagnosisEntity>()
-                .HasOne(d => d.MTP).WithMany(m => m.Diagnosis).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<GoalEntity>()
                 .HasOne(g => g.MTP).WithMany(m => m.Goals).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<ObjetiveEntity>()

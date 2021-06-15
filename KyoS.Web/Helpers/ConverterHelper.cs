@@ -307,34 +307,10 @@ namespace KyoS.Web.Helpers
                 InitialDischargeCriteria = mtpEntity.InitialDischargeCriteria,
                 Modality = mtpEntity.Modality,
                 Frecuency = mtpEntity.Frecuency,
-                NumberOfMonths = mtpEntity.NumberOfMonths,
-                Diagnosis = mtpEntity.Diagnosis,
+                NumberOfMonths = mtpEntity.NumberOfMonths,                
                 Setting = mtpEntity.Setting
             };
-        }
-
-        public async Task<DiagnosisEntity> ToDiagnosisEntity(DiagnosisViewModel model, bool isNew)
-        {
-            return new DiagnosisEntity
-            {
-                Id = isNew ? 0 : model.Id,
-                Code = model.Code,
-                Description = model.Description,
-                MTP = await _context.MTPs.FindAsync(model.IdMTP)
-            };
-        }
-
-        public DiagnosisViewModel ToDiagnosisViewModel(DiagnosisEntity diagnosisEntity)
-        {
-            return new DiagnosisViewModel
-            {
-                Id = diagnosisEntity.Id,
-                MTP = diagnosisEntity.MTP,
-                IdMTP = diagnosisEntity.MTP.Id,
-                Code = diagnosisEntity.Code,
-                Description = diagnosisEntity.Description
-            };
-        }
+        }        
 
         public async Task<GoalEntity> ToGoalEntity(GoalViewModel model, bool isNew)
         {
