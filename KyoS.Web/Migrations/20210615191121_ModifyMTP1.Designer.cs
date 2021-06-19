@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210615191121_ModifyMTP1")]
+    partial class ModifyMTP1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -906,9 +908,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<bool>("Limited")
                         .HasColumnType("bit");
-
-                    b.Property<int?>("MTPId")
-                        .HasColumnType("int");
 
                     b.Property<bool>("MildlyImpaired")
                         .HasColumnType("bit");

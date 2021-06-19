@@ -171,7 +171,7 @@ namespace KyoS.Web.Helpers
 
         public IEnumerable<SelectListItem> GetComboClientsByClinic(int idClinic)
         {
-            List<SelectListItem> list = _context.Clients.Where(c => (c.Clinic.Id == idClinic && c.MTPs.Count == 0))
+            List<SelectListItem> list = _context.Clients.Where(c => (c.Clinic.Id == idClinic/* && c.MTPs.Count == 0*/))
                                                         .Select(c => new SelectListItem
             {
                 Text = $"{c.Name}",

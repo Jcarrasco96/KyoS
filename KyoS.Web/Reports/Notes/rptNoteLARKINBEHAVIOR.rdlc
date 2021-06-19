@@ -4208,6 +4208,9 @@
             <Height>0.18in</Height>
             <Width>0.15in</Width>
             <ZIndex>106</ZIndex>
+            <Visibility>
+              <Hidden>=Parameters!goal_text1.Value = ""</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -4256,6 +4259,9 @@
             <Height>0.18in</Height>
             <Width>0.15in</Width>
             <ZIndex>108</ZIndex>
+            <Visibility>
+              <Hidden>=Parameters!goal_text2.Value = ""</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -4273,6 +4279,9 @@
             <Height>0.115in</Height>
             <Width>0.115in</Width>
             <ZIndex>109</ZIndex>
+            <Visibility>
+              <Hidden>=Parameters!goal_text3.Value = ""</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -4300,10 +4309,13 @@
             </Paragraphs>
             <rd:DefaultName>Textbox22</rd:DefaultName>
             <Top>0.90362in</Top>
-            <Left>0.117in</Left>
+            <Left>0.125in</Left>
             <Height>0.18in</Height>
             <Width>0.15in</Width>
             <ZIndex>110</ZIndex>
+            <Visibility>
+              <Hidden>=Parameters!goal_text3.Value = ""</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -4478,7 +4490,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox22</rd:DefaultName>
             <Top>1.28751in</Top>
-            <Left>0.117in</Left>
+            <Left>0.125in</Left>
             <Height>0.18in</Height>
             <Width>0.15in</Width>
             <ZIndex>116</ZIndex>

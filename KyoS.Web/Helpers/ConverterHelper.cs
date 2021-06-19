@@ -288,7 +288,8 @@ namespace KyoS.Web.Helpers
                 InitialDischargeCriteria = model.InitialDischargeCriteria,
                 Modality = model.Modality,
                 Frecuency = model.Frecuency,
-                NumberOfMonths = model.NumberOfMonths
+                NumberOfMonths = model.NumberOfMonths,
+                Active = isNew ? true : model.Active
             };
         }
 
@@ -308,7 +309,8 @@ namespace KyoS.Web.Helpers
                 Modality = mtpEntity.Modality,
                 Frecuency = mtpEntity.Frecuency,
                 NumberOfMonths = mtpEntity.NumberOfMonths,                
-                Setting = mtpEntity.Setting
+                Setting = mtpEntity.Setting,
+                Active = mtpEntity.Active
             };
         }        
 
@@ -450,7 +452,7 @@ namespace KyoS.Web.Helpers
                 Normal = model.Normal,
                 ShortSpanned = model.ShortSpanned,
                 MildlyImpaired = model.MildlyImpaired,
-                SeverelyImpaired = model.SeverelyImpaired
+                SeverelyImpaired = model.SeverelyImpaired                
             };
         }
 

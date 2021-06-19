@@ -66,5 +66,7 @@ namespace KyoS.Web.Data.Entities
 
         public SupervisorEntity Supervisor { get; set; }
         public ICollection<Note_Activity> Notes_Activities { get; set; }
+
+        public int? MTPId { get; set; }
     }
 }

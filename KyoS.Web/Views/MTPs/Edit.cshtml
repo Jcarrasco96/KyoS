@@ -4,13 +4,24 @@
     ViewData["Title"] = "Edit";
 }
 
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("MTPs", "Index", "MTPs")
+        </li>
+        <li class="active">Edit</li>
+    </ul><!--.breadcrumb-->
+</div>
+
 <h4>Edit master treament plan</h4>
 <hr />
 <div>
     <form asp-action="Edit" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
-        <partial name="_MTPs" /> 
+        <input type="hidden" asp-for="Active" />
+        <partial name="_MTPs" />
         <div class="form-group">
             <input type="submit" value="Save MTP" class="btn btn-primary" /> |
             <a asp-action="Index" class="btn btn-success">Back</a> |

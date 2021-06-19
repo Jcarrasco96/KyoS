@@ -32,8 +32,13 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Admin, Supervisor, Mannager")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int idError = 0)
         {
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+
             if (User.IsInRole("Admin"))
             {
                 ViewBag.Count = _context.Clients.Where(c => c.MTPs.Count == 0)
@@ -144,9 +149,16 @@ namespace KyoS.Web.Controllers
             {
                 MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, true);
                 mtpEntity.Setting = form["Setting"].ToString();
-                
-                _context.Add(mtpEntity);
 
+                //set all mtps of this client non active
+                List<MTPEntity> mtp_list = _context.MTPs.Where(m => m.Client == mtpEntity.Client).ToList();                
+                foreach (MTPEntity item in mtp_list)
+                {
+                    item.Active = false;
+                    _context.Update(item);
+                }     
+
+                _context.Add(mtpEntity);
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -175,10 +187,28 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            MTPEntity mtpEntity = await _context.MTPs.FirstOrDefaultAsync(t => t.Id == id);
+            MTPEntity mtpEntity = await _context.MTPs
+                                                .Include(m => m.Client)
+                                                .FirstOrDefaultAsync(t => t.Id == id);
             if (mtpEntity == null)
             {
                 return NotFound();
+            }
+
+            //I check the mtp is not in a any note
+            List<NoteEntity> notes = await _context.Notes.Where(n => n.MTPId == id).ToListAsync();
+            if (notes.Count() > 0)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+            //I check the client have more than 1 mtp and this mtp is not active, or the client have not any note
+            ClientEntity client = await _context.Clients
+                                                .Include(c => c.MTPs)
+                                                .FirstOrDefaultAsync(c => c.Id == mtpEntity.Client.Id);
+            notes = await _context.Notes.Where(n => n.Workday_Cient.Client.Id == client.Id).ToListAsync();
+            if ((client.MTPs.Count() == 1 && notes.Count() > 0) || (mtpEntity.Active))
+            {
+                return RedirectToAction("Index", new { idError = 1 });
             }
 
             _context.MTPs.Remove(mtpEntity);
@@ -705,6 +735,20 @@ namespace KyoS.Web.Controllers
             }
 
             return null;            
+        }
+
+        public void UpdateMTPToNonActive(ClientEntity client)
+        {
+            List<MTPEntity> mtp_list = _context.MTPs.Where(m => m.Client == client).ToList();
+            if (mtp_list.Count() > 0)
+            {
+                foreach (MTPEntity item in mtp_list)
+                {
+                    item.Active = false;
+                    _context.Update(item);
+                }
+                _context.SaveChangesAsync();
+            }
         }
     }
 }

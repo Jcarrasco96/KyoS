@@ -194,8 +194,11 @@ namespace KyoS.Web.Controllers
                                                                            .ThenInclude(c => c.Clinic)
 
                                                                            .Include(wc => wc.Client)
-                                                                           .ThenInclude(c => c.Group)      
-                                                                           
+                                                                           .ThenInclude(c => c.Group)
+
+                                                                           .Include(wc => wc.Client)
+                                                                           .ThenInclude(c => c.MTPs)
+
                                                                            .Include(wc => wc.Facilitator)
                                                                            .FirstOrDefaultAsync(wc => wc.Id == id);
 
@@ -211,6 +214,17 @@ namespace KyoS.Web.Controllers
             if (workday_Client.Workday.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator == facilitator_logged).Count() == 0)
             {
                 ViewBag.Error = "1";
+                noteViewModel = new NoteViewModel
+                {
+                    Id = workday_Client.Workday.Id,
+                };
+                return View(noteViewModel);
+            }
+
+            //el cliente no tiene mtp activos
+            if (workday_Client.Client.MTPs.Where(m => m.Active == true).Count() == 0)
+            {
+                ViewBag.Error = "3";
                 noteViewModel = new NoteViewModel
                 {
                     Id = workday_Client.Workday.Id,
@@ -279,7 +293,8 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            MTPEntity mtp = await _context.MTPs.Include(m => m.Goals).FirstOrDefaultAsync(m => m.Client.Id == workday_Client.Client.Id);
+            //-----------se selecciona el primer MTP activo que tenga el cliente-----------//
+            MTPEntity mtp = _context.MTPs.FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
 
             List<Workday_Activity_Facilitator> activities = workday_Client.Workday
                                                                           .Workdays_Activities_Facilitators
@@ -519,6 +534,14 @@ namespace KyoS.Web.Controllers
                     noteEntity.UnableToDetermine = (form["Progress"] == "Unable") ? true : false;
                     noteEntity.Setting = workday_Client.Client.MTPs.FirstOrDefault().Setting;
 
+                    //vinculo el mtp activo del cliente a la nota que se creará
+                    Workday_Client workday_client = await _context.Workdays_Clients
+                                                                  .Include(wd => wd.Client)
+                                                                  .FirstOrDefaultAsync(wd => wd.Id == model.Id);
+                    MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_client.Client.Id && m.Active == true));
+                    if(mtp != null)
+                        noteEntity.MTPId = mtp.Id;
+
                     _context.Add(noteEntity);
                     note_Activity = new Note_Activity
                     {
@@ -609,6 +632,15 @@ namespace KyoS.Web.Controllers
                     note.ShortSpanned = model.ShortSpanned;
                     note.MildlyImpaired = model.MildlyImpaired;
                     note.SeverelyImpaired = model.SeverelyImpaired;
+
+                    //actualizo el mtp activo del cliente a la nota que se creará
+                    Workday_Client workday_client = await _context.Workdays_Clients
+                                                                  .Include(wd => wd.Client)
+                                                                  .FirstOrDefaultAsync(wd => wd.Id == model.Id);
+                    MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_client.Client.Id && m.Active == true));
+                    if (mtp != null)
+                        note.MTPId = mtp.Id;
+
                     _context.Update(note);
                     List<Note_Activity> noteActivities_list = await _context.Notes_Activities
                                                                             .Where(na => na.Note.Id == note.Id)
@@ -689,7 +721,6 @@ namespace KyoS.Web.Controllers
                         }
                     }
                 }
-
             }
 
             return View(model);
@@ -1290,7 +1321,14 @@ namespace KyoS.Web.Controllers
             var goal_obj_activity2 = string.Empty;
             var goal_obj_activity3 = string.Empty;
             var goal_obj_activity4 = string.Empty;
-            foreach (GoalEntity item in workdayClient.Client.MTPs.FirstOrDefault().Goals.OrderBy(g => g.Number))
+
+            MTPEntity mtp;
+            if (workdayClient.Note.MTPId == null)   //la nota no tiene mtp relacionado, entonces se usa el primero que esté
+               mtp = workdayClient.Client.MTPs.FirstOrDefault();            
+            else                                    //la nota tiene mtp relacionado    
+               mtp = _context.MTPs.FirstOrDefault(m => m.Id == workdayClient.Note.MTPId);            
+
+            foreach (GoalEntity item in mtp.Goals.OrderBy(g => g.Number))
             {
                 if (i == 0)
                 {
@@ -1703,7 +1741,14 @@ namespace KyoS.Web.Controllers
             var goal_obj_activity2 = string.Empty;
             var goal_obj_activity3 = string.Empty;
             var goal_obj_activity4 = string.Empty;
-            foreach (GoalEntity item in workdayClient.Client.MTPs.FirstOrDefault().Goals.OrderBy(g => g.Number))
+
+            MTPEntity mtp;
+            if (workdayClient.Note.MTPId == null)   //la nota no tiene mtp relacionado, entonces se usa el primero que esté
+                mtp = workdayClient.Client.MTPs.FirstOrDefault();
+            else                                    //la nota tiene mtp relacionado    
+                mtp = _context.MTPs.FirstOrDefault(m => m.Id == workdayClient.Note.MTPId);
+
+            foreach (GoalEntity item in mtp.Goals.OrderBy(g => g.Number))
             {
                 if (i == 0)
                 {
@@ -1950,7 +1995,14 @@ namespace KyoS.Web.Controllers
             var goal_obj_activity2 = string.Empty;
             var goal_obj_activity3 = string.Empty;
             var goal_obj_activity4 = string.Empty;
-            foreach (GoalEntity item in workdayClient.Client.MTPs.FirstOrDefault().Goals.OrderBy(g => g.Number))
+
+            MTPEntity mtp;
+            if (workdayClient.Note.MTPId == null)   //la nota no tiene mtp relacionado, entonces se usa el primero que esté
+                mtp = workdayClient.Client.MTPs.FirstOrDefault();
+            else                                    //la nota tiene mtp relacionado    
+                mtp = _context.MTPs.FirstOrDefault(m => m.Id == workdayClient.Note.MTPId);
+
+            foreach (GoalEntity item in mtp.Goals.OrderBy(g => g.Number))
             {
                 if (i == 0)
                 {
@@ -2197,7 +2249,14 @@ namespace KyoS.Web.Controllers
             var goal_obj_activity2 = string.Empty;
             var goal_obj_activity3 = string.Empty;
             var goal_obj_activity4 = string.Empty;
-            foreach (GoalEntity item in workdayClient.Client.MTPs.FirstOrDefault().Goals.OrderBy(g => g.Number))
+
+            MTPEntity mtp;
+            if (workdayClient.Note.MTPId == null)   //la nota no tiene mtp relacionado, entonces se usa el primero que esté
+                mtp = workdayClient.Client.MTPs.FirstOrDefault();
+            else                                    //la nota tiene mtp relacionado    
+                mtp = _context.MTPs.FirstOrDefault(m => m.Id == workdayClient.Note.MTPId);
+
+            foreach (GoalEntity item in mtp.Goals.OrderBy(g => g.Number))
             {
                 if (i == 0)
                 {

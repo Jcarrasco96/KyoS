@@ -50,5 +50,7 @@ namespace KyoS.Web.Data.Entities
         public int? NumberOfMonths { get; set; }
 
         public string Setting { get; set; }
+
+        public bool Active { get; set; }
     }
 }

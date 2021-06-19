@@ -52,8 +52,20 @@
                     </strong>
                 </div>
             }
+            @if (ViewBag.Error == "3")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. The client have not active MTP.
+                    </strong>
+                </div>
+            }
         </div>
-        @if (ViewBag.Error != "1")  //se puede crear o editar la nota
+        @if ((ViewBag.Error != "1") && (ViewBag.Error != "3"))  //se puede crear o editar la nota
         { 
             <form asp-action="EditNote" enctype="multipart/form-data">
                 @*<div class="form-group col-md-12">*@
