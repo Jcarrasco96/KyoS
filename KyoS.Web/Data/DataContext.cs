@@ -46,6 +46,8 @@ namespace KyoS.Web.Data
         public DbSet<DiagnosticEntity> Diagnostics { get; set; }
         public DbSet<Client_Diagnostic> Clients_Diagnostics { get; set; }
         public DbSet<DocumentDiagnosticEntity> DocumentDiagnostics { get; set; }
+        public DbSet<DocumentEntity> Documents { get; set; }
+        public DbSet<DocumentTempEntity> DocumentsTemp { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -77,6 +79,11 @@ namespace KyoS.Web.Data
                 .HasOne(nc => nc.Note).WithMany(n => n.Classifications).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Plan_Classification>()
                 .HasOne(nc => nc.Plan).WithMany(n => n.Classifications).OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<DocumentEntity>()
+                .HasOne(d => d.Client).WithMany(c => c.Documents).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Client_Diagnostic>()
+                .HasOne(cd => cd.Client).WithMany(c => c.Clients_Diagnostics).OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Workday_Client>()
            .HasOne(wd => wd.Note)

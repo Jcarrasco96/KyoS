@@ -52,6 +52,7 @@ namespace KyoS.Web
             services.AddScoped<IDateHelper, DateHelper>();
             services.AddScoped<ITranslateHelper, TranslateHelper>();
             services.AddScoped<IReportHelper, ReportHelper>();
+            services.AddScoped<IMimeType, MimeType>();
             //services.AddControllers();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();            

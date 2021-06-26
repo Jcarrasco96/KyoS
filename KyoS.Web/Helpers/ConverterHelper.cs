@@ -242,7 +242,8 @@ namespace KyoS.Web.Helpers
                 Psychiatrists = _combosHelper.GetComboPsychiatristsByClinic(userId),
                 IdLegalGuardian = (clientEntity.LegalGuardian != null) ? clientEntity.LegalGuardian.Id : 0,
                 LegalsGuardians = _combosHelper.GetComboLegalGuardiansByClinic(userId),
-                DiagnosticTemp = _context.DiagnosticsTemp
+                DiagnosticTemp = _context.DiagnosticsTemp,
+                DocumentTemp = _context.DocumentsTemp
             };
         }
 

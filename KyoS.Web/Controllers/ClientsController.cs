@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using KyoS.Web.Data;
@@ -21,14 +22,16 @@ namespace KyoS.Web.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly IRenderHelper _renderHelper;
         private readonly IImageHelper _imageHelper;
+        private readonly IMimeType _mimeType;
 
-        public ClientsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IImageHelper imageHelper)
+        public ClientsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IImageHelper imageHelper, IMimeType mimeType)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _renderHelper = renderHelper;
             _imageHelper = imageHelper;
+            _mimeType = mimeType;
         }
         public async Task<IActionResult> Index()
         {
@@ -68,6 +71,7 @@ namespace KyoS.Web.Controllers
             }
 
             this.DeleteDiagnosticsTemp();
+            this.DeleteDocumentsTemp();
 
             ClientViewModel model = new ClientViewModel();
 
@@ -116,7 +120,8 @@ namespace KyoS.Web.Controllers
                         Psychiatrists = _combosHelper.GetComboPsychiatristsByClinic(user_logged.Id),
                         IdLegalGuardian = 0,
                         LegalsGuardians = _combosHelper.GetComboLegalGuardiansByClinic(user_logged.Id),
-                        DiagnosticTemp = _context.DiagnosticsTemp
+                        DiagnosticTemp = _context.DiagnosticsTemp,
+                        DocumentTemp = _context.DocumentsTemp
                     };
                     return View(model);
                 }
@@ -173,6 +178,24 @@ namespace KyoS.Web.Controllers
                         };
                         _context.Add(clientDiagnostic);
                         _context.DiagnosticsTemp.Remove(item);
+                    }
+
+                    //----------update Documents table-------------//
+                    IQueryable<DocumentTempEntity> list_to_delete_doc = _context.DocumentsTemp;
+                    DocumentEntity document;
+                    foreach (DocumentTempEntity item in list_to_delete_doc)
+                    {
+                        document = new DocumentEntity
+                        {
+                            Client = clientEntity,
+                            FileName = item.DocumentName,
+                            Description = item.Description,
+                            FileUrl = item.DocumentPath,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Now
+                        };
+                        _context.Add(document);
+                        _context.DocumentsTemp.Remove(item);
                     }
 
                     try
@@ -238,11 +261,15 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                   .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             this.DeleteDiagnosticsTemp();
+            this.DeleteDocumentsTemp();
+
             this.SetDiagnosticsTemp(clientEntity);
+            this.SetDocumentsTemp(clientEntity);
 
             ClientViewModel clientViewModel = _converterHelper.ToClientViewModel(clientEntity, user_logged.Id);            
 
@@ -313,6 +340,30 @@ namespace KyoS.Web.Controllers
                     _context.DiagnosticsTemp.Remove(item);
                 }
 
+                //delete all document of this client
+                IEnumerable<DocumentEntity> list_to_delete_doc = await _context.Documents
+                                                                               .Where(d => d.Client.Id == clientViewModel.Id)
+                                                                               .ToListAsync();
+                _context.Documents.RemoveRange(list_to_delete_doc);
+
+                //update Documents table with the news DocumentsTemp
+                IQueryable<DocumentTempEntity> listDocumentTemp = _context.DocumentsTemp;
+                DocumentEntity document;
+                foreach (DocumentTempEntity item in listDocumentTemp)
+                {
+                    document = new DocumentEntity
+                    {
+                        Client = clientEntity,
+                        FileName = item.DocumentName,
+                        Description = item.Description,
+                        FileUrl = item.DocumentPath,
+                        CreatedBy = user_logged.Id,
+                        CreatedOn = DateTime.Now
+                    };
+                    _context.Add(document);
+                    _context.DocumentsTemp.Remove(item);
+                }               
+
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -378,7 +429,7 @@ namespace KyoS.Web.Controllers
                 //Edit
                 return View(new DiagnosticTempViewModel());
             }
-        }
+        }          
 
         [HttpPost]
         [ValidateAntiForgeryToken]        
@@ -412,6 +463,41 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddDiagnostic", model) });
         }
 
+        public IActionResult AddDocument(int id = 0)
+        {
+            return View(new DocumentTempViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddDocument(int id, DocumentTempViewModel documentTempViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                string documentPath = string.Empty;
+                if (documentTempViewModel.DocumentFile != null)
+                {
+                    documentPath = await _imageHelper.UploadFileAsync(documentTempViewModel.DocumentFile, "Clients");
+                }
+
+                if (id == 0)
+                {
+                    DocumentTempEntity documentTemp = new DocumentTempEntity
+                    {
+                        Id = 0,
+                        DocumentPath = documentPath,
+                        DocumentName = documentTempViewModel.DocumentFile.FileName,
+                        Description = documentTempViewModel.Description
+                    };
+                    _context.Add(documentTemp);
+                    await _context.SaveChangesAsync();
+                }
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.ToList()) });
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddDocument", documentTempViewModel) });
+        }
+
         public async Task<IActionResult> DeleteDiagnosticTemp(int? id)
         {
             if (id == null)
@@ -428,6 +514,18 @@ namespace KyoS.Web.Controllers
             _context.DiagnosticsTemp.Remove(diagnostic);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> OpenDocument(int id)
+        {
+            DocumentTempEntity document = await _context.DocumentsTemp
+                                                        .FirstOrDefaultAsync(d => d.Id == id);
+            if (document == null)
+            {
+                return NotFound();
+            }
+            string mimeType = _mimeType.GetMimeType(document.DocumentName);
+            return File(document.DocumentPath, mimeType);
         }
 
         public void DeleteDiagnosticsTemp()
@@ -463,5 +561,38 @@ namespace KyoS.Web.Controllers
                 _context.SaveChanges();
             }            
         }
+
+        public void SetDocumentsTemp(ClientEntity client)
+        {
+            IEnumerable<DocumentEntity> documents = _context.Documents                                                            
+                                                            .Where(d => d.Client == client).ToList();
+
+            if (documents.Count() > 0)
+            {
+                DocumentTempEntity document;
+                foreach (var item in documents)
+                {
+                    document = new DocumentTempEntity
+                    {
+                        Description = item.Description,
+                        DocumentPath = item.FileUrl,
+                        DocumentName = item.FileName
+                    };
+                    _context.Add(document);
+                }
+                _context.SaveChanges();
+            }
+        }
+
+        public void DeleteDocumentsTemp()
+        {
+            //delete all DiagnosticsTemp
+            IQueryable<DocumentTempEntity> list_to_delete = _context.DocumentsTemp;
+            foreach (DocumentTempEntity item in list_to_delete)
+            {
+                _context.DocumentsTemp.Remove(item);
+            }
+            _context.SaveChanges();
+        }        
     }
 }

@@ -94,5 +94,7 @@ namespace KyoS.Web.Data.Entities
         public ICollection<MTPEntity> MTPs { get; set; }
     
         public ICollection<Workday_Client> Workdays_Clients { get; set; }
+
+        public ICollection<DocumentEntity> Documents { get; set; }
     }
 }

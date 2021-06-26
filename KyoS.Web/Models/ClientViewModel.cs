@@ -71,5 +71,7 @@ namespace KyoS.Web.Models
         public IEnumerable<SelectListItem> Relationships { get; set; }
 
         public IEnumerable<DiagnosticTempEntity> DiagnosticTemp { get; set; }
+
+        public IEnumerable<DocumentTempEntity> DocumentTemp { get; set; }
     }
 }

@@ -2819,7 +2819,7 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            Stream stream = _reportHelper.PrintIndividualSign(workdayClientList);
+            Stream stream = _reportHelper.PrintIndividualSign(workdayClientList);            
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);            
         }
 

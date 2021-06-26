@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210619222002_AddDocumentEntity")]
+    partial class AddDocumentEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -448,29 +450,7 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Documents");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.DocumentTempEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DocumentName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DocumentPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DocumentsTemp");
+                    b.ToTable("DocumentEntity");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.EmergencyContactEntity", b =>
@@ -1785,8 +1765,7 @@ namespace KyoS.Web.Migrations
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
                         .WithMany("Clients_Diagnostics")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ClientId");
 
                     b.HasOne("KyoS.Web.Data.Entities.DiagnosticEntity", "Diagnostic")
                         .WithMany()
@@ -1819,8 +1798,7 @@ namespace KyoS.Web.Migrations
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
                         .WithMany("Documents")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ClientId");
 
                     b.Navigation("Client");
                 });

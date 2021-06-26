@@ -23,6 +23,21 @@ namespace KyoS.Web.Helpers
             return $"~/images/{folder}/{file}";
         }
 
+        public async Task<string> UploadFileAsync(IFormFile file, string folder)
+        {
+            string[] fileName = file.FileName.Split('.');
+            string guid = Guid.NewGuid().ToString();
+            string doc = $"{guid}.{fileName[1]}";
+            string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\images\\{folder}", doc);
+
+            using (FileStream stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return $"~/images/{folder}/{doc}";
+        }
+
         public byte[] ImageToByteArray(string imageFilePath)
         {
             FileStream stream = new FileStream(imageFilePath, FileMode.Open, FileAccess.Read);
@@ -47,6 +62,6 @@ namespace KyoS.Web.Helpers
         {
             string init = path.Substring(1);
             return init.Replace("/", "\\");            
-        }
+        }        
     }
 }

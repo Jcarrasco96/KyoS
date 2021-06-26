@@ -3,8 +3,6 @@
     ViewData["Title"] = "Create Client";
 }
 
-
-
 <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
         <li>
@@ -53,6 +51,7 @@
                     <li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">General</a></li>
                     <li role="presentation"><a href="#others" aria-controls="others" role="tab" data-toggle="tab">Others</a></li>
                     <li role="presentation"><a href="#diagnostics" aria-controls="diagnostics" role="tab" data-toggle="tab">Diagnostics</a></li>
+                    <li role="presentation"><a href="#documents" aria-controls="documents" role="tab" data-toggle="tab">Documents</a></li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content">
@@ -69,6 +68,9 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="diagnostics">
                         <partial name="_ClientsDiagnostics" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="documents">
+                        <partial name="_ClientsDocuments" />
                     </div>
                 </div>
             </div>
