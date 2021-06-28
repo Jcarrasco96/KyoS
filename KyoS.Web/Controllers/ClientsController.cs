@@ -513,7 +513,27 @@ namespace KyoS.Web.Controllers
 
             _context.DiagnosticsTemp.Remove(diagnostic);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.DiagnosticsTemp.ToList()) });
+        }
+
+        public async Task<IActionResult> DeleteDocumentTemp(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            DocumentTempEntity document = await _context.DocumentsTemp.FirstOrDefaultAsync(d => d.Id == id);
+            if (document == null)
+            {
+                return NotFound();
+            }
+
+            _context.DocumentsTemp.Remove(document);
+            await _context.SaveChangesAsync();
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.ToList()) });
         }
 
         public async Task<IActionResult> OpenDocument(int id)
@@ -565,7 +585,8 @@ namespace KyoS.Web.Controllers
         public void SetDocumentsTemp(ClientEntity client)
         {
             IEnumerable<DocumentEntity> documents = _context.Documents                                                            
-                                                            .Where(d => d.Client == client).ToList();
+                                                            .Where(d => d.Client == client)                                                            
+                                                            .ToList();
 
             if (documents.Count() > 0)
             {

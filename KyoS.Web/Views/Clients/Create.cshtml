@@ -71,6 +71,7 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="documents">
                         <partial name="_ClientsDocuments" />
+                        @*<button type="button" id="btnDeleteDoc1" class="btn btn-danger deleteItem" title="Delete document"><i class="glyphicon glyphicon-trash"></i></button>*@
                     </div>
                 </div>
             </div>
@@ -103,8 +104,22 @@
                 if (File && File[0]) {
                     ReadImageSign(File[0]);
                 }
-            });
+            });                      
         });
+
+        var DeleteDocumentTemp = function (idDoc) {
+            var url = "@Url.Action("DeleteDocumentTemp", "Clients")";
+            $.get(url, { id: idDoc }, function (data) {
+                $('#view-documents').html(data.html);
+            });
+        }  
+
+        var DeleteDiagnosticTemp = function (idDoc) {
+            var url = "@Url.Action("DeleteDiagnosticTemp", "Clients")";
+            $.get(url, { id: idDoc }, function (data) {
+                $('#view-diagnosis').html(data.html);
+            });
+        } 
 
         var ReadImagePhoto = function (file) {
         var reader = new FileReader;

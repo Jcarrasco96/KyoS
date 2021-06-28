@@ -39,7 +39,7 @@
                                         @Html.DisplayFor(modelItem => item.Principal)
                                     </td>
                                     <td align="right">
-                                        @*<button type="button" data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete diagnostic"><i class="glyphicon glyphicon-trash"></i></button>*@                                        
+                                        <button type="button" onclick="DeleteDiagnosticTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete diagnostic"><i class="glyphicon glyphicon-trash"></i></button>
                                     </td>
                                 </tr>
                             }

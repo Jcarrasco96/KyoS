@@ -85,6 +85,20 @@
             });
         });
 
+        var DeleteDocumentTemp = function (idDoc) {
+            var url = "@Url.Action("DeleteDocumentTemp", "Clients")";
+            $.get(url, { id: idDoc }, function (data) {
+                $('#view-documents').html(data.html);
+            });
+        }  
+
+        var DeleteDiagnosticTemp = function (idDoc) {
+            var url = "@Url.Action("DeleteDiagnosticTemp", "Clients")";
+            $.get(url, { id: idDoc }, function (data) {
+                $('#view-diagnosis').html(data.html);
+            });
+        } 
+
         var ReadImagePhoto = function (file) {
         var reader = new FileReader;
         var image = new Image;
