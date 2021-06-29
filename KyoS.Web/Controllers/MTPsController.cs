@@ -733,6 +733,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.FloridaSocialHSMTPReport(mtpEntity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (mtpEntity.Client.Clinic.Name == "ATLANTIC GROUP MEDICAL CENTER")
+            {
+                Stream stream = _reportHelper.AtlanticGroupMCMTPReport(mtpEntity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;            
         }

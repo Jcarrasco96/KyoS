@@ -17,11 +17,13 @@ namespace KyoS.Web.Helpers
         Stream SolAndVidaAbsenceNoteReport(Workday_Client workdayClient);
         Stream DavilaAbsenceNoteReport(Workday_Client workdayClient);
         Stream AdvancedGroupMCAbsenceNoteReport(Workday_Client workdayClient);
+        Stream AtlanticGroupMCAbsenceNoteReport(Workday_Client workdayClient);
         Stream FloridaSocialHSAbsenceNoteReport(Workday_Client workdayClient);
         Stream LarkinMTPReport(MTPEntity mtp);
         Stream SolAndVidaMTPReport(MTPEntity mtp);
         Stream HealthAndBeautyMTPReport(MTPEntity mtp);
         Stream AdvancedGroupMCMTPReport(MTPEntity mtp);
+        Stream AtlanticGroupMCMTPReport(MTPEntity mtp);
         Stream FloridaSocialHSMTPReport(MTPEntity mtp);
         Stream DavilaMTPReport(MTPEntity mtp);
     }
