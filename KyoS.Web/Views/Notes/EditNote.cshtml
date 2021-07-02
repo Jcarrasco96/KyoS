@@ -64,6 +64,18 @@
                     </strong>
                 </div>
             }
+            @if (ViewBag.Error == "4")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. There are gender issues in: @ViewBag.errorText
+                    </strong>
+                </div>
+            }
         </div>
         @if ((ViewBag.Error != "1") && (ViewBag.Error != "3"))  //se puede crear o editar la nota
         { 

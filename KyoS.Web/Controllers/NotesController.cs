@@ -168,7 +168,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Admin, Facilitator")]
-        public async Task<IActionResult> EditNote(int id, int error = 0, int origin = 0)
+        public async Task<IActionResult> EditNote(int id, int error = 0, int origin = 0, string errorText = "")
         {
             NoteViewModel noteViewModel;
             List<ThemeEntity> topics;
@@ -184,6 +184,13 @@ namespace KyoS.Web.Controllers
             //la nota no esta completa, faltan campos por editar
             if (error == 2)
                 ViewBag.Error = "2";
+
+            //la nota tiene problemas con el genero
+            if (error == 4)
+            {
+                ViewBag.Error = "4";
+                ViewBag.errorText = errorText;
+            }
 
             Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
                                                                            .ThenInclude(w => w.Workdays_Activities_Facilitators)
@@ -729,7 +736,9 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Admin, Facilitator")]
         public async Task<IActionResult> FinishEditing(int id, int origin = 0)
         {
-            Workday_Client workday_Client = await _context.Workdays_Clients.FirstOrDefaultAsync(wc => wc.Id == id);
+            Workday_Client workday_Client = await _context.Workdays_Clients
+                                                          .Include(wc => wc.Client)
+                                                          .FirstOrDefaultAsync(wc => wc.Id == id);
             if (workday_Client == null)
             {
                 return NotFound();
@@ -744,13 +753,23 @@ namespace KyoS.Web.Controllers
 
             bool exist = false;
             bool complete = true;
+            string gender_problems = string.Empty;
+            int index = 1;
             foreach (Note_Activity item in note.Notes_Activities)
             {
                 if (item.Objetive != null)
                     exist = true;
                 if (string.IsNullOrEmpty(item.AnswerClient) || string.IsNullOrEmpty(item.AnswerFacilitator))
-                    complete = false;               
+                    complete = false;
+                if(this.GenderEvaluation(workday_Client.Client.Gender, item.AnswerClient))
+                    gender_problems = string.IsNullOrEmpty(gender_problems) ? $"Client Answer #{index}" : $"{gender_problems}, Client Answer #{index}";
+                if (this.GenderEvaluation(workday_Client.Client.Gender, item.AnswerFacilitator))
+                    gender_problems = string.IsNullOrEmpty(gender_problems) ? $"Facilitator Answer #{index}" : $"{gender_problems}, Facilitator Answer #{index}";
+                index ++;
             }
+
+            if (this.GenderEvaluation(workday_Client.Client.Gender, note.PlanNote))
+                gender_problems = string.IsNullOrEmpty(gender_problems) ? $"Plan" : $"{gender_problems}, Plan";
 
             if (!exist)     //la nota no tiene goal relacionado
             {
@@ -769,6 +788,14 @@ namespace KyoS.Web.Controllers
                     if (origin == 2)
                         return RedirectToAction(nameof(EditNote), new { id = id, error = 2, origin = 2 });
                 }
+            }
+
+            if (!string.IsNullOrEmpty(gender_problems))     //la nota tiene problemas con el genero
+            {
+                if (origin == 0)
+                    return RedirectToAction(nameof(EditNote), new { id = id, error = 4, origin = 0, errorText = gender_problems});
+                if (origin == 2)
+                    return RedirectToAction(nameof(EditNote), new { id = id, error = 4, origin = 2, errorText = gender_problems});
             }
             
             note.Status = NoteStatus.Pending;
@@ -3157,6 +3184,20 @@ namespace KyoS.Web.Controllers
 
                                             .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
                                             .ToListAsync());
+        }
+
+        private bool GenderEvaluation(GenderType gender, string text)
+        {
+            if (gender == GenderType.Female)
+            {
+                return text.Contains(" he ") || text.Contains(" He ") || text.Contains(" his ") || text.Contains(" His ") || text.Contains("him") ||
+                       text.Contains("himself") || text.Contains("Himself") || text.Contains("oldman") || text.Contains("wife");
+            }
+            else
+            {
+                return text.Contains(" she ") || text.Contains(" She ") || text.Contains(" her ") || text.Contains(" Her ") || text.Contains("herself") ||
+                       text.Contains("Herself") || text.Contains("oldwoman") || text.Contains("husband");
+            }
         }
     }
 }
