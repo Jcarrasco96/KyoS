@@ -17,5 +17,7 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Document Name")]
         public string DocumentName { get; set; }
+
+        public DateTime CreatedOn { get; set; }
     }
 }

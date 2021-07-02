@@ -761,10 +761,16 @@ namespace KyoS.Web.Controllers
                     exist = true;
                 if (string.IsNullOrEmpty(item.AnswerClient) || string.IsNullOrEmpty(item.AnswerFacilitator))
                     complete = false;
-                if(this.GenderEvaluation(workday_Client.Client.Gender, item.AnswerClient))
+                if(!string.IsNullOrEmpty(item.AnswerClient))
+                { 
+                  if(this.GenderEvaluation(workday_Client.Client.Gender, item.AnswerClient))
                     gender_problems = string.IsNullOrEmpty(gender_problems) ? $"Client Answer #{index}" : $"{gender_problems}, Client Answer #{index}";
-                if (this.GenderEvaluation(workday_Client.Client.Gender, item.AnswerFacilitator))
+                }
+                if (!string.IsNullOrEmpty(item.AnswerFacilitator))
+                {
+                  if(this.GenderEvaluation(workday_Client.Client.Gender, item.AnswerFacilitator))
                     gender_problems = string.IsNullOrEmpty(gender_problems) ? $"Facilitator Answer #{index}" : $"{gender_problems}, Facilitator Answer #{index}";
+                }                
                 index ++;
             }
 

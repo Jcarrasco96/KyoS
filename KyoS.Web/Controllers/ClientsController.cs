@@ -487,7 +487,8 @@ namespace KyoS.Web.Controllers
                         Id = 0,
                         DocumentPath = documentPath,
                         DocumentName = documentTempViewModel.DocumentFile.FileName,
-                        Description = documentTempViewModel.Description
+                        Description = documentTempViewModel.Description,
+                        CreatedOn = DateTime.Now
                     };
                     _context.Add(documentTemp);
                     await _context.SaveChangesAsync();
@@ -597,7 +598,8 @@ namespace KyoS.Web.Controllers
                     {
                         Description = item.Description,
                         DocumentPath = item.FileUrl,
-                        DocumentName = item.FileName
+                        DocumentName = item.FileName,
+                        CreatedOn = item.CreatedOn
                     };
                     _context.Add(document);
                 }
