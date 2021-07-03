@@ -3196,13 +3196,13 @@ namespace KyoS.Web.Controllers
         {
             if (gender == GenderType.Female)
             {
-                return text.Contains(" he ") || text.Contains(" He ") || text.Contains(" his ") || text.Contains(" His ") || text.Contains("him") ||
-                       text.Contains("himself") || text.Contains("Himself") || text.Contains("oldman") || text.Contains("wife");
+                return text.Contains(" he ") || text.Contains(" He ") || text.Contains(" his ") || text.Contains(" His ") || text.Contains(" him") ||
+                       text.Contains("himself") || text.Contains("Himself") || text.Contains(" oldman") || text.Contains(" wife");
             }
             else
             {
-                return text.Contains(" she ") || text.Contains(" She ") || text.Contains(" her ") || text.Contains(" Her ") || text.Contains("herself") ||
-                       text.Contains("Herself") || text.Contains("oldwoman") || text.Contains("husband");
+                return text.Contains(" she ") || text.Contains(" She ") || text.Contains(" her") || text.Contains(" Her") || text.Contains("herself") ||
+                       text.Contains("Herself") || text.Contains(" oldwoman") || text.Contains(" husband");
             }
         }
     }

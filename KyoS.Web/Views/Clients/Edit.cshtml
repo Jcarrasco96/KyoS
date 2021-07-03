@@ -4,6 +4,9 @@
     ViewData["Title"] = "Edit";
 }
 
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+
 <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
         <li>
@@ -65,7 +68,12 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
-       $(document).ready(function () {
+        $(document).ready(function () {
+
+            $('#MyTableDoc').DataTable({                
+                "pageLength": 100
+            });
+
             $("#photoBrowser").change(function () {
 
                 var File = this.files;
@@ -83,8 +91,7 @@
                     ReadImageSign(File[0]);
                 }
             });
-
-            //$('#MyTableDoc').DataTable();  
+            
         });
 
         var DeleteDocumentTemp = function (idDoc) {
