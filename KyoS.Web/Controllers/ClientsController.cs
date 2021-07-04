@@ -340,27 +340,25 @@ namespace KyoS.Web.Controllers
                     _context.DiagnosticsTemp.Remove(item);
                 }
 
-                //delete all document of this client
-                IEnumerable<DocumentEntity> list_to_delete_doc = await _context.Documents
-                                                                               .Where(d => d.Client.Id == clientViewModel.Id)
-                                                                               .ToListAsync();
-                _context.Documents.RemoveRange(list_to_delete_doc);
-
                 //update Documents table with the news DocumentsTemp
                 IQueryable<DocumentTempEntity> listDocumentTemp = _context.DocumentsTemp;
                 DocumentEntity document;
                 foreach (DocumentTempEntity item in listDocumentTemp)
                 {
-                    document = new DocumentEntity
+                    document = await _context.Documents.FirstOrDefaultAsync(d => d.FileUrl == item.DocumentPath);
+                    if (document == null)
                     {
-                        Client = clientEntity,
-                        FileName = item.DocumentName,
-                        Description = item.Description,
-                        FileUrl = item.DocumentPath,
-                        CreatedBy = user_logged.Id,
-                        CreatedOn = DateTime.Now
-                    };
-                    _context.Add(document);
+                        document = new DocumentEntity
+                        {
+                            Client = clientEntity,
+                            FileName = item.DocumentName,
+                            Description = item.Description,
+                            FileUrl = item.DocumentPath,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Now
+                        };
+                        _context.Add(document);
+                    }                    
                     _context.DocumentsTemp.Remove(item);
                 }               
 
@@ -493,7 +491,7 @@ namespace KyoS.Web.Controllers
                     _context.Add(documentTemp);
                     await _context.SaveChangesAsync();
                 }
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.ToList()) });
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.OrderByDescending(d => d.CreatedOn).ToList()) });
             }
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddDocument", documentTempViewModel) });
@@ -525,13 +523,18 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            DocumentTempEntity document = await _context.DocumentsTemp.FirstOrDefaultAsync(d => d.Id == id);
-            if (document == null)
+            DocumentTempEntity documentTemp = await _context.DocumentsTemp.FirstOrDefaultAsync(d => d.Id == id);
+            if (documentTemp == null)
             {
                 return NotFound();
             }
 
-            _context.DocumentsTemp.Remove(document);
+            DocumentEntity document = await _context.Documents.FirstOrDefaultAsync(d => d.FileUrl == documentTemp.DocumentPath);
+
+            _context.DocumentsTemp.Remove(documentTemp);
+            if(document != null)
+                _context.Documents.Remove(document);
+
             await _context.SaveChangesAsync();
 
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.ToList()) });

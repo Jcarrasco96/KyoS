@@ -9,6 +9,6 @@
         </div>
     </div>
     <div id="view-documents">
-        @await Html.PartialAsync("_ViewDocument", Model.DocumentTemp)        
+        @await Html.PartialAsync("_ViewDocument", Model.DocumentTemp.OrderByDescending(d => d.CreatedOn))        
     </div>
 </div>
