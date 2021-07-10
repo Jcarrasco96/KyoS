@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace KyoS.Web.Controllers
 {
@@ -463,7 +465,12 @@ namespace KyoS.Web.Controllers
 
         public IActionResult AddDocument(int id = 0)
         {
-            return View(new DocumentTempViewModel());
+            DocumentTempViewModel entity = new DocumentTempViewModel()
+            { 
+                IdDescription = 0,
+                Descriptions = _combosHelper.GetComboDocumentDescriptions()
+            };
+            return View(entity);
         }
 
         [HttpPost]
@@ -485,7 +492,7 @@ namespace KyoS.Web.Controllers
                         Id = 0,
                         DocumentPath = documentPath,
                         DocumentName = documentTempViewModel.DocumentFile.FileName,
-                        Description = documentTempViewModel.Description,
+                        Description = DocumentUtils.GetDocumentByIndex(documentTempViewModel.IdDescription),
                         CreatedOn = DateTime.Now
                     };
                     _context.Add(documentTemp);
@@ -537,7 +544,7 @@ namespace KyoS.Web.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.ToList()) });
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.OrderByDescending(d => d.CreatedOn).ToList()) });
         }
 
         public async Task<IActionResult> OpenDocument(int id)

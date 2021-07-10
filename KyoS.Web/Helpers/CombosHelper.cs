@@ -677,5 +677,22 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboDocumentDescriptions()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = DocumentDescription.Psychiatrist_evaluation.ToString(), Value = "0"},
+                new SelectListItem { Text = DocumentDescription.Intake.ToString(), Value = "1"},
+                new SelectListItem { Text = DocumentDescription.Bio.ToString(), Value = "2"},
+                new SelectListItem { Text = DocumentDescription.MTP.ToString(), Value = "3"},
+                new SelectListItem { Text = DocumentDescription.Fars.ToString(), Value = "4"},
+                new SelectListItem { Text = DocumentDescription.MTP_review.ToString(), Value = "5"},
+                new SelectListItem { Text = DocumentDescription.Consent.ToString(), Value = "6"},
+                new SelectListItem { Text = DocumentDescription.Others.ToString(), Value = "7"}
+            };
+
+            return list;
+        }
     }
 }

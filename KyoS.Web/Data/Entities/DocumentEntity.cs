@@ -1,4 +1,5 @@
-﻿using KyoS.Web.Data.Abstract;
+﻿using KyoS.Common.Enums;
+using KyoS.Web.Data.Abstract;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
@@ -8,7 +9,7 @@ namespace KyoS.Web.Data.Entities
         public int Id { get; set; }
         
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public string Description { get; set; }
+        public DocumentDescription Description { get; set; }
         
         public ClientEntity Client { get; set; }
     }

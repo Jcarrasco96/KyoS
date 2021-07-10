@@ -18,8 +18,8 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Description" class="control-label"></label>&nbsp;*
-                    <textarea asp-for="Description" class="form-control" rows="2"></textarea>
-                    <span asp-validation-for="Description" class="text-danger"></span>
+                    <select asp-for="IdDescription" class="form-control" asp-items="Model.Descriptions"></select>                    
+                    <span asp-validation-for="IdDescription" class="text-danger"></span>
                 </div>
             </div>
             <div>

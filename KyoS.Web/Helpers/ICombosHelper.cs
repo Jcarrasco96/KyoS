@@ -36,5 +36,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboPsychiatristsByClinic(string idUser);
         IEnumerable<SelectListItem> GetComboLegalGuardiansByClinic(string idUser);
         IEnumerable<SelectListItem> GetComboDiagnosticsByClinic(string idUser);
+        IEnumerable<SelectListItem> GetComboDocumentDescriptions();
     }
 }
