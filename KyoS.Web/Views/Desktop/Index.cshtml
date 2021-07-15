@@ -287,41 +287,39 @@
                             </div>
                         </div>
                     </div>
-                    @*<div class="col-md-1">
-                        &nbsp;
-                    </div>*@
-                    @*//New line 
+                    //New line 
                     <div class="col-md-12">
                         &nbsp;
                     </div>
                     //New line 
-                    <div class="col-md-1">
+                    <div class="col-sm-3 col-md-3">
                         &nbsp;
                     </div>
                     <div class="col-sm-3 col-md-2">
                         &nbsp;
                     </div>
                     <div class="col-sm-3 col-md-2">
-                        &nbsp;
-                    </div>
-                    <div class="col-sm-3 col-md-2">
-                        <div class="thumbnail list-group-item list-group-item-success">
+                        <div class="thumbnail list-group-item list-group-item-heading">
                             <div class="caption">
-                                <h4 style="align-content:end;">Billing <br> Report</h4>
-                                <h3 style="text-align:right">$</h3>
-                                <p><a asp-controller="Notes" asp-action="BillingReport" class="btn btn-success">Go</a></p>                                
+                                <h4 style="align-content:end;">Clients <br> without DOC.</h4>
+                                <h3 style="text-align:right">@ViewBag.ClientsWithoutDoc</h3>
+                                @if (ViewBag.ClientsWithoutDoc == "0")
+                                {
+                                    <p><a class="btn btn-default disabled">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="Clients" asp-action="ClientsWithoutDOC" class="btn btn-default">Go</a></p>
+                                }
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3 col-md-2">
+                    <div class="col-sm-3 col-md-3">
                         &nbsp;
                     </div>
                     <div class="col-sm-3 col-md-2">
                         &nbsp;
-                    </div>
-                    <div class="col-md-1">
-                        &nbsp;
-                    </div>*@
+                    </div>                                     
                 }
             </div>
         </div>

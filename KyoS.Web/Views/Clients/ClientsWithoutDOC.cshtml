@@ -1,0 +1,153 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
+@{
+    ViewData["Title"] = "Clients without DOC.";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Clients without documentation</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Clients without documentation</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-5">
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Code
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-4" style="text-align:center;">      
+                                Missing Documentation
+                            </th>
+                            <th class="col-md-1">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.Code)
+                            </td>
+                            <td align="center">
+                                @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                {
+                                    <span class="label label-success">
+                                        Open
+                                    </span>
+                                }
+                                @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                {
+                                    <span class="label label-default">
+                                        Close
+                                    </span>
+                                }
+                            </td>                                
+                            <td align="center">
+                                @if (item.MissingDoc.Contains("Psychiatrist_evaluation"))
+                                {
+                                    <span class="label label-danger">
+                                        Psychiatrist evaluation
+                                    </span>
+                                }
+                                &nbsp;
+                                @if (item.MissingDoc.Contains("Intake"))
+                                {
+                                    <span class="label label-info">
+                                        Intake
+                                    </span>
+                                }
+                                &nbsp;
+                                @if (item.MissingDoc.Contains("Bio"))
+                                {
+                                    <span class="label label-default">
+                                        Bio
+                                    </span>
+                                }
+                                &nbsp;
+                                @if (item.MissingDoc.Contains("MTP"))
+                                {
+                                    <span class="label label-primary">
+                                        MTP
+                                    </span>
+                                }
+                                &nbsp;
+                                @if (item.MissingDoc.Contains("Fars"))
+                                {
+                                    <span class="label label-warning">
+                                        Fars
+                                    </span>
+                                }
+                                &nbsp;
+                                @if (item.MissingDoc.Contains("Consent"))
+                                {
+                                    <span class="label label-success">
+                                        Consent
+                                    </span>
+                                }
+                            </td>
+                            <td align="right">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit selected client"><i class="glyphicon glyphicon-pencil"></i></a>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+                        $(document).ready(function () {
+                            $('#MyTable').DataTable({
+                                "order": [[0, "asc"]],
+                                "pageLength": 100
+                            });
+
+                            // Delete item
+                            var item_to_delete;
+
+                            $('.deleteItem').click((e) => {
+                                item_to_delete = e.currentTarget.dataset.id;
+                            });
+
+                            $("#btnYesDelete").click(function () {
+                                var url = "@Url.Action("Delete", "Clients")";
+                                window.location.href = url + '/' + item_to_delete;
+                            });
+                        });
+    </script>
+}
+
+
+
+

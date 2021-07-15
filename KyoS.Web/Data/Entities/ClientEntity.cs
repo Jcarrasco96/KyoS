@@ -96,5 +96,48 @@ namespace KyoS.Web.Data.Entities
         public ICollection<Workday_Client> Workdays_Clients { get; set; }
 
         public ICollection<DocumentEntity> Documents { get; set; }
+
+        public string MissingDoc 
+        {
+            get
+            {               
+                string missingDoc = string.Empty;
+                bool pe = false;
+                bool intake = false;
+                bool bio = false;
+                bool mtp = false;
+                bool fars = false;
+                bool consent = false;
+                if (this.Documents != null)
+                { 
+                    foreach (var item in this.Documents)
+                    {
+                        if (item.Description == DocumentDescription.Psychiatrist_evaluation)
+                            pe = true;
+                        if (item.Description == DocumentDescription.Intake)
+                            intake = true;
+                        if (item.Description == DocumentDescription.Bio)
+                            bio = true;
+                        if (item.Description == DocumentDescription.MTP)
+                            mtp = true;
+                        if (item.Description == DocumentDescription.Fars)
+                            fars = true;
+                        if (item.Description == DocumentDescription.Consent)
+                            consent = true;
+                    }
+
+                    missingDoc = (!pe) ? "Psychiatrist_evaluation," : string.Empty;
+                    missingDoc = (!intake) ? $"{missingDoc} Intake," : missingDoc;
+                    missingDoc = (!bio) ? $"{missingDoc} Bio," : missingDoc;
+                    missingDoc = (!mtp) ? $"{missingDoc} MTP," : missingDoc;
+                    missingDoc = (!fars) ? $"{missingDoc} Fars," : missingDoc;
+                    missingDoc = (!consent) ? $"{missingDoc} Consent" : missingDoc;
+
+                    if (missingDoc.EndsWith(','))
+                        missingDoc.Remove(missingDoc.Length - 1);
+                }
+                return missingDoc;      
+            } 
+        }
     }
 }

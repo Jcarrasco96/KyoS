@@ -117,6 +117,45 @@ namespace KyoS.Web.Controllers
                                                                               && wc.Note.Status == NoteStatus.Pending)).ToListAsync();
                 notes_review_list = notes_review_list.Where(wc => wc.Messages.Count() > 0).ToList();
                 ViewBag.NotesWithReview = notes_review_list.Count.ToString();
+
+                
+                //-------------clients without documentation--------------//
+                client = await _context.Clients
+                                       .Where(c => c.Clinic.Id == user_logged.Clinic.Id).ToListAsync();
+                int clients_without_doc = 0;                
+                DocumentEntity doc_pe;
+                DocumentEntity doc_intake;
+                DocumentEntity doc_bio;
+                DocumentEntity doc_mtp;
+                DocumentEntity doc_fars;
+                DocumentEntity doc_consent;
+                foreach (var item in client)
+                {
+                    doc_pe = await _context.Documents
+                                             .FirstOrDefaultAsync(d => (d.Description == DocumentDescription.Psychiatrist_evaluation
+                                                                        && d.Client.Id == item.Id));
+                    doc_intake = await _context.Documents
+                                             .FirstOrDefaultAsync(d => (d.Description == DocumentDescription.Intake
+                                                                        && d.Client.Id == item.Id));
+                    doc_bio = await _context.Documents
+                                             .FirstOrDefaultAsync(d => (d.Description == DocumentDescription.Bio
+                                                                        && d.Client.Id == item.Id));
+                    doc_mtp = await _context.Documents
+                                             .FirstOrDefaultAsync(d => (d.Description == DocumentDescription.MTP
+                                                                        && d.Client.Id == item.Id));
+                    doc_fars = await _context.Documents
+                                             .FirstOrDefaultAsync(d => (d.Description == DocumentDescription.Fars
+                                                                        && d.Client.Id == item.Id));
+                    doc_consent = await _context.Documents
+                                             .FirstOrDefaultAsync(d => (d.Description == DocumentDescription.Consent
+                                                                        && d.Client.Id == item.Id));
+
+                    if (doc_pe == null || doc_intake == null || doc_bio == null || doc_mtp == null || doc_fars == null || doc_consent == null)
+                    {
+                        clients_without_doc++;
+                    }
+                }
+                ViewBag.ClientsWithoutDoc = clients_without_doc.ToString();
             }
             return View();
         }

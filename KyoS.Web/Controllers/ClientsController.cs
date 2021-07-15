@@ -410,6 +410,39 @@ namespace KyoS.Web.Controllers
             }
         }
 
+        public async Task<IActionResult> ClientsWithoutDOC()
+        {
+            if (User.IsInRole("Admin"))
+                return View(await _context.Clients
+                                          .Include(c => c.Clinic)
+                                          .Where(c => c.MTPs.Count == 0)
+                                          .OrderBy(c => c.Clinic.Name)
+                                          .ToListAsync());
+            else
+            {
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic == null)
+                    return View(null);
+
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if (clinic != null)
+                {
+                    List<ClientEntity> client = await _context.Clients
+                                                              .Include(c => c.Clinic)
+                                                              .Include(c => c.Documents)
+                                                              .Where(c => (c.Clinic.Id == clinic.Id))
+                                                              .OrderBy(c => c.Name)
+                                                              .ToListAsync();
+                    client = client.Where(c => c.MissingDoc != string.Empty).ToList();
+                    return View(client);
+                }                    
+                else
+                    return View(null);
+            }
+        }
+
         public IActionResult AddDiagnostic(int id = 0)
         {
             if (id == 0)
