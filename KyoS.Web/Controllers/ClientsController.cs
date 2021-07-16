@@ -146,9 +146,9 @@ namespace KyoS.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                ClientEntity client = await _context.Clients.FirstOrDefaultAsync(c => c.Name == clientViewModel.Name);
+                /*ClientEntity client = await _context.Clients.FirstOrDefaultAsync(c => c.Name == clientViewModel.Name);
                 if (client == null)
-                {
+                {*/
                     string photoPath = string.Empty;
                     string signPath = string.Empty;
 
@@ -216,11 +216,11 @@ namespace KyoS.Web.Controllers
                             ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                         }
                     }
-                }
+                /*}
                 else
                 {
                     return RedirectToAction("Create", new { id = 2 });
-                }
+                }*/
             }
             return View(clientViewModel);
         }

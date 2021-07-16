@@ -65,9 +65,9 @@ namespace KyoS.Web.Data
                 .HasIndex(s => s.Name)
                 .IsUnique();
 
-            modelBuilder.Entity<ClientEntity>()
-                .HasIndex(c => c.Name)
-                .IsUnique();
+            //modelBuilder.Entity<ClientEntity>()
+            //    .HasIndex(c => c.Name)
+            //    .IsUnique();
 
             modelBuilder.Entity<GoalEntity>()
                 .HasOne(g => g.MTP).WithMany(m => m.Goals).OnDelete(DeleteBehavior.Cascade);
