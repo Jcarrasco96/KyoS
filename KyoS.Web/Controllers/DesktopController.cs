@@ -156,6 +156,11 @@ namespace KyoS.Web.Controllers
                     }
                 }
                 ViewBag.ClientsWithoutDoc = clients_without_doc.ToString();
+
+                ViewBag.ApprovedNotes = _context.Workdays_Clients
+                                                .Include(wc => wc.Note)
+                                                .Count(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                              && wc.Note.Status == NoteStatus.Approved)).ToString();
             }
             return View();
         }

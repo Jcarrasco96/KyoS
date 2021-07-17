@@ -145,7 +145,7 @@ namespace KyoS.Web.Controllers
                         client = await _context.Clients
                                                .Include(c => c.MTPs)
                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(value));
-                        DateTime admission_date;
+                        DateTime developed_date;
                         List<WorkdayEntity> workdays;
                         Workday_Client workday_client;
                         if (client != null)
@@ -153,12 +153,12 @@ namespace KyoS.Web.Controllers
                             client.Group = group;
                             _context.Update(client);
 
-                            //verifico que el cliente tenga la asistencia necesaria dada su fecha de admision
-                            admission_date = client.MTPs.First().AdmisionDate;
+                            //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas
+                            developed_date = client.MTPs.First().MTPDevelopedDate;
                             workdays = await _context.Workdays
                                                      .Include(w => w.Workdays_Clients)
                                                      .ThenInclude(wc => wc.Client)
-                                                     .Where(w => (w.Date >= admission_date
+                                                     .Where(w => (w.Date >= developed_date
                                                                   && w.Week.Clinic.Id == user_logged.Clinic.Id))
                                                      .ToListAsync();
                             foreach (WorkdayEntity item in workdays)
@@ -306,7 +306,7 @@ namespace KyoS.Web.Controllers
                 {
                     string[] clients = form["clients"].ToString().Split(',');
                     ClientEntity client;
-                    DateTime admission_date;
+                    DateTime developed_date;
                     List<WorkdayEntity> workdays;
                     Workday_Client workday_client;
                     foreach (string value in clients)
@@ -319,12 +319,12 @@ namespace KyoS.Web.Controllers
                             client.Group = group;
                             _context.Update(client);
 
-                            //verifico que el cliente tenga la asistencia necesaria dada su fecha de admision
-                            admission_date = client.MTPs.First().AdmisionDate;
+                            //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas
+                            developed_date = client.MTPs.First().AdmisionDate;
                             workdays = await _context.Workdays
                                                      .Include(w => w.Workdays_Clients)
                                                      .ThenInclude(wc => wc.Client)
-                                                     .Where(w => (w.Date >= admission_date
+                                                     .Where(w => (w.Date >= developed_date
                                                                   && w.Week.Clinic.Id == user_logged.Clinic.Id))
                                                      .ToListAsync();
                             foreach (WorkdayEntity item in workdays)

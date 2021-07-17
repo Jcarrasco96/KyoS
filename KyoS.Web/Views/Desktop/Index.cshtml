@@ -196,8 +196,8 @@
                 @if (User.IsInRole("Mannager"))
                 {
                     @*<div class="col-md-1">
-                        &nbsp;
-                    </div>*@
+                &nbsp;
+            </div>*@
                     <div class="col-sm-3 col-md-2">
                         <div class="thumbnail list-group-item list-group-item-danger">
                             <div class="caption">
@@ -277,7 +277,34 @@
                                 }
                             </div>
                         </div>
-                    </div>   
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-success">
+                            <div class="caption">
+                                <h4>Approved <br>Notes</h4>
+                                <h3 style="text-align:right">@ViewBag.ApprovedNotes</h3>
+                                @if (ViewBag.ApprovedNotes == "0")
+                                {
+                                    <p><a href="#" class="btn btn-success disabled" role="button">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="Notes" asp-action="ApprovedNotesClinic" class="btn btn-success" role="button">Go</a></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    //New line
+                    <div class="col-md-12">
+                        &nbsp;
+                    </div>
+                    //New line
+                    <div class="col-sm-3 col-md-2">
+                        &nbsp;
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                        &nbsp;
+                    </div>
                     <div class="col-sm-3 col-md-2">
                         <div class="thumbnail list-group-item list-group-item-success">
                             <div class="caption">
@@ -286,17 +313,6 @@
                                 <p><a asp-controller="Notes" asp-action="BillingReport" class="btn btn-success">Go</a></p>
                             </div>
                         </div>
-                    </div>
-                    //New line 
-                    <div class="col-md-12">
-                        &nbsp;
-                    </div>
-                    //New line 
-                    <div class="col-sm-3 col-md-3">
-                        &nbsp;
-                    </div>
-                    <div class="col-sm-3 col-md-2">
-                        &nbsp;
                     </div>
                     <div class="col-sm-3 col-md-2">
                         <div class="thumbnail list-group-item list-group-item-heading">
@@ -314,12 +330,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3 col-md-3">
+                    <div class="col-sm-3 col-md-2">
                         &nbsp;
                     </div>
                     <div class="col-sm-3 col-md-2">
                         &nbsp;
-                    </div>                                     
+                    </div>
                 }
             </div>
         </div>

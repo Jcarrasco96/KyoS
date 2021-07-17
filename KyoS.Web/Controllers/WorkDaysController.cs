@@ -55,8 +55,9 @@ namespace KyoS.Web.Controllers
 
             if (!User.IsInRole("Admin"))
             {
-                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic != null)
                 {
                     ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
@@ -126,7 +127,8 @@ namespace KyoS.Web.Controllers
                             WeekOfYear = item.Key
                         };
 
-                        week_entity = await _context.Weeks.FirstOrDefaultAsync(w => (w.Clinic == week.Clinic 
+                        week_entity = await _context.Weeks
+                                                    .FirstOrDefaultAsync(w => (w.Clinic == week.Clinic 
                                                                                         && w.InitDate == week.InitDate 
                                                                                         && w.FinalDate == week.FinalDate));
                         if(week_entity == null)

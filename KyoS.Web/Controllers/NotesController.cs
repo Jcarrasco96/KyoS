@@ -1070,7 +1070,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin, Facilitator")]
+        [Authorize(Roles = "Facilitator, Mannager")]
         public IActionResult PrintNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -2832,6 +2832,23 @@ namespace KyoS.Web.Controllers
                                                        .ToListAsync());
         }
 
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> ApprovedNotesClinic(int id = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+                                                       .Include(wc => wc.Facilitator)
+                                                       .Include(wc => wc.Client)
+                                                       .Include(wc => wc.Workday)
+                                                       .ThenInclude(w => w.Week)
+                                                       .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                                  && wc.Note.Status == NoteStatus.Approved))
+                                                       .ToListAsync());
+        }
+
         [Authorize(Roles = "Supervisor")]
         public IActionResult AddMessageEntity(int id = 0, int origin = 0)
         {
@@ -3122,8 +3139,9 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Mannager")]
         public async Task<IActionResult> BillingReport()
         {                     
-            UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
-                                                            .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user_logged.Clinic == null)
             {
                 return NotFound();

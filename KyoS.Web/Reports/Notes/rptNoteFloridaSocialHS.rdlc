@@ -6052,7 +6052,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=First(Fields!Name.Value, "dsFacilitators") &amp; ", BS"</Value>
+                      <Value>=First(Fields!Name.Value, "dsFacilitators") &amp; ", " &amp; First(Fields!Codigo.Value, "dsFacilitators")</Value>
                       <Style>
                         <FontFamily>times New Roman</FontFamily>
                         <FontWeight>Bold</FontWeight>
