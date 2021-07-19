@@ -25,6 +25,8 @@
     <None Remove="Reports\Notes\rptNoteAdvancedGroupMC.rdlc" />
     <None Remove="Reports\Notes\rptNoteAtlanticGroupMC.rdlc" />
     <None Remove="Reports\Notes\rptNoteDavila.rdlc" />
+    <None Remove="Reports\Notes\rptNoteDemoClinic1.rdlc" />
+    <None Remove="Reports\Notes\rptNoteDemoClinic2.rdlc" />
     <None Remove="Reports\Notes\rptNoteFloridaSocialHS.rdlc" />
     <None Remove="Reports\Notes\rptNoteHealthAndBeauty.rdlc" />
     <None Remove="Reports\Notes\rptNoteLARKINBEHAVIOR.rdlc" />
@@ -42,6 +44,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Notes\rptNoteFloridaSocialHS.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Notes\rptNoteDemoClinic1.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Notes\rptNoteDemoClinic2.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Notes\rptNoteSolAndVida.rdlc">

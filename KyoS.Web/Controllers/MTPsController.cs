@@ -738,6 +738,16 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.AtlanticGroupMCMTPReport(mtpEntity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (mtpEntity.Client.Clinic.Name == "DEMO CLINIC SCHEMA 1")
+            {
+                Stream stream = _reportHelper.DemoClinic1MTPReport(mtpEntity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (mtpEntity.Client.Clinic.Name == "DEMO CLINIC SCHEMA 2")
+            {
+                Stream stream = _reportHelper.DemoClinic2MTPReport(mtpEntity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;            
         }
