@@ -39,10 +39,18 @@
                         <input type="hidden" asp-for="SignPath" />
                         <input type="hidden" asp-for="CreatedBy" />
                         <input type="hidden" asp-for="CreatedOn" />
+                        <input type="hidden" asp-for="Origin" />
                         <partial name="_Clients" />
                         <div class="form-group col-md-12">
                             <input type="submit" value="Save" class="btn btn-primary" />
-                            <a asp-action="Index" class="btn btn-success">Back</a>
+                            @if (Model.Origin == 0) //viene de la pagina Index de los clientes
+                            {
+                                <a asp-action="Index" class="btn btn-success">Back</a>
+                            }
+                            @if (Model.Origin == 1) //viene de la pagina ClientsWithoutDOC del dashboard del manager
+                            {
+                                <a asp-action="ClientsWithoutDOC" class="btn btn-success">Back</a>
+                            }
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="others">

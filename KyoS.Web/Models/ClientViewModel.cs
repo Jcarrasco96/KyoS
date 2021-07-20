@@ -73,5 +73,8 @@ namespace KyoS.Web.Models
         public IEnumerable<DiagnosticTempEntity> DiagnosticTemp { get; set; }
 
         public IEnumerable<DocumentTempEntity> DocumentTemp { get; set; }
+
+        //este campo lo uso para saber de que pagina se viene
+        public int Origin { get; set; }
     }
 }

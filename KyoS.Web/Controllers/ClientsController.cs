@@ -243,7 +243,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, int origin = 0)
         {
             if (id == null)
             {
@@ -288,7 +288,7 @@ namespace KyoS.Web.Controllers
                     clientViewModel.Clinics = list;
                 }
             }
-
+            clientViewModel.Origin = origin;
             return View(clientViewModel);
         }
 
@@ -367,7 +367,14 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    if (clientViewModel.Origin == 0)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                    if (clientViewModel.Origin == 1)
+                    {
+                        return RedirectToAction(nameof(ClientsWithoutDOC));
+                    }                    
                 }
                 catch (System.Exception ex)
                 {

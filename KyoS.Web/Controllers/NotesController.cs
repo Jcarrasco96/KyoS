@@ -528,7 +528,7 @@ namespace KyoS.Web.Controllers
                                      (form["Progress"] == "Unable") ? "Unable "
                                       : string.Empty;
                     progress = $"{progress}{RandomGenerator()}";
-                    model.PlanNote = $"{progress}{model.PlanNote}";
+                    model.PlanNote = (model.PlanNote.Last() == '.') ? $"{progress}{model.PlanNote}" : $"{progress}{model.PlanNote}.";
 
                     noteEntity = await _converterHelper.ToNoteEntity(model, true);      
                     //Update plan progress
@@ -555,7 +555,7 @@ namespace KyoS.Web.Controllers
                         Note = noteEntity,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1),
                         AnswerClient = model.AnswerClient1,
-                        AnswerFacilitator = model.AnswerFacilitator1,
+                        AnswerFacilitator = (model.AnswerFacilitator1.Last() == '.') ? model.AnswerFacilitator1 : $"{model.AnswerFacilitator1}.",
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
                     };
                     _context.Add(note_Activity);
@@ -564,7 +564,7 @@ namespace KyoS.Web.Controllers
                         Note = noteEntity,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2),
                         AnswerClient = model.AnswerClient2,
-                        AnswerFacilitator = model.AnswerFacilitator2,
+                        AnswerFacilitator = (model.AnswerFacilitator2.Last() == '.') ? model.AnswerFacilitator2 : $"{model.AnswerFacilitator2}.",
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
                     };
                     _context.Add(note_Activity);
@@ -573,7 +573,7 @@ namespace KyoS.Web.Controllers
                         Note = noteEntity,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity3),
                         AnswerClient = model.AnswerClient3,
-                        AnswerFacilitator = model.AnswerFacilitator3,
+                        AnswerFacilitator = (model.AnswerFacilitator3.Last() == '.') ? model.AnswerFacilitator3 : $"{model.AnswerFacilitator3}.",
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive3),
                     };
                     _context.Add(note_Activity);
@@ -582,7 +582,7 @@ namespace KyoS.Web.Controllers
                         Note = noteEntity,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity4),
                         AnswerClient = model.AnswerClient4,
-                        AnswerFacilitator = model.AnswerFacilitator4,
+                        AnswerFacilitator = (model.AnswerFacilitator4.Last() == '.') ? model.AnswerFacilitator4 : $"{model.AnswerFacilitator4}.",
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4),
                     };
                     _context.Add(note_Activity);
@@ -608,7 +608,7 @@ namespace KyoS.Web.Controllers
                 }
                 else    //la nota está creada y sólo se debe actualizar
                 {
-                    note.PlanNote = model.PlanNote;
+                    note.PlanNote = (model.PlanNote.Last() == '.') ? model.PlanNote : $"{model.PlanNote}.";
                     note.OrientedX3 = model.OrientedX3;
                     note.NotTime = model.NotTime;
                     note.NotPlace = model.NotPlace;
@@ -662,7 +662,7 @@ namespace KyoS.Web.Controllers
                         Note = note,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1),
                         AnswerClient = model.AnswerClient1,
-                        AnswerFacilitator = model.AnswerFacilitator1,
+                        AnswerFacilitator = (model.AnswerFacilitator1.Last() == '.') ? model.AnswerFacilitator1 : $"{model.AnswerFacilitator1}.",
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
                     };
                     _context.Add(note_Activity);
@@ -671,7 +671,7 @@ namespace KyoS.Web.Controllers
                         Note = note,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2),
                         AnswerClient = model.AnswerClient2,
-                        AnswerFacilitator = model.AnswerFacilitator2,
+                        AnswerFacilitator = (model.AnswerFacilitator2.Last() == '.') ? model.AnswerFacilitator2 : $"{model.AnswerFacilitator2}.",
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
                     };
                     _context.Add(note_Activity);
@@ -680,7 +680,7 @@ namespace KyoS.Web.Controllers
                         Note = note,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity3),
                         AnswerClient = model.AnswerClient3,
-                        AnswerFacilitator = model.AnswerFacilitator3,
+                        AnswerFacilitator = (model.AnswerFacilitator3.Last() == '.') ? model.AnswerFacilitator3 : $"{model.AnswerFacilitator3}.",
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive3),
                     };
                     _context.Add(note_Activity);
@@ -689,7 +689,7 @@ namespace KyoS.Web.Controllers
                         Note = note,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity4),
                         AnswerClient = model.AnswerClient4,
-                        AnswerFacilitator = model.AnswerFacilitator4,
+                        AnswerFacilitator = (model.AnswerFacilitator4.Last() == '.') ? model.AnswerFacilitator4 : $"{model.AnswerFacilitator4}.",
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4),
                     };
                     _context.Add(note_Activity);
