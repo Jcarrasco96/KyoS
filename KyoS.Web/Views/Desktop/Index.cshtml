@@ -20,7 +20,7 @@
             <div class="col-md-12">
                 <hr />
             </div>
-            <div class="col-md-12" @*style="align-content:center;"*@>
+            <div class="col-md-12">
                 @if (User.IsInRole("Facilitator"))
                 {
                     <div class="col-sm-3 col-md-2">
@@ -196,24 +196,8 @@
                 @if (User.IsInRole("Mannager"))
                 {
                     @*<div class="col-md-1">
-                &nbsp;
-            </div>*@
-                    <div class="col-sm-3 col-md-2">
-                        <div class="thumbnail list-group-item list-group-item-danger">
-                            <div class="caption">
-                                <h4 style="align-content:end;">Clients <br>without MTP</h4>
-                                <h3 style="text-align:right">@ViewBag.MTPMissing</h3>
-                                @if (ViewBag.MTPMissing == "0")
-                                {
-                                    <p><a class="btn btn-danger disabled">Go</a></p>
-                                }
-                                else
-                                {
-                                    <p><a asp-controller="Clients" asp-action="ClientsWithoutMTP" class="btn btn-danger">Go</a></p>
-                                }
-                            </div>
-                        </div>
-                    </div>
+                      &nbsp;
+                    </div>*@
                     <div class="col-sm-3 col-md-2">
                         <div class="thumbnail list-group-item list-group-item-danger">
                             <div class="caption">
@@ -294,23 +278,40 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-3 col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <div class="caption">
+                                <h4>Absence <br>Notes</h4>
+                                <h3 style="text-align:right">@ViewBag.NotPresentNotes</h3>
+                                @if (ViewBag.NotPresentNotes == "0")
+                                {
+                                    <p><a href="#" class="btn btn-default disabled" role="button">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="Notes" asp-action="NotPresentNotesClinic" class="btn btn-default" role="button">Go</a></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
                     //New line
                     <div class="col-md-12">
                         &nbsp;
                     </div>
                     //New line
                     <div class="col-sm-3 col-md-2">
-                        &nbsp;
-                    </div>
-                    <div class="col-sm-3 col-md-2">
-                        &nbsp;
-                    </div>
-                    <div class="col-sm-3 col-md-2">
-                        <div class="thumbnail list-group-item list-group-item-success">
+                        <div class="thumbnail list-group-item list-group-item-danger">
                             <div class="caption">
-                                <h4 style="align-content:end;">Billing <br> Report</h4>
-                                <h3 style="text-align:right">$</h3>
-                                <p><a asp-controller="Notes" asp-action="BillingReport" class="btn btn-success">Go</a></p>
+                                <h4 style="align-content:end;">Clients <br>without MTP</h4>
+                                <h3 style="text-align:right">@ViewBag.MTPMissing</h3>
+                                @if (ViewBag.MTPMissing == "0")
+                                {
+                                    <p><a class="btn btn-danger disabled">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="Clients" asp-action="ClientsWithoutMTP" class="btn btn-danger">Go</a></p>
+                                }
                             </div>
                         </div>
                     </div>
@@ -329,6 +330,18 @@
                                 }
                             </div>
                         </div>
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-success">
+                            <div class="caption">
+                                <h4 style="align-content:end;">Billing <br> Report</h4>
+                                <h3 style="text-align:right">$</h3>
+                                <p><a asp-controller="Notes" asp-action="BillingReport" class="btn btn-success">Go</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                        &nbsp;
                     </div>
                     <div class="col-sm-3 col-md-2">
                         &nbsp;

@@ -48,6 +48,7 @@ namespace KyoS.Web.Data
         public DbSet<DocumentDiagnosticEntity> DocumentDiagnostics { get; set; }
         public DbSet<DocumentEntity> Documents { get; set; }
         public DbSet<DocumentTempEntity> DocumentsTemp { get; set; }
+        public DbSet<TemplateDOCEntity> TemplatesDOC { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

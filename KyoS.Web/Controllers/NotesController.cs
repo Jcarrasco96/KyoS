@@ -564,7 +564,7 @@ namespace KyoS.Web.Controllers
                         Note = noteEntity,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2),
                         AnswerClient = model.AnswerClient2,
-                        AnswerFacilitator = (model.AnswerFacilitator2.Last() == '.') ? model.AnswerFacilitator2 : $"{model.AnswerFacilitator2}.",
+                        AnswerFacilitator = (model.AnswerFacilitator2 != null) ? ((model.AnswerFacilitator2.Last() == '.') ? model.AnswerFacilitator2 : $"{model.AnswerFacilitator2}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
                     };
                     _context.Add(note_Activity);
@@ -573,7 +573,7 @@ namespace KyoS.Web.Controllers
                         Note = noteEntity,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity3),
                         AnswerClient = model.AnswerClient3,
-                        AnswerFacilitator = (model.AnswerFacilitator3.Last() == '.') ? model.AnswerFacilitator3 : $"{model.AnswerFacilitator3}.",
+                        AnswerFacilitator = (model.AnswerFacilitator3 != null) ? ((model.AnswerFacilitator3.Last() == '.') ? model.AnswerFacilitator3 : $"{model.AnswerFacilitator3}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive3),
                     };
                     _context.Add(note_Activity);
@@ -582,7 +582,7 @@ namespace KyoS.Web.Controllers
                         Note = noteEntity,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity4),
                         AnswerClient = model.AnswerClient4,
-                        AnswerFacilitator = (model.AnswerFacilitator4.Last() == '.') ? model.AnswerFacilitator4 : $"{model.AnswerFacilitator4}.",
+                        AnswerFacilitator = (model.AnswerFacilitator4 != null) ? ((model.AnswerFacilitator4.Last() == '.') ? model.AnswerFacilitator4 : $"{model.AnswerFacilitator4}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4),
                     };
                     _context.Add(note_Activity);
@@ -671,7 +671,7 @@ namespace KyoS.Web.Controllers
                         Note = note,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2),
                         AnswerClient = model.AnswerClient2,
-                        AnswerFacilitator = (model.AnswerFacilitator2.Last() == '.') ? model.AnswerFacilitator2 : $"{model.AnswerFacilitator2}.",
+                        AnswerFacilitator = (model.AnswerFacilitator2 != null) ? ((model.AnswerFacilitator2.Last() == '.') ? model.AnswerFacilitator2 : $"{model.AnswerFacilitator2}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
                     };
                     _context.Add(note_Activity);
@@ -680,7 +680,7 @@ namespace KyoS.Web.Controllers
                         Note = note,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity3),
                         AnswerClient = model.AnswerClient3,
-                        AnswerFacilitator = (model.AnswerFacilitator3.Last() == '.') ? model.AnswerFacilitator3 : $"{model.AnswerFacilitator3}.",
+                        AnswerFacilitator = (model.AnswerFacilitator3 != null) ? ((model.AnswerFacilitator3.Last() == '.') ? model.AnswerFacilitator3 : $"{model.AnswerFacilitator3}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive3),
                     };
                     _context.Add(note_Activity);
@@ -689,7 +689,7 @@ namespace KyoS.Web.Controllers
                         Note = note,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity4),
                         AnswerClient = model.AnswerClient4,
-                        AnswerFacilitator = (model.AnswerFacilitator4.Last() == '.') ? model.AnswerFacilitator4 : $"{model.AnswerFacilitator4}.",
+                        AnswerFacilitator = (model.AnswerFacilitator4 != null) ? ((model.AnswerFacilitator4.Last() == '.') ? model.AnswerFacilitator4 : $"{model.AnswerFacilitator4}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4),
                     };
                     _context.Add(note_Activity);
@@ -3483,7 +3483,24 @@ namespace KyoS.Web.Controllers
                                                        .ToListAsync());
         }
 
-        [Authorize(Roles = "Facilitator")]
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> NotPresentNotesClinic(int id = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+                                                       .Include(wc => wc.Facilitator)
+                                                       .Include(wc => wc.Client)
+                                                       .Include(wc => wc.Workday)
+                                                       .ThenInclude(w => w.Week)
+                                                       .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                                  && wc.Present == false))
+                                                       .ToListAsync());
+        }
+
+        [Authorize(Roles = "Facilitator, Mannager")]
         public IActionResult PrintAbsenceNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients

@@ -74,42 +74,44 @@
                     }
                     else
                      if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
-                    {
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
-                                General <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
-                                <li>@Html.ActionLink("Facilitators", "Index", "Facilitators")</li>
-                                <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Groups", "Index", "Groups")</li>
-                                <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Workdays", "Index", "Workdays")</li>
-                                <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Topics", "Index", "Themes")</li>
-                            </ul>
-                        </li>
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
-                                Clinic Management <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
-                                <li>@Html.ActionLink("Doctors", "Index", "Doctors")</li>
-                                <li>@Html.ActionLink("Psychiatrists", "Index", "Psychiatrists")</li>
-                                <li>@Html.ActionLink("Legal Guardians", "Index", "LegalGuardians")</li>
-                                <li>@Html.ActionLink("Emergency Contacts", "Index", "EmergencyContacts")</li>
-                                <li>@Html.ActionLink("Referreds", "Index", "Referreds")</li>
-                                <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
-                                <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Diagnostics", "Index", "Diagnostics")</li>
-                            </ul>
-                        </li>
-                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
-                    }
-                    else
+                        {
+                            <li class="class=" dropdown open"">
+                                <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
+                                    General <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
+                                    <li>@Html.ActionLink("Facilitators", "Index", "Facilitators")</li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>@Html.ActionLink("Groups", "Index", "Groups")</li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>@Html.ActionLink("Workdays", "Index", "Workdays")</li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>@Html.ActionLink("Topics", "Index", "Themes")</li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>@Html.ActionLink("Templates DOC.", "Index", "TemplatesDOC")</li>
+                                </ul>
+                            </li>
+                            <li class="class=" dropdown open"">
+                                <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
+                                    Clinic Management <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
+                                    <li>@Html.ActionLink("Doctors", "Index", "Doctors")</li>
+                                    <li>@Html.ActionLink("Psychiatrists", "Index", "Psychiatrists")</li>
+                                    <li>@Html.ActionLink("Legal Guardians", "Index", "LegalGuardians")</li>
+                                    <li>@Html.ActionLink("Emergency Contacts", "Index", "EmergencyContacts")</li>
+                                    <li>@Html.ActionLink("Referreds", "Index", "Referreds")</li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>@Html.ActionLink("Diagnostics", "Index", "Diagnostics")</li>
+                                </ul>
+                            </li>
+                            <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                        }
+                     else
                          if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
                     {
                         <li class="class=" dropdown open"">
@@ -140,7 +142,7 @@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
-                    else
+                         else
                              if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
                     {
                         <li class="class=" dropdown open"">

@@ -161,6 +161,11 @@ namespace KyoS.Web.Controllers
                                                 .Include(wc => wc.Note)
                                                 .Count(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                               && wc.Note.Status == NoteStatus.Approved)).ToString();
+
+                ViewBag.NotPresentNotes = _context.Workdays_Clients
+                                                  .Include(wc => wc.Note)
+                                                  .Count(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                              && wc.Present == false)).ToString();
             }
             return View();
         }
