@@ -5311,10 +5311,10 @@
               <Source>Embedded</Source>
               <Value>larkin</Value>
               <Sizing>FitProportional</Sizing>
-              <Top>0in</Top>
+              <Top>0.0125in</Top>
               <Left>0.61333in</Left>
-              <Height>0.55639in</Height>
-              <Width>0.65625in</Width>
+              <Height>0.53416in</Height>
+              <Width>0.70473in</Width>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -6363,8 +6363,6 @@
         </PageFooter>
         <LeftMargin>0.1in</LeftMargin>
         <RightMargin>0.1in</RightMargin>
-        <TopMargin>0.1in</TopMargin>
-        <BottomMargin>0.1in</BottomMargin>
         <Style />
       </Page>
     </ReportSection>

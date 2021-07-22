@@ -154,7 +154,7 @@ namespace KyoS.Web.Controllers
                             _context.Update(client);
 
                             //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas
-                            developed_date = client.MTPs.First().MTPDevelopedDate;
+                            developed_date = client.MTPs.FirstOrDefault(m => m.Active == true).MTPDevelopedDate;
                             workdays = await _context.Workdays
                                                      .Include(w => w.Workdays_Clients)
                                                      .ThenInclude(wc => wc.Client)
@@ -320,7 +320,7 @@ namespace KyoS.Web.Controllers
                             _context.Update(client);
 
                             //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas
-                            developed_date = client.MTPs.First().AdmisionDate;
+                            developed_date = client.MTPs.FirstOrDefault(m => m.Active == true).MTPDevelopedDate;
                             workdays = await _context.Workdays
                                                      .Include(w => w.Workdays_Clients)
                                                      .ThenInclude(wc => wc.Client)
