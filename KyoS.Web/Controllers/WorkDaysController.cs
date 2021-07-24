@@ -167,22 +167,29 @@ namespace KyoS.Web.Controllers
                                     var clients = await _context.Clients
                                                                 .Include(c => c.Group)
                                                                 .ThenInclude(g => g.Facilitator)
+                                                                .Include(c => c.MTPs)
                                                                 .Where(c => (c.Group.Facilitator.Clinic.Id == clinic_entity.Id 
                                                                              && c.Status == StatusType.Open 
                                                                              && c.Group.Facilitator.Status == StatusType.Open)).ToListAsync();
 
+                                    DateTime developed_date;
                                     Workday_Client workday_client;
                                     foreach (ClientEntity client in clients)
                                     {
-                                        workday_client = new Workday_Client
+                                        developed_date = client.MTPs.FirstOrDefault(m => m.Active == true).MTPDevelopedDate;
+                                        //si el workday que estoy creando es mayor o igual que la fecha de desarrollo del mtp del cliente entonces creo el workday_client
+                                        if (workday.Date >= developed_date)
                                         {
-                                            Workday = workday,
-                                            Client = client,
-                                            Facilitator = client.Group.Facilitator,
-                                            Session = client.Group.Meridian,
-                                            Present = true
-                                        };
-                                        _context.Add(workday_client);
+                                            workday_client = new Workday_Client
+                                            {
+                                                Workday = workday,
+                                                Client = client,
+                                                Facilitator = client.Group.Facilitator,
+                                                Session = client.Group.Meridian,
+                                                Present = true
+                                            };
+                                            _context.Add(workday_client);
+                                        }                                        
                                     }
                                 }                           
                             }

@@ -26,15 +26,15 @@
     <h4>Create new workdays</h4>
     <hr />
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-10">
             <form asp-action="Create" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
+                <div class="col-md-5 form-group">
                     <label asp-for="IdClinic" class="control-label"></label>
                     <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control"></select>
                     <span asp-validation-for="IdClinic" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="col-md-5 form-group">
                     <label class="control-label">Select workdays</label><br />
                     <input type="text" asp-for="Workdays"
                            class="form-control datepicker-here"
@@ -44,7 +44,7 @@
                            style="width:100%;"
                            data-position="right top" />
                 </div>
-                <div class="form-group">
+                <div class="col-md-10 form-group">
                     <input type="submit" value="Create" class="btn btn-primary" />
                     <a asp-action="Index" class="btn btn-success">Back</a>
                 </div>
