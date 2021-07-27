@@ -1,4 +1,5 @@
-﻿using KyoS.Web.Data;
+﻿using KyoS.Common.Enums;
+using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
@@ -764,6 +765,39 @@ namespace KyoS.Web.Controllers
                 }
                 _context.SaveChangesAsync();
             }
+        }
+        
+        [Authorize(Roles = "Supervisor, Mannager")]        
+        public async Task<IActionResult> ExpiredMTP()
+        {            
+             UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                          .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+             if (user_logged.Clinic == null)
+                return View(null);
+
+             ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+             if (clinic != null)
+             {
+                List<MTPEntity> mtps = await _context.MTPs
+                                                     .Include(m => m.Client)
+                                                     .ThenInclude(c => c.Clinic)
+                                                     .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                && m.Active == true && m.Client.Status == StatusType.Open)).ToListAsync();
+                List<MTPEntity> expiredMTPs = new List<MTPEntity>();
+                foreach (var item in mtps)
+                {
+                    if (item.NumberOfMonths != null)
+                    {
+                        if (DateTime.Now > item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths)))
+                        {
+                            expiredMTPs.Add(item);
+                        }
+                    }
+                }
+                return View(expiredMTPs);
+            }
+             else
+                return View(null);            
         }
     }
 }
