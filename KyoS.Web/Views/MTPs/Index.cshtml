@@ -50,16 +50,18 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-5">
+                            <th class="col-md-4">
                                 Client
                             </th>
-                            <th class="col-md-3">
+                            <th class="col-md-4">
                                 Clinic
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Active
                             </th>
-                            <th class="col-md-3">
+                            <th class="col-md-1" style="text-align:center;">                                
+                            </th>
+                            <th class="col-md-2">
                             </th>
                         </tr>
                     </thead>
@@ -86,6 +88,26 @@
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Active)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Active)
+                                        {
+                                            @if (item.NumberOfMonths != null)
+                                            {
+                                                @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days > 0)
+                                                {
+                                                    <span class="label label-danger" title="Expired days">
+                                                        @(-(DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days)
+                                                    </span>
+                                                }
+                                                @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days < 0)
+                                                {
+                                                    <span class="label label-primary" title="Number of days to expire the MTP">
+                                                        @((item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths)) - DateTime.Now).Days)
+                                                    </span>
+                                                }
+                                            }
+                                        }
                                     </td>
                                     <td align="right">
                                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
@@ -115,6 +137,9 @@
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Active)
+                                    </td>
+                                    <td align="center">
+                                        &nbsp;
                                     </td>
                                     <td align="right">
                                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
