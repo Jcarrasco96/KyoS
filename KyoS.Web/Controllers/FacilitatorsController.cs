@@ -184,8 +184,10 @@ namespace KyoS.Web.Controllers
             FacilitatorViewModel facilitatorViewModel;
             if (!User.IsInRole("Admin"))
             {
-                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
                 facilitatorViewModel = _converterHelper.ToFacilitatorViewModel(facilitatorEntity, user_logged.Clinic.Id);
                 if (user_logged.Clinic != null)
                 {
@@ -216,7 +218,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                string path = string.Empty;
+                string path = facilitatorViewModel.SignaturePath;
                 if (facilitatorViewModel.SignatureFile != null)
                 {
                     path = await _imageHelper.UploadImageAsync(facilitatorViewModel.SignatureFile, "Signatures");

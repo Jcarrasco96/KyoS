@@ -213,7 +213,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                string path = string.Empty;
+                string path = supervisorViewModel.SignaturePath;
                 if (supervisorViewModel.SignatureFile != null)
                 {
                     path = await _imageHelper.UploadImageAsync(supervisorViewModel.SignatureFile, "Signatures");

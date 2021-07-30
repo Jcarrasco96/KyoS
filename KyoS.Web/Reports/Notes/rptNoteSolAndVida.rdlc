@@ -4999,8 +4999,8 @@
         </PageFooter>
         <LeftMargin>0.2in</LeftMargin>
         <RightMargin>0.2in</RightMargin>
-        <TopMargin>0.2in</TopMargin>
-        <BottomMargin>0.2in</BottomMargin>
+        <TopMargin>0.1in</TopMargin>
+        <BottomMargin>0.1in</BottomMargin>
         <Style />
       </Page>
     </ReportSection>

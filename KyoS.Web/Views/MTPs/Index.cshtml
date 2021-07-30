@@ -68,7 +68,7 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            @if (item.Active)
+                            @if ((item.Active) && (item.Client.Status == KyoS.Common.Enums.StatusType.Open))
                             {
                                 <tr>
                                     <td>
@@ -90,7 +90,7 @@
                                         @Html.DisplayFor(modelItem => item.Active)
                                     </td>
                                     <td align="center">
-                                        @if (item.Active)
+                                        @if ((item.Active) && (item.Client.Status == KyoS.Common.Enums.StatusType.Open))
                                         {
                                             @if (item.NumberOfMonths != null)
                                             {
@@ -117,7 +117,7 @@
                                     </td>
                                 </tr>
                             }
-                            @if (!item.Active)
+                            @if ((!item.Active) || (item.Client.Status == KyoS.Common.Enums.StatusType.Close))
                             {
                                 <tr style="color: darkgrey;">
                                     <td>
