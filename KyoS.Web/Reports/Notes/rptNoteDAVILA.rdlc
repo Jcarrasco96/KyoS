@@ -4840,7 +4840,7 @@
               <Source>Database</Source>
               <Value>=First(Fields!ImageStream1.Value, "dsImages")</Value>
               <MIMEType>image/jpeg</MIMEType>
-              <Sizing>FitProportional</Sizing>
+              <Sizing>Fit</Sizing>
               <Top>0.43498in</Top>
               <Left>0.62792in</Left>
               <Height>0.40721in</Height>
@@ -4856,7 +4856,7 @@
               <Source>Database</Source>
               <Value>=First(Fields!ImageStream2.Value, "dsImages")</Value>
               <MIMEType>image/jpeg</MIMEType>
-              <Sizing>FitProportional</Sizing>
+              <Sizing>Fit</Sizing>
               <Left>0.60973in</Left>
               <Height>0.40721in</Height>
               <Width>0.70833in</Width>
