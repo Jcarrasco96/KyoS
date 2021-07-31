@@ -28,8 +28,13 @@ namespace KyoS.Web.Controllers
             _converterHelper = converterHelper;
             _imageHelper = imageHelper;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int idError = 0)
         {
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+
             if (User.IsInRole("Admin"))
                 return View(await _context.Supervisors.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
             else
@@ -47,6 +52,7 @@ namespace KyoS.Web.Controllers
                     return View(await _context.Supervisors.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
             }
         }
+
         public IActionResult Create(int id = 0)
         {
             if (id == 1)
@@ -158,10 +164,18 @@ namespace KyoS.Web.Controllers
             if (supervisorEntity == null)
             {
                 return NotFound();
-            }
+            }        
 
-            _context.Supervisors.Remove(supervisorEntity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Supervisors.Remove(supervisorEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }           
+
             return RedirectToAction(nameof(Index));
         }
 

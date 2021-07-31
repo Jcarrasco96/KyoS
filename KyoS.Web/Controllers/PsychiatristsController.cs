@@ -25,8 +25,13 @@ namespace KyoS.Web.Controllers
             _converterHelper = converterHelper;
         }
         
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int idError = 0)
         {
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+
             if (User.IsInRole("Admin"))
             {
                 return View(await _context.Psychiatrists.OrderBy(d => d.Name).ToListAsync());
@@ -193,8 +198,16 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            _context.Psychiatrists.Remove(psychiatristEntity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Psychiatrists.Remove(psychiatristEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (System.Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+            
             return RedirectToAction(nameof(Index));
         }
     }

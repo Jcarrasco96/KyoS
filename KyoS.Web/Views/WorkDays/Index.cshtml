@@ -21,6 +21,19 @@
 
 <div class="row">
     <div class="col-md-12">
+        @if (ViewBag.Delete == "N")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <strong class="red">
+                    Error. It is not posible delete the workday
+                </strong>
+            </div>
+        }
+    </div>
+    <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Workdays</h3>
@@ -42,7 +55,7 @@
                                 Final Date
                             </th>
                             @if (User.IsInRole("Admin"))
-                            { 
+                            {
                                 <th class="col-md-2">
                                     Clinic
                                 </th>
@@ -52,59 +65,59 @@
                     <tbody>
                         @foreach (var item in Model.OrderBy(w => w.WeekOfYear))
                         {
-                        <tr>
-                            <td align="center">
-                                @if (item.Days.Count() != 0)
-                                {
-                                    <a class="icon-plus-sign-alt"></a>
-                                }
-                                else
-                                {
+                            <tr>
+                                <td align="center">
+                                    @if (item.Days.Count() != 0)
+                                    {
+                                        <a class="icon-plus-sign-alt"></a>
+                                    }
+                                    else
+                                    {
 
-                                }
-                                <div style="display:none">
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <th class="col-md-3">Date</th>
-                                            <th class="col-md-7">Day</th>
-                                            <th></th>
-                                        </tr>
-                                        @foreach (var day in item.Days.OrderBy(d => d.Date))
-                                        {
+                                    }
+                                    <div style="display:none">
+                                        <table class="table table-striped">
                                             <tr>
-
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => day.Date)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => day.Day)
-                                                </td>
-                                                <td align="right">
-                                                    @*<button data-id="@day.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>*@
-                                                    <a asp-action="Delete" asp-route-id="@day.Id" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
-                                                </td>
+                                                <th class="col-md-3">Date</th>
+                                                <th class="col-md-7">Day</th>
+                                                <th></th>
                                             </tr>
-                                        }
+                                            @foreach (var day in item.Days.OrderBy(d => d.Date))
+                                            {
+                                                <tr>
 
-                                    </table>
-                                </div>
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Alias)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.InitDate)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.FinalDate)
-                            </td>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Clinic.Name)                                    
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => day.Date)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => day.Day)
+                                                    </td>
+                                                    <td align="right">
+                                                        @*<button data-id="@day.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>*@
+                                                        <a asp-action="Delete" asp-route-id="@day.Id" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                        </table>
+                                    </div>
                                 </td>
-                            }
-                        </tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Alias)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.InitDate)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.FinalDate)
+                                </td>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Clinic.Name)
+                                    </td>
+                                }
+                            </tr>
                         }
                     </tbody>
                 </table>

@@ -33,8 +33,7 @@
             <div class="alert alert-block alert-danger">
                 <button type="button" class="close" data-dismiss="alert">
                     <i class="icon-remove"></i>
-                </button>
-                <i class="icon-ok red"></i>
+                </button>                
                 <strong class="red">
                     Error. It is not posible delete the MTP
                 </strong>
@@ -89,12 +88,10 @@
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Active)
                                     </td>
-                                    <td align="center">
-                                        @if ((item.Active) && (item.Client.Status == KyoS.Common.Enums.StatusType.Open))
-                                        {
+                                    <td align="center">                                        
                                             @if (item.NumberOfMonths != null)
                                             {
-                                                @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days > 0)
+                                                @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days >= 0)
                                                 {
                                                     <span class="label label-danger" title="Expired days">
                                                         @(-(DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days)
@@ -106,8 +103,7 @@
                                                         @((item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths)) - DateTime.Now).Days)
                                                     </span>
                                                 }
-                                            }
-                                        }
+                                            }                                        
                                     </td>
                                     <td align="right">
                                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
@@ -117,7 +113,7 @@
                                     </td>
                                 </tr>
                             }
-                            @if ((!item.Active) || (item.Client.Status == KyoS.Common.Enums.StatusType.Close))
+                            @if ((item.Active == false) || (item.Client.Status == KyoS.Common.Enums.StatusType.Close))
                             {
                                 <tr style="color: darkgrey;">
                                     <td>
@@ -149,7 +145,6 @@
                                     </td>
                                 </tr>
                             }
-
                         }
                     </tbody>
                 </table>

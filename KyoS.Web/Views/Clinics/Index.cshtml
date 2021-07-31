@@ -19,33 +19,19 @@
 </p>
 
 <div class="row">
-    @*<div class="col-md-12">
-        @if ((ViewBag.StatusMessage == "An error has occured") || (ViewBag.StatusMessage == "An error has occured, unabled to delete logged-in current user"))
+    <div class="col-md-12">
+        @if (ViewBag.Delete == "N")
         {
-            <div class="alert alert-block alert-warning">
+            <div class="alert alert-block alert-danger">
                 <button type="button" class="close" data-dismiss="alert">
                     <i class="icon-remove"></i>
                 </button>
-                <i class="icon-ok red"></i>
                 <strong class="red">
-                    @ViewBag.StatusMessage
+                    Error. It is not posible delete the clinic
                 </strong>
             </div>
         }
-        else
-      if (ViewBag.StatusMessage != string.Empty)
-        {
-            <div class="alert alert-block alert-success">
-                <button type="button" class="close" data-dismiss="alert">
-                    <i class="icon-remove"></i>
-                </button>
-                <i class="icon-ok green"></i>
-                <strong class="green">
-                    @ViewBag.StatusMessage
-                </strong>
-            </div>
-        }
-    </div>*@
+    </div>
 
     <div class="col-md-12">
         <div class="panel panel-default">

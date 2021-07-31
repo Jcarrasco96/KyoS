@@ -30,8 +30,13 @@ namespace KyoS.Web.Controllers
             _converterHelper = converterHelper;
             _dateHelper = dateHelper;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int idError = 0)
         {
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+
             if (User.IsInRole("Admin"))
                 return View(await _context.Weeks.Include(w => w.Clinic)
                                                 .Include(w => w.Days).ToListAsync());
@@ -230,8 +235,16 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            _context.Workdays.Remove(workdayEntity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Workdays.Remove(workdayEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+            
             return RedirectToAction(nameof(Index));
         }
     }

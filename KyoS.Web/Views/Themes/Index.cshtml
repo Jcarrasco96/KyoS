@@ -19,7 +19,20 @@
     <a asp-action="Create" class="btn btn-primary" title="Create new topic"><i class="glyphicon glyphicon-plus"></i> Create Topic</a>
 </p>
 
-<div class="row">    
+<div class="row">  
+    <div class="col-md-12">
+        @if (ViewBag.Delete == "N")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <strong class="red">
+                    Error. It is not posible delete the topic
+                </strong>
+            </div>
+        }
+    </div>
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">

@@ -27,8 +27,13 @@ namespace KyoS.Web.Controllers
             _converterHelper = converterHelper;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int idError = 0)
         {
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+
             return View(await _context.Clinics.OrderBy(t => t.Name).ToListAsync());
         }
 
@@ -110,8 +115,16 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            _context.Clinics.Remove(clinicEntity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Clinics.Remove(clinicEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+            
             return RedirectToAction(nameof(Index));
         }
 

@@ -21,6 +21,19 @@
 
 <div class="row">
     <div class="col-md-12">
+        @if (ViewBag.Delete == "N")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <strong class="red">
+                    Error. It is not posible delete the doctor
+                </strong>
+            </div>
+        }
+    </div>
+    <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Doctors</h3>
@@ -40,7 +53,7 @@
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Email)
-                            </th>                            
+                            </th>
                             <th class="col-md-1">
                             </th>
                         </tr>
@@ -60,7 +73,7 @@
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Email)
-                                </td>                                
+                                </td>
                                 <td align="right">
                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit doctor"><i class="glyphicon glyphicon-pencil"></i></a>
                                     <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete doctor"><i class="glyphicon glyphicon-trash"></i></button>
