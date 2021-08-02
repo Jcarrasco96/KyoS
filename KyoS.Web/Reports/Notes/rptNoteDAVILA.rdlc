@@ -4736,7 +4736,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=First(Fields!Name.Value, "dsSupervisors")</Value>
+                      <Value>=First(Fields!Name.Value, "dsSupervisors") &amp; ", " &amp; First(Fields!Code.Value, "dsSupervisors")</Value>
                       <Style>
                         <FontFamily>times New Roman</FontFamily>
                         <FontSize>9pt</FontSize>
@@ -4775,7 +4775,6 @@
                       <Value>=Parameters!dateFacilitator.Value</Value>
                       <Style>
                         <FontFamily>times New Roman</FontFamily>
-                        <FontSize>9pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
