@@ -42,6 +42,18 @@
                 </strong>
             </div>
         }
+        @if (ViewBag.Creado == "EG")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok red"></i>
+                <strong class="red">
+                    Error. There are gender issues in: @ViewBag.errorText
+                </strong>
+            </div>
+        }
     </div>
     <div>
         <form asp-action="Create">
