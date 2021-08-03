@@ -22,52 +22,65 @@
 
 <div class="row">
     <div class="col-md-12">
+        @if (ViewBag.Delete == "N")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <strong class="red">
+                    Error. It is not posible delete the objective
+                </strong>
+            </div>
+        }
+    </div>
+    <div class="col-md-12">
         <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h5 style="font-weight:bold;">Objectives of Goal # @Model.Number - @Model.Name</h5>
-                    <h5 style="font-weight:bold;">MTP - @Model.MTP.Client.Name</h5>
-                </div>                
-                <div class="panel-body">
-                    <table class="table table-hover table-responsive table-striped" id="MyTable">
-                        <thead>
+            <div class="panel-heading">
+                <h5 style="font-weight:bold;">Objectives of Goal # @Model.Number - @Model.Name</h5>
+                <h5 style="font-weight:bold;">MTP - @Model.MTP.Client.Name</h5>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1" align="center">
+                                Objective
+                            </th>
+                            <th class="col-md-5">
+                                Description
+                            </th>
+                            <th class="col-md-4">
+                                Intervention
+                            </th>
+                            <th class="col-md-2">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Objetives)
+                        {
                             <tr>
-                                <th class="col-md-1" align="center">
-                                    Objective
-                                </th>
-                                <th class="col-md-5">
-                                    Description
-                                </th>
-                                <th class="col-md-4">
-                                    Intervention
-                                </th>
-                                <th class="col-md-2">
-                                </th>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Objetive)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Intervention)
+                                </td>
+                                <td align="right">
+                                    <a asp-action="EditObjective" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.Objetives)
-                            {
-                                <tr>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Objetive)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Description)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Intervention)
-                                    </td>
-                                    <td align="right">
-                                        <a asp-action="EditObjective" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
+    </div>
 </div>
 
 <partial name="_DeleteDialog" />

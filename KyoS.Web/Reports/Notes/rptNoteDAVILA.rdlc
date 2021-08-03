@@ -4590,7 +4590,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Name3</rd:DefaultName>
-              <Top>0.21667in</Top>
+              <Top>0.25417in</Top>
               <Left>5.41542in</Left>
               <Height>0.24583in</Height>
               <Width>2.52459in</Width>
@@ -4750,7 +4750,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Name4</rd:DefaultName>
-              <Top>0.63061in</Top>
+              <Top>0.65561in</Top>
               <Left>5.41542in</Left>
               <Height>0.22553in</Height>
               <Width>2.52459in</Width>
@@ -4785,7 +4785,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>dateFacilitator</rd:DefaultName>
-              <Top>0.21667in</Top>
+              <Top>0.25417in</Top>
               <Left>3.39667in</Left>
               <Height>0.24583in</Height>
               <Width>1in</Width>
@@ -4820,7 +4820,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>dateFacilitator</rd:DefaultName>
-              <Top>0.62709in</Top>
+              <Top>0.65209in</Top>
               <Left>3.39667in</Left>
               <Height>0.22553in</Height>
               <Width>1in</Width>
@@ -4856,6 +4856,7 @@
               <Value>=First(Fields!ImageStream2.Value, "dsImages")</Value>
               <MIMEType>image/jpeg</MIMEType>
               <Sizing>Fit</Sizing>
+              <Top>0in</Top>
               <Left>0.57223in</Left>
               <Height>0.59691in</Height>
               <Width>0.96194in</Width>

@@ -153,8 +153,10 @@ namespace KyoS.Web.Controllers
 
                 ClientEntity client = await _context.Clients.FindAsync(mtpViewModel.IdClient);
                 string gender_problems = string.Empty;
+                
                 if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
                 {
+                    mtpViewModel.InitialDischargeCriteria = (mtpViewModel.InitialDischargeCriteria.Last() == '.') ? mtpViewModel.InitialDischargeCriteria : $"{mtpViewModel.InitialDischargeCriteria}.";
                     if (this.GenderEvaluation(client.Gender, mtpViewModel.InitialDischargeCriteria))
                     {
                         ModelState.AddModelError(string.Empty, "Error.There are gender issues in: Initial discharge criteria");
@@ -294,11 +296,16 @@ namespace KyoS.Web.Controllers
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+                if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
+                {
+                    mtpViewModel.InitialDischargeCriteria = (mtpViewModel.InitialDischargeCriteria.Last() == '.') ? mtpViewModel.InitialDischargeCriteria : $"{mtpViewModel.InitialDischargeCriteria}.";
+                }
+                
                 MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, false);
 
                 string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
-                {
+                {                    
                     if (this.GenderEvaluation(mtpEntity.Client.Gender, mtpViewModel.InitialDischargeCriteria))
                     {
                         ModelState.AddModelError(string.Empty, "Error.There are gender issues in: Initial discharge criteria");
@@ -378,11 +385,16 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Admin, Supervisor, Mannager")]
-        public async Task<IActionResult> UpdateGoals(int? id)
+        public async Task<IActionResult> UpdateGoals(int? id, int idError = 0)
         {
             if (id == null)
             {
                 return NotFound();
+            }
+
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
             }
 
             MTPEntity mtpEntity = await _context.MTPs.Include(m => m.Goals)
@@ -437,9 +449,10 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                string gender_problems = string.Empty;
+                string gender_problems = string.Empty;                
                 if (!string.IsNullOrEmpty(model.Name))
-                { 
+                {
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
                     if (this.GenderEvaluation(model.MTP.Client.Gender, model.Name))
                     {
                         gender_problems = "Name";                        
@@ -447,6 +460,7 @@ namespace KyoS.Web.Controllers
                 }
                 if (!string.IsNullOrEmpty(model.AreaOfFocus))
                 {
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
                     if (this.GenderEvaluation(model.MTP.Client.Gender, model.AreaOfFocus))
                     {
                         gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
@@ -494,9 +508,16 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            _context.Goals.Remove(goalEntity);
-            await _context.SaveChangesAsync();
-            //return RedirectToAction($"{nameof(UpdateGoals)}/{goalEntity.MTP.Id}");
+            try
+            {
+                _context.Goals.Remove(goalEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("UpdateGoals", new { id = goalEntity.MTP.Id, idError = 1 });
+            }            
+            
             return RedirectToAction("UpdateGoals", new { id = goalEntity.MTP.Id });
         }
 
@@ -536,6 +557,7 @@ namespace KyoS.Web.Controllers
                 string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Name))
                 {
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
                     if (this.GenderEvaluation(model.MTP.Client.Gender, model.Name))
                     {
                         gender_problems = "Name";
@@ -543,6 +565,7 @@ namespace KyoS.Web.Controllers
                 }
                 if (!string.IsNullOrEmpty(model.AreaOfFocus))
                 {
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
                     if (this.GenderEvaluation(model.MTP.Client.Gender, model.AreaOfFocus))
                     {
                         gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
@@ -577,11 +600,16 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Admin, Supervisor, Mannager")]
-        public async Task<IActionResult> UpdateObjectives(int? id)
+        public async Task<IActionResult> UpdateObjectives(int? id, int idError = 0)
         {
             if (id == null)
             {
                 return NotFound();
+            }
+
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
             }
 
             GoalEntity goalEntity = await _context.Goals.Include(g => g.MTP)
@@ -645,6 +673,7 @@ namespace KyoS.Web.Controllers
                 string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
                     if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Description))
                     {
                         gender_problems = "Description";
@@ -652,6 +681,7 @@ namespace KyoS.Web.Controllers
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
                     if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Intervention))
                     {
                         gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
@@ -733,9 +763,16 @@ namespace KyoS.Web.Controllers
                 return NotFound();
             }
 
-            _context.Objetives.Remove(objectiveEntity);
-            await _context.SaveChangesAsync();
-            //return RedirectToAction($"{nameof(UpdateObjectives)}/{objectiveEntity.Goal.Id}");
+            try
+            {
+                _context.Objetives.Remove(objectiveEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("UpdateObjectives", new { id = objectiveEntity.Goal.Id, idError = 1 });
+            }            
+            
             return RedirectToAction("UpdateObjectives", new { objectiveEntity.Goal.Id });
         }
 
@@ -786,6 +823,7 @@ namespace KyoS.Web.Controllers
                 string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
                     if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Description))
                     {
                         gender_problems = "Description";
@@ -793,6 +831,7 @@ namespace KyoS.Web.Controllers
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
                     if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Intervention))
                     {
                         gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
