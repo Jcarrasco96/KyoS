@@ -28,7 +28,10 @@
                             <th class="col-md-1">
 
                             </th>
-                            <th class="col-md-5">
+                            <th class="col-md-2">
+
+                            </th>
+                            <th class="col-md-3">
 
                             </th>
                             <th class="col-md-2" style="text-align:center;">
@@ -125,6 +128,80 @@
                                 </div>
                             </td>
                             <td>
+                                @if (item.MonthYear.Contains("January"))
+                                {
+                                    <span class="label label-default">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("February"))
+                                {
+                                    <span class="label label-info">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("March"))
+                                {
+                                    <span class="label label-primary">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("April"))
+                                {
+                                    <span class="label label-warning">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("May"))
+                                {
+                                    <span class="label label-success">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("June"))
+                                {
+                                    <span class="label label-default">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("July"))
+                                {
+                                    <span class="label label-info">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("August"))
+                                {
+                                    <span class="label label-primary">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("September"))
+                                {
+                                    <span class="label label-warning">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("October"))
+                                {
+                                    <span class="label label-success">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("November"))
+                                {
+                                    <span class="label label-default">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("December"))
+                                {
+                                    <span class="label label-info">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                            </td>
+                            <td>
                                 @Html.DisplayFor(modelItem => item.Alias)
                             </td>
                             <td align="center">
@@ -158,7 +235,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#MyTable').DataTable({
-                "order": [[1, "asc"]],
+                "order": [[2, "asc"]],
                 "pageLength": 100
             });
             // Delete item

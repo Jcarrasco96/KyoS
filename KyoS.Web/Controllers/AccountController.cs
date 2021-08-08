@@ -6,7 +6,6 @@ using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -148,7 +147,7 @@ namespace KyoS.Web.Controllers
                     return RedirectToAction("Create", new { id = 2 });
                 }
             }
-           
+
             model.Clinics = _combosHelper.GetComboClinics();
             model.Roles = _combosHelper.GetComboRoles();
             return View(model);
@@ -168,7 +167,7 @@ namespace KyoS.Web.Controllers
                 return View(model);
             }
             UserEntity user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
-            var result = await _userHelper.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            IdentityResult result = await _userHelper.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
@@ -179,7 +178,7 @@ namespace KyoS.Web.Controllers
 
         private void AddErrors(IdentityResult result)
         {
-            foreach (var error in result.Errors)
+            foreach (IdentityError error in result.Errors)
             {
                 ModelState.AddModelError("", error.Description);
             }
@@ -192,8 +191,8 @@ namespace KyoS.Web.Controllers
             {
                 return NotFound();
             }
-            var user_to_eliminate = await _userHelper.GetUserByIdAsync(id);
-            var user_in = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+            UserEntity user_to_eliminate = await _userHelper.GetUserByIdAsync(id);
+            UserEntity user_in = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
 
             if (user_to_eliminate == user_in)
             {

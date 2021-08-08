@@ -28,6 +28,9 @@
                             <th class="col-md-1">
 
                             </th>
+                            <th class="col-md-3">
+
+                            </th>
                             <th class="col-md-5">
 
                             </th>
@@ -48,56 +51,131 @@
                     <tbody>
                         @foreach (var item in Model.OrderBy(w => w.WeekOfYear))
                         {
-                            <tr>
-                                <td align="center">
-                                    @if (item.Clinic.Clients.Where(c => c.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Facilitator.LinkedUser == User.Identity.Name)).Count() != 0).Count() != 0)
-                                    {
-                                        <a class="icon-plus-sign-alt"></a>
-                                    }
-                                    <div style="display:none">
-                                        <table class="table table-striped">
-                                            <tr>
-                                                <th class="col-md-1" style="text-align:center;">Code</th>
-                                                <th class="col-md-6">Client Name</th>
-                                                <th class="col-md-2" style="text-align:center;">Medical ID</th>
-                                                <th class="col-md-3"></th>
-                                            </tr>
-                                            @foreach (var client in item.Clinic.Clients.Where(c => c.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Facilitator.LinkedUser == User.Identity.Name)).Count() != 0))
-                                            {                                               
-                                                <tr>
-                                                    <td align="center">
-                                                        @Html.DisplayFor(modelItem => client.Code)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => client.Name)
-                                                    </td>
-                                                    <td align="center">
-                                                        @Html.DisplayFor(modelItem => client.MedicaidID)
-                                                    </td>
-                                                    <td align="right">
-                                                        <a asp-action="PrintIndividualSign" asp-route-id="@client.Id" asp-route-idWeek="@item.Id" class="btn btn-success" title="Print" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                    </td>
-                                                </tr>                                                
-                                            }
-                                        </table>
-                                    </div>
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Alias)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.InitDate)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.FinalDate)
-                                </td>
-                                @if (User.IsInRole("Admin"))
+                        <tr>
+                            <td align="center">
+                                @if (item.Clinic.Clients.Where(c => c.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Facilitator.LinkedUser == User.Identity.Name)).Count() != 0).Count() != 0)
                                 {
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Clinic.Name)
-                                    </td>
+                                    <a class="icon-plus-sign-alt"></a>
                                 }
-                            </tr>
+                                <div style="display:none">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <th class="col-md-1" style="text-align:center;">Code</th>
+                                            <th class="col-md-6">Client Name</th>
+                                            <th class="col-md-2" style="text-align:center;">Medical ID</th>
+                                            <th class="col-md-3"></th>
+                                        </tr>
+                                        @foreach (var client in item.Clinic.Clients.Where(c => c.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Facilitator.LinkedUser == User.Identity.Name)).Count() != 0))
+                                        {
+                                            <tr>
+                                                <td align="center">
+                                                    @Html.DisplayFor(modelItem => client.Code)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => client.Name)
+                                                </td>
+                                                <td align="center">
+                                                    @Html.DisplayFor(modelItem => client.MedicaidID)
+                                                </td>
+                                                <td align="right">
+                                                    <a asp-action="PrintIndividualSign" asp-route-id="@client.Id" asp-route-idWeek="@item.Id" class="btn btn-success" title="Print" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                </td>
+                                            </tr>
+
+                                        }
+                                    </table>
+                                </div>
+                            </td>
+                            <td>
+                                @if (item.MonthYear.Contains("January"))
+                                {
+                                    <span class="label label-default">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("February"))
+                                {
+                                    <span class="label label-info">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("March"))
+                                {
+                                    <span class="label label-primary">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("April"))
+                                {
+                                    <span class="label label-warning">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("May"))
+                                {
+                                    <span class="label label-success">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("June"))
+                                {
+                                    <span class="label label-default">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("July"))
+                                {
+                                    <span class="label label-info">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("August"))
+                                {
+                                    <span class="label label-primary">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("September"))
+                                {
+                                    <span class="label label-warning">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("October"))
+                                {
+                                    <span class="label label-success">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("November"))
+                                {
+                                    <span class="label label-default">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("December"))
+                                {
+                                    <span class="label label-info">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Alias)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.InitDate)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.FinalDate)
+                            </td>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Clinic.Name)
+                                </td>
+                            }
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -115,7 +193,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#MyTable').DataTable({
-              "order": [[1, "asc"]],
+              "order": [[2, "asc"]],
               "pageLength": 25
             });
 

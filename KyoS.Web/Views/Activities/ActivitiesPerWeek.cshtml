@@ -28,7 +28,10 @@
                             <th class="col-md-1">
 
                             </th>
-                            <th class="col-md-5">
+                            <th class="col-md-2">
+
+                            </th>
+                            <th class="col-md-3">
 
                             </th>
                             <th class="col-md-2" style="text-align:center;">
@@ -48,35 +51,35 @@
                     <tbody>
                         @foreach (var item in Model.OrderBy(w => w.WeekOfYear))
                         {
-                            <tr>
-                                <td align="center">
-                                    @if (item.Days.Count() != 0)
-                                    {
-                                        <a class="icon-plus-sign-alt"></a>
-                                    }                                    
-                                    <div style="display:none">
-                                        <table class="table table-striped">
+                        <tr>
+                            <td align="center">
+                                @if (item.Days.Count() != 0)
+                                {
+                                    <a class="icon-plus-sign-alt"></a>
+                                }
+                                <div style="display:none">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <th class="col-md-1"></th>
+                                            <th class="col-md-3">Date</th>
+                                            <th class="col-md-7">Day</th>
+                                            <th></th>
+                                        </tr>
+                                        @foreach (var day in item.Days.OrderBy(d => d.Date))
+                                        {
                                             <tr>
-                                                <th class="col-md-1"></th>
-                                                <th class="col-md-3">Date</th>
-                                                <th class="col-md-7">Day</th>
-                                                <th></th>
-                                            </tr>
-                                            @foreach (var day in item.Days.OrderBy(d => d.Date))
-                                            {
-                                                <tr>
-                                                    <td align="center">
-                                                        @if (day.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator.LinkedUser == User.Identity.Name).Count() != 0)
-                                                        {
-                                                            <a class="icon-plus-sign-alt"></a>
-                                                            <div style="display:none">
-                                                                <table class="table table-striped">
-                                                                    <tr>
-                                                                        <th class="col-md-3">Topic</th>
-                                                                        <th class="col-md-9">Activity</th>                                                                                                                                                
-                                                                    </tr>
-                                                                    @foreach (var activity in day.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator.LinkedUser == User.Identity.Name))
-                                                                    {
+                                                <td align="center">
+                                                    @if (day.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator.LinkedUser == User.Identity.Name).Count() != 0)
+                                                    {
+                                                        <a class="icon-plus-sign-alt"></a>
+                                                        <div style="display:none">
+                                                            <table class="table table-striped">
+                                                                <tr>
+                                                                    <th class="col-md-3">Topic</th>
+                                                                    <th class="col-md-9">Activity</th>
+                                                                </tr>
+                                                                @foreach (var activity in day.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator.LinkedUser == User.Identity.Name))
+                                                                {
                                                                     <tr>
                                                                         <td>
                                                                             @Html.DisplayFor(modelItem => activity.Activity.Theme.Name)
@@ -85,42 +88,116 @@
                                                                             @Html.DisplayFor(modelItem => activity.Activity.Name)
                                                                         </td>
                                                                     </tr>
-                                                                    }
-                                                                </table>
-                                                            </div>
-                                                        }
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => day.Date)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => day.Day)
-                                                    </td>
-                                                    <td align="right">
-                                                        <a asp-action="CreateActivitiesWeek" asp-route-id="@day.Id" class="btn btn-warning" title="Activities per week"><i class="glyphicon glyphicon-list"></i></a>
-                                                    </td>
-                                                </tr>
-                                            }
+                                                                }
+                                                            </table>
+                                                        </div>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => day.Date)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => day.Day)
+                                                </td>
+                                                <td align="right">
+                                                    <a asp-action="CreateActivitiesWeek" asp-route-id="@day.Id" class="btn btn-warning" title="Activities per week"><i class="glyphicon glyphicon-list"></i></a>
+                                                </td>
+                                            </tr>
+                                        }
 
-                                        </table>
-                                    </div>
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Alias)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.InitDate)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.FinalDate)
-                                </td>
-                                @if (User.IsInRole("Admin"))
+                                    </table>
+                                </div>
+                            </td>
+                            <td>
+                                @if (item.MonthYear.Contains("January"))
                                 {
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Clinic.Name)
-                                    </td>
+                                    <span class="label label-default">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
                                 }
-                            </tr>
+                                @if (item.MonthYear.Contains("February"))
+                                {
+                                    <span class="label label-info">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("March"))
+                                {
+                                    <span class="label label-primary">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("April"))
+                                {
+                                    <span class="label label-warning">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("May"))
+                                {
+                                    <span class="label label-success">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("June"))
+                                {
+                                    <span class="label label-default">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("July"))
+                                {
+                                    <span class="label label-info">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("August"))
+                                {
+                                    <span class="label label-primary">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("September"))
+                                {
+                                    <span class="label label-warning">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("October"))
+                                {
+                                    <span class="label label-success">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("November"))
+                                {
+                                    <span class="label label-default">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("December"))
+                                {
+                                    <span class="label label-info">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Alias)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.InitDate)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.FinalDate)
+                            </td>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Clinic.Name)
+                                </td>
+                            }
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -138,7 +215,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#MyTable').DataTable({
-              "order": [[1, "asc"]],
+              "order": [[2, "asc"]],
               "pageLength": 25
             });
 
