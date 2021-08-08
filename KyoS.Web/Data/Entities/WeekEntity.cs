@@ -49,5 +49,27 @@ namespace KyoS.Web.Data.Entities
                 return count;
             }
         }
+        public string MonthYear
+        {
+            get
+            {
+                try
+                {
+                    var month = (InitDate.Month == 1) ? "January" : (InitDate.Month == 2) ? "February" : (InitDate.Month == 3) ? "March" :
+                            (InitDate.Month == 4) ? "April" : (InitDate.Month == 5) ? "May" : (InitDate.Month == 6) ? "June" : (InitDate.Month == 7) ? "July" :
+                            (InitDate.Month == 8) ? "August" : (InitDate.Month == 9) ? "September" : (InitDate.Month == 10) ? "October" :
+                            (InitDate.Month == 11) ? "November" : (InitDate.Month == 12) ? "December" : string.Empty;
+                    var year = InitDate.Year.ToString().Substring(2);
+
+                    return $"{month} - {year}";
+                }
+                catch (Exception)
+                {
+
+                    return string.Empty;
+                }
+                
+            }
+        }
     }
 }
