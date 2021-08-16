@@ -194,7 +194,7 @@
                     </div>
                 }
                 @if (User.IsInRole("Mannager"))
-                {                   
+                {
                     <div class="col-sm-3 col-md-2">
                         <div class="thumbnail list-group-item list-group-item-danger">
                             <div class="caption">
@@ -297,6 +297,9 @@
                     </div>
                     //New line
                     <div class="col-sm-3 col-md-2">
+                        &nbsp;
+                    </div>
+                    <div class="col-sm-3 col-md-2">
                         <div class="thumbnail list-group-item list-group-item-danger">
                             <div class="caption">
                                 <h4 style="align-content:end;">Clients <br>without MTP</h4>
@@ -352,9 +355,6 @@
                                 <p><a asp-controller="Notes" asp-action="BillingReport" class="btn btn-success">Go</a></p>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-3 col-md-2">
-                        &nbsp;
                     </div>
                     <div class="col-sm-3 col-md-2">
                         &nbsp;

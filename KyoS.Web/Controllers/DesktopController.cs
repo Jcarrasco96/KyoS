@@ -184,6 +184,10 @@ namespace KyoS.Web.Controllers
 
                 ViewBag.ExpiredMTPs = count.ToString();
             }
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction(nameof(Index), "Incidents");
+            }
             return View();
         }
     }

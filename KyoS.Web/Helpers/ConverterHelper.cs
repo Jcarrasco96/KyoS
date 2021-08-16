@@ -705,5 +705,33 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = model.LastModifiedOn
             };
         }
+
+        public async Task<IncidentEntity> ToIncidentEntity(IncidentViewModel model, bool isNew, string userId)
+        {
+            return new IncidentEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Description = model.Description,
+                CreatedDate = isNew ? DateTime.Now : model.CreatedDate,
+                Status = isNew ? IncidentsStatus.Pending : StatusUtils.GetIncidentStatusByIndex(model.IdStatus),
+                UserCreatedBy = isNew ? await _context.Users.FindAsync(userId) : await _context.Users.FindAsync(model.IdUserCreatedBy),
+                SolvedBy = isNew ? string.Empty : (StatusUtils.GetIncidentStatusByIndex(model.IdStatus) == IncidentsStatus.Solved) ? userId : string.Empty,
+                SolvedDate = !isNew && (StatusUtils.GetIncidentStatusByIndex(model.IdStatus) == IncidentsStatus.Solved) ? DateTime.Now : model.SolvedDate
+            };
+        }
+
+        public IncidentViewModel ToIncidentViewModel(IncidentEntity model)
+        {
+            return new IncidentViewModel
+            {
+                Id = model.Id,
+                Description = model.Description,
+                CreatedDate = model.CreatedDate,
+                IdStatus = (model.Status == IncidentsStatus.Pending) ? 0 : (model.Status == IncidentsStatus.Solved) ? 1 : (model.Status == IncidentsStatus.NotValid) ? 2 : 0,
+                StatusList = _combosHelper.GetComboIncidentsStatus(),
+                IdUserCreatedBy = model.UserCreatedBy.Id,
+                UserCreatedBy = model.UserCreatedBy
+            };
+        }
     }
 }

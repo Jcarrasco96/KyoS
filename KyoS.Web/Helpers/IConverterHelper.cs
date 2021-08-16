@@ -46,5 +46,7 @@ namespace KyoS.Web.Helpers
         LegalGuardianViewModel ToLegalGuardianViewModel(LegalGuardianEntity model);
         EmergencyContactViewModel ToEmergencyContactViewModel(EmergencyContactEntity model);
         DiagnosticViewModel ToDiagnosticViewModel(DiagnosticEntity model);
+        Task<IncidentEntity> ToIncidentEntity(IncidentViewModel model, bool isNew, string userId);
+        IncidentViewModel ToIncidentViewModel(IncidentEntity model);
     }
 }

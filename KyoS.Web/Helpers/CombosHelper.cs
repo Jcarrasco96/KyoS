@@ -694,5 +694,15 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboIncidentsStatus()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = IncidentsStatus.Pending.ToString(), Value = "0"},
+                                  new SelectListItem { Text = IncidentsStatus.Solved.ToString(), Value = "1"},
+                                  new SelectListItem { Text = IncidentsStatus.NotValid.ToString(), Value = "2"}};
+            
+            return list;
+        }
     }
 }

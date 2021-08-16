@@ -12,6 +12,11 @@
             return (index == 1) ? StatusType.Open :
                    (index == 2) ? StatusType.Close: StatusType.Open;
         }
+        public static IncidentsStatus GetIncidentStatusByIndex(int index)
+        {
+            return (index == 0) ? IncidentsStatus.Pending:
+                   (index == 1) ? IncidentsStatus.Solved : IncidentsStatus.NotValid;
+        }
     }
     public enum NoteStatus
     {
@@ -29,4 +34,10 @@
         Pending,
         Approved
     }
+    public enum IncidentsStatus
+    {
+        Pending,
+        Solved,
+        NotValid
+    }    
 }
