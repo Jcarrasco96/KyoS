@@ -243,7 +243,14 @@
                                                     @Html.DisplayFor(modelItem => day.Day)
                                                 </td>
                                                 <td align="right">
-                                                    @*<a asp-action="PrintNotes" asp-route-id="@day.Id" class="btn btn-success disabled" title="Print notes - Date: @day.Date.ToShortDateString()"><i class="glyphicon glyphicon-print"></i></a>*@
+                                                    @if ((day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() == (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Present == false)).Count() + day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count())) && (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count() > 0))
+                                                    {
+                                                        <a asp-action="PrintWorkdaysNotes" asp-route-id="@day.Id" class="btn btn-success" title="Print notes - Date: @day.Date.ToShortDateString()"><i class="glyphicon glyphicon-print"></i></a>
+                                                    }
+                                                    @if ((day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() != (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Present == false)).Count() + day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count())) || (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count() == 0))
+                                                    {
+                                                        <a class="btn btn-success disabled" title="Print notes - Date: @day.Date.ToShortDateString()"><i class="glyphicon glyphicon-print"></i></a>
+                                                    }                                                    
                                                 </td>
                                             </tr>
                                         }
