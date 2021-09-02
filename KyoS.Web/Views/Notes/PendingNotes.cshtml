@@ -27,8 +27,9 @@
                         <tr>
                             <th class="col-md-1" style="text-align:center;">Date</th>
                             <th class="col-md-1" style="text-align:center;">Session</th>
-                            <th class="col-md-4">Name</th>
+                            <th class="col-md-3">Name</th>
                             <th class="col-md-2" style="text-align:center;">Note Status</th>
+                            <th class="col-md-1" style="text-align:center;">Review</th>
                             <th class="col-md-3">Facilitator</th>
                             <th class="col-md-1"></th>
                         </tr>
@@ -45,11 +46,25 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => day_client.Client.Name)
-                            </td>                            
-                            <td align="center">                                
+                            </td>
+                            <td align="center">
                                 <span class="label label-info">
                                     Pending
                                 </span>
+                            </td>
+                            <td align="center">
+                                @if (day_client.Messages.Count() == 0)
+                                {
+                                    <span class="label label-default">
+                                        No
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="label label-warning">
+                                        Yes
+                                    </span>
+                                }
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => day_client.Facilitator.Name)

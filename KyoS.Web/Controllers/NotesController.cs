@@ -5316,13 +5316,19 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("Facilitator"))
             {
                 return View(await _context.Workdays_Clients.Include(wc => wc.Note)
-                                                       .Include(wc => wc.Facilitator)
-                                                       .Include(wc => wc.Client)
-                                                       .Include(wc => wc.Workday)
-                                                       .ThenInclude(w => w.Week)
-                                                       .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                                  && wc.Note.Status == NoteStatus.Pending))
-                                                       .ToListAsync());
+
+                                                           .Include(wc => wc.Facilitator)
+
+                                                           .Include(wc => wc.Client)
+
+                                                           .Include(wc => wc.Workday)
+                                                           .ThenInclude(w => w.Week)
+
+                                                           .Include(wc => wc.Messages)
+
+                                                           .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                                      && wc.Note.Status == NoteStatus.Pending))
+                                                           .ToListAsync());
             }
 
             if (User.IsInRole("Supervisor"))
@@ -5332,14 +5338,20 @@ namespace KyoS.Web.Controllers
                 if (user_logged.Clinic != null)
                 {
                     return View(await _context.Workdays_Clients.Include(wc => wc.Note)
-                                                       .Include(wc => wc.Facilitator)
-                                                       .ThenInclude(f => f.Clinic)
-                                                       .Include(wc => wc.Client)
-                                                       .Include(wc => wc.Workday)
-                                                       .ThenInclude(w => w.Week)
-                                                       .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                                  && wc.Note.Status == NoteStatus.Pending))
-                                                       .ToListAsync());
+
+                                                               .Include(wc => wc.Facilitator)
+                                                               .ThenInclude(f => f.Clinic)
+
+                                                               .Include(wc => wc.Client)
+
+                                                               .Include(wc => wc.Workday)
+                                                               .ThenInclude(w => w.Week)
+
+                                                               .Include(wc => wc.Messages)
+
+                                                               .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                                          && wc.Note.Status == NoteStatus.Pending))
+                                                               .ToListAsync());
                 }
             }
 
