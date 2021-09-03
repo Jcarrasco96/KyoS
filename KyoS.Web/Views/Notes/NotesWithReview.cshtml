@@ -28,8 +28,9 @@
                             <th class="col-md-1"></th>
                             <th class="col-md-1" style="text-align:center;">Date</th>
                             <th class="col-md-1" style="text-align:center;">Session</th>
-                            <th class="col-md-4">Name</th>
+                            <th class="col-md-3">Name</th>
                             <th class="col-md-2" style="text-align:center;">Note Status</th>
+                            <th class="col-md-1" style="text-align:center;">Review</th>
                             <th class="col-md-2">Facilitator</th>
                             <th class="col-md-1"></th>
                         </tr>
@@ -61,12 +62,12 @@
                                                     <td>
                                                         <i class="glyphicon glyphicon-thumbs-down"></i> Not processed
                                                     </td>
-                                                    <td>                                                        
+                                                    <td>
                                                         @Html.DisplayFor(modelItem => message.Title)
                                                     </td>
                                                     <td>
                                                         @Html.DisplayFor(modelItem => message.Text)
-                                                    </td>                                                    
+                                                    </td>
                                                 </tr>
                                             }
                                             @if (message.Status.ToString() == "Read")
@@ -75,12 +76,12 @@
                                                     <td>
                                                         <i class="glyphicon glyphicon-thumbs-up"></i> Processed
                                                     </td>
-                                                    <td>                                                        
-                                                       @Html.DisplayFor(modelItem => message.Title)
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => message.Title)
                                                     </td>
                                                     <td>
                                                         @Html.DisplayFor(modelItem => message.Text)
-                                                    </td>                                                   
+                                                    </td>
                                                 </tr>
                                             }
                                         }
@@ -96,10 +97,43 @@
                             <td>
                                 @Html.DisplayFor(modelItem => day_client.Client.Name)
                             </td>
-                            <td align="center">                                
+                            <td align="center">
                                 <span class="label label-info">
                                     Pending
                                 </span>
+                            </td>
+                            <td align="center">
+                                @if (day_client.Messages.Count() == 0)
+                                {
+                                    <span>
+                                        -
+                                    </span>
+                                }
+                                else
+                                {
+                                    bool read = false;
+                                    @foreach (var message in day_client.Messages.OrderBy(m => m.DateCreated))
+                                    {
+                                        @if (message.Status.ToString() == "NotRead")
+                                        {
+                                            read = false;
+                                            break;
+                                        }
+                                        @if (message.Status.ToString() == "Read")
+                                        {
+                                            read = true;
+                                        }
+                                    }
+                                    
+                                    if (read)
+                                    {
+                                        <i class="glyphicon glyphicon-thumbs-up"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="glyphicon glyphicon-thumbs-down"></i>
+                                    }
+                                }
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
