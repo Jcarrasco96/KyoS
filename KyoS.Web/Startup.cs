@@ -3,7 +3,6 @@ using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -55,14 +54,14 @@ namespace KyoS.Web
             services.AddScoped<IMimeType, MimeType>();
             //services.AddControllers();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
-            services.AddRazorPages();            
+            services.AddRazorPages();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();               
+                app.UseDeveloperExceptionPage();
             }
             else
             {
@@ -73,16 +72,16 @@ namespace KyoS.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseFastReport();
-            
+
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            
+
             app.UseEndpoints(endpoints =>
             {
-               endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");               
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
 
             //system culture

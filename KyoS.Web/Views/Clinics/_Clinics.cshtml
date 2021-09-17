@@ -22,11 +22,21 @@
     <br />
     @if (ViewBag.Schema == "2")
     {
-        <input type="radio" name="Schema" value="Schema2" checked="checked"/>
+        <input type="radio" name="Schema" value="Schema2" checked="checked" />
     }
     else
     {
         <input type="radio" name="Schema" value="Schema2" />
-    }    
+    }
     <label style="font-weight: bold;"> Schema 2</label>
+    <br />
+    @if (ViewBag.Schema == "3")
+    {
+        <input type="radio" name="Schema" value="Schema3" checked="checked" />
+    }
+    else
+    {
+        <input type="radio" name="Schema" value="Schema3" />
+    }
+    <label style="font-weight: bold;"> Schema 3</label>
 </div>

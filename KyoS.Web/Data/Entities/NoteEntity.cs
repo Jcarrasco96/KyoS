@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -61,12 +59,14 @@ namespace KyoS.Web.Data.Entities
         public bool Regression { get; set; }
         public bool Decompensating { get; set; }
         public bool UnableToDetermine { get; set; }
-        
+
         public string Setting { get; set; }
 
         public SupervisorEntity Supervisor { get; set; }
         public ICollection<Note_Activity> Notes_Activities { get; set; }
 
         public int? MTPId { get; set; }
+
+        public SchemaType Schema { get; set; }
     }
 }

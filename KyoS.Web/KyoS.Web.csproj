@@ -22,43 +22,47 @@
   <ItemGroup>
     <None Remove="Reports\Notes\rptAbsenceNoteLARKINBEHAVIOR.rdlc" />
     <None Remove="Reports\Notes\rptAbsenceNoteSolAndVida.rdlc" />
-    <None Remove="Reports\Notes\rptNoteAdvancedGroupMC.rdlc" />
-    <None Remove="Reports\Notes\rptNoteAtlanticGroupMC.rdlc" />
-    <None Remove="Reports\Notes\rptNoteDavila.rdlc" />
+    <None Remove="Reports\Notes\rptNoteAdvancedGroupMC1.rdlc" />
+    <None Remove="Reports\Notes\rptNoteAtlanticGroupMC1.rdlc" />
+    <None Remove="Reports\Notes\rptNoteDAVILA0.rdlc" />
+    <None Remove="Reports\Notes\rptNoteDemoClinic0.rdlc" />
     <None Remove="Reports\Notes\rptNoteDemoClinic1.rdlc" />
-    <None Remove="Reports\Notes\rptNoteDemoClinic2.rdlc" />
-    <None Remove="Reports\Notes\rptNoteFloridaSocialHS.rdlc" />
-    <None Remove="Reports\Notes\rptNoteHealthAndBeauty.rdlc" />
-    <None Remove="Reports\Notes\rptNoteLARKINBEHAVIOR.rdlc" />
-    <None Remove="Reports\Notes\rptNoteSolAndVida.rdlc" />
+    <None Remove="Reports\Notes\rptNoteFloridaSocialHS1.rdlc" />
+    <None Remove="Reports\Notes\rptNoteHealthAndBeauty1.rdlc" />
+    <None Remove="Reports\Notes\rptNoteLARKINBEHAVIOR0.rdlc" />
+    <None Remove="Reports\Notes\rptNoteLARKINBEHAVIOR1.rdlc" />
+    <None Remove="Reports\Notes\rptNoteSolAndVida0.rdlc" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Reports\Notes\rptNoteAtlanticGroupMC.rdlc">
+    <EmbeddedResource Include="Reports\Notes\rptNoteAtlanticGroupMC1.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Notes\rptNoteHealthAndBeauty.rdlc">
+    <EmbeddedResource Include="Reports\Notes\rptNoteLARKINBEHAVIOR0.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Notes\rptNoteAdvancedGroupMC.rdlc">
+    <EmbeddedResource Include="Reports\Notes\rptNoteHealthAndBeauty1.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Notes\rptNoteFloridaSocialHS.rdlc">
+    <EmbeddedResource Include="Reports\Notes\rptNoteAdvancedGroupMC1.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Notes\rptNoteFloridaSocialHS1.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Notes\rptNoteDemoClinic0.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Notes\rptNoteDemoClinic1.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Notes\rptNoteDemoClinic2.rdlc">
+    <EmbeddedResource Include="Reports\Notes\rptNoteSolAndVida0.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Notes\rptNoteSolAndVida.rdlc">
+    <EmbeddedResource Include="Reports\Notes\rptNoteLARKINBEHAVIOR1.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Notes\rptNoteLARKINBEHAVIOR.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Notes\rptNoteDAVILA.rdlc">
+    <EmbeddedResource Include="Reports\Notes\rptNoteDAVILA0.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

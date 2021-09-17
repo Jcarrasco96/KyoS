@@ -453,7 +453,8 @@ namespace KyoS.Web.Helpers
                 Normal = model.Normal,
                 ShortSpanned = model.ShortSpanned,
                 MildlyImpaired = model.MildlyImpaired,
-                SeverelyImpaired = model.SeverelyImpaired                
+                SeverelyImpaired = model.SeverelyImpaired,
+                Schema = model.Schema
             };
         }
 
