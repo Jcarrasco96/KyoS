@@ -896,85 +896,156 @@ namespace KyoS.Web.Controllers
                                                   .ThenInclude(wc => wc.Client)
                                                   .ThenInclude(c => c.Group)
                                                   .ThenInclude(g => g.Facilitator)
+
                                                   .Include(n => n.Notes_Activities)
                                                   .ThenInclude(na => na.Activity)
+
                                                   .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
-            NoteViewModel noteViewModel;
+            NoteViewModel noteViewModel = null;
                         
             List<Note_Activity> note_Activity = await _context.Notes_Activities
                                                                 .Include(na => na.Activity)
                                                                 .ThenInclude(a => a.Theme)
+
                                                                 .Include(n => n.Objetive)
                                                                 .ThenInclude(o => o.Goal)
+
                                                                 .Where(na => na.Note.Id == note.Id).ToListAsync();
-            noteViewModel = new NoteViewModel
+            
+            if ((note.Schema == Common.Enums.SchemaType.Schema1) || (note.Schema == Common.Enums.SchemaType.Schema2))
             {
-                Id = id,
-                Workday_Cient = workday_Client,
-                PlanNote = note.PlanNote,
-                Origin = origin,
-                Schema = note.Schema,
+                noteViewModel = new NoteViewModel
+                {
+                    Id = id,
+                    Workday_Cient = workday_Client,
+                    PlanNote = note.PlanNote,
+                    Origin = origin,
+                    Schema = note.Schema,
 
-                OrientedX3 = note.OrientedX3,
-                NotTime = note.NotTime,
-                NotPlace = note.NotPlace,
-                NotPerson = note.NotPerson,
-                Present = note.Present,
-                Adequate = note.Adequate,
-                Limited = note.Limited,
-                Impaired = note.Impaired,
-                Faulty = note.Faulty,
-                Euthymic = note.Euthymic,
-                Congruent = note.Congruent,
-                Negativistic = note.Negativistic,
-                Depressed = note.Depressed,
-                Euphoric = note.Euphoric,
-                Optimistic = note.Optimistic,
-                Anxious = note.Anxious,
-                Hostile = note.Hostile,
-                Withdrawn = note.Withdrawn,
-                Irritable = note.Irritable,
-                Dramatized = note.Dramatized,
-                AdequateAC = note.AdequateAC,
-                Inadequate = note.Inadequate,
-                Fair = note.Fair,
-                Unmotivated = note.Unmotivated,
-                Motivated = note.Motivated,
-                Guarded = note.Guarded,
-                Normal = note.Normal,
-                ShortSpanned = note.ShortSpanned,
-                MildlyImpaired = note.MildlyImpaired,
-                SeverelyImpaired = note.SeverelyImpaired,
+                    OrientedX3 = note.OrientedX3,
+                    NotTime = note.NotTime,
+                    NotPlace = note.NotPlace,
+                    NotPerson = note.NotPerson,
+                    Present = note.Present,
+                    Adequate = note.Adequate,
+                    Limited = note.Limited,
+                    Impaired = note.Impaired,
+                    Faulty = note.Faulty,
+                    Euthymic = note.Euthymic,
+                    Congruent = note.Congruent,
+                    Negativistic = note.Negativistic,
+                    Depressed = note.Depressed,
+                    Euphoric = note.Euphoric,
+                    Optimistic = note.Optimistic,
+                    Anxious = note.Anxious,
+                    Hostile = note.Hostile,
+                    Withdrawn = note.Withdrawn,
+                    Irritable = note.Irritable,
+                    Dramatized = note.Dramatized,
+                    AdequateAC = note.AdequateAC,
+                    Inadequate = note.Inadequate,
+                    Fair = note.Fair,
+                    Unmotivated = note.Unmotivated,
+                    Motivated = note.Motivated,
+                    Guarded = note.Guarded,
+                    Normal = note.Normal,
+                    ShortSpanned = note.ShortSpanned,
+                    MildlyImpaired = note.MildlyImpaired,
+                    SeverelyImpaired = note.SeverelyImpaired,
 
-                Topic1 = note_Activity[0].Activity.Theme.Name,
-                Activity1 = note_Activity[0].Activity.Name,
-                AnswerClient1 = note_Activity[0].AnswerClient,
-                AnswerFacilitator1 = note_Activity[0].AnswerFacilitator,
-                Goal1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Goal.Number.ToString() : string.Empty,
-                Objetive1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Objetive : string.Empty,
+                    Topic1 = note_Activity[0].Activity.Theme.Name,
+                    Activity1 = note_Activity[0].Activity.Name,
+                    AnswerClient1 = note_Activity[0].AnswerClient,
+                    AnswerFacilitator1 = note_Activity[0].AnswerFacilitator,
+                    Goal1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Goal.Number.ToString() : string.Empty,
+                    Objetive1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Objetive : string.Empty,
 
-                Topic2 = note_Activity[1].Activity.Theme.Name,
-                Activity2 = note_Activity[1].Activity.Name,
-                AnswerClient2 = note_Activity[1].AnswerClient,
-                AnswerFacilitator2 = note_Activity[1].AnswerFacilitator,
-                Goal2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Goal.Number.ToString() : string.Empty,
-                Objetive2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Objetive : string.Empty,
+                    Topic2 = note_Activity[1].Activity.Theme.Name,
+                    Activity2 = note_Activity[1].Activity.Name,
+                    AnswerClient2 = note_Activity[1].AnswerClient,
+                    AnswerFacilitator2 = note_Activity[1].AnswerFacilitator,
+                    Goal2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Goal.Number.ToString() : string.Empty,
+                    Objetive2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Objetive : string.Empty,
 
-                Topic3 = note_Activity[2].Activity.Theme.Name,
-                Activity3 = note_Activity[2].Activity.Name,
-                AnswerClient3 = note_Activity[2].AnswerClient,
-                AnswerFacilitator3 = note_Activity[2].AnswerFacilitator,
-                Goal3 = (note_Activity[2].Objetive != null) ? note_Activity[2].Objetive.Goal.Number.ToString() : string.Empty,
-                Objetive3 = (note_Activity[2].Objetive != null) ? note_Activity[2].Objetive.Objetive : string.Empty,
+                    Topic3 = note_Activity[2].Activity.Theme.Name,
+                    Activity3 = note_Activity[2].Activity.Name,
+                    AnswerClient3 = note_Activity[2].AnswerClient,
+                    AnswerFacilitator3 = note_Activity[2].AnswerFacilitator,
+                    Goal3 = (note_Activity[2].Objetive != null) ? note_Activity[2].Objetive.Goal.Number.ToString() : string.Empty,
+                    Objetive3 = (note_Activity[2].Objetive != null) ? note_Activity[2].Objetive.Objetive : string.Empty,
 
-                Topic4 = note_Activity[3].Activity.Theme.Name,
-                Activity4 = note_Activity[3].Activity.Name,
-                AnswerClient4 = note_Activity[3].AnswerClient,
-                AnswerFacilitator4 = note_Activity[3].AnswerFacilitator,
-                Goal4 = (note_Activity[3].Objetive != null) ? note_Activity[3].Objetive.Goal.Number.ToString() : string.Empty,
-                Objetive4 = (note_Activity[3].Objetive != null) ? note_Activity[3].Objetive.Objetive : string.Empty,
-            };
+                    Topic4 = note_Activity[3].Activity.Theme.Name,
+                    Activity4 = note_Activity[3].Activity.Name,
+                    AnswerClient4 = note_Activity[3].AnswerClient,
+                    AnswerFacilitator4 = note_Activity[3].AnswerFacilitator,
+                    Goal4 = (note_Activity[3].Objetive != null) ? note_Activity[3].Objetive.Goal.Number.ToString() : string.Empty,
+                    Objetive4 = (note_Activity[3].Objetive != null) ? note_Activity[3].Objetive.Objetive : string.Empty,
+                };
+            }
+            if (note.Schema == Common.Enums.SchemaType.Schema4)
+            {
+                noteViewModel = new NoteViewModel
+                {
+                    Id = id,
+                    Workday_Cient = workday_Client,
+                    PlanNote = note.PlanNote,
+                    Origin = origin,
+                    Schema = note.Schema,
+
+                    OrientedX3 = note.OrientedX3,
+                    NotTime = note.NotTime,
+                    NotPlace = note.NotPlace,
+                    NotPerson = note.NotPerson,
+                    Present = note.Present,
+                    Adequate = note.Adequate,
+                    Limited = note.Limited,
+                    Impaired = note.Impaired,
+                    Faulty = note.Faulty,
+                    Euthymic = note.Euthymic,
+                    Congruent = note.Congruent,
+                    Negativistic = note.Negativistic,
+                    Depressed = note.Depressed,
+                    Euphoric = note.Euphoric,
+                    Optimistic = note.Optimistic,
+                    Anxious = note.Anxious,
+                    Hostile = note.Hostile,
+                    Withdrawn = note.Withdrawn,
+                    Irritable = note.Irritable,
+                    Dramatized = note.Dramatized,
+                    AdequateAC = note.AdequateAC,
+                    Inadequate = note.Inadequate,
+                    Fair = note.Fair,
+                    Unmotivated = note.Unmotivated,
+                    Motivated = note.Motivated,
+                    Guarded = note.Guarded,
+                    Normal = note.Normal,
+                    ShortSpanned = note.ShortSpanned,
+                    MildlyImpaired = note.MildlyImpaired,
+                    SeverelyImpaired = note.SeverelyImpaired,
+
+                    Topic1 = note_Activity[0].Activity.Theme.Name,
+                    Activity1 = note_Activity[0].Activity.Name,
+                    AnswerClient1 = note_Activity[0].AnswerClient,
+                    AnswerFacilitator1 = note_Activity[0].AnswerFacilitator,
+                    Goal1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Goal.Number.ToString() : string.Empty,
+                    Objetive1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Objetive : string.Empty,
+
+                    Topic2 = note_Activity[1].Activity.Theme.Name,
+                    Activity2 = note_Activity[1].Activity.Name,
+                    AnswerClient2 = note_Activity[1].AnswerClient,
+                    AnswerFacilitator2 = note_Activity[1].AnswerFacilitator,
+                    Goal2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Goal.Number.ToString() : string.Empty,
+                    Objetive2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Objetive : string.Empty,
+
+                    Topic3 = note_Activity[2].Activity.Theme.Name,
+                    Activity3 = note_Activity[2].Activity.Name,
+                    AnswerClient3 = note_Activity[2].AnswerClient,
+                    AnswerFacilitator3 = note_Activity[2].AnswerFacilitator,
+                    Goal3 = (note_Activity[2].Objetive != null) ? note_Activity[2].Objetive.Goal.Number.ToString() : string.Empty,
+                    Objetive3 = (note_Activity[2].Objetive != null) ? note_Activity[2].Objetive.Objetive : string.Empty                    
+                };
+            }            
             
             return View(noteViewModel);
         }
@@ -1212,7 +1283,15 @@ namespace KyoS.Web.Controllers
             
             if (workdayClient.Note.Supervisor.Clinic.Name == "DAVILA")
             {
-                return DavilaNoteReportSchema1(workdayClient);
+                if (workdayClient.Note.Schema == Common.Enums.SchemaType.Schema1)
+                {
+                    return DavilaNoteReportSchema1(workdayClient);
+                }
+                if (workdayClient.Note.Schema == Common.Enums.SchemaType.Schema4)
+                {
+                    Stream stream = _reportHelper.DavilaNoteReportSchema4(workdayClient);
+                    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+                }
             }
 
             if (workdayClient.Note.Supervisor.Clinic.Name == "LARKIN BEHAVIOR")

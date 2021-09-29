@@ -1,0 +1,122 @@
+﻿@model KyoS.Web.Models.Workday_Activity_Facilitator4ViewModel
+@{
+    ViewData["Title"] = "Activities per day";
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Activities per week", "ActivitiesPerWeek", "Activities")
+        </li>
+        <li class="active">Activities per day</li>
+    </ul>
+</div>
+
+<h4>Activities per day</h4>
+
+<div class="row">
+    @if (ViewBag.Error == "0")
+    {
+        <div class="alert alert-block alert-danger">
+            <i class="icon-ok red"></i>
+            <strong class="red">
+                Error. There are notes on this date. It´s not possible edit.
+            </strong>
+            <a asp-action="ActivitiesPerWeek">Back</a>
+        </div>
+    }
+    else
+    {
+    <form asp-action="CreateActivitiesWeek4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="IdWorkday" />
+        <div class="col-md-12">
+            <h5><strong>Date: </strong> @Model.Day @Model.Date </h5>
+        </div>
+        <div>
+            &nbsp;
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-3">
+                <label asp-for="IdTopic1" class="control-label"></label>
+                <select asp-for="IdTopic1" asp-items="Model.Topics1" class="form-control" id="cbTopic1"></select>
+                <span asp-validation-for="IdTopic1" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-9">
+                <label asp-for="IdActivity1" class="control-label"></label>
+                <select asp-for="IdActivity1" asp-items="Model.Activities1" class="form-control" id="cbActivity1"></select>
+                <span asp-validation-for="IdActivity1" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-3">
+                <label asp-for="IdTopic2" class="control-label"></label>
+                <select asp-for="IdTopic2" asp-items="Model.Topics2" class="form-control" id="cbTopic2"></select>
+                <span asp-validation-for="IdTopic2" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-9">
+                <label asp-for="IdActivity2" class="control-label"></label>
+                <select asp-for="IdActivity2" asp-items="Model.Activities2" class="form-control" id="cbActivity2"></select>
+                <span asp-validation-for="IdActivity2" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-3">
+                <label asp-for="IdTopic3" class="control-label"></label>
+                <select asp-for="IdTopic3" asp-items="Model.Topics3" class="form-control" id="cbTopic3"></select>
+                <span asp-validation-for="IdTopic3" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-9">
+                <label asp-for="IdActivity3" class="control-label"></label>
+                <select asp-for="IdActivity3" asp-items="Model.Activities3" class="form-control" id="cbActivity3"></select>
+                <span asp-validation-for="IdActivity3" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            &nbsp;
+        </div>
+        <div class="col-md-12">
+            <input type="submit" value="Save" class="btn btn-primary" />
+            <a asp-action="ActivitiesPerWeek" class="btn btn-success">Back</a>
+        </div>
+    </form>
+    }
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#cbTopic1").change(function () {
+                var url = "@Url.Action("GetActivityList", "Activities")";
+                $.get(url, { idTheme: $("#cbTopic1").val() }, function (data) {
+                    $("#cbActivity1").empty();
+                    $.each(data, function (index, row) {
+                        $("#cbActivity1").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
+                    });
+                });
+            })
+            $("#cbTopic2").change(function () {
+                var url = "@Url.Action("GetActivityList", "Activities")";
+                $.get(url, { idTheme: $("#cbTopic2").val() }, function (data) {
+                    $("#cbActivity2").empty();
+                    $.each(data, function (index, row) {
+                        $("#cbActivity2").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
+                    });
+                });
+            })
+            $("#cbTopic3").change(function () {
+                var url = "@Url.Action("GetActivityList", "Activities")";
+                $.get(url, { idTheme: $("#cbTopic3").val() }, function (data) {
+                    $("#cbActivity3").empty();
+                    $.each(data, function (index, row) {
+                        $("#cbActivity3").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
+                    });
+                });
+            })            
+        });
+    </script>
+}
+
+

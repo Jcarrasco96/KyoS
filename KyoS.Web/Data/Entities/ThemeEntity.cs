@@ -13,8 +13,7 @@ namespace KyoS.Web.Data.Entities
         public string Name { get; set; }
 
         [Display(Name = "Day of week")]
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public DayOfWeekType Day { get; set; }
+        public DayOfWeekType? Day { get; set; }
 
         public ClinicEntity Clinic { get; set; }
     }

@@ -118,6 +118,23 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboThemesByClinic3(int idClinic)
+        {
+            List<SelectListItem> list = _context.Themes.Where(t => (t.Clinic.Id == idClinic && t.Day == null)).Select(t => new SelectListItem
+            {
+                Text = $"{t.Name}",
+                Value = $"{t.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select theme...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
         public IEnumerable<SelectListItem> GetComboFacilitators()
         {
             List<SelectListItem> list = _context.Facilitators.Select(f => new SelectListItem

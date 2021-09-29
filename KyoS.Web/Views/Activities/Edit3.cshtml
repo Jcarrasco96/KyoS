@@ -1,0 +1,37 @@
+﻿@model KyoS.Web.Models.ActivityViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h4>Edit facilitator's intervention</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit3" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Origin" />
+            <partial name="_Activities3" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @if (Model.Origin == 0)
+                {
+                    <a asp-action="Index3" class="btn btn-success">Back</a>
+                }
+                @if (Model.Origin == 1)
+                {
+                    <a asp-action="FISupervision" class="btn btn-success">Back</a>
+                }
+                @if (Model.Origin == 2)
+                {
+                    <a asp-action="FISupervision" class="btn btn-success" asp-route-pending="1">Back</a>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

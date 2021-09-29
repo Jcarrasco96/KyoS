@@ -54,6 +54,16 @@ namespace KyoS.Web.Helpers
             };
         }
 
+        public async Task<ThemeEntity> ToTheme3Entity(Theme3ViewModel model, bool isNew)
+        {
+            return new ThemeEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Clinic = await _context.Clinics.FindAsync(model.IdClinic),                
+                Name = model.Name
+            };
+        }
+
         public ThemeViewModel ToThemeViewModel(ThemeEntity themeEntity)
         {
             return new ThemeViewModel
@@ -63,6 +73,17 @@ namespace KyoS.Web.Helpers
                 Day = themeEntity.Day,
                 Days = _combosHelper.GetComboDays(),
                 DayId = Convert.ToInt32(themeEntity.Day) + 1,
+                IdClinic = themeEntity.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics()
+            };
+        }
+
+        public Theme3ViewModel ToTheme3ViewModel(ThemeEntity themeEntity)
+        {
+            return new Theme3ViewModel
+            {
+                Id = themeEntity.Id,
+                Name = themeEntity.Name,                
                 IdClinic = themeEntity.Clinic.Id,
                 Clinics = _combosHelper.GetComboClinics()
             };

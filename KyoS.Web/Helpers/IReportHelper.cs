@@ -30,5 +30,6 @@ namespace KyoS.Web.Helpers
         Stream DavilaMTPReport(MTPEntity mtp);
         Stream DemoClinic1MTPReport(MTPEntity mtp);
         Stream DemoClinic2MTPReport(MTPEntity mtp);
+        Stream DavilaNoteReportSchema4(Workday_Client workdayClient);
     }
 }

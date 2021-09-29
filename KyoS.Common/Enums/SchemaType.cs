@@ -8,6 +8,7 @@ namespace KyoS.Common.Enums
     {
         Schema1,
         Schema2,
-        Schema3
+        Schema3,
+        Schema4
     }
 }

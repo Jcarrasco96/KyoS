@@ -1,0 +1,80 @@
+﻿@model KyoS.Web.Models.ActivityViewModel
+@{
+    ViewData["Title"] = "Create Facilitator’s Intervention";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create</title>
+</head>
+<body>
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("Facilitator’s Intervention", "Index3", "Activities")
+            </li>
+            <li class="active">Create</li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+    <h4>Create new facilitator’s intervention</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            @if (ViewBag.Creado == "Y")
+            {
+                <div class="alert alert-block alert-success">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok green"></i>
+                    <strong class="green">
+                        Facilitator’s Intervention with Id @ViewBag.IdCreado been successfully created
+                    </strong>
+
+                </div>
+            }
+            @if (ViewBag.Creado == "E")
+            {
+                <div class="alert alert-block alert-warning">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. Facilitator’s Intervention already exist
+                    </strong>
+                </div>
+            }
+        </div>
+        <div class="col-md-6">
+            <form asp-action="Create3">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <partial name="_Activities3" />
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#EnglishName").click(function () {
+                var url = "@Url.Action("Translate", "Activities")";
+                $.get(url, { text: $("#Name").val() }, function (data) {
+                    $("#Name").val(data);
+                });
+            })
+        });
+    </script>
+}

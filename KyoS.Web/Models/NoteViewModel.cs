@@ -87,8 +87,6 @@ namespace KyoS.Web.Models
         //este campo lo uso para saber de que pagina se viene
         public int Origin { get; set; }
 
-        public SchemaType Schema { get; set; }
-
         //estos campos solo se usan para el modo solo lectura
         public string Topic1 { get; set; }        
         public string Activity1 { get; set; }

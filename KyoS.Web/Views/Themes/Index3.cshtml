@@ -1,0 +1,105 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.ThemeEntity>
+@{
+    ViewData["Title"] = "Themes";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Themes</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<p>
+    <a asp-action="Create3" class="btn btn-primary" title="Create new theme"><i class="glyphicon glyphicon-plus"></i> Create Theme</a>
+</p>
+
+<div class="row">
+    <div class="col-md-12">
+        @if (ViewBag.Delete == "N")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <strong class="red">
+                    Error. It is not posible delete the theme
+                </strong>
+            </div>
+        }
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Themes</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-5">
+                                Theme
+                            </th>
+                            <th class="col-md-5" style="text-align:center;">
+                                Clinic Name
+                            </th>
+                            <th class="col-md-2">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>                                
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Clinic.Name)
+                                </td>
+                                <td align="right">
+                                    <a asp-action="Edit3" asp-route-id="@item.Id" class="btn btn-warning" title="Edit theme"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete theme"><i class="glyphicon glyphicon-trash"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+                        $(document).ready(function () {
+                            $('#MyTable').DataTable({
+                                "pageLength": 50
+                            });
+
+                            // Delete item
+                            var item_to_delete;
+
+                            $('.deleteItem').click((e) => {
+                                item_to_delete = e.currentTarget.dataset.id;
+                            });
+
+                            $("#btnYesDelete").click(function () {
+                                var url = "@Url.Action("Delete", "Themes")";
+                                window.location.href = url + '/' + item_to_delete;
+                            });
+                        });
+    </script>
+}
+
+

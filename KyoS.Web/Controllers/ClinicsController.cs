@@ -75,7 +75,7 @@ namespace KyoS.Web.Controllers
                     }
 
                     ClinicEntity clinicEntity = _converterHelper.ToClinicEntity(clinicViewModel, path, true);
-                    clinicEntity.Schema = (form["Schema"] == "Schema1") ? SchemaType.Schema1 : (form["Schema"] == "Schema2") ? SchemaType.Schema2 : SchemaType.Schema3;
+                    clinicEntity.Schema = (form["Schema"] == "Schema1") ? SchemaType.Schema1 : (form["Schema"] == "Schema2") ? SchemaType.Schema2 : (form["Schema"] == "Schema3") ? SchemaType.Schema3 : SchemaType.Schema4;
                     _context.Add(clinicEntity);
                     try
                     {
@@ -142,7 +142,7 @@ namespace KyoS.Web.Controllers
             }
 
             ClinicViewModel clinicViewModel = _converterHelper.ToClinicViewModel(clinicEntity);
-            ViewBag.Schema = (clinicEntity.Schema == SchemaType.Schema1) ? "1" : (clinicEntity.Schema == SchemaType.Schema2) ? "2" : "3";
+            ViewBag.Schema = (clinicEntity.Schema == SchemaType.Schema1) ? "1" : (clinicEntity.Schema == SchemaType.Schema2) ? "2" : (clinicEntity.Schema == SchemaType.Schema3) ? "3" : "4";
             return View(clinicViewModel);
         }
 
@@ -165,7 +165,7 @@ namespace KyoS.Web.Controllers
                 }
 
                 ClinicEntity clinicEntity = _converterHelper.ToClinicEntity(clinicViewModel, path, false);
-                clinicEntity.Schema = (form["Schema"] == "Schema1") ? SchemaType.Schema1 : (form["Schema"] == "Schema2") ? SchemaType.Schema2 : SchemaType.Schema3;
+                clinicEntity.Schema = (form["Schema"] == "Schema1") ? SchemaType.Schema1 : (form["Schema"] == "Schema2") ? SchemaType.Schema2 : (form["Schema"] == "Schema3") ? SchemaType.Schema3 : SchemaType.Schema4;
                 _context.Update(clinicEntity);
                 try
                 {

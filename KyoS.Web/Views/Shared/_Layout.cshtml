@@ -85,7 +85,7 @@
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Workdays", "Index", "Workdays")</li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Topics", "Index", "Themes")</li>
+                                <li>@Html.ActionLink("Topics / Themes", "Index", "Themes")</li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Templates DOC.", "Index", "TemplatesDOC")</li>
                             </ul>
@@ -127,8 +127,8 @@
                                 Topics / Activities <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Topics", "Index", "Themes")</li>
-                                <li>@Html.ActionLink("Activities", "ActivitiesSupervision", "Activities")</li>
+                                <li>@Html.ActionLink("Topics / Themes", "Index", "Themes")</li>
+                                <li>@Html.ActionLink("Activities / Facilitator's Interventions", "ActivitiesSupervision", "Activities")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
@@ -146,11 +146,11 @@
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
-                                Activities <span class="caret"></span>
+                                Activities / Interventions <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Activities", "Index", "Activities")</li>
-                                <li>@Html.ActionLink("Activities per week", "ActivitiesPerWeek", "Activities")</li>
+                                <li>@Html.ActionLink("Activities / Facilitator's Interventions", "Index", "Activities")</li>
+                                <li>@Html.ActionLink("Activities / Facilitator's Interventions per week", "ActivitiesPerWeek", "Activities")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">

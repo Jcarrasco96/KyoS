@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Models
 {
-    public class Workday_Activity_FacilitatorViewModel
+    public class Workday_Activity_Facilitator4ViewModel
     {
         public int IdWorkday { get; set; }
 
@@ -48,17 +48,5 @@ namespace KyoS.Web.Models
         [Range(1, int.MaxValue, ErrorMessage = "You must select a activity.")]
         public int IdActivity3 { get; set; }
         public IEnumerable<SelectListItem> Activities3 { get; set; }
-
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
-        [Display(Name = "Topic #4")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a topic.")]
-        public int IdTopic4 { get; set; }
-        public IEnumerable<SelectListItem> Topics4 { get; set; }
-
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
-        [Display(Name = "Activity #4")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a activity.")]
-        public int IdActivity4 { get; set; }
-        public IEnumerable<SelectListItem> Activities4 { get; set; }
     }
 }

@@ -9,7 +9,9 @@ namespace KyoS.Web.Helpers
         ClinicEntity ToClinicEntity(ClinicViewModel model, string path, bool isNew);
         ClinicViewModel ToClinicViewModel(ClinicEntity model);
         Task<ThemeEntity> ToThemeEntity(ThemeViewModel model, bool isNew);
+        Task<ThemeEntity> ToTheme3Entity(Theme3ViewModel model, bool isNew);
         ThemeViewModel ToThemeViewModel(ThemeEntity model);
+        Theme3ViewModel ToTheme3ViewModel(ThemeEntity model);
         Task<ActivityEntity> ToActivityEntity(ActivityViewModel model, bool isNew);
         ActivityViewModel ToActivityViewModel(ActivityEntity model);
         Task<NotePrototypeEntity> ToNotePrototypeEntity(NotePrototypeViewModel model, bool isNew);
