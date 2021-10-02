@@ -6139,7 +6139,9 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(d => d.Workdays_Clients)
                                             .ThenInclude(g => g.Facilitator)
 
-                                            .Include(w => w.Days)
+                                            .Include(w => w.Clinic)
+                                            .ThenInclude(c => c.Weeks)
+                                            .ThenInclude(w => w.Days)
                                             .ThenInclude(d => d.Workdays_Clients)
                                             .ThenInclude(wc => wc.Note)
 
@@ -6152,7 +6154,7 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(d => d.Workdays_Clients)
                                             .ThenInclude(wc => wc.Client)
                                             .ThenInclude(c => c.Clients_Diagnostics)
-                                            .ThenInclude(cd => cd.Diagnostic)
+                                            .ThenInclude(cd => cd.Diagnostic)                                            
 
                                             .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
                                             .ToListAsync());            

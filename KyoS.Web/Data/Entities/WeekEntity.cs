@@ -31,7 +31,40 @@ namespace KyoS.Web.Data.Entities
         {
             get
             {
-                return Notes * 16;
+                int units = 0;
+                if (this.Days != null)
+                {
+                    foreach (var item in this.Days)
+                    {
+                        foreach (var workday_client in item.Workdays_Clients.Where(wc => wc.Present == true))
+                        {
+                            if(workday_client.Note != null)
+                            {
+                                if ((workday_client.Note.Schema == Common.Enums.SchemaType.Schema1) || (workday_client.Note.Schema == Common.Enums.SchemaType.Schema2) || (workday_client.Note.Schema == Common.Enums.SchemaType.Schema3))
+                                {
+                                    units = units + 16;
+                                }
+                                if ((workday_client.Note.Schema == Common.Enums.SchemaType.Schema4))
+                                {
+                                    units = units + 12;
+                                }
+                            }
+                            else
+                            {
+                                if ((workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema1) || (workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema2) || (workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema3))
+                                {
+                                    units = units + 16;
+                                }
+                                if ((workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema4))
+                                {
+                                    units = units + 12;
+                                }
+                            }
+                        }
+                        
+                    }
+                }
+                return units;
             }
         }
         public int Notes
