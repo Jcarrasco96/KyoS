@@ -163,8 +163,9 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#MyTable').DataTable({                                
-              "pageLength": 50
+            $('#MyTable').DataTable({ 
+              "order": [[1, "asc"]],
+              "pageLength": 100
             });
         });
         $(function () {
