@@ -8,7 +8,7 @@ namespace KyoS.Web.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
-
+            //Database.SetCommandTimeout(50);   
         }
         
         public DbSet<ClinicEntity> Clinics { get; set; }
