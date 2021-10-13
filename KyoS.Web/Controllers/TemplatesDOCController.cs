@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using KyoS.Common.Enums;
+﻿using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
@@ -10,6 +6,9 @@ using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
@@ -34,19 +33,21 @@ namespace KyoS.Web.Controllers
         }
 
         public async Task<IActionResult> Index()
-        {            
+        {
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic == null)
+            {
                 return NotFound();
+            }
 
             return View(await _context.TemplatesDOC
                                       .Include(t => t.Clinic)
                                       .Where(t => t.Clinic.Id == user_logged.Clinic.Id)
                                       .OrderByDescending(t => t.CreatedOn)
-                                      .ToListAsync());            
+                                      .ToListAsync());
         }
 
         public IActionResult AddTemplate(int id = 0)

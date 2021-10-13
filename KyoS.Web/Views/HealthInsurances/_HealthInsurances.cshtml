@@ -1,0 +1,46 @@
+﻿@model KyoS.Web.Models.HealthInsuranceViewModel
+<div class="row">
+    <div class="col-md-5">
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>&nbsp;*
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="SignedDate" class="control-label"></label>&nbsp;*
+            <input asp-for="SignedDate" class="form-control" />
+            <span asp-validation-for="SignedDate" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="DurationTime" class="control-label"></label>&nbsp;*
+            <input asp-for="DurationTime" class="form-control" />
+            <span asp-validation-for="DurationTime" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="DocumentFile" class="control-label"></label>
+            <input asp-for="DocumentFile" class="form-control" type="file" id="photoBrowser" />
+            <span asp-validation-for="DocumentFile" class="text-danger"></span>
+        </div>
+    </div>        
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <div class="form-group">
+            <input type="checkbox" asp-for="Active" /> Active
+        </div>
+    </div>
+    <div class="col-md-10">
+        <div class="form-group">
+            &nbsp;
+        </div>
+    </div>    
+</div>
+
+
+

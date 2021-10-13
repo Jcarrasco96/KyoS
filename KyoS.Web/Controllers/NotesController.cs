@@ -5676,15 +5676,17 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Admin, Facilitator, Supervisor")]
         public async Task<IActionResult> MTPView(int id)
         {
-            Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Client)
-                                                                           .FirstOrDefaultAsync(wc => wc.Id == id);
+            Workday_Client workday_Client = await _context.Workdays_Clients
+                                                          .Include(wc => wc.Client)
+                                                          .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
             {
                 return NotFound();
             }
 
-            MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => m.Client.Id == workday_Client.Client.Id);
+            MTPEntity mtp = await _context.MTPs
+                                          .FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
             if (mtp == null)
             {
                 return NotFound();

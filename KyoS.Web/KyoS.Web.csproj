@@ -94,8 +94,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\files\Insurances\" />
+    <Folder Include="wwwroot\files\Clients\" />
+    <Folder Include="wwwroot\files\Templates\" />
     <Folder Include="wwwroot\images\Clinics\" />
-    <Folder Include="wwwroot\images\Templates\" />
     <Folder Include="wwwroot\images\Signatures\" />
     <Folder Include="wwwroot\Reports\ApprovedNotes\" />
   </ItemGroup>

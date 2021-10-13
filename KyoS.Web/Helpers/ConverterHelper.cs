@@ -755,5 +755,41 @@ namespace KyoS.Web.Helpers
                 UserCreatedBy = model.UserCreatedBy
             };
         }
+
+        public async Task<HealthInsuranceEntity> ToHealthInsuranceEntity(HealthInsuranceViewModel model, bool isNew, string userId, string documentPath)
+        {
+            return new HealthInsuranceEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                SignedDate = model.SignedDate,
+                DurationTime = model.DurationTime,
+                Active = model.Active,
+                DocumentPath = documentPath,
+                Clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == model.IdClinic),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)                
+            };
+        }
+
+        public HealthInsuranceViewModel ToHealthInsuranceViewModel(HealthInsuranceEntity model)
+        {
+            return new HealthInsuranceViewModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                SignedDate = model.SignedDate,
+                DurationTime = model.DurationTime,
+                Active = model.Active,
+                DocumentPath = model.DocumentPath,
+                IdClinic = model.Clinic.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+            };
+        }
     }
 }

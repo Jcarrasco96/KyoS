@@ -7,8 +7,7 @@ namespace KyoS.Web.Data
     public class DataContext : IdentityDbContext<UserEntity>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
-        {
-            //Database.SetCommandTimeout(50);   
+        {            
         }
         
         public DbSet<ClinicEntity> Clinics { get; set; }
@@ -50,6 +49,8 @@ namespace KyoS.Web.Data
         public DbSet<DocumentTempEntity> DocumentsTemp { get; set; }
         public DbSet<TemplateDOCEntity> TemplatesDOC { get; set; }
         public DbSet<IncidentEntity> Incidents { get; set; }
+        public DbSet<HealthInsuranceEntity> HealthInsurances { get; set; }
+        public DbSet<Client_HealthInsurance> Clients_HealthInsurances { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

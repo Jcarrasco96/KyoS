@@ -28,14 +28,14 @@ namespace KyoS.Web.Helpers
             string[] fileName = file.FileName.Split('.');
             string guid = Guid.NewGuid().ToString();
             string doc = $"{guid}.{fileName[1]}";
-            string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\images\\{folder}", doc);
+            string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\files\\{folder}", doc);
 
             using (FileStream stream = new FileStream(path, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
 
-            return $"~/images/{folder}/{doc}";
+            return $"~/files/{folder}/{doc}";
         }
 
         public byte[] ImageToByteArray(string imageFilePath)

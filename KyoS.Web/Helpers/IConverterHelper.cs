@@ -50,5 +50,7 @@ namespace KyoS.Web.Helpers
         DiagnosticViewModel ToDiagnosticViewModel(DiagnosticEntity model);
         Task<IncidentEntity> ToIncidentEntity(IncidentViewModel model, bool isNew, string userId);
         IncidentViewModel ToIncidentViewModel(IncidentEntity model);
+        Task<HealthInsuranceEntity> ToHealthInsuranceEntity(HealthInsuranceViewModel model, bool isNew, string userId, string documentPath);
+        HealthInsuranceViewModel ToHealthInsuranceViewModel(HealthInsuranceEntity model);
     }
 }

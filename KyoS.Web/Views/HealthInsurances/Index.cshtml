@@ -1,0 +1,160 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.HealthInsuranceEntity>
+@{
+    ViewData["Title"] = "Health Insurances";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Health Insurances</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Health Insurance</a>
+</p>
+
+<div class="row">
+    <div class="col-md-12">
+        @if (ViewBag.Delete == "N")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <strong class="red">
+                    Error. It is not posible delete the Health Insurance
+                </strong>
+            </div>
+        }
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Health Insurances</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-5">
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Signed date
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.DurationTime)
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Active
+                            </th>  
+                            <th class="col-md-2">
+                            </th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            @if (item.Active == false)
+                            {
+                            <tr style="color: darkgrey;">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.SignedDate)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DurationTime)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Active)
+                                </td>                                
+                                <td align="right">
+                                    @if (item.DocumentPath == string.Empty)
+                                    {
+                                        <a class="btn btn-default disabled" title="View attachment"><i class="glyphicon glyphicon-download-alt"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="OpenDocument" asp-route-id="@item.Id" class="btn btn-default" title="View attachment" target="_blank"><i class="glyphicon glyphicon-download-alt"></i></a>
+                                    }
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit health insurance"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete health insurance"><i class="glyphicon glyphicon-trash"></i></button>
+                                </td>
+                            </tr>
+                            }
+                            @if (item.Active == true)
+                            {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.SignedDate)
+                                </td>
+                                <td align="center"> 
+                                    @Html.DisplayFor(modelItem => item.DurationTime)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Active)
+                                </td>                               
+                                <td align="right">
+                                    @if (item.DocumentPath == string.Empty)
+                                    {
+                                        <a class="btn btn-default disabled" title="View attachment"><i class="glyphicon glyphicon-download-alt"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="OpenDocument" asp-route-id="@item.Id" class="btn btn-default" title="View attachment" target="_blank"><i class="glyphicon glyphicon-download-alt"></i></a>
+                                    }
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit health insurance"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete health insurance"><i class="glyphicon glyphicon-trash"></i></button>
+                                </td>
+                            </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('#MyTable').DataTable({
+                            "order": [[0, "asc"]],
+                            "pageLength": 100
+                        });
+
+                        // Delete item
+                        var item_to_delete;
+
+                        $('.deleteItem').click((e) => {
+                            item_to_delete = e.currentTarget.dataset.id;
+                        });
+
+                        $("#btnYesDelete").click(function () {
+                            var url = "@Url.Action("Delete", "HealthInsurances")";
+                            window.location.href = url + '/' + item_to_delete;
+                        });
+                    });
+    </script>
+}
+
+
+
+

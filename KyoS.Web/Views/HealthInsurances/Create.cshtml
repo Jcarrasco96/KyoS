@@ -1,0 +1,64 @@
+﻿@model KyoS.Web.Models.HealthInsuranceViewModel
+@{
+    ViewData["Title"] = "Create Health Insurance";
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Health Insurances", "Index", "HealthInsurances")
+        </li>
+        <li class="active">Create</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<h4>Create new health insurance</h4>
+<hr />
+<div>
+    <div>
+        @if (ViewBag.Creado == "Y")
+        {
+            <div class="alert alert-block alert-success">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok green"></i>
+                <strong class="green">
+                    Health insurance been successfully created
+                </strong>
+
+            </div>
+        }
+        @if (ViewBag.Creado == "E")
+        {
+            <div class="alert alert-block alert-warning">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok red"></i>
+                <strong class="red">
+                    Error. Health insurance already exist
+                </strong>
+            </div>
+        }        
+    </div>
+    <div>
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <partial name="_HealthInsurances" />
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Create Insurance" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-success">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@*<partial name="_ModalPopup" />*@
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

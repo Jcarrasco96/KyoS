@@ -1,0 +1,39 @@
+﻿@model KyoS.Web.Models.HealthInsuranceViewModel
+
+@{
+    ViewData["Title"] = "Edit health insurance";
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Health Insurances", "Index", "HealthInsurances")
+        </li>
+        <li class="active">Edit</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<h4>Edit health insurance</h4>
+<hr />
+
+<div>
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="CreatedBy" />
+        <input type="hidden" asp-for="CreatedOn" />
+        <input type="hidden" asp-for="DocumentPath" />
+        <partial name="_HealthInsurances" />
+        </br>
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-success">Back</a>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
