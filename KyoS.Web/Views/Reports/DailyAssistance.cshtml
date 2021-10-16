@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.WeekEntity>
 @{
-    ViewData["Title"] = "Daily Assistance";
+    ViewData["Title"] = "PSR Daily Assistance";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,7 +11,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Daily assistance</li>
+        <li class="active">PSR Daily assistance</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -65,7 +65,7 @@
                                             <th class="col-md-7">Day</th>
                                             <th></th>
                                         </tr>
-                                        @foreach (var day in item.Days.OrderBy(d => d.Date))
+                                        @foreach (var day in item.Days.Where(d => d.Service == KyoS.Common.Enums.ServiceType.PSR).OrderBy(d => d.Date))
                                         {
                                             <tr>
                                                 <td align="center">

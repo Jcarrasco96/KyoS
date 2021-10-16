@@ -417,28 +417,22 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> ActivitiesPerWeek()
         {
-            if (User.IsInRole("Admin"))
-                return View(await _context.Weeks.Include(w => w.Clinic)
-                                                .Include(w => w.Days).ToListAsync());
-            else
-            {
-                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-                if (user_logged.Clinic == null)
-                    return View(null);
+            UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                            .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic == null)
+                return View(null);
 
-                return View(await _context.Weeks.Include(w => w.Days)
-                                                .ThenInclude(d => d.Workdays_Activities_Facilitators)
-                                                .ThenInclude(waf => waf.Activity)
-                                                .ThenInclude(a => a.Theme)
+            return View(await _context.Weeks.Include(w => w.Days)
+                                            .ThenInclude(d => d.Workdays_Activities_Facilitators)
+                                            .ThenInclude(waf => waf.Activity)
+                                            .ThenInclude(a => a.Theme)
 
-                                                .Include(w => w.Days)
-                                                .ThenInclude(d => d.Workdays_Activities_Facilitators)
-                                                .ThenInclude(waf =>waf.Facilitator)
+                                            .Include(w => w.Days)
+                                            .ThenInclude(d => d.Workdays_Activities_Facilitators)
+                                            .ThenInclude(waf =>waf.Facilitator)
 
-                                                .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
-                                                .ToListAsync());
-            }
+                                            .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Days.Where(d => d.Service == ServiceType.PSR).Count() > 0))
+                                            .ToListAsync());            
         }
 
         [Authorize(Roles = "Facilitator")]

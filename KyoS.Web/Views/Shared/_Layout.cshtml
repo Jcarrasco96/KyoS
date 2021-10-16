@@ -19,18 +19,26 @@
     <link href="~/css/font-awesome.css" rel="stylesheet">
     <link href="~/css/font-awesome.min.css" rel="stylesheet">
     <link href="~/css/font-awesome-ie7.css" rel="stylesheet">
-    <link href="~/css/font-awesome-ie7.min.css" rel="stylesheet">   
-    
+    <link href="~/css/font-awesome-ie7.min.css" rel="stylesheet">
+    <style>        
+        .dropdown-submenu{position:relative;}
+        .dropdown-submenu>.dropdown-menu{top:0;left:100%;margin-top:-6px;margin-left:-1px;-webkit-border-radius:0 6px 6px 6px;-moz-border-radius:0 6px 6px 6px;border-radius:0 6px 6px 6px;}
+        .dropdown-submenu:hover>.dropdown-menu{display:block;}
+        .dropdown-submenu>a:after{display:block;content:" ";float:right;width:0;height:0;border-color:transparent;border-style:solid;border-width:5px 0 5px 5px;border-left-color:#cccccc;margin-top:5px;margin-right:-10px;}
+        .dropdown-submenu:hover>a:after{border-left-color:#ffffff;}
+        .dropdown-submenu.pull-left{float:none;}.dropdown-submenu.pull-left>.dropdown-menu{left:-100%;margin-left:10px;-webkit-border-radius:6px 0 6px 6px;-moz-border-radius:6px 0 6px 6px;border-radius:6px 0 6px 6px;}
+    </style>
+
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" />        
+        <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
     </environment>
 </head>
 <body>
@@ -50,9 +58,9 @@
                     <label style="font-family:Tahoma; color:white;">
                         Notes
                     </label>
-                   
-                </span>                    
-            </div>
+
+                </span>
+            </div>            
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="nav navbar-nav">
                     @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")))
@@ -64,14 +72,14 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><a asp-area="" asp-controller="Clinics" asp-action="Index">Clinics</a></li>
                                 <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
-                                <li>@Html.ActionLink("Facilitators", "Index", "Facilitators")</li>                                
+                                <li>@Html.ActionLink("Facilitators", "Index", "Facilitators")</li>
                             </ul>
                         </li>
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                     if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
+                   if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
@@ -85,7 +93,14 @@
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Groups", "Index", "Groups")</li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Workdays", "Index", "Workdays")</li>
+                                <li class="dropdown-submenu">                                    
+                                    <a class="test" tabindex="-1" href="#">Workdays</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("PSR", "Index", "Workdays")</li>
+                                        <li>@Html.ActionLink("Individual", "IndividualWorkdays", "Workdays")</li>
+                                        <li>@Html.ActionLink("Group", "GroupWorkdays", "Workdays")</li>
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Topics / Themes", "Index", "Themes")</li>
                                 <li role="separator" class="divider"></li>
@@ -114,8 +129,8 @@
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
-                     else
-                       if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
+                    else
+                     if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
@@ -145,8 +160,8 @@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
-                       else
-                          if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
+                    else
+                        if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
@@ -162,7 +177,8 @@
                                 Notes <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Notes", "Index", "Notes")</li>
+                                <li>@Html.ActionLink("PSR Notes", "Index", "Notes")</li>
+                                <li>@Html.ActionLink("Individual Notes", "IndividualNotes", "Notes")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
@@ -170,8 +186,8 @@
                                 Reports <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Daily assistance", "DailyAssistance", "Reports")</li>
-                                <li>@Html.ActionLink("Individual sign in sheet", "IndividualSignInSheet", "Notes")</li>
+                                <li>@Html.ActionLink("PSR Daily assistance", "DailyAssistance", "Reports")</li>
+                                <li>@Html.ActionLink("PSR Individual sign in sheet", "IndividualSignInSheet", "Notes")</li>
                             </ul>
                         </li>
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
@@ -212,7 +228,7 @@
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
                                 @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
-                                @*<div class="user-info">*@                               
+                                @*<div class="user-info">*@
                                 <span class="name pdd-right-5">@name</span>
                                 @*<i class="ti-angle-down font-size-10"></i>*@
                                 <span class="caret"></span>
@@ -220,17 +236,17 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 @*<li>
-                                    <a href="#">
-                                        <i class="ti-settings pdd-right-10"></i>
-                                        <span>Setting</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <i class="ti-user pdd-right-10"></i>
-                                        <span>Profile</span>
-                                    </a>
-                                </li>*@
+                                        <a href="#">
+                                            <i class="ti-settings pdd-right-10"></i>
+                                            <span>Setting</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="ti-user pdd-right-10"></i>
+                                            <span>Profile</span>
+                                        </a>
+                                    </li>*@
                                 <li>
                                     <a href="#">
                                         <i class="ti-email pdd-right-10"></i>
@@ -238,7 +254,7 @@
                                     </a>
                                 </li>
                                 <li role="separator" class="divider"></li>
-                                <li>                            
+                                <li>
                                     <a asp-area="" asp-controller="Account" asp-action="Logout">
                                         <i class="ti-power-off pdd-right-10"></i>
                                         <span>Logout</span>
@@ -246,9 +262,10 @@
                                 </li>
                             </ul>
                             @*<a asp-area="" asp-controller="Account" asp-action="Index">@User.Identity.Name</a>*@
-                        </li>                        
-                    }                    
-                </ul>                
+                        </li>
+
+                    }
+                </ul>
             </div>
         </div>
     </nav>
@@ -284,6 +301,17 @@
         <script src="~/js/site.js" asp-append-version="true"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+
+    <script>
+        $(document).ready(function () {
+            $('.dropdown-submenu a.test').on("click", function (e) {
+                $(this).next('ul').toggle();
+                e.stopPropagation();
+                e.preventDefault();
+            });
+        });
+    </script>
+
 
     @RenderSection("Scripts", required: false)
 </body>

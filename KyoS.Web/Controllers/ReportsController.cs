@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using AspNetCore.Reporting;
+using KyoS.Common.Enums;
 using KyoS.Common.Helpers;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
@@ -63,7 +64,8 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(d => d.Workdays_Clients)
                                                 .ThenInclude(wc => wc.Note)
 
-                                                .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
+                                                .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                          && w.Days.Where(d => d.Service == ServiceType.PSR).Count() > 0))
                                                 .ToListAsync());            
         }
 

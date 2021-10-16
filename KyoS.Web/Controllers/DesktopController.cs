@@ -26,36 +26,85 @@ namespace KyoS.Web.Controllers
                 ViewBag.ApprovedNotes = _context.Workdays_Clients
                                                    .Include(wc => wc.Note)
                                                    .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name 
-                                                              && wc.Note.Status == NoteStatus.Approved)).ToString();
+                                                              && wc.Note.Status == NoteStatus.Approved
+                                                              && wc.Workday.Service == ServiceType.PSR)).ToString();
 
                 ViewBag.PendingNotes = _context.Workdays_Clients
                                                   .Include(wc => wc.Note)
                                                   .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                              && wc.Note.Status == NoteStatus.Pending)).ToString();
+                                                              && wc.Note.Status == NoteStatus.Pending
+                                                              && wc.Workday.Service == ServiceType.PSR)).ToString();
 
                 ViewBag.InProgressNotes = _context.Workdays_Clients
                                                   .Include(wc => wc.Note)
                                                   .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                              && wc.Note.Status == NoteStatus.Edition)).ToString();
+                                                              && wc.Note.Status == NoteStatus.Edition
+                                                              && wc.Workday.Service == ServiceType.PSR)).ToString();
                                 
                 List <Workday_Client> not_started_list = await _context.Workdays_Clients
                                                           .Include(wc => wc.Note)
                                                           .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                                 && wc.Present == true)).ToListAsync();
+                                                                      && wc.Present == true 
+                                                                      && wc.Workday.Service == ServiceType.PSR)).ToListAsync();
                 not_started_list = not_started_list.Where(wc => wc.Note == null).ToList();
                 ViewBag.NotStartedNotes = not_started_list.Count.ToString();
 
                 List<Workday_Client> notes_review_list = await _context.Workdays_Clients
                                                                  .Include(wc => wc.Messages)
                                                                  .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                                            && wc.Note.Status == NoteStatus.Pending)).ToListAsync();
+                                                                            && wc.Note.Status == NoteStatus.Pending
+                                                                            && wc.Workday.Service == ServiceType.PSR)).ToListAsync();
                 notes_review_list = notes_review_list.Where(wc => wc.Messages.Count() > 0).ToList();
                 ViewBag.NotesWithReview = notes_review_list.Count.ToString();
 
                 ViewBag.NotPresentNotes = _context.Workdays_Clients
                                                   .Include(wc => wc.Note)
                                                   .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                              && wc.Present == false)).ToString();
+                                                              && wc.Present == false
+                                                              && wc.Workday.Service == ServiceType.PSR)).ToString();
+                
+                //-----------------------------------------------------------------------------------------------------------------//
+                
+                ViewBag.ApprovedIndNotes = _context.Workdays_Clients
+                                                   .Include(wc => wc.Note)
+                                                   .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                              && wc.Note.Status == NoteStatus.Approved
+                                                              && wc.Workday.Service == ServiceType.Individual)).ToString();
+
+                ViewBag.PendingIndNotes = _context.Workdays_Clients
+                                                  .Include(wc => wc.Note)
+                                                  .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                              && wc.Note.Status == NoteStatus.Pending
+                                                              && wc.Workday.Service == ServiceType.Individual)).ToString();
+
+                ViewBag.InProgressIndNotes = _context.Workdays_Clients
+                                                     .Include(wc => wc.Note)
+                                                     .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                              && wc.Note.Status == NoteStatus.Edition
+                                                              && wc.Workday.Service == ServiceType.Individual)).ToString();
+
+                not_started_list = await _context.Workdays_Clients
+                                                 .Include(wc => wc.Note)
+                                                 .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                                      && wc.Present == true
+                                                                      && wc.Workday.Service == ServiceType.Individual)).ToListAsync();
+                not_started_list = not_started_list.Where(wc => wc.Note == null).ToList();
+                ViewBag.NotStartedIndNotes = not_started_list.Count.ToString();
+
+                notes_review_list = await _context.Workdays_Clients
+                                                  .Include(wc => wc.Messages)
+                                                  .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                                            && wc.Note.Status == NoteStatus.Pending
+                                                                            && wc.Workday.Service == ServiceType.Individual)).ToListAsync();
+                notes_review_list = notes_review_list.Where(wc => wc.Messages.Count() > 0).ToList();
+                ViewBag.IndNotesWithReview = notes_review_list.Count.ToString();
+
+                ViewBag.NotPresentIndNotes = _context.Workdays_Clients
+                                                     .Include(wc => wc.Note)
+                                                     .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                              && wc.Present == false
+                                                              && wc.Workday.Service == ServiceType.Individual)).ToString();
+
             }
             if (User.IsInRole("Supervisor"))
             {

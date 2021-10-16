@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.WeekViewModel
 @{
-    ViewData["Title"] = "Create Workdays";
+    ViewData["Title"] = "Create PSR Workdays";
 }
 
 <!DOCTYPE html>
@@ -13,49 +13,49 @@
 </head>
 <body>
 
-    <div class="breadcrumbs" id="breadcrumbs">
-        <ul class="breadcrumb">
-            <li>
-                <i class="icon-home"></i>
-                @Html.ActionLink("Workdays", "Index", "WorkDays")
-            </li>
-            <li class="active">Create</li>
-        </ul><!--.breadcrumb-->
-    </div>
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("PSR Workdays", "Index", "WorkDays")
+        </li>
+        <li class="active">Create PSR Workdays</li>
+    </ul><!--.breadcrumb-->
+</div>
 
-    <h4>Create new workdays</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-10">
-            <form asp-action="Create" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="col-md-5 form-group">
-                    <label asp-for="IdClinic" class="control-label"></label>
-                    <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control"></select>
-                    <span asp-validation-for="IdClinic" class="text-danger"></span>
-                </div>
-                <div class="col-md-5 form-group">
-                    <label class="control-label">Select workdays</label><br />
-                    <input type="text" asp-for="Workdays"
-                           class="form-control datepicker-here"
-                           data-language='en'
-                           data-multiple-dates="4"
-                           data-multiple-dates-separator="," 
-                           style="width:100%;"
-                           data-position="right top" />
-                </div>
-                <div class="col-md-10 form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                    <a asp-action="Index" class="btn btn-success">Back</a>
-                </div>
-            </form>
+<h4>Create new PSR workdays</h4>
+<hr />
+    
+<div class="row">
+    <form asp-action="Create" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-4 form-group">
+            <label asp-for="IdClinic" class="control-label"></label>&nbsp;*
+            <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control"></select>
+            <span asp-validation-for="IdClinic" class="text-danger"></span>
         </div>
-    </div>
-    @section Scripts {
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        <div class="col-md-5 form-group">
+            <label class="control-label">Select workdays</label>&nbsp;*<br />
+            <input type="text" asp-for="Workdays"
+                   class="form-control datepicker-here"
+                   data-language='en'
+                   data-multiple-dates="4"
+                   data-multiple-dates-separator=","
+                   style="width:100%;"
+                   data-position="right top" />
+        </div>
+        <div class="col-md-12 form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-success">Back</a>
+        </div>
+    </form>
+</div>
+    
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-        <script src="~/js/datepicker.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="~/js/datepicker.en.js" type="text/javascript" charset="utf-8"></script>        
-    }
+    <script src="~/js/datepicker.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="~/js/datepicker.en.js" type="text/javascript" charset="utf-8"></script>        
+}
 </body>
 </html>

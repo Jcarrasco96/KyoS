@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.WeekEntity>
 @{
-    ViewData["Title"] = "Workdays";
+    ViewData["Title"] = "PSR Workdays";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,12 +11,12 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Workdays</li>
+        <li class="active">PSR Workdays</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-calendar"></i> Create Workdays</a>
+    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create PSR Workdays</a>    
 </p>
 
 <div class="row">
@@ -36,7 +36,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Workdays</h3>
+                <h3 class="panel-title">PSR Workdays</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -56,13 +56,7 @@
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Final Date
-                            </th>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <th class="col-md-2">
-                                    Clinic
-                                </th>
-                            }
+                            </th>                            
                         </tr>
                     </thead>
                     <tbody>
@@ -70,14 +64,7 @@
                         {
                         <tr>
                             <td align="center">
-                                @if (item.Days.Count() != 0)
-                                {
-                                    <a class="icon-plus-sign-alt"></a>
-                                }
-                                else
-                                {
-
-                                }
+                                <a class="icon-plus-sign-alt"></a>                                
                                 <div style="display:none">
                                     <table class="table table-striped">
                                         <tr>
@@ -85,10 +72,9 @@
                                             <th class="col-md-7">Day</th>
                                             <th></th>
                                         </tr>
-                                        @foreach (var day in item.Days.OrderBy(d => d.Date))
+                                        @foreach (var day in item.Days.Where(d => d.Service == KyoS.Common.Enums.ServiceType.PSR).OrderBy(d => d.Date))
                                         {
                                             <tr>
-
                                                 <td>
                                                     @Html.DisplayFor(modelItem => day.Date)
                                                 </td>
@@ -96,12 +82,10 @@
                                                     @Html.DisplayFor(modelItem => day.Day)
                                                 </td>
                                                 <td align="right">
-                                                    @*<button data-id="@day.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>*@
                                                     <a asp-action="Delete" asp-route-id="@day.Id" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
                                                 </td>
                                             </tr>
                                         }
-
                                     </table>
                                 </div>
                             </td>
@@ -187,13 +171,7 @@
                             </td>
                             <td align="center">
                                 @Html.DisplayFor(modelItem => item.FinalDate)
-                            </td>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Clinic.Name)
-                                </td>
-                            }
+                            </td>                            
                         </tr>
                         }
                     </tbody>
@@ -213,7 +191,7 @@
         $(document).ready(function () {
             $('#MyTable').DataTable({
               "order": [[2, "asc"]],
-              "pageLength": 25
+              "pageLength": 50
             });
             
             // Delete item

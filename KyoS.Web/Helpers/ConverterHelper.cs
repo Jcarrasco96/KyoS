@@ -496,7 +496,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = model.Id,
                 Workday = model.Workday,
-                Client = model.Client,
+                Client = (model.Client != null) ? model.Client : null,
                 Facilitator = model.Facilitator,
                 Session = model.Session,
                 Present = model.Present,

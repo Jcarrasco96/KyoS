@@ -13,7 +13,14 @@
         <input type="hidden" asp-for="Origin" />
         <div>
             <div class="col-md-12">
-                <h4 style="font-weight:bold;"><span class="label label-info">@Model.Client.Name</span></h4>
+                @if (Model.Client == null)
+                {
+                    <h4 style="font-weight:bold;"><span class="label label-info">Individual Note</span></h4>
+                }
+                else
+                {
+                    <h4 style="font-weight:bold;"><span class="label label-info">@Model.Client.Name</span></h4>                
+                }                
                 <h5 style="font-weight:bold;">Facilitator: @Model.Facilitator.Name</h5>
                 <h5 style="font-weight:bold;">Date: @Model.Workday.Date.ToShortDateString()</h5>
                 <h5 style="font-weight:bold;">Session: @Model.Session</h5>
@@ -70,6 +77,14 @@
             @if (Model.Origin == 2) //viene de la pagina NotesInEdit de las notas
             {
                 <a asp-action="NotesInEdit" class="btn btn-success">Back</a>
+            }
+            @if (Model.Origin == 3) //viene de la pagina NotStartedIndNotes de las notas individuales
+            {
+                <a asp-action="NotStartedIndNotes" class="btn btn-success">Back</a>
+            }
+            @if (Model.Origin == 4) //viene de la pagina IndividualNotes de las notas individuales
+            {
+                <a asp-action="IndividualNotes" class="btn btn-success">Back</a>
             }
         </div>
     </form>
