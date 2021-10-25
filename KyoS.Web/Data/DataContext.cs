@@ -51,50 +51,82 @@ namespace KyoS.Web.Data
         public DbSet<IncidentEntity> Incidents { get; set; }
         public DbSet<HealthInsuranceEntity> HealthInsurances { get; set; }
         public DbSet<Client_HealthInsurance> Clients_HealthInsurances { get; set; }
+        public DbSet<IndividualNoteEntity> IndividualNotes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<ClinicEntity>()
-                .HasIndex(t => t.Name)
-                .IsUnique();
+                        .HasIndex(t => t.Name)
+                        .IsUnique();
 
             modelBuilder.Entity<FacilitatorEntity>()
-                .HasIndex(s => s.Name)
-                .IsUnique();
+                        .HasIndex(s => s.Name)
+                        .IsUnique();
 
             modelBuilder.Entity<SupervisorEntity>()
-                .HasIndex(s => s.Name)
-                .IsUnique();
+                        .HasIndex(s => s.Name)
+                        .IsUnique();
 
             //modelBuilder.Entity<ClientEntity>()
             //    .HasIndex(c => c.Name)
             //    .IsUnique();
 
             modelBuilder.Entity<GoalEntity>()
-                .HasOne(g => g.MTP).WithMany(m => m.Goals).OnDelete(DeleteBehavior.Cascade);
+                        .HasOne(g => g.MTP)
+                        .WithMany(m => m.Goals)
+                        .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<ObjetiveEntity>()
-                .HasOne(o => o.Goal).WithMany(g => g.Objetives).OnDelete(DeleteBehavior.Cascade);
+                        .HasOne(o => o.Goal)
+                        .WithMany(g => g.Objetives)
+                        .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Objetive_Classification>()
-                .HasOne(oc => oc.Objetive).WithMany(o => o.Classifications).OnDelete(DeleteBehavior.Cascade);
+                        .HasOne(oc => oc.Objetive)
+                        .WithMany(o => o.Classifications)
+                        .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<NotePrototype_Classification>()
-                .HasOne(nc => nc.Note).WithMany(n => n.Classifications).OnDelete(DeleteBehavior.Cascade);
+                        .HasOne(nc => nc.Note)
+                        .WithMany(n => n.Classifications)
+                        .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Plan_Classification>()
-                .HasOne(nc => nc.Plan).WithMany(n => n.Classifications).OnDelete(DeleteBehavior.Cascade);
+                        .HasOne(nc => nc.Plan)
+                        .WithMany(n => n.Classifications)
+                        .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<DocumentEntity>()
-                .HasOne(d => d.Client).WithMany(c => c.Documents).OnDelete(DeleteBehavior.Cascade);
+                        .HasOne(d => d.Client)
+                        .WithMany(c => c.Documents)
+                        .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Client_Diagnostic>()
-                .HasOne(cd => cd.Client).WithMany(c => c.Clients_Diagnostics).OnDelete(DeleteBehavior.Cascade);
+                        .HasOne(cd => cd.Client)
+                        .WithMany(c => c.Clients_Diagnostics)
+                        .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Workday_Client>()
-           .HasOne(wd => wd.Note)
-           .WithOne(n => n.Workday_Cient)
-           .HasForeignKey<NoteEntity>(n => n.Workday_Client_FK);
+                        .HasOne(wd => wd.Note)
+                        .WithOne(n => n.Workday_Cient)
+                        .HasForeignKey<NoteEntity>(n => n.Workday_Client_FK);
 
             modelBuilder.Entity<Workday_Client>()
-                .HasOne(wd => wd.Note).WithOne(n => n.Workday_Cient).OnDelete(DeleteBehavior.Cascade);
+                        .HasOne(wd => wd.Note)
+                        .WithOne(n => n.Workday_Cient)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Workday_Client>()
+                        .HasOne(wd => wd.IndividualNote)
+                        .WithOne(n => n.Workday_Cient)
+                        .HasForeignKey<IndividualNoteEntity>(i => i.Workday_Client_FK);
+
+            modelBuilder.Entity<Workday_Client>()
+                        .HasOne(wd => wd.IndividualNote)
+                        .WithOne(n => n.Workday_Cient)
+                        .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

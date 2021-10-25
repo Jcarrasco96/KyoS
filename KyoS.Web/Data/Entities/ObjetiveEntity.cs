@@ -38,5 +38,6 @@ namespace KyoS.Web.Data.Entities
         public GoalEntity Goal { get; set; }
 
         public IEnumerable<Objetive_Classification> Classifications { get; set; }
+        public IEnumerable<IndividualNoteEntity> IndividualNotes { get; set; }
     }
 }

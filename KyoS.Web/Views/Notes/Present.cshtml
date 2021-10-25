@@ -86,6 +86,10 @@
             {
                 <a asp-action="IndividualNotes" class="btn btn-success">Back</a>
             }
+            @if (Model.Origin == 5) //viene de la pagina IndNotesInEdit de las notas individuales
+            {
+                <a asp-action="IndNotesInEdit" class="btn btn-success">Back</a>
+            }
         </div>
     </form>
 </div>

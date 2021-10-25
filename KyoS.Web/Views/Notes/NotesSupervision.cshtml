@@ -62,7 +62,7 @@
                                             <th class="col-md-7">Day</th>
                                             <th></th>
                                         </tr>
-                                        @foreach (var day in item.Days.OrderBy(d => d.Date))
+                                        @foreach (var day in item.Days.Where(d => d.Service == KyoS.Common.Enums.ServiceType.PSR).OrderBy(d => d.Date))
                                         {
                                             <tr>
                                                 <td align="center">
@@ -231,7 +231,7 @@
         $(document).ready(function () {
             $('#MyTable').DataTable({
                                 "order": [[2, "asc"]],
-                                "pageLength": 25
+                                "pageLength": 100
                             });
 
             // Delete item

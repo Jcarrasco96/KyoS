@@ -150,7 +150,7 @@
                                 }
                                 else
                                 {
-                                    <p><a asp-controller="Notes" asp-action="NotesInEdit" class="btn btn-warning" role="button">Go</a></p>
+                                    <p><a asp-controller="Notes" asp-action="IndNotesInEdit" class="btn btn-warning" role="button">Go</a></p>
                                 }
                             </div>
                         </div>
@@ -166,7 +166,7 @@
                                 }
                                 else
                                 {
-                                    <p><a asp-controller="Notes" asp-action="PendingNotes" class="btn btn-primary" role="button">Go</a></p>
+                                    <p><a asp-controller="Notes" asp-action="PendingIndNotes" class="btn btn-primary" role="button">Go</a></p>
                                 }
                             </div>
                         </div>
@@ -182,7 +182,7 @@
                                 }
                                 else
                                 {
-                                    <p><a asp-controller="Notes" asp-action="NotesWithReview" class="btn btn-warning" role="button">Go</a></p>
+                                    <p><a asp-controller="Notes" asp-action="IndNotesWithReview" class="btn btn-warning" role="button">Go</a></p>
                                 }
                             </div>
                         </div>
@@ -198,7 +198,7 @@
                                 }
                                 else
                                 {
-                                    <p><a asp-controller="Notes" asp-action="ApprovedNotes" class="btn btn-success" role="button">Go</a></p>
+                                    <p><a asp-controller="Notes" asp-action="ApprovedIndNotes" class="btn btn-success" role="button">Go</a></p>
                                 }
                             </div>
                         </div>
@@ -214,7 +214,7 @@
                                 }
                                 else
                                 {
-                                    <p><a asp-controller="Notes" asp-action="NotPresentNotes" class="btn btn-default" role="button">Go</a></p>
+                                    <p><a asp-controller="Notes" asp-action="NotPresentIndNotes" class="btn btn-default" role="button">Go</a></p>
                                 }
                             </div>
                         </div>
@@ -222,9 +222,6 @@
                 }
                 @if (User.IsInRole("Supervisor"))
                 {
-                    <div class="col-md-2">
-                        &nbsp;
-                    </div>
                     <div class="col-sm-3 col-md-2">
                         <div class="thumbnail list-group-item list-group-item-danger">
                             <div class="caption">
@@ -260,7 +257,7 @@
                     <div class="col-sm-3 col-md-2">
                         <div class="thumbnail list-group-item list-group-item-info">
                             <div class="caption">
-                                <h4 style="align-content:end;">Pending <br>Notes</h4>
+                                <h4 style="align-content:end;">Pending <br>PSR Notes</h4>
                                 <h3 style="text-align:right">@ViewBag.PendingNotes</h3>
                                 @if (ViewBag.PendingNotes == "0")
                                 {
@@ -274,9 +271,25 @@
                         </div>
                     </div>
                     <div class="col-sm-3 col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <div class="caption">
+                                <h4 style="align-content:end;">Pending <br>Ind. Notes</h4>
+                                <h3 style="text-align:right">@ViewBag.PendingIndNotes</h3>
+                                @if (ViewBag.PendingIndNotes == "0")
+                                {
+                                    <p><a class="btn btn-info disabled">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="Notes" asp-action="PendingIndNotes" class="btn btn-info">Go</a></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-2">
                         <div class="thumbnail list-group-item list-group-item-warning">
                             <div class="caption">
-                                <h4>Notes <br>with review</h4>
+                                <h4>PSR Notes <br>with review</h4>
                                 <h3 style="text-align:right">@ViewBag.NotesWithReview</h3>
                                 @if (ViewBag.NotesWithReview == "0")
                                 {
@@ -289,8 +302,21 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        &nbsp;
+                    <div class="col-sm-3 col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-warning">
+                            <div class="caption">
+                                <h4>Ind. Notes <br>with review</h4>
+                                <h3 style="text-align:right">@ViewBag.IndNotesWithReview</h3>
+                                @if (ViewBag.IndNotesWithReview == "0")
+                                {
+                                    <p><a href="#" class="btn btn-warning disabled" role="button">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="Notes" asp-action="IndNotesWithReview" class="btn btn-warning" role="button">Go</a></p>
+                                }
+                            </div>
+                        </div>
                     </div>
                 }
                 @if (User.IsInRole("Mannager"))

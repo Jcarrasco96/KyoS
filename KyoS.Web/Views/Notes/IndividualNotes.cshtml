@@ -108,7 +108,7 @@
                                                                                 @Html.DisplayFor(modelItem => day_client.Present)
                                                                             </td>
                                                                             <td align="center">
-                                                                                @if (day_client.Note == null)
+                                                                                @if (day_client.IndividualNote == null)
                                                                                 {
                                                                                     <span class="label label-danger">
                                                                                         Not Started
@@ -116,7 +116,7 @@
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    if (day_client.Note.Status.ToString() == "Edition")
+                                                                                    if (day_client.IndividualNote.Status.ToString() == "Edition")
                                                                                     {
                                                                                         <span class="label label-default">
                                                                                             Edition
@@ -124,7 +124,7 @@
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        if (day_client.Note.Status.ToString() == "Pending")
+                                                                                        if (day_client.IndividualNote.Status.ToString() == "Pending")
                                                                                         {
                                                                                             <span class="label label-info">
                                                                                                 Pending
@@ -132,7 +132,7 @@
                                                                                         }
                                                                                         else
                                                                                         {
-                                                                                            if (day_client.Note.Status.ToString() == "Approved")
+                                                                                            if (day_client.IndividualNote.Status.ToString() == "Approved")
                                                                                             {
                                                                                                 <span class="label label-success">
                                                                                                     Approved
@@ -143,27 +143,27 @@
                                                                                 }
                                                                             </td>
                                                                             <td align="right">
-                                                                                @if (day_client.Note == null)
+                                                                                @if (day_client.IndividualNote == null)
                                                                                 {
-                                                                                    <a asp-action="EditNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
+                                                                                    <a asp-action="EditIndNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
                                                                                     <a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-danger" title="Present or not present" asp-route-origin ="4"><i class="glyphicon glyphicon-remove"></i></a>
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    if (day_client.Note.Status.ToString() == "Edition")
+                                                                                    if (day_client.IndividualNote.Status.ToString() == "Edition")
                                                                                     {
-                                                                                        <a asp-action="EditNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
+                                                                                        <a asp-action="EditIndNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
                                                                                         <a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-danger" title="Present or not present" asp-route-origin ="4"><i class="glyphicon glyphicon-remove"></i></a>
-                                                                                        <a asp-action="FinishEditing" class="btn btn-success" asp-route-id="@day_client.Id" title="Finish edition of note"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                                        <a asp-action="FinishEditingIN" class="btn btn-success" asp-route-id="@day_client.Id" title="Finish edition of note"><i class="glyphicon glyphicon-ok"></i></a>
                                                                                     }
                                                                                     else
-                                                                                        if (day_client.Note.Status.ToString() == "Pending")
+                                                                                        if (day_client.IndividualNote.Status.ToString() == "Pending")
                                                                                     {
-                                                                                        <a asp-action="EditNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
+                                                                                        <a asp-action="EditIndNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        if (day_client.Note.Status.ToString() == "Approved")
+                                                                                        if (day_client.IndividualNote.Status.ToString() == "Approved")
                                                                                         {
                                                                                             <a asp-action="ApproveNote" asp-route-id="@day_client.Id" class="btn btn-primary" title="View of note"><i class="glyphicon glyphicon-file"></i></a>
                                                                                             <a asp-action="PrintNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
@@ -186,7 +186,7 @@
                                                                                 @Html.DisplayFor(modelItem => day_client.Present)
                                                                             </td>
                                                                             <td align="center">
-                                                                                @if (day_client.Note == null)
+                                                                                @if (day_client.IndividualNote == null)
                                                                                 {
                                                                                     <span class="label label-danger">
                                                                                         Not Started
@@ -194,7 +194,7 @@
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    if (day_client.Note.Status.ToString() == "Edition")
+                                                                                    if (day_client.IndividualNote.Status.ToString() == "Edition")
                                                                                     {
                                                                                         <span class="label label-default">
                                                                                             Edition
@@ -202,7 +202,7 @@
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        if (day_client.Note.Status.ToString() == "Pending")
+                                                                                        if (day_client.IndividualNote.Status.ToString() == "Pending")
                                                                                         {
                                                                                             <span class="label label-info">
                                                                                                 Pending
@@ -210,7 +210,7 @@
                                                                                         }
                                                                                         else
                                                                                         {
-                                                                                            if (day_client.Note.Status.ToString() == "Approved")
+                                                                                            if (day_client.IndividualNote.Status.ToString() == "Approved")
                                                                                             {
                                                                                                 <span class="label label-success">
                                                                                                     Approved
@@ -221,7 +221,7 @@
                                                                                 }
                                                                             </td>
                                                                             <td align="right">
-                                                                                <a asp-action="EditNote" asp-route-id="@day_client.Id" class="btn btn-warning disabled"><i class="glyphicon glyphicon-file"></i></a>
+                                                                                <a asp-action="EditIndNote" asp-route-id="@day_client.Id" class="btn btn-warning disabled"><i class="glyphicon glyphicon-file"></i></a>
                                                                                 <a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-primary" title="Present or not present" asp-route-origin ="4"><i class="glyphicon glyphicon-ok"></i></a>
                                                                             </td>
                                                                         </tr>

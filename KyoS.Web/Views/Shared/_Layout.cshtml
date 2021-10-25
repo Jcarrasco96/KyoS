@@ -155,8 +155,9 @@
                                 Notes <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Approve notes", "NotesSupervision", "Notes")</li>
-                            </ul>
+                                <li>@Html.ActionLink("Approve PSR notes", "NotesSupervision", "Notes")</li>
+                                <li>@Html.ActionLink("Approve Individual notes", "IndNotesSupervision", "Notes")</li>
+                            </ul>                            
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }

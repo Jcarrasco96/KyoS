@@ -94,7 +94,7 @@ namespace KyoS.Web.Controllers
             if (!User.IsInRole("Admin"))
             {
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic != null)
                 {
                     List<SelectListItem> list = _context.Clients.Where(c => c.Id == idClient).Select(c => new SelectListItem

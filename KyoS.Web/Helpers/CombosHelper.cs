@@ -204,6 +204,25 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboActiveClientsByClinic(int idClinic)
+        {
+            List<SelectListItem> list = _context.Clients.Where(c => (c.Clinic.Id == idClinic 
+                                                                    && c.MTPs.Where(m => m.Active == true).Count() > 0 && c.Status == StatusType.Open))
+                                                        .Select(c => new SelectListItem
+                                                         {
+                                                             Text = $"{c.Name}",
+                                                             Value = $"{c.Id}"
+                                                         }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select client...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
         public IEnumerable<SelectListItem> GetComboActivities()
         {
             List<SelectListItem> list = _context.Activities.Select(a => new SelectListItem
@@ -720,6 +739,6 @@ namespace KyoS.Web.Helpers
                                   new SelectListItem { Text = IncidentsStatus.NotValid.ToString(), Value = "2"}};
             
             return list;
-        }
+        }        
     }
 }

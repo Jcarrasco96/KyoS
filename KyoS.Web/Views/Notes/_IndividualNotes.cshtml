@@ -1,0 +1,111 @@
+﻿@model KyoS.Web.Models.IndividualNoteViewModel
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="IdGoal1" class="control-label"></label>
+        <select asp-for="IdGoal1" asp-items="Model.Goals1" class="form-control" id="cbGoal1"></select>
+        <span asp-validation-for="IdGoal1" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="IdObjetive1" class="control-label"></label>
+        <select asp-for="IdObjetive1" asp-items="Model.Objetives1" class="form-control" id="cbObjetive1"></select>
+        <span asp-validation-for="IdObjetive1" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-8">
+        <label class="control-label">Intervention</label>
+        <br />       
+        @if (Model.Intervention1 == null)
+        {
+            <label id="lbIntervention1" style="font-weight:normal;">Select goal and objective</label>
+        }
+        else
+        {
+            <label id="lbIntervention1" style="font-weight:normal">@Model.Intervention1</label>
+        }            
+    </div>
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <label asp-for="SubjectiveData" class="control-label"></label>&nbsp;*
+        <textarea asp-for="SubjectiveData" class="form-control" rows="4" id="subjectiveData"></textarea>
+        <span asp-validation-for="SubjectiveData" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="ObjectiveData" class="control-label"></label>&nbsp;*
+        <textarea asp-for="ObjectiveData" class="form-control" rows="4" id="objectiveData"></textarea>
+        <span asp-validation-for="ObjectiveData" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <a class="btn btn-info" id="EnglishSubjectiveData">English</a>
+    </div>
+    <div class="form-group col-md-6">
+        <a class="btn btn-info" id="EnglishObjectiveData">English</a>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <label asp-for="Assessment" class="control-label"></label>&nbsp;*
+        <textarea asp-for="Assessment" class="form-control" rows="2" id="assessment"></textarea>
+        <span asp-validation-for="Assessment" class="text-danger"></span>
+    </div>   
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <a class="btn btn-info" id="EnglishAssessment">English</a>
+    </div>    
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <label asp-for="PlanNote" class="control-label"></label>&nbsp;*
+        <textarea asp-for="PlanNote" class="form-control" rows="3" id="PlanNote"></textarea>
+        <span asp-validation-for="PlanNote" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <a class="btn btn-info" id="EnglishPlanNote">English</a>
+    </div>
+</div>
+ @*si se va a crear la nota doy la posibilidad de seleccionar el avance del plan para que despues se agregue al futuro plan*@
+@if (@Model.Workday_Cient.IndividualNote == null)
+{
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <label style="font-weight: bold;">Update of progress toward meeting goals and objectives on treatment plan (check only one)</label>
+            <br />
+            <input type="radio" name="Progress" value="Exceptional" />
+            Exceptional
+            &nbsp;&nbsp;
+            <input type="radio" name="Progress" value="Steady" />
+            Steady
+            &nbsp;&nbsp;
+            <input type="radio" name="Progress" value="Slow" checked="checked" />
+            Slow
+            &nbsp;&nbsp;
+            <input type="radio" name="Progress" value="Regressing" />
+            Regressing
+            &nbsp;&nbsp;
+            <input type="radio" name="Progress" value="Stable" />
+            Stable
+            &nbsp;&nbsp;
+            <input type="radio" name="Progress" value="Maintain" />
+            Maintain
+        </div>
+    </div>
+}
+<div class="col-md-12">
+    <hr />
+</div>
+
+
+
+
+
+

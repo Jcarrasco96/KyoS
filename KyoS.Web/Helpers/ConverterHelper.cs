@@ -479,6 +479,56 @@ namespace KyoS.Web.Helpers
             };
         }
 
+        public async Task<IndividualNoteEntity> ToIndividualNoteEntity(IndividualNoteViewModel model, bool isNew)
+        {
+            IndividualNoteEntity entity = await _context.IndividualNotes.FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
+            return new IndividualNoteEntity
+            {
+                Id = isNew ? 0 : entity.Id,
+                Workday_Cient = await _context.Workdays_Clients.FindAsync(model.Id),
+                PlanNote = model.PlanNote,
+                Status = NoteStatus.Edition,
+                SubjectiveData = model.SubjectiveData,
+                ObjectiveData = model.ObjectiveData,
+                Assessment = model.Assessment,
+                Objective = (model.IdObjetive1 != 0) ? await _context.Objetives.FirstOrDefaultAsync(o => o.Id == model.IdObjetive1) : null,
+                Groomed = model.Groomed,
+                Unkempt = model.Unkempt,
+                Disheveled = model.Disheveled,
+                Meticulous = model.Meticulous,
+                Overbuild = model.Overbuild,
+                Other = model.Other,
+                Clear = model.Clear,
+                Pressured = model.Pressured,
+                Slurred = model.Slurred,
+                Slow = model.Slow,
+                Impaired = model.Impaired,
+                Poverty = model.Poverty,
+                Euthymic = model.Euthymic,
+                Depressed = model.Depressed,
+                Anxious = model.Anxious,
+                Fearful = model.Fearful,
+                Irritable = model.Irritable,
+                Labile = model.Labile,
+                WNL = model.WNL,
+                Guarded = model.Guarded,
+                Withdrawn = model.Withdrawn,
+                Hostile = model.Hostile,
+                Restless = model.Restless,
+                Impulsive = model.Impulsive,
+                WNL_Cognition = model.WNL_Cognition,
+                Blocked = model.Blocked,
+                Obsessive = model.Obsessive,
+                Paranoid = model.Paranoid,
+                Scattered = model.Scattered,
+                Psychotic = model.Psychotic,           
+                CBT = model.CBT,
+                Psychodynamic = model.Psychodynamic,
+                BehaviorModification = model.BehaviorModification,
+                Other_Intervention = model.Other_Intervention
+            };
+        }
+
         public NoteViewModel ToNoteViewModel(NoteEntity model)
         {
             return new NoteViewModel
@@ -500,7 +550,8 @@ namespace KyoS.Web.Helpers
                 Facilitator = model.Facilitator,
                 Session = model.Session,
                 Present = model.Present,
-                Note = model.Note
+                Note = model.Note,
+                IndividualNote = model.IndividualNote
             };
         }
 
@@ -790,6 +841,6 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
             };
-        }
+        }        
     }
 }

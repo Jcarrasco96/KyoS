@@ -1,0 +1,188 @@
+﻿@model KyoS.Web.Models.IndividualNoteViewModel
+@{
+    ViewData["Title"] = "Individual note management";
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Individual Notes", "IndividualNotes", "Notes")
+        </li>
+        <li class="active">Individual Note</li>
+    </ul>
+</div>
+
+<h4>Individual Note Management</h4>
+
+<div class="row">
+    <div>
+        <div class="col-md-12">
+            @if (ViewBag.Error == "0")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. The note must have at least one related goal.
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.Error == "2")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. The note has fields mandatory.
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.Error == "3")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. The client have not active MTP.
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.Error == "4")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. There are gender issues in: @ViewBag.errorText
+                    </strong>
+                </div>
+            }
+        </div>
+        @if ((ViewBag.Error != "1") && (ViewBag.Error != "3"))  //se puede crear o editar la nota
+        {
+        <form asp-action="EditIndNote" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Origin" />
+        <partial name="_IndividualMCS" />
+        <partial name="_IndividualNotes" />
+        <div class="form-group col-md-12">
+            <input type="submit" value="Save All" class="btn btn-primary" />
+            @if (Model.Origin == 0) //viene de la pagina IndividualNotes de las notas individuales
+            {
+                <a asp-action="IndividualNotes" class="btn btn-success">Back</a>
+            }
+            @if (Model.Origin == 1) //viene de la pagina NotStartedIndNotes de las notas individuales
+            {
+                <a asp-action="NotStartedIndNotes" class="btn btn-success">Back</a>
+            }
+            @if (Model.Origin == 2) //viene de la pagina NotesInEdit de las notas
+            {
+                <a asp-action="IndNotesInEdit" class="btn btn-success">Back</a>
+            }
+            @if (Model.Origin == 3) //viene de la pagina PendingIndNotes de las notas
+            {
+                <a asp-action="PendingIndNotes" class="btn btn-success">Back</a>
+            }
+            @if (Model.Origin == 4) //viene de la pagina NotesWithReview de las notas
+            {
+                <a asp-action="IndNotesWithReview" class="btn btn-success">Back</a>
+            }
+
+            @if (Model.Status.ToString() == "Edition")
+            {
+                @if (Model.Origin == 0) //viene de la pagina IndividualNotes de las notas
+                {
+                    <a asp-action="FinishEditingIN" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="0" title="Finish edition of note">Finish Editing</a>
+                }
+                @if (Model.Origin == 2) //viene de la pagina IndNotesInEdit de las notas
+                {
+                    <a asp-action="FinishEditingIN" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="2" title="Finish edition of note">Finish Editing</a>
+                }
+            }
+        </div>
+    </form>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+            $("#cbClient").change(function () {
+                var url = "@Url.Action("GetGoalsList", "Notes")";
+                $.get(url, { idClient: $("#cbClient").val() }, function (data) {
+                    $("#cbGoal1").empty();
+                    $.each(data, function (index, row) {
+                        $("#cbGoal1").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                    }); 
+
+                    //actualizo el combobox y el label con la intervention que corresponde al obj seleccionado
+                    $("#cbObjetive1").empty();
+                    $("#cbObjetive1").append("<option value=0>[First select goal...]</option>")
+
+                    $("#lbIntervention1").text('Select goal and objective');
+                });
+            })      
+            $("#cbGoal1").change(function () {
+                var url = "@Url.Action("GetObjetiveList", "Notes")";
+                $.get(url, { idGoal: $("#cbGoal1").val() }, function (data) {
+                    $("#cbObjetive1").empty();
+                    $.each(data, function (index, row) {
+                        $("#cbObjetive1").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                    });
+
+                    //actualizo el label con la intervention que corresponde al obj seleccionado
+                    url = "@Url.Action("GetIntervention", "Notes")";
+                    $.get(url, { idObjetive: $("#cbObjetive1").val() }, function (data) {
+                        $("#lbIntervention1").text(data);
+                    });
+                });
+            })        
+            $("#cbObjetive1").change(function () {
+                var url = "@Url.Action("GetIntervention", "Notes")";
+                $.get(url, { idObjetive: $("#cbObjetive1").val() }, function (data) {
+                    $("#lbIntervention1").text(data);
+                });
+            })            
+            $("#EnglishSubjectiveData").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#subjectiveData").val() }, function (data) {
+                    $("#subjectiveData").val(data);
+                });
+            })         
+            $("#EnglishObjectiveData").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#objectiveData").val() }, function (data) {
+                    $("#objectiveData").val(data);
+                });
+            }) 
+            $("#EnglishAssessment").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#assessment").val() }, function (data) {
+                    $("#assessment").val(data);
+                });
+            }) 
+            $("#EnglishPlanNote").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#PlanNote").val() }, function (data) {
+                    $("#PlanNote").val(data);                    
+                });
+            })
+        });
+    </script>
+}
+
+
+

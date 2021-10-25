@@ -33,6 +33,7 @@ namespace KyoS.Web.Helpers
         Task<PlanEntity> ToPlanEntity(PlanViewModel model, bool isNew);
         PlanViewModel ToPlanViewModel(PlanEntity model);
         Task<NoteEntity> ToNoteEntity(NoteViewModel model, bool isNew);
+        Task<IndividualNoteEntity> ToIndividualNoteEntity(IndividualNoteViewModel model, bool isNew);
         NoteViewModel ToNoteViewModel(NoteEntity model);
         Workday_ClientViewModel ToWorkdayClientViewModel(Workday_Client model);
         Task<MessageEntity> ToMessageEntity(MessageViewModel model, bool isNew);

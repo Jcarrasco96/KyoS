@@ -14,6 +14,7 @@ namespace KyoS.Web.Data.Entities
         public string Session{ get; set; }
         public bool Present { get; set; }
         public NoteEntity Note { get; set; }
+        public IndividualNoteEntity IndividualNote { get; set; }
         public IEnumerable<MessageEntity> Messages { get; set; }
         public string CauseOfNotPresent { get; set; }
         public string ClientName 

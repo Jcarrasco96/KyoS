@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="09/27/2021 13:18:26" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="10/20/2021 13:31:06" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3AVwItRsc2HRJ68w8UGuPsw==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3SHMEXqXkjtb+pX1No1FNJw==">
       <TableDataSource Name="Themes1" Alias="Themes2" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -19,7 +19,7 @@
         <Column Name="SupervisorId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3Xi4uy2QUGeQzaNNIluTG4Q==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3uG1gUY8obPYZK7/0k+bPiA==">
       <TableDataSource Name="Themes2" Alias="Themes3" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -37,7 +37,7 @@
         <Column Name="SupervisorId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3O1ayZeq620BZYTsgAT5Aiw==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3jB2byW9P+SE34KH6M2VBxQ==">
       <TableDataSource Name="Notes" DataType="System.Int32" Enabled="true" TableName="Notes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="PlanNote" DataType="System.String"/>
@@ -183,7 +183,7 @@
         <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Column"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <Parameter Name="date" DataType="System.String"/>
+    <Parameter Name="datenote" DataType="System.String"/>
     <Parameter Name="num_of_goal" DataType="System.String"/>
     <Parameter Name="num_of_obj" DataType="System.String"/>
     <Parameter Name="goal_text" DataType="System.String"/>
@@ -202,7 +202,7 @@
         <TableColumn Name="Column3" Width="189"/>
         <TableRow Name="Row1">
           <TableCell Name="Cell1" Border.Lines="All" Text="SERVICE DAY/DATE:" HorzAlign="Right" Font="Times New Roman, 10pt, style=Bold"/>
-          <TableCell Name="Cell2" Border.Lines="All" Text="[date]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" ColSpan="2"/>
+          <TableCell Name="Cell2" Border.Lines="All" Text="[datenote]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" ColSpan="2"/>
           <TableCell Name="Cell14" Border.Lines="All" Font="Arial, 10pt"/>
           <TableCell Name="Cell3" Border.Lines="All" Text="Code H2017" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
         </TableRow>
@@ -371,7 +371,7 @@
       <TextObject Name="Text55" Left="513.95" Top="26.45" Width="255.15" Height="18.9" Text="[Facilitators.Name] , [Facilitators.Codigo]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
       <TextObject Name="Text56" Left="513.95" Top="69.7" Width="255.15" Height="18.9" Text="[Supervisors.Name] , [Supervisors.Code]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
       <PictureObject Name="Picture2" Left="62.35" Top="1.45" Width="95" Height="54" DataColumn="Signatures.facilitatorSignature"/>
-      <PictureObject Name="Picture3" Left="61.7" Top="49.35" Width="92.61" Height="57.46" DataColumn="Signatures.supervisorSignature" SizeMode="AutoSize"/>
+      <PictureObject Name="Picture3" Left="61.7" Top="49.35" Width="92.61" Height="57.46" DataColumn="Signatures.supervisorSignature"/>
     </PageFooterBand>
   </ReportPage>
 </Report>

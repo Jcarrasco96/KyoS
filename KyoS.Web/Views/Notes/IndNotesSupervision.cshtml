@@ -1,0 +1,263 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.WeekEntity>
+@{
+    ViewData["Title"] = "Supervision of individual notes";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Individual Notes Supervision</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Individual notes pending</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1">
+
+                            </th>
+                            <th class="col-md-2">
+
+                            </th>
+                            <th class="col-md-2">
+
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Init Date
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Final Date
+                            </th>
+                            <th class="col-md-3">
+                                Clinic
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderBy(w => w.WeekOfYear))
+                        {
+                            <tr>
+                                <td align="center">
+                                    @if (item.Days.Where(w => w.Workdays_Clients.Where(wc => (wc.IndividualNote != null && wc.IndividualNote.Status.ToString() == "Pending")).Count() != 0).Count() != 0)
+                                    {
+                                        <a class="icon-plus-sign-alt"></a>
+                                    }
+                                    <div style="display:none">
+                                        <table class="table table-striped">
+                                            <tr>
+                                                <th class="col-md-1"></th>
+                                                <th class="col-md-3">Date</th>
+                                                <th class="col-md-7">Day</th>
+                                                <th></th>
+                                            </tr>
+                                            @foreach (var day in item.Days.Where(d => d.Service == KyoS.Common.Enums.ServiceType.Individual).OrderBy(d => d.Date))
+                                            {
+                                                <tr>
+                                                    <td align="center">
+                                                        @if (day.Workdays_Clients.Where(wc => (wc.IndividualNote != null && wc.IndividualNote.Status.ToString() == "Pending")).Count() != 0)
+                                                        {
+                                                            <a class="icon-plus-sign-alt"></a>
+                                                            @*<a class="glyphicon glyphicon-plus"></a>*@
+                                                        }
+                                                        <div style="display:none">
+                                                            <table class="table table-striped">
+                                                                <tr>
+                                                                    <th class="col-md-2" style="text-align:Left;">Session</th>
+                                                                    <th class="col-md-4">Name</th>
+                                                                    <th class="col-md-2" style="text-align:center;">Facilitator</th>
+                                                                    <th class="col-md-2" style="text-align:center;">Note Status</th>
+                                                                    <th class="col-md-2"></th>
+                                                                    <th></th>
+                                                                </tr>
+                                                                @foreach (var day_client in day.Workdays_Clients)
+                                                                {
+                                                                    @if (day_client.IndividualNote != null)
+                                                                    {
+                                                                        @if (day_client.IndividualNote.Status.ToString() == "Pending")
+                                                                        {
+                                                                            <tr>
+                                                                                <td align="left">
+                                                                                    @Html.DisplayFor(modelItem => day_client.Session)
+                                                                                </td>
+                                                                                <td>
+                                                                                    @Html.DisplayFor(modelItem => day_client.Client.Name)
+                                                                                </td>
+                                                                                <td align="center">
+                                                                                    @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
+                                                                                </td>
+                                                                                <td align="center">
+                                                                                    <span class="label label-info">
+                                                                                        Pending
+                                                                                    </span>
+                                                                                </td>
+                                                                                <td align="right">
+                                                                                    <a asp-action="ApproveIndNote" asp-route-id="@day_client.Id" asp-route-origin ="1" class="btn btn-primary" title="Approve Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </table>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => day.Date)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => day.Day)
+                                                    </td>
+                                                    <td align="right">
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                        </table>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if (item.MonthYear.Contains("January"))
+                                    {
+                                        <span class="label label-default">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("February"))
+                                    {
+                                        <span class="label label-info">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("March"))
+                                    {
+                                        <span class="label label-primary">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("April"))
+                                    {
+                                        <span class="label label-warning">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("May"))
+                                    {
+                                        <span class="label label-success">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("June"))
+                                    {
+                                        <span class="label label-default">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("July"))
+                                    {
+                                        <span class="label label-info">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("August"))
+                                    {
+                                        <span class="label label-primary">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("September"))
+                                    {
+                                        <span class="label label-warning">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("October"))
+                                    {
+                                        <span class="label label-success">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("November"))
+                                    {
+                                        <span class="label label-default">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("December"))
+                                    {
+                                        <span class="label label-info">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Alias)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.InitDate)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.FinalDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Clinic.Name)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                                "order": [[2, "asc"]],
+                                "pageLength": 100
+                            });
+
+            // Delete item
+            var item_to_delete;
+
+            $('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                window.location.href = '/WorkDays/Delete/' + item_to_delete;
+            });
+        });
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+
+    </script>
+}

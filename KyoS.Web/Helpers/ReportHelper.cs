@@ -1811,7 +1811,7 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
 
-            WebReport.Report.SetParameterValue("date", date);
+            WebReport.Report.SetParameterValue("datenote", date);
             WebReport.Report.SetParameterValue("dateFacilitator", dateFacilitator);
             WebReport.Report.SetParameterValue("dateSupervisor", dateSupervisor);
             WebReport.Report.SetParameterValue("num_of_goal", num_of_goal);

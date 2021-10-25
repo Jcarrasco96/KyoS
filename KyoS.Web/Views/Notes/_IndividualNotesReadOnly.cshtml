@@ -1,0 +1,55 @@
+﻿@model KyoS.Web.Models.IndividualNoteViewModel
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">        
+        <label asp-for="IdGoal1" class="control-label"></label>
+        <input asp-for="Goal1" class="form-control" readonly />
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="IdObjetive1" class="control-label"></label>
+        <input asp-for="Objetive1" class="form-control" readonly />
+    </div>
+    <div class="form-group col-md-8">
+        <label class="control-label">Intervention</label>
+        <br />        
+        <label style="font-weight:normal">@Model.Intervention1</label>                   
+    </div>
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <label asp-for="SubjectiveData" class="control-label"></label>&nbsp;*
+        <textarea asp-for="SubjectiveData" class="form-control" rows="4" disabled></textarea>        
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="ObjectiveData" class="control-label"></label>&nbsp;*
+        <textarea asp-for="ObjectiveData" class="form-control" rows="4" disabled></textarea>
+        
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <label asp-for="Assessment" class="control-label"></label>&nbsp;*
+        <textarea asp-for="Assessment" class="form-control" rows="2" disabled></textarea>        
+    </div>   
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <label asp-for="PlanNote" class="control-label"></label>&nbsp;*
+        <textarea asp-for="PlanNote" class="form-control" rows="3" disabled></textarea>
+        
+    </div>
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+
+
+
+
+
+

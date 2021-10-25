@@ -1,0 +1,186 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.Workday_Client>
+@{
+    ViewData["Title"] = "Individual Notes with review";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Individual Notes with review</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Individual Notes with review</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1"></th>
+                            <th class="col-md-1" style="text-align:center;">Date</th>
+                            <th class="col-md-2" style="text-align:center;">Session</th>
+                            <th class="col-md-3">Name</th>
+                            <th class="col-md-1" style="text-align:center;">Status</th>
+                            <th class="col-md-1" style="text-align:center;">Review</th>
+                            <th class="col-md-2">Facilitator</th>
+                            <th class="col-md-1"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var day_client in Model.OrderBy(dc => dc.Workday.Date).OrderBy(dc => dc.Session))
+                        {
+                            <tr>
+                                <td align="center">
+                                    @if (day_client.Messages.Count() != 0)
+                                    {
+                                        <a class="icon-plus-sign-alt"></a>
+                                    }
+                                    <div style="display:none">
+                                        <table class="table table-striped">
+                                            <tr>
+                                                <th class="col-md-2"></th>
+                                                <th class="col-md-3">Title</th>
+                                                <th class="col-md-7" style="text-align:center;">Text</th>                                                
+                                                <th></th>
+                                            </tr>
+                                            @foreach (var message in day_client.Messages.OrderBy(m => m.DateCreated))
+                                            {
+
+                                                @if (message.Status.ToString() == "NotRead")
+                                                {
+                                                    <tr style="color:mediumblue;">
+                                                        <td>
+                                                            <i class="glyphicon glyphicon-thumbs-down"></i> Not processed
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Title)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Text)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                @if (message.Status.ToString() == "Read")
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <i class="glyphicon glyphicon-thumbs-up"></i> Processed
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Title)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Text)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </table>
+                                    </div>
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => day_client.Workday.Date)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => day_client.Session)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => day_client.Client.Name)
+                                </td>
+                                <td align="center">
+                                    <span class="label label-info">
+                                        Pending
+                                    </span>
+                                </td>
+                                <td align="center">
+                                    @if (day_client.Messages.Count() == 0)
+                                    {
+                                        <span>
+                                            -
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        bool read = false;
+                                        @foreach (var message in day_client.Messages.OrderBy(m => m.DateCreated))
+                                        {
+                                            @if (message.Status.ToString() == "NotRead")
+                                            {
+                                                read = false;
+                                                break;
+                                            }
+                                            @if (message.Status.ToString() == "Read")
+                                            {
+                                                read = true;
+                                            }
+                                        }
+
+                                        if (read)
+                                        {
+                                            <i class="glyphicon glyphicon-thumbs-up"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="glyphicon glyphicon-thumbs-down"></i>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
+                                </td>
+                                <td align="right">
+                                    @if (User.IsInRole("Facilitator"))
+                                    {
+                                        <a asp-action="EditIndNote" asp-route-id="@day_client.Id" asp-route-origin="4" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
+                                    }
+                                    @if (User.IsInRole("Supervisor"))
+                                    {
+                                        <a asp-action="ApproveIndNote" asp-route-id="@day_client.Id" asp-route-origin="6" class="btn btn-primary" title="Approve Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                    }
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+              "order": [[1, "asc"]],
+              "pageLength": 100
+            });
+        });
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+    </script>
+}
+

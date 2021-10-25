@@ -1,0 +1,77 @@
+﻿@model KyoS.Web.Models.IndividualNoteViewModel
+@{
+    if (User.IsInRole("Facilitator"))
+    {
+        ViewData["Title"] = "Preview individual note";
+    }
+    if (User.IsInRole("Supervisor"))
+    {
+        ViewData["Title"] = "Approve individual note";
+    }
+}
+
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Individual Notes Supervision", "IndNotesSupervision", "Notes")
+        </li>
+        <li class="active">Approve individual note</li>
+    </ul>
+</div>
+
+@if (User.IsInRole("Facilitator"))
+{
+    <h4>Preview individual note</h4>
+}
+@if (User.IsInRole("Supervisor"))
+{
+    <h4>Approve individual note</h4>
+}
+
+<div class="row">
+    <div>
+        <form asp-action="ApproveIndNote" enctype="multipart/form-data">            
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Origin" />
+            <partial name="_IndividualMCSReadOnly" />
+            <partial name="_IndividualNotesReadOnly" />            
+            <div class="form-group col-md-12">                
+                @if (User.IsInRole("Supervisor"))
+                {
+                    <input type="submit" value="Approve" class="btn btn-primary" title="Approve note and enable it to print" />
+                    <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","Notes",new {id = Model.Workday_Cient.Id, origin = Model.Origin},Context.Request.Scheme)','Add message to facilitator')" title="Not approved note due to problems">Review</a>
+                    @if (Model.Origin == 1) //viene de la pagina IndNotesSupervision
+                    {
+                        <a asp-action="IndNotesSupervision" class="btn btn-success">Back</a>
+                    }
+                    @if (Model.Origin == 5) //viene de la pagina PendingIndNotes
+                    {
+                        <a asp-action="PendingIndNotes" class="btn btn-success">Back</a>
+                    }
+                    @if (Model.Origin == 6) //viene de la pagina IndNotesWithReview
+                    {
+                        <a asp-action="IndNotesWithReview" class="btn btn-success">Back</a>
+                    }
+                }
+                @if (User.IsInRole("Facilitator"))
+                {
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                }
+                @*</div>*@
+            </div>
+        </form>
+    </div>
+</div>
+
+<partial name="_ModalPopup" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+
+

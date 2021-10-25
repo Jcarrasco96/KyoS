@@ -75,7 +75,7 @@ namespace KyoS.Web.Controllers
             if (!User.IsInRole("Admin"))
             {
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic != null)
                 {
                     model = new GroupViewModel
@@ -130,8 +130,9 @@ namespace KyoS.Web.Controllers
                     default:
                         break;
                 }
-                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 GroupEntity group = await _converterHelper.ToGroupEntity(model, true);
                 _context.Add(group);
@@ -159,7 +160,8 @@ namespace KyoS.Web.Controllers
                                                      .Include(w => w.Workdays_Clients)
                                                      .ThenInclude(wc => wc.Client)
                                                      .Where(w => (w.Date >= developed_date
-                                                                  && w.Week.Clinic.Id == user_logged.Clinic.Id))
+                                                               && w.Week.Clinic.Id == user_logged.Clinic.Id
+                                                               && w.Service == Common.Enums.ServiceType.PSR))
                                                      .ToListAsync();
                             foreach (WorkdayEntity item in workdays)
                             {
@@ -325,7 +327,8 @@ namespace KyoS.Web.Controllers
                                                      .Include(w => w.Workdays_Clients)
                                                      .ThenInclude(wc => wc.Client)
                                                      .Where(w => (w.Date >= developed_date
-                                                                  && w.Week.Clinic.Id == user_logged.Clinic.Id))
+                                                               && w.Week.Clinic.Id == user_logged.Clinic.Id
+                                                               && w.Service == Common.Enums.ServiceType.PSR))
                                                      .ToListAsync();
                             foreach (WorkdayEntity item in workdays)
                             {
