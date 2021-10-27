@@ -1069,15 +1069,7 @@ namespace KyoS.Web.Controllers
                     note.CBT = model.CBT;
                     note.Psychodynamic = model.Psychodynamic;
                     note.BehaviorModification = model.BehaviorModification;
-                    note.Other_Intervention = model.Other_Intervention;
-                    
-                    //Update plan progress
-                    note.Exceptional = (form["Progress"] == "Exceptional") ? true : false;
-                    note.Steady = (form["Progress"] == "Steady") ? true : false;
-                    note.Slow_Progress = (form["Progress"] == "Slow") ? true : false;
-                    note.Regressing = (form["Progress"] == "Regressing") ? true : false;
-                    note.Stable = (form["Progress"] == "Stable") ? true : false;
-                    note.Maintain = (form["Progress"] == "Maintain") ? true : false;                    
+                    note.Other_Intervention = model.Other_Intervention;               
 
                     note.Objective = (model.IdObjetive1 != 0) ? await _context.Objetives.FirstOrDefaultAsync(o => o.Id == model.IdObjetive1) : null;
 
@@ -1394,7 +1386,7 @@ namespace KyoS.Web.Controllers
             return View(weeks);
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> ApproveNote(int id, int origin = 0)
         {
             Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
@@ -1574,7 +1566,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> ApproveNote(NoteViewModel model)
         {
             if (model == null)
@@ -1886,7 +1878,7 @@ namespace KyoS.Web.Controllers
             return this.ZipFile(fileContentList, $"{workday.Date.ToShortDateString()}.zip");
         }
 
-        [Authorize(Roles = "Facilitator, Mannager")]
+        [Authorize(Roles = "Facilitator")]
         //[ResponseCache(Location = ResponseCacheLocation.Client, NoStore = true)]
         public IActionResult PrintNote(int id)
         {
@@ -1986,6 +1978,47 @@ namespace KyoS.Web.Controllers
                 return DemoClinic2NoteReportSchema2(workdayClient);
             }
 
+            return null;
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public IActionResult PrintIndNote(int id)
+        {
+            Workday_Client workdayClient = _context.Workdays_Clients
+
+                                                    .Include(wc => wc.Facilitator)
+
+                                                    .Include(wc => wc.Client)
+                                                    .ThenInclude(c => c.MTPs)
+                                                    .ThenInclude(m => m.Goals)
+                                                    .ThenInclude(g => g.Objetives)
+
+                                                    .Include(wc => wc.Client)
+                                                    .ThenInclude(c => c.Clients_Diagnostics)
+                                                    .ThenInclude(cd => cd.Diagnostic)
+
+                                                    .Include(wc => wc.IndividualNote)
+                                                    .ThenInclude(n => n.Supervisor)
+                                                    .ThenInclude(s => s.Clinic)
+
+                                                    .Include(wc => wc.IndividualNote)
+                                                    .ThenInclude(n => n.Objective)
+
+                                                    .Include(wc => wc.Workday)
+
+                                                    .FirstOrDefault(wc => (wc.Id == id && wc.IndividualNote.Status == NoteStatus.Approved));
+            if (workdayClient == null)
+            {
+                return NotFound();
+            }
+
+            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DAVILA")
+            {
+                Stream stream = _reportHelper.DavilaIndNoteReportSchema1(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+                
+            }
+            
             return null;
         }
 
@@ -6942,6 +6975,77 @@ namespace KyoS.Web.Controllers
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             if (workdayClient.Client.Clinic.Name == "DEMO CLINIC SCHEMA 2")
+            {
+                Stream stream = _reportHelper.DemoClinic2AbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
+            return null;
+        }
+
+        [Authorize(Roles = "Facilitator, Mannager")]
+        public IActionResult PrintAbsenceIndNote(int id)
+        {
+            Workday_Client workdayClient = _context.Workdays_Clients
+
+                                                   .Include(wc => wc.Facilitator)
+                                                   .ThenInclude(c => c.Clinic)
+
+                                                   .Include(wc => wc.Client)
+                                                   .ThenInclude(c => c.Clinic)
+
+                                                   .Include(wc => wc.Client)
+                                                   .ThenInclude(c => c.Group)
+
+                                                   .Include(wc => wc.Workday)
+
+                                                   .FirstOrDefault(wc => wc.Id == id);
+            if (workdayClient == null)
+            {
+                return NotFound();
+            }
+
+            if (workdayClient.Facilitator.Clinic.Name == "DAVILA")
+            {
+                Stream stream = _reportHelper.DavilaAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "LARKIN BEHAVIOR")
+            {
+                Stream stream = _reportHelper.LarkinAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "SOL & VIDA")
+            {
+                Stream stream = _reportHelper.SolAndVidaAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "HEALTH & BEAUTY NGB, INC")
+            {
+                Stream stream = _reportHelper.HealthAndBeautyAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "ADVANCED GROUP MEDICAL CENTER")
+            {
+                Stream stream = _reportHelper.AdvancedGroupMCAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            {
+                Stream stream = _reportHelper.FloridaSocialHSAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "ATLANTIC GROUP MEDICAL CENTER")
+            {
+                Stream stream = _reportHelper.AtlanticGroupMCAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "DEMO CLINIC SCHEMA 1")
+            {
+                Stream stream = _reportHelper.DemoClinic1AbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "DEMO CLINIC SCHEMA 2")
             {
                 Stream stream = _reportHelper.DemoClinic2AbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);

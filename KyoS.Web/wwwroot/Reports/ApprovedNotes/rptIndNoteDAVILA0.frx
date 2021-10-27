@@ -1,0 +1,378 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="10/25/2021 16:28:52" ReportInfo.Modified="10/27/2021 11:31:06" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3wEc6XufG+xjYmzAXCrfa9A==">
+      <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Codigo" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Supervisors" DataType="System.Int32" Enabled="true" TableName="Supervisors">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Firm" DataType="System.String"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="ReferredId" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="IndividualNotes" DataType="System.Int32" Enabled="true" TableName="IndividualNotes">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Workday_Client_FK" DataType="System.Int32"/>
+        <Column Name="SubjectiveData" DataType="System.String"/>
+        <Column Name="ObjectiveData" DataType="System.String"/>
+        <Column Name="Assessment" DataType="System.String"/>
+        <Column Name="PlanNote" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="DateOfApprove" DataType="System.DateTime"/>
+        <Column Name="Groomed" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Unkempt" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Disheveled" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Meticulous" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Overbuild" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Other" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Clear" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Pressured" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Slurred" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Slow" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Impaired" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Poverty" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Euthymic" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Depressed" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Anxious" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Fearful" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Irritable" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Labile" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="WNL" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Guarded" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Withdrawn" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Hostile" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Restless" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Impulsive" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="WNL_Cognition" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Blocked" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Obsessive" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Paranoid" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Scattered" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Psychotic" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Exceptional" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Steady" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Slow_Progress" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Regressing" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Stable" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Maintain" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="CBT" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Psychodynamic" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="BehaviorModification" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Other_Intervention" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="SupervisorId" DataType="System.Int32"/>
+        <Column Name="ObjectiveId" DataType="System.Int32"/>
+        <Column Name="MTPId" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="Workdays_Clients" DataType="System.Int32" Enabled="true" TableName="Workdays_Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="WorkdayId" DataType="System.Int32"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="Session" DataType="System.String"/>
+        <Column Name="Present" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FacilitatorId" DataType="System.Int32"/>
+        <Column Name="CauseOfNotPresent" DataType="System.String"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="datenote" DataType="System.String"/>
+    <Parameter Name="goal_text" DataType="System.String"/>
+    <Parameter Name="obj_text" DataType="System.String"/>
+    <Parameter Name="num_of_goal" DataType="System.String"/>
+    <Parameter Name="num_of_obj" DataType="System.String"/>
+    <Parameter Name="dateFacilitator" DataType="System.String"/>
+    <Parameter Name="dateSupervisor" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="740.5" Height="66.15">
+      <PictureObject Name="Picture1" Left="311.85" Top="9.45" Width="98.28" Height="28.35" SizeMode="Normal" ImageFormat="Png" Image="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"/>
+      <TextObject Name="Text1" Left="94.5" Top="39.25" Width="538.65" Height="18.9" Text="INDIVIDUAL PROGRESS NOTE" HorzAlign="Center" Font="Times New Roman, 11pt, style=Bold"/>
+    </ReportTitleBand>
+    <PageHeaderBand Name="PageHeader1" Top="70.15" Width="740.5" Height="56.7">
+      <TableObject Name="Table1" Top="9.45" Width="739.47" Height="37.8">
+        <TableColumn Name="Column1" Width="262.24"/>
+        <TableColumn Name="Column2" Width="252.79"/>
+        <TableColumn Name="Column3" Width="224.44"/>
+        <TableRow Name="Row1">
+          <TableCell Name="Cell1" Border.Lines="All" Text="Name: [Clients.Name]" Font="Times New Roman, 10pt, style=Bold"/>
+          <TableCell Name="Cell2" Border.Lines="All" Text="Start and End: [Workdays_Clients.Session]" Font="Times New Roman, 10pt, style=Bold"/>
+          <TableCell Name="Cell3" Border.Lines="All" Text="MR#: [Clients.Code]" Font="Times New Roman, 10pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row2">
+          <TableCell Name="Cell6" Border.Lines="All" Text="Date: [datenote]" Font="Times New Roman, 10pt, style=Bold"/>
+          <TableCell Name="Cell7" Border.Lines="All" Text="Code: H0019" Font="Times New Roman, 10pt, style=Bold"/>
+          <TableCell Name="Cell8" Border.Lines="All" Text="Units: 4" Font="Times New Roman, 10pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="130.85" Width="740.5" Height="557.55" DataSource="IndividualNotes">
+      <TableObject Name="Table2" Top="9.45" Width="737.1" Height="132.3" Border.Lines="All">
+        <TableColumn Name="Column4" Width="94.5"/>
+        <TableColumn Name="Column5" Width="103.95"/>
+        <TableColumn Name="Column6" Width="103.95"/>
+        <TableColumn Name="Column7" Width="103.95"/>
+        <TableColumn Name="Column10" Width="113.4"/>
+        <TableColumn Name="Column9" Width="113.4"/>
+        <TableColumn Name="Column8" Width="103.95"/>
+        <TableRow Name="Row3">
+          <TableCell Name="Cell9" Border.Lines="All" Text="Appearance" Font="Times New Roman, 11pt, style=Bold"/>
+          <TableCell Name="Cell10" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox1" Left="3.45" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Groomed" CheckWidthRatio="2"/>
+            <TextObject Name="Text8" Left="16.8" Top="2" Width="75.6" Height="18.9" Text="Groomed" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell11" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox2" Left="3" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Unkempt" CheckWidthRatio="2"/>
+            <TextObject Name="Text9" Left="16.35" Top="2" Width="75.6" Height="18.9" Text="Unkempt" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell12" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox3" Left="2.45" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Disheveled" CheckWidthRatio="2"/>
+            <TextObject Name="Text10" Left="15.8" Top="2" Width="75.6" Height="18.9" Text="Disheveled" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell39" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox4" Left="4" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Meticulous" CheckWidthRatio="2"/>
+            <TextObject Name="Text11" Left="17.35" Top="2" Width="75.6" Height="18.9" Text="Meticulous" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell34" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox5" Left="3" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Overbuild" CheckWidthRatio="2"/>
+            <TextObject Name="Text12" Left="16.35" Top="2" Width="75.6" Height="18.9" Text="Overbuild" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell13" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox6" Left="3" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Other" CheckWidthRatio="2"/>
+            <TextObject Name="Text13" Left="16.35" Top="2" Width="75.6" Height="18.9" Text="Other" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row4">
+          <TableCell Name="Cell14" Border.Lines="All" Text="Speech" Font="Times New Roman, 11pt, style=Bold"/>
+          <TableCell Name="Cell15" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox7" Left="3.9" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Clear" CheckWidthRatio="2"/>
+            <TextObject Name="Text14" Left="17.25" Top="2" Width="75.6" Height="18.9" Text="Clear" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell16" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox8" Left="3.45" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Pressured" CheckWidthRatio="2"/>
+            <TextObject Name="Text15" Left="16.8" Top="2" Width="75.6" Height="18.9" Text="Pressured" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell17" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox9" Left="2.9" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Slurred" CheckWidthRatio="2"/>
+            <TextObject Name="Text16" Left="16.25" Top="2" Width="75.6" Height="18.9" Text="Slurred" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell40" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox10" Left="3.45" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Slow" CheckWidthRatio="2"/>
+            <TextObject Name="Text17" Left="16.8" Top="2" Width="75.6" Height="18.9" Text="Slow" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell35" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox11" Left="3.45" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Impaired" CheckWidthRatio="2"/>
+            <TextObject Name="Text18" Left="16.8" Top="2" Width="75.6" Height="18.9" Text="Impaired" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell18" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox12" Left="3.45" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Poverty" CheckWidthRatio="2"/>
+            <TextObject Name="Text19" Left="16.8" Top="2" Width="75.6" Height="18.9" Text="Poverty" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row5">
+          <TableCell Name="Cell19" Border.Lines="All" Text="Mood/Affect" Font="Times New Roman, 11pt, style=Bold"/>
+          <TableCell Name="Cell20" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox13" Left="4" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Euthymic" CheckWidthRatio="2"/>
+            <TextObject Name="Text20" Left="17.35" Top="2" Width="75.6" Height="18.9" Text="Euthymic" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell21" Border.Lines="All" Font="Arial, 10pt">
+            <TextObject Name="Text21" Left="16.9" Top="2" Width="75.6" Height="18.9" Text="Depressed" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox14" Left="3.55" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Depressed" CheckWidthRatio="2"/>
+          </TableCell>
+          <TableCell Name="Cell22" Border.Lines="All" Font="Arial, 10pt">
+            <TextObject Name="Text22" Left="16.35" Top="2" Width="75.6" Height="18.9" Text="Anxious" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox15" Left="3" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Anxious" CheckWidthRatio="2"/>
+          </TableCell>
+          <TableCell Name="Cell41" Border.Lines="All" Font="Arial, 10pt">
+            <TextObject Name="Text23" Left="16.9" Top="2" Width="75.6" Height="18.9" Text="Fearful" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox16" Left="3.55" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Fearful" CheckWidthRatio="2"/>
+          </TableCell>
+          <TableCell Name="Cell36" Border.Lines="All" Font="Arial, 10pt">
+            <TextObject Name="Text24" Left="16.9" Top="2" Width="75.6" Height="18.9" Text="Irritable" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox17" Left="3.55" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Irritable" CheckWidthRatio="2"/>
+          </TableCell>
+          <TableCell Name="Cell23" Border.Lines="All" Font="Arial, 10pt">
+            <TextObject Name="Text25" Left="16.9" Top="2" Width="75.6" Height="18.9" Text="Labile" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox18" Left="3.55" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Labile" CheckWidthRatio="2"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row6">
+          <TableCell Name="Cell24" Border.Lines="All" Text="Behavior" Font="Times New Roman, 11pt, style=Bold"/>
+          <TableCell Name="Cell25" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox19" Left="3.45" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.WNL" CheckWidthRatio="2"/>
+            <TextObject Name="Text26" Left="16.8" Top="2" Width="75.6" Height="18.9" Text="WNL" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell26" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox20" Left="3" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Guarded" CheckWidthRatio="2"/>
+            <TextObject Name="Text27" Left="16.35" Top="2" Width="75.6" Height="18.9" Text="Guarded" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell27" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox21" Left="2.45" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Withdrawn" CheckWidthRatio="2"/>
+            <TextObject Name="Text28" Left="15.8" Top="2" Width="85.05" Height="18.9" Text="Withdrawn" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell42" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox22" Left="4" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Hostile" CheckWidthRatio="2"/>
+            <TextObject Name="Text29" Left="17.35" Top="2" Width="75.6" Height="18.9" Text="Hostile" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell37" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox23" Left="3" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Restless" CheckWidthRatio="2"/>
+            <TextObject Name="Text30" Left="16.35" Top="2" Width="75.6" Height="18.9" Text="Restless" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell28" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox24" Left="4" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Impulsive" CheckWidthRatio="2"/>
+            <TextObject Name="Text31" Left="17.35" Top="2" Width="75.6" Height="18.9" Text="Impulsive" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row9">
+          <TableCell Name="Cell51" Border.Lines="All" Text="Cognition" Font="Times New Roman, 11pt, style=Bold"/>
+          <TableCell Name="Cell52" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox25" Left="4" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.WNL_Cognition" CheckWidthRatio="2"/>
+            <TextObject Name="Text32" Left="17.35" Top="2" Width="75.6" Height="18.9" Text="WNL" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell53" Border.Lines="All" Font="Arial, 10pt">
+            <TextObject Name="Text33" Left="16.9" Top="2" Width="75.6" Height="18.9" Text="Blocked" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox26" Left="3.55" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Blocked" CheckWidthRatio="2"/>
+          </TableCell>
+          <TableCell Name="Cell54" Border.Lines="All" Font="Arial, 10pt">
+            <TextObject Name="Text34" Left="16.35" Top="2" Width="75.6" Height="18.9" Text="Obsessive" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox27" Left="3" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Obsessive" CheckWidthRatio="2"/>
+          </TableCell>
+          <TableCell Name="Cell55" Border.Lines="All" Font="Arial, 10pt">
+            <TextObject Name="Text35" Left="16.9" Top="2" Width="75.6" Height="18.9" Text="Paranoid" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox28" Left="3.55" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Paranoid" CheckWidthRatio="2"/>
+          </TableCell>
+          <TableCell Name="Cell56" Border.Lines="All" Font="Arial, 10pt">
+            <TextObject Name="Text36" Left="16.9" Top="2" Width="75.6" Height="18.9" Text="Scattered" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox29" Left="3.55" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Scattered" CheckWidthRatio="2"/>
+          </TableCell>
+          <TableCell Name="Cell57" Border.Lines="All" Font="Arial, 10pt">
+            <TextObject Name="Text37" Left="16.9" Top="2" Width="75.6" Height="18.9" Text="Psychotic" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox30" Left="3.55" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Psychotic" CheckWidthRatio="2"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row8">
+          <TableCell Name="Cell44" Border.Lines="All" Text="Progress" Font="Times New Roman, 11pt, style=Bold"/>
+          <TableCell Name="Cell45" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox31" Left="4" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Exceptional" CheckWidthRatio="2"/>
+            <TextObject Name="Text38" Left="17.35" Top="2" Width="85.05" Height="18.9" Text="Exceptional" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell46" Border.Lines="All" Font="Arial, 10pt">
+            <TextObject Name="Text39" Left="16.9" Top="2" Width="75.6" Height="18.9" Text="Steady" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox32" Left="3.55" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Steady" CheckWidthRatio="2"/>
+          </TableCell>
+          <TableCell Name="Cell47" Border.Lines="All" Font="Arial, 10pt">
+            <TextObject Name="Text40" Left="16.35" Top="2" Width="75.6" Height="18.9" Text="Slow" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox33" Left="3" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Slow_Progress" CheckWidthRatio="2"/>
+          </TableCell>
+          <TableCell Name="Cell48" Border.Lines="All" Font="Arial, 10pt">
+            <TextObject Name="Text41" Left="16.9" Top="2" Width="75.6" Height="18.9" Text="Regressing" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox34" Left="3.55" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Regressing" CheckWidthRatio="2"/>
+          </TableCell>
+          <TableCell Name="Cell49" Border.Lines="All" Font="Arial, 10pt">
+            <TextObject Name="Text42" Left="16.9" Top="2" Width="75.6" Height="18.9" Text="Stable" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox35" Left="3.55" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Stable" CheckWidthRatio="2"/>
+          </TableCell>
+          <TableCell Name="Cell50" Border.Lines="All" Font="Arial, 10pt">
+            <TextObject Name="Text43" Left="16.9" Top="2" Width="75.6" Height="18.9" Text="Maintain" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox36" Left="3.55" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Maintain" CheckWidthRatio="2"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row7">
+          <TableCell Name="Cell29" Border.Lines="All" Text="Intervention" Font="Times New Roman, 11pt, style=Bold"/>
+          <TableCell Name="Cell30" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox37" Left="4" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.CBT" CheckWidthRatio="2"/>
+            <TextObject Name="Text44" Left="17.35" Top="2" Width="75.6" Height="18.9" Text="CBT" Font="Times New Roman, 10pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell31" Border.Lines="All" Font="Arial, 10pt" ColSpan="2">
+            <TextObject Name="Text45" Left="16.9" Top="2" Width="141.75" Height="18.9" Text="Psychodynamic" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox38" Left="3.55" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Psychodynamic" CheckWidthRatio="2"/>
+          </TableCell>
+          <TableCell Name="Cell32" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell43" Border.Lines="All" Font="Arial, 10pt" ColSpan="2">
+            <TextObject Name="Text46" Left="17.35" Top="2" Width="151.2" Height="18.9" Text="Behavior Modification" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox39" Left="4" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.BehaviorModification" CheckWidthRatio="2"/>
+          </TableCell>
+          <TableCell Name="Cell38" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell33" Border.Lines="All" Font="Arial, 10pt">
+            <TextObject Name="Text47" Left="16.9" Top="2" Width="75.6" Height="18.9" Text="Other" Font="Times New Roman, 10pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox40" Left="3.55" Top="3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="IndividualNotes.Other_Intervention" CheckWidthRatio="2"/>
+          </TableCell>
+        </TableRow>
+      </TableObject>
+      <TextObject Name="Text48" Top="152.2" Width="737.1" Height="18.9" Border.Lines="All" Text="Treatment Goal Addressed:" Font="Times New Roman, 11pt, style=Bold"/>
+      <TextObject Name="Text2" Left="77.6" Top="179.55" Width="1323" Height="18.9" CanGrow="true" Text="[goal_text]" Font="Times New Roman, 10pt"/>
+      <TextObject Name="Text4" Top="179.55" Width="75.6" Height="18.9" Text="[num_of_goal]" HorzAlign="Right" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text5" Top="201.9" Width="75.6" Height="18.9" Text="[num_of_obj]" HorzAlign="Right" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text49" Top="255.15" Width="737.1" Height="18.9" Border.Lines="All" Text="Subjective Data / Clinical Impression:" Font="Times New Roman, 11pt, style=Bold"/>
+      <TextObject Name="Text50" Top="279.5" Width="737.1" Height="47.25" CanGrow="true" CanShrink="true" Text="[IndividualNotes.SubjectiveData]" HorzAlign="Justify" Font="Times New Roman, 10pt"/>
+      <TextObject Name="Text51" Top="331.75" Width="737.1" Height="18.9" Border.Lines="All" Text="Objective Data / Behavioral Observations:" Font="Times New Roman, 11pt, style=Bold"/>
+      <TextObject Name="Text52" Top="355.1" Width="737.1" Height="47.25" CanGrow="true" CanShrink="true" Text="[IndividualNotes.ObjectiveData]" HorzAlign="Justify" Font="Times New Roman, 10pt"/>
+      <TextObject Name="Text53" Top="407.35" Width="737.1" Height="18.9" Border.Lines="All" Text="Assessment:" Font="Times New Roman, 11pt, style=Bold"/>
+      <TextObject Name="Text54" Top="430.7" Width="737.1" Height="47.25" CanGrow="true" CanShrink="true" Text="[IndividualNotes.Assessment]" HorzAlign="Justify" Font="Times New Roman, 10pt"/>
+      <TextObject Name="Text55" Top="481.95" Width="737.1" Height="18.9" Border.Lines="All" Text="Plan:" Font="Times New Roman, 11pt, style=Bold"/>
+      <TextObject Name="Text56" Top="505.85" Width="737.1" Height="47.25" CanGrow="true" CanShrink="true" Text="[IndividualNotes.PlanNote]" HorzAlign="Justify" Font="Times New Roman, 10pt"/>
+      <TextObject Name="Text67" Left="77.6" Top="202.45" Width="661.5" Height="47.25" CanGrow="true" CanShrink="true" Text="[obj_text]" HorzAlign="Justify" Font="Times New Roman, 10pt"/>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="692.4" Width="740.5" Height="108.5">
+      <LineObject Name="Line5" Left="756" Top="45.35" Width="-766.55"/>
+      <TextObject Name="Text57" Top="45.35" Width="236.25" Height="18.9" Text="Group Facilitator / Credentials" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text59" Left="330.75" Top="45.35" Width="47.25" Height="18.9" Text="Date" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text61" Left="495.05" Top="45.35" Width="255.15" Height="18.9" Text="Group Facilitator (print legibly)" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text63" Left="293.4" Top="27.45" Width="122.85" Height="18.9" Text="[dateFacilitator]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text65" Left="495.05" Top="26" Width="255.15" Height="18.9" Text="[Facilitators.Name] , [Facilitators.Codigo]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <PictureObject Name="Picture2" Left="52.9" Top="1" Width="95" Height="54" DataColumn="Signatures.facilitatorSignature"/>
+      <PictureObject Name="Picture3" Left="52.25" Top="48.9" Width="92.61" Height="57.46" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text64" Left="292.95" Top="69.25" Width="122.85" Height="18.9" Text="[dateSupervisor]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text66" Left="495.05" Top="69.25" Width="255.15" Height="18.9" Text="[Supervisors.Name] , [Supervisors.Code]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <LineObject Name="Line6" Left="756" Top="87.15" Width="-766.58"/>
+      <TextObject Name="Text58" Top="88.15" Width="160.65" Height="18.9" Text="Supervisor / Credentials" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text60" Left="330.75" Top="88.15" Width="47.25" Height="18.9" Text="Date" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text62" Left="495.05" Top="89.6" Width="255.15" Height="18.9" Text="Supervisor (print legibly)" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
+    </PageFooterBand>
+  </ReportPage>
+</Report>

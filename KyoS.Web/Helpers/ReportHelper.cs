@@ -60,7 +60,7 @@ namespace KyoS.Web.Helpers
         }
         #endregion
 
-        #region Generics reports functions
+        #region PSR general reports
         public Stream DailyAssistanceReport(List<Workday_Client> workdayClientList)
         {
             List<Workday_Client> am_list = workdayClientList.Where(wc => wc.Session == "AM").ToList();
@@ -234,7 +234,7 @@ namespace KyoS.Web.Helpers
         }
         #endregion
 
-        #region Absences Notes functions
+        #region PSR Absense Notes reports
         public Stream LarkinAbsenceNoteReport(Workday_Client workdayClient)
         {
             WebReport WebReport = new WebReport();
@@ -534,7 +534,7 @@ namespace KyoS.Web.Helpers
 
         #endregion
 
-        #region MTP functions
+        #region MTP reports
         public Stream LarkinMTPReport(MTPEntity mtp)
         {
             WebReport WebReport = new WebReport();
@@ -1688,7 +1688,7 @@ namespace KyoS.Web.Helpers
         }
         #endregion
 
-        #region Approved Notes functions
+        #region Approved PSR Notes reports
         public Stream DavilaNoteReportSchema4(Workday_Client workdayClient)
         {
             WebReport WebReport = new WebReport();
@@ -1829,6 +1829,87 @@ namespace KyoS.Web.Helpers
         }
         #endregion
 
+        #region Approved Individual Notes reports
+        public Stream DavilaIndNoteReportSchema1(Workday_Client workdayClient)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\ApprovedNotes\\rptIndNoteDAVILA0.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetWorkdayClientDS(workdayClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Clients");
+            DataSet dataSet1 = new DataSet();
+            dataSet1.Tables.Add(GetClientDS(workdayClient.Client));
+            WebReport.Report.RegisterData(dataSet1.Tables[0], "Clients");
+            DataSet dataSet2 = new DataSet();
+            dataSet2.Tables.Add(GetFacilitatorDS(workdayClient.Facilitator));
+            WebReport.Report.RegisterData(dataSet2.Tables[0], "Facilitators");
+            DataSet dataSet3 = new DataSet();
+            dataSet3.Tables.Add(GetSupervisorDS(workdayClient.IndividualNote.Supervisor));
+            WebReport.Report.RegisterData(dataSet3.Tables[0], "Supervisors");
+            DataSet dataSet4 = new DataSet();
+            dataSet4.Tables.Add(GetIndividualNoteDS(workdayClient.IndividualNote));
+            WebReport.Report.RegisterData(dataSet4.Tables[0], "IndividualNotes");
+
+            var num_of_goal = string.Empty;
+            var goal_text = string.Empty;
+            var num_of_obj = string.Empty;
+            var obj_text = string.Empty;
+
+            if (workdayClient.IndividualNote.Objective != null)
+            {
+                num_of_goal = $"GOAL #{workdayClient.IndividualNote.Objective.Goal.Number}:";
+                goal_text = workdayClient.IndividualNote.Objective.Goal.Name;
+                num_of_obj = $"OBJ {workdayClient.IndividualNote.Objective.Objetive}:";
+                obj_text = workdayClient.IndividualNote.Objective.Description;
+            }
+
+            var date = $"{workdayClient.Workday.Date.ToShortDateString()}";
+            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+            var dateSupervisor = workdayClient.IndividualNote
+                .DateOfApprove.Value.ToShortDateString();
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(workdayClient.IndividualNote.Supervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.IndividualNote.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(workdayClient.Facilitator.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.SetParameterValue("datenote", date);
+            WebReport.Report.SetParameterValue("dateFacilitator", dateFacilitator);
+            WebReport.Report.SetParameterValue("dateSupervisor", dateSupervisor);
+            WebReport.Report.SetParameterValue("num_of_goal", num_of_goal);
+            WebReport.Report.SetParameterValue("goal_text", goal_text);
+            WebReport.Report.SetParameterValue("num_of_obj", num_of_obj);
+            WebReport.Report.SetParameterValue("obj_text", obj_text);
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
+
         #region System.Data functions 
         private DataTable GetWorkdayClientDS(Workday_Client workdayClient)
         {
@@ -1850,7 +1931,7 @@ namespace KyoS.Web.Helpers
                                         {
                                             workdayClient.Id,
                                             workdayClient.Workday.Id,
-                                            workdayClient.Client.Id,
+                                            (workdayClient.Client == null) ? 0 : workdayClient.Client.Id,
                                             workdayClient.Session,
                                             workdayClient.Present,
                                             workdayClient.Facilitator.Id,
@@ -1938,8 +2019,10 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Status", typeof(int));
             dt.Columns.Add("GroupId", typeof(int));
 
-            dt.Rows.Add(new object[]
-                                        {
+            if (client != null)
+            {
+                dt.Rows.Add(new object[]
+                                            {
                                             client.Id,
                                             client.Name,
                                             client.Gender,
@@ -1949,7 +2032,23 @@ namespace KyoS.Web.Helpers
                                             client.MedicaidID,
                                             client.Status,
                                             0
-                                        });
+                                            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                            {
+                                            0,
+                                            string.Empty,
+                                            Common.Enums.GenderType.Female,
+                                            string.Empty,
+                                            0,
+                                            new DateTime(),
+                                            string.Empty,
+                                            Common.Enums.StatusType.Close,
+                                            0
+                                            });
+            }
 
             return dt;
         }
@@ -2188,6 +2287,127 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetIndividualNoteDS(IndividualNoteEntity note)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IndividualNote"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("PlanNote", typeof(string));
+            dt.Columns.Add("SubjectiveData", typeof(string));
+            dt.Columns.Add("ObjectiveData", typeof(string));
+            dt.Columns.Add("Assessment", typeof(string));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("Workday_Client_FK", typeof(int));
+            dt.Columns.Add("DateOfApprove", typeof(DateTime));
+            
+            dt.Columns.Add("Groomed", typeof(bool));
+            dt.Columns.Add("Unkempt", typeof(bool));
+            dt.Columns.Add("Disheveled", typeof(bool));
+            dt.Columns.Add("Meticulous", typeof(bool));
+            dt.Columns.Add("Overbuild", typeof(bool));
+            dt.Columns.Add("Other", typeof(bool));
+            dt.Columns.Add("Clear", typeof(bool));
+            dt.Columns.Add("Pressured", typeof(bool));
+            dt.Columns.Add("Slurred", typeof(bool));
+            dt.Columns.Add("Slow", typeof(bool));
+            dt.Columns.Add("Impaired", typeof(bool));
+            dt.Columns.Add("Poverty", typeof(bool));
+            dt.Columns.Add("Euthymic", typeof(bool));
+            dt.Columns.Add("Depressed", typeof(bool));
+            dt.Columns.Add("Anxious", typeof(bool));
+            dt.Columns.Add("Fearful", typeof(bool));
+            dt.Columns.Add("Irritable", typeof(bool));            
+            dt.Columns.Add("Labile", typeof(bool));
+            dt.Columns.Add("WNL", typeof(bool));
+            dt.Columns.Add("Guarded", typeof(bool));
+            dt.Columns.Add("Withdrawn", typeof(bool));
+            dt.Columns.Add("Hostile", typeof(bool));
+            dt.Columns.Add("Restless", typeof(bool));
+            dt.Columns.Add("Impulsive", typeof(bool));
+            dt.Columns.Add("WNL_Cognition", typeof(bool));
+            dt.Columns.Add("Blocked", typeof(bool));
+            dt.Columns.Add("Obsessive", typeof(bool));
+            dt.Columns.Add("Paranoid", typeof(int));
+            dt.Columns.Add("Scattered", typeof(bool));
+            dt.Columns.Add("Psychotic", typeof(bool));            
+            dt.Columns.Add("Exceptional", typeof(bool));
+            dt.Columns.Add("Steady", typeof(bool));
+            dt.Columns.Add("Slow_Progress", typeof(bool));
+            dt.Columns.Add("Regressing", typeof(bool));
+            dt.Columns.Add("Stable", typeof(bool));
+            dt.Columns.Add("Maintain", typeof(bool));
+            dt.Columns.Add("CBT", typeof(bool));
+            dt.Columns.Add("Psychodynamic", typeof(bool));
+            dt.Columns.Add("BehaviorModification", typeof(bool));
+            dt.Columns.Add("Other_Intervention", typeof(bool));
+
+            dt.Columns.Add("SupervisorId", typeof(int));
+            dt.Columns.Add("ObjectiveId", typeof(int));
+            dt.Columns.Add("MTPId", typeof(int));
+
+            dt.Rows.Add(new object[]
+                                        {
+                                            note.Id,
+                                            note.PlanNote,
+                                            note.SubjectiveData,
+                                            note.ObjectiveData,
+                                            note.Assessment,
+                                            note.Status,
+                                            note.Workday_Client_FK,
+                                            note.DateOfApprove,
+
+                                            note.Groomed,
+                                            note.Unkempt,
+                                            note.Disheveled,
+                                            note.Meticulous,
+                                            note.Overbuild,
+                                            note.Other,
+                                            note.Clear,
+                                            note.Pressured,
+                                            note.Slurred,
+                                            note.Slow,
+                                            note.Impaired,
+                                            note.Poverty,
+                                            note.Euthymic,
+                                            note.Depressed,
+                                            note.Anxious,
+                                            note.Fearful,
+                                            note.Irritable,
+                                            note.Labile,
+                                            note.WNL,
+                                            note.Guarded,
+                                            note.Withdrawn,
+                                            note.Hostile,
+                                            note.Restless,
+                                            note.Impulsive,
+                                            note.WNL_Cognition,
+                                            note.Blocked,
+                                            note.Obsessive,
+                                            note.Paranoid,
+                                            note.Scattered,
+                                            note.Psychotic,
+                                            note.Exceptional,
+                                            note.Steady,
+                                            note.Slow_Progress,
+                                            note.Regressing,
+                                            note.Stable,
+                                            note.Maintain,
+                                            note.CBT,
+                                            note.Psychodynamic,
+                                            note.BehaviorModification,
+                                            note.Other_Intervention,  
+                                            note.Supervisor.Id,
+                                            note.Objective.Id,
+                                            note.MTPId
+            });
+
+            return dt;
+        }
+
         private DataTable GetNoteActivityDS(Note_Activity noteActivity)
         {
             DataTable dt = new DataTable
@@ -2392,8 +2612,7 @@ namespace KyoS.Web.Helpers
             
 
             return dt;
-        }
-
+        }        
         #endregion
     }
 }

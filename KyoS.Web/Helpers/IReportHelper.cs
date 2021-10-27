@@ -9,9 +9,11 @@ namespace KyoS.Web.Helpers
 {
     public interface IReportHelper
     {
+        #region Group functions
         Task<byte[]>  GroupAsyncReport(int id);
-        Stream DailyAssistanceReport(List<Workday_Client> workdayClientList);
-        Stream PrintIndividualSign(List<Workday_Client> workdayClientList);
+        #endregion
+
+        #region PSR Absense Notes reports
         Stream LarkinAbsenceNoteReport(Workday_Client workdayClient);
         Stream HealthAndBeautyAbsenceNoteReport(Workday_Client workdayClient);
         Stream SolAndVidaAbsenceNoteReport(Workday_Client workdayClient);
@@ -21,6 +23,17 @@ namespace KyoS.Web.Helpers
         Stream FloridaSocialHSAbsenceNoteReport(Workday_Client workdayClient);
         Stream DemoClinic1AbsenceNoteReport(Workday_Client workdayClient);
         Stream DemoClinic2AbsenceNoteReport(Workday_Client workdayClient);
+        #endregion
+
+        #region Approved PSR Notes reports
+        Stream DavilaNoteReportSchema4(Workday_Client workdayClient);
+        #endregion
+
+        #region Approved Individual Notes reports
+        Stream DavilaIndNoteReportSchema1(Workday_Client workdayClient);
+        #endregion
+
+        #region MTP reports
         Stream LarkinMTPReport(MTPEntity mtp);
         Stream SolAndVidaMTPReport(MTPEntity mtp);
         Stream HealthAndBeautyMTPReport(MTPEntity mtp);
@@ -30,6 +43,11 @@ namespace KyoS.Web.Helpers
         Stream DavilaMTPReport(MTPEntity mtp);
         Stream DemoClinic1MTPReport(MTPEntity mtp);
         Stream DemoClinic2MTPReport(MTPEntity mtp);
-        Stream DavilaNoteReportSchema4(Workday_Client workdayClient);
+        #endregion
+
+        #region PSR general reports
+        Stream DailyAssistanceReport(List<Workday_Client> workdayClientList);
+        Stream PrintIndividualSign(List<Workday_Client> workdayClientList);
+        #endregion
     }
 }
