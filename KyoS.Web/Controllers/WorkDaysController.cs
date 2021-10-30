@@ -408,7 +408,7 @@ namespace KyoS.Web.Controllers
                                             Present = true
                                         };
                                         _context.Add(workday_client);
-                                        
+
                                         workday_client = new Workday_Client
                                         {
                                             Workday = workday,
@@ -478,7 +478,99 @@ namespace KyoS.Web.Controllers
                                             Present = true
                                         };
                                         _context.Add(workday_client);
-                                    }                                    
+                                    }
+                                }
+                                else
+                                {
+                                    string[] facilitators = form["facilitators"].ToString().Split(',');
+                                    FacilitatorEntity facilitator;
+                                    Workday_Client workday_client;
+                                    foreach (var value in facilitators)
+                                    {
+                                        facilitator = await _context.Facilitators
+                                                                    .Where(f => f.Id == Convert.ToInt32(value))
+                                                                    .FirstOrDefaultAsync();
+
+                                        workday_client = new Workday_Client
+                                        {
+                                            Workday = workday_entity,
+                                            Client = null,
+                                            Facilitator = facilitator,
+                                            Session = "8.00 - 9.00 AM",
+                                            Present = true
+                                        };
+                                        _context.Add(workday_client);
+
+                                        workday_client = new Workday_Client
+                                        {
+                                            Workday = workday_entity,
+                                            Client = null,
+                                            Facilitator = facilitator,
+                                            Session = "9.05 - 10.05 AM",
+                                            Present = true
+                                        };
+                                        _context.Add(workday_client);
+
+                                        workday_client = new Workday_Client
+                                        {
+                                            Workday = workday_entity,
+                                            Client = null,
+                                            Facilitator = facilitator,
+                                            Session = "10.15 - 11.15 AM",
+                                            Present = true
+                                        };
+                                        _context.Add(workday_client);
+
+                                        workday_client = new Workday_Client
+                                        {
+                                            Workday = workday_entity,
+                                            Client = null,
+                                            Facilitator = facilitator,
+                                            Session = "11.20 - 12.20 PM",
+                                            Present = true
+                                        };
+                                        _context.Add(workday_client);
+
+                                        workday_client = new Workday_Client
+                                        {
+                                            Workday = workday_entity,
+                                            Client = null,
+                                            Facilitator = facilitator,
+                                            Session = "12.45 - 1.45 PM",
+                                            Present = true
+                                        };
+                                        _context.Add(workday_client);
+
+                                        workday_client = new Workday_Client
+                                        {
+                                            Workday = workday_entity,
+                                            Client = null,
+                                            Facilitator = facilitator,
+                                            Session = "1.50 - 2.50 PM",
+                                            Present = true
+                                        };
+                                        _context.Add(workday_client);
+
+                                        workday_client = new Workday_Client
+                                        {
+                                            Workday = workday_entity,
+                                            Client = null,
+                                            Facilitator = facilitator,
+                                            Session = "3.00 - 4.00 PM",
+                                            Present = true
+                                        };
+                                        _context.Add(workday_client);
+
+                                        workday_client = new Workday_Client
+                                        {
+                                            Workday = workday_entity,
+                                            Client = null,
+                                            Facilitator = facilitator,
+                                            Session = "4.05 - 5.05 PM",
+                                            Present = true
+                                        };
+                                        _context.Add(workday_client);
+                                    }
                                 }
                             }
                         }

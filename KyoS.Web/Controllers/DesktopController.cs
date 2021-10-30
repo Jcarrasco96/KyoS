@@ -156,17 +156,18 @@ namespace KyoS.Web.Controllers
 
                 ViewBag.PendingNotes = _context.Workdays_Clients
                                                .Count(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                              && wc.Note.Status == NoteStatus.Pending)).ToString();
+                                                         && (wc.Note.Status == NoteStatus.Pending || wc.IndividualNote.Status == NoteStatus.Pending))).ToString();
 
                 ViewBag.InProgressNotes = _context.Workdays_Clients
                                                   .Include(wc => wc.Note)
                                                   .Count(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                              && wc.Note.Status == NoteStatus.Edition)).ToString();
+                                                            && (wc.Note.Status == NoteStatus.Edition || wc.IndividualNote.Status == NoteStatus.Edition))).ToString();
 
                 List<Workday_Client> not_started_list = await _context.Workdays_Clients
-                                                          .Include(wc => wc.Note)
-                                                          .Where(wc => wc.Facilitator.Clinic.Id == user_logged.Clinic.Id).ToListAsync();
-                not_started_list = not_started_list.Where(wc => (wc.Note == null && wc.Present == true)).ToList();
+                                                                      .Include(wc => wc.Note)
+                                                                      .Include(wc => wc.IndividualNote)
+                                                                      .Where(wc => wc.Facilitator.Clinic.Id == user_logged.Clinic.Id).ToListAsync();
+                not_started_list = not_started_list.Where(wc => (wc.Note == null && wc.IndividualNote == null && wc.Present == true)).ToList();
                 ViewBag.NotStartedNotes = not_started_list.Count.ToString();
 
                 List<ClientEntity> client = await _context.Clients
@@ -178,10 +179,10 @@ namespace KyoS.Web.Controllers
                 List<Workday_Client> notes_review_list = await _context.Workdays_Clients
                                                                       .Include(wc => wc.Messages)
                                                                       .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                                              && wc.Note.Status == NoteStatus.Pending)).ToListAsync();
+                                                                                && (wc.Note.Status == NoteStatus.Pending || wc.IndividualNote.Status == NoteStatus.Pending)))
+                                                                      .ToListAsync();
                 notes_review_list = notes_review_list.Where(wc => wc.Messages.Count() > 0).ToList();
                 ViewBag.NotesWithReview = notes_review_list.Count.ToString();
-
                 
                 //-------------clients without documentation--------------//
                 client = await _context.Clients

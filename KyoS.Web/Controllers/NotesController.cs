@@ -1594,7 +1594,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(NotesSupervision));
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> ApproveIndNote(int id, int origin = 0)
         {
             Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
@@ -1690,7 +1690,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> ApproveIndNote(IndividualNoteViewModel model)
         {
             if (model == null)
@@ -6764,20 +6764,32 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Mannager")]
         public async Task<IActionResult> NotNotesSummary()
         {
-            UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
-                                                         .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             List<FacilitatorEntity> facilitators = await _context.Facilitators
                                                                  .Where(f => f.Clinic.Id == user_logged.Clinic.Id) 
                                                                  .ToListAsync();
-            int cant;
             List<NotesSummary> notStarted = new List<NotesSummary>();
             foreach (FacilitatorEntity item in facilitators)
             {
-                cant = await _context.Workdays_Clients.CountAsync(wc => (wc.Facilitator.Id == item.Id 
-                                                                      && wc.Note == null && wc.Facilitator.Status == StatusType.Open && wc.Present == true));
+                int psr_cant = await _context.Workdays_Clients
+                                             .CountAsync(wc => (wc.Facilitator.Id == item.Id 
+                                                             && wc.Note == null && wc.Present == true
+                                                             && wc.Workday.Service == ServiceType.PSR));
 
-                notStarted.Add(new NotesSummary {FacilitatorName = item.Name, NotStarted = cant});
+                int ind_cant = await _context.Workdays_Clients
+                                             .CountAsync(wc => (wc.Facilitator.Id == item.Id
+                                                             && wc.IndividualNote == null && wc.Present == true
+                                                             && wc.Workday.Service == ServiceType.Individual));
+
+                int group_cant = await _context.Workdays_Clients
+                                               .CountAsync(wc => (wc.Facilitator.Id == item.Id
+                                                               && wc.Note == null && wc.Present == true
+                                                               && wc.Workday.Service == ServiceType.Group));
+
+                notStarted.Add(new NotesSummary {FacilitatorName = item.Name, PSRNotStarted = psr_cant, IndNotStarted = ind_cant, GroupNotStarted = group_cant });
             }
             
             return View(notStarted);
@@ -6792,14 +6804,26 @@ namespace KyoS.Web.Controllers
             List<FacilitatorEntity> facilitators = await _context.Facilitators
                                                                  .Where(f => f.Clinic.Id == user_logged.Clinic.Id)
                                                                  .ToListAsync();
-            int cant;
+            
             List<NotesSummary> editing = new List<NotesSummary>();
             foreach (FacilitatorEntity item in facilitators)
             {
-                cant = await _context.Workdays_Clients.CountAsync(wc => (wc.Facilitator.Id == item.Id
-                                                                      && wc.Note.Status == NoteStatus.Edition && wc.Facilitator.Status == StatusType.Open));
+                int psr_cant = await _context.Workdays_Clients
+                                             .CountAsync(wc => (wc.Facilitator.Id == item.Id
+                                                             && wc.Note.Status == NoteStatus.Edition
+                                                             && wc.Workday.Service == ServiceType.PSR));
 
-                editing.Add(new NotesSummary { FacilitatorName = item.Name, Editing = cant });
+                int ind_cant = await _context.Workdays_Clients
+                                             .CountAsync(wc => (wc.Facilitator.Id == item.Id
+                                                             && wc.IndividualNote.Status == NoteStatus.Edition
+                                                             && wc.Workday.Service == ServiceType.Individual));
+
+                int group_cant = await _context.Workdays_Clients
+                                               .CountAsync(wc => (wc.Facilitator.Id == item.Id
+                                                             && wc.Note.Status == NoteStatus.Edition
+                                                             && wc.Workday.Service == ServiceType.Group));
+
+                editing.Add(new NotesSummary { FacilitatorName = item.Name, PSREditing = psr_cant, IndEditing = ind_cant, GroupEditing = group_cant });
             }
 
             return View(editing);
@@ -6814,14 +6838,26 @@ namespace KyoS.Web.Controllers
             List<FacilitatorEntity> facilitators = await _context.Facilitators
                                                                  .Where(f => f.Clinic.Id == user_logged.Clinic.Id)
                                                                  .ToListAsync();
-            int cant;
+            
             List<NotesSummary> pending = new List<NotesSummary>();
             foreach (FacilitatorEntity item in facilitators)
             {
-                cant = await _context.Workdays_Clients.CountAsync(wc => (wc.Facilitator.Id == item.Id
-                                                                      && wc.Note.Status == NoteStatus.Pending && wc.Facilitator.Status == StatusType.Open));
+                int psr_cant = await _context.Workdays_Clients
+                                             .CountAsync(wc => (wc.Facilitator.Id == item.Id
+                                                             && wc.Note.Status == NoteStatus.Pending 
+                                                             && wc.Workday.Service == ServiceType.PSR));
 
-                pending.Add(new NotesSummary { FacilitatorName = item.Name, Editing = cant });
+                int ind_cant = await _context.Workdays_Clients
+                                             .CountAsync(wc => (wc.Facilitator.Id == item.Id
+                                                             && wc.IndividualNote.Status == NoteStatus.Pending
+                                                             && wc.Workday.Service == ServiceType.Individual));
+
+                int group_cant = await _context.Workdays_Clients
+                                               .CountAsync(wc => (wc.Facilitator.Id == item.Id
+                                                               && wc.Note.Status == NoteStatus.Pending
+                                                               && wc.Workday.Service == ServiceType.Group));
+
+                pending.Add(new NotesSummary { FacilitatorName = item.Name, PSRPending = psr_cant, IndPending = ind_cant, GroupPending = group_cant });
             }
 
             return View(pending);
@@ -6836,16 +6872,26 @@ namespace KyoS.Web.Controllers
             List<FacilitatorEntity> facilitators = await _context.Facilitators
                                                                  .Where(f => f.Clinic.Id == user_logged.Clinic.Id)
                                                                  .ToListAsync();
-            int cant;
+           
             List<NotesSummary> review = new List<NotesSummary>();
             foreach (FacilitatorEntity item in facilitators)
             {
-                cant = await _context.Workdays_Clients.CountAsync(wc => (wc.Facilitator.Id == item.Id
-                                                                      && wc.Note.Status == NoteStatus.Pending 
-                                                                      && wc.Facilitator.Status == StatusType.Open
-                                                                      && wc.Messages.Count() > 0));
+                int psr_cant = await _context.Workdays_Clients.CountAsync(wc => (wc.Facilitator.Id == item.Id
+                                                                              && wc.Note.Status == NoteStatus.Pending 
+                                                                              && wc.Messages.Count() > 0
+                                                                              && wc.Workday.Service == ServiceType.PSR));
 
-                review.Add(new NotesSummary { FacilitatorName = item.Name, Editing = cant });
+                int ind_cant = await _context.Workdays_Clients.CountAsync(wc => (wc.Facilitator.Id == item.Id
+                                                                              && wc.IndividualNote.Status == NoteStatus.Pending
+                                                                              && wc.Messages.Count() > 0
+                                                                              && wc.Workday.Service == ServiceType.Individual));
+
+                int group_cant = await _context.Workdays_Clients.CountAsync(wc => (wc.Facilitator.Id == item.Id
+                                                                                && wc.Note.Status == NoteStatus.Pending
+                                                                                && wc.Messages.Count() > 0
+                                                                                && wc.Workday.Service == ServiceType.Group));
+
+                review.Add(new NotesSummary { FacilitatorName = item.Name, PSRReview = psr_cant, IndReview = ind_cant, GroupReview = group_cant});
             }
 
             return View(review);
@@ -7140,18 +7186,35 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(d => d.Workdays_Clients)
                                             .ThenInclude(wc => wc.Note)
 
-                                            .Include(w => w.Days)
+                                            .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                      && w.Days.Where(d => d.Service == ServiceType.PSR).Count() > 0))
+                                            .ToListAsync());
+        }
+
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> IndNotesSummaryDetails()
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic == null)
+            {
+                return NotFound();
+            }
+            return View(await _context.Weeks.Include(w => w.Days)
                                             .ThenInclude(d => d.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Client)
-                                            .ThenInclude(c => c.MTPs)
+                                            .ThenInclude(wc => wc.Client)                                            
 
                                             .Include(w => w.Days)
                                             .ThenInclude(d => d.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Client)
-                                            .ThenInclude(c => c.Clients_Diagnostics)
-                                            .ThenInclude(cd => cd.Diagnostic)
+                                            .ThenInclude(g => g.Facilitator)
 
-                                            .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
+                                            .Include(w => w.Days)
+                                            .ThenInclude(d => d.Workdays_Clients)
+                                            .ThenInclude(wc => wc.IndividualNote)
+
+                                            .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                      && w.Days.Where(d => d.Service == ServiceType.Individual).Count() > 0))
                                             .ToListAsync());
         }
 
