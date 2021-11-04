@@ -56,7 +56,7 @@
                         {
                             <tr>
                                 <td align="center">
-                                    @if (item.Clinic.Facilitators.Where(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id)).Count() != 0).Count() != 0)
+                                    @if (item.Clinic.Facilitators.Where(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count() != 0).Count() != 0)
                                     {
                                         <a class="icon-plus-sign-alt"></a>
                                     }
@@ -68,11 +68,11 @@
                                                 <th class="col-md-2" style="text-align:center;">Notes</th>
                                                 <th class="col-md-2" style="text-align:center;">Units</th>
                                             </tr>
-                                            @foreach (var facilitator in item.Clinic.Facilitators.OrderByDescending(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id)).Count()))
+                                            @foreach (var facilitator in item.Clinic.Facilitators.OrderByDescending(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count()))
                                             {
                                                 <tr>
                                                     <td align="center">
-                                                        @if (facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id)).Count() != 0)
+                                                        @if (facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count() != 0)
                                                         {
                                                             <a class="icon-plus-sign-alt"></a>
                                                         }
@@ -87,7 +87,7 @@
                                                                     <th class="col-md-1" style="text-align:center;">Notes</th>
                                                                     <th class="col-md-1" style="text-align:center;">Units</th>
                                                                 </tr>
-                                                                @foreach (var workdayClient in facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id)).OrderBy(wc => wc.Client.Name))
+                                                                @foreach (var workdayClient in facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).OrderBy(wc => wc.Client.Name))
                                                                 {
                                                                     <tr>
                                                                         <td align="center">
@@ -122,13 +122,20 @@
                                                                             }
                                                                             else
                                                                             {
-                                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                                                if (workdayClient.IndividualNote != null)
                                                                                 {
-                                                                                    <label>16</label>
+                                                                                    <label>4</label>
                                                                                 }
-                                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                                else
                                                                                 {
-                                                                                    <label>12</label>
+                                                                                    if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                                                    {
+                                                                                        <label>16</label>
+                                                                                    }
+                                                                                    if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                                    {
+                                                                                        <label>12</label>
+                                                                                    }
                                                                                 }
                                                                             }
                                                                         </td>
@@ -141,13 +148,13 @@
                                                         @Html.DisplayFor(modelItem => facilitator.Name)
                                                     </td>
                                                     <td align="center">
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id)).Count()
+                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count()
                                                     </td>
                                                     <td align="center">            
                                                         @{
                                                             units = 0;
                                                         }
-                                                        @foreach (var workdayClient in facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id)))
+                                                        @foreach (var workdayClient in facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)))
                                                         {
                                                             @if (workdayClient.Note != null)
                                                             {
@@ -162,13 +169,20 @@
                                                             }
                                                             else
                                                             {
-                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
-                                                                {
-                                                                    units = units + 16;
+                                                                if (workdayClient.IndividualNote != null)
+                                                                { 
+                                                                    units = units + 4;
                                                                 }
-                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
-                                                                {
-                                                                    units = units + 12;
+                                                                else 
+                                                                { 
+                                                                    if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                                    {
+                                                                        units = units + 16;
+                                                                    }
+                                                                    if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                    {
+                                                                        units = units + 12;
+                                                                    }
                                                                 }
                                                             }
                                                         }

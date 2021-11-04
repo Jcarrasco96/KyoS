@@ -225,16 +225,16 @@ namespace KyoS.Web.Controllers
                 ViewBag.ApprovedNotes = _context.Workdays_Clients
                                                 .Include(wc => wc.Note)
                                                 .Count(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                              && wc.Note.Status == NoteStatus.Approved)).ToString();
+                                                          && (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved))).ToString();
 
                 ViewBag.NotPresentNotes = _context.Workdays_Clients
                                                   .Include(wc => wc.Note)
                                                   .Count(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                              && wc.Present == false)).ToString();
+                                                             && wc.Present == false)).ToString();
 
                 List<MTPEntity> mtps = await _context.MTPs
                                                      .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id 
-                                                                && m.Active == true && m.Client.Status == StatusType.Open)).ToListAsync();
+                                                               && m.Active == true && m.Client.Status == StatusType.Open)).ToListAsync();
                 int count = 0;
                 foreach (var item in mtps)
                 {

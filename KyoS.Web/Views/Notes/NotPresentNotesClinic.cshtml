@@ -26,9 +26,10 @@
                     <thead>
                         <tr>
                             <th class="col-md-1" style="text-align:center;">Date</th>
+                            <th class="col-md-1" style="text-align:center;">Service</th>
                             <th class="col-md-3">Name</th>
                             <th class="col-md-1" style="text-align:center;"></th>
-                            <th class="col-md-4" style="text-align:center;">Cause</th>
+                            <th class="col-md-3" style="text-align:center;">Cause</th>
                             <th class="col-md-2">Facilitator</th>
                             <th class="col-md-1"></th>
                         </tr>
@@ -36,28 +37,39 @@
                     <tbody>
                         @foreach (var day_client in Model.OrderBy(dc => dc.Workday.Date).OrderBy(dc => dc.Session))
                         {
-                            <tr style="color:darkgrey">
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => day_client.Workday.Date)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => day_client.Client.Name)
-                                </td>
-                                <td align="center">
-                                    <span class="label label-default">
-                                        Absence
-                                    </span>
-                                </td>
-                                <td align="left">
-                                    @Html.DisplayFor(modelItem => day_client.CauseOfNotPresent)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
-                                </td>
-                                <td align="right">
-                                    <a asp-action="PrintAbsenceNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print absence note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                </td>
-                            </tr>
+                        <tr style="color:darkgrey">
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => day_client.Workday.Date)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => day_client.Workday.Service)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => day_client.Client.Name)
+                            </td>
+                            <td align="center">
+                                <span class="label label-default">
+                                    Absence
+                                </span>
+                            </td>
+                            <td align="left">
+                                @Html.DisplayFor(modelItem => day_client.CauseOfNotPresent)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
+                            </td>
+                            <td align="right">
+                                @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)
+                                {
+                                  <a asp-action="PrintAbsenceNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print absence PSR note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                }
+                                @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
+                                {
+                                  <a asp-action="PrintAbsenceIndNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print absence individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                }
+                                
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

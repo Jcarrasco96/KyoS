@@ -25,11 +25,12 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-2" style="text-align:center;">Date</th>
-                            <th class="col-md-1" style="text-align:center;">Session</th>
-                            <th class="col-md-3">Name</th>
-                            <th class="col-md-2" style="text-align:center;">Note Status</th>
-                            <th class="col-md-3">Facilitator</th>
+                            <th class="col-md-1" style="text-align:center;">Date</th>
+                            <th class="col-md-1" style="text-align:center;">Service</th>
+                            <th class="col-md-2" style="text-align:center;">Session</th>
+                            <th class="col-md-4">Name</th>
+                            <th class="col-md-1" style="text-align:center;">Status</th>
+                            <th class="col-md-2">Facilitator</th>
                             <th class="col-md-1"></th>
                         </tr>
                     </thead>
@@ -39,6 +40,9 @@
                         <tr>
                             <td align="center">
                                 @Html.DisplayFor(modelItem => day_client.Workday.Date)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => day_client.Workday.Service)
                             </td>
                             <td align="center">
                                 @Html.DisplayFor(modelItem => day_client.Session)
@@ -55,7 +59,14 @@
                                 @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
                             </td>
                             <td align="right">
-                                <a asp-action="PrintNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)
+                                {
+                                    <a asp-action="PrintNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print PSR note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                }
+                                @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
+                                {
+                                    <a asp-action="PrintIndNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                }
                             </td>
                         </tr>
 

@@ -402,13 +402,15 @@ namespace KyoS.Web.Controllers
             else
             {
                 List<Note_Activity> note_Activity = await _context.Notes_Activities
+
                                                                   .Include(na => na.Activity)
                                                                   .ThenInclude(a => a.Theme)
 
                                                                   .Include(na => na.Objetive)
                                                                   .ThenInclude(o => o.Goal)
 
-                                                                  .Where(na => na.Note.Id == note.Id).ToListAsync();
+                                                                  .Where(na => na.Note.Id == note.Id)
+                                                                  .ToListAsync();
 
                 IEnumerable<SelectListItem> goals = null;
                 IEnumerable<SelectListItem> objs = null;
@@ -704,16 +706,20 @@ namespace KyoS.Web.Controllers
                         AnswerFacilitator = (model.AnswerFacilitator1.Trim().Last() == '.') ? model.AnswerFacilitator1.Trim() : $"{model.AnswerFacilitator1.Trim()}.",
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
                     };
-                    _context.Add(note_Activity);
+                    _context.Add(note_Activity);                    
+                    await _context.SaveChangesAsync();
+
                     note_Activity = new Note_Activity
                     {
                         Note = note,
-                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2),                        
+                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2),
                         AnswerClient = (model.AnswerClient2 != null) ? model.AnswerClient2.Trim() : string.Empty,
                         AnswerFacilitator = (model.AnswerFacilitator2 != null) ? ((model.AnswerFacilitator2.Trim().Last() == '.') ? model.AnswerFacilitator2.Trim() : $"{model.AnswerFacilitator2.Trim()}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
                     };
                     _context.Add(note_Activity);
+                    await _context.SaveChangesAsync();
+
                     note_Activity = new Note_Activity
                     {
                         Note = note,
@@ -723,6 +729,8 @@ namespace KyoS.Web.Controllers
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive3),
                     };
                     _context.Add(note_Activity);
+                    await _context.SaveChangesAsync();
+
                     note_Activity = new Note_Activity
                     {
                         Note = note,
@@ -731,7 +739,7 @@ namespace KyoS.Web.Controllers
                         AnswerFacilitator = (model.AnswerFacilitator4 != null) ? ((model.AnswerFacilitator4.Trim().Last() == '.') ? model.AnswerFacilitator4.Trim() : $"{model.AnswerFacilitator4.Trim()}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4),
                     };
-                    _context.Add(note_Activity);
+                    _context.Add(note_Activity);                                     
 
                     //todos los mensajes que tiene el Workday_Client de la nota los pongo como leidos
                     foreach (MessageEntity value in note.Workday_Cient.Messages)
@@ -1878,7 +1886,7 @@ namespace KyoS.Web.Controllers
             return this.ZipFile(fileContentList, $"{workday.Date.ToShortDateString()}.zip");
         }
 
-        [Authorize(Roles = "Facilitator")]
+        [Authorize(Roles = "Facilitator, Mannager")]
         //[ResponseCache(Location = ResponseCacheLocation.Client, NoStore = true)]
         public IActionResult PrintNote(int id)
         {
@@ -1981,7 +1989,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator")]
+        [Authorize(Roles = "Facilitator, Mannager")]
         public IActionResult PrintIndNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -6592,17 +6600,25 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> ApprovedNotesClinic(int id = 0)
         {
             UserEntity user_logged = await _context.Users
-                                                       .Include(u => u.Clinic)
-                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
-            return View(await _context.Workdays_Clients.Include(wc => wc.Note)
-                                                       .Include(wc => wc.Facilitator)
-                                                       .Include(wc => wc.Client)
-                                                       .Include(wc => wc.Workday)
-                                                       .ThenInclude(w => w.Week)
-                                                       .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                                  && wc.Note.Status == NoteStatus.Approved))
-                                                       .ToListAsync());
+            return View(await _context.Workdays_Clients
+
+                                      .Include(wc => wc.Note)
+
+                                      .Include(wc => wc. IndividualNote)
+
+                                      .Include(wc => wc.Facilitator)
+
+                                      .Include(wc => wc.Client)
+                                      
+                                      .Include(wc => wc.Workday)
+                                      .ThenInclude(w => w.Week)
+                                      
+                                      .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                 && (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved)))
+                                      .ToListAsync());
         }
 
         [Authorize(Roles = "Supervisor")]
@@ -6951,10 +6967,14 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+
                                                        .Include(wc => wc.Facilitator)
+
                                                        .Include(wc => wc.Client)
+
                                                        .Include(wc => wc.Workday)
                                                        .ThenInclude(w => w.Week)
+
                                                        .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                                   && wc.Present == false))
                                                        .ToListAsync());
@@ -7145,6 +7165,10 @@ namespace KyoS.Web.Controllers
                                             .Include(w => w.Days)
                                             .ThenInclude(d => d.Workdays_Clients)
                                             .ThenInclude(wc => wc.Note)
+
+                                            .Include(w => w.Days)
+                                            .ThenInclude(d => d.Workdays_Clients)
+                                            .ThenInclude(wc => wc.IndividualNote)
 
                                             .Include(w => w.Days)
                                             .ThenInclude(d => d.Workdays_Clients)
