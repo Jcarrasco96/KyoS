@@ -1910,6 +1910,15 @@ namespace KyoS.Web.Helpers
         }
         #endregion
 
+        #region Utils functions
+        public byte[] ConvertStreamToByteArray(Stream stream)
+        {
+            MemoryStream ms = new MemoryStream();
+            stream.CopyTo(ms);
+            return ms.ToArray();
+        }
+        #endregion
+
         #region System.Data functions 
         private DataTable GetWorkdayClientDS(Workday_Client workdayClient)
         {
@@ -2612,7 +2621,10 @@ namespace KyoS.Web.Helpers
             
 
             return dt;
-        }        
+        }
+
         #endregion
+
+        
     }
 }

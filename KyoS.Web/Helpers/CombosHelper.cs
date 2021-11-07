@@ -206,13 +206,54 @@ namespace KyoS.Web.Helpers
 
         public IEnumerable<SelectListItem> GetComboActiveClientsByClinic(int idClinic)
         {
-            List<SelectListItem> list = _context.Clients.Where(c => (c.Clinic.Id == idClinic 
-                                                                    && c.MTPs.Where(m => m.Active == true).Count() > 0 && c.Status == StatusType.Open))
-                                                        .Select(c => new SelectListItem
-                                                         {
-                                                             Text = $"{c.Name}",
-                                                             Value = $"{c.Id}"
-                                                         }).ToList();
+            List<SelectListItem> list = _context.Clients
+                                                .Where(c => (c.Clinic.Id == idClinic 
+                                                          && c.MTPs.Where(m => m.Active == true).Count() > 0 && c.Status == StatusType.Open))
+                                                .Select(c => new SelectListItem
+                                                {
+                                                    Text = $"{c.Name}",
+                                                    Value = $"{c.Id}"
+                                                })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select client...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboClientsForIndNotes(int idClinic, int idWeek)
+        {
+            List<ClientEntity> clients = _context.Clients
+                                                 .Where(c => (c.Clinic.Id == idClinic
+                                                           && c.MTPs.Where(m => m.Active == true).Count() > 0 && c.Status == StatusType.Open))
+                                                 .ToList();
+
+            List<Workday_Client> workdays_clients = _context.Workdays_Clients
+
+                                                            .Include(wc => wc.Client)
+
+                                                            .Where(wc => (wc.Workday.Week.Id == idWeek && wc.Workday.Service == ServiceType.Individual))
+                                                            .ToList();
+
+            foreach (var item in workdays_clients)
+            {
+                if (item.Client != null)
+                {
+                    if (clients.Exists(c => c.Id == item.Client.Id))
+                        clients.Remove(item.Client);
+                }
+            }
+
+            List<SelectListItem> list = clients.Select(c => new SelectListItem
+                                                {
+                                                    Text = $"{c.Name}",
+                                                    Value = $"{c.Id}"
+                                                })
+                                                .ToList();
 
             list.Insert(0, new SelectListItem
             {

@@ -1,8 +1,6 @@
 ﻿using KyoS.Web.Data.Entities;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace KyoS.Web.Helpers
@@ -10,7 +8,7 @@ namespace KyoS.Web.Helpers
     public interface IReportHelper
     {
         #region Group functions
-        Task<byte[]>  GroupAsyncReport(int id);
+        Task<byte[]> GroupAsyncReport(int id);
         #endregion
 
         #region PSR Absense Notes reports
@@ -48,6 +46,10 @@ namespace KyoS.Web.Helpers
         #region PSR general reports
         Stream DailyAssistanceReport(List<Workday_Client> workdayClientList);
         Stream PrintIndividualSign(List<Workday_Client> workdayClientList);
+        #endregion
+
+        #region Utils functions
+        byte[] ConvertStreamToByteArray(Stream stream);        
         #endregion
     }
 }

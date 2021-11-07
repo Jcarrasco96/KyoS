@@ -810,6 +810,9 @@ namespace KyoS.Web.Controllers
 
                                                                            .Include(wc => wc.Facilitator)
 
+                                                                           .Include(wc => wc.Workday)
+                                                                           .ThenInclude(w => w.Week)
+
                                                                            .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
@@ -882,18 +885,25 @@ namespace KyoS.Web.Controllers
                     Goals1 = goals,
                     Objetives1 = objs,
                     Workday_Cient = workday_Client,
-                    Clients = _combosHelper.GetComboActiveClientsByClinic(user_logged.Clinic.Id),
+                    Clients = _combosHelper.GetComboClientsForIndNotes(user_logged.Clinic.Id, workday_Client.Workday.Week.Id),
                     IdClient = 0
                 };
             }
             else
             {
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Insert(0, new SelectListItem
+                {
+                    Text = note.Workday_Cient.Client.Name,
+                    Value = $"{note.Workday_Cient.Client.Id}"
+                });
+
                 individualNoteViewModel = new IndividualNoteViewModel
                 {
                     Id = id,
                     Workday_Cient = workday_Client,
                     IdClient = note.Workday_Cient.Client.Id,
-                    Clients = _combosHelper.GetComboActiveClientsByClinic(user_logged.Clinic.Id),
+                    Clients   = list,
                     Origin = origin,
                     SubjectiveData = note.SubjectiveData,
                     ObjectiveData = note.ObjectiveData,
@@ -1789,8 +1799,10 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> PrintWorkdaysNotes(int id)
         {
             WorkdayEntity workday = await _context.Workdays
+
                                                   .Include(w => w.Workdays_Clients)     
                                                   .ThenInclude(wc => wc.Facilitator)
+
                                                   .FirstOrDefaultAsync(w => w.Id == id);
 
             if (workday == null)
@@ -1804,6 +1816,7 @@ namespace KyoS.Web.Controllers
             foreach (var item in workdayClientList)
             {
                 workdayClient = _context.Workdays_Clients
+
                                         .Include(wc => wc.Facilitator)
 
                                         .Include(wc => wc.Client)
@@ -1833,13 +1846,22 @@ namespace KyoS.Web.Controllers
                                         .ThenInclude(n => n.Notes_Activities)
 
                                         .Include(wc => wc.Workday)
+
                                         .FirstOrDefault(wc => (wc.Id == item.Id));
 
                 if ((workdayClient.Note != null) && (workdayClient.Note.Status == NoteStatus.Approved))
                 {
                     if (workdayClient.Note.Supervisor.Clinic.Name == "DAVILA")
                     {
-                        fileContentList.Add(DavilaNoteReportFCRSchema1(workdayClient));
+                        if (workdayClient.Note.Schema == Common.Enums.SchemaType.Schema1)
+                        {
+                            fileContentList.Add(DavilaNoteReportFCRSchema1(workdayClient));
+                        }
+                        if (workdayClient.Note.Schema == Common.Enums.SchemaType.Schema4)
+                        {
+                            Stream stream = _reportHelper.DavilaNoteReportSchema4(workdayClient); 
+                            fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));
+                        }
                     }
                     if (workdayClient.Note.Supervisor.Clinic.Name == "LARKIN BEHAVIOR")
                     {
@@ -1881,6 +1903,64 @@ namespace KyoS.Web.Controllers
                         fileContentList.Add(DemoClinic2NoteReportFCRSchema2(workdayClient));                        
                     }
                 }                
+            }
+
+            return this.ZipFile(fileContentList, $"{workday.Date.ToShortDateString()}.zip");
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> PrintWorkdaysIndNotes(int id)
+        {
+            WorkdayEntity workday = await _context.Workdays
+
+                                                  .Include(w => w.Workdays_Clients)
+                                                  .ThenInclude(wc => wc.Facilitator)
+
+                                                  .FirstOrDefaultAsync(w => w.Id == id);
+
+            if (workday == null)
+            {
+                return NotFound();
+            }
+
+            IEnumerable<Workday_Client> workdayClientList = workday.Workdays_Clients
+                                                                   .Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name);
+            Workday_Client workdayClient;
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            foreach (var item in workdayClientList)
+            {
+                workdayClient = _context.Workdays_Clients
+
+                                        .Include(wc => wc.Facilitator)
+
+                                        .Include(wc => wc.Client)
+                                        .ThenInclude(c => c.MTPs)
+                                        .ThenInclude(m => m.Goals)
+                                        .ThenInclude(g => g.Objetives)
+
+                                        .Include(wc => wc.Client)
+                                        .ThenInclude(c => c.Clients_Diagnostics)
+                                        .ThenInclude(cd => cd.Diagnostic)
+
+                                        .Include(wc => wc.IndividualNote)
+                                        .ThenInclude(n => n.Supervisor)
+                                        .ThenInclude(s => s.Clinic)
+
+                                        .Include(wc => wc.IndividualNote)
+                                        .ThenInclude(n => n.Objective)
+
+                                        .Include(wc => wc.Workday)
+
+                                        .FirstOrDefault(wc => (wc.Id == item.Id && wc.IndividualNote.Status == NoteStatus.Approved));
+
+                if (workdayClient != null)
+                {
+                    if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DAVILA")
+                    {                       
+                       Stream stream = _reportHelper.DavilaIndNoteReportSchema1(workdayClient);
+                       fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));                        
+                    }                    
+                }
             }
 
             return this.ZipFile(fileContentList, $"{workday.Date.ToShortDateString()}.zip");
