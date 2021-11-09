@@ -231,6 +231,12 @@ namespace KyoS.Web.Controllers
                 ViewBag.errorText = errorText;
             }
 
+            //el cliente seleccionado tiene una nota ya creada de otro servicio en ese mismo horario
+            if (error == 5)
+            {
+                ViewBag.Error = "5";
+            }
+
             Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
                                                                            .ThenInclude(w => w.Workdays_Activities_Facilitators)
                                                                            .ThenInclude(waf => waf.Activity)
@@ -559,6 +565,12 @@ namespace KyoS.Web.Controllers
                 string progress;
                 if (note == null)   //la nota no está creada
                 {
+                    //Verify the client is not present in other services of notes at the same time
+                    if (this.VerifyNotesAtSameTime(workday_Client.Client.Id, workday_Client.Session, workday_Client.Workday.Date))
+                    {
+                        return RedirectToAction(nameof(EditNote), new { id = model.Id, error = 5, origin = model.Origin });
+                    }
+
                     //actualizo el progress seleccionado en el plan
                     progress = (form["Progress"] == "SignificantProgress") ? "Significant progress " :
                                 (form["Progress"] == "ModerateProgress") ? "Moderate progress " :
@@ -800,6 +812,12 @@ namespace KyoS.Web.Controllers
                 ViewBag.errorText = errorText;
             }
 
+            //el cliente seleccionado tiene una nota ya creada en ese mismo horario
+            if (error == 5)
+            {
+                ViewBag.Error = "5";                
+            }
+
             Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
                                                                            
                                                                            .Include(wc => wc.Client)
@@ -969,17 +987,19 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> EditIndNote(IndividualNoteViewModel model, IFormCollection form)
         {
-            Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
+            Workday_Client workday_Client = await _context.Workdays_Clients
 
-                                                                           .Include(wc => wc.Client)
-                                                                           .ThenInclude(c => c.Clinic)                                                                          
+                                                          .Include(wc => wc.Workday)
 
-                                                                           .Include(wc => wc.Client)
-                                                                           .ThenInclude(c => c.MTPs)
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Clinic)                                                                          
 
-                                                                           .Include(wc => wc.Facilitator)
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.MTPs)
 
-                                                                           .FirstOrDefaultAsync(wc => wc.Id == model.Id);
+                                                          .Include(wc => wc.Facilitator)
+
+                                                          .FirstOrDefaultAsync(wc => wc.Id == model.Id);
             if (workday_Client == null)
             {
                 return NotFound();
@@ -999,6 +1019,12 @@ namespace KyoS.Web.Controllers
                
                 if (note == null)   //the note is not exist
                 {
+                    //Verify the client is not present in other services of notes at the same time
+                    if (this.VerifyNotesAtSameTime(model.IdClient, workday_Client.Session, workday_Client.Workday.Date))
+                    {
+                        return RedirectToAction(nameof(EditIndNote), new { id = model.Id, error = 5, origin = model.Origin });
+                    }
+
                     model.PlanNote = (model.PlanNote.Trim().Last() == '.') ? model.PlanNote.Trim() : $"{model.PlanNote.Trim()}.";
                     model.SubjectiveData = (model.SubjectiveData.Trim().Last() == '.') ? model.SubjectiveData.Trim() : $"{model.SubjectiveData.Trim()}.";
                     model.ObjectiveData = (model.ObjectiveData.Trim().Last() == '.') ? model.ObjectiveData.Trim() : $"{model.ObjectiveData.Trim()}.";
@@ -1966,8 +1992,7 @@ namespace KyoS.Web.Controllers
             return this.ZipFile(fileContentList, $"{workday.Date.ToShortDateString()}.zip");
         }
 
-        [Authorize(Roles = "Facilitator, Mannager")]
-        //[ResponseCache(Location = ResponseCacheLocation.Client, NoStore = true)]
+        [Authorize(Roles = "Facilitator, Mannager")]        
         public IActionResult PrintNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -2110,8 +2135,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        #region Davila
-        //[ResponseCache(Location = ResponseCacheLocation.Client, NoStore = true)]
+        #region Davila        
         private IActionResult DavilaNoteReportSchema1(Workday_Client workdayClient)
         {
             //report
@@ -2415,7 +2439,6 @@ namespace KyoS.Web.Controllers
         #endregion
 
         #region Larkin
-        //[ResponseCache(Location = ResponseCacheLocation.Client, NoStore = true)]
         private IActionResult LarkinNoteReportSchema1(Workday_Client workdayClient)
         {
             //report
@@ -2566,7 +2589,6 @@ namespace KyoS.Web.Controllers
             return File(result.MainStream, "application/pdf");
         }
 
-        //[ResponseCache(Location = ResponseCacheLocation.Client, NoStore = true)]
         private IActionResult LarkinNoteReportSchema2(Workday_Client workdayClient)
         {
             //report
@@ -7359,6 +7381,7 @@ namespace KyoS.Web.Controllers
                                             .ToListAsync());
         }
 
+        #region Utils funtions
         private bool GenderEvaluation(GenderType gender, string text)
         {
             if (gender == GenderType.Female)
@@ -7391,5 +7414,67 @@ namespace KyoS.Web.Controllers
                 return File(ms.ToArray(), "application/zip", zipName);
             }
         }
+
+        private bool VerifyNotesAtSameTime(int idClient, string session, DateTime date)
+        {
+            //Individual notes
+            if (session == "8.00 - 9.00 AM" || session == "9.05 - 10.05 AM" || session == "10.15 - 11.15 AM" || session == "11.20 - 12.20 PM")
+            {
+                if (_context.Workdays_Clients
+                            .Where(wc => (wc.Client.Id == idClient && wc.Session == "AM" && wc.Workday.Date == date))
+                            .Count() > 0)
+                    return true;
+                return false;
+
+            }
+            if (session == "12.45 - 1.45 PM" || session == "1.50 - 2.50 PM" || session == "3.00 - 4.00 PM" || session == "4.05 - 5.05 PM")
+            {
+                if (_context.Workdays_Clients
+                            .Where(wc => (wc.Client.Id == idClient && wc.Session == "PM" && wc.Workday.Date == date))
+                            .Count() > 0)
+                    return true;
+                return false;
+            }
+
+            //PSR notes
+            if (session == "AM")
+            {
+                if (_context.Workdays_Clients
+                            .Where(wc => (wc.Client.Id == idClient && wc.Session == "8.00 - 9.00 AM" && wc.Workday.Date == date))
+                            .Count() > 0 
+                       || _context.Workdays_Clients
+                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "9.05 - 10.05 AM" && wc.Workday.Date == date))
+                                  .Count() > 0
+                       || _context.Workdays_Clients
+                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "10.15 - 11.15 AM" && wc.Workday.Date == date))
+                                  .Count() > 0
+                       || _context.Workdays_Clients
+                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "11.20 - 12.20 PM" && wc.Workday.Date == date))
+                                  .Count() > 0)
+                    return true;
+                return false;
+            }
+            if (session == "PM")
+            {
+                if (_context.Workdays_Clients
+                            .Where(wc => (wc.Client.Id == idClient && wc.Session == "12.45 - 1.45 PM" && wc.Workday.Date == date))
+                            .Count() > 0
+                       || _context.Workdays_Clients
+                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "1.50 - 2.50 PM" && wc.Workday.Date == date))
+                                  .Count() > 0
+                       || _context.Workdays_Clients
+                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "3.00 - 4.00 PM" && wc.Workday.Date == date))
+                                  .Count() > 0
+                       || _context.Workdays_Clients
+                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "4.05 - 5.05 PM" && wc.Workday.Date == date))
+                                  .Count() > 0)
+                    return true;
+                return false;
+            }
+
+            return true;
+        }
+        #endregion
+
     }
 }
