@@ -34,7 +34,7 @@
                             <th class="col-md-2">
 
                             </th>
-                            <th class="col-md-3">
+                            <th class="col-md-2">
 
                             </th>
                             <th class="col-md-2" style="text-align:center;">
@@ -49,243 +49,249 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Units
                             </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model.OrderBy(w => w.WeekOfYear))
                         {
-                            <tr>
-                                <td align="center">
-                                    @if (item.Clinic.Facilitators.Where(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count() != 0).Count() != 0)
-                                    {
-                                        <a class="icon-plus-sign-alt"></a>
-                                    }
-                                    <div style="display:none">
-                                        <table class="table table-striped">
+                        <tr>
+                            <td align="center">
+                                @if (item.Clinic.Facilitators.Where(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count() != 0).Count() != 0)
+                                {
+                                    <a class="icon-plus-sign-alt"></a>
+                                }
+                                <div style="display:none">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <th class="col-md-1"></th>
+                                            <th class="col-md-7">Name</th>
+                                            <th class="col-md-2" style="text-align:center;">Notes</th>
+                                            <th class="col-md-2" style="text-align:center;">Units</th>
+                                        </tr>
+                                        @foreach (var facilitator in item.Clinic.Facilitators.OrderByDescending(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count()))
+                                        {
                                             <tr>
-                                                <th class="col-md-1"></th>
-                                                <th class="col-md-7">Name</th>
-                                                <th class="col-md-2" style="text-align:center;">Notes</th>
-                                                <th class="col-md-2" style="text-align:center;">Units</th>
-                                            </tr>
-                                            @foreach (var facilitator in item.Clinic.Facilitators.OrderByDescending(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count()))
-                                            {
-                                                <tr>
-                                                    <td align="center">
-                                                        @if (facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count() != 0)
-                                                        {
-                                                            <a class="icon-plus-sign-alt"></a>
-                                                        }
-                                                        <div style="display:none">
-                                                            <table class="table table-striped">
+                                                <td align="center">
+                                                    @if (facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count() != 0)
+                                                    {
+                                                        <a class="icon-plus-sign-alt"></a>
+                                                    }
+                                                    <div style="display:none">
+                                                        <table class="table table-striped">
+                                                            <tr>
+                                                                <th class="col-md-1" style="text-align:center;">Code</th>
+                                                                <th class="col-md-3">Client Name</th>
+                                                                <th class="col-md-2" style="text-align:center;">Medicaid ID</th>
+                                                                <th class="col-md-1" style="text-align:center;">Date</th>
+                                                                <th class="col-md-3" style="text-align:center;">Diagnostics</th>
+                                                                <th class="col-md-1" style="text-align:center;">Notes</th>
+                                                                <th class="col-md-1" style="text-align:center;">Units</th>
+                                                            </tr>
+                                                            @foreach (var workdayClient in facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).OrderBy(wc => wc.Client.Name))
+                                                            {
                                                                 <tr>
-                                                                    <th class="col-md-1" style="text-align:center;">Code</th>
-                                                                    <th class="col-md-3">Client Name</th>
-                                                                    <th class="col-md-2" style="text-align:center;">Medicaid ID</th>
-                                                                    <th class="col-md-1" style="text-align:center;">Date</th>
-                                                                    <th class="col-md-3" style="text-align:center;">Diagnostics</th>
-                                                                    <th class="col-md-1" style="text-align:center;">Notes</th>
-                                                                    <th class="col-md-1" style="text-align:center;">Units</th>
-                                                                </tr>
-                                                                @foreach (var workdayClient in facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).OrderBy(wc => wc.Client.Name))
-                                                                {
-                                                                    <tr>
-                                                                        <td align="center">
-                                                                            @Html.DisplayFor(modelItem => workdayClient.Client.Code)
-                                                                        </td>
-                                                                        <td>
-                                                                            @Html.DisplayFor(modelItem => workdayClient.Client.Name)
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            @Html.DisplayFor(modelItem => workdayClient.Client.MedicaidID)
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            @Html.DisplayFor(modelItem => workdayClient.Workday.Date)
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            @Html.DisplayFor(modelItem => workdayClient.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code)
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            1
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            @if (workdayClient.Note != null)
+                                                                    <td align="center">
+                                                                        @Html.DisplayFor(modelItem => workdayClient.Client.Code)
+                                                                    </td>
+                                                                    <td>
+                                                                        @Html.DisplayFor(modelItem => workdayClient.Client.Name)
+                                                                    </td>
+                                                                    <td align="center">
+                                                                        @Html.DisplayFor(modelItem => workdayClient.Client.MedicaidID)
+                                                                    </td>
+                                                                    <td align="center">
+                                                                        @Html.DisplayFor(modelItem => workdayClient.Workday.Date)
+                                                                    </td>
+                                                                    <td align="center">
+                                                                        @Html.DisplayFor(modelItem => workdayClient.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code)
+                                                                    </td>
+                                                                    <td align="center">
+                                                                        1
+                                                                    </td>
+                                                                    <td align="center">
+                                                                        @if (workdayClient.Note != null)
+                                                                        {
+                                                                            if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema3))
                                                                             {
-                                                                                if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                                                <label>16</label>
+                                                                            }
+                                                                            if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                            {
+                                                                                <label>12</label>
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (workdayClient.IndividualNote != null)
+                                                                            {
+                                                                                <label>4</label>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
                                                                                 {
                                                                                     <label>16</label>
                                                                                 }
-                                                                                if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
                                                                                 {
                                                                                     <label>12</label>
                                                                                 }
                                                                             }
-                                                                            else
-                                                                            {
-                                                                                if (workdayClient.IndividualNote != null)
-                                                                                {
-                                                                                    <label>4</label>
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
-                                                                                    {
-                                                                                        <label>16</label>
-                                                                                    }
-                                                                                    if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
-                                                                                    {
-                                                                                        <label>12</label>
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        </td>
-                                                                    </tr>
-                                                                }
-                                                            </table>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => facilitator.Name)
-                                                    </td>
-                                                    <td align="center">
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count()
-                                                    </td>
-                                                    <td align="center">            
-                                                        @{
-                                                            units = 0;
-                                                        }
-                                                        @foreach (var workdayClient in facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)))
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => facilitator.Name)
+                                                </td>
+                                                <td align="center">
+                                                    @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count()
+                                                </td>
+                                                <td align="center">
+                                                    @{
+                                                        units = 0;
+                                                    }
+                                                    @foreach (var workdayClient in facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)))
+                                                    {
+                                                        @if (workdayClient.Note != null)
                                                         {
-                                                            @if (workdayClient.Note != null)
+                                                            if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema3))
                                                             {
-                                                                if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                                units = units + 16;
+                                                            }
+                                                            if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                            {
+                                                                units = units + 12;
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            if (workdayClient.IndividualNote != null)
+                                                            {
+                                                                units = units + 4;
+                                                            }
+                                                            else
+                                                            {
+                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
                                                                 {
                                                                     units = units + 16;
                                                                 }
-                                                                if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
                                                                 {
                                                                     units = units + 12;
                                                                 }
                                                             }
-                                                            else
-                                                            {
-                                                                if (workdayClient.IndividualNote != null)
-                                                                { 
-                                                                    units = units + 4;
-                                                                }
-                                                                else 
-                                                                { 
-                                                                    if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
-                                                                    {
-                                                                        units = units + 16;
-                                                                    }
-                                                                    if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
-                                                                    {
-                                                                        units = units + 12;
-                                                                    }
-                                                                }
-                                                            }
                                                         }
-                                                        <label>@units</label>
-                                                        @*@(facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id)).Count() * 16)*@
-                                                    </td>
-                                                </tr>
-                                            }
-                                        </table>
-                                    </div>
-                                </td>
-                                <td>
-                                    @if (item.MonthYear.Contains("January"))
-                                    {
-                                        <span class="label label-default">
-                                            @Html.DisplayFor(modelItem => item.MonthYear)
-                                        </span>
-                                    }
-                                    @if (item.MonthYear.Contains("February"))
-                                    {
-                                        <span class="label label-info">
-                                            @Html.DisplayFor(modelItem => item.MonthYear)
-                                        </span>
-                                    }
-                                    @if (item.MonthYear.Contains("March"))
-                                    {
-                                        <span class="label label-primary">
-                                            @Html.DisplayFor(modelItem => item.MonthYear)
-                                        </span>
-                                    }
-                                    @if (item.MonthYear.Contains("April"))
-                                    {
-                                        <span class="label label-warning">
-                                            @Html.DisplayFor(modelItem => item.MonthYear)
-                                        </span>
-                                    }
-                                    @if (item.MonthYear.Contains("May"))
-                                    {
-                                        <span class="label label-success">
-                                            @Html.DisplayFor(modelItem => item.MonthYear)
-                                        </span>
-                                    }
-                                    @if (item.MonthYear.Contains("June"))
-                                    {
-                                        <span class="label label-default">
-                                            @Html.DisplayFor(modelItem => item.MonthYear)
-                                        </span>
-                                    }
-                                    @if (item.MonthYear.Contains("July"))
-                                    {
-                                        <span class="label label-info">
-                                            @Html.DisplayFor(modelItem => item.MonthYear)
-                                        </span>
-                                    }
-                                    @if (item.MonthYear.Contains("August"))
-                                    {
-                                        <span class="label label-primary">
-                                            @Html.DisplayFor(modelItem => item.MonthYear)
-                                        </span>
-                                    }
-                                    @if (item.MonthYear.Contains("September"))
-                                    {
-                                        <span class="label label-warning">
-                                            @Html.DisplayFor(modelItem => item.MonthYear)
-                                        </span>
-                                    }
-                                    @if (item.MonthYear.Contains("October"))
-                                    {
-                                        <span class="label label-success">
-                                            @Html.DisplayFor(modelItem => item.MonthYear)
-                                        </span>
-                                    }
-                                    @if (item.MonthYear.Contains("November"))
-                                    {
-                                        <span class="label label-default">
-                                            @Html.DisplayFor(modelItem => item.MonthYear)
-                                        </span>
-                                    }
-                                    @if (item.MonthYear.Contains("December"))
-                                    {
-                                        <span class="label label-info">
-                                            @Html.DisplayFor(modelItem => item.MonthYear)
-                                        </span>
-                                    }
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Alias)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.InitDate)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.FinalDate)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Notes)
-                                </td>
-                                <td align="center" style="font-weight:bold;">
-                                    <span class="label label-success">
-                                        @Html.DisplayFor(modelItem => item.Units)
+                                                    }
+                                                    <label>@units</label>
+                                                    @*@(facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id)).Count() * 16)*@
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table>
+                                </div>
+                            </td>
+                            <td>
+                                @if (item.MonthYear.Contains("January"))
+                                {
+                                    <span class="label label-default">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
                                     </span>
-                                </td>
-                            </tr>
+                                }
+                                @if (item.MonthYear.Contains("February"))
+                                {
+                                    <span class="label label-info">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("March"))
+                                {
+                                    <span class="label label-primary">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("April"))
+                                {
+                                    <span class="label label-warning">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("May"))
+                                {
+                                    <span class="label label-success">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("June"))
+                                {
+                                    <span class="label label-default">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("July"))
+                                {
+                                    <span class="label label-info">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("August"))
+                                {
+                                    <span class="label label-primary">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("September"))
+                                {
+                                    <span class="label label-warning">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("October"))
+                                {
+                                    <span class="label label-success">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("November"))
+                                {
+                                    <span class="label label-default">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                                @if (item.MonthYear.Contains("December"))
+                                {
+                                    <span class="label label-info">
+                                        @Html.DisplayFor(modelItem => item.MonthYear)
+                                    </span>
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Alias)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.InitDate)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.FinalDate)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.Notes)
+                            </td>
+                            <td align="center" style="font-weight:bold;">
+                                <span class="label label-success">
+                                    @Html.DisplayFor(modelItem => item.Units)
+                                </span>
+                            </td>
+                            <td align="center">
+                                <a asp-action="BillingWeek" class="btn btn-default" asp-route-id="@item.Id" asp-route-origin="0" title="Bill this week">Bill</a>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

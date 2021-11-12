@@ -1,5 +1,3 @@
-using System;
-
 namespace KyoS.Web.Models
 {
     public class ErrorViewModel

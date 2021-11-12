@@ -28,5 +28,7 @@ namespace KyoS.Web.Data.Entities
                 return Client.Name;
             }
         }
+        public DateTime? BilledDate { get; set; }
+        public DateTime? PaymentDate { get; set; }
     }
 }
