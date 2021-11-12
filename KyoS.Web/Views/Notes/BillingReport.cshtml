@@ -86,63 +86,74 @@
                                                                 <th class="col-md-3">Client Name</th>
                                                                 <th class="col-md-2" style="text-align:center;">Medicaid ID</th>
                                                                 <th class="col-md-1" style="text-align:center;">Date</th>
-                                                                <th class="col-md-3" style="text-align:center;">Diagnostics</th>
+                                                                <th class="col-md-2" style="text-align:center;">Diagnostics</th>
+                                                                <th class="col-md-1" style="text-align:center;">Billed</th>
                                                                 <th class="col-md-1" style="text-align:center;">Notes</th>
                                                                 <th class="col-md-1" style="text-align:center;">Units</th>
                                                             </tr>
                                                             @foreach (var workdayClient in facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).OrderBy(wc => wc.Client.Name))
                                                             {
-                                                                <tr>
-                                                                    <td align="center">
-                                                                        @Html.DisplayFor(modelItem => workdayClient.Client.Code)
-                                                                    </td>
-                                                                    <td>
-                                                                        @Html.DisplayFor(modelItem => workdayClient.Client.Name)
-                                                                    </td>
-                                                                    <td align="center">
-                                                                        @Html.DisplayFor(modelItem => workdayClient.Client.MedicaidID)
-                                                                    </td>
-                                                                    <td align="center">
-                                                                        @Html.DisplayFor(modelItem => workdayClient.Workday.Date)
-                                                                    </td>
-                                                                    <td align="center">
-                                                                        @Html.DisplayFor(modelItem => workdayClient.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code)
-                                                                    </td>
-                                                                    <td align="center">
-                                                                        1
-                                                                    </td>
-                                                                    <td align="center">
-                                                                        @if (workdayClient.Note != null)
+                                                            <tr>
+                                                                <td align="center">
+                                                                    @Html.DisplayFor(modelItem => workdayClient.Client.Code)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => workdayClient.Client.Name)
+                                                                </td>
+                                                                <td align="center">
+                                                                    @Html.DisplayFor(modelItem => workdayClient.Client.MedicaidID)
+                                                                </td>
+                                                                <td align="center">
+                                                                    @Html.DisplayFor(modelItem => workdayClient.Workday.Date)
+                                                                </td>
+                                                                <td align="center">
+                                                                    @Html.DisplayFor(modelItem => workdayClient.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code)
+                                                                </td>
+                                                                <td align="center">
+                                                                    @if (workdayClient.BilledDate == null)
+                                                                    {
+                                                                        <p>-</p>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <p>@workdayClient.BilledDate.Value.ToShortDateString()</p>
+                                                                    }
+                                                                </td>
+                                                                <td align="center">
+                                                                    1
+                                                                </td>
+                                                                <td align="center">
+                                                                    @if (workdayClient.Note != null)
+                                                                    {
+                                                                        if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema3))
                                                                         {
-                                                                            if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                                            <label>16</label>
+                                                                        }
+                                                                        if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                        {
+                                                                            <label>12</label>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if (workdayClient.IndividualNote != null)
+                                                                        {
+                                                                            <label>4</label>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
                                                                             {
                                                                                 <label>16</label>
                                                                             }
-                                                                            if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                            if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
                                                                             {
                                                                                 <label>12</label>
                                                                             }
                                                                         }
-                                                                        else
-                                                                        {
-                                                                            if (workdayClient.IndividualNote != null)
-                                                                            {
-                                                                                <label>4</label>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
-                                                                                {
-                                                                                    <label>16</label>
-                                                                                }
-                                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
-                                                                                {
-                                                                                    <label>12</label>
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    </td>
-                                                                </tr>
+                                                                    }
+                                                                </td>
+                                                            </tr>
                                                             }
                                                         </table>
                                                     </div>
@@ -289,7 +300,14 @@
                                 </span>
                             </td>
                             <td align="center">
-                                <a asp-action="BillingWeek" class="btn btn-default" asp-route-id="@item.Id" asp-route-origin="0" title="Bill this week">Bill</a>
+                                @if (item.Days.Where(d => d.Workdays_Clients.Where(wc => (wc.BilledDate == null && wc.Present == true && wc.Client != null)).Count() > 0).Count() > 0)
+                                {
+                                    <a asp-action="BillingWeek" class="btn btn-danger" asp-route-id="@item.Id" asp-route-origin="0" title="Bill this week">Bill</a>
+                                }
+                                else
+                                { 
+                                    <a asp-action="BillingWeek" class="btn btn-default" asp-route-id="@item.Id" asp-route-origin="0" title="Billing completed successfully">Bill</a>
+                                }
                             </td>
                         </tr>
                         }

@@ -1,0 +1,3 @@
+https://github.com/amh1979/AspNetCore.Reporting/issues/9
+
+https://github.com/lkosson/reportviewercore
