@@ -7441,7 +7441,7 @@ namespace KyoS.Web.Controllers
 
                 return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_BillingWeek", workdays_clients) });
             }
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillNote", model) });
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "PaymentReceived", model) });
         }
 
         [Authorize(Roles = "Mannager")]

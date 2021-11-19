@@ -841,6 +841,44 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
             };
-        }        
+        }
+
+        public async Task<Client_HealthInsurance> ToClientHealthInsuranceEntity(UnitsAvailabilityViewModel model, bool isNew, string userId)
+        {
+            return new Client_HealthInsurance
+            {
+                Id = isNew ? 0 : model.Id,
+                ApprovedDate = model.ApprovedDate,
+                DurationTime = model.DurationTime,
+                Units = model.Units,                
+                Active = isNew ? true : model.Active,
+                Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient),
+                HealthInsurance = await _context.HealthInsurances.FirstOrDefaultAsync(hi => hi.Id == model.IdHealthInsurance),                
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+            };
+        }
+
+        public UnitsAvailabilityViewModel ToClientHealthInsuranceViewModel(Client_HealthInsurance model, int idClinic)
+        {
+            return new UnitsAvailabilityViewModel
+            {
+                Id = model.Id,
+                ApprovedDate = model.ApprovedDate,
+                DurationTime = model.DurationTime,
+                Units = model.Units,                
+                Active = model.Active,
+                IdClient = model.Client.Id,
+                Clients = _combosHelper.GetComboActiveClientsByClinic(idClinic),
+                IdHealthInsurance = model.HealthInsurance.Id,
+                HealthInsurances = _combosHelper.GetComboActiveInsurancesByClinic(idClinic),
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+            };
+        }
     }
 }

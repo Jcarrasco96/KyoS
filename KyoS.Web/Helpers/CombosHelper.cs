@@ -188,7 +188,7 @@ namespace KyoS.Web.Helpers
 
         public IEnumerable<SelectListItem> GetComboClientsByClinic(int idClinic)
         {
-            List<SelectListItem> list = _context.Clients.Where(c => (c.Clinic.Id == idClinic/* && c.MTPs.Count == 0*/))
+            List<SelectListItem> list = _context.Clients.Where(c => (c.Clinic.Id == idClinic /* && c.MTPs.Count == 0*/))
                                                         .Select(c => new SelectListItem
             {
                 Text = $"{c.Name}",
@@ -780,6 +780,27 @@ namespace KyoS.Web.Helpers
                                   new SelectListItem { Text = IncidentsStatus.NotValid.ToString(), Value = "2"}};
             
             return list;
-        }        
+        }
+
+        public IEnumerable<SelectListItem> GetComboActiveInsurancesByClinic(int idClinic)
+        {
+            List<SelectListItem> list = _context.HealthInsurances
+                                                 .Where(hi => (hi.Clinic.Id == idClinic
+                                                            && hi.Active == true))
+                                                 .Select(hi => new SelectListItem
+                                                 {
+                                                     Text = $"{hi.Name}",
+                                                     Value = $"{hi.Id}"
+                                                 })
+                                                 .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select insurance...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

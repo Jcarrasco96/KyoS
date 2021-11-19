@@ -1,0 +1,41 @@
+﻿@model IEnumerable<KyoS.Web.Models.UnitsAvailabilityViewModel>
+@{
+    ViewData["Title"] = "Units per client";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Units per client</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<p>
+    <a onclick="showInPopup('@Url.Action("CreateUnits","HealthInsurances",null,Context.Request.Scheme)','Create units per client')" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Units</a>
+</p>
+
+<div class="row">    
+    <div id="view-templates">
+        @await Html.PartialAsync("_UnitsAvailability", Model)
+    </div>
+</div>
+
+<partial name="_ModalPopup" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "order": [[0, "asc"]],
+                "pageLength": 100
+            });
+        });
+    </script>
+}
