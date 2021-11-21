@@ -304,6 +304,10 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                //Si el cliente tiene unidades disponibles de la asignación anterior se le suman a esta asignación
+                int availableUnits = await this.AvailableUnitsPerClientInsurance(model.IdClient, model.IdHealthInsurance);
+                model.Units = model.Units + availableUnits;
+
                 Client_HealthInsurance entity = await _converterHelper.ToClientHealthInsuranceEntity(model, true, user_logged.Id);
                 _context.Add(entity);
 
@@ -551,6 +555,30 @@ namespace KyoS.Web.Controllers
             }
 
             return usedUnits;
+        }
+
+        private async Task<int> AvailableUnitsPerClientInsurance(int idClient, int idHealthInsurance)
+        {
+            int availableUnits = 0;
+            int usedUnits = 0;
+            int diference = 0;
+
+            List<Client_HealthInsurance> list = await _context.Clients_HealthInsurances
+                                                              .Where(c => (c.Client.Id == idClient && c.HealthInsurance.Id == idHealthInsurance))
+                                                              .ToListAsync();
+
+            Client_HealthInsurance entity;
+            if (list.Count > 0)
+            {
+                entity = list.Last();
+                usedUnits = await this.UsedUnitsPerClient(entity.Id, idClient, idHealthInsurance);
+                diference = entity.Units - usedUnits;
+                if (diference >= 0)
+                   return diference;                
+                else
+                    return 0;
+            }
+            return availableUnits;
         }
         #endregion
     }
