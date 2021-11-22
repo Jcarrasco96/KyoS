@@ -458,7 +458,7 @@ namespace KyoS.Web.Controllers
             int schema2Count = 0;
             int schema4Count = 0;
             int notNotesCount = 0;
-            int indNotesCount = 0;
+            //int indNotesCount = 0;
 
             Client_HealthInsurance entity = await _context.Clients_HealthInsurances
                                                           .FirstOrDefaultAsync(c => (c.Id == idClientHealthInsurance));
@@ -499,11 +499,11 @@ namespace KyoS.Web.Controllers
                                         (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema4) ? 12 : 0;
                     usedUnits = usedUnits + (notNotesCount * value);
 
-                    indNotesCount = _context.IndividualNotes
-                                            .Where(n => (n.Workday_Cient.Workday.Date >= entity.ApprovedDate
-                                                      && n.Workday_Cient.Client.Id == idClient))
-                                            .Count();
-                    usedUnits = usedUnits + (indNotesCount * 4);
+                    //indNotesCount = _context.IndividualNotes
+                    //                        .Where(n => (n.Workday_Cient.Workday.Date >= entity.ApprovedDate
+                    //                                  && n.Workday_Cient.Client.Id == idClient))
+                    //                        .Count();
+                    //usedUnits = usedUnits + (indNotesCount * 4);
                 }
                 else 
                 {
@@ -545,12 +545,12 @@ namespace KyoS.Web.Controllers
                                         (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema4) ? 12 : 0;
                     usedUnits = usedUnits + (notNotesCount * value);
 
-                    indNotesCount = _context.IndividualNotes
-                                            .Where(i => (i.Workday_Cient.Workday.Date >= entity.ApprovedDate && i.Workday_Cient.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
-                                                      && i.Workday_Cient.Workday.Date < nextEntity.ApprovedDate
-                                                      && i.Workday_Cient.Client.Id == idClient))
-                                            .Count();
-                    usedUnits = usedUnits + (indNotesCount * 4);
+                    //indNotesCount = _context.IndividualNotes
+                    //                        .Where(i => (i.Workday_Cient.Workday.Date >= entity.ApprovedDate && i.Workday_Cient.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
+                    //                                  && i.Workday_Cient.Workday.Date < nextEntity.ApprovedDate
+                    //                                  && i.Workday_Cient.Client.Id == idClient))
+                    //                        .Count();
+                    //usedUnits = usedUnits + (indNotesCount * 4);
                 }
             }
 
