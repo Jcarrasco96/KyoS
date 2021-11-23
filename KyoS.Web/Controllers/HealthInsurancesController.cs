@@ -305,7 +305,7 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 //Si el cliente tiene unidades disponibles de la asignación anterior se le suman a esta asignación
-                int availableUnits = await this.AvailableUnitsPerClientInsurance(model.IdClient, model.IdHealthInsurance);
+                int availableUnits = await this.AvailableUnitsPerClientInsurance(model.IdClient, model.IdHealthInsurance, model.ApprovedDate);
                 model.Units = model.Units + availableUnits;
 
                 Client_HealthInsurance entity = await _converterHelper.ToClientHealthInsuranceEntity(model, true, user_logged.Id);
@@ -591,7 +591,127 @@ namespace KyoS.Web.Controllers
             return usedUnits;
         }
 
-        private async Task<int> AvailableUnitsPerClientInsurance(int idClient, int idHealthInsurance)
+        private async Task<int> UsedUnitsPerClient(int idClientHealthInsurance, int idClient, int idHealthInsurance, DateTime approvedDateNextEntity)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            int usedUnits = 0;
+            List<Client_HealthInsurance> list = await _context.Clients_HealthInsurances
+                                                              .Where(c => (c.Client.Id == idClient && c.HealthInsurance.Id == idHealthInsurance))
+                                                              .ToListAsync();
+
+            int schema1Count = 0;
+            int schema2Count = 0;
+            int schema4Count = 0;
+            int notNotesCount = 0;
+            //int indNotesCount = 0;
+
+            Client_HealthInsurance entity = await _context.Clients_HealthInsurances
+                                                          .FirstOrDefaultAsync(c => (c.Id == idClientHealthInsurance));
+
+            if (entity != null)
+            {
+                //ultima asignacion de unidades de ese cliente a ese seguro
+                if (list.Last().Id == idClientHealthInsurance)
+                {
+                    schema1Count = _context.Notes
+                                           .Where(n => (n.Schema == Common.Enums.SchemaType.Schema1
+                                                     && n.Workday_Cient.Workday.Date >= entity.ApprovedDate
+                                                     && n.Workday_Cient.Workday.Date < approvedDateNextEntity
+                                                     && n.Workday_Cient.Client.Id == idClient))
+                                           .Count();
+                    usedUnits = schema1Count * 16;
+
+                    schema2Count = _context.Notes
+                                           .Where(n => (n.Schema == Common.Enums.SchemaType.Schema2
+                                                     && n.Workday_Cient.Workday.Date >= entity.ApprovedDate
+                                                     && n.Workday_Cient.Workday.Date < approvedDateNextEntity
+                                                     && n.Workday_Cient.Client.Id == idClient))
+                                           .Count();
+                    usedUnits = usedUnits + (schema2Count * 16);
+
+                    schema4Count = _context.Notes
+                                           .Where(n => (n.Schema == Common.Enums.SchemaType.Schema4
+                                                     && n.Workday_Cient.Workday.Date >= entity.ApprovedDate
+                                                     && n.Workday_Cient.Workday.Date < approvedDateNextEntity
+                                                     && n.Workday_Cient.Client.Id == idClient))
+                                          .Count();
+                    usedUnits = usedUnits + (schema4Count * 12);
+
+                    notNotesCount = _context.Workdays_Clients
+                                            .Where(wc => (wc.Note == null
+                                                       && wc.IndividualNote == null
+                                                       && wc.Workday.Date >= entity.ApprovedDate
+                                                       && wc.Workday.Date < approvedDateNextEntity
+                                                       && wc.Client.Id == idClient))
+                                            .Count();
+                    int value = (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema1) ? 16 :
+                                    (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema2) ? 16 :
+                                        (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema4) ? 12 : 0;
+                    usedUnits = usedUnits + (notNotesCount * value);
+
+                    //indNotesCount = _context.IndividualNotes
+                    //                        .Where(n => (n.Workday_Cient.Workday.Date >= entity.ApprovedDate
+                    //                                  && n.Workday_Cient.Client.Id == idClient))
+                    //                        .Count();
+                    //usedUnits = usedUnits + (indNotesCount * 4);
+                }
+                else
+                {
+                    int index = list.IndexOf(entity);
+                    Client_HealthInsurance nextEntity = list.ElementAt(index + 1);
+
+                    schema1Count = _context.Notes
+                                           .Where(n => (n.Schema == Common.Enums.SchemaType.Schema1
+                                                     && n.Workday_Cient.Workday.Date >= entity.ApprovedDate && n.Workday_Cient.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
+                                                     && n.Workday_Cient.Workday.Date < nextEntity.ApprovedDate
+                                                     && n.Workday_Cient.Client.Id == idClient))
+                                           .Count();
+                    usedUnits = schema1Count * 16;
+
+                    schema2Count = _context.Notes
+                                           .Where(n => (n.Schema == Common.Enums.SchemaType.Schema2
+                                                     && n.Workday_Cient.Workday.Date >= entity.ApprovedDate && n.Workday_Cient.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
+                                                     && n.Workday_Cient.Workday.Date < nextEntity.ApprovedDate
+                                                     && n.Workday_Cient.Client.Id == idClient))
+                                           .Count();
+                    usedUnits = usedUnits + (schema2Count * 16);
+
+                    schema4Count = _context.Notes
+                                           .Where(n => (n.Schema == Common.Enums.SchemaType.Schema4
+                                                     && n.Workday_Cient.Workday.Date >= entity.ApprovedDate && n.Workday_Cient.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
+                                                     && n.Workday_Cient.Workday.Date < nextEntity.ApprovedDate
+                                                     && n.Workday_Cient.Client.Id == idClient))
+                                           .Count();
+                    usedUnits = usedUnits + (schema4Count * 12);
+
+                    notNotesCount = _context.Workdays_Clients
+                                            .Where(wc => (wc.Note == null
+                                                       && wc.IndividualNote == null
+                                                       && wc.Workday.Date >= entity.ApprovedDate && wc.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
+                                                       && wc.Workday.Date < nextEntity.ApprovedDate
+                                                       && wc.Client.Id == idClient))
+                                            .Count();
+                    int value = (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema1) ? 16 :
+                                    (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema2) ? 16 :
+                                        (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema4) ? 12 : 0;
+                    usedUnits = usedUnits + (notNotesCount * value);
+
+                    //indNotesCount = _context.IndividualNotes
+                    //                        .Where(i => (i.Workday_Cient.Workday.Date >= entity.ApprovedDate && i.Workday_Cient.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
+                    //                                  && i.Workday_Cient.Workday.Date < nextEntity.ApprovedDate
+                    //                                  && i.Workday_Cient.Client.Id == idClient))
+                    //                        .Count();
+                    //usedUnits = usedUnits + (indNotesCount * 4);
+                }
+            }
+
+            return usedUnits;
+        }
+
+        private async Task<int> AvailableUnitsPerClientInsurance(int idClient, int idHealthInsurance, DateTime approvedDateLimit)
         {
             int availableUnits = 0;
             int usedUnits = 0;
@@ -605,7 +725,7 @@ namespace KyoS.Web.Controllers
             if (list.Count > 0)
             {
                 entity = list.Last();
-                usedUnits = await this.UsedUnitsPerClient(entity.Id, idClient, idHealthInsurance);
+                usedUnits = await this.UsedUnitsPerClient(entity.Id, idClient, idHealthInsurance, approvedDateLimit);
                 diference = entity.Units - usedUnits;
                 if (diference >= 0)
                    return diference;                
