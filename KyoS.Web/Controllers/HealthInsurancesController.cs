@@ -442,6 +442,38 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditUnits", originalEntity) });
         }
 
+        public async Task<IActionResult> UnitsPerClientsInsurances()
+        {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic == null)
+            {
+                return NotFound();
+            }
+
+            List<ClientEntity> clients = await _context.Clients
+                                                       .Where(c => (c.Clinic.Id == user_logged.Clinic.Id && c.Status == Common.Enums.StatusType.Open))
+                                                       .ToListAsync();
+
+            List<HealthInsuranceEntity> insurances = await _context.HealthInsurances
+                                                                   .Where(hi => hi.Active == true)
+                                                                   .ToListAsync();
+
+            List<UnitsPerClientsInsurancesViewModel> list = new List<UnitsPerClientsInsurancesViewModel>();
+            foreach (var item in clients)
+            {
+                foreach (var value in insurances)
+                {
+
+                }
+            }
+
+            return View(null);
+        }
+
         #region Utils Functions
         private async Task<int> UsedUnitsPerClient(int idClientHealthInsurance, int idClient, int idHealthInsurance)
         {
@@ -491,6 +523,7 @@ namespace KyoS.Web.Controllers
 
                     notNotesCount = _context.Workdays_Clients
                                             .Where(wc => (wc.Note == null
+                                                       && wc.IndividualNote == null
                                                        && wc.Workday.Date >= entity.ApprovedDate
                                                        && wc.Client.Id == idClient))
                                             .Count();
@@ -536,6 +569,7 @@ namespace KyoS.Web.Controllers
 
                     notNotesCount = _context.Workdays_Clients
                                             .Where(wc => (wc.Note == null
+                                                       && wc.IndividualNote == null
                                                        && wc.Workday.Date >= entity.ApprovedDate && wc.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
                                                        && wc.Workday.Date < nextEntity.ApprovedDate
                                                        && wc.Client.Id == idClient))

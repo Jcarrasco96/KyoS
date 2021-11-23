@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="10/20/2021 13:31:06" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="11/22/2021 13:29:15" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3SHMEXqXkjtb+pX1No1FNJw==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3C0+ZGX3AinMcNwH4vy2ecA==">
       <TableDataSource Name="Themes1" Alias="Themes2" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -19,7 +19,7 @@
         <Column Name="SupervisorId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3uG1gUY8obPYZK7/0k+bPiA==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3sTiEtqpETfR7VxyCvhmBPQ==">
       <TableDataSource Name="Themes2" Alias="Themes3" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -37,7 +37,7 @@
         <Column Name="SupervisorId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3jB2byW9P+SE34KH6M2VBxQ==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3Eeq7UKzAdze0WiuKF/E5dw==">
       <TableDataSource Name="Notes" DataType="System.Int32" Enabled="true" TableName="Notes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="PlanNote" DataType="System.String"/>
@@ -231,7 +231,7 @@
           <TableCell Name="Cell19" Border.Lines="All" Text="Client ID #: [Clients.Code]" Font="Times New Roman, 11pt, style=Bold"/>
         </TableRow>
       </TableObject>
-      <TextObject Name="Text2" Left="85.05" Top="28.35" Width="689.85" Height="18.9" Text="[goal_text]" Font="Times New Roman, 10pt"/>
+      <TextObject Name="Text2" Left="85.05" Top="28.35" Width="689.85" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="[goal_text]" Font="Times New Roman, 10pt"/>
       <TextObject Name="Text4" Left="7.45" Top="28.35" Width="75.6" Height="18.9" Text="[num_of_goal]" HorzAlign="Right" Font="Times New Roman, 10pt, style=Bold"/>
       <TextObject Name="Text5" Left="7.45" Top="47.25" Width="75.6" Height="18.9" Text="[num_of_obj]" HorzAlign="Right" Font="Times New Roman, 10pt, style=Bold"/>
       <TextObject Name="Text6" Left="85.05" Top="47.25" Width="689.85" Height="37.8" CanGrow="true" CanShrink="true" CanBreak="false" Text="[obj_text]" HorzAlign="Justify" Font="Times New Roman, 10pt"/>

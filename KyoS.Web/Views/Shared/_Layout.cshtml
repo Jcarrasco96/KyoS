@@ -78,7 +78,7 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                   if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
+                     if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
@@ -112,7 +112,7 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
-                                <li>@Html.ActionLink("Units per clients", "UnitsAvailability", "HealthInsurances")</li>
+                                <li>@Html.ActionLink("Units per Insurances / Clients", "UnitsAvailability", "HealthInsurances")</li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Doctors", "Index", "Doctors")</li>
                                 <li>@Html.ActionLink("Psychiatrists", "Index", "Psychiatrists")</li>
@@ -128,8 +128,8 @@
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
-                    else
-                     if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
+                      else
+                       if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
@@ -160,7 +160,7 @@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
-                    else
+                       else
                         if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
                     {
                         <li class="class=" dropdown open"">

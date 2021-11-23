@@ -97,6 +97,8 @@ namespace KyoS.Web.Data.Entities
 
         public ICollection<DocumentEntity> Documents { get; set; }
 
+        public ICollection<Client_HealthInsurance> Clients_HealthInsurances { get; set; }
+
         public string MissingDoc 
         {
             get
@@ -138,6 +140,6 @@ namespace KyoS.Web.Data.Entities
                 }
                 return missingDoc;      
             } 
-        }
+        }        
     }
 }
