@@ -36,7 +36,8 @@
         $(document).ready(function () {
             $('#MyTable').DataTable({
                 "order": [[0, "asc"]],
-                "pageLength": 100
+                "lengthMenu": [[100, 200, -1], [100, 200, "All"]],
+                "pageLength": 200
             });        
         });
     </script>

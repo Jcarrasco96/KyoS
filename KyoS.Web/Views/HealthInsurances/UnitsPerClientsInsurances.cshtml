@@ -1,0 +1,102 @@
+﻿@model IEnumerable<KyoS.Web.Models.UnitsPerClientsInsurancesViewModel>
+@{
+    ViewData["Title"] = "Units per clients";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Available units</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @*<div class="alert alert-warning" role="alert">
+            <span class="sr-only"></span>*@
+        <strong>Note: </strong> Only Active Clients will be displayed
+        @*</div>*@
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Units per clients</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-2">Client Name</th>
+                            <th class="col-md-2" style="text-align:center;">Health Insurance</th>
+                            <th class="col-md-2" style="text-align:center;">Client Code</th>
+                            <th class="col-md-2" style="text-align:center;">Approved Units</th>
+                            <th class="col-md-2" style="text-align:center;">Used Units</th>
+                            <th class="col-md-2" style="text-align:center;">Available Units</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ClientName)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.HealthInsuranceName)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.ClientCode)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.ApprovedUnits)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.UsedUnits)
+                                </td>
+                                <td align="center">
+                                    @if (item.AvailableUnits < 64)
+                                    {
+                                        <span class="label label-danger">
+                                            @Html.DisplayFor(modelItem => item.AvailableUnits)
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-success">
+                                            @Html.DisplayFor(modelItem => item.AvailableUnits)
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_ModalPopup" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "order": [[5, "asc"]],
+                "lengthMenu": [[100, 200, -1], [100, 200, "All"]],
+                "pageLength": 200
+            });
+        });
+    </script>
+}

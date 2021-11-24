@@ -164,7 +164,8 @@
                         $(document).ready(function () {
                             $('#MyTable').DataTable({
                                 "order": [[0, "asc"]],
-                                "pageLength": 100
+                                "lengthMenu": [[10, 100, 200, -1], [10, 100, 200, "All"]],
+                                "pageLength": 200
                             });
                             
                             // Delete item

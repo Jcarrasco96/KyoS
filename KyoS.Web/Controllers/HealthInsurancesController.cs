@@ -463,15 +463,61 @@ namespace KyoS.Web.Controllers
                                                                    .ToListAsync();
 
             List<UnitsPerClientsInsurancesViewModel> list = new List<UnitsPerClientsInsurancesViewModel>();
+            List<Client_HealthInsurance> chi_list = new List<Client_HealthInsurance>();
+            int approvedUnits = 0;
+            int usedUnits = 0;
+            int diference = 0;
+            bool create;
+
             foreach (var item in clients)
             {
+                create = false;
                 foreach (var value in insurances)
                 {
+                    approvedUnits = 0;
+                    usedUnits = 0;
+                    diference = 0;
 
+                    chi_list = await _context.Clients_HealthInsurances
+                                             .Where(c => (c.HealthInsurance.Id == value.Id && c.Client.Id == item.Id))
+                                             .ToListAsync();
+                    if (chi_list.Count() > 0)
+                    {
+                        foreach (var element in chi_list)
+                        {
+                            approvedUnits = approvedUnits + element.Units;
+                            usedUnits = usedUnits + await this.UsedUnitsPerClient(element.Id, item.Id, value.Id);
+                        }
+                        diference = approvedUnits - usedUnits;
+                        list.Add(new UnitsPerClientsInsurancesViewModel
+                                    {
+                                        ClientName = item.Name,
+                                        HealthInsuranceName = value.Name,
+                                        ClientCode = item.Code,
+                                        ApprovedUnits = approvedUnits,
+                                        UsedUnits = usedUnits,
+                                        AvailableUnits = diference
+                                    }
+                        );
+                        create = true;
+                    }                    
+                }
+                if (!create)
+                {
+                    list.Add(new UnitsPerClientsInsurancesViewModel
+                                {
+                                    ClientName = item.Name,
+                                    HealthInsuranceName = "-",
+                                    ClientCode = item.Code,
+                                    ApprovedUnits = 0,
+                                    UsedUnits = 0,
+                                    AvailableUnits = 0
+                                }
+                    );
                 }
             }
 
-            return View(null);
+            return View(list.OrderBy(u => u.AvailableUnits));
         }
 
         #region Utils Functions
