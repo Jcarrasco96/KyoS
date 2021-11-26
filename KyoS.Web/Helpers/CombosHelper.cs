@@ -225,6 +225,28 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboActiveClientsPSRByClinic(int idClinic)
+        {
+            List<SelectListItem> list = _context.Clients
+                                                .Where(c => (c.Clinic.Id == idClinic
+                                                          && c.MTPs.Where(m => m.Active == true).Count() > 0 && c.Status == StatusType.Open
+                                                          && c.Service == ServiceType.PSR))
+                                                .Select(c => new SelectListItem
+                                                {
+                                                    Text = $"{c.Name}",
+                                                    Value = $"{c.Id}"
+                                                })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select client...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
         public IEnumerable<SelectListItem> GetComboClientsForIndNotes(int idClinic, int idWeek)
         {
             List<ClientEntity> clients = _context.Clients
@@ -802,5 +824,17 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboServices()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = ServiceType.PSR.ToString(), Value = "0"},
+                new SelectListItem { Text = ServiceType.Individual.ToString(), Value = "1"},
+                new SelectListItem { Text = ServiceType.Group.ToString(), Value = "2"}               
+            };
+
+            return list;
+        }        
     }
 }

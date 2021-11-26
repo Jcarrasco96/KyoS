@@ -99,6 +99,8 @@ namespace KyoS.Web.Data.Entities
 
         public ICollection<Client_HealthInsurance> Clients_HealthInsurances { get; set; }
 
+        public ServiceType Service { get; set; }
+
         public string MissingDoc 
         {
             get

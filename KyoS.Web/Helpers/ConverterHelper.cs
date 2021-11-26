@@ -203,6 +203,7 @@ namespace KyoS.Web.Helpers
                 LegalGuardian = await _context.LegalGuardians.FirstOrDefaultAsync(lg => lg.Id == model.IdLegalGuardian),
                 EmergencyContact = await _context.EmergencyContacts.FirstOrDefaultAsync(ec => ec.Id == model.IdEmergencyContact),
                 RelationShipOfLegalGuardian = RelationshipUtils.GetRelationshipByIndex(model.IdRelationship),
+                Service = isNew ? ServiceType.PSR : ServiceUtils.GetServiceByIndex(model.IdService),
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
@@ -264,7 +265,9 @@ namespace KyoS.Web.Helpers
                 IdLegalGuardian = (clientEntity.LegalGuardian != null) ? clientEntity.LegalGuardian.Id : 0,
                 LegalsGuardians = _combosHelper.GetComboLegalGuardiansByClinic(userId),
                 DiagnosticTemp = _context.DiagnosticsTemp,
-                DocumentTemp = _context.DocumentsTemp
+                DocumentTemp = _context.DocumentsTemp,
+                IdService = Convert.ToInt32(clientEntity.Service),
+                Services = _combosHelper.GetComboServices()
             };
         }
 

@@ -70,6 +70,10 @@ namespace KyoS.Web.Models
         public int IdRelationship { get; set; }
         public IEnumerable<SelectListItem> Relationships { get; set; }
 
+        [Display(Name = "Therapy")]
+        public int IdService { get; set; }
+        public IEnumerable<SelectListItem> Services { get; set; }
+
         public IEnumerable<DiagnosticTempEntity> DiagnosticTemp { get; set; }
 
         public IEnumerable<DocumentTempEntity> DocumentTemp { get; set; }

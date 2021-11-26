@@ -289,7 +289,7 @@ namespace KyoS.Web.Controllers
                 IdHealthInsurance = 0,
                 HealthInsurances = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id),
                 IdClient = 0,
-                Clients = _combosHelper.GetComboActiveClientsByClinic(user_logged.Clinic.Id)
+                Clients = _combosHelper.GetComboActiveClientsPSRByClinic(user_logged.Clinic.Id)
             };
             return View(entity);
         }
@@ -455,7 +455,8 @@ namespace KyoS.Web.Controllers
             }
 
             List<ClientEntity> clients = await _context.Clients
-                                                       .Where(c => (c.Clinic.Id == user_logged.Clinic.Id && c.Status == Common.Enums.StatusType.Open))
+                                                       .Where(c => (c.Clinic.Id == user_logged.Clinic.Id && c.Status == Common.Enums.StatusType.Open
+                                                                 && c.Service == Common.Enums.ServiceType.PSR))
                                                        .ToListAsync();
 
             List<HealthInsuranceEntity> insurances = await _context.HealthInsurances
