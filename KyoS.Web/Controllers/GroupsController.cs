@@ -82,10 +82,16 @@ namespace KyoS.Web.Controllers
                     {
                         Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id)
                     };
+
                     clients = await _context.Clients
+
                                             .Include(c => c.MTPs)
-                                            .Where(c => (c.Clinic.Id == user_logged.Clinic.Id && c.Status == Common.Enums.StatusType.Open))
+
+                                            .Where(c => (c.Clinic.Id == user_logged.Clinic.Id 
+                                                && c.Status == Common.Enums.StatusType.Open
+                                                && c.Service == Common.Enums.ServiceType.PSR))
                                             .OrderBy(c => c.Name).ToListAsync();
+
                     clients = clients.Where(c => c.MTPs.Count > 0).ToList();
                     client_list = new MultiSelectList(clients, "Id", "Name");
                     ViewData["clients"] = client_list;
@@ -247,10 +253,15 @@ namespace KyoS.Web.Controllers
                     groupViewModel.Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id);
 
                     clients = await _context.Clients
+
                                             .Include(c => c.MTPs)
-                                            .Where(c => (c.Clinic.Id == user_logged.Clinic.Id && c.Status == Common.Enums.StatusType.Open))
+
+                                            .Where(c => (c.Clinic.Id == user_logged.Clinic.Id 
+                                                      && c.Status == Common.Enums.StatusType.Open
+                                                      && c.Service == Common.Enums.ServiceType.PSR))
                                             .OrderBy(c => c.Name)
                                             .ToListAsync();
+
                     clients = clients.Where(c => c.MTPs.Count > 0).ToList();
                     client_list = new MultiSelectList(clients, "Id", "Name", groupViewModel.Clients.Select(c => c.Id));
                     ViewData["clients"] = client_list;

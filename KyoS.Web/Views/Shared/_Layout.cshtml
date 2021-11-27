@@ -20,18 +20,60 @@
     <link href="~/css/font-awesome.min.css" rel="stylesheet">
     <link href="~/css/font-awesome-ie7.css" rel="stylesheet">
     <link href="~/css/font-awesome-ie7.min.css" rel="stylesheet">
-    <style>        
-        .dropdown-submenu{position:relative;}
-        .dropdown-submenu>.dropdown-menu{top:0;left:100%;margin-top:-6px;margin-left:-1px;-webkit-border-radius:0 6px 6px 6px;-moz-border-radius:0 6px 6px 6px;border-radius:0 6px 6px 6px;}
-        .dropdown-submenu:hover>.dropdown-menu{display:block;}
-        .dropdown-submenu>a:after{display:block;content:" ";float:right;width:0;height:0;border-color:transparent;border-style:solid;border-width:5px 0 5px 5px;border-left-color:#cccccc;margin-top:5px;margin-right:-10px;}
-        .dropdown-submenu:hover>a:after{border-left-color:#ffffff;}
-        .dropdown-submenu.pull-left{float:none;}.dropdown-submenu.pull-left>.dropdown-menu{left:-100%;margin-left:10px;-webkit-border-radius:6px 0 6px 6px;-moz-border-radius:6px 0 6px 6px;border-radius:6px 0 6px 6px;}
+    <link href="~/css/site.css" rel="stylesheet" />
+
+    <style>
+        .dropdown-submenu {
+            position: relative;
+        }
+
+            .dropdown-submenu > .dropdown-menu {
+                top: 0;
+                left: 100%;
+                margin-top: -6px;
+                margin-left: -1px;
+                -webkit-border-radius: 0 6px 6px 6px;
+                -moz-border-radius: 0 6px 6px 6px;
+                border-radius: 0 6px 6px 6px;
+            }
+
+            .dropdown-submenu:hover > .dropdown-menu {
+                display: block;
+            }
+
+            .dropdown-submenu > a:after {
+                display: block;
+                content: " ";
+                float: right;
+                width: 0;
+                height: 0;
+                border-color: transparent;
+                border-style: solid;
+                border-width: 5px 0 5px 5px;
+                border-left-color: #cccccc;
+                margin-top: 5px;
+                margin-right: -10px;
+            }
+
+            .dropdown-submenu:hover > a:after {
+                border-left-color: #ffffff;
+            }
+
+            .dropdown-submenu.pull-left {
+                float: none;
+            }
+
+                .dropdown-submenu.pull-left > .dropdown-menu {
+                    left: -100%;
+                    margin-left: 10px;
+                    -webkit-border-radius: 6px 0 6px 6px;
+                    -moz-border-radius: 6px 0 6px 6px;
+                    border-radius: 6px 0 6px 6px;
+                }
     </style>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
@@ -42,7 +84,7 @@
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #1e2833;">
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -65,7 +107,7 @@
                     @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")))
                     {
                         <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 Data Operation <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
@@ -81,7 +123,7 @@
                      if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
                     {
                         <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 General <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
@@ -107,7 +149,7 @@
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 Clinic Management <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
@@ -132,7 +174,7 @@
                        if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
                     {
                         <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
+                            <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 Clients <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
@@ -141,7 +183,7 @@
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
+                            <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 Topics / Activities <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
@@ -150,7 +192,7 @@
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Notes" data-toggle="dropdown" role="button" aria-expanded="true">
+                            <a asp-area="" class="dropdown-toggle" asp-controller="Notes" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 Notes <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
@@ -164,7 +206,7 @@
                         if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
                     {
                         <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true">
+                            <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 Activities / Interventions <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
@@ -173,7 +215,7 @@
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 Notes <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
@@ -182,7 +224,7 @@
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 Reports <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
@@ -226,7 +268,7 @@
                             </a>
                         </li>
                         <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
                                 @*<div class="user-info">*@
                                 <span class="name pdd-right-5">@name</span>
@@ -234,36 +276,22 @@
                                 <span class="caret"></span>
                                 @*</div>*@
                             </a>
-                            <ul class="dropdown-menu" role="menu">
-                                @*<li>
-                                        <a href="#">
-                                            <i class="ti-settings pdd-right-10"></i>
-                                            <span>Setting</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="ti-user pdd-right-10"></i>
-                                            <span>Profile</span>
-                                        </a>
-                                    </li>*@
+                            <ul class="dropdown-menu" role="menu">                                
                                 <li>
                                     <a href="#">
-                                        <i class="ti-email pdd-right-10"></i>
+                                        <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
                                         <span>Inbox</span>
                                     </a>
                                 </li>
                                 <li role="separator" class="divider"></li>
                                 <li>
                                     <a asp-area="" asp-controller="Account" asp-action="Logout">
-                                        <i class="ti-power-off pdd-right-10"></i>
+                                        <i class="icon-off" style="padding-right: 10px !important;"></i>
                                         <span>Logout</span>
                                     </a>
                                 </li>
-                            </ul>
-                            @*<a asp-area="" asp-controller="Account" asp-action="Index">@User.Identity.Name</a>*@
+                            </ul>                            
                         </li>
-
                     }
                 </ul>
             </div>
@@ -311,7 +339,6 @@
             });
         });
     </script>
-
 
     @RenderSection("Scripts", required: false)
 </body>

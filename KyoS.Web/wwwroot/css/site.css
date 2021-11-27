@@ -46,21 +46,141 @@ body {
     flex-shrink: 0;
 }
 
-    .reports > a {
-        font-family: "Segoe UI",Arial,sans-serif;
-        font-size: 17px;
-        text-decoration: none;
-        padding: 3px 24px 4px 24px;
-        color: black;
-    }
+.reports > a {
+    font-family: "Segoe UI",Arial,sans-serif;
+    font-size: 17px;
+    text-decoration: none;
+    padding: 3px 24px 4px 24px;
+    color: black;
+}
 
-        .reports > a:hover {
-            background-color: rgb(54, 173, 244);
-            box-shadow: 0px 2px 10px -2px rgba(0, 0, 0, 0.2);
-            color: white;
-        }
+.reports > a:hover {
+    background-color: rgb(54, 173, 244);
+    box-shadow: 0px 2px 10px -2px rgba(0, 0, 0, 0.2);
+    color: white;
+}
 
 .webreport {
     padding-left: 20px;
     padding-right: 24px;
+}
+
+.pdd-right-5 {
+    padding-right: 5px !important;
+}
+
+.pdd-right-10 {
+    padding-right: 10px !important;
+}
+
+.pdd-right-15 {
+    padding-right: 15px !important;
+}
+
+.pdd-right-20 {
+    padding-right: 20px !important;
+}
+
+.pdd-right-25 {
+    padding-right: 25px !important;
+}
+
+.pdd-right-30 {
+    padding-right: 30px !important;
+}
+
+.pdd-right-35 {
+    padding-right: 35px !important;
+}
+
+.pdd-right-40 {
+    padding-right: 40px !important;
+}
+
+.pdd-right-45 {
+    padding-right: 45px !important;
+}
+
+.pdd-right-50 {
+    padding-right: 50px !important;
+}
+
+.pdd-right-55 {
+    margin-right: 55px !important;
+}
+
+.pdd-right-60 {
+    padding-right: 60px !important;
+}
+
+.pdd-right-65 {
+    padding-right: 65px !important;
+}
+
+.pdd-right-70 {
+    padding-right: 70px !important;
+}
+
+.pdd-right-75 {
+    padding-right: 75px !important;
+}
+
+.pdd-right-80 {
+    padding-right: 80px !important;
+}
+
+.pdd-right-85 {
+    padding-right: 85px !important;
+}
+
+.pdd-right-90 {
+    padding-right: 90px !important;
+}
+
+.pdd-right-95 {
+    padding-right: 95px !important;
+}
+
+.pdd-right-100 {
+    padding-right: 100px !important;
+}
+
+.pdd-right-105 {
+    padding-right: 105px !important;
+}
+
+.pdd-left-110 {
+    padding-left: 110px !important;
+}
+
+.pdd-right-115 {
+    padding-right: 115px !important;
+}
+
+.pdd-right-120 {
+    margin-right: 120px !important;
+}
+
+.pdd-right-125 {
+    padding-right: 125px !important;
+}
+
+.pdd-right-130 {
+    padding-right: 130px !important;
+}
+
+.pdd-right-135 {
+    padding-right: 135px !important;
+}
+
+.pdd-right-140 {
+    padding-right: 140px !important;
+}
+
+.pdd-right-145 {
+    padding-right: 145px !important;
+}
+
+.pdd-right-150 {
+    padding-right: 150px !important;
 }

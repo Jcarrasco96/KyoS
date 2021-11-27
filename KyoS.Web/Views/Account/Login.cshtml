@@ -1,43 +1,180 @@
 ﻿@model KyoS.Web.Models.LoginViewModel
-@{
+@{    
     ViewData["Title"] = "Login";
+    Layout = null;
 }   
-        
 
-<div class="row">
-    <div class="col-md-4">
-    </div>
-    <div class="col-md-3">
-        <h3 class="text-center mb-5">Log in</h3>
-        <p class="text-center mb-5">Please enter your user name and password</p>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />   
+    <title>@ViewData["Title"] - KyoS Notes</title>
+    <link href="~/css/font-awesome.css" rel="stylesheet">
+    <link href="~/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/css/font-awesome-ie7.css" rel="stylesheet">
+    <link href="~/css/font-awesome-ie7.min.css" rel="stylesheet">
+
+    <style>
+        .login-dark {
+        height: 1000px;
+        /*background: #475d62 url(../../assets/img/star-sky.jpg);*/
+        background-size: cover;
+        position: center;       
+        }
+
+        .login-dark form {
+        max-width: 320px;
+        width: 90%;
+        background-color: #1e2833;
+        padding: 40px;
+        border-radius: 4px;
+        transform: translate(-50%, -50%);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        color: #fff;
+        box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
+        }
+
+        .login-dark .illustration {
+            text-align: center;
+            padding: 15px 0 20px;
+            font-size: 100px;
+            color: #2980ef;
+        }
+
+        .login-dark form .form-control {
+            background: none;
+            border: none;
+            border-bottom: 1px solid #434a52;
+            border-radius: 0;
+            box-shadow: none;
+            outline: none;
+            color: inherit;
+        }
+
+        .login-dark form .btn-primary {
+            background: #214a80;
+            border: none;
+            border-radius: 4px;
+            padding: 11px;
+            box-shadow: none;
+            margin-top: 26px;
+            text-shadow: none;
+            outline: none;
+        }
+
+        .login-dark form .btn-primary:hover, .login-dark form .btn-primary:active {
+                background: #214a80;
+                outline: none;
+            }
+
+        .login-dark form .forgot {
+            /*display: block;*/
+            /*text-align: center;*/
+            font-size: 13px;
+            color: #6f7a85;
+            opacity: 1.0;
+            text-decoration: none;
+        }
+
+        .login-dark form .forgot:hover, .login-dark form .forgot:active {
+                opacity: 1;
+                text-decoration: none;
+            }
+
+        .login-dark form .btn-primary:active {
+            transform: translateY(1px);
+        }
+    </style>
+    
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />        
+    </environment>
+</head>
+<body style="background-color: #fff;">  
+        
+    <div class="login-dark">        
         <form method="post">
             <div asp-validation-summary="ModelOnly"></div>
+            <div class="text-center mb-5">
+                <label style="font-family:Tahoma; color:goldenrod; font-size:x-large">
+                    KyoS
+                </label>
+                <label style="font-family:Tahoma; color:white; font-size:x-large">
+                    Notes
+                </label>
+            </div>
+            <div class="illustration"><i class="icon ion-ios-locked-outline"></i></div>
             <div class="form-group">
-                <input asp-for="Username" class="form-control" placeholder="User name" />
+                <input asp-for="Username" class="form-control" placeholder="Enter email" />
                 <span asp-validation-for="Username" class="text-warning"></span>
             </div>
             <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
             <div class="form-group">
-                <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
+                <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" />
                 <span asp-validation-for="Password" class="text-warning"></span>
             </div>
             <div class="form-group">
                 <div class="form-check">
                     <input asp-for="RememberMe" type="checkbox" class="form-check-input" />
-                    <label asp-for="RememberMe" class="form-check-label">Keep me signed in</label>
+                    <label asp-for="RememberMe" class="forgot">Keep me signed in</label>
                 </div>
                 <span asp-validation-for="RememberMe" class="text-warning"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value=" Log in " class="btn btn-primary" style="width: 100% !important;"/>
+                <input type="submit" value=" Log in " class="btn btn-primary" style="width: 100% !important;" />
             </div>
         </form>
-    </div>
-    <div class="col-md-5">
-    </div>
-</div>
+    </div>       
+    
 
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+        </script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
+        </script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+    <environment include="Development">
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.min.js"
+                asp-fallback-src="~/lib/jquery-validation/dist/jquery.validate.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.validator"
+                crossorigin="anonymous"
+                integrity="sha384-rZfj/ogBloos6wzLGpPkkOr/gpkBNLZ6b6yLy4o+ok+t/SAKlL5mvXLr0OXNi1Hp">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.9/jquery.validate.unobtrusive.min.js"
+                asp-fallback-src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive"
+                crossorigin="anonymous"
+                integrity="sha384-ifv0TYDWxBHzvAk2Z0n8R434FL1Rlv/Av18DXE43N/1rvHyOG4izKst0f2iSLdds">
+        </script>
+    </environment>
+</body>
+</html>        
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
