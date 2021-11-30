@@ -53,7 +53,10 @@
                             <th class="col-md-4">
                                 Client
                             </th>
-                            <th class="col-md-4">
+                            <th class="col-md-1" style="text-align:center;">
+                                Therapy
+                            </th>
+                            <th class="col-md-3" style="text-align:center;">
                                 Clinic
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -70,81 +73,87 @@
                         {
                             @if ((item.Active) && (item.Client.Status == KyoS.Common.Enums.StatusType.Open))
                             {
-                                <tr>
-                                    <td>
-                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                            <tr>
+                                <td>
+                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => item.Client.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Client.Service)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Client.Clinic.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Active)
+                                </td>
+                                <td align="center">
+                                    @if (item.NumberOfMonths != null)
+                                    {
+                                        @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days >= 0)
                                         {
-                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                            <span class="label label-danger" title="Expired days">
+                                                @(-(DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days)
+                                            </span>
                                         }
-                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days < 0)
                                         {
-                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                            <span class="label label-primary" title="Number of days to expire the MTP">
+                                                @((item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths)) - DateTime.Now).Days)
+                                            </span>
                                         }
-                                        &nbsp;
-                                        @Html.DisplayFor(modelItem => item.Client.Name)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Client.Clinic.Name)
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Active)
-                                    </td>
-                                    <td align="center">                                        
-                                            @if (item.NumberOfMonths != null)
-                                            {
-                                                @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days >= 0)
-                                                {
-                                                    <span class="label label-danger" title="Expired days">
-                                                        @(-(DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days)
-                                                    </span>
-                                                }
-                                                @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days < 0)
-                                                {
-                                                    <span class="label label-primary" title="Number of days to expire the MTP">
-                                                        @((item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths)) - DateTime.Now).Days)
-                                                    </span>
-                                                }
-                                            }                                        
-                                    </td>
-                                    <td align="right">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                        <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
-                                    </td>
-                                </tr>
+                                    }
+                                </td>
+                                <td align="right">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                </td>
+                            </tr>
                             }
                             @if ((item.Active == false) || (item.Client.Status == KyoS.Common.Enums.StatusType.Close))
                             {
-                                <tr style="color: darkgrey;">
-                                    <td>
-                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
-                                        {
-                                            <i class="glyphicon glyphicon-user btn-danger"></i>
-                                        }
-                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
-                                        {
-                                            <i class="glyphicon glyphicon-user btn-primary"></i>
-                                        }
-                                        &nbsp;
-                                        @Html.DisplayFor(modelItem => item.Client.Name)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Client.Clinic.Name)
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Active)
-                                    </td>
-                                    <td align="center">
-                                        &nbsp;
-                                    </td>
-                                    <td align="right">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                        <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
-                                    </td>
-                                </tr>
+                            <tr style="color: darkgrey;">
+                                <td>
+                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => item.Client.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Client.Service)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Client.Clinic.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Active)
+                                </td>
+                                <td align="center">
+                                    &nbsp;
+                                </td>
+                                <td align="right">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                </td>
+                            </tr>
                             }
                         }
                     </tbody>
