@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using KyoS.Common.Enums;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
@@ -10,9 +11,9 @@ namespace KyoS.Web.Data.Entities
         public bool Am { get; set; }
         [Display(Name = "PM")]
         public bool Pm { get; set; }
+        public ServiceType Service { get; set; }
         public FacilitatorEntity Facilitator { get; set; }
         public IEnumerable<ClientEntity> Clients { get; set; }
-
         public string Meridian 
         {
             get

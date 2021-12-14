@@ -1,7 +1,7 @@
 ﻿@model KyoS.Web.Models.GroupViewModel
 
 @{
-    ViewData["Title"] = "Edit PSR Group";
+    ViewData["Title"] = "Edit GT Group";
 }
 
 <link rel="stylesheet" href="~/css/prism.css">
@@ -11,13 +11,13 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("PSR Groups", "Index", "Groups")
+            @Html.ActionLink("Group-Therapy Group", "Group", "Groups")
         </li>
-        <li class="active">Edit PSR Group</li>
+        <li class="active">Edit GT Group</li>
     </ul><!--.breadcrumb-->
 </div>
 
-<h4>Edit PSR Group</h4>
+<h4>Edit GT Group</h4>
 <hr />
 <div class="row">
     <div class="col-md-12">
@@ -34,7 +34,7 @@
             </div>
         }
     </div>
-    <form asp-action="Edit">
+    <form asp-action="EditGT">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
 
@@ -96,7 +96,7 @@
         <div class="form-group col-md-12"></div>
         <div class="form-group col-md-12">
             <input type="submit" value="Save" class="btn btn-primary" />
-            <a asp-action="Index" class="btn btn-success">Back</a>
+            <a asp-action="Group" class="btn btn-success">Back</a>
         </div>
     </form>
 </div>

@@ -403,7 +403,8 @@ namespace KyoS.Web.Helpers
                 Id = isNew ? 0 : model.Id,
                 Am = model.Am,
                 Pm = model.Pm,
-                Facilitator = await _context.Facilitators.FindAsync(model.IdFacilitator)
+                Facilitator = await _context.Facilitators.FindAsync(model.IdFacilitator),
+                Service = model.Service
             };
         }
 

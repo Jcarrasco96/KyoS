@@ -1,7 +1,7 @@
 ﻿@model KyoS.Web.Models.GroupViewModel
 
 @{
-    ViewData["Title"] = "Create PSR Group";
+    ViewData["Title"] = "Create Group-Therapy Group";
 }
 
 <link rel="stylesheet" href="~/css/prism.css">
@@ -11,13 +11,13 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("PSR Groups", "Index", "Groups")
+            @Html.ActionLink("Group-Therapy Group", "Group", "Groups")
         </li>
-        <li class="active">Create PSR Group</li>
+        <li class="active">Create GT Group</li>
     </ul><!--.breadcrumb-->
 </div>
 
-<h4>Create PSR Group</h4>
+<h4>Create GT Group</h4>
 <hr />
 <div class="row">
     <div class="col-md-12">
@@ -29,7 +29,7 @@
                 </button>
                 <i class="icon-ok green"></i>
                 <strong class="green">
-                    PSR Group been successfully created
+                    GT Group been successfully created
                 </strong>
 
             </div>
@@ -46,22 +46,9 @@
                 </strong>
             </div>
         }
-        
-        @if (ViewBag.Error == "0" || ViewBag.Error == "1")
-        {
-            <div class="alert alert-block alert-danger">
-                <button type="button" class="close" data-dismiss="alert">
-                    <i class="icon-remove"></i>
-                </button>
-                <i class="icon-ok red"></i>
-                <strong class="red">
-                    @ViewBag.errorText
-                </strong>
-            </div>
-        }        
     </div>
     <div>
-        <form asp-action="Create">
+        <form asp-action="CreateGT">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <partial name="_Groups" />
@@ -72,7 +59,7 @@
             <div class="form-group col-md-12"></div>
             <div class="form-group col-md-12">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-success">Back</a>
+                <a asp-action="Group" class="btn btn-success">Back</a>
             </div>
         </form>
     </div>

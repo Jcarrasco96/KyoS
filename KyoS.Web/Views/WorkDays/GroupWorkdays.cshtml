@@ -16,7 +16,7 @@
 </div>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Group Workdays</a>
+    <a asp-action="CreateGroup" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Group Workdays</a>
 </p>
 
 <div class="row">
@@ -72,7 +72,7 @@
                                                 <th class="col-md-7">Day</th>
                                                 <th></th>
                                             </tr>
-                                            @foreach (var day in item.Days.OrderBy(d => d.Date))
+                                            @foreach (var day in item.Days.Where(d => d.Service == KyoS.Common.Enums.ServiceType.Group).OrderBy(d => d.Date))
                                             {
                                                 <tr>
                                                     <td>
@@ -82,7 +82,7 @@
                                                         @Html.DisplayFor(modelItem => day.Day)
                                                     </td>
                                                     <td align="right">
-                                                        <a asp-action="Delete" asp-route-id="@day.Id" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
+                                                        <a asp-action="DeleteGroup" asp-route-id="@day.Id" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
                                                     </td>
                                                 </tr>
                                             }

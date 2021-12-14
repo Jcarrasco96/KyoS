@@ -131,10 +131,16 @@
                                 <li>@Html.ActionLink("Facilitators", "Index", "Facilitators")</li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Health Insurances", "Index", "HealthInsurances")</li>
+                                <li role="separator" class="divider"></li>                                
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Groups</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("PSR", "Index", "Groups")</li>
+                                        <li>@Html.ActionLink("Group", "Group", "Groups")</li>                                        
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Groups", "Index", "Groups")</li>
-                                <li role="separator" class="divider"></li>
-                                <li class="dropdown-submenu">                                    
+                                <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">Workdays</a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("PSR", "Index", "Workdays")</li>
