@@ -309,8 +309,17 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult CreateIndividual()
+        public IActionResult CreateIndividual(int error = 0, int idFacilitator = 0)
         {
+            //the facilitator has not availability on that dates
+            if (error == 1)
+            {
+                FacilitatorEntity facilitator = _context.Facilitators
+                                                        .FirstOrDefault(f => f.Id == idFacilitator);
+                ViewBag.Error = "0";
+                ViewBag.errorText = $"Error. The facilitator {facilitator.Name} has another therapy already at that time";
+            }
+
             WeekViewModel model;
 
             UserEntity user_logged = _context.Users
@@ -445,6 +454,12 @@ namespace KyoS.Web.Controllers
                                                                     .Where(f => f.Id == Convert.ToInt32(value))
                                                                     .FirstOrDefaultAsync();
 
+                                        //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
+                                        if (this.VerifyFreeTimeOfFacilitator(facilitator.Id, ServiceType.Individual, string.Empty, item1))
+                                        {
+                                            return RedirectToAction(nameof(CreateIndividual), new { error = 1, idFacilitator = facilitator.Id });
+                                        }
+
                                         workday_client = new Workday_Client
                                         {
                                             Workday = workday,
@@ -536,6 +551,12 @@ namespace KyoS.Web.Controllers
                                         facilitator = await _context.Facilitators
                                                                     .Where(f => f.Id == Convert.ToInt32(value))
                                                                     .FirstOrDefaultAsync();
+
+                                        //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
+                                        if (this.VerifyFreeTimeOfFacilitator(facilitator.Id, ServiceType.Individual, string.Empty, item1))
+                                        {
+                                            return RedirectToAction(nameof(CreateIndividual), new { error = 1, idFacilitator = facilitator.Id });
+                                        }
 
                                         workday_client = new Workday_Client
                                         {
@@ -995,6 +1016,16 @@ namespace KyoS.Web.Controllers
                                   .Where(wc => (wc.Facilitator.Id == idFacilitator && wc.Session == "PM" && wc.Workday.Date == date && wc.Workday.Service == ServiceType.Group))
                                   .Count() > 0
                                   )
+                    return true;
+                return false;
+            }
+
+            //Individual notes
+            if (service == ServiceType.Individual)
+            {
+                if (_context.Workdays_Clients
+                            .Where(wc => (wc.Facilitator.Id == idFacilitator && wc.Workday.Date == date && wc.Workday.Service != ServiceType.Individual))
+                            .Count() > 0)
                     return true;
                 return false;
             }
