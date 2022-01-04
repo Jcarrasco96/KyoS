@@ -90,6 +90,18 @@
             {
                 <a asp-action="IndNotesInEdit" class="btn btn-success">Back</a>
             }
+            @if (Model.Origin == 6) //viene de la pagina GroupNotes de las notas de grupo
+            {
+                <a asp-action="GroupNotes" class="btn btn-success">Back</a>
+            }
+            @if (Model.Origin == 7) //viene de la pagina NotStartedGroupNotes de las notas de grupo
+            {
+                <a asp-action="NotStartedGroupNotes" class="btn btn-success">Back</a>
+            }
+            @if (Model.Origin == 8) //viene de la pagina GroupNotesInEdit de las notas de grupo
+            {
+                <a asp-action="GroupNotesInEdit" class="btn btn-success">Back</a>
+            }
         </div>
     </form>
 </div>

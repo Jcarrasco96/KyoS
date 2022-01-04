@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.WeekEntity>
 @{
-    ViewData["Title"] = "Supervision of individual notes";
+    ViewData["Title"] = "Activities per Group week";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,21 +11,15 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Individual Notes Supervision</li>
+        <li class="active">Activities per Group week</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <div class="row">
     <div class="col-md-12">
-        <strong>Note: </strong> Only pending individual notes will be displayed
-    </div>
-    <div class="col-md-12">
-        &nbsp;
-    </div>
-    <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Individual notes pending</h3>
+                <h3 class="panel-title">Activities per Group week</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -37,7 +31,7 @@
                             <th class="col-md-2">
 
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-3">
 
                             </th>
                             <th class="col-md-2" style="text-align:center;">
@@ -45,10 +39,7 @@
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Final Date
-                            </th>
-                            <th class="col-md-3">
-                                Clinic
-                            </th>
+                            </th>                            
                         </tr>
                     </thead>
                     <tbody>
@@ -56,7 +47,7 @@
                         {
                             <tr>
                                 <td align="center">
-                                    @if (item.Days.Where(w => w.Workdays_Clients.Where(wc => (wc.IndividualNote != null && wc.IndividualNote.Status.ToString() == "Pending")).Count() != 0).Count() != 0)
+                                    @if (item.Days.Count() != 0)
                                     {
                                         <a class="icon-plus-sign-alt"></a>
                                     }
@@ -68,55 +59,33 @@
                                                 <th class="col-md-7">Day</th>
                                                 <th></th>
                                             </tr>
-                                            @foreach (var day in item.Days.Where(d => d.Service == KyoS.Common.Enums.ServiceType.Individual).OrderBy(d => d.Date))
+                                            @foreach (var day in item.Days.Where(d => d.Service == KyoS.Common.Enums.ServiceType.Group).OrderBy(d => d.Date))
                                             {
                                                 <tr>
                                                     <td align="center">
-                                                        @if (day.Workdays_Clients.Where(wc => (wc.IndividualNote != null && wc.IndividualNote.Status.ToString() == "Pending")).Count() != 0)
+                                                        @if (day.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator.LinkedUser == User.Identity.Name).Count() != 0)
                                                         {
                                                             <a class="icon-plus-sign-alt"></a>
-                                                            @*<a class="glyphicon glyphicon-plus"></a>*@
-                                                        }
-                                                        <div style="display:none">
-                                                            <table class="table table-striped">
-                                                                <tr>
-                                                                    <th class="col-md-2" style="text-align:Left;">Session</th>
-                                                                    <th class="col-md-4">Name</th>
-                                                                    <th class="col-md-2" style="text-align:center;">Facilitator</th>
-                                                                    <th class="col-md-2" style="text-align:center;">Note Status</th>
-                                                                    <th class="col-md-2"></th>
-                                                                    <th></th>
-                                                                </tr>
-                                                                @foreach (var day_client in day.Workdays_Clients)
-                                                                {
-                                                                    @if (day_client.IndividualNote != null)
+                                                            <div style="display:none">
+                                                                <table class="table table-striped">
+                                                                    <tr>
+                                                                        <th class="col-md-3">Topic</th>
+                                                                        <th class="col-md-9">Activity</th>
+                                                                    </tr>
+                                                                    @foreach (var activity in day.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator.LinkedUser == User.Identity.Name))
                                                                     {
-                                                                        @if (day_client.IndividualNote.Status.ToString() == "Pending")
-                                                                        {
-                                                                            <tr>
-                                                                                <td align="left">
-                                                                                    @Html.DisplayFor(modelItem => day_client.Session)
-                                                                                </td>
-                                                                                <td>
-                                                                                    @Html.DisplayFor(modelItem => day_client.Client.Name)
-                                                                                </td>
-                                                                                <td align="center">
-                                                                                    @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
-                                                                                </td>
-                                                                                <td align="center">
-                                                                                    <span class="label label-info">
-                                                                                        Pending
-                                                                                    </span>
-                                                                                </td>
-                                                                                <td align="right">
-                                                                                    <a asp-action="ApproveIndNote" asp-route-id="@day_client.Id" asp-route-origin="1" class="btn btn-primary" title="Approve Individual Note"><i class="glyphicon glyphicon-ok"></i></a>
-                                                                                </td>
-                                                                            </tr>
-                                                                        }
+                                                                        <tr>
+                                                                            <td>
+                                                                                @Html.DisplayFor(modelItem => activity.Activity.Theme.Name)
+                                                                            </td>
+                                                                            <td>
+                                                                                @Html.DisplayFor(modelItem => activity.Activity.Name)
+                                                                            </td>
+                                                                        </tr>
                                                                     }
-                                                                }
-                                                            </table>
-                                                        </div>
+                                                                </table>
+                                                            </div>
+                                                        }
                                                     </td>
                                                     <td>
                                                         @Html.DisplayFor(modelItem => day.Date)
@@ -125,6 +94,7 @@
                                                         @Html.DisplayFor(modelItem => day.Day)
                                                     </td>
                                                     <td align="right">
+                                                        <a asp-action="CreateActivitiesGroupWeek" asp-route-id="@day.Id" class="btn btn-warning" title="Activities per Group week"><i class="glyphicon glyphicon-list"></i></a>
                                                     </td>
                                                 </tr>
                                             }
@@ -214,10 +184,7 @@
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.FinalDate)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Clinic.Name)
-                                </td>
+                                </td>                                
                             </tr>
                         }
                     </tbody>
@@ -236,9 +203,9 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#MyTable').DataTable({
-                                "order": [[2, "asc"]],
-                                "pageLength": 100
-                            });
+              "order": [[2, "asc"]],
+              "pageLength": 100
+            });
 
             // Delete item
             var item_to_delete;
@@ -248,7 +215,8 @@
             });
 
             $("#btnYesDelete").click(function () {
-                window.location.href = '/WorkDays/Delete/' + item_to_delete;
+                var url = "@Url.Action("Delete", "WorkDays")";
+                window.location.href = url + '/' + item_to_delete;
             });
         });
         $(function () {

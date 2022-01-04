@@ -204,6 +204,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Approve PSR notes", "NotesSupervision", "Notes")</li>
                                 <li>@Html.ActionLink("Approve Individual notes", "IndNotesSupervision", "Notes")</li>
+                                <li>@Html.ActionLink("Approve Group notes", "GroupNotesSupervision", "Notes")</li>
                             </ul>                            
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
@@ -217,7 +218,8 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Activities / Facilitator's Interventions", "Index", "Activities")</li>
-                                <li>@Html.ActionLink("Activities / Facilitator's Interventions per week", "ActivitiesPerWeek", "Activities")</li>
+                                <li>@Html.ActionLink("Activities / Facilitator's Interventions per PSR week", "ActivitiesPerWeek", "Activities")</li>
+                                <li>@Html.ActionLink("Activities / Facilitator's Interventions per Group week", "ActivitiesPerGroupWeek", "Activities")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
@@ -225,8 +227,9 @@
                                 Notes <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("PSR Notes", "Index", "Notes")</li>
-                                <li>@Html.ActionLink("Individual Notes", "IndividualNotes", "Notes")</li>
+                                <li>@Html.ActionLink("PSR Therapy", "Index", "Notes")</li>
+                                <li>@Html.ActionLink("Individual Therapy", "IndividualNotes", "Notes")</li>
+                                <li>@Html.ActionLink("Group Therapy", "GroupNotes", "Notes")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">

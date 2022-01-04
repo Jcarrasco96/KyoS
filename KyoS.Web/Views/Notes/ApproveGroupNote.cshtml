@@ -1,12 +1,12 @@
-﻿@model KyoS.Web.Models.IndividualNoteViewModel
+﻿@model KyoS.Web.Models.GroupNoteViewModel
 @{
     if (User.IsInRole("Facilitator"))
     {
-        ViewData["Title"] = "Preview individual note";
+        ViewData["Title"] = "Preview Group note";
     }
     if (User.IsInRole("Supervisor"))
     {
-        ViewData["Title"] = "Approve individual note";
+        ViewData["Title"] = "Approve Group note";
     }
 }
 
@@ -15,52 +15,51 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("Individual Notes Supervision", "IndNotesSupervision", "Notes")
+            @Html.ActionLink("Group Notes Supervision", "GroupNotesSupervision", "Notes")
         </li>
-        <li class="active">Approve individual note</li>
+        <li class="active">Approve Group note</li>
     </ul>
 </div>
 
 @if (User.IsInRole("Facilitator"))
 {
-    <h4>Preview individual note</h4>
+    <h4>Preview Group note</h4>
 }
 @if (User.IsInRole("Supervisor"))
 {
-    <h4>Approve individual note</h4>
+    <h4>Approve Group note</h4>
 }
 
 <div class="row">
     <div>
-        <form asp-action="ApproveIndNote" enctype="multipart/form-data">            
+        <form asp-action="ApproveGroupNote" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Origin" />
-            <partial name="_IndividualMCSReadOnly" />
-            <partial name="_IndividualNotesReadOnly" />            
-            <div class="form-group col-md-12">                
+            <partial name="_GroupMCSReadOnly" />
+            <partial name="_GroupNotesReadOnly" />            
+            <div class="form-group col-md-12">
                 @if (User.IsInRole("Supervisor"))
                 {
                     <input type="submit" value="Approve" class="btn btn-primary" title="Approve note and enable it to print" />
                     <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","Notes",new {id = Model.Workday_Cient.Id, origin = Model.Origin},Context.Request.Scheme)','Add message to facilitator')" title="Not approved note due to problems">Review</a>
-                    @if (Model.Origin == 1) //viene de la pagina IndNotesSupervision
+                    @if (Model.Origin == 0) //viene de la pagina GroupNotesSupervision
                     {
-                        <a asp-action="IndNotesSupervision" class="btn btn-success">Back</a>
+                        <a asp-action="GroupNotesSupervision" class="btn btn-success">Back</a>
                     }
-                    @if (Model.Origin == 5) //viene de la pagina PendingIndNotes
+                    @if (Model.Origin == 7) //viene de la pagina GroupPendingNotes
                     {
-                        <a asp-action="PendingIndNotes" class="btn btn-success">Back</a>
+                        <a asp-action="PendingGroupNotes" class="btn btn-success">Back</a>
                     }
-                    @if (Model.Origin == 6) //viene de la pagina IndNotesWithReview
+                    @if (Model.Origin == 8) //viene de la pagina GroupNotesWithReview
                     {
-                        <a asp-action="IndNotesWithReview" class="btn btn-success">Back</a>
+                        <a asp-action="GroupNotesWithReview" class="btn btn-success">Back</a>
                     }
                 }
                 @if (User.IsInRole("Facilitator"))
                 {
-                    <a asp-action="IndividualNotes" class="btn btn-success">Back</a>
-                }
-                @*</div>*@
+                    <a asp-action="GroupNotes" class="btn btn-success">Back</a>
+                }                
             </div>
         </form>
     </div>
@@ -71,7 +70,6 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-
 
 
 

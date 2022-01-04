@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211218221430_AddGroupNoteEntity")]
+    partial class AddGroupNoteEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -968,39 +970,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("GroupNotes");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.GroupNote_Activity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ActivityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AnswerClient")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AnswerFacilitator")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("GroupNoteId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ObjetiveId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActivityId");
-
-                    b.HasIndex("GroupNoteId");
-
-                    b.HasIndex("ObjetiveId");
-
-                    b.ToTable("GroupNotes_Activities");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.HealthInsuranceEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -1615,6 +1584,9 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("AnswerFacilitator")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("GroupNoteId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("NoteId")
                         .HasColumnType("int");
 
@@ -1624,6 +1596,8 @@ namespace KyoS.Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ActivityId");
+
+                    b.HasIndex("GroupNoteId");
 
                     b.HasIndex("NoteId");
 
@@ -2462,27 +2436,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Workday_Cient");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.GroupNote_Activity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ActivityEntity", "Activity")
-                        .WithMany()
-                        .HasForeignKey("ActivityId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.GroupNoteEntity", "GroupNote")
-                        .WithMany("GroupNotes_Activities")
-                        .HasForeignKey("GroupNoteId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.ObjetiveEntity", "Objetive")
-                        .WithMany()
-                        .HasForeignKey("ObjetiveId");
-
-                    b.Navigation("Activity");
-
-                    b.Navigation("GroupNote");
-
-                    b.Navigation("Objetive");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.HealthInsuranceEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
@@ -2590,6 +2543,10 @@ namespace KyoS.Web.Migrations
                         .WithMany("Notes_Activities")
                         .HasForeignKey("ActivityId");
 
+                    b.HasOne("KyoS.Web.Data.Entities.GroupNoteEntity", "GroupNote")
+                        .WithMany("Notes_Activities")
+                        .HasForeignKey("GroupNoteId");
+
                     b.HasOne("KyoS.Web.Data.Entities.NoteEntity", "Note")
                         .WithMany("Notes_Activities")
                         .HasForeignKey("NoteId");
@@ -2599,6 +2556,8 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("ObjetiveId");
 
                     b.Navigation("Activity");
+
+                    b.Navigation("GroupNote");
 
                     b.Navigation("Note");
 
@@ -2871,7 +2830,7 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.GroupNoteEntity", b =>
                 {
-                    b.Navigation("GroupNotes_Activities");
+                    b.Navigation("Notes_Activities");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.LegalGuardianEntity", b =>

@@ -2,11 +2,11 @@
 
 namespace KyoS.Web.Data.Entities
 {
-    public class Note_Activity
+    public class GroupNote_Activity
     {
         public int Id { get; set; }
 
-        public NoteEntity Note { get; set; }
+        public GroupNoteEntity GroupNote { get; set; }
 
         public ActivityEntity Activity { get; set; }
 

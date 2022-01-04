@@ -8,6 +8,6 @@ namespace KyoS.Web.Data.Entities
         public WorkdayEntity Workday { get; set; }
         public ActivityEntity Activity { get; set; }
         public FacilitatorEntity Facilitator { get; set; }
-        public SchemaType Schema { get; set; }
+        public SchemaType Schema { get; set; }        
     }
 }

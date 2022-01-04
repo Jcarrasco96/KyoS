@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.WeekEntity>
 @{
-    ViewData["Title"] = "Supervision of individual notes";
+    ViewData["Title"] = "Supervision of group notes";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,13 +11,13 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Individual Notes Supervision</li>
+        <li class="active">Group Notes Supervision</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <div class="row">
     <div class="col-md-12">
-        <strong>Note: </strong> Only pending individual notes will be displayed
+        <strong>Note: </strong> Only pending group notes will be displayed
     </div>
     <div class="col-md-12">
         &nbsp;
@@ -25,7 +25,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Individual notes pending</h3>
+                <h3 class="panel-title">Group notes pending</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -56,7 +56,7 @@
                         {
                             <tr>
                                 <td align="center">
-                                    @if (item.Days.Where(w => w.Workdays_Clients.Where(wc => (wc.IndividualNote != null && wc.IndividualNote.Status.ToString() == "Pending")).Count() != 0).Count() != 0)
+                                    @if (item.Days.Where(w => w.Workdays_Clients.Where(wc => (wc.GroupNote != null && wc.GroupNote.Status.ToString() == "Pending")).Count() != 0).Count() != 0)
                                     {
                                         <a class="icon-plus-sign-alt"></a>
                                     }
@@ -68,11 +68,11 @@
                                                 <th class="col-md-7">Day</th>
                                                 <th></th>
                                             </tr>
-                                            @foreach (var day in item.Days.Where(d => d.Service == KyoS.Common.Enums.ServiceType.Individual).OrderBy(d => d.Date))
+                                            @foreach (var day in item.Days.Where(d => d.Service == KyoS.Common.Enums.ServiceType.Group).OrderBy(d => d.Date))
                                             {
                                                 <tr>
                                                     <td align="center">
-                                                        @if (day.Workdays_Clients.Where(wc => (wc.IndividualNote != null && wc.IndividualNote.Status.ToString() == "Pending")).Count() != 0)
+                                                        @if (day.Workdays_Clients.Where(wc => (wc.GroupNote != null && wc.GroupNote.Status.ToString() == "Pending")).Count() != 0)
                                                         {
                                                             <a class="icon-plus-sign-alt"></a>
                                                             @*<a class="glyphicon glyphicon-plus"></a>*@
@@ -80,8 +80,8 @@
                                                         <div style="display:none">
                                                             <table class="table table-striped">
                                                                 <tr>
-                                                                    <th class="col-md-2" style="text-align:Left;">Session</th>
-                                                                    <th class="col-md-4">Name</th>
+                                                                    <th class="col-md-1" style="text-align:center;">Session</th>
+                                                                    <th class="col-md-5">Name</th>
                                                                     <th class="col-md-2" style="text-align:center;">Facilitator</th>
                                                                     <th class="col-md-2" style="text-align:center;">Note Status</th>
                                                                     <th class="col-md-2"></th>
@@ -89,19 +89,19 @@
                                                                 </tr>
                                                                 @foreach (var day_client in day.Workdays_Clients)
                                                                 {
-                                                                    @if (day_client.IndividualNote != null)
+                                                                    @if (day_client.GroupNote != null)
                                                                     {
-                                                                        @if (day_client.IndividualNote.Status.ToString() == "Pending")
+                                                                        @if (day_client.GroupNote.Status.ToString() == "Pending")
                                                                         {
                                                                             <tr>
-                                                                                <td align="left">
+                                                                                <td align="center">
                                                                                     @Html.DisplayFor(modelItem => day_client.Session)
                                                                                 </td>
                                                                                 <td>
                                                                                     @Html.DisplayFor(modelItem => day_client.Client.Name)
                                                                                 </td>
                                                                                 <td align="center">
-                                                                                    @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
+                                                                                    @Html.DisplayFor(modelItem => day_client.Client.Group.Facilitator.Name)
                                                                                 </td>
                                                                                 <td align="center">
                                                                                     <span class="label label-info">
@@ -109,7 +109,7 @@
                                                                                     </span>
                                                                                 </td>
                                                                                 <td align="right">
-                                                                                    <a asp-action="ApproveIndNote" asp-route-id="@day_client.Id" asp-route-origin="1" class="btn btn-primary" title="Approve Individual Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                                    <a asp-action="ApproveGroupNote" asp-route-id="@day_client.Id" class="btn btn-primary" title="Approve Group Note"><i class="glyphicon glyphicon-ok"></i></a>
                                                                                 </td>
                                                                             </tr>
                                                                         }

@@ -417,22 +417,51 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> ActivitiesPerWeek()
         {
-            UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
-                                                            .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user_logged.Clinic == null)
                 return View(null);
 
-            return View(await _context.Weeks.Include(w => w.Days)
-                                            .ThenInclude(d => d.Workdays_Activities_Facilitators)
-                                            .ThenInclude(waf => waf.Activity)
-                                            .ThenInclude(a => a.Theme)
+            return View(await _context.Weeks
 
-                                            .Include(w => w.Days)
-                                            .ThenInclude(d => d.Workdays_Activities_Facilitators)
-                                            .ThenInclude(waf =>waf.Facilitator)
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Activities_Facilitators)
+                                      .ThenInclude(waf => waf.Activity)
+                                      .ThenInclude(a => a.Theme)
 
-                                            .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Days.Where(d => d.Service == ServiceType.PSR).Count() > 0))
-                                            .ToListAsync());            
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Activities_Facilitators)
+                                      .ThenInclude(waf =>waf.Facilitator)
+
+                                      .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                && w.Days.Where(d => (d.Service == ServiceType.PSR && d.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))
+                                      .ToListAsync());            
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> ActivitiesPerGroupWeek()
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic == null)
+                return View(null);
+
+            return View(await _context.Weeks
+
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Activities_Facilitators)
+                                      .ThenInclude(waf => waf.Activity)
+                                      .ThenInclude(a => a.Theme)
+
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Activities_Facilitators)
+                                      .ThenInclude(waf => waf.Facilitator)
+
+                                      .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                && w.Days.Where(d => (d.Service == ServiceType.Group && d.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))
+                                      .ToListAsync());
         }
 
         [Authorize(Roles = "Facilitator")]
@@ -476,8 +505,9 @@ namespace KyoS.Web.Controllers
             List<Workday_Activity_Facilitator> activities_list = await _context.Workdays_Activities_Facilitators
                                                                                .Include(waf => waf.Activity)
                                                                                .ThenInclude(a => a.Theme)
+
                                                                                .Where(waf => (waf.Workday.Id == workday.Id
-                                                                                        && waf.Facilitator.Id == facilitator_logged.Id))
+                                                                                           && waf.Facilitator.Id == facilitator_logged.Id))
                                                                                .ToListAsync();
             
             //No hay creadas actividades del facilitador logueado en la fecha seleccionada
@@ -488,8 +518,9 @@ namespace KyoS.Web.Controllers
                     return RedirectToAction(nameof(CreateActivitiesWeek4), "Activities", new { id = id });
                 }
 
-                topics = await _context.Themes.Where(t => t.Clinic.Id == user_logged.Clinic.Id)
-                                              .ToListAsync();
+                topics = await _context.Themes
+                                       .Where(t => t.Clinic.Id == user_logged.Clinic.Id)
+                                       .ToListAsync();
                 topics = topics.Where(t => t.Day.ToString() == workday.Day).ToList();
 
                 int index = 0;
@@ -667,8 +698,8 @@ namespace KyoS.Web.Controllers
                 }
                 
                 List<Workday_Activity_Facilitator> activities_list = await _context.Workdays_Activities_Facilitators
-                                                                        .Where(waf => (waf.Workday.Id == model.IdWorkday
-                                                                                        && waf.Facilitator.Id == facilitator_logged.Id))
+                                                                                   .Where(waf => (waf.Workday.Id == model.IdWorkday
+                                                                                               && waf.Facilitator.Id == facilitator_logged.Id))
                                                                         .ToListAsync();
                 //elimino las actividades que tiene asociada ese facilitator en ese dia
                 _context.RemoveRange(activities_list);
@@ -771,7 +802,7 @@ namespace KyoS.Web.Controllers
                                                                                .Include(waf => waf.Activity)
                                                                                .ThenInclude(a => a.Theme)
                                                                                .Where(waf => (waf.Workday.Id == workday.Id
-                                                                                        && waf.Facilitator.Id == facilitator_logged.Id))
+                                                                                           && waf.Facilitator.Id == facilitator_logged.Id))
                                                                                .ToListAsync();
 
             //No hay creadas actividades del facilitador logueado en la fecha seleccionada
@@ -967,7 +998,7 @@ namespace KyoS.Web.Controllers
 
                 List<Workday_Activity_Facilitator> activities_list = await _context.Workdays_Activities_Facilitators
                                                                                    .Where(waf => (waf.Workday.Id == model.IdWorkday
-                                                                                                && waf.Facilitator.Id == facilitator_logged.Id))
+                                                                                               && waf.Facilitator.Id == facilitator_logged.Id))
                                                                                    .ToListAsync();
                 //elimino las actividades que tiene asociada ese facilitator en ese dia
                 _context.RemoveRange(activities_list);
@@ -1019,10 +1050,178 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        //Group Therapy
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> CreateActivitiesGroupWeek(int id = 0)
+        {
+            List<ThemeEntity> topics;
+            Workday_Activity_FacilitatorGroupViewModel model;
+            UserEntity user_logged;
+
+            user_logged = await _context.Users
+                                        .Include(u => u.Clinic)
+                                        .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            WorkdayEntity workday = await _context.Workdays
+
+                                                  .Include(wd => wd.Week)
+                                                  .ThenInclude(w => w.Clinic)
+
+                                                  .Include(wd => wd.Workdays_Clients)
+                                                  .ThenInclude(wc => wc.Note)
+
+                                                  .FirstOrDefaultAsync(w => w.Id == id);
+
+            //el workday ya tiene notas creadas por el facilitator logueado por tanto no es posible su edición
+            if (GroupWorkdayReadOnly(workday))
+            {
+                ViewBag.Error = "0";
+                return View(null);
+            }
+
+            FacilitatorEntity facilitator_logged = await _context.Facilitators
+                                                                 .FirstOrDefaultAsync(f => f.LinkedUser == User.Identity.Name);
+
+            if ((workday == null) || (facilitator_logged == null))
+            {
+                return NotFound();
+            }
+
+            List<Workday_Activity_Facilitator> activities_list = await _context.Workdays_Activities_Facilitators
+
+                                                                               .Include(waf => waf.Activity)
+                                                                               .ThenInclude(a => a.Theme)
+
+                                                                               .Where(waf => (waf.Workday.Id == workday.Id
+                                                                                           && waf.Facilitator.Id == facilitator_logged.Id))
+                                                                               .ToListAsync();
+
+            topics = await _context.Themes
+                                   .Where(t => t.Clinic.Id == user_logged.Clinic.Id)
+                                   .ToListAsync();
+
+            //No hay creadas actividades del facilitador logueado en la fecha seleccionada
+            if (activities_list.Count() == 0)
+            {
+                //if (user_logged.Clinic.Schema == SchemaType.Schema4)
+                //{
+                //    return RedirectToAction(nameof(CreateActivitiesWeek4), "Activities", new { id = id });
+                //}
+
+                model = new Workday_Activity_FacilitatorGroupViewModel
+                {
+                    IdWorkday = id,
+                    Date = workday.Date.ToShortDateString(),
+                    Day = workday.Date.DayOfWeek.ToString(),
+
+                    IdTopic1 = 0,
+                    Topics1 = _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Activities1 = null,
+
+                    IdTopic2 = 0,
+                    Topics2 = _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Activities2 = null,                    
+                };
+            }
+            else
+            {
+                //if (activities_list[0].Schema == SchemaType.Schema4)
+                //{
+                //    return RedirectToAction(nameof(CreateActivitiesWeek4), "Activities", new { id = id });
+                //}               
+
+                model = new Workday_Activity_FacilitatorGroupViewModel
+                {
+                    IdWorkday = id,
+                    Date = workday.Date.ToShortDateString(),
+                    Day = workday.Date.DayOfWeek.ToString(),
+
+                    IdTopic1 = (activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0,
+                    Topics1 = _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    IdActivity1 = (activities_list.Count > 0) ? activities_list[0].Activity.Id : 0,
+                    Activities1 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
+
+                    IdTopic2 = (activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0,
+                    Topics2 = _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    IdActivity2 = (activities_list.Count > 1) ? activities_list[1].Activity.Id : 0,
+                    Activities2 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
+                };
+            }
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateActivitiesGroupWeek(Workday_Activity_FacilitatorGroupViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                FacilitatorEntity facilitator_logged = await _context.Facilitators
+                                                                     .Include(f => f.Clinic)
+                                                                     .FirstOrDefaultAsync(f => f.LinkedUser == User.Identity.Name);
+
+                WorkdayEntity workday = await _context.Workdays
+                                                      .FirstOrDefaultAsync(w => w.Id == model.IdWorkday);
+
+                if ((facilitator_logged == null) || (workday == null))
+                {
+                    return NotFound();
+                }
+
+                List<Workday_Activity_Facilitator> activities_list = await _context.Workdays_Activities_Facilitators
+                                                                                   .Where(waf => (waf.Workday.Id == model.IdWorkday
+                                                                                               && waf.Facilitator.Id == facilitator_logged.Id))
+                                                                                   .ToListAsync();
+                //elimino las actividades que tiene asociada ese facilitator en ese dia
+                _context.RemoveRange(activities_list);
+
+                Workday_Activity_Facilitator activity;
+                activity = new Workday_Activity_Facilitator
+                {
+                    Facilitator = facilitator_logged,
+                    Workday = workday,
+                    Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity1),
+                    Schema = SchemaType.Schema1
+                };
+                _context.Add(activity);
+                activity = new Workday_Activity_Facilitator
+                {
+                    Facilitator = facilitator_logged,
+                    Workday = workday,
+                    Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity2),
+                    Schema = SchemaType.Schema1
+                };
+                _context.Add(activity);        
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(ActivitiesPerGroupWeek));
+                }
+                catch (Exception ex)
+                {
+
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Already exists the element");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            return View(model);
+        }
+
         [Authorize(Roles = "Facilitator")]
         public JsonResult GetActivityList(int idTheme)
         {
-            List<ActivityEntity> activities = _context.Activities.Where(a => a.Theme.Id == idTheme).ToList();
+            List<ActivityEntity> activities = _context.Activities
+                                                      .Where(a => a.Theme.Id == idTheme)
+                                                      .ToList();
 
             return Json(new SelectList(activities, "Id", "Name"));
         }
@@ -1036,6 +1235,23 @@ namespace KyoS.Web.Controllers
                 foreach (Workday_Client item in workday.Workdays_Clients)
                 {
                     if ((item.Note != null) && (item.Facilitator == facilitator_logged))
+                        return true;
+                }
+                return false;
+            }
+            else
+                return false;
+        }
+
+        public bool GroupWorkdayReadOnly(WorkdayEntity workday)
+        {
+            if (workday.Workdays_Clients.Count > 0)
+            {
+                FacilitatorEntity facilitator_logged = _context.Facilitators
+                                                               .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
+                foreach (Workday_Client item in workday.Workdays_Clients)
+                {
+                    if ((item.GroupNote != null) && (item.Facilitator == facilitator_logged))
                         return true;
                 }
                 return false;

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -11,13 +9,14 @@ namespace KyoS.Web.Data.Entities
         public WorkdayEntity Workday { get; set; }
         public ClientEntity Client { get; set; }
         public FacilitatorEntity Facilitator { get; set; }
-        public string Session{ get; set; }
+        public string Session { get; set; }
         public bool Present { get; set; }
         public NoteEntity Note { get; set; }
         public IndividualNoteEntity IndividualNote { get; set; }
+        public GroupNoteEntity GroupNote { get; set; }
         public IEnumerable<MessageEntity> Messages { get; set; }
         public string CauseOfNotPresent { get; set; }
-        public string ClientName 
+        public string ClientName
         {
             get
             {

@@ -31,6 +31,10 @@ namespace KyoS.Web.Helpers
         Stream DavilaIndNoteReportSchema1(Workday_Client workdayClient);
         #endregion
 
+        #region Approved Group Notes reports
+        Stream DavilaGroupNoteReportSchema1(Workday_Client workdayClient);
+        #endregion
+
         #region MTP reports
         Stream LarkinMTPReport(MTPEntity mtp);
         Stream SolAndVidaMTPReport(MTPEntity mtp);

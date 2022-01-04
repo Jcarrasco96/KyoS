@@ -25,5 +25,7 @@ namespace KyoS.Web.Data.Entities
         public ClinicEntity Clinic { get; set; }
 
         public ICollection<NoteEntity> Notes { get; set; }
+
+        public ICollection<GroupNoteEntity> GroupNotes { get; set; }
     }
 }

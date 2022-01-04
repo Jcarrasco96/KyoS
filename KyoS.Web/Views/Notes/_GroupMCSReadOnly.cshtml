@@ -1,0 +1,155 @@
+﻿@model KyoS.Web.Models.GroupNoteViewModel
+<div class="col-md-12">
+    <h4 style="font-weight:bold;"><span class="label label-info">@Model.Workday_Cient.Client.Name</span></h4>
+    <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">View of MTP</a>
+    <h5>Facilitator: @Model.Workday_Cient.Facilitator.Name</h5>
+    <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
+    <hr />
+</div>
+<div class="col-md-12">
+    <p style="font-weight:bold;">Description of Client’s Mental Status (As evidenced by): Client.</p>
+</div>
+<div class="col-md-12">
+    <table border="1" width="70%">
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Appearance</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Groomed" disabled /> Groomed
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Unkempt" disabled /> Unkempt
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Disheveled" disabled /> Disheveled
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Meticulous" disabled /> Meticulous
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Overbuild" disabled /> Overbuild
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Other" disabled /> Other
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Speech</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Clear" disabled /> Clear
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Pressured" disabled /> Pressured
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Slurred" disabled /> Slurred
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Slow" disabled /> Slow
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Impaired" disabled /> Impaired
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Poverty" disabled /> Poverty
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Mood/Affect</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Euthymic" disabled /> Euthymic
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Depressed" disabled /> Depressed
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Anxious" disabled /> Anxious
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Fearful" disabled /> Fearful
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Irritable" disabled /> Irritable
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Labile" disabled /> Labile
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Behavior</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="WNL" disabled /> WNL
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Guarded" disabled /> Guarded
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Withdrawn" disabled /> Withdrawn
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Hostile" disabled /> Hostile
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Restless" disabled /> Restless
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Impulsive" disabled /> Impulsive
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Cognition</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="WNL_Cognition" disabled /> WNL
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Blocked" disabled /> Blocked
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Obsessive" disabled /> Obsessive
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Paranoid" disabled /> Paranoid
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Scattered" disabled /> Scattered
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Psychotic" disabled /> Psychotic
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Intervention</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="CBT" disabled /> CBT
+            </td>
+            <td align="center" colspan="2">
+                <input type="checkbox" asp-for="Psychodynamic" disabled /> Psychodynamic
+            </td>
+            <td align="center" colspan="2">
+                <input type="checkbox" asp-for="BehaviorModification" disabled /> Behavior Modification
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Other_Intervention" disabled /> Other
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+
+
+
+
+
