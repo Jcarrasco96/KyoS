@@ -67,6 +67,10 @@
                                 {
                                     <a asp-action="PrintIndNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                 }
+                                @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
+                                {
+                                    <a asp-action="PrintGroupNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                }
                             </td>
                         </tr>
 

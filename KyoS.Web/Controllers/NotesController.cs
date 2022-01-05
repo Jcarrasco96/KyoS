@@ -7681,6 +7681,8 @@ namespace KyoS.Web.Controllers
 
                                       .Include(wc => wc. IndividualNote)
 
+                                      .Include(wc => wc.GroupNote)
+
                                       .Include(wc => wc.Facilitator)
 
                                       .Include(wc => wc.Client)
@@ -7689,7 +7691,8 @@ namespace KyoS.Web.Controllers
                                       .ThenInclude(w => w.Week)
                                       
                                       .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                 && (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved)))
+                                                 && (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved
+                                                                                           || wc.GroupNote.Status == NoteStatus.Approved)))
                                       .ToListAsync());
         }
 
@@ -7935,7 +7938,7 @@ namespace KyoS.Web.Controllers
 
                 int group_cant = await _context.Workdays_Clients
                                                .CountAsync(wc => (wc.Facilitator.Id == item.Id
-                                                               && wc.Note == null && wc.Present == true
+                                                               && wc.GroupNote == null && wc.Present == true
                                                                && wc.Workday.Service == ServiceType.Group));
 
                 notStarted.Add(new NotesSummary {FacilitatorName = item.Name, PSRNotStarted = psr_cant, IndNotStarted = ind_cant, GroupNotStarted = group_cant });
@@ -8616,6 +8619,34 @@ namespace KyoS.Web.Controllers
 
                                             .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                       && w.Days.Where(d => d.Service == ServiceType.Individual).Count() > 0))
+                                            .ToListAsync());
+        }
+
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> GroupNotesSummaryDetails()
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic == null)
+            {
+                return NotFound();
+            }
+
+            return View(await _context.Weeks.Include(w => w.Days)
+                                            .ThenInclude(d => d.Workdays_Clients)
+                                            .ThenInclude(wc => wc.Client)
+
+                                            .Include(w => w.Days)
+                                            .ThenInclude(d => d.Workdays_Clients)
+                                            .ThenInclude(g => g.Facilitator)
+
+                                            .Include(w => w.Days)
+                                            .ThenInclude(d => d.Workdays_Clients)
+                                            .ThenInclude(wc => wc.GroupNote)
+
+                                            .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                      && w.Days.Where(d => d.Service == ServiceType.Group).Count() > 0))
                                             .ToListAsync());
         }
 

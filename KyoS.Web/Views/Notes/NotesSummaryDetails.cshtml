@@ -80,7 +80,7 @@
                                                 @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Approved && wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).Count()
                                             </td>
                                             <td align="center">
-                                                @facilitator.Workdays_Clients.Where(wc => (wc.Present == false && wc.Workday.Week.Id == item.Id)).Count()
+                                                @facilitator.Workdays_Clients.Where(wc => (wc.Present == false && wc.Workday.Week.Id == item.Id && wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).Count()
                                             </td>
                                         </tr>
                                         }

@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.WeekEntity>
 @{
-    ViewData["Title"] = "Individual notes summary";
+    ViewData["Title"] = "Group notes summary";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,7 +11,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Individual notes summary</li>
+        <li class="active">Group notes summary</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -19,7 +19,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Individual notes summary by facilitator</h3>
+                <h3 class="panel-title">Group notes summary by facilitator</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -68,19 +68,19 @@
                                                         @Html.DisplayFor(modelItem => facilitator.Name)
                                                     </td>
                                                     <td align="center">
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.IndividualNote == null && wc.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)).Count()
+                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.GroupNote == null && wc.Workday.Service == KyoS.Common.Enums.ServiceType.Group)).Count()
                                                     </td>
                                                     <td align="center">
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.IndividualNote != null && wc.IndividualNote.Status == KyoS.Common.Enums.NoteStatus.Edition && wc.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)).Count()
+                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.GroupNote != null && wc.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Edition && wc.Workday.Service == KyoS.Common.Enums.ServiceType.Group)).Count()
                                                     </td>
                                                     <td align="center">
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.IndividualNote != null && wc.IndividualNote.Status == KyoS.Common.Enums.NoteStatus.Pending && wc.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)).Count()
+                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.GroupNote != null && wc.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Pending && wc.Workday.Service == KyoS.Common.Enums.ServiceType.Group)).Count()
                                                     </td>
                                                     <td align="center">
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.IndividualNote != null && wc.IndividualNote.Status == KyoS.Common.Enums.NoteStatus.Approved && wc.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)).Count()
+                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.GroupNote != null && wc.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved && wc.Workday.Service == KyoS.Common.Enums.ServiceType.Group)).Count()
                                                     </td>
                                                     <td align="center">
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == false && wc.Workday.Week.Id == item.Id && wc.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)).Count()
+                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == false && wc.Workday.Week.Id == item.Id && wc.Workday.Service == KyoS.Common.Enums.ServiceType.Group)).Count()
                                                     </td>
                                                 </tr>
                                             }
