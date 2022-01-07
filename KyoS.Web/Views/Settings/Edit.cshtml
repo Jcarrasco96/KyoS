@@ -1,0 +1,62 @@
+﻿@model KyoS.Web.Models.SettingViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Edit" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTem(this);">
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group col-md-12">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#basic" aria-controls="basic" role="tab" data-toggle="tab">Basic</a></li>
+                    <li role="presentation"><a href="#advanced" aria-controls="advanced" role="tab" data-toggle="tab">Advanced</a></li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="basic">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="col-md-12">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="IdClinic" class="control-label"></label>&nbsp;*
+                                <select asp-for="IdClinic" class="form-control" asp-items="Model.Clinics"></select>
+                                <span asp-validation-for="IdClinic" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="checkbox" asp-for="AvailableCreateNewWorkdays" /> Enable to create new workdays (weeks)
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="advanced">
+                        <br />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <hr />
+            </div>
+            <div class="col-md-12">
+                <strong>Note: </strong> A clinic can only have one setting
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-offset-8">
+                    &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+}

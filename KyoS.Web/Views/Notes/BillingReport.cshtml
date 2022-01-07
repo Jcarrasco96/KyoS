@@ -67,7 +67,7 @@
                                     <table class="table table-striped">
                                         <tr>
                                             <th class="col-md-1"></th>
-                                            <th class="col-md-7">Name</th>
+                                            <th class="col-md-7">Facilitator Name</th>
                                             <th class="col-md-2" style="text-align:center;">Notes</th>
                                             <th class="col-md-2" style="text-align:center;">Units</th>
                                         </tr>
@@ -136,19 +136,26 @@
                                                                     }
                                                                     else
                                                                     {
-                                                                        if (workdayClient.IndividualNote != null)
+                                                                        if ((workdayClient.IndividualNote != null) || (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Individual))
                                                                         {
                                                                             <label>4</label>
                                                                         }
                                                                         else
                                                                         {
-                                                                            if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                                            if ((workdayClient.GroupNote != null) || (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group))
                                                                             {
-                                                                                <label>16</label>
+                                                                                <label>8</label>
                                                                             }
-                                                                            if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
-                                                                            {
-                                                                                <label>12</label>
+                                                                            else
+                                                                            { 
+                                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                                                {
+                                                                                    <label>16</label>
+                                                                                }
+                                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                                {
+                                                                                    <label>12</label>
+                                                                                }
                                                                             }
                                                                         }
                                                                     }
@@ -183,19 +190,26 @@
                                                         }
                                                         else
                                                         {
-                                                            if (workdayClient.IndividualNote != null)
+                                                            if ((workdayClient.IndividualNote != null) || (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Individual))
                                                             {
                                                                 units = units + 4;
                                                             }
                                                             else
                                                             {
-                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                                if ((workdayClient.GroupNote != null) || (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group))
                                                                 {
-                                                                    units = units + 16;
+                                                                    units = units + 8;
                                                                 }
-                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
-                                                                {
-                                                                    units = units + 12;
+                                                                else
+                                                                { 
+                                                                    if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                                    {
+                                                                        units = units + 16;
+                                                                    }
+                                                                    if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                    {
+                                                                        units = units + 12;
+                                                                    }
                                                                 }
                                                             }
                                                         }

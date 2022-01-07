@@ -571,6 +571,7 @@ namespace KyoS.Web.Controllers
                     notNotesCount = _context.Workdays_Clients
                                             .Where(wc => (wc.Note == null
                                                        && wc.IndividualNote == null
+                                                       && wc.GroupNote == null
                                                        && wc.Workday.Date >= entity.ApprovedDate
                                                        && wc.Client.Id == idClient))
                                             .Count();
@@ -617,6 +618,7 @@ namespace KyoS.Web.Controllers
                     notNotesCount = _context.Workdays_Clients
                                             .Where(wc => (wc.Note == null
                                                        && wc.IndividualNote == null
+                                                       && wc.GroupNote == null
                                                        && wc.Workday.Date >= entity.ApprovedDate && wc.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
                                                        && wc.Workday.Date < nextEntity.ApprovedDate
                                                        && wc.Client.Id == idClient))
@@ -690,6 +692,7 @@ namespace KyoS.Web.Controllers
                     notNotesCount = _context.Workdays_Clients
                                             .Where(wc => (wc.Note == null
                                                        && wc.IndividualNote == null
+                                                       && wc.GroupNote == null
                                                        && wc.Workday.Date >= entity.ApprovedDate
                                                        && wc.Workday.Date < approvedDateNextEntity
                                                        && wc.Client.Id == idClient))
@@ -737,6 +740,7 @@ namespace KyoS.Web.Controllers
                     notNotesCount = _context.Workdays_Clients
                                             .Where(wc => (wc.Note == null
                                                        && wc.IndividualNote == null
+                                                       && wc.GroupNote == null
                                                        && wc.Workday.Date >= entity.ApprovedDate && wc.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
                                                        && wc.Workday.Date < nextEntity.ApprovedDate
                                                        && wc.Client.Id == idClient))

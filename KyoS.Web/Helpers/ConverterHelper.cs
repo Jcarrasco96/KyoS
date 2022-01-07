@@ -930,5 +930,34 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = model.LastModifiedOn
             };
         }
+
+        public async Task<SettingEntity> ToSettingEntity(SettingViewModel model, bool isNew, string userId)
+        {
+            return new SettingEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == model.IdClinic),
+                AvailableCreateNewWorkdays = model.AvailableCreateNewWorkdays,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+            };
+        }
+
+        public SettingViewModel ToSettingViewModel(SettingEntity model)
+        {
+            return new SettingViewModel
+            {
+                Id = model.Id,
+                IdClinic = model.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics(),
+                AvailableCreateNewWorkdays = model.AvailableCreateNewWorkdays,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+            };
+        }
     }
 }

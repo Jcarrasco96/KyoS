@@ -112,6 +112,13 @@ namespace KyoS.Web.Controllers
                 ViewBag.errorText = $"Error. The client {client.Name} has a created note from another therapy at that time";
             }
 
+            //Imposible to create new workdays due to settings
+            if (error == 3)
+            {
+                ViewBag.Error = "2";
+                ViewBag.errorText = "Unable to create a new week. Please contact the administrator";
+            }
+
             WeekViewModel model;
 
             UserEntity user_logged = _context.Users
@@ -159,6 +166,17 @@ namespace KyoS.Web.Controllers
                     UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    //Unable to create new week due to the settings
+                    SettingEntity setting = await _context.Settings
+                                                          .FirstOrDefaultAsync(s => s.Clinic.Id == user_logged.Clinic.Id);
+                    if(setting != null)
+                    { 
+                        if (setting.AvailableCreateNewWorkdays == false)
+                        {
+                            return RedirectToAction(nameof(Create), new { error = 3 });
+                        }
+                    }
 
                     workdays = entity.Workdays.ToString().Split(',');
                     foreach (string value in workdays)
@@ -320,6 +338,13 @@ namespace KyoS.Web.Controllers
                 ViewBag.errorText = $"Error. The facilitator {facilitator.Name} has another therapy already at that time";
             }
 
+            //Imposible to create new workdays due to settings
+            if (error == 2)
+            {
+                ViewBag.Error = "1";
+                ViewBag.errorText = "Unable to create a new week. Please contact the administrator";
+            }
+
             WeekViewModel model;
 
             UserEntity user_logged = _context.Users
@@ -369,6 +394,21 @@ namespace KyoS.Web.Controllers
                 WorkdayEntity workday_entity;
                 WeekEntity week_entity;
                 ClinicEntity clinic_entity;
+
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                //Unable to create new week due to the settings
+                SettingEntity setting = await _context.Settings
+                                                      .FirstOrDefaultAsync(s => s.Clinic.Id == user_logged.Clinic.Id);
+                if (setting != null)
+                {
+                    if (setting.AvailableCreateNewWorkdays == false)
+                    {
+                        return RedirectToAction(nameof(CreateIndividual), new { error = 2 });
+                    }
+                }
 
                 if (!string.IsNullOrEmpty(entity.Workdays) && !string.IsNullOrEmpty(form["facilitators"]))
                 {
@@ -664,58 +704,6 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            WorkdayEntity workdayEntity = await _context.Workdays.FirstOrDefaultAsync(w => w.Id == id);
-            if (workdayEntity == null)
-            {
-                return NotFound();
-            }
-
-            try
-            {
-                _context.Workdays.Remove(workdayEntity);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                return RedirectToAction("Index", new { idError = 1 });
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> DeleteGroup(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            WorkdayEntity workdayEntity = await _context.Workdays.FirstOrDefaultAsync(w => w.Id == id);
-            if (workdayEntity == null)
-            {
-                return NotFound();
-            }
-
-            try
-            {
-                _context.Workdays.Remove(workdayEntity);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                return RedirectToAction("GroupWorkdays", new { idError = 1 });
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-
         public IActionResult CreateGroup(int error = 0, int idFacilitator = 0, int idClient = 0)
         {
             //One facilitator has not availability on that dates
@@ -736,17 +724,24 @@ namespace KyoS.Web.Controllers
                 ViewBag.errorText = $"Error. The client {client.Name} has a created note from another therapy at that time";
             }
 
+            //Imposible to create new workdays due to settings
+            if (error == 3)
+            {
+                ViewBag.Error = "2";
+                ViewBag.errorText = "Unable to create a new week. Please contact the administrator";
+            }
+
             WeekViewModel model;
 
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
-            
+
             if (user_logged.Clinic == null)
             {
                 return NotFound();
             }
-                        
+
             List<SelectListItem> list = new List<SelectListItem>();
             list.Insert(0, new SelectListItem
             {
@@ -758,7 +753,7 @@ namespace KyoS.Web.Controllers
                 IdClinic = user_logged.Clinic.Id,
                 Clinics = list
             };
-            return View(model);                        
+            return View(model);
         }
 
         [HttpPost]
@@ -779,6 +774,17 @@ namespace KyoS.Web.Controllers
                     UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    //Unable to create new week due to the settings
+                    SettingEntity setting = await _context.Settings
+                                                          .FirstOrDefaultAsync(s => s.Clinic.Id == user_logged.Clinic.Id);
+                    if (setting != null)
+                    {
+                        if (setting.AvailableCreateNewWorkdays == false)
+                        {
+                            return RedirectToAction(nameof(CreateGroup), new { error = 3 });
+                        }
+                    }
 
                     workdays = entity.Workdays.ToString().Split(',');
                     foreach (string value in workdays)
@@ -928,6 +934,60 @@ namespace KyoS.Web.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            WorkdayEntity workdayEntity = await _context.Workdays.FirstOrDefaultAsync(w => w.Id == id);
+            if (workdayEntity == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                _context.Workdays.Remove(workdayEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> DeleteGroup(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            WorkdayEntity workdayEntity = await _context.Workdays.FirstOrDefaultAsync(w => w.Id == id);
+            if (workdayEntity == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                _context.Workdays.Remove(workdayEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("GroupWorkdays", new { idError = 1 });
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        
 
         #region Utils Functions     
         private bool VerifyFreeTimeOfFacilitator(int idFacilitator, ServiceType service, string session, DateTime date)

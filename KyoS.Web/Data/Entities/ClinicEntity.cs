@@ -24,5 +24,6 @@ namespace KyoS.Web.Data.Entities
         public ICollection<UserEntity> Users { get; set; }
         public ICollection<WeekEntity> Weeks { get; set; }
         public ICollection<TemplateDOCEntity> Templates { get; set; }
+        public SettingEntity Setting { get; set; }
     }
 }

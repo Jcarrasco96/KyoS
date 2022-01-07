@@ -51,13 +51,27 @@ namespace KyoS.Web.Data.Entities
                             }
                             else
                             {
-                                if ((workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema1) || (workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema2) || (workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema3))
+                                if ((workday_client.IndividualNote != null) || (workday_client.Workday.Service == Common.Enums.ServiceType.Individual))
                                 {
-                                    units = units + 16;
+                                    units = units + 4;
                                 }
-                                if ((workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema4))
+                                else
                                 {
-                                    units = units + 12;
+                                    if ((workday_client.GroupNote != null) || (workday_client.Workday.Service == Common.Enums.ServiceType.Group))
+                                    {
+                                        units = units + 8;
+                                    }
+                                    else
+                                    { 
+                                        if ((workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema1) || (workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema2) || (workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema3))
+                                        {
+                                            units = units + 16;
+                                        }
+                                        if ((workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema4))
+                                        {
+                                            units = units + 12;
+                                        }
+                                    }
                                 }
                             }
                         }

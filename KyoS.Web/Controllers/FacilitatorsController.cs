@@ -20,6 +20,7 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IImageHelper _imageHelper;
+
         public FacilitatorsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IImageHelper imageHelper)
         {
             _context = context;
@@ -27,6 +28,7 @@ namespace KyoS.Web.Controllers
             _converterHelper = converterHelper;
             _imageHelper = imageHelper;
         }
+
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
