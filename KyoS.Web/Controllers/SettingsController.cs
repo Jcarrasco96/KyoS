@@ -87,7 +87,7 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             SettingEntity entity = await _context.Settings
@@ -95,7 +95,7 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefaultAsync(s => s.Id == id);
             if (entity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             SettingViewModel model = _converterHelper.ToSettingViewModel(entity);
@@ -120,7 +120,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != model.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
             
             if (ModelState.IsValid)

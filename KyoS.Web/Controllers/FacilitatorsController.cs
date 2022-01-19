@@ -161,13 +161,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             FacilitatorEntity facilitatorEntity = await _context.Facilitators.FirstOrDefaultAsync(t => t.Id == id);
             if (facilitatorEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             try
@@ -187,13 +187,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             FacilitatorEntity facilitatorEntity = await _context.Facilitators.Include(f => f.Clinic).FirstOrDefaultAsync(f => f.Id == id);
             if (facilitatorEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             FacilitatorViewModel facilitatorViewModel;
@@ -228,7 +228,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != facilitatorViewModel.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (ModelState.IsValid)

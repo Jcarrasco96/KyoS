@@ -218,7 +218,7 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             MTPEntity mtpEntity = await _context.MTPs
@@ -226,7 +226,7 @@ namespace KyoS.Web.Controllers
                                                 .FirstOrDefaultAsync(t => t.Id == id);
             if (mtpEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             //I check the mtp is not in a any note
@@ -255,14 +255,14 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             MTPEntity mtpEntity = await _context.MTPs.Include(m => m.Client)
                                                      .FirstOrDefaultAsync(m => m.Id == id);
             if (mtpEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             MTPViewModel mtpViewModel = _converterHelper.ToMTPViewModel(mtpEntity);
@@ -290,7 +290,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != mtpViewModel.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (ModelState.IsValid)
@@ -363,7 +363,7 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             MTPEntity mtpEntity = await _context.MTPs.Include(m => m.Client)                                                                 
@@ -380,7 +380,7 @@ namespace KyoS.Web.Controllers
                                                      .FirstOrDefaultAsync(m => m.Id == id);
             if (mtpEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             return View(mtpEntity);
@@ -391,7 +391,7 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (idError == 1) //Imposible to delete
@@ -404,7 +404,7 @@ namespace KyoS.Web.Controllers
 
             if (mtpEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             return View(mtpEntity);
@@ -415,7 +415,7 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             MTPEntity mtpEntity = await _context.MTPs
@@ -424,7 +424,7 @@ namespace KyoS.Web.Controllers
                                                 .FirstOrDefaultAsync(m => m.Id == id);
             if (mtpEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             GoalViewModel model = new GoalViewModel
@@ -444,7 +444,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != model.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             model.MTP = await _context.MTPs.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdMTP);
@@ -501,13 +501,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             GoalEntity goalEntity = await _context.Goals.Include(g => g.MTP).FirstOrDefaultAsync(g => g.Id == id);
             if (goalEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             try
@@ -528,7 +528,7 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             GoalEntity goalEntity = await _context.Goals.Include(g => g.MTP)
@@ -536,7 +536,7 @@ namespace KyoS.Web.Controllers
             GoalViewModel model = _converterHelper.ToGoalViewModel(goalEntity);
             if (model == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             return View(model);
@@ -549,7 +549,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != model.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             model.MTP = await _context.MTPs.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdMTP);
@@ -606,7 +606,7 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (idError == 1) //Imposible to delete
@@ -620,7 +620,7 @@ namespace KyoS.Web.Controllers
 
             if (goalEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             return View(goalEntity);
@@ -631,7 +631,7 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             GoalEntity goalEntity = await _context.Goals.Include(g => g.MTP)
@@ -640,7 +640,7 @@ namespace KyoS.Web.Controllers
                                                         .FirstOrDefaultAsync(m => m.Id == id);
             if (goalEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             string objetive = $"{goalEntity.Number}.{goalEntity.Objetives.Count() + 1}";
@@ -756,13 +756,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             ObjetiveEntity objectiveEntity = await _context.Objetives.Include(o => o.Goal).FirstOrDefaultAsync(o => o.Id == id);
             if (objectiveEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             try
@@ -783,7 +783,7 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             ObjetiveEntity objectiveEntity = await _context.Objetives.Include(o => o.Goal)
@@ -794,7 +794,7 @@ namespace KyoS.Web.Controllers
             ObjectiveViewModel model = _converterHelper.ToObjectiveViewModel(objectiveEntity);
             if (model == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             List<ClassificationEntity> list = new List<ClassificationEntity>();
@@ -907,7 +907,7 @@ namespace KyoS.Web.Controllers
                                                .FirstOrDefault(m => (m.Id == id));
             if (mtpEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (mtpEntity.Client.Clinic.Name == "DAVILA")

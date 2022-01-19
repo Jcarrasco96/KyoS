@@ -139,13 +139,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             EmergencyContactEntity emergencyContactEntity = await _context.EmergencyContacts.FirstOrDefaultAsync(c => c.Id == id);
             if (emergencyContactEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             EmergencyContactViewModel emergencyContactViewModel = _converterHelper.ToEmergencyContactViewModel(emergencyContactEntity);
@@ -159,7 +159,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != emergencyContactViewModel.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (ModelState.IsValid)
@@ -193,13 +193,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             EmergencyContactEntity emergencyContactEntity = await _context.EmergencyContacts.FirstOrDefaultAsync(c => c.Id == id);
             if (emergencyContactEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             try

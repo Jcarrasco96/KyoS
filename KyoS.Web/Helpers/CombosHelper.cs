@@ -37,6 +37,24 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboUserNames()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            list = _context.Users.OrderBy(u => u.UserName).Select (u => new SelectListItem
+            {
+                    Text = $"{u.UserName}",
+                    Value = $"{u.Id}"
+            }).ToList();            
+
+            //list.Insert(0, new SelectListItem
+            //{
+            //    Text = "[Select user...]",
+            //    Value = "0"
+            //});
+
+            return list;
+        }
+
         public IEnumerable<SelectListItem> GetComboUserNamesByRolesClinic(UserType userType, int idClinic)
         {
             List<SelectListItem> list = new List<SelectListItem>();

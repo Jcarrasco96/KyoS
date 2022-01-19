@@ -43,7 +43,7 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             return View(await _context.Weeks
@@ -63,7 +63,7 @@ namespace KyoS.Web.Controllers
                                                          .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             return View(await _context.Weeks.Include(w => w.Days)
@@ -83,7 +83,7 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             return View(await _context.Weeks
@@ -378,7 +378,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }           
         }
 
@@ -739,7 +739,7 @@ namespace KyoS.Web.Controllers
 
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             List<SelectListItem> list = new List<SelectListItem>();
@@ -939,13 +939,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             WorkdayEntity workdayEntity = await _context.Workdays.FirstOrDefaultAsync(w => w.Id == id);
             if (workdayEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             try
@@ -965,13 +965,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             WorkdayEntity workdayEntity = await _context.Workdays.FirstOrDefaultAsync(w => w.Id == id);
             if (workdayEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             try

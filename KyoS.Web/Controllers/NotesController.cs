@@ -194,7 +194,7 @@ namespace KyoS.Web.Controllers
 
             if (entity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             switch (form["Present"])
@@ -303,7 +303,7 @@ namespace KyoS.Web.Controllers
 
             if (workday_Client == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             FacilitatorEntity facilitator_logged = _context.Facilitators
@@ -599,7 +599,7 @@ namespace KyoS.Web.Controllers
                                                                            .FirstOrDefaultAsync(wc => wc.Id == model.Id);
             if (workday_Client == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             NoteEntity noteEntity;
@@ -882,7 +882,7 @@ namespace KyoS.Web.Controllers
 
             if (workday_Client == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             FacilitatorEntity facilitator_logged = _context.Facilitators
@@ -1049,7 +1049,7 @@ namespace KyoS.Web.Controllers
                                                           .FirstOrDefaultAsync(wc => wc.Id == model.Id);
             if (workday_Client == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             IndividualNoteEntity individualNoteEntity;
@@ -1264,7 +1264,7 @@ namespace KyoS.Web.Controllers
 
             if (workday_Client == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             FacilitatorEntity facilitator_logged = _context.Facilitators
@@ -1476,7 +1476,7 @@ namespace KyoS.Web.Controllers
                                                                            .FirstOrDefaultAsync(wc => wc.Id == model.Id);
             if (workday_Client == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
                         
             if (ModelState.IsValid)
@@ -1674,7 +1674,7 @@ namespace KyoS.Web.Controllers
                                                           .FirstOrDefaultAsync(wc => wc.Id == id);
             if (workday_Client == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             NoteEntity note = await _context.Notes.Include(n => n.Workday_Cient)
@@ -1755,7 +1755,7 @@ namespace KyoS.Web.Controllers
                                                           .FirstOrDefaultAsync(wc => wc.Id == id);
             if (workday_Client == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             IndividualNoteEntity note = await _context.IndividualNotes
@@ -1813,7 +1813,7 @@ namespace KyoS.Web.Controllers
                                                           .FirstOrDefaultAsync(wc => wc.Id == id);
             if (workday_Client == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             GroupNoteEntity note = await _context.GroupNotes
@@ -2054,7 +2054,7 @@ namespace KyoS.Web.Controllers
 
             if (workday_Client == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             NoteEntity note = await _context.Notes.Include(n => n.Workday_Cient)
@@ -2222,7 +2222,7 @@ namespace KyoS.Web.Controllers
         {
             if (model == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             NoteEntity note = await _context.Notes
@@ -2261,7 +2261,7 @@ namespace KyoS.Web.Controllers
 
             if (workday_Client == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             IndividualNoteEntity note = await _context.IndividualNotes
@@ -2346,7 +2346,7 @@ namespace KyoS.Web.Controllers
         {
             if (model == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             IndividualNoteEntity note = await _context.IndividualNotes                                            
@@ -2385,7 +2385,7 @@ namespace KyoS.Web.Controllers
 
             if (workday_Client == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             GroupNoteEntity note = await _context.GroupNotes
@@ -2486,7 +2486,7 @@ namespace KyoS.Web.Controllers
         {
             if (model == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             GroupNoteEntity note = await _context.GroupNotes                                                 
@@ -2516,7 +2516,7 @@ namespace KyoS.Web.Controllers
 
             if (workday == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             PrintNotesViewModel noteViewModel = new PrintNotesViewModel
@@ -2558,7 +2558,7 @@ namespace KyoS.Web.Controllers
 
             //if (workday == null)
             //{
-            //    return NotFound();
+            //    return RedirectToAction("Home/Error404");
             //}
 
             //PrintNotesViewModel noteViewModel = new PrintNotesViewModel
@@ -2581,7 +2581,7 @@ namespace KyoS.Web.Controllers
 
             if (workday == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             IEnumerable<Workday_Client> workdayClientList = workday.Workdays_Clients
@@ -2696,7 +2696,7 @@ namespace KyoS.Web.Controllers
 
             if (workday == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             IEnumerable<Workday_Client> workdayClientList = workday.Workdays_Clients
@@ -2755,7 +2755,7 @@ namespace KyoS.Web.Controllers
 
             if (workday == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             IEnumerable<Workday_Client> workdayClientList = workday.Workdays_Clients
@@ -2842,7 +2842,7 @@ namespace KyoS.Web.Controllers
                                                     .FirstOrDefault(wc => (wc.Id == id && wc.Note.Status == NoteStatus.Approved));
             if (workdayClient == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }            
             
             if (workdayClient.Note.Supervisor.Clinic.Name == "DAVILA")
@@ -2936,7 +2936,7 @@ namespace KyoS.Web.Controllers
                                                     .FirstOrDefault(wc => (wc.Id == id && wc.IndividualNote.Status == NoteStatus.Approved));
             if (workdayClient == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DAVILA")
@@ -2980,7 +2980,7 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefault(wc => (wc.Id == id && wc.GroupNote.Status == NoteStatus.Approved));
             if (workdayClient == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (workdayClient.GroupNote.Supervisor.Clinic.Name == "DAVILA")
@@ -7327,14 +7327,14 @@ namespace KyoS.Web.Controllers
 
             if (workday_Client == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             MTPEntity mtp = await _context.MTPs
                                           .FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
             if (mtp == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
             
             return RedirectToAction("Details", "MTPs", new {id = mtp.Id});
@@ -8153,7 +8153,7 @@ namespace KyoS.Web.Controllers
                                                           .FirstOrDefault(wc => wc.Id == id);
             if (workdayClient == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (workdayClient.Client.Clinic.Name == "DAVILA")
@@ -8224,7 +8224,7 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefault(wc => wc.Id == id);
             if (workdayClient == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (workdayClient.Facilitator.Clinic.Name == "DAVILA")
@@ -8295,7 +8295,7 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefault(wc => wc.Id == id);
             if (workdayClient == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (workdayClient.Facilitator.Clinic.Name == "DAVILA")
@@ -8362,7 +8362,7 @@ namespace KyoS.Web.Controllers
                                                             .Where(wc => (wc.Client.Id == id && wc.Workday.Week.Id == idWeek)).ToListAsync();
             if (workdayClientList.Count() == 0)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             Stream stream = _reportHelper.PrintIndividualSign(workdayClientList);            
@@ -8377,7 +8377,7 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
             
             return View(await _context.Weeks
@@ -8429,7 +8429,7 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             return View(await _context.Workdays_Clients
@@ -8579,7 +8579,7 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
             return View(await _context.Weeks.Include(w => w.Days)
                                             .ThenInclude(d => d.Workdays_Clients)
@@ -8607,7 +8607,7 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
             return View(await _context.Weeks.Include(w => w.Days)
                                             .ThenInclude(d => d.Workdays_Clients)
@@ -8634,7 +8634,7 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             return View(await _context.Weeks.Include(w => w.Days)

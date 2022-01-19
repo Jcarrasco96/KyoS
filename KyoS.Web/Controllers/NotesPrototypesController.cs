@@ -140,13 +140,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             NotePrototypeEntity noteEntity = await _context.NotesPrototypes.FirstOrDefaultAsync(n => n.Id == id);
             if (noteEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             _context.NotesPrototypes.Remove(noteEntity);
@@ -158,7 +158,7 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             NotePrototypeEntity noteEntity = await _context.NotesPrototypes.Include(n => n.Activity)
@@ -166,7 +166,7 @@ namespace KyoS.Web.Controllers
                                                         .ThenInclude(cl => cl.Classification).FirstOrDefaultAsync(n => n.Id == id);
             if (noteEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             NotePrototypeViewModel noteViewModel = _converterHelper.ToNotePrototypeViewModel(noteEntity);

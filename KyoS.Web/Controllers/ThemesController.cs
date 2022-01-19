@@ -287,13 +287,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             ThemeEntity themeEntity = await _context.Themes.FirstOrDefaultAsync(t => t.Id == id);
             if (themeEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             try
@@ -313,13 +313,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             ThemeEntity themeEntity = await _context.Themes.Include(t => t.Clinic).FirstOrDefaultAsync(t => t.Id == id);
             if (themeEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             ThemeViewModel themeViewModel = _converterHelper.ToThemeViewModel(themeEntity);
@@ -349,7 +349,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != themeViewModel.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (ModelState.IsValid)
@@ -380,13 +380,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             ThemeEntity themeEntity = await _context.Themes.Include(t => t.Clinic).FirstOrDefaultAsync(t => t.Id == id);
             if (themeEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             Theme3ViewModel themeViewModel = _converterHelper.ToTheme3ViewModel(themeEntity);
@@ -417,7 +417,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != themeViewModel.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (ModelState.IsValid)

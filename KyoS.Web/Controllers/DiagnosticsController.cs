@@ -133,13 +133,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             DiagnosticEntity diagnosticEntity = await _context.Diagnostics.FirstOrDefaultAsync(c => c.Id == id);
             if (diagnosticEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             DiagnosticViewModel diagnosticViewModel = _converterHelper.ToDiagnosticViewModel(diagnosticEntity);
@@ -153,7 +153,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != diagnosticViewModel.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (ModelState.IsValid)
@@ -187,13 +187,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             DiagnosticEntity diagnosticEntity = await _context.Diagnostics.FirstOrDefaultAsync(c => c.Id == id);
             if (diagnosticEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             try

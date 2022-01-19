@@ -25,10 +25,11 @@ namespace KyoS.Web.Models
         public string Email { get; set; }
         public string Role { get; set; }
         public ClinicEntity Clinic { get; set; }
+        public bool Active { get; set; }
     }
 
     public class RegisterViewModel
-    {
+    {      
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
@@ -59,6 +60,38 @@ namespace KyoS.Web.Models
         [Compare("Password", ErrorMessage = "Password and confirmation do not match")]
         public string ConfirmPassword { get; set; }
 
+        public bool Active { get; set; }
+
+        [Display(Name = "Clinic")]
+        public int IdClinic { get; set; }
+        public IEnumerable<SelectListItem> Clinics { get; set; }
+    }
+
+    public class EditViewModel
+    {
+        public string Id { get; set; }
+
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [Display(Name = "Role")]
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a role.")]
+        public int RoleId { get; set; }
+        public IEnumerable<SelectListItem> Roles { get; set; }        
+
+        public bool Active { get; set; }
+
         [Display(Name = "Clinic")]
         public int IdClinic { get; set; }
         public IEnumerable<SelectListItem> Clinics { get; set; }
@@ -77,6 +110,12 @@ namespace KyoS.Web.Models
 
     public class SetPasswordViewModel
     {
+        [Display(Name = "User")]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public string IdUser { get; set; }
+
+        public IEnumerable<SelectListItem> Users { get; set; }
+
         [Required]
         [StringLength(100, ErrorMessage = "La {0} debe tener al menos {2} caracteres.", MinimumLength = 6)]
         [DataType(DataType.Password)]

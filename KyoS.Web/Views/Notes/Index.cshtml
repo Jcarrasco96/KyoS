@@ -55,287 +55,287 @@
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Final Date
-                            </th>                            
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model.OrderBy(w => w.WeekOfYear))
                         {
-                        <tr>
-                            <td align="center">
-                                @if (item.Days.Count() != 0)
-                                {
-                                    <a class="icon-plus-sign-alt"></a>
-                                }
-                                <div style="display:none">
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <th class="col-md-1"></th>
-                                            <th class="col-md-3">Date</th>
-                                            <th class="col-md-4">Day</th>
-                                            <th class="col-md-4"></th>
-                                        </tr>
-                                        @foreach (var day in item.Days.Where(d => d.Service == KyoS.Common.Enums.ServiceType.PSR).OrderBy(d => d.Date))
-                                        {
+                            <tr>
+                                <td align="center">
+                                    @if (item.Days.Count() != 0)
+                                    {
+                                        <a class="icon-plus-sign-alt"></a>
+                                    }
+                                    <div style="display:none">
+                                        <table class="table table-striped">
                                             <tr>
-                                                <td align="center">
-                                                    @if (day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() != 0)
-                                                    {
-                                                        <a class="icon-plus-sign-alt"></a>
-                                                    }
-                                                    <div style="display:none">
-                                                        <table class="table table-striped">
-                                                            <tr>
-                                                                <th class="col-md-1" style="text-align:center;">Session</th>
-                                                                <th class="col-md-4">Name</th>
-                                                                <th class="col-md-2" style="text-align:center;">Present</th>
-                                                                <th class="col-md-2" style="text-align:center;">Note Status</th>
-                                                                <th class="col-md-3"></th>
-                                                                <th></th>
-                                                            </tr>
-                                                            @foreach (var day_client in day.Workdays_Clients.Where(dc => dc.Facilitator.LinkedUser == User.Identity.Name))
-                                                            {
-                                                                @if (day_client.Present)
+                                                <th class="col-md-1"></th>
+                                                <th class="col-md-3">Date</th>
+                                                <th class="col-md-4">Day</th>
+                                                <th class="col-md-4"></th>
+                                            </tr>
+                                            @foreach (var day in item.Days.Where(d => d.Service == KyoS.Common.Enums.ServiceType.PSR).OrderBy(d => d.Date))
+                                            {
+                                                <tr>
+                                                    <td align="center">
+                                                        @if (day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() != 0)
+                                                        {
+                                                            <a class="icon-plus-sign-alt"></a>
+                                                        }
+                                                        <div style="display:none">
+                                                            <table class="table table-striped">
+                                                                <tr>
+                                                                    <th class="col-md-1" style="text-align:center;">Session</th>
+                                                                    <th class="col-md-4">Name</th>
+                                                                    <th class="col-md-2" style="text-align:center;">Present</th>
+                                                                    <th class="col-md-2" style="text-align:center;">Note Status</th>
+                                                                    <th class="col-md-3"></th>
+                                                                    <th></th>
+                                                                </tr>
+                                                                @foreach (var day_client in day.Workdays_Clients.Where(dc => dc.Facilitator.LinkedUser == User.Identity.Name))
                                                                 {
-                                                                    <tr>
-                                                                        <td align="center">
-                                                                            @Html.DisplayFor(modelItem => day_client.Session)
-                                                                        </td>
-                                                                        <td>
-                                                                            @Html.DisplayFor(modelItem => day_client.Client.Name)
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            @Html.DisplayFor(modelItem => day_client.Present)
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            @if (day_client.Note == null)
-                                                                            {
-                                                                                <span class="label label-danger">
-                                                                                    Not Started
-                                                                                </span>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                if (day_client.Note.Status.ToString() == "Edition")
+                                                                    @if (day_client.Present)
+                                                                    {
+                                                                        <tr>
+                                                                            <td align="center">
+                                                                                @Html.DisplayFor(modelItem => day_client.Session)
+                                                                            </td>
+                                                                            <td>
+                                                                                @Html.DisplayFor(modelItem => day_client.Client.Name)
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @Html.DisplayFor(modelItem => day_client.Present)
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @if (day_client.Note == null)
                                                                                 {
-                                                                                    <span class="label label-default">
-                                                                                        Edition
+                                                                                    <span class="label label-danger">
+                                                                                        Not Started
                                                                                     </span>
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    if (day_client.Note.Status.ToString() == "Pending")
+                                                                                    if (day_client.Note.Status.ToString() == "Edition")
                                                                                     {
-                                                                                        <span class="label label-info">
-                                                                                            Pending
+                                                                                        <span class="label label-default">
+                                                                                            Edition
                                                                                         </span>
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        if (day_client.Note.Status.ToString() == "Approved")
+                                                                                        if (day_client.Note.Status.ToString() == "Pending")
                                                                                         {
-                                                                                            <span class="label label-success">
-                                                                                                Approved
+                                                                                            <span class="label label-info">
+                                                                                                Pending
                                                                                             </span>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            if (day_client.Note.Status.ToString() == "Approved")
+                                                                                            {
+                                                                                                <span class="label label-success">
+                                                                                                    Approved
+                                                                                                </span>
+                                                                                            }
                                                                                         }
                                                                                     }
                                                                                 }
-                                                                            }
-                                                                        </td>
-                                                                        <td align="right">
-                                                                            @if (day_client.Note == null)
-                                                                            {
-                                                                                <a asp-action="EditNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
-                                                                                <a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-danger" title="Present or not present"><i class="glyphicon glyphicon-remove"></i></a>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                if (day_client.Note.Status.ToString() == "Edition")
+                                                                            </td>
+                                                                            <td align="right">
+                                                                                @if (day_client.Note == null)
                                                                                 {
                                                                                     <a asp-action="EditNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
                                                                                     <a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-danger" title="Present or not present"><i class="glyphicon glyphicon-remove"></i></a>
-                                                                                    <a asp-action="FinishEditing" class="btn btn-success" asp-route-id="@day_client.Id" title="Finish edition of note"><i class="glyphicon glyphicon-ok"></i></a>
-                                                                                }
-                                                                                else
-                                                                                    if (day_client.Note.Status.ToString() == "Pending")
-                                                                                {
-                                                                                    <a asp-action="EditNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    if (day_client.Note.Status.ToString() == "Approved")
+                                                                                    if (day_client.Note.Status.ToString() == "Edition")
                                                                                     {
-                                                                                        <a asp-action="ApproveNote" asp-route-id="@day_client.Id" class="btn btn-primary" title="View of note"><i class="glyphicon glyphicon-file"></i></a>
-                                                                                        <a asp-action="PrintNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                                                        <a asp-action="EditNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
+                                                                                        <a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-danger" title="Present or not present"><i class="glyphicon glyphicon-remove"></i></a>
+                                                                                        <a asp-action="FinishEditing" class="btn btn-success" asp-route-id="@day_client.Id" title="Finish edition of note"><i class="glyphicon glyphicon-ok"></i></a>
                                                                                     }
-                                                                                }
-                                                                            }
-                                                                        </td>
-                                                                    </tr>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <tr style="color:darkgrey">
-                                                                        <td align="center">
-                                                                            @Html.DisplayFor(modelItem => day_client.Session)
-                                                                        </td>
-                                                                        <td>
-                                                                            @Html.DisplayFor(modelItem => day_client.Client.Name)
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            @Html.DisplayFor(modelItem => day_client.Present)
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            @if (day_client.Note == null)
-                                                                            {
-                                                                                <span class="label label-danger">
-                                                                                    Not Started
-                                                                                </span>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                if (day_client.Note.Status.ToString() == "Edition")
-                                                                                {
-                                                                                    <span class="label label-default">
-                                                                                        Edition
-                                                                                    </span>
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    if (day_client.Note.Status.ToString() == "Pending")
+                                                                                    else
+                                                                                        if (day_client.Note.Status.ToString() == "Pending")
                                                                                     {
-                                                                                        <span class="label label-info">
-                                                                                            Pending
-                                                                                        </span>
+                                                                                        <a asp-action="EditNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
                                                                                     }
                                                                                     else
                                                                                     {
                                                                                         if (day_client.Note.Status.ToString() == "Approved")
                                                                                         {
-                                                                                            <span class="label label-success">
-                                                                                                Approved
-                                                                                            </span>
+                                                                                            <a asp-action="ApproveNote" asp-route-id="@day_client.Id" class="btn btn-primary" title="View of note"><i class="glyphicon glyphicon-file"></i></a>
+                                                                                            <a asp-action="PrintNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                                                         }
                                                                                     }
                                                                                 }
-                                                                            }
-                                                                        </td>
-                                                                        <td align="right">
-                                                                            <a asp-action="EditNote" asp-route-id="@day_client.Id" class="btn btn-warning disabled"><i class="glyphicon glyphicon-file"></i></a>
-                                                                            <a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-primary" title="Present or not present"><i class="glyphicon glyphicon-ok"></i></a>
-                                                                        </td>
-                                                                    </tr>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <tr style="color:darkgrey">
+                                                                            <td align="center">
+                                                                                @Html.DisplayFor(modelItem => day_client.Session)
+                                                                            </td>
+                                                                            <td>
+                                                                                @Html.DisplayFor(modelItem => day_client.Client.Name)
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @Html.DisplayFor(modelItem => day_client.Present)
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @if (day_client.Note == null)
+                                                                                {
+                                                                                    <span class="label label-danger">
+                                                                                        Not Started
+                                                                                    </span>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    if (day_client.Note.Status.ToString() == "Edition")
+                                                                                    {
+                                                                                        <span class="label label-default">
+                                                                                            Edition
+                                                                                        </span>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        if (day_client.Note.Status.ToString() == "Pending")
+                                                                                        {
+                                                                                            <span class="label label-info">
+                                                                                                Pending
+                                                                                            </span>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            if (day_client.Note.Status.ToString() == "Approved")
+                                                                                            {
+                                                                                                <span class="label label-success">
+                                                                                                    Approved
+                                                                                                </span>
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            </td>
+                                                                            <td align="right">
+                                                                                <a asp-action="EditNote" asp-route-id="@day_client.Id" class="btn btn-warning disabled"><i class="glyphicon glyphicon-file"></i></a>
+                                                                                <a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-primary" title="Present or not present"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
                                                                 }
-                                                            }
-                                                        </table>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => day.Date)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => day.Day)
-                                                </td>
-                                                <td align="right">
-                                                    @if ((day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() == (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Present == false)).Count() + day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count())) && (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count() > 0))
-                                                    {
-                                                        <a asp-action="PrintWorkdaysNotes" asp-route-id="@day.Id" class="btn btn-success" title="Print notes - Date: @day.Date.ToShortDateString()"><i class="glyphicon glyphicon-print"></i></a>
-                                                    }
-                                                    @if ((day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() != (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Present == false)).Count() + day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count())) || (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count() == 0))
-                                                    {
-                                                        <a class="btn btn-success disabled" title="Print notes - Date: @day.Date.ToShortDateString()"><i class="glyphicon glyphicon-print"></i></a>
-                                                    }                                                    
-                                                </td>
-                                            </tr>
-                                        }
+                                                            </table>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => day.Date)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => day.Day)
+                                                    </td>
+                                                    <td align="right">
+                                                        @if ((day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() == (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Present == false)).Count() + day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count())) && (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count() > 0))
+                                                        {
+                                                            <a asp-action="PrintWorkdaysNotes" asp-route-id="@day.Id" class="btn btn-success" title="Print notes - Date: @day.Date.ToShortDateString()"><i class="glyphicon glyphicon-print"></i></a>
+                                                        }
+                                                        @if ((day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() != (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Present == false)).Count() + day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count())) || (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count() == 0))
+                                                        {
+                                                            <a class="btn btn-success disabled" title="Print notes - Date: @day.Date.ToShortDateString()"><i class="glyphicon glyphicon-print"></i></a>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
 
-                                    </table>
-                                </div>
-                            </td>
-                            <td>
-                                @if (item.MonthYear.Contains("January"))
-                                {
-                                    <span class="label label-default">
-                                        @Html.DisplayFor(modelItem => item.MonthYear)
-                                    </span>
-                                }
-                                @if (item.MonthYear.Contains("February"))
-                                {
-                                    <span class="label label-info">
-                                        @Html.DisplayFor(modelItem => item.MonthYear)
-                                    </span>
-                                }
-                                @if (item.MonthYear.Contains("March"))
-                                {
-                                    <span class="label label-primary">
-                                        @Html.DisplayFor(modelItem => item.MonthYear)
-                                    </span>
-                                }
-                                @if (item.MonthYear.Contains("April"))
-                                {
-                                    <span class="label label-warning">
-                                        @Html.DisplayFor(modelItem => item.MonthYear)
-                                    </span>
-                                }
-                                @if (item.MonthYear.Contains("May"))
-                                {
-                                    <span class="label label-success">
-                                        @Html.DisplayFor(modelItem => item.MonthYear)
-                                    </span>
-                                }
-                                @if (item.MonthYear.Contains("June"))
-                                {
-                                    <span class="label label-default">
-                                        @Html.DisplayFor(modelItem => item.MonthYear)
-                                    </span>
-                                }
-                                @if (item.MonthYear.Contains("July"))
-                                {
-                                    <span class="label label-info">
-                                        @Html.DisplayFor(modelItem => item.MonthYear)
-                                    </span>
-                                }
-                                @if (item.MonthYear.Contains("August"))
-                                {
-                                    <span class="label label-primary">
-                                        @Html.DisplayFor(modelItem => item.MonthYear)
-                                    </span>
-                                }
-                                @if (item.MonthYear.Contains("September"))
-                                {
-                                    <span class="label label-warning">
-                                        @Html.DisplayFor(modelItem => item.MonthYear)
-                                    </span>
-                                }
-                                @if (item.MonthYear.Contains("October"))
-                                {
-                                    <span class="label label-success">
-                                        @Html.DisplayFor(modelItem => item.MonthYear)
-                                    </span>
-                                }
-                                @if (item.MonthYear.Contains("November"))
-                                {
-                                    <span class="label label-default">
-                                        @Html.DisplayFor(modelItem => item.MonthYear)
-                                    </span>
-                                }
-                                @if (item.MonthYear.Contains("December"))
-                                {
-                                    <span class="label label-info">
-                                        @Html.DisplayFor(modelItem => item.MonthYear)
-                                    </span>
-                                }
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Alias)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.InitDate)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.FinalDate)
-                            </td>                            
-                        </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if (item.MonthYear.Contains("January"))
+                                    {
+                                        <span class="label label-default">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("February"))
+                                    {
+                                        <span class="label label-info">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("March"))
+                                    {
+                                        <span class="label label-primary">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("April"))
+                                    {
+                                        <span class="label label-warning">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("May"))
+                                    {
+                                        <span class="label label-success">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("June"))
+                                    {
+                                        <span class="label label-default">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("July"))
+                                    {
+                                        <span class="label label-info">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("August"))
+                                    {
+                                        <span class="label label-primary">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("September"))
+                                    {
+                                        <span class="label label-warning">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("October"))
+                                    {
+                                        <span class="label label-success">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("November"))
+                                    {
+                                        <span class="label label-default">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("December"))
+                                    {
+                                        <span class="label label-info">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Alias)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.InitDate)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.FinalDate)
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -348,11 +348,18 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
     <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+
     <script type="text/javascript">
-        $(document).ready(function () {            
+        $(document).ready(function () {
+
+            $.fn.dataTable.moment('MM/DD/YYYY');  
+
             $('#MyTable').DataTable({
-                "order": [[2, "asc"]],
+                "order": [[3, "asc"]],
                 "pageLength": 100
             });
             // Delete item
@@ -364,7 +371,7 @@
 
             $("#btnYesDelete").click(function () {
                 var url = "@Url.Action("Delete", "WorkDays")";
-                window.location.href = url + '/' + item_to_delete;                
+                window.location.href = url + '/' + item_to_delete;
             });
         });
         $(function () {

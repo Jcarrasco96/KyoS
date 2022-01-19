@@ -49,7 +49,7 @@
                                             <tr>
                                                 <th class="col-md-2"></th>
                                                 <th class="col-md-3">Title</th>
-                                                <th class="col-md-7" style="text-align:center;">Text</th>                                                
+                                                <th class="col-md-7" style="text-align:center;">Text</th>
                                                 <th></th>
                                             </tr>
                                             @foreach (var message in day_client.Messages.OrderBy(m => m.DateCreated))
@@ -160,12 +160,19 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
     <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
+
+            $.fn.dataTable.moment('MM/DD/YYYY');     
+
             $('#MyTable').DataTable({
-              "order": [[1, "asc"]],
-              "pageLength": 100
+                "order": [[1, "asc"]],
+                "pageLength": 100
             });
         });
         $(function () {

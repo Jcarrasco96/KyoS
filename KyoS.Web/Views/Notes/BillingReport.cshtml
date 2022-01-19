@@ -30,7 +30,7 @@
                         <tr>
                             <th class="col-md-1">
 
-                            </th>
+                            </th>                            
                             <th class="col-md-2">
 
                             </th>
@@ -50,7 +50,7 @@
                                 Units
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                
+
                             </th>
                         </tr>
                     </thead>
@@ -221,7 +221,7 @@
                                         }
                                     </table>
                                 </div>
-                            </td>
+                            </td>                            
                             <td>
                                 @if (item.MonthYear.Contains("January"))
                                 {
@@ -335,14 +335,23 @@
 <partial name="_DeleteDialog" />
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}    
+    
     <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+    
+    
     <script type="text/javascript">
         $(document).ready(function () {
+
+            $.fn.dataTable.moment('MM/DD/YYYY');            
+
             $('#MyTable').DataTable({
-                "order": [[2, "asc"]],
+                "order": [[3, "asc"]],
                 "pageLength": 100
             });
+            
             // Delete item
             var item_to_delete;
 

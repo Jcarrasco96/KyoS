@@ -84,7 +84,7 @@ namespace KyoS.Web.Controllers
                                                                .ToListAsync();
             if (workdayClientList.Count() == 0)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             Stream stream = _reportHelper.DailyAssistanceReport(workdayClientList);

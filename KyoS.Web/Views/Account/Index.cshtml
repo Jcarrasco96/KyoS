@@ -17,9 +17,12 @@
 <dl class="dl-horizontal">
     <dt>Password:</dt>
     <dd>
-        [
-        @Html.ActionLink("Change password", "ChangePassword")
-        ]
+        <a onclick="showInPopup('@Url.Action("ChangePassword","Account",null,Context.Request.Scheme)','Change my password')">[ Change my password ]</a>
+        &nbsp;
+        @if (User.IsInRole("Admin"))
+        {
+            <a onclick="showInPopup('@Url.Action("ResetPassword","Account",null,Context.Request.Scheme)','Reset password for any user')">[ Reset password for any user ]</a>
+        }
     </dd>
 </dl>
 <hr />
@@ -27,9 +30,18 @@
 @if (User.IsInRole("Admin"))
 {
     <p>
-        <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> New User</a>
+        <a onclick="showInPopup('@Url.Action("Create", "Account", null, Context.Request.Scheme)','Create user')" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> New User</a>
     </p>
+}
 
+<div class="row">
+    <div id="view-templates">
+        @await Html.PartialAsync("_Message", string.Empty)
+    </div>
+</div>
+
+@if (User.IsInRole("Admin"))
+{
     <div class="row">
         <div class="col-md-12">
             @if ((ViewBag.StatusMessage == "An error has occured") || (ViewBag.StatusMessage == "An error has occured, unabled to delete logged-in current user"))
@@ -45,7 +57,7 @@
                 </div>
             }
             else
-            if (ViewBag.StatusMessage != string.Empty)
+          if (ViewBag.StatusMessage != string.Empty)
             {
                 <div class="alert alert-block alert-success">
                     <button type="button" class="close" data-dismiss="alert">
@@ -80,7 +92,10 @@
                                 <th class="col-md-3">
                                     Clinic Name
                                 </th>
-                                <th class="col-md-2">
+                                <th class="col-md-1" style="text-align:center;">
+                                    Active
+                                </th>
+                                <th class="col-md-1">
 
                                 </th>
                             </tr>
@@ -88,33 +103,72 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Username)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Fullname)
-                                </td>
-                                @if (item.Role == "Admin")
+                                @if (item.Active)
                                 {
-                                    <td class="hidden-480">
-                                        <span class="label label-success">administrator</span>
-                                    </td>
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Username)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Fullname)
+                                        </td>
+                                        @if (item.Role == "Admin")
+                                        {
+                                            <td class="hidden-480">
+                                                <span class="label label-success">administrator</span>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="hidden-480">
+                                                <span class="label label-warning">@Html.DisplayFor(modelItem => item.Role)</span>
+                                            </td>
+                                        }
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Clinic.Name)
+                                        </td>
+                                        <td align="center">
+                                            @Html.DisplayFor(modelItem => item.Active)
+                                        </td>
+                                        <td align="right">
+                                            <a onclick="showInPopup('@Url.Action("Edit","Account",new { id = item.UserId },Context.Request.Scheme)','Edit user')" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            @*<button data-id="@item.UserId" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>*@
+                                        </td>
+                                    </tr>
                                 }
                                 else
                                 {
-                                    <td class="hidden-480">
-                                        <span class="label label-warning">@Html.DisplayFor(modelItem => item.Role)</span>
-                                    </td>
+                                    <tr style="color: darkgrey;">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Username)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Fullname)
+                                        </td>
+                                        @if (item.Role == "Admin")
+                                        {
+                                            <td class="hidden-480">
+                                                <span class="label label-success">administrator</span>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="hidden-480">
+                                                <span class="label label-warning">@Html.DisplayFor(modelItem => item.Role)</span>
+                                            </td>
+                                        }
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Clinic.Name)
+                                        </td>
+                                        <td align="center">
+                                            @Html.DisplayFor(modelItem => item.Active)
+                                        </td>
+                                        <td align="right">
+                                            <a onclick="showInPopup('@Url.Action("Edit","Account",new { id = item.UserId },Context.Request.Scheme)','Edit user')" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            @*<button data-id="@item.UserId" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>*@
+                                        </td>
+                                    </tr>
                                 }
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Clinic.Name)
-                                </td>
-                                <td align="right">
-                                    <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <button data-id="@item.UserId" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
-                                </td>
-                            </tr>
                             }
                         </tbody>
                     </table>
@@ -125,6 +179,7 @@
 }
 
 <partial name="_DeleteDialog" />
+<partial name="_ModalPopup" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -134,7 +189,7 @@
         $(document).ready(function () {
             $('#MyTable').DataTable({
                                 "order": [[0, "asc"]],
-                                "pageLength": 100
+                                "pageLength": 50
                             });
 
             // Delete item

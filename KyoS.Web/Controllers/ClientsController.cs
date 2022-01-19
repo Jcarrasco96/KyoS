@@ -234,13 +234,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             ClientEntity clientEntity = await _context.Clients.FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             try
@@ -261,7 +261,7 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             ClientEntity clientEntity = await _context.Clients
@@ -274,7 +274,7 @@ namespace KyoS.Web.Controllers
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             UserEntity user_logged = _context.Users
@@ -312,7 +312,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != clientViewModel.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (ModelState.IsValid)
@@ -562,13 +562,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             DiagnosticTempEntity diagnostic = await _context.DiagnosticsTemp.FirstOrDefaultAsync(d => d.Id == id);
             if (diagnostic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             _context.DiagnosticsTemp.Remove(diagnostic);
@@ -581,13 +581,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             DocumentTempEntity documentTemp = await _context.DocumentsTemp.FirstOrDefaultAsync(d => d.Id == id);
             if (documentTemp == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             DocumentEntity document = await _context.Documents.FirstOrDefaultAsync(d => d.FileUrl == documentTemp.DocumentPath);
@@ -607,7 +607,7 @@ namespace KyoS.Web.Controllers
                                                         .FirstOrDefaultAsync(d => d.Id == id);
             if (document == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
             string mimeType = _mimeType.GetMimeType(document.DocumentName);
             return File(document.DocumentPath, mimeType);

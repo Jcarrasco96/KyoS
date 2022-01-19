@@ -1,0 +1,70 @@
+﻿@model KyoS.Web.Models.EditViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div>
+        <form asp-action="Edit" onsubmit="return jQueryAjaxPostTem(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group col-md-12">
+                <div class="col-md-6">
+                    <label asp-for="FirstName" class="control-label"></label>&nbsp;*
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="LastName" class="control-label"></label>&nbsp;*
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <div class="col-md-6">
+                    <label asp-for="Email" class="control-label"></label>&nbsp;*
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="RoleId" class="control-label"></label>&nbsp;*
+                    <select asp-for="RoleId" asp-items="Model.Roles" class="form-control"></select>
+                    <span asp-validation-for="RoleId" class="text-danger"></span>
+                </div>
+            </div>            
+            <div class="form-group col-md-12">
+                <div class="col-md-6">
+                    <label asp-for="IdClinic" class="control-label"></label>
+                    <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control"></select>
+                    <span asp-validation-for="IdClinic" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    &nbsp;
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <div class="col-md-6">
+                    <input type="checkbox" asp-for="Active"/> &nbsp;Active user
+                </div>
+                <div class="col-md-6">
+                    &nbsp;
+                </div>
+            </div>
+            <div class="col-md-12">
+                <hr />
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-offset-8">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="submit" value="Save" class="btn btn-primary" />&nbsp;
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

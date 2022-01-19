@@ -1,67 +1,59 @@
 ﻿@model KyoS.Web.Models.RegisterViewModel
-    <div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-        </div>    
-        <div class="col-md-6">
-            <div class="form-group">
-                 <label asp-for="LastName" class="control-label"></label>
-                 <input asp-for="LastName" class="form-control" />
-                 <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-        </div>        
+<div class="form-group col-md-12">
+    <div class="col-md-6">
+        <label asp-for="FirstName" class="control-label"></label>&nbsp;*
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
     </div>
-    <div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="RoleId" class="control-label"></label>
-                <select asp-for="RoleId" asp-items="Model.Roles" class="form-control"></select>
-                <span asp-validation-for="RoleId" class="text-danger"></span>
-            </div>
-        </div>
+    <div class="col-md-6">
+        <label asp-for="LastName" class="control-label"></label>&nbsp;*
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
     </div>
-    <div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-        </div>
+</div>
+<div class="form-group col-md-12">
+    <div class="col-md-6">
+        <label asp-for="Email" class="control-label"></label>&nbsp;*
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
     </div>
-    <div class="col-md-12">
+    <div class="col-md-6">
+        <label asp-for="RoleId" class="control-label"></label>&nbsp;*
+        <select asp-for="RoleId" asp-items="Model.Roles" class="form-control"></select>
+        <span asp-validation-for="RoleId" class="text-danger"></span>
+    </div>
+</div>
+<div class="form-group col-md-12">
+    <div class="col-md-6">
+        <label asp-for="Password" class="control-label"></label>&nbsp;*
+        <input asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="ConfirmPassword" class="control-label"></label>&nbsp;*
+        <input asp-for="ConfirmPassword" class="form-control" />
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+</div>
+@*<div class="col-md-12">
+        &nbsp;
+    </div>*@
+<div class="form-group col-md-12">
+    <div class="col-md-6">
+        <label asp-for="IdClinic" class="control-label"></label>
+        <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control"></select>
+        <span asp-validation-for="IdClinic" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
         &nbsp;
     </div>
-    <div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="IdClinic" class="control-label"></label>
-                <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control"></select>
-                <span asp-validation-for="IdClinic" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                
-            </div>
-        </div>
+</div>
+<div class="form-group col-md-12">
+    <div class="col-md-6">
+        <input type="checkbox" asp-for="Active" checked /> &nbsp;Active user
     </div>
-                
+    <div class="col-md-6">
+        &nbsp;
+    </div>
+</div>
+

@@ -14,9 +14,15 @@ namespace KyoS.Web.Helpers
 
         Task<IdentityResult> AddUserAsync(UserEntity user, string password);
 
+        Task<IdentityResult> EditUserAsync(UserEntity user);
+
         Task CheckRoleAsync(string roleName);
 
         Task AddUserToRoleAsync(UserEntity user, string roleName);
+
+        Task RemoveFromRolesAsync(UserEntity user, IEnumerable<string> rolesName);
+
+        Task<IList<string>> GetRolesAsync(UserEntity user);
 
         Task<bool> IsUserInRoleAsync(UserEntity user, string roleName);
 
@@ -33,5 +39,9 @@ namespace KyoS.Web.Helpers
         Task<IdentityResult> ChangePasswordAsync(UserEntity user, string oldPassword, string newPassword);
 
         Task<IdentityResult> DeleteUserAsync(UserEntity user);
+
+        bool GetActiveByUserName(string userName);
+
+        void HardResetPassword(string email, string newPassword);        
     }
 }

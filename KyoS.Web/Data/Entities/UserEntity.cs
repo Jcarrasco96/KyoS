@@ -30,6 +30,8 @@ namespace KyoS.Web.Data.Entities
         [Display(Name = "User Type")]
         public UserType UserType { get; set; }
 
+        public bool Active { get; set; }
+
         [Display(Name = "User")]
         public string FullName => $"{FirstName} {LastName}";
 

@@ -8,6 +8,7 @@ namespace KyoS.Web.Helpers
     public interface ICombosHelper
     {
         IEnumerable<SelectListItem> GetComboRoles();
+        IEnumerable<SelectListItem> GetComboUserNames();
         IEnumerable<SelectListItem> GetComboUserNamesByRolesClinic(UserType userType, int idClinic);
         IEnumerable<SelectListItem> GetComboDays();
         IEnumerable<SelectListItem> GetComboThemes();

@@ -1,0 +1,34 @@
+﻿@model string
+@{
+    Layout = null;
+}
+
+<div class="col-md-12">
+    @if ((Model == "An error has occured.") || (Model == "An error has occured, unabled to delete logged-in current user.") || (Model == "Error. User already exist"))
+    {
+        <div class="alert alert-block alert-warning">
+            <button type="button" class="close" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <i class="icon-ok red"></i>
+            <strong class="red">
+                @Model
+            </strong>
+        </div>
+    }
+    else
+    {
+        if (Model != string.Empty)
+        {            
+            <div class="alert alert-block alert-success">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok green"></i>
+                <strong class="green">
+                    @Model
+                </strong>
+            </div>
+        }
+    }
+</div>

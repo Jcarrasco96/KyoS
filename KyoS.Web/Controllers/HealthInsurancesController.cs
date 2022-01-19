@@ -45,7 +45,7 @@ namespace KyoS.Web.Controllers
 
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             return View(await _context.HealthInsurances
@@ -133,7 +133,7 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             HealthInsuranceEntity entity = await _context.HealthInsurances
@@ -141,7 +141,7 @@ namespace KyoS.Web.Controllers
                                                          .FirstOrDefaultAsync(hi => hi.Id == id);
             if (entity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             HealthInsuranceViewModel healthInsuranceViewModel = _converterHelper.ToHealthInsuranceViewModel(entity);            
@@ -154,7 +154,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != healthInsuranceViewModel.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (ModelState.IsValid)
@@ -196,13 +196,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             HealthInsuranceEntity healthInsurancesEntity = await _context.HealthInsurances.FirstOrDefaultAsync(hi => hi.Id == id);
             if (healthInsurancesEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             try
@@ -224,7 +224,7 @@ namespace KyoS.Web.Controllers
                                                          .FirstOrDefaultAsync(t => t.Id == id);
             if (entity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
             string mimeType = _mimeType.GetMimeType(entity.DocumentPath);
             return File(entity.DocumentPath, mimeType);
@@ -244,7 +244,7 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             List<Client_HealthInsurance> list = await _context.Clients_HealthInsurances
@@ -359,7 +359,7 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             Client_HealthInsurance entity = await _context.Clients_HealthInsurances
@@ -371,7 +371,7 @@ namespace KyoS.Web.Controllers
                                                           .FirstOrDefaultAsync(hi => hi.Id == id);
             if (entity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             UserEntity user_logged = await _context.Users
@@ -388,7 +388,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != model.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
             UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -451,7 +451,7 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             List<ClientEntity> clients = await _context.Clients

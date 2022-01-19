@@ -93,7 +93,7 @@
 
                 if (File && File[0]) {
                     ReadImagePhoto(File[0]);
-                }                    
+                }
             });
 
             $("#signBrowser").change(function () {
@@ -103,11 +103,11 @@
                 if (File && File[0]) {
                     ReadImageSign(File[0]);
                 }
-            });  
-           
-            //$('#MyTableDoc').DataTable({                                
+            });
+
+            //$('#MyTableDoc').DataTable({
             //    "pageLength": 100
-            //});                   
+            //});
         });
 
         var DeleteDocumentTemp = function (idDoc) {
@@ -115,14 +115,14 @@
             $.get(url, { id: idDoc }, function (data) {
                 $('#view-documents').html(data.html);
             });
-        }  
+        }
 
         var DeleteDiagnosticTemp = function (idDoc) {
             var url = "@Url.Action("DeleteDiagnosticTemp", "Clients")";
             $.get(url, { id: idDoc }, function (data) {
                 $('#view-diagnosis').html(data.html);
             });
-        } 
+        }
 
         var ReadImagePhoto = function (file) {
         var reader = new FileReader;
@@ -162,7 +162,7 @@
                 $("#lbSign").show();
                }
             }
-        }  
+        }
 
         var ClearPreviewPhoto = function () {
             $("#photoBrowser").val('');

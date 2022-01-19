@@ -157,13 +157,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             SupervisorEntity supervisorEntity = await _context.Supervisors.FirstOrDefaultAsync(s => s.Id == id);
             if (supervisorEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }        
 
             try
@@ -183,13 +183,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             SupervisorEntity supervisorEntity = await _context.Supervisors.Include(s => s.Clinic).FirstOrDefaultAsync(s => s.Id == id);
             if (supervisorEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             SupervisorViewModel supervisorViewModel;
@@ -222,7 +222,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != supervisorViewModel.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (ModelState.IsValid)

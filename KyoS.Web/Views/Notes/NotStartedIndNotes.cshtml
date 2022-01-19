@@ -64,7 +64,7 @@
                             }
                             else
                             {
-                                <tr style="color:darkgrey">                                    
+                                <tr style="color:darkgrey">
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => day_client.Workday.Date)
                                     </td>
@@ -99,15 +99,21 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
     <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
 
+            $.fn.dataTable.moment('MM/DD/YYYY');          
+
             $('#MyTable').DataTable({
-               "order": [[0, "asc"]],
-               "pageLength": 100
+                "order": [[0, "asc"]],
+                "pageLength": 100
             });
-            
+
         });
     </script>
 }

@@ -55,7 +55,7 @@
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Final Date
-                            </th>                           
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -146,14 +146,14 @@
                                                                                 @if (day_client.IndividualNote == null)
                                                                                 {
                                                                                     <a asp-action="EditIndNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
-                                                                                    <a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-danger" title="Present or not present" asp-route-origin ="4"><i class="glyphicon glyphicon-remove"></i></a>
+                                                                                    <a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-danger" title="Present or not present" asp-route-origin="4"><i class="glyphicon glyphicon-remove"></i></a>
                                                                                 }
                                                                                 else
                                                                                 {
                                                                                     if (day_client.IndividualNote.Status.ToString() == "Edition")
                                                                                     {
                                                                                         <a asp-action="EditIndNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
-                                                                                        <a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-danger" title="Present or not present" asp-route-origin ="4"><i class="glyphicon glyphicon-remove"></i></a>
+                                                                                        <a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-danger" title="Present or not present" asp-route-origin="4"><i class="glyphicon glyphicon-remove"></i></a>
                                                                                         <a asp-action="FinishEditingIN" class="btn btn-success" asp-route-id="@day_client.Id" title="Finish edition of note"><i class="glyphicon glyphicon-ok"></i></a>
                                                                                     }
                                                                                     else
@@ -222,7 +222,7 @@
                                                                             </td>
                                                                             <td align="right">
                                                                                 <a asp-action="EditIndNote" asp-route-id="@day_client.Id" class="btn btn-warning disabled"><i class="glyphicon glyphicon-file"></i></a>
-                                                                                <a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-primary" title="Present or not present" asp-route-origin ="4"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                                <a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-primary" title="Present or not present" asp-route-origin="4"><i class="glyphicon glyphicon-ok"></i></a>
                                                                             </td>
                                                                         </tr>
                                                                     }
@@ -334,7 +334,7 @@
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.FinalDate)
-                                </td>                               
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -348,11 +348,18 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
     <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
+
+            $.fn.dataTable.moment('MM/DD/YYYY');
+
             $('#MyTable').DataTable({
-                "order": [[2, "asc"]],
+                "order": [[3, "asc"]],
                 "pageLength": 100
             });
             // Delete item

@@ -257,13 +257,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             ActivityEntity activityEntity = await _context.Activities.FirstOrDefaultAsync(t => t.Id == id);
             if (activityEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             _context.Activities.Remove(activityEntity);
@@ -276,13 +276,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             ActivityEntity activityEntity = await _context.Activities.Include(a => a.Theme).FirstOrDefaultAsync(a => a.Id == id);
             if (activityEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             ActivityViewModel activityViewModel = _converterHelper.ToActivityViewModel(activityEntity);
@@ -307,7 +307,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != activityViewModel.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (ModelState.IsValid)
@@ -344,13 +344,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             ActivityEntity activityEntity = await _context.Activities.Include(a => a.Theme).FirstOrDefaultAsync(a => a.Id == id);
             if (activityEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             ActivityViewModel activityViewModel = _converterHelper.ToActivityViewModel(activityEntity);
@@ -376,7 +376,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != activityViewModel.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (ModelState.IsValid)
@@ -499,7 +499,7 @@ namespace KyoS.Web.Controllers
 
             if ((workday == null) || (facilitator_logged == null))
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }                               
             
             List<Workday_Activity_Facilitator> activities_list = await _context.Workdays_Activities_Facilitators
@@ -694,7 +694,7 @@ namespace KyoS.Web.Controllers
 
                 if ((facilitator_logged == null) || (workday == null))
                 {
-                    return NotFound();
+                    return RedirectToAction("Home/Error404");
                 }
                 
                 List<Workday_Activity_Facilitator> activities_list = await _context.Workdays_Activities_Facilitators
@@ -795,7 +795,7 @@ namespace KyoS.Web.Controllers
 
             if ((workday == null) || (facilitator_logged == null))
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             List<Workday_Activity_Facilitator> activities_list = await _context.Workdays_Activities_Facilitators
@@ -993,7 +993,7 @@ namespace KyoS.Web.Controllers
 
                 if ((facilitator_logged == null) || (workday == null))
                 {
-                    return NotFound();
+                    return RedirectToAction("Home/Error404");
                 }
 
                 List<Workday_Activity_Facilitator> activities_list = await _context.Workdays_Activities_Facilitators
@@ -1084,7 +1084,7 @@ namespace KyoS.Web.Controllers
 
             if ((workday == null) || (facilitator_logged == null))
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             List<Workday_Activity_Facilitator> activities_list = await _context.Workdays_Activities_Facilitators
@@ -1167,7 +1167,7 @@ namespace KyoS.Web.Controllers
 
                 if ((facilitator_logged == null) || (workday == null))
                 {
-                    return NotFound();
+                    return RedirectToAction("Home/Error404");
                 }
 
                 List<Workday_Activity_Facilitator> activities_list = await _context.Workdays_Activities_Facilitators
@@ -1344,7 +1344,7 @@ namespace KyoS.Web.Controllers
             ActivityEntity activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == id);
             if (activity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             activity.Status = Common.Enums.ActivityStatus.Approved;
@@ -1370,7 +1370,7 @@ namespace KyoS.Web.Controllers
             ActivityEntity activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == id);
             if (activity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             activity.Status = Common.Enums.ActivityStatus.Approved;

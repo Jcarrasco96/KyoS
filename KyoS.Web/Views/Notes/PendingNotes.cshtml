@@ -125,14 +125,14 @@
                                             }
                                         }
                                         @*<span class="label label-warning">
-                                            Yes &nbsp;
-                                        </span>*@                                        
+                                                Yes &nbsp;
+                                            </span>*@
                                         if (read)
                                         {
                                             <i class="glyphicon glyphicon-thumbs-up"></i>
                                         }
                                         else
-                                        {                                            
+                                        {
                                             <i class="glyphicon glyphicon-thumbs-down"></i>
                                         }
                                     }
@@ -150,7 +150,8 @@
                                         <a asp-action="ApproveNote" asp-route-id="@day_client.Id" asp-route-origin="3" class="btn btn-primary" title="Approve Note"><i class="glyphicon glyphicon-ok"></i></a>
                                     }
                                 </td>
-                        </tr>                       
+                            </tr>
+
                         }
                     </tbody>
                 </table>
@@ -162,13 +163,20 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
     <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#MyTable').DataTable({ 
-              "order": [[1, "asc"]],
-              "pageLength": 100
-            });        
+
+            $.fn.dataTable.moment('MM/DD/YYYY');  
+
+            $('#MyTable').DataTable({
+                "order": [[1, "asc"]],
+                "pageLength": 100
+            });
         });
         $(function () {
 

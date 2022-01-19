@@ -40,7 +40,7 @@ namespace KyoS.Web.Controllers
 
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             return View(await _context.TemplatesDOC
@@ -102,7 +102,7 @@ namespace KyoS.Web.Controllers
                                                        .FirstOrDefaultAsync(t => t.Id == id);
             if (template == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
             string mimeType = _mimeType.GetMimeType(template.FileName);
             return File(template.FileUrl, mimeType);
@@ -112,13 +112,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             TemplateDOCEntity template = await _context.TemplatesDOC.FirstOrDefaultAsync(c => c.Id == id);
             if (template == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             _context.TemplatesDOC.Remove(template);

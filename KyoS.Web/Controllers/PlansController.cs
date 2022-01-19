@@ -123,13 +123,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             PlanEntity planEntity = await _context.Plans.FirstOrDefaultAsync(p => p.Id == id);
             if (planEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             _context.Plans.Remove(planEntity);
@@ -141,7 +141,7 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             PlanEntity planEntity = await _context.Plans.Include(p => p.Classifications).
@@ -149,7 +149,7 @@ namespace KyoS.Web.Controllers
             
             if (planEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             PlanViewModel planViewModel = _converterHelper.ToPlanViewModel(planEntity);

@@ -27,13 +27,26 @@ namespace KyoS.Web
             services.AddIdentity<UserEntity, IdentityRole>(cfg =>
             {
                 cfg.User.RequireUniqueEmail = true;
+
                 cfg.Password.RequireDigit = false;
                 cfg.Password.RequiredUniqueChars = 0;
                 cfg.Password.RequireLowercase = false;
                 cfg.Password.RequireNonAlphanumeric = false;
                 cfg.Password.RequireUppercase = false;
                 cfg.Password.RequiredLength = 6;
-            }).AddEntityFrameworkStores<DataContext>();
+
+                cfg.Lockout.MaxFailedAccessAttempts = 5;
+
+            })
+            .AddEntityFrameworkStores<DataContext>()
+            .AddDefaultTokenProviders();
+
+            //not authorized page
+            services.ConfigureApplicationCookie(options => 
+            {
+                //options.LoginPath = "/Account/NotAuthorized";
+                options.AccessDeniedPath = "/Account/NotAuthorized";
+            });
 
             //db connection
             services.AddDbContext<DataContext>(cfg =>
@@ -69,6 +82,7 @@ namespace KyoS.Web
                 app.UseHsts();
             }
 
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseFastReport();

@@ -26,9 +26,24 @@ namespace KyoS.Web.Helpers
             return await _userManager.CreateAsync(user, password);
         }
 
+        public async Task<IdentityResult> EditUserAsync(UserEntity user)
+        {
+            return await _userManager.UpdateAsync(user);
+        }
+
         public async Task AddUserToRoleAsync(UserEntity user, string roleName)
         {
             await _userManager.AddToRoleAsync(user, roleName);
+        }
+
+        public async Task RemoveFromRolesAsync(UserEntity user, IEnumerable<string> rolesName)
+        {
+            await _userManager.RemoveFromRolesAsync(user, rolesName);
+        }
+
+        public async Task<IList<string>> GetRolesAsync(UserEntity user)
+        {
+            return await _userManager.GetRolesAsync(user);
         }
 
         public async Task CheckRoleAsync(string roleName)
@@ -62,7 +77,8 @@ namespace KyoS.Web.Helpers
                              Username = user.UserName,
                              FullName = user.FullName,
                              RoleNames = user.UserType.ToString(),
-                             Clinic = user.Clinic
+                             Clinic = user.Clinic,
+                             Active = user.Active
                          }).ToList().Select(p => new Users_in_Role_ViewModel()
                          {
                              UserId = p.UserId,
@@ -70,7 +86,8 @@ namespace KyoS.Web.Helpers
                              Email = p.Username,
                              Fullname = p.FullName,
                              Role = p.RoleNames,
-                             Clinic = p.Clinic
+                             Clinic = p.Clinic,
+                             Active = p.Active
                          });
             return model;
         }
@@ -98,7 +115,7 @@ namespace KyoS.Web.Helpers
 
         public async Task<SignInResult> LoginAsync(LoginViewModel model)
         {
-            return await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+            return await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, true);
         }
 
         public async Task LogoutAsync()
@@ -122,6 +139,38 @@ namespace KyoS.Web.Helpers
             if (await this.IsUserInRoleAsync(user, UserType.Supervisor.ToString()))
                 await _userManager.RemoveFromRoleAsync(user, UserType.Supervisor.ToString());
             return await _userManager.DeleteAsync(user);
+        }
+
+        public bool GetActiveByUserName(string userName)
+        {
+            var model = _userManager.Users.FirstOrDefault(u => u.UserName == userName);
+            if (model != null)
+                return model.Active;
+            return false;
+        }
+
+        public void HardResetPassword(string email, string newPassword)
+        {
+            Task<UserEntity> userTask = _userManager.FindByEmailAsync(email);
+            userTask.Wait();
+            UserEntity user = userTask.Result;
+            ResetUserPassword(user, newPassword);
+        }
+
+        private void ResetUserPassword(UserEntity user, string newPassword)
+        {
+            var token = GeneratePasswordResetToken(user);
+            var task = _userManager.ResetPasswordAsync(user, token, newPassword);
+            task.Wait();
+            var result = task.Result;
+        }
+
+        private string GeneratePasswordResetToken(UserEntity user)
+        {
+            var task = _userManager.GeneratePasswordResetTokenAsync(user);
+            task.Wait();
+            var token = task.Result;
+            return token;
         }        
     }
 }

@@ -138,13 +138,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             LegalGuardianEntity legalGuardianEntity = await _context.LegalGuardians.FirstOrDefaultAsync(c => c.Id == id);
             if (legalGuardianEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             LegalGuardianViewModel legalGuardianViewModel = _converterHelper.ToLegalGuardianViewModel(legalGuardianEntity);
@@ -158,7 +158,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != legalGuardianViewModel.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (ModelState.IsValid)
@@ -192,13 +192,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             LegalGuardianEntity legalGuardiansEntity = await _context.LegalGuardians.FirstOrDefaultAsync(c => c.Id == id);
             if (legalGuardiansEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             try

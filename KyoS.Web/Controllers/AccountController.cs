@@ -6,6 +6,8 @@ using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,13 +18,15 @@ namespace KyoS.Web.Controllers
     {
         private readonly IUserHelper _userHelper;
         private readonly ICombosHelper _combosHelper;
+        private readonly IRenderHelper _renderHelper;
         private readonly DataContext _context;
 
-        public AccountController(IUserHelper userHelper, ICombosHelper combosHelper, DataContext context)
+        public AccountController(IUserHelper userHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context)
         {
             _userHelper = userHelper;
             _combosHelper = combosHelper;
             _context = context;
+            _renderHelper = renderHelper;
         }
 
         [AllowAnonymous]
@@ -42,18 +46,33 @@ namespace KyoS.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                Microsoft.AspNetCore.Identity.SignInResult result = await _userHelper.LoginAsync(model);
-                if (result.Succeeded)
+                if (!_userHelper.GetActiveByUserName(model.Username))
                 {
-                    if (Request.Query.Keys.Contains("ReturnUrl"))
-                    {
-                        return Redirect(Request.Query["ReturnUrl"].First());
+                    ModelState.AddModelError(string.Empty, "User not active.");
+                }
+                else
+                { 
+                    Microsoft.AspNetCore.Identity.SignInResult result = await _userHelper.LoginAsync(model);
+                
+                    if (result.Succeeded)
+                    {    
+                        if (Request.Query.Keys.Contains("ReturnUrl"))
+                        {
+                          return Redirect(Request.Query["ReturnUrl"].First());
+                        }
+
+                        return RedirectToAction("Index", "Desktop");                  
                     }
 
-                    return RedirectToAction("Index", "Desktop");
+                    if (result.IsLockedOut)
+                    {
+                        ModelState.AddModelError(string.Empty, "User account locked out.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Email or password incorrect.");
+                    }
                 }
-
-                ModelState.AddModelError(string.Empty, "Email or password incorrect.");
             }
 
             return View(model);
@@ -128,14 +147,15 @@ namespace KyoS.Web.Controllers
                         Address = string.Empty,
                         Document = string.Empty,
                         UserType = (model.RoleId == 1) ? UserType.Facilitator : (model.RoleId == 2) ? UserType.Supervisor : (model.RoleId == 3) ? UserType.Mannager : UserType.Admin,
-                        Clinic = (model.IdClinic != 0) ? _context.Clinics.FirstOrDefault(c => c.Id == model.IdClinic) : null
+                        Active = model.Active,
+                        Clinic = (model.IdClinic != 0) ? _context.Clinics.FirstOrDefault(c => c.Id == model.IdClinic) : null                    
                     };
 
                     try
                     {
                         await _userHelper.AddUserAsync(user, model.Password);
                         await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
-                        return RedirectToAction("Create", new { id = 1 });
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_Message", "User has been successfully created") });
                     }
                     catch (System.Exception ex)
                     {
@@ -144,13 +164,13 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Create", new { id = 2 });
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_Message", "Error. User already exist") });
                 }
             }
 
             model.Clinics = _combosHelper.GetComboClinics();
             model.Roles = _combosHelper.GetComboRoles();
-            return View(model);
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
         }
 
         public IActionResult ChangePassword()
@@ -164,16 +184,16 @@ namespace KyoS.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "ChangePassword") });
             }
             UserEntity user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
             IdentityResult result = await _userHelper.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_Message", "Your password was changed successfully") });
             }
             AddErrors(result);
-            return View(model);
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "ChangePassword") });
         }
 
         private void AddErrors(IdentityResult result)
@@ -189,7 +209,7 @@ namespace KyoS.Web.Controllers
         {
             if (id == string.Empty)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
             UserEntity user_to_eliminate = await _userHelper.GetUserByIdAsync(id);
             UserEntity user_in = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
@@ -200,6 +220,117 @@ namespace KyoS.Web.Controllers
             }
             await _userHelper.DeleteUserAsync(user_to_eliminate);
             return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == string.Empty)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user = await _context.Users
+
+                                            .Include(u => u.Clinic)
+
+                                            .FirstOrDefaultAsync(u => u.Id == id);                                           
+
+            if (user == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            EditViewModel model = new EditViewModel
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                RoleId = (user.UserType == UserType.Facilitator) ? 1 : (user.UserType == UserType.Supervisor) ? 2 : (user.UserType == UserType.Mannager) ? 3
+                                                                     : (user.UserType == UserType.Admin) ? 4 : 0,
+                Roles = _combosHelper.GetComboRoles(),
+                IdClinic = (user.Clinic != null) ? user.Clinic.Id : 0,
+                Clinics = _combosHelper.GetComboClinics(),
+                Active = user.Active
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(EditViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                    UserEntity user = await _userHelper.GetUserByIdAsync(model.Id);
+
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+                    user.Email = model.Email;
+                    user.UserName = model.Email;
+                    user.PhoneNumber = string.Empty;
+                    user.Address = string.Empty;
+                    user.Document = string.Empty;
+                    user.UserType = (model.RoleId == 1) ? UserType.Facilitator : (model.RoleId == 2) ? UserType.Supervisor : (model.RoleId == 3) ? UserType.Mannager : UserType.Admin;
+                    user.Active = model.Active;
+                    user.Clinic = (model.IdClinic != 0) ? _context.Clinics.FirstOrDefault(c => c.Id == model.IdClinic) : null;
+                    
+                    try
+                    {                                          
+                        await _userHelper.EditUserAsync(user);
+
+                        var roles = await _userHelper.GetRolesAsync(user);
+                        await _userHelper.RemoveFromRolesAsync(user, roles);
+                        await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
+                        
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_Message", "The user has been successfully modified.") });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }               
+            }
+
+            model.Clinics = _combosHelper.GetComboClinics();
+            model.Roles = _combosHelper.GetComboRoles();
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", model) });
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult ResetPassword()
+        {
+            SetPasswordViewModel model = new SetPasswordViewModel
+            {
+                Users = _combosHelper.GetComboUserNames()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(SetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {            
+                UserEntity user = await _userHelper.GetUserByIdAsync(model.IdUser.ToString());
+                if (user != null)
+                {
+                    _userHelper.HardResetPassword(user.Email, model.NewPassword);
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_Message", "User password was updated successfully") });
+                }
+            }
+
+            model.Users = _combosHelper.GetComboUserNames();
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "ResetPassword", model) });
+        }
+
+        public IActionResult NotAuthorized()
+        {
+            return View();
         }
     }
 }

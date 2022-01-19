@@ -135,13 +135,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             ReferredEntity referredEntity = await _context.Referreds.FirstOrDefaultAsync(c => c.Id == id);
             if (referredEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             ReferredViewModel referredViewModel = _converterHelper.ToReferredViewModel(referredEntity);
@@ -155,7 +155,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != referredViewModel.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (ModelState.IsValid)
@@ -189,13 +189,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             ReferredEntity referredEntity = await _context.Referreds.FirstOrDefaultAsync(c => c.Id == id);
             if (referredEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             try

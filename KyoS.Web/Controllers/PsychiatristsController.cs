@@ -135,13 +135,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             PsychiatristEntity psychiatristEntity = await _context.Psychiatrists.FirstOrDefaultAsync(c => c.Id == id);
             if (psychiatristEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             PsychiatristViewModel psychiatristViewModel = _converterHelper.ToPsychiatristViewModel(psychiatristEntity);
@@ -155,7 +155,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != psychiatristViewModel.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (ModelState.IsValid)
@@ -189,13 +189,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             PsychiatristEntity psychiatristEntity = await _context.Psychiatrists.FirstOrDefaultAsync(c => c.Id == id);
             if (psychiatristEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             try

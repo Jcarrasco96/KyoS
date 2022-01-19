@@ -45,7 +45,7 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (User.IsInRole("Mannager"))
@@ -141,13 +141,13 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             IncidentEntity incidentEntity = await _context.Incidents.FirstOrDefaultAsync(i => i.Id == id);
             if (incidentEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             try
@@ -169,7 +169,7 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             IncidentEntity incidentEntity = await _context.Incidents
@@ -177,7 +177,7 @@ namespace KyoS.Web.Controllers
                                                           .FirstOrDefaultAsync(i => i.Id == id);
             if (incidentEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             IncidentViewModel incidentViewModel = _converterHelper.ToIncidentViewModel(incidentEntity);
@@ -192,7 +192,7 @@ namespace KyoS.Web.Controllers
         {
             if (id != incidentViewModel.Id)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             if (ModelState.IsValid)

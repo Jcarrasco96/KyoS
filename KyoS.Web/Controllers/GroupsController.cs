@@ -38,7 +38,7 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }    
 
             ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
@@ -256,14 +256,14 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             GroupEntity groupEntity = await _context.Groups.Include(g => g.Facilitator)
                                                            .Include(g => g.Clients).FirstOrDefaultAsync(g => g.Id == id);
             if (groupEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             //the facilitator has not availability on that dates
@@ -466,7 +466,7 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
@@ -528,7 +528,7 @@ namespace KyoS.Web.Controllers
 
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
                         
             model = new GroupViewModel
@@ -685,7 +685,7 @@ namespace KyoS.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             GroupEntity groupEntity = await _context.Groups
@@ -694,7 +694,7 @@ namespace KyoS.Web.Controllers
                                                     .FirstOrDefaultAsync(g => g.Id == id);
             if (groupEntity == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
 
             //the facilitator has not availability on that dates
@@ -726,7 +726,7 @@ namespace KyoS.Web.Controllers
 
             if (user_logged.Clinic == null)
             {
-                return NotFound();
+                return RedirectToAction("Home/Error404");
             }
             
             groupViewModel.Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id);
