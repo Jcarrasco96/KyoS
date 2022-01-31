@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220123011615_AddEntityNotePs")]
+    partial class AddEntityNotePs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1666,9 +1668,6 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("SupervisorId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("UsesSessions")
                         .HasColumnType("bit");
 
@@ -1678,6 +1677,9 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Withdrawn")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("Workday_CientId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Workday_Client_FK")
                         .HasColumnType("int");
 
@@ -1685,8 +1687,7 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("SupervisorId");
 
-                    b.HasIndex("Workday_Client_FK")
-                        .IsUnique();
+                    b.HasIndex("Workday_CientId");
 
                     b.ToTable("NotesP");
                 });
@@ -2772,7 +2773,7 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("ObjectiveId");
 
                     b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
-                        .WithMany("IndividualNotes")
+                        .WithMany()
                         .HasForeignKey("SupervisorId");
 
                     b.HasOne("KyoS.Web.Data.Entities.Workday_Client", "Workday_Cient")
@@ -2826,14 +2827,12 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.NotePEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
-                        .WithMany("NotesP")
+                        .WithMany()
                         .HasForeignKey("SupervisorId");
 
                     b.HasOne("KyoS.Web.Data.Entities.Workday_Client", "Workday_Cient")
-                        .WithOne("NoteP")
-                        .HasForeignKey("KyoS.Web.Data.Entities.NotePEntity", "Workday_Client_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("Workday_CientId");
 
                     b.Navigation("Supervisor");
 
@@ -3240,11 +3239,7 @@ namespace KyoS.Web.Migrations
                 {
                     b.Navigation("GroupNotes");
 
-                    b.Navigation("IndividualNotes");
-
                     b.Navigation("Notes");
-
-                    b.Navigation("NotesP");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.WeekEntity", b =>
@@ -3268,8 +3263,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Messages");
 
                     b.Navigation("Note");
-
-                    b.Navigation("NoteP");
                 });
 #pragma warning restore 612, 618
         }

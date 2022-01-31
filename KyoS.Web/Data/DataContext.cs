@@ -35,6 +35,8 @@ namespace KyoS.Web.Data
         public DbSet<Workday_Client> Workdays_Clients { get; set; }
         public DbSet<NoteEntity> Notes { get; set; }
         public DbSet<Note_Activity> Notes_Activities { get; set; }
+        public DbSet<NotePEntity> NotesP { get; set; }
+        public DbSet<NoteP_Activity> NotesP_Activities { get; set; }
         public DbSet<MessageEntity> Messages { get; set; }
         public DbSet<Workday_Activity_Facilitator> Workdays_Activities_Facilitators { get; set; }
         public DbSet<ReferredEntity> Referreds { get; set; }
@@ -54,7 +56,7 @@ namespace KyoS.Web.Data
         public DbSet<IndividualNoteEntity> IndividualNotes { get; set; }
         public DbSet<GroupNoteEntity> GroupNotes { get; set; }
         public DbSet<GroupNote_Activity> GroupNotes_Activities { get; set; }
-        public DbSet<SettingEntity> Settings { get; set; }
+        public DbSet<SettingEntity> Settings { get; set; }        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -118,6 +120,16 @@ namespace KyoS.Web.Data
 
             modelBuilder.Entity<Workday_Client>()
                         .HasOne(wd => wd.Note)
+                        .WithOne(n => n.Workday_Cient)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Workday_Client>()
+                        .HasOne(wd => wd.NoteP)
+                        .WithOne(n => n.Workday_Cient)
+                        .HasForeignKey<NotePEntity>(n => n.Workday_Client_FK);
+
+            modelBuilder.Entity<Workday_Client>()
+                        .HasOne(wd => wd.NoteP)
                         .WithOne(n => n.Workday_Cient)
                         .OnDelete(DeleteBehavior.Cascade);
 

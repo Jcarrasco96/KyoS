@@ -464,6 +464,7 @@ namespace KyoS.Web.Controllers
                                       .ToListAsync());
         }
 
+        //Schema 1 and schema 2
         [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> CreateActivitiesWeek(int id = 0)
         {
@@ -513,6 +514,11 @@ namespace KyoS.Web.Controllers
             //No hay creadas actividades del facilitador logueado en la fecha seleccionada
             if (activities_list.Count() == 0)
             {
+                if (user_logged.Clinic.Schema == SchemaType.Schema3)
+                {
+                    return RedirectToAction(nameof(CreateActivitiesWeek3), "Activities", new { id = id });
+                }
+
                 if (user_logged.Clinic.Schema == SchemaType.Schema4)
                 {
                     return RedirectToAction(nameof(CreateActivitiesWeek4), "Activities", new { id = id });
@@ -593,6 +599,11 @@ namespace KyoS.Web.Controllers
             }
             else
             {
+                if (activities_list[0].Schema == SchemaType.Schema3)
+                {
+                    return RedirectToAction(nameof(CreateActivitiesWeek3), "Activities", new { id = id });
+                }
+
                 if (activities_list[0].Schema == SchemaType.Schema4)
                 {
                     return RedirectToAction(nameof(CreateActivitiesWeek4), "Activities", new { id = id });
@@ -735,6 +746,275 @@ namespace KyoS.Web.Controllers
                     Workday = workday,
                     Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity4),
                     Schema = facilitator_logged.Clinic.Schema
+                };
+                _context.Add(activity);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(ActivitiesPerWeek));
+                }
+                catch (Exception ex)
+                {
+
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Already exists the element");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            return View(model);
+        }
+
+        //Schema 3
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> CreateActivitiesWeek3(int id = 0)
+        {
+            IEnumerable<SelectListItem> list1;
+            IEnumerable<SelectListItem> list2;
+            IEnumerable<SelectListItem> list3;
+            IEnumerable<SelectListItem> list4;
+
+            Workday_Activity_Facilitator3ViewModel model;
+            UserEntity user_logged;
+
+            user_logged = await _context.Users
+                                        .Include(u => u.Clinic)
+                                        .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            WorkdayEntity workday = await _context.Workdays
+                                                  
+                                                  .Include(wd => wd.Week)
+                                                  .ThenInclude(w => w.Clinic)
+
+                                                  .Include(wd => wd.Workdays_Clients)
+                                                  .ThenInclude(wc => wc.Note)
+
+                                                  .FirstOrDefaultAsync(w => w.Id == id);
+
+            //el workday ya tiene notas creadas por el facilitator logueado por tanto no es posible su edición
+            if (WorkdayReadOnly(workday))
+            {
+                ViewBag.Error = "0";
+                return View(null);
+            }
+
+            FacilitatorEntity facilitator_logged = await _context.Facilitators
+                                                                 .FirstOrDefaultAsync(f => f.LinkedUser == User.Identity.Name);
+
+            if ((workday == null) || (facilitator_logged == null))
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            List<Workday_Activity_Facilitator> activities_list = await _context.Workdays_Activities_Facilitators
+
+                                                                               .Include(waf => waf.Activity)
+                                                                               .ThenInclude(a => a.Theme)
+
+                                                                               .Where(waf => (waf.Workday.Id == workday.Id
+                                                                                           && waf.Facilitator.Id == facilitator_logged.Id))
+                                                                               .ToListAsync();
+
+            list1 = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id);
+            list2 = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id);
+            list3 = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id);
+            list4 = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id);
+
+            //No hay creadas actividades del facilitador logueado en la fecha seleccionada
+            if (activities_list.Count() == 0)
+            {
+                model = new Workday_Activity_Facilitator3ViewModel
+                {
+                    IdWorkday = id,
+                    Date = workday.Date.ToShortDateString(),
+                    Day = workday.Date.DayOfWeek.ToString(),
+
+                    IdTopic1 = 0,
+                    Topics1 = list1,
+                    Activities1 = null,
+
+                    IdTopic2 = 0,
+                    Topics2 = list2,
+                    Activities2 = null,
+
+                    IdTopic3 = 0,
+                    Topics3 = list3,
+                    Activities3 = null,
+
+                    IdTopic4 = 0,
+                    Topics4 = list4,
+                    Activities4 = null,
+                };
+            }
+            else
+            {
+                model = new Workday_Activity_Facilitator3ViewModel
+                {
+                    IdWorkday = id,
+                    Date = workday.Date.ToShortDateString(),
+                    Day = workday.Date.DayOfWeek.ToString(),
+
+                    IdTopic1 = (activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0,
+                    Topics1 = list1,
+                    IdActivity1 = (activities_list.Count > 0) ? activities_list[0].Activity.Id : 0,
+                    Activities1 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
+                    activityDailyLiving1 = activities_list[0].activityDailyLiving == null ? false : Convert.ToBoolean(activities_list[0].activityDailyLiving),
+                    communityResources1 = activities_list[0].communityResources == null ? false : Convert.ToBoolean(activities_list[0].communityResources),
+                    copingSkills1 = activities_list[0].copingSkills == null ? false : Convert.ToBoolean(activities_list[0].copingSkills),
+                    diseaseManagement1 = activities_list[0].diseaseManagement == null ? false : Convert.ToBoolean(activities_list[0].diseaseManagement),
+                    healthyLiving1 = activities_list[0].healthyLiving == null ? false : Convert.ToBoolean(activities_list[0].healthyLiving),
+                    lifeSkills1 = activities_list[0].lifeSkills == null ? false : Convert.ToBoolean(activities_list[0].lifeSkills),
+                    relaxationTraining1 = activities_list[0].relaxationTraining == null ? false : Convert.ToBoolean(activities_list[0].relaxationTraining),
+                    socialSkills1 = activities_list[0].socialSkills == null ? false : Convert.ToBoolean(activities_list[0].socialSkills),
+                    stressManagement1 = activities_list[0].stressManagement == null ? false : Convert.ToBoolean(activities_list[0].stressManagement),
+
+                    IdTopic2 = (activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0,
+                    Topics2 = list2,
+                    IdActivity2 = (activities_list.Count > 1) ? activities_list[1].Activity.Id : 0,
+                    Activities2 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
+                    activityDailyLiving2 = activities_list[1].activityDailyLiving == null ? false : Convert.ToBoolean(activities_list[1].activityDailyLiving),
+                    communityResources2 = activities_list[1].communityResources == null ? false : Convert.ToBoolean(activities_list[1].communityResources),
+                    copingSkills2 = activities_list[1].copingSkills == null ? false : Convert.ToBoolean(activities_list[1].copingSkills),
+                    diseaseManagement2 = activities_list[1].diseaseManagement == null ? false : Convert.ToBoolean(activities_list[1].diseaseManagement),
+                    healthyLiving2 = activities_list[1].healthyLiving == null ? false : Convert.ToBoolean(activities_list[1].healthyLiving),
+                    lifeSkills2 = activities_list[1].lifeSkills == null ? false : Convert.ToBoolean(activities_list[1].lifeSkills),
+                    relaxationTraining2 = activities_list[1].relaxationTraining == null ? false : Convert.ToBoolean(activities_list[1].relaxationTraining),
+                    socialSkills2 = activities_list[1].socialSkills == null ? false : Convert.ToBoolean(activities_list[1].socialSkills),
+                    stressManagement2 = activities_list[1].stressManagement == null ? false : Convert.ToBoolean(activities_list[1].stressManagement),
+
+                    IdTopic3 = (activities_list.Count > 2) ? activities_list[2].Activity.Theme.Id : 0,
+                    Topics3 = list3,
+                    IdActivity3 = (activities_list.Count > 2) ? activities_list[2].Activity.Id : 0,
+                    Activities3 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 2) ? activities_list[2].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
+                    activityDailyLiving3 = activities_list[2].activityDailyLiving == null ? false : Convert.ToBoolean(activities_list[2].activityDailyLiving),
+                    communityResources3 = activities_list[2].communityResources == null ? false : Convert.ToBoolean(activities_list[2].communityResources),
+                    copingSkills3 = activities_list[2].copingSkills == null ? false : Convert.ToBoolean(activities_list[2].copingSkills),
+                    diseaseManagement3 = activities_list[2].diseaseManagement == null ? false : Convert.ToBoolean(activities_list[2].diseaseManagement),
+                    healthyLiving3 = activities_list[2].healthyLiving == null ? false : Convert.ToBoolean(activities_list[2].healthyLiving),
+                    lifeSkills3 = activities_list[2].lifeSkills == null ? false : Convert.ToBoolean(activities_list[2].lifeSkills),
+                    relaxationTraining3 = activities_list[2].relaxationTraining == null ? false : Convert.ToBoolean(activities_list[2].relaxationTraining),
+                    socialSkills3 = activities_list[2].socialSkills == null ? false : Convert.ToBoolean(activities_list[2].socialSkills),
+                    stressManagement3 = activities_list[2].stressManagement == null ? false : Convert.ToBoolean(activities_list[2].stressManagement),
+
+                    IdTopic4 = (activities_list.Count > 3) ? activities_list[3].Activity.Theme.Id : 0,
+                    Topics4 = list4,
+                    IdActivity4 = (activities_list.Count > 3) ? activities_list[3].Activity.Id : 0,
+                    Activities4 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 3) ? activities_list[3].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
+                    activityDailyLiving4 = activities_list[3].activityDailyLiving == null ? false : Convert.ToBoolean(activities_list[3].activityDailyLiving),
+                    communityResources4 = activities_list[3].communityResources == null ? false : Convert.ToBoolean(activities_list[3].communityResources),
+                    copingSkills4 = activities_list[3].copingSkills == null ? false : Convert.ToBoolean(activities_list[3].copingSkills),
+                    diseaseManagement4 = activities_list[3].diseaseManagement == null ? false : Convert.ToBoolean(activities_list[3].diseaseManagement),
+                    healthyLiving4 = activities_list[3].healthyLiving == null ? false : Convert.ToBoolean(activities_list[3].healthyLiving),
+                    lifeSkills4 = activities_list[3].lifeSkills == null ? false : Convert.ToBoolean(activities_list[3].lifeSkills),
+                    relaxationTraining4 = activities_list[3].relaxationTraining == null ? false : Convert.ToBoolean(activities_list[3].relaxationTraining),
+                    socialSkills4 = activities_list[3].socialSkills == null ? false : Convert.ToBoolean(activities_list[3].socialSkills),
+                    stressManagement4 = activities_list[3].stressManagement == null ? false : Convert.ToBoolean(activities_list[3].stressManagement),
+                };
+            }
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateActivitiesWeek3(Workday_Activity_Facilitator3ViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                FacilitatorEntity facilitator_logged = await _context.Facilitators
+
+                                                                     .Include(f => f.Clinic)
+
+                                                                     .FirstOrDefaultAsync(f => f.LinkedUser == User.Identity.Name);
+
+                WorkdayEntity workday = await _context.Workdays
+                                                      .FirstOrDefaultAsync(w => w.Id == model.IdWorkday);
+
+                if ((facilitator_logged == null) || (workday == null))
+                {
+                    return RedirectToAction("Home/Error404");
+                }
+
+                List<Workday_Activity_Facilitator> activities_list = await _context.Workdays_Activities_Facilitators
+                                                                                   .Where(waf => (waf.Workday.Id == model.IdWorkday
+                                                                                               && waf.Facilitator.Id == facilitator_logged.Id))
+                                                                                   .ToListAsync();
+                //elimino las actividades que tiene asociada ese facilitator en ese dia
+                _context.RemoveRange(activities_list);
+
+                Workday_Activity_Facilitator activity;
+                activity = new Workday_Activity_Facilitator
+                {
+                    Facilitator = facilitator_logged,
+                    Workday = workday,
+                    Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity1),
+                    Schema = facilitator_logged.Clinic.Schema,
+                    activityDailyLiving = model.activityDailyLiving1,
+                    communityResources = model.communityResources1,
+                    copingSkills = model.copingSkills1,
+                    diseaseManagement = model.diseaseManagement1,
+                    healthyLiving = model.healthyLiving1,
+                    lifeSkills = model.lifeSkills1,
+                    relaxationTraining = model.relaxationTraining1,
+                    socialSkills = model.socialSkills1,
+                    stressManagement = model.stressManagement1
+                };
+                _context.Add(activity);
+                activity = new Workday_Activity_Facilitator
+                {
+                    Facilitator = facilitator_logged,
+                    Workday = workday,
+                    Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity2),
+                    Schema = facilitator_logged.Clinic.Schema,
+                    activityDailyLiving = model.activityDailyLiving2,
+                    communityResources = model.communityResources2,
+                    copingSkills = model.copingSkills2,
+                    diseaseManagement = model.diseaseManagement2,
+                    healthyLiving = model.healthyLiving2,
+                    lifeSkills = model.lifeSkills2,
+                    relaxationTraining = model.relaxationTraining2,
+                    socialSkills = model.socialSkills2,
+                    stressManagement = model.stressManagement2
+                };
+                _context.Add(activity);
+                activity = new Workday_Activity_Facilitator
+                {
+                    Facilitator = facilitator_logged,
+                    Workday = workday,
+                    Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity3),
+                    Schema = facilitator_logged.Clinic.Schema,
+                    activityDailyLiving = model.activityDailyLiving3,
+                    communityResources = model.communityResources3,
+                    copingSkills = model.copingSkills3,
+                    diseaseManagement = model.diseaseManagement3,
+                    healthyLiving = model.healthyLiving3,
+                    lifeSkills = model.lifeSkills3,
+                    relaxationTraining = model.relaxationTraining3,
+                    socialSkills = model.socialSkills3,
+                    stressManagement = model.stressManagement3
+                };
+                _context.Add(activity);
+                activity = new Workday_Activity_Facilitator
+                {
+                    Facilitator = facilitator_logged,
+                    Workday = workday,
+                    Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity4),
+                    Schema = facilitator_logged.Clinic.Schema,
+                    activityDailyLiving = model.activityDailyLiving4,
+                    communityResources = model.communityResources4,
+                    copingSkills = model.copingSkills4,
+                    diseaseManagement = model.diseaseManagement4,
+                    healthyLiving = model.healthyLiving4,
+                    lifeSkills = model.lifeSkills4,
+                    relaxationTraining = model.relaxationTraining4,
+                    socialSkills = model.socialSkills4,
+                    stressManagement = model.stressManagement4
                 };
                 _context.Add(activity);
 
@@ -1224,41 +1504,7 @@ namespace KyoS.Web.Controllers
                                                       .ToList();
 
             return Json(new SelectList(activities, "Id", "Name"));
-        }
-
-        public bool WorkdayReadOnly(WorkdayEntity workday)
-        {
-            if (workday.Workdays_Clients.Count > 0)
-            {
-                FacilitatorEntity facilitator_logged = _context.Facilitators
-                                                               .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
-                foreach (Workday_Client item in workday.Workdays_Clients)
-                {
-                    if ((item.Note != null) && (item.Facilitator == facilitator_logged))
-                        return true;
-                }
-                return false;
-            }
-            else
-                return false;
-        }
-
-        public bool GroupWorkdayReadOnly(WorkdayEntity workday)
-        {
-            if (workday.Workdays_Clients.Count > 0)
-            {
-                FacilitatorEntity facilitator_logged = _context.Facilitators
-                                                               .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
-                foreach (Workday_Client item in workday.Workdays_Clients)
-                {
-                    if ((item.GroupNote != null) && (item.Facilitator == facilitator_logged))
-                        return true;
-                }
-                return false;
-            }
-            else
-                return false;
-        }
+        }        
 
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> ActivitiesSupervision(int id = 0, int pending = 0)
@@ -1389,5 +1635,53 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction(nameof(FISupervision), new { id = 1, pending = 1 });
             }
         }
+
+        #region Utils functions
+        public bool WorkdayReadOnly(WorkdayEntity workday)
+        {
+            if (workday.Workdays_Clients.Count > 0)
+            {
+                FacilitatorEntity facilitator_logged = _context.Facilitators
+
+                                                               .Include(f => f.Clinic)
+
+                                                               .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
+
+                foreach (Workday_Client item in workday.Workdays_Clients)
+                {
+                    if (facilitator_logged.Clinic.Schema == SchemaType.Schema3)
+                    {
+                        if ((item.NoteP != null) && (item.Facilitator == facilitator_logged))
+                            return true;
+                    }
+                    else
+                    {
+                        if ((item.Note != null) && (item.Facilitator == facilitator_logged))
+                            return true;
+                    }
+                }
+                return false;
+            }
+            else
+                return false;
+        }
+
+        public bool GroupWorkdayReadOnly(WorkdayEntity workday)
+        {
+            if (workday.Workdays_Clients.Count > 0)
+            {
+                FacilitatorEntity facilitator_logged = _context.Facilitators
+                                                               .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
+                foreach (Workday_Client item in workday.Workdays_Clients)
+                {
+                    if ((item.GroupNote != null) && (item.Facilitator == facilitator_logged))
+                        return true;
+                }
+                return false;
+            }
+            else
+                return false;
+        }
+        #endregion
     }
 }

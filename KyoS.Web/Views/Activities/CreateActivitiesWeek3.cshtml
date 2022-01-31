@@ -1,0 +1,212 @@
+﻿@model KyoS.Web.Models.Workday_Activity_Facilitator3ViewModel
+@{
+    ViewData["Title"] = "Activities per day";
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Activities per week", "ActivitiesPerWeek", "Activities")
+        </li>
+        <li class="active">Activities per day</li>
+    </ul>
+</div>
+
+<h4><strong>Activities per day </strong>&nbsp; @Model.Day @Model.Date </h4>
+<hr />
+
+<div class="row">
+    @if (ViewBag.Error == "0")
+    {
+        <div class="alert alert-block alert-danger">
+            <i class="icon-ok red"></i>
+            <strong class="red">
+                Error. There are notes on this date. It´s not possible edit.
+            </strong>
+            <a asp-action="ActivitiesPerWeek">Back</a>
+        </div>
+    }
+    else
+    {
+    <form asp-action="CreateActivitiesWeek3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="IdWorkday" />
+        <div class="col-md-push-12">
+            <div class="form-group col-md-6">
+                <label class="control-label">Group 1 Theme</label>
+                <select asp-for="IdTopic1" asp-items="Model.Topics1" class="form-control" id="cbTopic1"></select>
+                <span asp-validation-for="IdTopic1" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="control-label">Skill Sets Addressed</label>
+                <br />
+                <input type="checkbox" asp-for="copingSkills1" /> Coping Skills &nbsp;
+                <input type="checkbox" asp-for="stressManagement1" /> Stress Management &nbsp;
+                <input type="checkbox" asp-for="healthyLiving1" /> Healthy Living &nbsp;
+                <input type="checkbox" asp-for="relaxationTraining1" /> Relaxation Training &nbsp;
+                <input type="checkbox" asp-for="diseaseManagement1" /> Disease Management &nbsp;
+                <input type="checkbox" asp-for="communityResources1" /> Community Resources &nbsp;
+                <input type="checkbox" asp-for="activityDailyLiving1" /> Activities of Daily Living &nbsp;
+                <input type="checkbox" asp-for="socialSkills1" /> Social Skills &nbsp;
+                <input type="checkbox" asp-for="lifeSkills1" /> Life Skills &nbsp;
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-12">
+                <label class="control-label">Group Facilitator's Intervention</label>
+                <select asp-for="IdActivity1" asp-items="Model.Activities1" class="form-control" id="cbActivity1"></select>
+                <span asp-validation-for="IdActivity1" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="col-md-12">
+                <hr />
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-6">
+                <label class="control-label">Group 2 Theme</label>
+                <select asp-for="IdTopic2" asp-items="Model.Topics2" class="form-control" id="cbTopic2"></select>
+                <span asp-validation-for="IdTopic2" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="control-label">Skill Sets Addressed</label>
+                <br />
+                <input type="checkbox" asp-for="copingSkills2" /> Coping Skills &nbsp;
+                <input type="checkbox" asp-for="stressManagement2" /> Stress Management &nbsp;
+                <input type="checkbox" asp-for="healthyLiving2" /> Healthy Living &nbsp;
+                <input type="checkbox" asp-for="relaxationTraining2" /> Relaxation Training &nbsp;
+                <input type="checkbox" asp-for="diseaseManagement2" /> Disease Management &nbsp;
+                <input type="checkbox" asp-for="communityResources2" /> Community Resources &nbsp;
+                <input type="checkbox" asp-for="activityDailyLiving2" /> Activities of Daily Living &nbsp;
+                <input type="checkbox" asp-for="socialSkills2" /> Social Skills &nbsp;
+                <input type="checkbox" asp-for="lifeSkills2" /> Life Skills &nbsp;
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-12">
+                <label class="control-label">Group Facilitator's Intervention</label>
+                <select asp-for="IdActivity2" asp-items="Model.Activities2" class="form-control" id="cbActivity2"></select>
+                <span asp-validation-for="IdActivity2" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="col-md-12">
+                <hr />
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-6">
+                <label class="control-label">Group 3 Theme</label>
+                <select asp-for="IdTopic3" asp-items="Model.Topics3" class="form-control" id="cbTopic3"></select>
+                <span asp-validation-for="IdTopic3" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="control-label">Skill Sets Addressed</label>
+                <br />
+                <input type="checkbox" asp-for="copingSkills3" /> Coping Skills &nbsp;
+                <input type="checkbox" asp-for="stressManagement3" /> Stress Management &nbsp;
+                <input type="checkbox" asp-for="healthyLiving3" /> Healthy Living &nbsp;
+                <input type="checkbox" asp-for="relaxationTraining3" /> Relaxation Training &nbsp;
+                <input type="checkbox" asp-for="diseaseManagement3" /> Disease Management &nbsp;
+                <input type="checkbox" asp-for="communityResources3" /> Community Resources &nbsp;
+                <input type="checkbox" asp-for="activityDailyLiving3" /> Activities of Daily Living &nbsp;
+                <input type="checkbox" asp-for="socialSkills3" /> Social Skills &nbsp;
+                <input type="checkbox" asp-for="lifeSkills3" /> Life Skills &nbsp;
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-12">
+                <label class="control-label">Group Facilitator's Intervention</label>
+                <select asp-for="IdActivity3" asp-items="Model.Activities3" class="form-control" id="cbActivity3"></select>
+                <span asp-validation-for="IdActivity3" class="text-danger"></span>
+            </div>
+        </div>    
+        <div class="col-md-push-12">
+            <div class="col-md-12">
+                <hr />
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-6">
+                <label class="control-label">Group 4 Theme</label>
+                <select asp-for="IdTopic4" asp-items="Model.Topics4" class="form-control" id="cbTopic4"></select>
+                <span asp-validation-for="IdTopic4" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="control-label">Skill Sets Addressed</label>
+                <br />
+                <input type="checkbox" asp-for="copingSkills4" /> Coping Skills &nbsp;
+                <input type="checkbox" asp-for="stressManagement4" /> Stress Management &nbsp;
+                <input type="checkbox" asp-for="healthyLiving4" /> Healthy Living &nbsp;
+                <input type="checkbox" asp-for="relaxationTraining4" /> Relaxation Training &nbsp;
+                <input type="checkbox" asp-for="diseaseManagement4" /> Disease Management &nbsp;
+                <input type="checkbox" asp-for="communityResources4" /> Community Resources &nbsp;
+                <input type="checkbox" asp-for="activityDailyLiving4" /> Activities of Daily Living &nbsp;
+                <input type="checkbox" asp-for="socialSkills4" /> Social Skills &nbsp;
+                <input type="checkbox" asp-for="lifeSkills4" /> Life Skills &nbsp;
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-12">
+                <label class="control-label">Group Facilitator's Intervention</label>
+                <select asp-for="IdActivity4" asp-items="Model.Activities4" class="form-control" id="cbActivity4"></select>
+                <span asp-validation-for="IdActivity4" class="text-danger"></span>
+            </div>
+        </div>        
+        &nbsp;
+        <div class="col-md-12">
+            <input type="submit" value="Save" class="btn btn-primary" />
+            <a asp-action="ActivitiesPerWeek" class="btn btn-success">Back</a>
+        </div>
+    </form>
+    }
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#cbTopic1").change(function () {
+                var url = "@Url.Action("GetActivityList", "Activities")";
+                $.get(url, { idTheme: $("#cbTopic1").val() }, function (data) {
+                    $("#cbActivity1").empty();
+                    $.each(data, function (index, row) {
+                        $("#cbActivity1").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
+                    });
+                });
+            })
+            $("#cbTopic2").change(function () {
+                var url = "@Url.Action("GetActivityList", "Activities")";
+                $.get(url, { idTheme: $("#cbTopic2").val() }, function (data) {
+                    $("#cbActivity2").empty();
+                    $.each(data, function (index, row) {
+                        $("#cbActivity2").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
+                    });
+                });
+            })
+            $("#cbTopic3").change(function () {
+                var url = "@Url.Action("GetActivityList", "Activities")";
+                $.get(url, { idTheme: $("#cbTopic3").val() }, function (data) {
+                    $("#cbActivity3").empty();
+                    $.each(data, function (index, row) {
+                        $("#cbActivity3").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
+                    });
+                });
+            })
+            $("#cbTopic4").change(function () {
+                var url = "@Url.Action("GetActivityList", "Activities")";
+                $.get(url, { idTheme: $("#cbTopic4").val() }, function (data) {
+                    $("#cbActivity4").empty();
+                    $.each(data, function (index, row) {
+                        $("#cbActivity4").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
+                    });
+                });
+            })
+        });
+    </script>
+}
+
+
+

@@ -483,6 +483,73 @@ namespace KyoS.Web.Helpers
             };
         }
 
+        public NoteViewModel ToNoteViewModel(NoteEntity model)
+        {
+            return new NoteViewModel
+            {
+                Id = model.Id,
+                PlanNote = model.PlanNote,
+                Status = model.Status,
+                Workday_Cient = model.Workday_Cient
+            };
+        }
+
+        public async Task<NotePEntity> ToNotePEntity(NotePViewModel model, bool isNew)
+        {
+            NotePEntity entity = await _context.NotesP.FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
+            return new NotePEntity
+            {
+                Id = isNew ? 0 : entity.Id,
+                Workday_Cient = await _context.Workdays_Clients.FindAsync(model.Id),
+                PlanNote = model.PlanNote,
+                Status = NoteStatus.Edition,
+                Title = model.Title,
+
+                //mental client status
+                Attentive = model.Attentive,
+                Depressed = model.Depressed,
+                Inattentive = model.Inattentive,
+                Angry = model.Angry,
+                Sad = model.Sad,
+                FlatAffect = model.FlatAffect,
+                Anxious = model.Anxious,
+                PositiveEffect = model.PositiveEffect,
+                Oriented1x = model.Oriented1x,
+                Oriented2x = model.Oriented2x,
+                Oriented3x = model.Oriented3x,
+                Impulsive = model.Impulsive,
+                Labile = model.Labile,
+                Withdrawn = model.Withdrawn,
+                RelatesWell = model.RelatesWell,
+                DecreasedEyeContact = model.DecreasedEyeContact,
+                AppropiateEyeContact = model.AppropiateEyeContact,
+
+                //progress
+                Minimal = model.Minimal,
+                Slow = model.Slow,
+                Steady = model.Steady,
+                GoodExcelent = model.GoodExcelent,
+                IncreasedDifficultiesNoted = model.IncreasedDifficultiesNoted,
+                Complicated = model.Complicated,
+                DevelopingInsight = model.DevelopingInsight,
+                LittleInsight = model.LittleInsight,
+                Aware = model.Aware,
+                AbleToGenerateAlternatives = model.AbleToGenerateAlternatives,
+                Initiates = model.Initiates,
+                ProblemSolved = model.ProblemSolved,
+                DemostratesEmpathy = model.DemostratesEmpathy,
+                UsesSessions = model.UsesSessions,
+                Variable = model.Variable,
+
+                Schema = model.Schema
+            };
+        }
+
+        public NotePViewModel ToNotePViewModel(NotePEntity model)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IndividualNoteEntity> ToIndividualNoteEntity(IndividualNoteViewModel model, bool isNew)
         {
             IndividualNoteEntity entity = await _context.IndividualNotes.FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
@@ -577,18 +644,7 @@ namespace KyoS.Web.Helpers
                 BehaviorModification = model.BehaviorModification,
                 Other_Intervention = model.Other_Intervention
             };
-        }
-
-        public NoteViewModel ToNoteViewModel(NoteEntity model)
-        {
-            return new NoteViewModel
-            {
-                Id = model.Id,
-                PlanNote = model.PlanNote,
-                Status = model.Status,
-                Workday_Cient = model.Workday_Cient
-            };
-        }
+        }        
 
         public Workday_ClientViewModel ToWorkdayClientViewModel(Workday_Client model)
         {
@@ -958,6 +1014,6 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
             };
-        }
+        }        
     }
 }

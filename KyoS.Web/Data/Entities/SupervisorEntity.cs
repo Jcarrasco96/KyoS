@@ -26,6 +26,10 @@ namespace KyoS.Web.Data.Entities
 
         public ICollection<NoteEntity> Notes { get; set; }
 
+        public ICollection<NotePEntity> NotesP { get; set; }
+
+        public ICollection<IndividualNoteEntity> IndividualNotes { get; set; }
+
         public ICollection<GroupNoteEntity> GroupNotes { get; set; }
     }
 }

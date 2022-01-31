@@ -69,6 +69,7 @@ namespace KyoS.Web.Controllers
             }
 
             return View(await _context.Weeks
+
                                       .Include(w => w.Days)                                            
                                       .ThenInclude(d => d.Workdays_Clients)                                            
                                       .ThenInclude(wc => wc.Client)                          
@@ -80,6 +81,10 @@ namespace KyoS.Web.Controllers
                                       .Include(w => w.Days)
                                       .ThenInclude(d => d.Workdays_Clients)
                                       .ThenInclude(wc => wc.Note)
+
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(wc => wc.NoteP)
 
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                 && w.Days.Where(d => (d.Service == ServiceType.PSR && d.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))
@@ -253,9 +258,35 @@ namespace KyoS.Web.Controllers
             return View(_converterHelper.ToWorkdayClientViewModel(entity));
         }
 
+        //PSR Notes (Schema 1, 2, 4)
         [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> EditNote(int id, int error = 0, int origin = 0, string errorText = "")
         {
+            FacilitatorEntity facilitator_logged = _context.Facilitators
+
+                                                           .Include(f => f.Clinic)
+
+                                                           .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
+
+            NoteEntity note = await _context.Notes
+
+                                            .Include(n => n.Workday_Cient)
+                                            .ThenInclude(wc => wc.Client)
+                                            .ThenInclude(c => c.Group)
+
+                                            .Include(n => n.Workday_Cient)
+                                            .ThenInclude(g => g.Facilitator)
+
+                                            .Include(n => n.Notes_Activities)
+                                            .ThenInclude(na => na.Activity)
+
+                                            .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+
+            if ((note == null) && (facilitator_logged.Clinic.Schema == Common.Enums.SchemaType.Schema3))
+            {
+                return RedirectToAction(nameof(EditNoteP), new { id = id, origin = origin});
+            }
+
             NoteViewModel noteViewModel;
             List<ThemeEntity> topics;
             List<SelectListItem> list1 = new List<SelectListItem>();
@@ -306,9 +337,6 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            FacilitatorEntity facilitator_logged = _context.Facilitators
-                                                           .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
-
             //el dia no tiene actividad asociada para el facilitator logueado por lo tanto no se puede crear la nota
             if (workday_Client.Workday.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator == facilitator_logged).Count() == 0)
             {
@@ -330,17 +358,6 @@ namespace KyoS.Web.Controllers
                 };
                 return View(noteViewModel);
             }
-
-            NoteEntity note = await _context.Notes.Include(n => n.Workday_Cient)
-                                                  .ThenInclude(wc => wc.Client)
-                                                  .ThenInclude(c => c.Group)
-
-                                                  .Include(n => n.Workday_Cient)
-                                                  .ThenInclude(g => g.Facilitator)
-
-                                                  .Include(n => n.Notes_Activities)
-                                                  .ThenInclude(na => na.Activity)
-                                                  .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
             topics = await _context.Themes.Where(t => t.Clinic.Id == workday_Client.Client.Clinic.Id)
                                           .ToListAsync();
@@ -578,6 +595,7 @@ namespace KyoS.Web.Controllers
             return View(noteViewModel);
         }
 
+        //PSR Notes (Schema 1, 2, 4)
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Facilitator")]
@@ -708,6 +726,15 @@ namespace KyoS.Web.Controllers
                 }
                 else    //la nota está creada y sólo se debe actualizar
                 {
+                    //I verify that the note has a selected goal
+                    if (note.Status == NoteStatus.Pending)
+                    {
+                        if (model.IdObjetive1 == 0 && model.IdObjetive2 == 0 && model.IdObjetive3 == 0 && model.IdObjetive4 == 0)
+                        {
+                            return RedirectToAction(nameof(EditNote), new { id = model.Id, error = 1, origin = model.Origin });
+                        }
+                    }
+
                     note.PlanNote = (model.PlanNote.Trim().Last() == '.') ? model.PlanNote.Trim() : $"{model.PlanNote.Trim()}.";
                     note.OrientedX3 = model.OrientedX3;
                     note.NotTime = model.NotTime;
@@ -839,6 +866,739 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        //PSR Notes (Schema 3)
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> EditNoteP(int id, int error = 0, int origin = 0, string errorText = "")
+        {
+            NotePViewModel noteViewModel;
+            
+            //la nota no tiene linkeado ningun goal
+            if (error == 1)
+                ViewBag.Error = "0";
+
+            //la nota no esta completa, faltan campos por editar
+            if (error == 2)
+                ViewBag.Error = "2";
+
+            //la nota tiene problemas con el genero
+            if (error == 4)
+            {
+                ViewBag.Error = "4";
+                ViewBag.errorText = errorText;
+            }
+
+            //el cliente seleccionado tiene una nota ya creada de otro servicio en ese mismo horario
+            if (error == 5)
+            {
+                ViewBag.Error = "5";
+            }
+
+            Workday_Client workday_Client = await _context.Workdays_Clients
+                                                          
+                                                          .Include(wc => wc.Workday)
+                                                          .ThenInclude(w => w.Workdays_Activities_Facilitators)
+                                                          .ThenInclude(waf => waf.Activity)
+                                                          .ThenInclude(a => a.Theme)
+
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Clinic)
+
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Group)
+
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.MTPs)
+
+                                                          .Include(wc => wc.Facilitator)
+
+                                                          .FirstOrDefaultAsync(wc => wc.Id == id);
+
+            if (workday_Client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            FacilitatorEntity facilitator_logged = _context.Facilitators
+                                                           .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
+
+            //el dia no tiene actividad asociada para el facilitator logueado por lo tanto no se puede crear la nota
+            if (workday_Client.Workday.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator == facilitator_logged).Count() == 0)
+            {
+                ViewBag.Error = "1";
+                noteViewModel = new NotePViewModel
+                {
+                    Id = workday_Client.Workday.Id,
+                };
+                return View(noteViewModel);
+            }
+
+            //el cliente no tiene mtp activos
+            if (workday_Client.Client.MTPs.Where(m => m.Active == true).Count() == 0)
+            {
+                ViewBag.Error = "3";
+                noteViewModel = new NotePViewModel
+                {
+                    Id = workday_Client.Workday.Id,
+                };
+                return View(noteViewModel);
+            }
+
+            NotePEntity note = await _context.NotesP
+
+                                            .Include(n => n.Workday_Cient)
+                                            .ThenInclude(wc => wc.Client)
+                                            .ThenInclude(c => c.Group)
+
+                                            .Include(n => n.Workday_Cient)
+                                            .ThenInclude(g => g.Facilitator)
+
+                                            .Include(n => n.NotesP_Activities)
+                                            .ThenInclude(na => na.Activity)
+
+                                            .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+
+            //-----------se selecciona el primer MTP activo que tenga el cliente-----------//
+            MTPEntity mtp = _context.MTPs
+                                    .FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+
+            List<Workday_Activity_Facilitator> activities = workday_Client.Workday
+                                                                          .Workdays_Activities_Facilitators
+                                                                          .Where(waf => waf.Facilitator == facilitator_logged)
+                                                                          .ToList();
+
+            if (note == null)   //la nota no está creada
+            {
+                IEnumerable<SelectListItem> goals = null;
+                IEnumerable<SelectListItem> objs = null;
+                if (mtp != null)
+                {
+                    goals = _combosHelper.GetComboGoals(mtp.Id);
+                    objs = _combosHelper.GetComboObjetives(0);
+                }
+                else
+                {
+                    goals = _combosHelper.GetComboGoals(0);
+                    objs = _combosHelper.GetComboObjetives(0);
+                }
+
+                noteViewModel = new NotePViewModel
+                {
+                    Id = id,
+                    Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
+                    Origin = origin,
+                    Schema = workday_Client.Client.Clinic.Schema,
+                    
+                    Theme1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
+                    FacilitatorIntervention1 = (activities.Count > 0) ? activities[0].Activity.Name : string.Empty,
+                    IdActivity1 = (activities.Count > 0) ? activities[0].Activity.Id : 0,
+                    Goals1 = goals,
+                    Objetives1 = objs,
+                    activityDailyLiving1 = activities[0].activityDailyLiving == null ? false : Convert.ToBoolean(activities[0].activityDailyLiving),
+                    communityResources1 = activities[0].communityResources == null ? false : Convert.ToBoolean(activities[0].communityResources),
+                    copingSkills1 = activities[0].copingSkills == null ? false : Convert.ToBoolean(activities[0].copingSkills),
+                    diseaseManagement1 = activities[0].diseaseManagement == null ? false : Convert.ToBoolean(activities[0].diseaseManagement),
+                    healthyLiving1 = activities[0].healthyLiving == null ? false : Convert.ToBoolean(activities[0].healthyLiving),
+                    lifeSkills1 = activities[0].lifeSkills == null ? false : Convert.ToBoolean(activities[0].lifeSkills),
+                    relaxationTraining1 = activities[0].relaxationTraining == null ? false : Convert.ToBoolean(activities[0].relaxationTraining),
+                    socialSkills1 = activities[0].socialSkills == null ? false : Convert.ToBoolean(activities[0].socialSkills),
+                    stressManagement1 = activities[0].stressManagement == null ? false : Convert.ToBoolean(activities[0].stressManagement),
+
+                    Theme2 = (activities.Count > 1) ? activities[1].Activity.Theme.Name : string.Empty,
+                    FacilitatorIntervention2 = (activities.Count > 1) ? activities[1].Activity.Name : string.Empty,
+                    IdActivity2 = (activities.Count > 1) ? activities[1].Activity.Id : 0,
+                    Goals2 = goals,
+                    Objetives2 = objs,
+                    activityDailyLiving2 = activities[1].activityDailyLiving == null ? false : Convert.ToBoolean(activities[1].activityDailyLiving),
+                    communityResources2 = activities[1].communityResources == null ? false : Convert.ToBoolean(activities[1].communityResources),
+                    copingSkills2 = activities[1].copingSkills == null ? false : Convert.ToBoolean(activities[1].copingSkills),
+                    diseaseManagement2 = activities[1].diseaseManagement == null ? false : Convert.ToBoolean(activities[1].diseaseManagement),
+                    healthyLiving2 = activities[1].healthyLiving == null ? false : Convert.ToBoolean(activities[1].healthyLiving),
+                    lifeSkills2 = activities[1].lifeSkills == null ? false : Convert.ToBoolean(activities[1].lifeSkills),
+                    relaxationTraining2 = activities[1].relaxationTraining == null ? false : Convert.ToBoolean(activities[1].relaxationTraining),
+                    socialSkills2 = activities[1].socialSkills == null ? false : Convert.ToBoolean(activities[1].socialSkills),
+                    stressManagement2 = activities[1].stressManagement == null ? false : Convert.ToBoolean(activities[1].stressManagement),
+
+                    Theme3 = (activities.Count > 2) ? activities[2].Activity.Theme.Name : string.Empty,
+                    FacilitatorIntervention3 = (activities.Count > 2) ? activities[2].Activity.Name : string.Empty,
+                    IdActivity3 = (activities.Count > 2) ? activities[2].Activity.Id : 0,
+                    Goals3 = goals,
+                    Objetives3 = objs,
+                    activityDailyLiving3 = activities[2].activityDailyLiving == null ? false : Convert.ToBoolean(activities[2].activityDailyLiving),
+                    communityResources3 = activities[2].communityResources == null ? false : Convert.ToBoolean(activities[2].communityResources),
+                    copingSkills3 = activities[2].copingSkills == null ? false : Convert.ToBoolean(activities[2].copingSkills),
+                    diseaseManagement3 = activities[2].diseaseManagement == null ? false : Convert.ToBoolean(activities[2].diseaseManagement),
+                    healthyLiving3 = activities[2].healthyLiving == null ? false : Convert.ToBoolean(activities[2].healthyLiving),
+                    lifeSkills3 = activities[2].lifeSkills == null ? false : Convert.ToBoolean(activities[2].lifeSkills),
+                    relaxationTraining3 = activities[2].relaxationTraining == null ? false : Convert.ToBoolean(activities[2].relaxationTraining),
+                    socialSkills3 = activities[2].socialSkills == null ? false : Convert.ToBoolean(activities[2].socialSkills),
+                    stressManagement3 = activities[2].stressManagement == null ? false : Convert.ToBoolean(activities[2].stressManagement),
+
+                    Theme4 = (activities.Count > 3) ? activities[3].Activity.Theme.Name : string.Empty,
+                    FacilitatorIntervention4 = (activities.Count > 3) ? activities[3].Activity.Name : string.Empty,
+                    IdActivity4 = (activities.Count > 3) ? activities[3].Activity.Id : 0,
+                    Goals4 = goals,
+                    Objetives4 = objs,
+                    activityDailyLiving4 = activities[3].activityDailyLiving == null ? false : Convert.ToBoolean(activities[3].activityDailyLiving),
+                    communityResources4 = activities[3].communityResources == null ? false : Convert.ToBoolean(activities[3].communityResources),
+                    copingSkills4 = activities[3].copingSkills == null ? false : Convert.ToBoolean(activities[3].copingSkills),
+                    diseaseManagement4 = activities[3].diseaseManagement == null ? false : Convert.ToBoolean(activities[3].diseaseManagement),
+                    healthyLiving4 = activities[3].healthyLiving == null ? false : Convert.ToBoolean(activities[3].healthyLiving),
+                    lifeSkills4 = activities[3].lifeSkills == null ? false : Convert.ToBoolean(activities[3].lifeSkills),
+                    relaxationTraining4 = activities[3].relaxationTraining == null ? false : Convert.ToBoolean(activities[3].relaxationTraining),
+                    socialSkills4 = activities[3].socialSkills == null ? false : Convert.ToBoolean(activities[3].socialSkills),
+                    stressManagement4 = activities[3].stressManagement == null ? false : Convert.ToBoolean(activities[3].stressManagement),
+
+                    Workday_Cient = workday_Client
+                };
+            }
+            else
+            {
+                List<NoteP_Activity> note_Activity = await _context.NotesP_Activities
+
+                                                                   .Include(na => na.Activity)
+                                                                   .ThenInclude(a => a.Theme)
+
+                                                                   .Include(na => na.Objetive)
+                                                                   .ThenInclude(o => o.Goal)
+
+                                                                   .Where(na => na.NoteP.Id == note.Id)
+                                                                   .ToListAsync();
+
+                IEnumerable<SelectListItem> goals = null;
+                IEnumerable<SelectListItem> objs = null;
+                if (mtp != null)
+                {
+                    goals = _combosHelper.GetComboGoals(mtp.Id);
+                    objs = _combosHelper.GetComboObjetives(0);
+                }
+                else
+                {
+                    goals = _combosHelper.GetComboGoals(0);
+                    objs = _combosHelper.GetComboObjetives(0);
+                }
+
+                noteViewModel = new NotePViewModel
+                {
+                    Id = id,
+                    Origin = origin,
+                    Workday_Cient = workday_Client,
+                    Schema = note.Schema,
+                    PlanNote = note.PlanNote,
+                    Status = note.Status,
+                    Title = note.Title,
+
+                    //mental client status
+                    Attentive = note.Attentive,
+                    Depressed = note.Depressed,
+                    Inattentive = note.Inattentive,
+                    Angry = note.Angry,
+                    Sad = note.Sad,
+                    FlatAffect = note.FlatAffect,
+                    Anxious = note.Anxious,
+                    PositiveEffect = note.PositiveEffect,
+                    Oriented1x = note.Oriented1x,
+                    Oriented2x = note.Oriented2x,
+                    Oriented3x = note.Oriented3x,
+                    Impulsive = note.Impulsive,
+                    Labile = note.Labile,
+                    Withdrawn = note.Withdrawn,
+                    RelatesWell = note.RelatesWell,
+                    DecreasedEyeContact = note.DecreasedEyeContact,
+                    AppropiateEyeContact = note.AppropiateEyeContact,   
+                    
+                    //progress
+                    Minimal = note.Minimal,
+                    Slow = note.Slow,
+                    Steady = note.Steady,
+                    GoodExcelent = note.GoodExcelent,
+                    IncreasedDifficultiesNoted = note.IncreasedDifficultiesNoted,
+                    Complicated = note.Complicated,
+                    DevelopingInsight = note.DevelopingInsight,
+                    LittleInsight = note.LittleInsight,
+                    Aware = note.Aware,
+                    AbleToGenerateAlternatives = note.AbleToGenerateAlternatives,
+                    Initiates = note.Initiates,
+                    ProblemSolved = note.ProblemSolved,
+                    DemostratesEmpathy = note.DemostratesEmpathy,
+                    UsesSessions = note.UsesSessions,
+                    Variable = note.Variable,
+
+                    Theme1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
+                    FacilitatorIntervention1 = (activities.Count > 0) ? activities[0].Activity.Name : string.Empty,
+                    IdActivity1 = (activities.Count > 0) ? activities[0].Activity.Id : 0,
+                    IdGoal1 = ((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Goal.Id : 0,
+                    Goals1 = goals,
+                    IdObjetive1 = ((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Id : 0,
+                    Objetives1 = _combosHelper.GetComboObjetives(((note_Activity.Count > 0) && (note_Activity[0].Objetive != null))
+                                                                        ? note_Activity[0].Objetive.Goal.Id : 0),
+                    Intervention1 = ((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Intervention : string.Empty,
+
+                    //Skill set addressed
+                    activityDailyLiving1 = activities[0].activityDailyLiving == null ? false : Convert.ToBoolean(activities[0].activityDailyLiving),
+                    communityResources1 = activities[0].communityResources == null ? false : Convert.ToBoolean(activities[0].communityResources),
+                    copingSkills1 = activities[0].copingSkills == null ? false : Convert.ToBoolean(activities[0].copingSkills),
+                    diseaseManagement1 = activities[0].diseaseManagement == null ? false : Convert.ToBoolean(activities[0].diseaseManagement),
+                    healthyLiving1 = activities[0].healthyLiving == null ? false : Convert.ToBoolean(activities[0].healthyLiving),
+                    lifeSkills1 = activities[0].lifeSkills == null ? false : Convert.ToBoolean(activities[0].lifeSkills),
+                    relaxationTraining1 = activities[0].relaxationTraining == null ? false : Convert.ToBoolean(activities[0].relaxationTraining),
+                    socialSkills1 = activities[0].socialSkills == null ? false : Convert.ToBoolean(activities[0].socialSkills),
+                    stressManagement1 = activities[0].stressManagement == null ? false : Convert.ToBoolean(activities[0].stressManagement),  
+                    
+                    //Client's response
+                    Cooperative1 = (note_Activity.Count > 0) ? note_Activity[0].Cooperative : false,
+                    Assertive1 = (note_Activity.Count > 0) ? note_Activity[0].Assertive : false,
+                    Passive1 = (note_Activity.Count > 0) ? note_Activity[0].Passive : false,
+                    Variable1 = (note_Activity.Count > 0) ? note_Activity[0].Variable : false,
+                    Uninterested1 = (note_Activity.Count > 0) ? note_Activity[0].Uninterested : false,
+                    Engaged1 = (note_Activity.Count > 0) ? note_Activity[0].EngagedActive : false,
+                    Distractible1 = (note_Activity.Count > 0) ? note_Activity[0].Distractible : false,
+                    Confused1 = (note_Activity.Count > 0) ? note_Activity[0].Confused : false,
+                    Aggresive1 = (note_Activity.Count > 0) ? note_Activity[0].Aggresive : false,
+                    Resistant1 = (note_Activity.Count > 0) ? note_Activity[0].Resistant : false,
+                    Other1 = (note_Activity.Count > 0) ? note_Activity[0].Other : false,
+
+                    Theme2 = (activities.Count > 1) ? activities[1].Activity.Theme.Name : string.Empty,
+                    FacilitatorIntervention2 = (activities.Count > 1) ? activities[1].Activity.Name : string.Empty,
+                    IdActivity2 = (activities.Count > 1) ? activities[1].Activity.Id : 0,
+                    IdGoal2 = ((note_Activity.Count > 1) && (note_Activity[1].Objetive != null)) ? note_Activity[1].Objetive.Goal.Id : 0,
+                    Goals2 = goals,
+                    IdObjetive2 = ((note_Activity.Count > 1) && (note_Activity[1].Objetive != null)) ? note_Activity[1].Objetive.Id : 0,
+                    Objetives2 = _combosHelper.GetComboObjetives(((note_Activity.Count > 1) && (note_Activity[1].Objetive != null))
+                                                                        ? note_Activity[1].Objetive.Goal.Id : 0),
+                    Intervention2 = ((note_Activity.Count > 1) && (note_Activity[1].Objetive != null)) ? note_Activity[1].Objetive.Intervention : string.Empty,
+
+                    //Skill set addressed
+                    activityDailyLiving2 = activities[1].activityDailyLiving == null ? false : Convert.ToBoolean(activities[1].activityDailyLiving),
+                    communityResources2 = activities[1].communityResources == null ? false : Convert.ToBoolean(activities[1].communityResources),
+                    copingSkills2 = activities[1].copingSkills == null ? false : Convert.ToBoolean(activities[1].copingSkills),
+                    diseaseManagement2 = activities[1].diseaseManagement == null ? false : Convert.ToBoolean(activities[1].diseaseManagement),
+                    healthyLiving2 = activities[1].healthyLiving == null ? false : Convert.ToBoolean(activities[1].healthyLiving),
+                    lifeSkills2 = activities[1].lifeSkills == null ? false : Convert.ToBoolean(activities[1].lifeSkills),
+                    relaxationTraining2 = activities[1].relaxationTraining == null ? false : Convert.ToBoolean(activities[1].relaxationTraining),
+                    socialSkills2 = activities[1].socialSkills == null ? false : Convert.ToBoolean(activities[1].socialSkills),
+                    stressManagement2 = activities[1].stressManagement == null ? false : Convert.ToBoolean(activities[1].stressManagement),
+
+                    //Client's response
+                    Cooperative2 = (note_Activity.Count > 1) ? note_Activity[1].Cooperative : false,
+                    Assertive2 = (note_Activity.Count > 1) ? note_Activity[1].Assertive : false,
+                    Passive2 = (note_Activity.Count > 1) ? note_Activity[1].Passive : false,
+                    Variable2 = (note_Activity.Count > 1) ? note_Activity[1].Variable : false,
+                    Uninterested2 = (note_Activity.Count > 1) ? note_Activity[1].Uninterested : false,
+                    Engaged2 = (note_Activity.Count > 1) ? note_Activity[1].EngagedActive : false,
+                    Distractible2 = (note_Activity.Count > 1) ? note_Activity[1].Distractible : false,
+                    Confused2 = (note_Activity.Count > 1) ? note_Activity[1].Confused : false,
+                    Aggresive2 = (note_Activity.Count > 1) ? note_Activity[1].Aggresive : false,
+                    Resistant2 = (note_Activity.Count > 1) ? note_Activity[1].Resistant : false,
+                    Other2 = (note_Activity.Count > 1) ? note_Activity[1].Other : false,
+
+                    Theme3 = (activities.Count > 2) ? activities[2].Activity.Theme.Name : string.Empty,
+                    FacilitatorIntervention3 = (activities.Count > 2) ? activities[2].Activity.Name : string.Empty,
+                    IdActivity3 = (activities.Count > 2) ? activities[2].Activity.Id : 0,
+                    IdGoal3 = ((note_Activity.Count > 2) && (note_Activity[2].Objetive != null)) ? note_Activity[2].Objetive.Goal.Id : 0,
+                    Goals3 = goals,
+                    IdObjetive3 = ((note_Activity.Count > 2) && (note_Activity[2].Objetive != null)) ? note_Activity[2].Objetive.Id : 0,
+                    Objetives3 = _combosHelper.GetComboObjetives(((note_Activity.Count > 2) && (note_Activity[2].Objetive != null))
+                                                                        ? note_Activity[2].Objetive.Goal.Id : 0),
+                    Intervention3 = ((note_Activity.Count > 2) && (note_Activity[2].Objetive != null)) ? note_Activity[2].Objetive.Intervention : string.Empty,
+
+                    //Skill set addressed
+                    activityDailyLiving3 = activities[2].activityDailyLiving == null ? false : Convert.ToBoolean(activities[2].activityDailyLiving),
+                    communityResources3 = activities[2].communityResources == null ? false : Convert.ToBoolean(activities[2].communityResources),
+                    copingSkills3 = activities[2].copingSkills == null ? false : Convert.ToBoolean(activities[2].copingSkills),
+                    diseaseManagement3 = activities[2].diseaseManagement == null ? false : Convert.ToBoolean(activities[2].diseaseManagement),
+                    healthyLiving3 = activities[2].healthyLiving == null ? false : Convert.ToBoolean(activities[2].healthyLiving),
+                    lifeSkills3 = activities[2].lifeSkills == null ? false : Convert.ToBoolean(activities[2].lifeSkills),
+                    relaxationTraining3 = activities[2].relaxationTraining == null ? false : Convert.ToBoolean(activities[2].relaxationTraining),
+                    socialSkills3 = activities[2].socialSkills == null ? false : Convert.ToBoolean(activities[2].socialSkills),
+                    stressManagement3 = activities[2].stressManagement == null ? false : Convert.ToBoolean(activities[2].stressManagement),
+
+                    //Client's response
+                    Cooperative3 = (note_Activity.Count > 2) ? note_Activity[2].Cooperative : false,
+                    Assertive3 = (note_Activity.Count > 2) ? note_Activity[2].Assertive : false,
+                    Passive3 = (note_Activity.Count > 2) ? note_Activity[2].Passive : false,
+                    Variable3 = (note_Activity.Count > 2) ? note_Activity[2].Variable : false,
+                    Uninterested3 = (note_Activity.Count > 2) ? note_Activity[2].Uninterested : false,
+                    Engaged3 = (note_Activity.Count > 2) ? note_Activity[2].EngagedActive : false,
+                    Distractible3 = (note_Activity.Count > 2) ? note_Activity[2].Distractible : false,
+                    Confused3 = (note_Activity.Count > 2) ? note_Activity[2].Confused : false,
+                    Aggresive3 = (note_Activity.Count > 2) ? note_Activity[2].Aggresive : false,
+                    Resistant3 = (note_Activity.Count > 2) ? note_Activity[2].Resistant : false,
+                    Other3 = (note_Activity.Count > 2) ? note_Activity[2].Other : false,
+
+                    Theme4 = (activities.Count > 3) ? activities[3].Activity.Theme.Name : string.Empty,
+                    FacilitatorIntervention4 = (activities.Count > 3) ? activities[3].Activity.Name : string.Empty,
+                    IdActivity4 = (activities.Count > 3) ? activities[3].Activity.Id : 0,
+                    IdGoal4 = ((note_Activity.Count > 3) && (note_Activity[3].Objetive != null)) ? note_Activity[3].Objetive.Goal.Id : 0,
+                    Goals4 = goals,
+                    IdObjetive4 = ((note_Activity.Count > 3) && (note_Activity[3].Objetive != null)) ? note_Activity[3].Objetive.Id : 0,
+                    Objetives4 = _combosHelper.GetComboObjetives(((note_Activity.Count > 3) && (note_Activity[3].Objetive != null))
+                                                                        ? note_Activity[3].Objetive.Goal.Id : 0),
+                    Intervention4 = ((note_Activity.Count > 3) && (note_Activity[3].Objetive != null)) ? note_Activity[3].Objetive.Intervention : string.Empty,
+
+                    //Skill set addressed
+                    activityDailyLiving4 = activities[3].activityDailyLiving == null ? false : Convert.ToBoolean(activities[3].activityDailyLiving),
+                    communityResources4 = activities[3].communityResources == null ? false : Convert.ToBoolean(activities[3].communityResources),
+                    copingSkills4 = activities[3].copingSkills == null ? false : Convert.ToBoolean(activities[3].copingSkills),
+                    diseaseManagement4 = activities[3].diseaseManagement == null ? false : Convert.ToBoolean(activities[3].diseaseManagement),
+                    healthyLiving4 = activities[3].healthyLiving == null ? false : Convert.ToBoolean(activities[3].healthyLiving),
+                    lifeSkills4 = activities[3].lifeSkills == null ? false : Convert.ToBoolean(activities[3].lifeSkills),
+                    relaxationTraining4 = activities[3].relaxationTraining == null ? false : Convert.ToBoolean(activities[3].relaxationTraining),
+                    socialSkills4 = activities[3].socialSkills == null ? false : Convert.ToBoolean(activities[3].socialSkills),
+                    stressManagement4 = activities[3].stressManagement == null ? false : Convert.ToBoolean(activities[3].stressManagement),
+
+                    //Client's response
+                    Cooperative4 = (note_Activity.Count > 3) ? note_Activity[3].Cooperative : false,
+                    Assertive4 = (note_Activity.Count > 3) ? note_Activity[3].Assertive : false,
+                    Passive4 = (note_Activity.Count > 3) ? note_Activity[3].Passive : false,
+                    Variable4 = (note_Activity.Count > 3) ? note_Activity[3].Variable : false,
+                    Uninterested4 = (note_Activity.Count > 3) ? note_Activity[3].Uninterested : false,
+                    Engaged4 = (note_Activity.Count > 3) ? note_Activity[3].EngagedActive : false,
+                    Distractible4 = (note_Activity.Count > 3) ? note_Activity[3].Distractible : false,
+                    Confused4 = (note_Activity.Count > 3) ? note_Activity[3].Confused : false,
+                    Aggresive4 = (note_Activity.Count > 3) ? note_Activity[3].Aggresive : false,
+                    Resistant4 = (note_Activity.Count > 3) ? note_Activity[3].Resistant : false,
+                    Other4 = (note_Activity.Count > 3) ? note_Activity[3].Other : false,
+                };
+            }
+            return View(noteViewModel);
+        }
+
+        //PSR Notes (Schema 3)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> EditNoteP(NotePViewModel model)
+        {
+            Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
+
+                                                                           .Include(wc => wc.Client)
+                                                                           .ThenInclude(c => c.Clinic)
+
+                                                                           .Include(wc => wc.Client)
+                                                                           .ThenInclude(c => c.Group)
+
+                                                                           .Include(wc => wc.Client)
+                                                                           .ThenInclude(c => c.MTPs)
+
+                                                                           .Include(wc => wc.Facilitator)
+
+                                                                           .FirstOrDefaultAsync(wc => wc.Id == model.Id);
+            if (workday_Client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            NotePEntity noteEntity;
+            if (ModelState.IsValid)
+            {
+                NotePEntity note = await _context.NotesP.Include(n => n.Workday_Cient)
+                                                        .ThenInclude(wc => wc.Messages)
+                                                        .FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
+                NoteP_Activity note_Activity;
+                if (note == null)   //the note has not been created
+                {
+                    //Verify the client is not present in other services of notes at the same time
+                    if (this.VerifyNotesAtSameTime(workday_Client.Client.Id, workday_Client.Session, workday_Client.Workday.Date))
+                    {
+                        return RedirectToAction(nameof(EditNoteP), new { id = model.Id, error = 5, origin = model.Origin });
+                    }
+
+                    noteEntity = await _converterHelper.ToNotePEntity(model, true);                                       
+
+                    //vinculo el mtp activo del cliente a la nota que se creará
+                    MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+                    if (mtp != null)
+                    { 
+                        noteEntity.MTPId = mtp.Id;
+                        noteEntity.Setting = mtp.Setting;
+                    }
+
+                    _context.Add(noteEntity);
+
+                    note_Activity = new NoteP_Activity
+                    {
+                        NoteP = noteEntity,
+                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1),
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
+                        //Client's response
+                        Cooperative = model.Cooperative1,
+                        Assertive = model.Assertive1,
+                        Passive = model.Passive1,
+                        Variable = model.Variable1,
+                        Uninterested = model.Uninterested1,
+                        EngagedActive = model.Engaged1,
+                        Distractible = model.Distractible1,
+                        Confused = model.Confused1,
+                        Aggresive = model.Aggresive1,
+                        Resistant = model.Resistant1,
+                        Other = model.Other1
+                    };
+                    _context.Add(note_Activity);
+                    note_Activity = new NoteP_Activity
+                    {
+                        NoteP = noteEntity,
+                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2),
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
+                        //Client's response
+                        Cooperative = model.Cooperative2,
+                        Assertive = model.Assertive2,
+                        Passive = model.Passive2,
+                        Variable = model.Variable2,
+                        Uninterested = model.Uninterested2,
+                        EngagedActive = model.Engaged2,
+                        Distractible = model.Distractible2,
+                        Confused = model.Confused2,
+                        Aggresive = model.Aggresive2,
+                        Resistant = model.Resistant2,
+                        Other = model.Other2
+                    };
+                    _context.Add(note_Activity);
+                    note_Activity = new NoteP_Activity
+                    {
+                        NoteP = noteEntity,
+                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity3),
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive3),
+                        //Client's response
+                        Cooperative = model.Cooperative3,
+                        Assertive = model.Assertive3,
+                        Passive = model.Passive3,
+                        Variable = model.Variable3,
+                        Uninterested = model.Uninterested3,
+                        EngagedActive = model.Engaged3,
+                        Distractible = model.Distractible3,
+                        Confused = model.Confused3,
+                        Aggresive = model.Aggresive3,
+                        Resistant = model.Resistant3,
+                        Other = model.Other3
+                    };
+                    _context.Add(note_Activity);
+                    note_Activity = new NoteP_Activity
+                    {
+                        NoteP = noteEntity,
+                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity4),
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4),
+                        //Client's response
+                        Cooperative = model.Cooperative4,
+                        Assertive = model.Assertive4,
+                        Passive = model.Passive4,
+                        Variable = model.Variable4,
+                        Uninterested = model.Uninterested4,
+                        EngagedActive = model.Engaged4,
+                        Distractible = model.Distractible4,
+                        Confused = model.Confused4,
+                        Aggresive = model.Aggresive4,
+                        Resistant = model.Resistant4,
+                        Other = model.Other4
+                    };
+                    _context.Add(note_Activity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        if (model.Origin == 0)
+                            return RedirectToAction(nameof(Index));
+                        if (model.Origin == 1)
+                            return RedirectToAction(nameof(NotStartedNotes));
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, "Already exists the element");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                }
+                else    //update note
+                {
+                    //I verify that the note has a selected goal
+                    if (note.Status == NoteStatus.Pending)
+                    {
+                        if (model.IdObjetive1 == 0 && model.IdObjetive2 == 0 && model.IdObjetive3 == 0 && model.IdObjetive4 == 0)
+                        {
+                            return RedirectToAction(nameof(EditNoteP), new { id = model.Id, error = 1, origin = model.Origin});
+                        }
+                    }
+
+                    note.Title = model.Title;
+                    note.PlanNote = model.PlanNote;
+
+                    //mental client status
+                    note.Attentive = model.Attentive;
+                    note.Depressed = model.Depressed;
+                    note.Inattentive = model.Inattentive;
+                    note.Angry = model.Angry;
+                    note.Sad = model.Sad;
+                    note.FlatAffect = model.FlatAffect;
+                    note.Anxious = model.Anxious;
+                    note.PositiveEffect = model.PositiveEffect;
+                    note.Oriented1x = model.Oriented1x;
+                    note.Oriented2x = model.Oriented2x;
+                    note.Oriented3x = model.Oriented3x;
+                    note.Impulsive = model.Impulsive;
+                    note.Labile = model.Labile;
+                    note.Withdrawn = model.Withdrawn;
+                    note.RelatesWell = model.RelatesWell;
+                    note.DecreasedEyeContact = model.DecreasedEyeContact;
+                    note.AppropiateEyeContact = model.AppropiateEyeContact;
+
+                    //progress
+                    note.Minimal = model.Minimal;
+                    note.Slow = model.Slow;
+                    note.Steady = model.Steady;
+                    note.GoodExcelent = model.GoodExcelent;
+                    note.IncreasedDifficultiesNoted = model.IncreasedDifficultiesNoted;
+                    note.Complicated = model.Complicated;
+                    note.DevelopingInsight = model.DevelopingInsight;
+                    note.LittleInsight = model.LittleInsight;
+                    note.Aware = model.Aware;
+                    note.AbleToGenerateAlternatives = model.AbleToGenerateAlternatives;
+                    note.Initiates = model.Initiates;
+                    note.ProblemSolved = model.ProblemSolved;
+                    note.DemostratesEmpathy = model.DemostratesEmpathy;
+                    note.UsesSessions = model.UsesSessions;
+                    note.Variable = model.Variable;
+
+                    //vinculo el mtp activo del cliente a la nota que se creará
+                    MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+                    if (mtp != null)
+                    {
+                        note.MTPId = mtp.Id;
+                        note.Setting = mtp.Setting;
+                    }
+
+                    _context.Update(note);
+                    List<NoteP_Activity> noteActivities_list = await _context.NotesP_Activities
+                                                                            
+                                                                            .Where(na => na.NoteP.Id == note.Id)
+                                                                            .ToListAsync();
+                    _context.RemoveRange(noteActivities_list);
+
+                    note_Activity = new NoteP_Activity
+                    {
+                        NoteP = note,
+                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1),
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
+                        //Client's response
+                        Cooperative = model.Cooperative1,
+                        Assertive = model.Assertive1,
+                        Passive = model.Passive1,
+                        Variable = model.Variable1,
+                        Uninterested = model.Uninterested1,
+                        EngagedActive = model.Engaged1,
+                        Distractible = model.Distractible1,
+                        Confused = model.Confused1,
+                        Aggresive = model.Aggresive1,
+                        Resistant = model.Resistant1,
+                        Other = model.Other1
+                    };
+                    _context.Add(note_Activity);
+                    await _context.SaveChangesAsync();
+
+                    note_Activity = new NoteP_Activity
+                    {
+                        NoteP = note,
+                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2),
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
+                        //Client's response
+                        Cooperative = model.Cooperative2,
+                        Assertive = model.Assertive2,
+                        Passive = model.Passive2,
+                        Variable = model.Variable2,
+                        Uninterested = model.Uninterested2,
+                        EngagedActive = model.Engaged2,
+                        Distractible = model.Distractible2,
+                        Confused = model.Confused2,
+                        Aggresive = model.Aggresive2,
+                        Resistant = model.Resistant2,
+                        Other = model.Other2
+                    };
+                    _context.Add(note_Activity);
+                    await _context.SaveChangesAsync();
+
+                    note_Activity = new NoteP_Activity
+                    {
+                        NoteP = note,
+                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity3),
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive3),
+                        //Client's response
+                        Cooperative = model.Cooperative3,
+                        Assertive = model.Assertive3,
+                        Passive = model.Passive3,
+                        Variable = model.Variable3,
+                        Uninterested = model.Uninterested3,
+                        EngagedActive = model.Engaged3,
+                        Distractible = model.Distractible3,
+                        Confused = model.Confused3,
+                        Aggresive = model.Aggresive3,
+                        Resistant = model.Resistant3,
+                        Other = model.Other3
+                    };
+                    _context.Add(note_Activity);
+                    await _context.SaveChangesAsync();
+
+                    note_Activity = new NoteP_Activity
+                    {
+                        NoteP = note,
+                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity4),
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4),
+                        //Client's response
+                        Cooperative = model.Cooperative4,
+                        Assertive = model.Assertive4,
+                        Passive = model.Passive4,
+                        Variable = model.Variable4,
+                        Uninterested = model.Uninterested4,
+                        EngagedActive = model.Engaged4,
+                        Distractible = model.Distractible4,
+                        Confused = model.Confused4,
+                        Aggresive = model.Aggresive4,
+                        Resistant = model.Resistant4,
+                        Other = model.Other4
+                    };
+                    _context.Add(note_Activity);
+
+                    //todos los mensajes que tiene el Workday_Client de la nota los pongo como leidos
+                    foreach (MessageEntity value in note.Workday_Cient.Messages)
+                    {
+                        value.Status = MessageStatus.Read;
+                        value.DateRead = DateTime.Now;
+                        _context.Update(value);
+                    }
+
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        if (model.Origin == 0)
+                            return RedirectToAction(nameof(Index));
+                        if (model.Origin == 1)
+                            return RedirectToAction(nameof(NotStartedNotes));
+                        if (model.Origin == 2)
+                            return RedirectToAction(nameof(NotesInEdit));
+                        if (model.Origin == 3)
+                            return RedirectToAction(nameof(PendingNotes));
+                        if (model.Origin == 4)
+                            return RedirectToAction(nameof(NotesWithReview));
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, "Already exists the element");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                }
+            }
+
+            return View(model);
+        }
+
+        //Individual Notes
         [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> EditIndNote(int id, int error = 0, int origin = 0, string errorText = "")
         {
@@ -1029,6 +1789,7 @@ namespace KyoS.Web.Controllers
             return View(individualNoteViewModel);
         }
 
+        //Individual Notes
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Facilitator")]
@@ -1122,6 +1883,15 @@ namespace KyoS.Web.Controllers
                 }
                 else    //the note exist, and must be updated
                 {
+                    //I verify that the note has a selected goal
+                    if (note.Status == NoteStatus.Pending)
+                    {
+                        if (model.IdObjetive1 == 0)
+                        {
+                            return RedirectToAction(nameof(EditIndNote), new { id = model.Id, error = 1, origin = model.Origin });
+                        }
+                    }
+
                     note.PlanNote = (model.PlanNote.Trim().Last() == '.') ? model.PlanNote.Trim() : $"{model.PlanNote.Trim()}.";
                     note.SubjectiveData = (model.SubjectiveData.Trim().Last() == '.') ? model.SubjectiveData.Trim() : $"{model.SubjectiveData.Trim()}.";
                     note.ObjectiveData = (model.ObjectiveData.Trim().Last() == '.') ? model.ObjectiveData.Trim() : $"{model.ObjectiveData.Trim()}.";
@@ -1216,6 +1986,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        //Group Notes
         [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> EditGroupNote(int id, int error = 0, int origin = 0, string errorText = "")
         {
@@ -1455,6 +2226,7 @@ namespace KyoS.Web.Controllers
             return View(noteViewModel);
         }
 
+        //Group Notes
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Facilitator")]
@@ -1556,6 +2328,15 @@ namespace KyoS.Web.Controllers
                 }
                 else    //la nota está creada y sólo se debe actualizar
                 {
+                    //I verify that the note has a selected goal
+                    if (note.Status == NoteStatus.Pending)
+                    {
+                        if (model.IdObjetive1 == 0 && model.IdObjetive2 == 0)
+                        {
+                            return RedirectToAction(nameof(EditGroupNote), new { id = model.Id, error = 1, origin = model.Origin });
+                        }
+                    }
+
                     note.PlanNote = (model.PlanNote.Trim().Last() == '.') ? model.PlanNote.Trim() : $"{model.PlanNote.Trim()}.";
 
                     note.Groomed = model.Groomed;
@@ -1745,6 +2526,64 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction(nameof(NotesInEdit), new { id = 1 });
             else
                 return RedirectToAction(nameof(Index), new { id = 1});                        
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> FinishEditingP(int id, int origin = 0)
+        {
+            Workday_Client workday_Client = await _context.Workdays_Clients
+                                                          .Include(wc => wc.Client)
+                                                          .FirstOrDefaultAsync(wc => wc.Id == id);
+            if (workday_Client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            NotePEntity note = await _context.NotesP
+                                             .Include(n => n.Workday_Cient)
+                                             .ThenInclude(wc => wc.Facilitator)
+                                             .ThenInclude(f => f.Clinic)
+                                             
+                                             .Include(n => n.NotesP_Activities)
+                                             .ThenInclude(na => na.Objetive)
+
+                                             .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+
+            string gender_problems = string.Empty;
+            if (this.GenderEvaluation(workday_Client.Client.Gender, note.PlanNote))
+                gender_problems = $"Client benefited from...";
+
+            bool exist = false;            
+            foreach (NoteP_Activity item in note.NotesP_Activities)
+            {
+                if (item.Objetive != null)
+                    exist = true;                
+            }
+
+            if (!exist)     //la nota no tiene goal relacionado
+            {
+                if (origin == 0)
+                    return RedirectToAction(nameof(EditNoteP), new { id = id, error = 1, origin = 0 });
+                if (origin == 2)
+                    return RedirectToAction(nameof(EditNoteP), new { id = id, error = 1, origin = 2 });
+            }
+
+            if (!string.IsNullOrEmpty(gender_problems))     //la nota tiene problemas con el genero
+            {
+                if (origin == 0)
+                    return RedirectToAction(nameof(EditNoteP), new { id = id, error = 4, origin = 0, errorText = gender_problems });
+                if (origin == 2)
+                    return RedirectToAction(nameof(EditNoteP), new { id = id, error = 4, origin = 2, errorText = gender_problems });
+            }
+
+            note.Status = NoteStatus.Pending;
+            _context.Update(note);
+
+            await _context.SaveChangesAsync();
+            if (origin == 2)
+                return RedirectToAction(nameof(NotesInEdit), new { id = 1 });
+            else
+                return RedirectToAction(nameof(Index), new { id = 1 });
         }
 
         [Authorize(Roles = "Facilitator")]
@@ -2049,12 +2888,20 @@ namespace KyoS.Web.Controllers
                                                                            .ThenInclude(c => c.Group)
 
                                                                            .Include(wc => wc.Facilitator)
+
+                                                                           .Include(wc => wc.NoteP)
                                                                            
                                                                            .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
             {
                 return RedirectToAction("Home/Error404");
+            }
+
+            //redirect to ApproveNoteP due to the note is schema 3
+            if (workday_Client.NoteP != null)
+            {
+                return RedirectToAction(nameof(ApproveNoteP), new { id = workday_Client.NoteP.Id, origin = origin });
             }
 
             NoteEntity note = await _context.Notes.Include(n => n.Workday_Cient)
@@ -2237,6 +3084,248 @@ namespace KyoS.Web.Controllers
 
             await _context.SaveChangesAsync();           
                 
+            if (model.Origin == 3)  ///viene de la pagina PendingNotes
+                return RedirectToAction(nameof(PendingNotes));
+            if (model.Origin == 4)  ///viene de la pagina NotesWithReview
+                return RedirectToAction(nameof(NotesWithReview));
+
+            return RedirectToAction(nameof(NotesSupervision));
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public async Task<IActionResult> ApproveNoteP(int id, int origin = 0)
+        {
+            NotePEntity note = await _context.NotesP
+
+                                             .Include(n => n.Workday_Cient)
+                                             .ThenInclude(wc => wc.Client)
+                                             .ThenInclude(c => c.Group)
+                                             .ThenInclude(g => g.Facilitator)
+                                             
+                                             .Include(n => n.Workday_Cient)
+                                             .ThenInclude(wc => wc.Facilitator)
+
+                                             .Include(n => n.Workday_Cient)
+                                             .ThenInclude(w => w.Workday)
+                                             .ThenInclude(wd => wd.Workdays_Activities_Facilitators)
+                                             .ThenInclude(waf => waf.Activity)
+                                             .ThenInclude(a => a.Theme)
+
+                                             .FirstOrDefaultAsync(n => n.Id == id);
+
+            if (note == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+            
+            NotePViewModel noteViewModel = null;
+
+            List<NoteP_Activity> note_Activity = await _context.NotesP_Activities
+
+                                                               .Include(na => na.Activity)
+                                                               .ThenInclude(a => a.Theme)
+
+                                                               .Include(na => na.Objetive)
+                                                               .ThenInclude(o => o.Goal)
+
+                                                               .Where(na => na.NoteP.Id == note.Id)
+                                                               .ToListAsync();
+
+            List<Workday_Activity_Facilitator> activities = note.Workday_Cient
+                                                                .Workday
+                                                                .Workdays_Activities_Facilitators
+                                                                .Where(waf => waf.Facilitator == note.Workday_Cient.Facilitator)
+                                                                .ToList();
+
+            if (note.Schema == Common.Enums.SchemaType.Schema3)
+            {
+                noteViewModel = new NotePViewModel
+                {
+                    Id = id,
+                    Workday_Cient = note.Workday_Cient,
+                    PlanNote = note.PlanNote,
+                    Origin = origin,
+                    Schema = note.Schema,
+
+                    Title = note.Title,
+
+                    //mental client status
+                    Attentive = note.Attentive,
+                    Depressed = note.Depressed,
+                    Inattentive = note.Inattentive,
+                    Angry = note.Angry,
+                    Sad = note.Sad,
+                    FlatAffect = note.FlatAffect,
+                    Anxious = note.Anxious,
+                    PositiveEffect = note.PositiveEffect,
+                    Oriented1x = note.Oriented1x,
+                    Oriented2x = note.Oriented2x,
+                    Oriented3x = note.Oriented3x,
+                    Impulsive = note.Impulsive,
+                    Labile = note.Labile,
+                    Withdrawn = note.Withdrawn,
+                    RelatesWell = note.RelatesWell,
+                    DecreasedEyeContact = note.DecreasedEyeContact,
+                    AppropiateEyeContact = note.AppropiateEyeContact,
+
+                    //progress
+                    Minimal = note.Minimal,
+                    Slow = note.Slow,
+                    Steady = note.Steady,
+                    GoodExcelent = note.GoodExcelent,
+                    IncreasedDifficultiesNoted = note.IncreasedDifficultiesNoted,
+                    Complicated = note.Complicated,
+                    DevelopingInsight = note.DevelopingInsight,
+                    LittleInsight = note.LittleInsight,
+                    Aware = note.Aware,
+                    AbleToGenerateAlternatives = note.AbleToGenerateAlternatives,
+                    Initiates = note.Initiates,
+                    ProblemSolved = note.ProblemSolved,
+                    DemostratesEmpathy = note.DemostratesEmpathy,
+                    UsesSessions = note.UsesSessions,
+                    Variable = note.Variable,
+
+                    Theme1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
+                    FacilitatorIntervention1 = (activities.Count > 0) ? activities[0].Activity.Name : string.Empty,                   
+                    Goal1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Goal.Number.ToString() : string.Empty,
+                    Objetive1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Objetive : string.Empty,
+                    
+                    //Skill set addressed
+                    activityDailyLiving1 = activities[0].activityDailyLiving == null ? false : Convert.ToBoolean(activities[0].activityDailyLiving),
+                    communityResources1 = activities[0].communityResources == null ? false : Convert.ToBoolean(activities[0].communityResources),
+                    copingSkills1 = activities[0].copingSkills == null ? false : Convert.ToBoolean(activities[0].copingSkills),
+                    diseaseManagement1 = activities[0].diseaseManagement == null ? false : Convert.ToBoolean(activities[0].diseaseManagement),
+                    healthyLiving1 = activities[0].healthyLiving == null ? false : Convert.ToBoolean(activities[0].healthyLiving),
+                    lifeSkills1 = activities[0].lifeSkills == null ? false : Convert.ToBoolean(activities[0].lifeSkills),
+                    relaxationTraining1 = activities[0].relaxationTraining == null ? false : Convert.ToBoolean(activities[0].relaxationTraining),
+                    socialSkills1 = activities[0].socialSkills == null ? false : Convert.ToBoolean(activities[0].socialSkills),
+                    stressManagement1 = activities[0].stressManagement == null ? false : Convert.ToBoolean(activities[0].stressManagement),
+
+                    //Client's response
+                    Cooperative1 = (note_Activity.Count > 0) ? note_Activity[0].Cooperative : false,
+                    Assertive1 = (note_Activity.Count > 0) ? note_Activity[0].Assertive : false,
+                    Passive1 = (note_Activity.Count > 0) ? note_Activity[0].Passive : false,
+                    Variable1 = (note_Activity.Count > 0) ? note_Activity[0].Variable : false,
+                    Uninterested1 = (note_Activity.Count > 0) ? note_Activity[0].Uninterested : false,
+                    Engaged1 = (note_Activity.Count > 0) ? note_Activity[0].EngagedActive : false,
+                    Distractible1 = (note_Activity.Count > 0) ? note_Activity[0].Distractible : false,
+                    Confused1 = (note_Activity.Count > 0) ? note_Activity[0].Confused : false,
+                    Aggresive1 = (note_Activity.Count > 0) ? note_Activity[0].Aggresive : false,
+                    Resistant1 = (note_Activity.Count > 0) ? note_Activity[0].Resistant : false,
+                    Other1 = (note_Activity.Count > 0) ? note_Activity[0].Other : false,
+
+                    Theme2 = (activities.Count > 1) ? activities[1].Activity.Theme.Name : string.Empty,
+                    FacilitatorIntervention2 = (activities.Count > 1) ? activities[1].Activity.Name : string.Empty,
+                    Goal2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Goal.Number.ToString() : string.Empty,
+                    Objetive2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Objetive : string.Empty,
+
+                    //Skill set addressed
+                    activityDailyLiving2 = activities[1].activityDailyLiving == null ? false : Convert.ToBoolean(activities[1].activityDailyLiving),
+                    communityResources2 = activities[1].communityResources == null ? false : Convert.ToBoolean(activities[1].communityResources),
+                    copingSkills2 = activities[1].copingSkills == null ? false : Convert.ToBoolean(activities[1].copingSkills),
+                    diseaseManagement2 = activities[1].diseaseManagement == null ? false : Convert.ToBoolean(activities[1].diseaseManagement),
+                    healthyLiving2 = activities[1].healthyLiving == null ? false : Convert.ToBoolean(activities[1].healthyLiving),
+                    lifeSkills2 = activities[1].lifeSkills == null ? false : Convert.ToBoolean(activities[1].lifeSkills),
+                    relaxationTraining2 = activities[1].relaxationTraining == null ? false : Convert.ToBoolean(activities[1].relaxationTraining),
+                    socialSkills2 = activities[1].socialSkills == null ? false : Convert.ToBoolean(activities[1].socialSkills),
+                    stressManagement2 = activities[1].stressManagement == null ? false : Convert.ToBoolean(activities[1].stressManagement),
+
+                    //Client's response
+                    Cooperative2 = (note_Activity.Count > 1) ? note_Activity[1].Cooperative : false,
+                    Assertive2 = (note_Activity.Count > 1) ? note_Activity[1].Assertive : false,
+                    Passive2 = (note_Activity.Count > 1) ? note_Activity[1].Passive : false,
+                    Variable2 = (note_Activity.Count > 1) ? note_Activity[1].Variable : false,
+                    Uninterested2 = (note_Activity.Count > 1) ? note_Activity[1].Uninterested : false,
+                    Engaged2 = (note_Activity.Count > 1) ? note_Activity[1].EngagedActive : false,
+                    Distractible2 = (note_Activity.Count > 1) ? note_Activity[1].Distractible : false,
+                    Confused2 = (note_Activity.Count > 1) ? note_Activity[1].Confused : false,
+                    Aggresive2 = (note_Activity.Count > 1) ? note_Activity[1].Aggresive : false,
+                    Resistant2 = (note_Activity.Count > 1) ? note_Activity[1].Resistant : false,
+                    Other2 = (note_Activity.Count > 1) ? note_Activity[1].Other : false,
+
+                    Theme3 = (activities.Count > 2) ? activities[2].Activity.Theme.Name : string.Empty,
+                    FacilitatorIntervention3 = (activities.Count > 2) ? activities[2].Activity.Name : string.Empty,
+                    Goal3 = (note_Activity[2].Objetive != null) ? note_Activity[2].Objetive.Goal.Number.ToString() : string.Empty,
+                    Objetive3 = (note_Activity[2].Objetive != null) ? note_Activity[2].Objetive.Objetive : string.Empty,
+
+                    //Skill set addressed
+                    activityDailyLiving3 = activities[2].activityDailyLiving == null ? false : Convert.ToBoolean(activities[2].activityDailyLiving),
+                    communityResources3 = activities[2].communityResources == null ? false : Convert.ToBoolean(activities[2].communityResources),
+                    copingSkills3 = activities[2].copingSkills == null ? false : Convert.ToBoolean(activities[2].copingSkills),
+                    diseaseManagement3 = activities[2].diseaseManagement == null ? false : Convert.ToBoolean(activities[2].diseaseManagement),
+                    healthyLiving3 = activities[2].healthyLiving == null ? false : Convert.ToBoolean(activities[2].healthyLiving),
+                    lifeSkills3 = activities[2].lifeSkills == null ? false : Convert.ToBoolean(activities[2].lifeSkills),
+                    relaxationTraining3 = activities[2].relaxationTraining == null ? false : Convert.ToBoolean(activities[2].relaxationTraining),
+                    socialSkills3 = activities[2].socialSkills == null ? false : Convert.ToBoolean(activities[2].socialSkills),
+                    stressManagement3 = activities[2].stressManagement == null ? false : Convert.ToBoolean(activities[2].stressManagement),
+
+                    //Client's response
+                    Cooperative3 = (note_Activity.Count > 2) ? note_Activity[2].Cooperative : false,
+                    Assertive3 = (note_Activity.Count > 2) ? note_Activity[2].Assertive : false,
+                    Passive3 = (note_Activity.Count > 2) ? note_Activity[2].Passive : false,
+                    Variable3 = (note_Activity.Count > 2) ? note_Activity[2].Variable : false,
+                    Uninterested3 = (note_Activity.Count > 2) ? note_Activity[2].Uninterested : false,
+                    Engaged3 = (note_Activity.Count > 2) ? note_Activity[2].EngagedActive : false,
+                    Distractible3 = (note_Activity.Count > 2) ? note_Activity[2].Distractible : false,
+                    Confused3 = (note_Activity.Count > 2) ? note_Activity[2].Confused : false,
+                    Aggresive3 = (note_Activity.Count > 2) ? note_Activity[2].Aggresive : false,
+                    Resistant3 = (note_Activity.Count > 2) ? note_Activity[2].Resistant : false,
+                    Other3 = (note_Activity.Count > 2) ? note_Activity[2].Other : false,
+
+                    Theme4 = (activities.Count > 3) ? activities[3].Activity.Theme.Name : string.Empty,
+                    FacilitatorIntervention4 = (activities.Count > 3) ? activities[3].Activity.Name : string.Empty,
+                    Goal4 = (note_Activity[3].Objetive != null) ? note_Activity[3].Objetive.Goal.Number.ToString() : string.Empty,
+                    Objetive4 = (note_Activity[3].Objetive != null) ? note_Activity[3].Objetive.Objetive : string.Empty,
+
+                    //Skill set addressed
+                    activityDailyLiving4 = activities[3].activityDailyLiving == null ? false : Convert.ToBoolean(activities[3].activityDailyLiving),
+                    communityResources4 = activities[3].communityResources == null ? false : Convert.ToBoolean(activities[3].communityResources),
+                    copingSkills4 = activities[3].copingSkills == null ? false : Convert.ToBoolean(activities[3].copingSkills),
+                    diseaseManagement4 = activities[3].diseaseManagement == null ? false : Convert.ToBoolean(activities[3].diseaseManagement),
+                    healthyLiving4 = activities[3].healthyLiving == null ? false : Convert.ToBoolean(activities[3].healthyLiving),
+                    lifeSkills4 = activities[3].lifeSkills == null ? false : Convert.ToBoolean(activities[3].lifeSkills),
+                    relaxationTraining4 = activities[3].relaxationTraining == null ? false : Convert.ToBoolean(activities[3].relaxationTraining),
+                    socialSkills4 = activities[3].socialSkills == null ? false : Convert.ToBoolean(activities[3].socialSkills),
+                    stressManagement4 = activities[3].stressManagement == null ? false : Convert.ToBoolean(activities[3].stressManagement),
+
+                    //Client's response
+                    Cooperative4 = (note_Activity.Count > 3) ? note_Activity[3].Cooperative : false,
+                    Assertive4 = (note_Activity.Count > 3) ? note_Activity[3].Assertive : false,
+                    Passive4 = (note_Activity.Count > 3) ? note_Activity[3].Passive : false,
+                    Variable4 = (note_Activity.Count > 3) ? note_Activity[3].Variable : false,
+                    Uninterested4 = (note_Activity.Count > 3) ? note_Activity[3].Uninterested : false,
+                    Engaged4 = (note_Activity.Count > 3) ? note_Activity[3].EngagedActive : false,
+                    Distractible4 = (note_Activity.Count > 3) ? note_Activity[3].Distractible : false,
+                    Confused4 = (note_Activity.Count > 3) ? note_Activity[3].Confused : false,
+                    Aggresive4 = (note_Activity.Count > 3) ? note_Activity[3].Aggresive : false,
+                    Resistant4 = (note_Activity.Count > 3) ? note_Activity[3].Resistant : false,
+                    Other4 = (note_Activity.Count > 3) ? note_Activity[3].Other : false
+                };
+            }
+            
+            return View(noteViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ApproveNoteP(NoteViewModel model)
+        {
+            if (model == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            NotePEntity note = await _context.NotesP
+                                             .FirstOrDefaultAsync(n => n.Id == model.Id);
+
+            note.Status = NoteStatus.Approved;
+            note.DateOfApprove = DateTime.Now;
+            note.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+            _context.Update(note);
+
+            await _context.SaveChangesAsync();
+
             if (model.Origin == 3)  ///viene de la pagina PendingNotes
                 return RedirectToAction(nameof(PendingNotes));
             if (model.Origin == 4)  ///viene de la pagina NotesWithReview
@@ -7349,12 +8438,13 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> NotStartedNotes()
         {           
           return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+                                                     .Include(wc => wc.NoteP)
                                                      .Include(wc => wc.Facilitator)
                                                      .Include(wc => wc.Client)
                                                      .Include(wc => wc.Workday)
                                                      .ThenInclude(w => w.Week)
                                                      .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                                      && wc.Note == null && wc.Present == true
+                                                                      && wc.Note == null && wc.NoteP == null && wc.Present == true
                                                                       && wc.Workday.Service == ServiceType.PSR))
                                                      .ToListAsync());                        
         }
@@ -7401,12 +8491,13 @@ namespace KyoS.Web.Controllers
                 ViewBag.FinishEdition = "Y";
             }
             return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+                                                       .Include(wc => wc.NoteP)
                                                        .Include(wc => wc.Facilitator)
                                                        .Include(wc => wc.Client)
                                                        .Include(wc => wc.Workday)
                                                        .ThenInclude(w => w.Week)
                                                        .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                                        && wc.Note.Status == NoteStatus.Edition
+                                                                        && (wc.Note.Status == NoteStatus.Edition || wc.NoteP.Status == NoteStatus.Edition)
                                                                         && wc.Workday.Service == ServiceType.PSR))
                                                        .ToListAsync());
         }
@@ -7472,7 +8563,7 @@ namespace KyoS.Web.Controllers
                                                            .Include(wc => wc.Messages)
 
                                                            .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                                      && wc.Note.Status == NoteStatus.Pending
+                                                                      && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
                                                                       && wc.Workday.Service == ServiceType.PSR))
                                                            .ToListAsync());
             }
@@ -7496,7 +8587,7 @@ namespace KyoS.Web.Controllers
                                                                .Include(wc => wc.Messages)
 
                                                                .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                                          && wc.Note.Status == NoteStatus.Pending
+                                                                          && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
                                                                           && wc.Workday.Service == ServiceType.PSR))
                                                                .ToListAsync());
                 }
@@ -7622,7 +8713,7 @@ namespace KyoS.Web.Controllers
                                       .ThenInclude(w => w.Week)
                                                        
                                       .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                 && wc.Note.Status == NoteStatus.Approved
+                                                 && (wc.Note.Status == NoteStatus.Approved || wc.NoteP.Status == NoteStatus.Approved)
                                                  && wc.Workday.Service == ServiceType.PSR))
                                                        
                                       .ToListAsync());
@@ -7765,9 +8856,9 @@ namespace KyoS.Web.Controllers
                                                            .Include(wc => wc.Messages)
 
                                                            .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                               && wc.Note.Status == NoteStatus.Pending
-                                                               && wc.Messages.Count() > 0
-                                                               && wc.Workday.Service == ServiceType.PSR))
+                                                                      && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
+                                                                      && wc.Messages.Count() > 0
+                                                                      && wc.Workday.Service == ServiceType.PSR))
                                                            .ToListAsync());
             }
 

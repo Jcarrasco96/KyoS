@@ -63,13 +63,77 @@
                 float: none;
             }
 
-                .dropdown-submenu.pull-left > .dropdown-menu {
-                    left: -100%;
-                    margin-left: 10px;
-                    -webkit-border-radius: 6px 0 6px 6px;
-                    -moz-border-radius: 6px 0 6px 6px;
-                    border-radius: 6px 0 6px 6px;
+            .dropdown-submenu.pull-left > .dropdown-menu {
+                left: -100%;
+                margin-left: 10px;
+                -webkit-border-radius: 6px 0 6px 6px;
+                -moz-border-radius: 6px 0 6px 6px;
+                border-radius: 6px 0 6px 6px;
+            }
+
+            .center-div {
+                width: 300px;
+                height: 300px;
+                position: absolute;
+                left: 50%;
+                top: 70%;
+                margin-left: -150px;
+                margin-top: -150px;
+            }
+
+            .spinner {
+                position: fixed;
+                z-index: 999;
+                height: 100%;
+                width: 100%;
+                top: 0;
+                left: 0;
+                background-color: black;
+                filter: alpha(opacity=90);
+                opacity: 0.9;
+                -moz-opacity: 0.8;
+            }
+
+            .loader {
+                margin: auto;
+                border: 8px solid #f3f3f3;
+                border-radius: 50%;
+                border-top: 8px solid #15a0ec;
+                border-bottom: 8px solid #15a0ec;
+                width: 35px;
+                height: 35px;
+                -webkit-animation: spin 1.2s linear infinite;
+                animation: spin 1.2s linear infinite;
+            }
+
+            .inner-div {
+                background-color: black;
+                border-radius: 15px;
+                margin: auto;
+                padding: 2%;
+                width: 100px;
+            }
+
+            @@-webkit-keyframes spin {
+                0% {
+                    -webkit-transform: rotate(0deg);
                 }
+
+                100% {
+                    -webkit-transform: rotate(360deg);
+                }
+            }
+
+            @@keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+
     </style>
 
     <environment include="Development">
@@ -84,6 +148,15 @@
     </environment>
 </head>
 <body>
+
+    <div class="spinner">
+        <div class="center-div">
+            <div class="inner-div">
+                <div class="loader"></div>
+            </div>
+        </div>
+    </div>
+
     <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #1e2833;">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -101,7 +174,7 @@
                         Notes
                     </label>
                 </span>
-            </div>            
+            </div>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="nav navbar-nav">
                     @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")))
@@ -121,7 +194,7 @@
                         <li><a asp-area="" asp-controller="Settings" asp-action="Index">Settings</a></li>
                     }
                     else
-                    if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
+                if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -178,7 +251,7 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                      if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
+                if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -211,7 +284,7 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                       if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
+                    if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -286,7 +359,7 @@
                                 <span class="caret"></span>
                                 @*</div>*@
                             </a>
-                            <ul class="dropdown-menu" role="menu">                                
+                            <ul class="dropdown-menu" role="menu">
                                 <li>
                                     <a href="#">
                                         <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
@@ -300,14 +373,14 @@
                                         <span>Logout</span>
                                     </a>
                                 </li>
-                            </ul>                            
+                            </ul>
                         </li>
                     }
                 </ul>
             </div>
         </div>
     </nav>
-
+    
     <partial name="_CookieConsentPartial" />
 
     <div class="container-fluid body-content">
@@ -316,7 +389,7 @@
         <footer>
             <p>&copy; 2021 - KyoS Notes</p>
         </footer>
-    </div>
+    </div>    
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -346,8 +419,11 @@
                 $(this).next('ul').toggle();
                 e.stopPropagation();
                 e.preventDefault();
-            });
+            });            
         });
+        $(window).on('load', function () {
+                $('.spinner').css('display', 'none');
+            });
     </script>
 
     @RenderSection("Scripts", required: false)

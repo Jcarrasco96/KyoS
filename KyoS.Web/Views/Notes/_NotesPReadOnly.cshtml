@@ -1,0 +1,250 @@
+﻿@model KyoS.Web.Models.NotePViewModel
+@if (Model.Schema == KyoS.Common.Enums.SchemaType.Schema3)
+{
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Group 1 Theme: </strong>@Model.Theme1
+            <br />
+            <strong>Group Facilitator's Intervention: </strong>@Model.FacilitatorIntervention1
+            <br />
+            <label class="control-label">Skill Sets Addressed:</label>
+            &nbsp;
+            <input type="checkbox" asp-for="copingSkills1" disabled /> Coping Skills &nbsp;
+            <input type="checkbox" asp-for="stressManagement1" disabled /> Stress Management &nbsp;
+            <input type="checkbox" asp-for="healthyLiving1" disabled /> Healthy Living &nbsp;
+            <input type="checkbox" asp-for="relaxationTraining1" disabled /> Relaxation Training &nbsp;
+            <input type="checkbox" asp-for="diseaseManagement1" disabled /> Disease Management &nbsp;
+            <input type="checkbox" asp-for="communityResources1" disabled /> Community Resources &nbsp;
+            <input type="checkbox" asp-for="activityDailyLiving1" disabled /> Activities of Daily Living &nbsp;
+            <input type="checkbox" asp-for="socialSkills1" disabled /> Social Skills &nbsp;
+            <input type="checkbox" asp-for="lifeSkills1" disabled /> Life Skills &nbsp;
+            <br />
+            <label class="control-label">Client's response:</label>
+            &nbsp;
+            <input type="checkbox" asp-for="Cooperative1" disabled/> Cooperative &nbsp;
+            <input type="checkbox" asp-for="Assertive1" disabled/> Assertive &nbsp;
+            <input type="checkbox" asp-for="Passive1" disabled/> Passive &nbsp;
+            <input type="checkbox" asp-for="Variable1" disabled/> Variable &nbsp;
+            <input type="checkbox" asp-for="Uninterested1" disabled/> Uninterested &nbsp;
+            <input type="checkbox" asp-for="Engaged1" disabled/> Engaged/Active &nbsp;
+            <input type="checkbox" asp-for="Distractible1" disabled/> Distractible &nbsp;
+            <input type="checkbox" asp-for="Confused1" disabled/> Confused &nbsp;
+            <input type="checkbox" asp-for="Aggresive1" disabled/> Aggresive &nbsp;
+            <input type="checkbox" asp-for="Resistant1" disabled/> Resistant &nbsp;
+            <input type="checkbox" asp-for="Other1" disabled/> Other &nbsp;
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="IdGoal1" class="control-label"></label>
+            <input asp-for="Goal1" class="form-control" readonly />           
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdObjetive1" class="control-label"></label>
+            <input asp-for="Objetive1" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-8">
+            &nbsp;
+        </div>
+    </div>    
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Group 2 Theme: </strong>@Model.Theme2
+            <br />
+            <strong>Group Facilitator's Intervention: </strong>@Model.FacilitatorIntervention2
+            <br />
+            <label class="control-label">Skill Sets Addressed:</label>
+            &nbsp;
+            <input type="checkbox" asp-for="copingSkills2" disabled /> Coping Skills &nbsp;
+            <input type="checkbox" asp-for="stressManagement2" disabled /> Stress Management &nbsp;
+            <input type="checkbox" asp-for="healthyLiving2" disabled /> Healthy Living &nbsp;
+            <input type="checkbox" asp-for="relaxationTraining2" disabled /> Relaxation Training &nbsp;
+            <input type="checkbox" asp-for="diseaseManagement2" disabled /> Disease Management &nbsp;
+            <input type="checkbox" asp-for="communityResources2" disabled /> Community Resources &nbsp;
+            <input type="checkbox" asp-for="activityDailyLiving2" disabled /> Activities of Daily Living &nbsp;
+            <input type="checkbox" asp-for="socialSkills2" disabled /> Social Skills &nbsp;
+            <input type="checkbox" asp-for="lifeSkills2" disabled /> Life Skills &nbsp;
+            <br />
+            <label class="control-label">Client's response:</label>
+            &nbsp;
+            <input type="checkbox" asp-for="Cooperative2" disabled/> Cooperative &nbsp;
+            <input type="checkbox" asp-for="Assertive2" disabled/> Assertive &nbsp;
+            <input type="checkbox" asp-for="Passive2" disabled/> Passive &nbsp;
+            <input type="checkbox" asp-for="Variable2" disabled/> Variable &nbsp;
+            <input type="checkbox" asp-for="Uninterested2" disabled/> Uninterested &nbsp;
+            <input type="checkbox" asp-for="Engaged2" disabled/> Engaged/Active &nbsp;
+            <input type="checkbox" asp-for="Distractible2" disabled/> Distractible &nbsp;
+            <input type="checkbox" asp-for="Confused2" disabled/> Confused &nbsp;
+            <input type="checkbox" asp-for="Aggresive2" disabled/> Aggresive &nbsp;
+            <input type="checkbox" asp-for="Resistant2" disabled/> Resistant &nbsp;
+            <input type="checkbox" asp-for="Other2" disabled/> Other &nbsp;
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="IdGoal2" class="control-label"></label>
+            <input asp-for="Goal2" class="form-control" readonly/>      
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdObjetive2" class="control-label"></label>
+            <input asp-for="Objetive2" class="form-control" readonly/>            
+        </div>
+        <div class="form-group col-md-8">
+            &nbsp;
+        </div>
+    </div>    
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Group 3 Theme: </strong>@Model.Theme3
+            <br />
+            <strong>Group Facilitator's Intervention: </strong>@Model.FacilitatorIntervention3
+            <br />
+            <label class="control-label">Skill Sets Addressed:</label>
+            &nbsp;
+            <input type="checkbox" asp-for="copingSkills3" disabled /> Coping Skills &nbsp;
+            <input type="checkbox" asp-for="stressManagement3" disabled /> Stress Management &nbsp;
+            <input type="checkbox" asp-for="healthyLiving3" disabled /> Healthy Living &nbsp;
+            <input type="checkbox" asp-for="relaxationTraining3" disabled /> Relaxation Training &nbsp;
+            <input type="checkbox" asp-for="diseaseManagement3" disabled /> Disease Management &nbsp;
+            <input type="checkbox" asp-for="communityResources3" disabled /> Community Resources &nbsp;
+            <input type="checkbox" asp-for="activityDailyLiving3" disabled /> Activities of Daily Living &nbsp;
+            <input type="checkbox" asp-for="socialSkills3" disabled /> Social Skills &nbsp;
+            <input type="checkbox" asp-for="lifeSkills3" disabled /> Life Skills &nbsp;
+            <br />
+            <label class="control-label">Client's response:</label>
+            &nbsp;
+            <input type="checkbox" asp-for="Cooperative3" disabled/> Cooperative &nbsp;
+            <input type="checkbox" asp-for="Assertive3" disabled/> Assertive &nbsp;
+            <input type="checkbox" asp-for="Passive3" disabled/> Passive &nbsp;
+            <input type="checkbox" asp-for="Variable3" disabled/> Variable &nbsp;
+            <input type="checkbox" asp-for="Uninterested3" disabled/> Uninterested &nbsp;
+            <input type="checkbox" asp-for="Engaged3" disabled/> Engaged/Active &nbsp;
+            <input type="checkbox" asp-for="Distractible3" disabled/> Distractible &nbsp;
+            <input type="checkbox" asp-for="Confused3" disabled/> Confused &nbsp;
+            <input type="checkbox" asp-for="Aggresive3" disabled/> Aggresive &nbsp;
+            <input type="checkbox" asp-for="Resistant3" disabled/> Resistant &nbsp;
+            <input type="checkbox" asp-for="Other3" disabled/> Other &nbsp;
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="IdGoal3" class="control-label"></label>
+            <input asp-for="Goal3" class="form-control" readonly />            
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdObjetive3" class="control-label"></label>
+            <input asp-for="Objetive3" class="form-control" readonly />            
+        </div>
+        <div class="form-group col-md-8">
+            &nbsp;
+        </div>
+    </div>    
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>Group 4 Theme: </strong>@Model.Theme4
+            <br />
+            <strong>Group Facilitator's Intervention: </strong>@Model.FacilitatorIntervention4
+            <br />
+            <label class="control-label">Skill Sets Addressed:</label>
+            &nbsp;
+            <input type="checkbox" asp-for="copingSkills4" disabled /> Coping Skills &nbsp;
+            <input type="checkbox" asp-for="stressManagement4" disabled /> Stress Management &nbsp;
+            <input type="checkbox" asp-for="healthyLiving4" disabled /> Healthy Living &nbsp;
+            <input type="checkbox" asp-for="relaxationTraining4" disabled /> Relaxation Training &nbsp;
+            <input type="checkbox" asp-for="diseaseManagement4" disabled /> Disease Management &nbsp;
+            <input type="checkbox" asp-for="communityResources4" disabled /> Community Resources &nbsp;
+            <input type="checkbox" asp-for="activityDailyLiving4" disabled /> Activities of Daily Living &nbsp;
+            <input type="checkbox" asp-for="socialSkills4" disabled /> Social Skills &nbsp;
+            <input type="checkbox" asp-for="lifeSkills4" disabled /> Life Skills &nbsp;
+            <br />
+            <label class="control-label">Client's response:</label>
+            &nbsp;
+            <input type="checkbox" asp-for="Cooperative4" disabled/> Cooperative &nbsp;
+            <input type="checkbox" asp-for="Assertive4" disabled/> Assertive &nbsp;
+            <input type="checkbox" asp-for="Passive4" disabled/> Passive &nbsp;
+            <input type="checkbox" asp-for="Variable4" disabled/> Variable &nbsp;
+            <input type="checkbox" asp-for="Uninterested4" disabled/> Uninterested &nbsp;
+            <input type="checkbox" asp-for="Engaged4" disabled/> Engaged/Active &nbsp;
+            <input type="checkbox" asp-for="Distractible4" disabled/> Distractible &nbsp;
+            <input type="checkbox" asp-for="Confused4" disabled/> Confused &nbsp;
+            <input type="checkbox" asp-for="Aggresive4" disabled/> Aggresive &nbsp;
+            <input type="checkbox" asp-for="Resistant4" disabled/> Resistant &nbsp;
+            <input type="checkbox" asp-for="Other4" disabled/> Other &nbsp;
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="IdGoal4" class="control-label"></label>
+            <input asp-for="Goal4" class="form-control" readonly />            
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdObjetive4" class="control-label"></label>
+            <input asp-for="Objetive4" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-8">
+            &nbsp;
+        </div>
+    </div>   
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <label asp-for="PlanNote" class="control-label"></label>&nbsp;*
+            <textarea asp-for="PlanNote" class="form-control" rows="3" id="PlanNote" readonly></textarea>           
+        </div>
+    </div>           
+    <div class="col-md-push-12">
+            <div class="form-group col-md-12">
+                <label style="font-weight: bold;">ASSESSMENT OF PROGRESS/OUTCOME</label>
+                <br />
+                <input type="checkbox" asp-for="Minimal" disabled/> Minimal
+                &nbsp;
+                <input type="checkbox" asp-for="Slow" disabled/> Slow
+                &nbsp;
+                <input type="checkbox" asp-for="Steady" disabled/> Steady
+                &nbsp;
+                <input type="checkbox" asp-for="GoodExcelent" disabled/> Good/Excellent
+                &nbsp;
+                <input type="checkbox" asp-for="IncreasedDifficultiesNoted" disabled/> Increased difficulties noted
+                &nbsp;
+                <input type="checkbox" asp-for="Complicated" disabled/> Complicated by recent stressors
+                &nbsp;
+                <input type="checkbox" asp-for="DevelopingInsight" disabled/> Developing insight
+                &nbsp;
+                <input type="checkbox" asp-for="LittleInsight" disabled/> Little insight
+                &nbsp;
+                <input type="checkbox" asp-for="Aware" disabled/> Aware, insightful
+                &nbsp;
+                <input type="checkbox" asp-for="AbleToGenerateAlternatives" disabled/> Able to generate alternatives
+                &nbsp;
+                <input type="checkbox" asp-for="Initiates" disabled/> Initiates problem-solving
+                &nbsp;
+                <input type="checkbox" asp-for="ProblemSolved" disabled/> Problem solved with assistance
+                &nbsp;
+                <input type="checkbox" asp-for="DemostratesEmpathy" disabled/> Demonstrates empathy, support for others
+                &nbsp;
+                <input type="checkbox" asp-for="UsesSessions" disabled/> Uses sessions to vent
+                &nbsp;
+                <input type="checkbox" asp-for="Variable" disabled/> Variable
+                &nbsp;
+            </div>
+    </div>    
+    <div class="col-md-12">
+        <hr />
+    </div>
+}
+
+
+
+
+

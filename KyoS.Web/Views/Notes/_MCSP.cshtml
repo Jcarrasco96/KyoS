@@ -1,0 +1,66 @@
+﻿@model KyoS.Web.Models.NotePViewModel
+<div class="col-md-12">    
+    <h4 style="font-weight:bold;"><span class="label label-info">@Model.Workday_Cient.Client.Name</span></h4>
+    <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">View of MTP</a>    
+    <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
+    <hr />
+</div>
+<div class="col-md-push-12">    
+    <div class="form-group col-md-4">
+        <label asp-for="Title" class="control-label">Note title</label>
+        <input asp-for="Title" class="form-control"></input>
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-8">
+        &nbsp;
+    </div>
+</div>
+<div class="col-md-12">
+    <p style="font-weight:bold;">MENTAL STATUS OBSERVATIONS</p>
+</div>
+<div class="col-md-7">
+    <table border="1" width="100%">
+        <tr>
+            <td align="left">
+                &nbsp;
+                <input type="checkbox" asp-for="Attentive" /> Attentive &nbsp;
+                <input type="checkbox" asp-for="Depressed" /> Depressed &nbsp;
+                <input type="checkbox" asp-for="Inattentive" /> Inattentive &nbsp;
+                <input type="checkbox" asp-for="Angry" /> Angry &nbsp;
+                <input type="checkbox" asp-for="Sad" /> Sad &nbsp;
+                <input type="checkbox" asp-for="FlatAffect" /> Flat Affect &nbsp;
+                
+            </td>
+        </tr>
+        <tr>
+            <td align="left">
+                &nbsp;
+                <input type="checkbox" asp-for="Anxious" /> Anxious, tense &nbsp;
+                <input type="checkbox" asp-for="PositiveEffect" /> Positive Effect, mood &nbsp;
+                <input type="checkbox" asp-for="Oriented3x" /> Oriented 3x &nbsp;
+                <input type="checkbox" asp-for="Oriented2x" /> Oriented 2x &nbsp;
+                <input type="checkbox" asp-for="Oriented1x" /> Oriented 1x &nbsp;
+                <input type="checkbox" asp-for="Impulsive" /> Impulsive &nbsp;
+                
+            </td>
+        </tr>
+        <tr>
+            <td align="left">
+                &nbsp;
+                <input type="checkbox" asp-for="Labile" /> Labile &nbsp;
+                <input type="checkbox" asp-for="Withdrawn" /> Withdrawn &nbsp;
+                <input type="checkbox" asp-for="RelatesWell" /> Relates Well &nbsp;
+                <input type="checkbox" asp-for="DecreasedEyeContact" /> Decreased eye contact &nbsp;
+                <input type="checkbox" asp-for="AppropiateEyeContact" /> Appropiate eye contact &nbsp;
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="col-md-12">    
+    <hr />
+</div>
+
+
+
+
+

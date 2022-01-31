@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220122232250_ModifyWorkday_Activity_Facilitator1")]
+    partial class ModifyWorkday_Activity_Facilitator1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1550,207 +1552,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("Notes");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.NotePEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<bool>("AbleToGenerateAlternatives")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Angry")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Anxious")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("AppropiateEyeContact")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Attentive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Aware")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Complicated")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("DateOfApprove")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("DecreasedEyeContact")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("DemostratesEmpathy")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Depressed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("DevelopingInsight")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("FlatAffect")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("GoodExcelent")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Impulsive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Inattentive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IncreasedDifficultiesNoted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Initiates")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Labile")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LittleInsight")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("MTPId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Minimal")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Oriented1x")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Oriented2x")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Oriented3x")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("PlanNote")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PositiveEffect")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("ProblemSolved")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("RelatesWell")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Sad")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Schema")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Setting")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Slow")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Steady")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("SupervisorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("UsesSessions")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Variable")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Withdrawn")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Workday_Client_FK")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SupervisorId");
-
-                    b.HasIndex("Workday_Client_FK")
-                        .IsUnique();
-
-                    b.ToTable("NotesP");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.NoteP_Activity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ActivityId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Aggresive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Assertive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Confused")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Cooperative")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Distractible")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("EngagedActive")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("NotePId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ObjetiveId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Other")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Passive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Resistant")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Uninterested")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Variable")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActivityId");
-
-                    b.HasIndex("NotePId");
-
-                    b.HasIndex("ObjetiveId");
-
-                    b.ToTable("NotesP_Activities");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.NotePrototypeEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -2772,7 +2573,7 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("ObjectiveId");
 
                     b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
-                        .WithMany("IndividualNotes")
+                        .WithMany()
                         .HasForeignKey("SupervisorId");
 
                     b.HasOne("KyoS.Web.Data.Entities.Workday_Client", "Workday_Cient")
@@ -2821,44 +2622,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Supervisor");
 
                     b.Navigation("Workday_Cient");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.NotePEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
-                        .WithMany("NotesP")
-                        .HasForeignKey("SupervisorId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.Workday_Client", "Workday_Cient")
-                        .WithOne("NoteP")
-                        .HasForeignKey("KyoS.Web.Data.Entities.NotePEntity", "Workday_Client_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Supervisor");
-
-                    b.Navigation("Workday_Cient");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.NoteP_Activity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ActivityEntity", "Activity")
-                        .WithMany()
-                        .HasForeignKey("ActivityId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.NotePEntity", "NoteP")
-                        .WithMany("NotesP_Activities")
-                        .HasForeignKey("NotePId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.ObjetiveEntity", "Objetive")
-                        .WithMany()
-                        .HasForeignKey("ObjetiveId");
-
-                    b.Navigation("Activity");
-
-                    b.Navigation("NoteP");
-
-                    b.Navigation("Objetive");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.NotePrototypeEntity", b =>
@@ -3204,11 +2967,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Notes_Activities");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.NotePEntity", b =>
-                {
-                    b.Navigation("NotesP_Activities");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.NotePrototypeEntity", b =>
                 {
                     b.Navigation("Classifications");
@@ -3240,11 +2998,7 @@ namespace KyoS.Web.Migrations
                 {
                     b.Navigation("GroupNotes");
 
-                    b.Navigation("IndividualNotes");
-
                     b.Navigation("Notes");
-
-                    b.Navigation("NotesP");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.WeekEntity", b =>
@@ -3268,8 +3022,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Messages");
 
                     b.Navigation("Note");
-
-                    b.Navigation("NoteP");
                 });
 #pragma warning restore 612, 618
         }
