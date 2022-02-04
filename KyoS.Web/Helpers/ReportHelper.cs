@@ -1689,6 +1689,207 @@ namespace KyoS.Web.Helpers
         #endregion
 
         #region Approved PSR Notes reports
+        public Stream FloridaSocialHSNoteReportSchema3(Workday_Client workdayClient)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\ApprovedNotes\\rptFloridaSocialHSNote2.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetWorkdayClientDS(workdayClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Clients");
+            DataSet dataSet1 = new DataSet();
+            dataSet1.Tables.Add(GetClientDS(workdayClient.Client));
+            WebReport.Report.RegisterData(dataSet1.Tables[0], "Clients");
+            DataSet dataSet2 = new DataSet();
+            dataSet2.Tables.Add(GetFacilitatorDS(workdayClient.Facilitator));
+            WebReport.Report.RegisterData(dataSet2.Tables[0], "Facilitators");
+            DataSet dataSet3 = new DataSet();
+            dataSet3.Tables.Add(GetSupervisorDS(workdayClient.NoteP.Supervisor));
+            WebReport.Report.RegisterData(dataSet3.Tables[0], "Supervisors");
+            DataSet dataSet4 = new DataSet();
+            dataSet4.Tables.Add(GetNotePDS(workdayClient.NoteP));
+            WebReport.Report.RegisterData(dataSet4.Tables[0], "NotesP");
+
+            int i = 0;
+            var num_of_goal = string.Empty;
+            var goal_text = string.Empty;
+            var num_of_obj = string.Empty;
+            var obj_text = string.Empty;
+            foreach (NoteP_Activity item in workdayClient.NoteP.NotesP_Activities)
+            {
+                if (i == 0)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetNotePActivityDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "NotesP_Activities1");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetActivityDS(item.Activity));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Activities1");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Themes1");
+
+                    if (item.Objetive != null)
+                    {
+                        num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                        goal_text = item.Objetive.Goal.Name;
+                        num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                        obj_text = item.Objetive.Description;
+                    }
+                }
+                if (i == 1)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetNotePActivityDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "NotesP_Activities2");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetActivityDS(item.Activity));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Activities2");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Themes2");
+
+                    if (num_of_goal == string.Empty)
+                    {
+                        if (item.Objetive != null)
+                        {
+                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                            goal_text = item.Objetive.Goal.Name;
+                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                            obj_text = item.Objetive.Description;
+                        }
+                    }
+                }
+                if (i == 2)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetNotePActivityDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "NotesP_Activities3");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetActivityDS(item.Activity));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Activities3");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Themes3");
+
+                    if (num_of_goal == string.Empty)
+                    {
+                        if (item.Objetive != null)
+                        {
+                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                            goal_text = item.Objetive.Goal.Name;
+                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                            obj_text = item.Objetive.Description;
+                        }
+                    }
+                }
+                if (i == 3)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetNotePActivityDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "NotesP_Activities4");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetActivityDS(item.Activity));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Activities4");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Themes4");
+
+                    if (num_of_goal == string.Empty)
+                    {
+                        if (item.Objetive != null)
+                        {
+                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                            goal_text = item.Objetive.Goal.Name;
+                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                            obj_text = item.Objetive.Description;
+                        }
+                    }
+                }
+                i = ++i;
+            }
+
+            i = 0;
+            foreach (Workday_Activity_Facilitator item in workdayClient.Workday.Workdays_Activities_Facilitators)
+            {
+                if (i == 0)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetWorkdayActivityFacilitatorDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Activities_Facilitators1");                    
+                }
+                if (i == 1)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetWorkdayActivityFacilitatorDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Activities_Facilitators2");
+                }
+                if (i == 2)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetWorkdayActivityFacilitatorDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Activities_Facilitators3");
+                }
+                if (i == 3)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetWorkdayActivityFacilitatorDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Activities_Facilitators4");
+                }
+                i = ++i;
+            }
+
+            var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
+            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+            var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(workdayClient.NoteP.Supervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.NoteP.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(workdayClient.Facilitator.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.SetParameterValue("datenote", date);
+            WebReport.Report.SetParameterValue("dateFacilitator", dateFacilitator);
+            WebReport.Report.SetParameterValue("dateSupervisor", dateSupervisor);
+            WebReport.Report.SetParameterValue("num_of_goal", num_of_goal);
+            WebReport.Report.SetParameterValue("goal_text", goal_text);
+            WebReport.Report.SetParameterValue("num_of_obj", num_of_obj);
+            WebReport.Report.SetParameterValue("obj_text", obj_text);
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         public Stream DavilaNoteReportSchema4(Workday_Client workdayClient)
         {
             WebReport WebReport = new WebReport();
@@ -2420,6 +2621,110 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetNotePDS(NotePEntity note)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "NoteP"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Title", typeof(string));
+            dt.Columns.Add("PlanNote", typeof(string));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("Workday_Client_FK", typeof(int));
+            dt.Columns.Add("DateOfApprove", typeof(DateTime));
+            
+            dt.Columns.Add("Attentive", typeof(bool));
+            dt.Columns.Add("Depressed", typeof(bool));
+            dt.Columns.Add("Inattentive", typeof(bool));
+            dt.Columns.Add("Angry", typeof(bool));
+            dt.Columns.Add("Sad", typeof(bool));
+            dt.Columns.Add("FlatAffect", typeof(bool));
+            dt.Columns.Add("Anxious", typeof(bool));
+            dt.Columns.Add("PositiveEffect", typeof(bool));
+            dt.Columns.Add("Oriented3x", typeof(bool));
+            dt.Columns.Add("Oriented2x", typeof(bool));
+            dt.Columns.Add("Oriented1x", typeof(bool));
+            dt.Columns.Add("Impulsive", typeof(bool));
+            dt.Columns.Add("Labile", typeof(bool));
+            dt.Columns.Add("Withdrawn", typeof(bool));
+            dt.Columns.Add("RelatesWell", typeof(bool));
+            dt.Columns.Add("DecreasedEyeContact", typeof(bool));
+            dt.Columns.Add("AppropiateEyeContact", typeof(bool));
+
+            dt.Columns.Add("Minimal", typeof(bool));
+            dt.Columns.Add("Slow", typeof(bool));
+            dt.Columns.Add("Steady", typeof(bool));
+            dt.Columns.Add("GoodExcelent", typeof(bool));
+            dt.Columns.Add("IncreasedDifficultiesNoted", typeof(bool));
+            dt.Columns.Add("Complicated", typeof(bool));
+            dt.Columns.Add("DevelopingInsight", typeof(bool));
+            dt.Columns.Add("LittleInsight", typeof(bool));
+            dt.Columns.Add("Aware", typeof(bool));
+            dt.Columns.Add("AbleToGenerateAlternatives", typeof(bool));
+            dt.Columns.Add("Initiates", typeof(bool));
+            dt.Columns.Add("ProblemSolved", typeof(bool));
+            dt.Columns.Add("DemostratesEmpathy", typeof(bool));
+            dt.Columns.Add("UsesSessions", typeof(bool));
+            dt.Columns.Add("Variable", typeof(bool));
+
+            dt.Columns.Add("Setting", typeof(string));
+            dt.Columns.Add("MTPId", typeof(int));
+            dt.Columns.Add("Schema", typeof(int));
+
+            dt.Rows.Add(new object[]
+                                        {
+                                            note.Id,
+                                            note.Title,
+                                            note.PlanNote,
+                                            note.Status,
+                                            note.Workday_Client_FK,
+                                            note.DateOfApprove,
+
+                                            note.Attentive,
+                                            note.Depressed,
+                                            note.Inattentive,
+                                            note.Angry,
+                                            note.Sad,
+                                            note.FlatAffect,
+                                            note.Anxious,
+                                            note.PositiveEffect,
+                                            note.Oriented3x,
+                                            note.Oriented2x,
+                                            note.Oriented1x,
+                                            note.Impulsive,
+                                            note.Labile,
+                                            note.Withdrawn,
+                                            note.RelatesWell,
+                                            note.DecreasedEyeContact,
+                                            note.AppropiateEyeContact,
+
+                                            note.Minimal,
+                                            note.Slow,
+                                            note.Steady,
+                                            note.GoodExcelent,
+                                            note.IncreasedDifficultiesNoted,
+                                            note.Complicated,
+                                            note.DevelopingInsight,
+                                            note.LittleInsight,
+                                            note.Aware,
+                                            note.AbleToGenerateAlternatives,
+                                            note.Initiates,
+                                            note.ProblemSolved,
+                                            note.DemostratesEmpathy,
+                                            note.UsesSessions,
+                                            note.Variable,
+
+                                            note.Setting,
+                                            note.MTPId,
+                                            note.Schema
+            });
+
+            return dt;
+        }
+
         private DataTable GetIndividualNoteDS(IndividualNoteEntity note)
         {
             DataTable dt = new DataTable
@@ -2679,6 +2984,102 @@ namespace KyoS.Web.Helpers
                                             noteActivity.AnswerFacilitator,
                                             (noteActivity.Objetive == null) ? 0 : noteActivity.Objetive.Id                                            
             });
+
+            return dt;
+        }
+
+        private DataTable GetNotePActivityDS(NoteP_Activity noteActivity)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "NotePActivity"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("NotePId", typeof(int));
+            dt.Columns.Add("ActivityId", typeof(int));
+
+            dt.Columns.Add("Cooperative", typeof(bool));
+            dt.Columns.Add("Assertive", typeof(bool));
+            dt.Columns.Add("Passive", typeof(bool));
+            dt.Columns.Add("Variable", typeof(bool));
+            dt.Columns.Add("Uninterested", typeof(bool));
+            dt.Columns.Add("EngagedActive", typeof(bool));
+            dt.Columns.Add("Distractible", typeof(bool));
+            dt.Columns.Add("Confused", typeof(bool));
+            dt.Columns.Add("Aggresive", typeof(bool));
+            dt.Columns.Add("Resistant", typeof(bool));
+            dt.Columns.Add("Other", typeof(bool));
+
+            dt.Columns.Add("ObjetiveId", typeof(int));
+
+            dt.Rows.Add(new object[]
+                                        {
+                                            noteActivity.Id,
+                                            noteActivity.NoteP.Id,
+                                            noteActivity.Activity.Id,
+
+                                            noteActivity.Cooperative,
+                                            noteActivity.Assertive,
+                                            noteActivity.Passive,
+                                            noteActivity.Variable,
+                                            noteActivity.Uninterested,
+                                            noteActivity.EngagedActive,
+                                            noteActivity.Distractible,
+                                            noteActivity.Confused,
+                                            noteActivity.Aggresive,
+                                            noteActivity.Resistant,
+                                            noteActivity.Other,
+
+                                            (noteActivity.Objetive == null) ? 0 : noteActivity.Objetive.Id
+                                        });
+
+            return dt;
+        }
+
+        private DataTable GetWorkdayActivityFacilitatorDS(Workday_Activity_Facilitator workdayActivityFacilitator)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "WorkdayActivityFacilitator"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("WorkdayId", typeof(int));
+            dt.Columns.Add("ActivityId", typeof(int));
+            dt.Columns.Add("FacilitatorId", typeof(int));
+            dt.Columns.Add("Schema", typeof(int));
+
+            dt.Columns.Add("copingSkills", typeof(bool));
+            dt.Columns.Add("stressManagement", typeof(bool));
+            dt.Columns.Add("healthyLiving", typeof(bool));
+            dt.Columns.Add("relaxationTraining", typeof(bool));
+            dt.Columns.Add("diseaseManagement", typeof(bool));
+            dt.Columns.Add("communityResources", typeof(bool));
+            dt.Columns.Add("activityDailyLiving", typeof(bool));
+            dt.Columns.Add("socialSkills", typeof(bool));
+            dt.Columns.Add("lifeSkills", typeof(bool));
+
+            dt.Rows.Add(new object[]
+                                        {
+                                            workdayActivityFacilitator.Id,
+                                            workdayActivityFacilitator.Workday.Id,
+                                            workdayActivityFacilitator.Activity.Id,
+                                            (workdayActivityFacilitator.Facilitator == null) ? 0 : workdayActivityFacilitator.Facilitator.Id,
+                                            workdayActivityFacilitator.Schema,
+
+                                            workdayActivityFacilitator.copingSkills,
+                                            workdayActivityFacilitator.stressManagement,
+                                            workdayActivityFacilitator.healthyLiving,
+                                            workdayActivityFacilitator.relaxationTraining,
+                                            workdayActivityFacilitator.diseaseManagement,
+                                            workdayActivityFacilitator.communityResources,
+                                            workdayActivityFacilitator.activityDailyLiving,
+                                            workdayActivityFacilitator.socialSkills,
+                                            workdayActivityFacilitator.lifeSkills
+                                        });
 
             return dt;
         }

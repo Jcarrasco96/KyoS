@@ -24,6 +24,7 @@ namespace KyoS.Web.Helpers
         #endregion
 
         #region Approved PSR Notes reports
+        Stream FloridaSocialHSNoteReportSchema3(Workday_Client workdayClient);
         Stream DavilaNoteReportSchema4(Workday_Client workdayClient);
         #endregion
 

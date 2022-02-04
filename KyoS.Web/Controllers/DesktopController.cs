@@ -207,31 +207,46 @@ namespace KyoS.Web.Controllers
 
                 ViewBag.PendingNotes = _context.Workdays_Clients
                                                .Count(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                         && (wc.Note.Status == NoteStatus.Pending || wc.IndividualNote.Status == NoteStatus.Pending))).ToString();
+                                                         && (wc.Note.Status == NoteStatus.Pending || wc.IndividualNote.Status == NoteStatus.Pending 
+                                                             || wc.GroupNote.Status == NoteStatus.Pending
+                                                             || wc.NoteP.Status == NoteStatus.Pending))).ToString();
 
                 ViewBag.InProgressNotes = _context.Workdays_Clients
-                                                  .Include(wc => wc.Note)
                                                   .Count(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                            && (wc.Note.Status == NoteStatus.Edition || wc.IndividualNote.Status == NoteStatus.Edition))).ToString();
+                                                            && (wc.Note.Status == NoteStatus.Edition || wc.IndividualNote.Status == NoteStatus.Edition
+                                                                || wc.GroupNote.Status == NoteStatus.Edition || wc.NoteP.Status == NoteStatus.Edition))).ToString();
 
                 List<Workday_Client> not_started_list = await _context.Workdays_Clients
+
                                                                       .Include(wc => wc.Note)
                                                                       .Include(wc => wc.IndividualNote)
-                                                                      .Where(wc => wc.Facilitator.Clinic.Id == user_logged.Clinic.Id).ToListAsync();
-                not_started_list = not_started_list.Where(wc => (wc.Note == null && wc.IndividualNote == null && wc.Present == true)).ToList();
+                                                                      .Include(wc => wc.GroupNote)
+                                                                      .Include(wc => wc.NoteP)
+
+                                                                      .Where(wc => wc.Facilitator.Clinic.Id == user_logged.Clinic.Id)
+                                                                      .ToListAsync();
+
+                not_started_list = not_started_list.Where(wc => (wc.Note == null && wc.IndividualNote == null && 
+                                                                 wc.GroupNote == null && wc.NoteP == null && wc.Present == true)).ToList();
                 ViewBag.NotStartedNotes = not_started_list.Count.ToString();
 
                 List<ClientEntity> client = await _context.Clients
+
                                                           .Include(c => c.MTPs)
-                                                          .Where(c => c.Clinic.Id == user_logged.Clinic.Id).ToListAsync();
+
+                                                          .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
+                                                          .ToListAsync();
+
                 client = client.Where(wc => wc.MTPs.Count == 0).ToList();
                 ViewBag.MTPMissing = client.Count.ToString();
 
                 List<Workday_Client> notes_review_list = await _context.Workdays_Clients
-                                                                      .Include(wc => wc.Messages)
-                                                                      .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                                                && (wc.Note.Status == NoteStatus.Pending || wc.IndividualNote.Status == NoteStatus.Pending)))
-                                                                      .ToListAsync();
+                                                                       .Include(wc => wc.Messages)
+                                                                       .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id &&
+                                                                                    (wc.Note.Status == NoteStatus.Pending || wc.IndividualNote.Status == NoteStatus.Pending ||
+                                                                                     wc.GroupNote.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)))
+                                                                       .ToListAsync();
+
                 notes_review_list = notes_review_list.Where(wc => wc.Messages.Count() > 0).ToList();
                 ViewBag.NotesWithReview = notes_review_list.Count.ToString();
                 
@@ -274,9 +289,12 @@ namespace KyoS.Web.Controllers
                 ViewBag.ClientsWithoutDoc = clients_without_doc.ToString();
 
                 ViewBag.ApprovedNotes = _context.Workdays_Clients
+
                                                 .Include(wc => wc.Note)
-                                                .Count(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                          && (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved))).ToString();
+
+                                                .Count(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id &&
+                                                             (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved ||
+                                                              wc.GroupNote.Status == NoteStatus.Approved || wc.NoteP.Status == NoteStatus.Approved))).ToString();
 
                 ViewBag.NotPresentNotes = _context.Workdays_Clients
                                                   .Include(wc => wc.Note)

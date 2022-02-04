@@ -99,7 +99,6 @@
     <Folder Include="wwwroot\files\Templates\" />
     <Folder Include="wwwroot\images\Clinics\" />
     <Folder Include="wwwroot\images\Signatures\" />
-    <Folder Include="wwwroot\Reports\ApprovedNotes\" />
   </ItemGroup>
 
   <ItemGroup>
