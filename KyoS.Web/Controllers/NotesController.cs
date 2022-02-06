@@ -3774,6 +3774,76 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> PrintWorkdaysNotesP(int id)
+        {
+            WorkdayEntity workday = await _context.Workdays
+
+                                                  .Include(w => w.Workdays_Clients)
+                                                  .ThenInclude(wc => wc.Facilitator)
+
+                                                  .FirstOrDefaultAsync(w => w.Id == id);
+
+            if (workday == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            IEnumerable<Workday_Client> workdayClientList = workday.Workdays_Clients
+                                                                   .Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name
+                                                                             && wc.Workday.Id == workday.Id);
+            Workday_Client workdayClient;
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            foreach (var item in workdayClientList)
+            {
+                workdayClient = _context.Workdays_Clients
+
+                                        .Include(wc => wc.Facilitator)
+
+                                        .Include(wc => wc.Client)
+                                        .ThenInclude(c => c.MTPs)
+                                        .ThenInclude(m => m.Goals)
+                                        .ThenInclude(g => g.Objetives)
+
+                                        .Include(wc => wc.Client)
+                                        .ThenInclude(c => c.Clients_Diagnostics)
+                                        .ThenInclude(cd => cd.Diagnostic)
+
+                                        .Include(wc => wc.NoteP)
+                                        .ThenInclude(n => n.Supervisor)
+                                        .ThenInclude(s => s.Clinic)
+
+                                        .Include(wc => wc.NoteP)
+                                        .ThenInclude(n => n.NotesP_Activities)
+                                        .ThenInclude(na => na.Activity)
+                                        .ThenInclude(a => a.Theme)
+
+                                        .Include(wc => wc.NoteP)
+                                        .ThenInclude(n => n.NotesP_Activities)
+                                        .ThenInclude(na => na.Objetive)
+                                        .ThenInclude(o => o.Goal)
+
+                                        .Include(wc => wc.Workday)
+                                        .ThenInclude(w => w.Workdays_Activities_Facilitators)
+
+                                        .FirstOrDefault(wc => (wc.Id == item.Id && wc.NoteP.Status == NoteStatus.Approved));
+
+                if ((workdayClient.NoteP != null) && (workdayClient.NoteP.Status == NoteStatus.Approved))
+                {                                      
+                    if (workdayClient.NoteP.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+                    {
+                        if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
+                        {
+                            Stream stream = _reportHelper.FloridaSocialHSNoteReportSchema3(workdayClient);
+                            fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));
+                        }
+                    }                                
+                }
+            }
+
+            return this.ZipFile(fileContentList, $"{workday.Date.ToShortDateString()}.zip");
+        }
+
+        [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> PrintWorkdaysIndNotes(int id)
         {
             WorkdayEntity workday = await _context.Workdays
