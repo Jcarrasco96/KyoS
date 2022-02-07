@@ -84,20 +84,21 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(HealthInsuranceViewModel healthInsuranceViewModel)
         {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
             if (ModelState.IsValid)
             {
-                HealthInsuranceEntity insurance = await _context.HealthInsurances.FirstOrDefaultAsync(c => c.Name == healthInsuranceViewModel.Name);
+                HealthInsuranceEntity insurance = await _context.HealthInsurances
+                                                                .FirstOrDefaultAsync(c => (c.Name == healthInsuranceViewModel.Name && c.Clinic.Id == user_logged.Clinic.Id));
                 if (insurance == null)
                 {
                     string documentPath = string.Empty;
                     if (healthInsuranceViewModel.DocumentFile != null)
                     {
                         documentPath = await _imageHelper.UploadFileAsync(healthInsuranceViewModel.DocumentFile, "Insurances");
-                    }
-
-                    UserEntity user_logged = _context.Users
-                                                     .Include(u => u.Clinic)
-                                                     .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                    }                    
 
                     healthInsuranceViewModel.IdClinic = user_logged.Clinic.Id;
 
@@ -535,6 +536,7 @@ namespace KyoS.Web.Controllers
 
             int schema1Count = 0;
             int schema2Count = 0;
+            int schema3Count = 0;
             int schema4Count = 0;
             int notNotesCount = 0;
             //int indNotesCount = 0;
@@ -560,6 +562,13 @@ namespace KyoS.Web.Controllers
                                                      && n.Workday_Cient.Client.Id == idClient))
                                            .Count();
                     usedUnits = usedUnits + (schema2Count * 16);
+
+                    schema3Count = _context.NotesP
+                                           .Where(n => (n.Schema == Common.Enums.SchemaType.Schema3
+                                                     && n.Workday_Cient.Workday.Date >= entity.ApprovedDate
+                                                     && n.Workday_Cient.Client.Id == idClient))
+                                           .Count();
+                    usedUnits = usedUnits + (schema3Count * 16);
 
                     schema4Count = _context.Notes
                                            .Where(n => (n.Schema == Common.Enums.SchemaType.Schema4
@@ -607,6 +616,14 @@ namespace KyoS.Web.Controllers
                                            .Count();
                     usedUnits = usedUnits + (schema2Count * 16);
 
+                    schema3Count = _context.NotesP
+                                           .Where(n => (n.Schema == Common.Enums.SchemaType.Schema3
+                                                     && n.Workday_Cient.Workday.Date >= entity.ApprovedDate && n.Workday_Cient.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
+                                                     && n.Workday_Cient.Workday.Date < nextEntity.ApprovedDate
+                                                     && n.Workday_Cient.Client.Id == idClient))
+                                           .Count();
+                    usedUnits = usedUnits + (schema3Count * 16);
+
                     schema4Count = _context.Notes
                                            .Where(n => (n.Schema == Common.Enums.SchemaType.Schema4
                                                      && n.Workday_Cient.Workday.Date >= entity.ApprovedDate && n.Workday_Cient.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
@@ -653,6 +670,7 @@ namespace KyoS.Web.Controllers
 
             int schema1Count = 0;
             int schema2Count = 0;
+            int schema3Count = 0;
             int schema4Count = 0;
             int notNotesCount = 0;
             //int indNotesCount = 0;
@@ -680,6 +698,14 @@ namespace KyoS.Web.Controllers
                                                      && n.Workday_Cient.Client.Id == idClient))
                                            .Count();
                     usedUnits = usedUnits + (schema2Count * 16);
+
+                    schema3Count = _context.NotesP
+                                           .Where(n => (n.Schema == Common.Enums.SchemaType.Schema3
+                                                     && n.Workday_Cient.Workday.Date >= entity.ApprovedDate
+                                                     && n.Workday_Cient.Workday.Date < approvedDateNextEntity
+                                                     && n.Workday_Cient.Client.Id == idClient))
+                                           .Count();
+                    usedUnits = usedUnits + (schema3Count * 16);
 
                     schema4Count = _context.Notes
                                            .Where(n => (n.Schema == Common.Enums.SchemaType.Schema4
@@ -728,6 +754,14 @@ namespace KyoS.Web.Controllers
                                                      && n.Workday_Cient.Client.Id == idClient))
                                            .Count();
                     usedUnits = usedUnits + (schema2Count * 16);
+
+                    schema3Count = _context.NotesP
+                                           .Where(n => (n.Schema == Common.Enums.SchemaType.Schema3
+                                                     && n.Workday_Cient.Workday.Date >= entity.ApprovedDate && n.Workday_Cient.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
+                                                     && n.Workday_Cient.Workday.Date < nextEntity.ApprovedDate
+                                                     && n.Workday_Cient.Client.Id == idClient))
+                                           .Count();
+                    usedUnits = usedUnits + (schema3Count * 16);
 
                     schema4Count = _context.Notes
                                            .Where(n => (n.Schema == Common.Enums.SchemaType.Schema4

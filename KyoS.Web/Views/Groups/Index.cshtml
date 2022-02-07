@@ -32,11 +32,14 @@
                             <th class="col-md-1">
 
                             </th>
-                            <th class="col-md-5">
+                            <th class="col-md-4">
                                 Facilitator
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Therapy
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Clients
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 AM
@@ -45,7 +48,7 @@
                                 PM
                             </th>
                             <th class="col-md-2">
-                                
+
                             </th>
                         </tr>
                     </thead>
@@ -85,19 +88,22 @@
                                 @Html.DisplayFor(modelItem => item.Service)
                             </td>
                             <td align="center">
+                                @item.Clients.Count()
+                            </td>
+                            <td align="center">
                                 @if (item.Am)
                                 {
                                     <i class="icon-ok green"></i>
-                                }                                
+                                }
                             </td>
                             <td align="center">
                                 @if (item.Pm)
                                 {
                                     <i class="icon-ok green"></i>
-                                }                               
+                                }
                             </td>
                             <td align="right">
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit PSR group"><i class="glyphicon glyphicon-pencil"></i></a>                                
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit PSR group"><i class="glyphicon glyphicon-pencil"></i></a>
                             </td>
                         </tr>
                         }

@@ -12,7 +12,8 @@
                     <thead>
                         <tr>
                             <th class="col-md-2">Facilitator</th>
-                            <th class="col-md-3">Client Name</th>
+                            <th class="col-md-2">Client Name</th>
+                            <th class="col-md-1" style="text-align:center;">Therapy</th>
                             <th class="col-md-1" style="text-align:center;">Code</th>
                             <th class="col-md-1" style="text-align:center;">Date</th>
                             <th class="col-md-1" style="text-align:center;">Med. ID</th>
@@ -25,49 +26,52 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Facilitator.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Client.Name)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Client.Code)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Workday.Date)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Client.MedicaidID)
-                                </td>
-                                <td align="center">
-                                    @if (item.BilledDate == null)
-                                    {
-                                        <p>-</p>
-                                    }
-                                    else
-                                    {
-                                        <p>@item.BilledDate.Value.ToShortDateString()</p>                                        
-                                    }
-                                </td>
-                                <td align="center">
-                                    @if (item.PaymentDate == null)
-                                    {
-                                        <p>-</p>
-                                    }
-                                    else
-                                    {
-                                        <p>@item.PaymentDate.Value.ToShortDateString()</p>
-                                    }
-                                </td>
-                                <td align="center">
-                                    <a onclick="showInPopup('@Url.Action("BillNote","Notes",new {id = item.Id}, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-usd"></i> Bill</a>
-                                </td>
-                                <td align="center">
-                                    <a onclick="showInPopup('@Url.Action("PaymentReceived","Notes",new {id = item.Id}, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-usd"></i> Received</a>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Facilitator.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Client.Name)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.Client.Service)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.Client.Code)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.Workday.Date)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.Client.MedicaidID)
+                            </td>
+                            <td align="center">
+                                @if (item.BilledDate == null)
+                                {
+                                    <p>-</p>
+                                }
+                                else
+                                {
+                                    <p>@item.BilledDate.Value.ToShortDateString()</p>
+                                }
+                            </td>
+                            <td align="center">
+                                @if (item.PaymentDate == null)
+                                {
+                                    <p>-</p>
+                                }
+                                else
+                                {
+                                    <p>@item.PaymentDate.Value.ToShortDateString()</p>
+                                }
+                            </td>
+                            <td align="center">
+                                <a onclick="showInPopup('@Url.Action("BillNote","Notes",new {id = item.Id}, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-usd"></i> Bill</a>
+                            </td>
+                            <td align="center">
+                                <a onclick="showInPopup('@Url.Action("PaymentReceived","Notes",new {id = item.Id}, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-usd"></i> Received</a>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

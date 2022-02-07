@@ -8560,19 +8560,36 @@ namespace KyoS.Web.Controllers
             return Json(text = _translateHelper.TranslateText("es", "en", text));            
         }
 
-        [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> NotStartedNotes()
-        {           
-          return View(await _context.Workdays_Clients.Include(wc => wc.Note)
-                                                     .Include(wc => wc.NoteP)
-                                                     .Include(wc => wc.Facilitator)
-                                                     .Include(wc => wc.Client)
-                                                     .Include(wc => wc.Workday)
-                                                     .ThenInclude(w => w.Week)
-                                                     .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+        [Authorize(Roles = "Facilitator, Mannager")]
+        public async Task<IActionResult> NotStartedNotes(string name = "", int id = 0)
+        {
+            if (name != string.Empty && id != 0)
+            {
+                return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+                                                           .Include(wc => wc.NoteP)
+                                                           .Include(wc => wc.Facilitator)
+                                                           .Include(wc => wc.Client)
+                                                           .Include(wc => wc.Workday)
+                                                           .ThenInclude(w => w.Week)
+                                                           .Where(wc => (wc.Facilitator.Name == name
+                                                                      && wc.Workday.Week.Id == id
                                                                       && wc.Note == null && wc.NoteP == null && wc.Present == true
                                                                       && wc.Workday.Service == ServiceType.PSR))
-                                                     .ToListAsync());                        
+                                                           .ToListAsync());
+            }
+            else
+            { 
+                return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+                                                           .Include(wc => wc.NoteP)
+                                                           .Include(wc => wc.Facilitator)
+                                                           .Include(wc => wc.Client)
+                                                           .Include(wc => wc.Workday)
+                                                           .ThenInclude(w => w.Week)
+                                                           .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                                      && wc.Note == null && wc.NoteP == null && wc.Present == true
+                                                                      && wc.Workday.Service == ServiceType.PSR))
+                                                           .ToListAsync());
+            }
         }
 
         [Authorize(Roles = "Facilitator")]

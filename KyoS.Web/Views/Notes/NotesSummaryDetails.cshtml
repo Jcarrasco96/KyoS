@@ -63,26 +63,35 @@
                                             </tr>
                                             @foreach (var facilitator in item.Clinic.Facilitators.OrderByDescending(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id)).Count()))
                                             {
-                                                <tr>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => facilitator.Name)
-                                                    </td>
-                                                    <td align="center">
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => facilitator.Name)
+                                                </td>
+                                                <td align="center">
+                                                    @if (@facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Note == null && wc.NoteP == null && wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).Count() > 0)
+                                                    {
+                                                        <a asp-controller="Notes" asp-action="NotStartedNotes" asp-route-name="@facilitator.Name" asp-route-id="@item.Id" class="btn btn-danger" target="_blank">
+                                                            @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Note == null && wc.NoteP == null && wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).Count()
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
                                                         @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Note == null && wc.NoteP == null && wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).Count()
-                                                    </td>
-                                                    <td align="center">
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id  && ((wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Edition) || (wc.NoteP != null && wc.NoteP.Status == KyoS.Common.Enums.NoteStatus.Edition)) && wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).Count()
-                                                    </td>
-                                                    <td align="center">
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && ((wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Pending) || (wc.NoteP != null && wc.NoteP.Status == KyoS.Common.Enums.NoteStatus.Pending)) && wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).Count()
-                                                    </td>
-                                                    <td align="center">
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && ((wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Approved) || (wc.NoteP != null && wc.NoteP.Status == KyoS.Common.Enums.NoteStatus.Approved)) && wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).Count()
-                                                    </td>
-                                                    <td align="center">
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == false && wc.Workday.Week.Id == item.Id && wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).Count()
-                                                    </td>
-                                                </tr>
+                                                    }
+                                                </td>
+                                                <td align="center">
+                                                    @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && ((wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Edition) || (wc.NoteP != null && wc.NoteP.Status == KyoS.Common.Enums.NoteStatus.Edition)) && wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).Count()
+                                                </td>
+                                                <td align="center">
+                                                    @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && ((wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Pending) || (wc.NoteP != null && wc.NoteP.Status == KyoS.Common.Enums.NoteStatus.Pending)) && wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).Count()
+                                                </td>
+                                                <td align="center">
+                                                    @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && ((wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Approved) || (wc.NoteP != null && wc.NoteP.Status == KyoS.Common.Enums.NoteStatus.Approved)) && wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).Count()
+                                                </td>
+                                                <td align="center">
+                                                    @facilitator.Workdays_Clients.Where(wc => (wc.Present == false && wc.Workday.Week.Id == item.Id && wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).Count()
+                                                </td>
+                                            </tr>
                                             }
                                         </table>
                                     </div>
