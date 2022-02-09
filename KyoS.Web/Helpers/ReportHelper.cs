@@ -2260,6 +2260,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Present", typeof(bool));
             dt.Columns.Add("FacilitatorId", typeof(int));
             dt.Columns.Add("CauseOfNotPresent", typeof(string));
+            dt.Columns.Add("GroupSize", typeof(int));
 
             dt.Rows.Add(new object[]
                                         {
@@ -2269,7 +2270,8 @@ namespace KyoS.Web.Helpers
                                             workdayClient.Session,
                                             workdayClient.Present,
                                             workdayClient.Facilitator.Id,
-                                            workdayClient.CauseOfNotPresent
+                                            workdayClient.CauseOfNotPresent,
+                                            (workdayClient.GroupSize != null) ? workdayClient.GroupSize : 0
                                         });
 
             return dt;
@@ -2290,6 +2292,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Present", typeof(bool));
             dt.Columns.Add("FacilitatorId", typeof(int));
             dt.Columns.Add("CauseOfNotPresent", typeof(string));
+            dt.Columns.Add("GroupSize", typeof(int));
 
             foreach (Workday_Client item in listWorkdayClient)
             {
@@ -2301,7 +2304,8 @@ namespace KyoS.Web.Helpers
                                             item.ClientName,
                                             item.Present,
                                             item.Facilitator.Id,
-                                            item.CauseOfNotPresent
+                                            item.CauseOfNotPresent,
+                                            (item.GroupSize != null) ? item.GroupSize : 0
                                         });
             }
 
@@ -2565,7 +2569,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("UnableToDetermine", typeof(bool));
             dt.Columns.Add("Setting", typeof(string));
             dt.Columns.Add("MTPId", typeof(int));
-            dt.Columns.Add("Schema", typeof(int));
+            dt.Columns.Add("Schema", typeof(int));            
 
             dt.Rows.Add(new object[]
                                         {
@@ -2615,7 +2619,7 @@ namespace KyoS.Web.Helpers
                                             note.UnableToDetermine,
                                             note.Setting,
                                             note.MTPId,
-                                            note.Schema
+                                            note.Schema                                            
             });
 
             return dt;

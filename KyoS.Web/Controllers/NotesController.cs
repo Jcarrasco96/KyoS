@@ -503,7 +503,7 @@ namespace KyoS.Web.Controllers
                     Schema = note.Schema,
                     PlanNote = note.PlanNote,
                     Status = note.Status,
-
+                    
                     OrientedX3 = note.OrientedX3,
                     NotTime = note.NotTime,
                     NotPlace = note.NotPlace,
@@ -658,7 +658,7 @@ namespace KyoS.Web.Controllers
                     noteEntity.Decompensating = (form["Progress"] == "Decompensating") ? true : false;
                     noteEntity.UnableToDetermine = (form["Progress"] == "Unable") ? true : false;
                     noteEntity.Setting = workday_Client.Client.MTPs.FirstOrDefault().Setting;
-
+                    
                     //vinculo el mtp activo del cliente a la nota que se creará
                     Workday_Client workday_client = await _context.Workdays_Clients
                                                                   .Include(wd => wd.Client)

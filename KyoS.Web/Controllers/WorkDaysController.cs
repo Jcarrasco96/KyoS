@@ -296,7 +296,8 @@ namespace KyoS.Web.Controllers
                                                 Client = client,
                                                 Facilitator = client.Group.Facilitator,
                                                 Session = client.Group.Meridian,
-                                                Present = true
+                                                Present = true,
+                                                GroupSize = client.Group.Clients.Count()
                                             };
                                             _context.Add(workday_client);
                                         }
@@ -904,7 +905,8 @@ namespace KyoS.Web.Controllers
                                                 Client = client,
                                                 Facilitator = client.Group.Facilitator,
                                                 Session = client.Group.Meridian,
-                                                Present = true
+                                                Present = true,
+                                                GroupSize = client.Group.Clients.Count()
                                             };
                                             _context.Add(workday_client);
                                         }

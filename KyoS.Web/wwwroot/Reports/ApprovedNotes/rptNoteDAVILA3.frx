@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="11/22/2021 13:29:15" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="02/09/2022 17:13:18" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3C0+ZGX3AinMcNwH4vy2ecA==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u38TxA7q8k349EJgXgXI7tUw==">
       <TableDataSource Name="Themes1" Alias="Themes2" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -19,7 +19,7 @@
         <Column Name="SupervisorId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3sTiEtqpETfR7VxyCvhmBPQ==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3blfHev4AFMqyIuzDspwWbg==">
       <TableDataSource Name="Themes2" Alias="Themes3" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -37,7 +37,7 @@
         <Column Name="SupervisorId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3Eeq7UKzAdze0WiuKF/E5dw==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3hCiCUrF6gOmnBWYD3WzLUA==">
       <TableDataSource Name="Notes" DataType="System.Int32" Enabled="true" TableName="Notes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="PlanNote" DataType="System.String"/>
@@ -175,6 +175,9 @@
         <Column Name="Present" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="FacilitatorId" DataType="System.Int32"/>
         <Column Name="CauseOfNotPresent" DataType="System.String"/>
+        <Column Name="BilledDate" DataType="System.DateTime"/>
+        <Column Name="PaymentDate" DataType="System.DateTime"/>
+        <Column Name="GroupSize" DataType="System.Int32"/>
       </TableDataSource>
       <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
         <Column Name="Id" Enabled="false" DataType="System.Int32"/>
@@ -196,10 +199,10 @@
       <PictureObject Name="Picture1" Left="340.2" Top="7.45" Width="98.28" Height="28.35" SizeMode="Normal" ImageFormat="Png" Image="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"/>
       <TextObject Name="Text1" Left="122.85" Top="37.25" Width="538.65" Height="18.9" Text="DAILY PROGRESS NOTE - PSYCHOSOCIAL REHABILITATION ON SITE" HorzAlign="Center" Font="Times New Roman, 11pt, style=Bold"/>
       <TableObject Name="Table1" Left="7.45" Top="62.15" Width="765.45" Height="56.7">
-        <TableColumn Name="Column1" Width="217.35"/>
-        <TableColumn Name="Column2" Width="179.55"/>
-        <TableColumn Name="Column4" Width="179.55"/>
-        <TableColumn Name="Column3" Width="189"/>
+        <TableColumn Name="Column1" Width="189"/>
+        <TableColumn Name="Column2" Width="189"/>
+        <TableColumn Name="Column4" Width="189"/>
+        <TableColumn Name="Column3" Width="198.45"/>
         <TableRow Name="Row1">
           <TableCell Name="Cell1" Border.Lines="All" Text="SERVICE DAY/DATE:" HorzAlign="Right" Font="Times New Roman, 10pt, style=Bold"/>
           <TableCell Name="Cell2" Border.Lines="All" Text="[datenote]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" ColSpan="2"/>
@@ -214,13 +217,13 @@
         </TableRow>
         <TableRow Name="Row3">
           <TableCell Name="Cell11" Border.Lines="All" Text="Session Number/units" HorzAlign="Right" Font="Times New Roman, 10pt, style=Bold"/>
-          <TableCell Name="Cell12" Border.Lines="All" Text="Session 1:4 Units" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold, Italic"/>
-          <TableCell Name="Cell16" Border.Lines="All" Text="Session 2:4 Units" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold, Italic"/>
-          <TableCell Name="Cell13" Border.Lines="All" Text="Session 3:4 Units" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold, Italic"/>
+          <TableCell Name="Cell12" Border.Lines="All" Text="Session 1:4 Units | Group size: [IIf([Workdays_Clients.GroupSize] == 0,&quot;&quot;,[Workdays_Clients.GroupSize])]" Padding="0, 1, 0, 1" HorzAlign="Center" Font="Times New Roman, 9pt, style=Bold, Italic"/>
+          <TableCell Name="Cell16" Border.Lines="All" Text="Session 2:4 Units | Group size: [IIf([Workdays_Clients.GroupSize] == 0,&quot;&quot;,[Workdays_Clients.GroupSize])]" Padding="0, 1, 0, 1" HorzAlign="Center" Font="Times New Roman, 9pt, style=Bold, Italic"/>
+          <TableCell Name="Cell13" Border.Lines="All" Text="Session 3:4 Units | Group size: [IIf([Workdays_Clients.GroupSize] == 0,&quot;&quot;,[Workdays_Clients.GroupSize])]" Padding="0, 1, 0, 1" HorzAlign="Center" Font="Times New Roman, 9pt, style=Bold, Italic"/>
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data1" Top="126.85" Width="778.3" Height="567">
+    <DataBand Name="Data1" Top="126.97" Width="778.3" Height="567">
       <TableObject Name="Table2" Left="7.45" Top="2.45" Width="765.45" Height="18.9">
         <TableColumn Name="Column5" Width="400.05"/>
         <TableColumn Name="Column6" Width="173.25"/>
@@ -357,7 +360,7 @@
       <TextObject Name="Text45" Left="9.45" Top="473.05" Width="763.56" Height="37.8" CanGrow="true" CanShrink="true" CanBreak="false" Text="&lt;b&gt;Facilitator Intervention:&lt;/b&gt; [Notes_Activities.AnswerFacilitator]" Padding="0, 0, 0, 0" HorzAlign="Justify" Font="Times New Roman, 10pt" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
       <TextObject Name="Text46" Left="9.45" Top="523.3" Width="763.56" Height="37.8" CanGrow="true" CanShrink="true" CanBreak="false" Text="&lt;b&gt;Progress towards meeting goals and objectives: (Significant progress, Moderate Progress, Minimal Progress, No Progress, Regression, Decompensating, Unable to determine at this time) Please explain:&lt;/b&gt; [Notes.PlanNote]" Padding="0, 0, 0, 0" HorzAlign="Justify" Font="Times New Roman, 10pt" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="697.85" Width="778.3" Height="107.95">
+    <PageFooterBand Name="PageFooter1" Top="698.1" Width="778.3" Height="107.95">
       <LineObject Name="Line5" Left="774.9" Top="45.8" Width="-766.55"/>
       <LineObject Name="Line6" Left="774.9" Top="87.6" Width="-766.55"/>
       <TextObject Name="Text47" Left="9.45" Top="45.8" Width="236.25" Height="18.9" Text="Group Facilitator / Credentials" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>

@@ -75,7 +75,14 @@
                                     <td align="right">
                                         <a asp-action="EditNote" asp-route-id="@day_client.Id" asp-route-origin="2" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
                                         <a asp-action="Present" asp-route-id="@day_client.Id" asp-route-origin="2" class="btn btn-danger" title="Present or not present"><i class="glyphicon glyphicon-remove"></i></a>
-                                        <a asp-action="FinishEditingP" class="btn btn-success" asp-route-id="@day_client.Id" asp-route-origin="2" title="Finish edition of note"><i class="glyphicon glyphicon-ok"></i></a>
+                                        @if (day_client.Note != null)
+                                        {
+                                            <a asp-action="FinishEditing" class="btn btn-success" asp-route-id="@day_client.Id"  asp-route-origin="2" title="Finish edition of note"><i class="glyphicon glyphicon-ok"></i></a>
+                                        }
+                                        @if (day_client.NoteP != null)
+                                        {
+                                            <a asp-action="FinishEditingP" class="btn btn-success" asp-route-id="@day_client.Id"  asp-route-origin="2" title="Finish edition of note"><i class="glyphicon glyphicon-ok"></i></a>
+                                        }                                        
                                     </td>
                                 </tr>
                             }
@@ -100,9 +107,9 @@
                                         </span>
                                     </td>
                                     <td align="right">
-                                        <a asp-action="EditNote" asp-route-id="@day_client.Id" asp-route-origin="2" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
+                                        <a asp-action="EditNote" asp-route-id="@day_client.Id" asp-route-origin="2" class="btn btn-warning disabled" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
                                         <a asp-action="Present" asp-route-id="@day_client.Id" asp-route-origin="2" class="btn btn-primary" title="Present or not present"><i class="glyphicon glyphicon-ok"></i></a>
-                                        <a asp-action="FinishEditing" class="btn btn-success" asp-route-id="@day_client.Id" title="Finish edition of note"><i class="glyphicon glyphicon-ok"></i></a>
+                                        <a asp-action="FinishEditing" class="btn btn-success disabled" asp-route-id="@day_client.Id" title="Finish edition of note"><i class="glyphicon glyphicon-ok"></i></a>
                                     </td>
                                 </tr>
                             }

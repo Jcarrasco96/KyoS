@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220209205323_ModifyNoteEntity7")]
+    partial class ModifyNoteEntity7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1440,6 +1442,9 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Faulty")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("GroupSize")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Guarded")
                         .HasColumnType("bit");
 
@@ -2364,9 +2369,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("FacilitatorId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("GroupSize")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("PaymentDate")
