@@ -277,7 +277,7 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Create", new { id = 2 });
+                    return RedirectToAction("Create3", new { id = 2 });
                 }
             }
             return View(themeViewModel);
