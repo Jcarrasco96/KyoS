@@ -23,7 +23,7 @@ namespace KyoS.Web.Controllers
             _converterHelper = converterHelper;           
         }
         
-        [Authorize(Roles = "Admin, Mannager, Facilitator")]
+        [Authorize(Roles = "Admin, Mannager, Facilitator, CaseMannager")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -40,6 +40,14 @@ namespace KyoS.Web.Controllers
                                           .ToListAsync());
             }
 
+            if (User.IsInRole("CaseMannager"))
+            {
+                return View(await _context.Incidents
+                                          .Include(i => i.UserCreatedBy)
+                                          .ThenInclude(u => u.Clinic)
+                                          .OrderByDescending(i => i.CreatedDate)
+                                          .ToListAsync());
+            }
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);

@@ -151,6 +151,20 @@ namespace KyoS.Web.Helpers
             };
         }
 
+        public async Task<CaseMannagerEntity> ToCaseMannagerEntity(CaseMannagerViewModel model, string signaturePath, bool isNew)
+        {
+            return new CaseMannagerEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
+                Codigo = model.Codigo,
+                Name = model.Name,
+                Status = StatusUtils.GetStatusByIndex(model.IdStatus),
+                LinkedUser = _userHelper.GetUserNameById(model.IdUser),
+                SignaturePath = signaturePath
+            };
+        }
+
         public FacilitatorViewModel ToFacilitatorViewModel(FacilitatorEntity facilitatorEntity, int idClinic)
         {
             return new FacilitatorViewModel
@@ -165,6 +179,23 @@ namespace KyoS.Web.Helpers
                 IdUser = _userHelper.GetIdByUserName(facilitatorEntity.LinkedUser),
                 UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, idClinic),
                 SignaturePath = facilitatorEntity.SignaturePath
+            };
+        }
+
+        public CaseMannagerViewModel ToCaseMannagerViewModel(CaseMannagerEntity caseMannagerEntity, int idClinic)
+        {
+            return new CaseMannagerViewModel
+            {
+                Id = caseMannagerEntity.Id,
+                Name = caseMannagerEntity.Name,
+                Codigo = caseMannagerEntity.Codigo,
+                IdClinic = caseMannagerEntity.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics(),
+                IdStatus = (caseMannagerEntity.Status == StatusType.Open) ? 1 : 2,
+                StatusList = _combosHelper.GetComboClientStatus(),
+                IdUser = _userHelper.GetIdByUserName(caseMannagerEntity.LinkedUser),
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseMannager, idClinic),
+                SignaturePath = caseMannagerEntity.SignaturePath
             };
         }
 

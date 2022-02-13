@@ -322,6 +322,10 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction(nameof(Index), "Incidents");
             }
+            if (User.IsInRole("CaseMannager"))
+            {
+                return RedirectToAction(nameof(Index), "Incidents");
+            }
             return View();
         }
     }

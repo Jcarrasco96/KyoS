@@ -5,6 +5,8 @@
         Admin,
         Mannager,
         Supervisor,
-        Facilitator           
+        Facilitator,
+        CaseMannager,
+        SupervisorTCM
     }
 }

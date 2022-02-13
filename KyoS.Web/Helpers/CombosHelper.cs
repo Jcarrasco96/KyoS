@@ -24,8 +24,10 @@ namespace KyoS.Web.Helpers
             List<SelectListItem> list = new List<SelectListItem>
                                 { new SelectListItem { Text = UserType.Facilitator.ToString(), Value = "1"},
                                   new SelectListItem { Text = UserType.Supervisor.ToString(), Value = "2"},
-                                  new SelectListItem { Text = UserType.Mannager.ToString(), Value = "3"},
-                                  new SelectListItem { Text = UserType.Admin.ToString(), Value = "4"}
+                                  new SelectListItem { Text = UserType.CaseMannager.ToString(), Value = "3"},
+                                  new SelectListItem { Text = UserType.SupervisorTCM.ToString(), Value = "4"},
+                                  new SelectListItem { Text = UserType.Mannager.ToString(), Value = "5"},
+                                  new SelectListItem { Text = UserType.Admin.ToString(), Value = "6"}
             };
             
             list.Insert(0, new SelectListItem

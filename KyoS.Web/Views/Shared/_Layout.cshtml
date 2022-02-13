@@ -194,7 +194,7 @@
                         <li><a asp-area="" asp-controller="Settings" asp-action="Index">Settings</a></li>
                     }
                     else
-                if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
+               if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -203,6 +203,8 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
                                 <li>@Html.ActionLink("Facilitators", "Index", "Facilitators")</li>
+                                <li>@Html.ActionLink("CaseMannager", "Index", "CaseMannager")</li>
+                                <li>@Html.ActionLink("Supervisor_TCM", "Index", "SupervisorTCM")</li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Health Insurances", "Index", "HealthInsurances")</li>
                                 <li role="separator" class="divider"></li>
@@ -251,7 +253,7 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
+               if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -284,7 +286,7 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                    if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
+                   if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -318,38 +320,76 @@
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
+                    else
+                    if (User.Identity.IsAuthenticated && (User.IsInRole("CaseMannager")))
+                    {
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Cases <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Not Started", "Index", "Activities")</li>
+                                <li>@Html.ActionLink("Open", "ActivitiesPerWeek", "Activities")</li>
+                                <li>@Html.ActionLink("Closed", "ActivitiesPerGroupWeek", "Activities")</li>
+                            </ul>
+                        </li>
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Services Plan <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Started", "Index", "Notes")</li>
+                                <li>@Html.ActionLink("Closed", "IndividualNotes", "Notes")</li>
+                            </ul>
+                        </li>
+
+                        <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                    }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li>
-                            <a class="">
-                                @if (User.IsInRole("Facilitator"))
-                                {
-                                    <span class="label label-default">
-                                        Facilitator
-                                    </span>
-                                }
-                                @if (User.IsInRole("Supervisor"))
-                                {
-                                    <span class="label label-default">
-                                        Supervisor
-                                    </span>
-                                }
-                                @if (User.IsInRole("Mannager"))
-                                {
-                                    <span class="label label-default">
-                                        Manager
-                                    </span>
-                                }
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <span class="label label-default">
-                                        Administrator
-                                    </span>
-                                }
-                            </a>
-                        </li>
+                    <li>
+                        <a class="">
+                            @if (User.IsInRole("Facilitator"))
+                            {
+                                <span class="label label-default">
+                                    Facilitator
+                                </span>
+                            }
+                            @if (User.IsInRole("CaseMannager"))
+                            {
+                                <span class="label label-default">
+                                    Case Mannager
+                                </span>
+                            }
+                            @if (User.IsInRole("Supervisor"))
+                            {
+                                <span class="label label-default">
+                                    Supervisor
+                                </span>
+                            }
+                            @if (User.IsInRole("SupervisorTCM"))
+                            {
+                                <span class="label label-default">
+                                    Supervisor TCM
+                                </span>
+                            }
+                            @if (User.IsInRole("Mannager"))
+                            {
+                                <span class="label label-default">
+                                    Manager
+                                </span>
+                            }
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <span class="label label-default">
+                                    Administrator
+                                </span>
+                            }
+                        </a>
+                    </li>
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
