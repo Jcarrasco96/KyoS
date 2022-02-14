@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Mannager, Supervisor")]
+    [Authorize(Roles = "Manager, Supervisor")]
     public class ThemesController : Controller
     {
         private readonly DataContext _context;

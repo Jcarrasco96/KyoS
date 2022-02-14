@@ -102,6 +102,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\CaseMannager\Create.cshtml" />
+    <None Include="Views\CaseMannager\Edit.cshtml" />
+    <None Include="Views\CaseMannager\Index.cshtml" />
+    <None Include="Views\CaseMannager\_CaseMannager.cshtml" />
+    <None Include="Views\SupervisorTCM\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="wwwroot\Reports\Groups\rptGroup.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

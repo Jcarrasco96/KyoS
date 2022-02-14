@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220209050924_erwe")]
+    partial class erwe
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2170,7 +2172,8 @@ namespace KyoS.Web.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -2402,9 +2405,6 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("FacilitatorId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("GroupSize")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("PaymentDate")
                         .HasColumnType("datetime2");
 
@@ -2583,7 +2583,7 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.CaseMannagerEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
-                        .WithMany("CaseManagers")
+                        .WithMany()
                         .HasForeignKey("ClinicId");
 
                     b.Navigation("Clinic");
@@ -3186,8 +3186,6 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClinicEntity", b =>
                 {
-                    b.Navigation("CaseManagers");
-
                     b.Navigation("Clients");
 
                     b.Navigation("Facilitators");
