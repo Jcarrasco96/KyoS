@@ -23,7 +23,7 @@ namespace KyoS.Web.Controllers
             _converterHelper = converterHelper;           
         }
         
-        [Authorize(Roles = "Admin, Mannager, Facilitator, CaseMannager")]
+        [Authorize(Roles = "Admin, Manager, Facilitator, CaseManager")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -40,7 +40,7 @@ namespace KyoS.Web.Controllers
                                           .ToListAsync());
             }
 
-            if (User.IsInRole("CaseMannager"))
+            if (User.IsInRole("CaseManager"))
             {
                 return View(await _context.Incidents
                                           .Include(i => i.UserCreatedBy)
@@ -56,7 +56,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
                 return View(await _context.Incidents
                                           .Include(i => i.UserCreatedBy)
@@ -79,7 +79,7 @@ namespace KyoS.Web.Controllers
             return View(null);
         }
         
-        [Authorize(Roles = "Admin, Mannager, Facilitator")]
+        [Authorize(Roles = "Admin, Manager, Facilitator")]
         public IActionResult Create(int id = 0)
         {
             if (id == 1)
@@ -172,7 +172,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Admin, Mannager, Facilitator")]
+        [Authorize(Roles = "Admin, Manager, Facilitator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -193,7 +193,7 @@ namespace KyoS.Web.Controllers
             return View(incidentViewModel);
         }
 
-        [Authorize(Roles = "Admin, Mannager, Facilitator")]
+        [Authorize(Roles = "Admin, Manager, Facilitator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, IncidentViewModel incidentViewModel)

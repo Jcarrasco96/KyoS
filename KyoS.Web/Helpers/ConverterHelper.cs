@@ -194,7 +194,7 @@ namespace KyoS.Web.Helpers
                 IdStatus = (caseMannagerEntity.Status == StatusType.Open) ? 1 : 2,
                 StatusList = _combosHelper.GetComboClientStatus(),
                 IdUser = _userHelper.GetIdByUserName(caseMannagerEntity.LinkedUser),
-                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseMannager, idClinic),
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, idClinic),
                 SignaturePath = caseMannagerEntity.SignaturePath
             };
         }

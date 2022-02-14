@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Mannager, Supervisor")]
+    [Authorize(Roles = "Admin, Manager, Supervisor")]
     public class ClientsController : Controller
     {
         private readonly DataContext _context;

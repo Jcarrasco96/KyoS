@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.CaseMannagerEntity>
 @{
-    ViewData["Title"] = "CaseMannager";
+    ViewData["Title"] = "Case Managers";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,12 +11,12 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">CaseMannager</li>
+        <li class="active">Case Managers</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Case Mannager</a>
+    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Case Manager</a>
 </p>
 
 <div class="row">
@@ -28,7 +28,7 @@
                     <i class="icon-remove"></i>
                 </button>
                 <strong class="red">
-                    Error. It is not posible delete the Case Mannager
+                    Error. It is not posible delete the case manager
                 </strong>
             </div>
         }
@@ -36,7 +36,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">CaseMannager</h3>
+                <h3 class="panel-title">Case Managers</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">

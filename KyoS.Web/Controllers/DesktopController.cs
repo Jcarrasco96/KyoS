@@ -199,7 +199,7 @@ namespace KyoS.Web.Controllers
                 notes_review_list = notes_review_list.Where(wc => wc.Messages.Count() > 0).ToList();
                 ViewBag.GroupNotesWithReview = notes_review_list.Count.ToString();
             }
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
                 UserEntity user_logged = await _context.Users
                                                        .Include(u => u.Clinic)
@@ -322,7 +322,7 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction(nameof(Index), "Incidents");
             }
-            if (User.IsInRole("CaseMannager"))
+            if (User.IsInRole("CaseManager"))
             {
                 return RedirectToAction(nameof(Index), "Incidents");
             }

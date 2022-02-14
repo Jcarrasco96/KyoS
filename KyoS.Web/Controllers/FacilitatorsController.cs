@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Mannager")]
+    [Authorize(Roles = "Admin, Manager")]
     public class FacilitatorsController : Controller
     {
         private readonly DataContext _context;

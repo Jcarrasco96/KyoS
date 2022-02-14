@@ -194,7 +194,7 @@
                         <li><a asp-area="" asp-controller="Settings" asp-action="Index">Settings</a></li>
                     }
                     else
-               if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
+               if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -203,8 +203,8 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
                                 <li>@Html.ActionLink("Facilitators", "Index", "Facilitators")</li>
-                                <li>@Html.ActionLink("CaseMannager", "Index", "CaseMannager")</li>
-                                <li>@Html.ActionLink("Supervisor_TCM", "Index", "SupervisorTCM")</li>
+                                <li>@Html.ActionLink("Case Managers", "Index", "CaseMannager")</li>
+                                <li>@Html.ActionLink("TCM Supervisors", "Index", "SupervisorTCM")</li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Health Insurances", "Index", "HealthInsurances")</li>
                                 <li role="separator" class="divider"></li>
@@ -321,7 +321,7 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                    if (User.Identity.IsAuthenticated && (User.IsInRole("CaseMannager")))
+                    if (User.Identity.IsAuthenticated && (User.IsInRole("CaseManager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -358,10 +358,10 @@
                                     Facilitator
                                 </span>
                             }
-                            @if (User.IsInRole("CaseMannager"))
+                            @if (User.IsInRole("CaseManager"))
                             {
                                 <span class="label label-default">
-                                    Case Mannager
+                                    Case Manager
                                 </span>
                             }
                             @if (User.IsInRole("Supervisor"))
@@ -373,10 +373,10 @@
                             @if (User.IsInRole("SupervisorTCM"))
                             {
                                 <span class="label label-default">
-                                    Supervisor TCM
+                                    TCM Supervisor
                                 </span>
                             }
-                            @if (User.IsInRole("Mannager"))
+                            @if (User.IsInRole("Manager"))
                             {
                                 <span class="label label-default">
                                     Manager

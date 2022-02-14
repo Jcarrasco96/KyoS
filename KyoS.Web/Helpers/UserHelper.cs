@@ -132,14 +132,14 @@ namespace KyoS.Web.Helpers
         {
             if (await this.IsUserInRoleAsync(user, UserType.Admin.ToString()))
                 await _userManager.RemoveFromRoleAsync(user, UserType.Admin.ToString());
-            if (await this.IsUserInRoleAsync(user, UserType.Mannager.ToString()))
-                await _userManager.RemoveFromRoleAsync(user, UserType.Mannager.ToString());
+            if (await this.IsUserInRoleAsync(user, UserType.Manager.ToString()))
+                await _userManager.RemoveFromRoleAsync(user, UserType.Manager.ToString());
             if (await this.IsUserInRoleAsync(user, UserType.Facilitator.ToString()))
                 await _userManager.RemoveFromRoleAsync(user, UserType.Facilitator.ToString());
             if (await this.IsUserInRoleAsync(user, UserType.Supervisor.ToString()))
                 await _userManager.RemoveFromRoleAsync(user, UserType.Supervisor.ToString());
-            if (await this.IsUserInRoleAsync(user, UserType.CaseMannager.ToString()))
-                await _userManager.RemoveFromRoleAsync(user, UserType.CaseMannager.ToString());
+            if (await this.IsUserInRoleAsync(user, UserType.CaseManager.ToString()))
+                await _userManager.RemoveFromRoleAsync(user, UserType.CaseManager.ToString());
             if (await this.IsUserInRoleAsync(user, UserType.SupervisorTCM.ToString()))
                 await _userManager.RemoveFromRoleAsync(user, UserType.SupervisorTCM.ToString());
             return await _userManager.DeleteAsync(user);

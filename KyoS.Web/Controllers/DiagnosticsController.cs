@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Mannager")]
+    [Authorize(Roles = "Admin, Manager")]
     public class DiagnosticsController : Controller
     {
         private readonly DataContext _context;
@@ -23,6 +23,7 @@ namespace KyoS.Web.Controllers
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
         }
+        
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete

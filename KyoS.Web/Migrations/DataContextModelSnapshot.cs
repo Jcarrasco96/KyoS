@@ -2583,7 +2583,7 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.CaseMannagerEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
-                        .WithMany()
+                        .WithMany("CaseManagers")
                         .HasForeignKey("ClinicId");
 
                     b.Navigation("Clinic");
@@ -3186,6 +3186,8 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClinicEntity", b =>
                 {
+                    b.Navigation("CaseManagers");
+
                     b.Navigation("Clients");
 
                     b.Navigation("Facilitators");

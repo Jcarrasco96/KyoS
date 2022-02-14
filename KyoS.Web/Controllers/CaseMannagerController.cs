@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Mannager")]
+    [Authorize(Roles = "Admin, Manager")]
     public class CaseMannagerController : Controller
     {
         private readonly DataContext _context;
@@ -28,6 +28,7 @@ namespace KyoS.Web.Controllers
             _converterHelper = converterHelper;
             _imageHelper = imageHelper;
         }
+        
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -52,6 +53,7 @@ namespace KyoS.Web.Controllers
                     return View(await _context.CaseMannager.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
             }
         }
+        
         public IActionResult Create(int id = 0)
         {
             if (id == 1)
@@ -90,7 +92,7 @@ namespace KyoS.Web.Controllers
                         Clinics = list,
                         IdClinic = clinic.Id,
                         StatusList = _combosHelper.GetComboClientStatus(),
-                        UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseMannager, user_logged.Clinic.Id)
+                        UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, user_logged.Clinic.Id)
                     };
                     return View(model);
                 }
@@ -101,7 +103,7 @@ namespace KyoS.Web.Controllers
                 Clinics = _combosHelper.GetComboClinics(),
                 IdStatus = 1,
                 StatusList = _combosHelper.GetComboClientStatus(),
-                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseMannager, 0)
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, 0)
             };
             return View(model);
         }
