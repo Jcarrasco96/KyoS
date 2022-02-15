@@ -4103,6 +4103,7 @@ namespace KyoS.Web.Controllers
 
                                                    .Include(wc => wc.Workday)
                                                    .ThenInclude(w => w.Workdays_Activities_Facilitators)
+                                                   .ThenInclude(waf => waf.Facilitator)
                                                    
                                                    .FirstOrDefault(wc => (wc.Id == id && wc.NoteP.Status == NoteStatus.Approved));
             
