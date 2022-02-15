@@ -215,39 +215,71 @@
                                         <ul class="dropdown-menu">
                                             <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
                                             <li><a asp-area="" asp-controller="Facilitators" asp-action="Index">Facilitators</a></li>
+                                            <li role="separator" class="divider"></li>
+                                            <li>@Html.ActionLink("Topics / Themes", "Index", "Themes")</li>
                                         </ul>
                                     </li>
                                 }
                                 else
                                 {
                                     <li class="dropdown-submenu disabled">
-                                        <a class="test" tabindex="-1" href="#">Mental Health</a>                                        
+                                        <a class="test" tabindex="-1" href="#">Mental Health</a>
                                     </li>
                                 }
-                                
-                                <li>@Html.ActionLink("Case Managers", "Index", "CaseMannager")</li>
-                                <li>@Html.ActionLink("TCM Supervisors", "Index", "SupervisorTCM")</li>
+
+                                @if (setting != null && setting.TCMClinic)
+                                {
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">TCM</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("Case Managers", "Index", "CaseMannager")</li>
+                                            <li>@Html.ActionLink("TCM Supervisors", "Index", "SupervisorTCM")</li>
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="dropdown-submenu disabled">
+                                        <a class="test" tabindex="-1" href="#">TCM</a>
+                                    </li>
+                                }
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Health Insurances", "Index", "HealthInsurances")</li>
                                 <li role="separator" class="divider"></li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Groups</a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("PSR", "Index", "Groups")</li>
-                                        <li>@Html.ActionLink("Group", "Group", "Groups")</li>
-                                    </ul>
-                                </li>
+                                @if (setting != null && setting.MentalHealthClinic)
+                                {
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Groups</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("PSR", "Index", "Groups")</li>
+                                            <li>@Html.ActionLink("Group", "Group", "Groups")</li>
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="dropdown-submenu disabled">
+                                        <a class="test" tabindex="-1" href="#">Groups</a>
+                                    </li>
+                                }
                                 <li role="separator" class="divider"></li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Workdays</a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("PSR", "Index", "Workdays")</li>
-                                        <li>@Html.ActionLink("Individual", "IndividualWorkdays", "Workdays")</li>
-                                        <li>@Html.ActionLink("Group", "GroupWorkdays", "Workdays")</li>
-                                    </ul>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Topics / Themes", "Index", "Themes")</li>
+                                @if (setting != null && setting.MentalHealthClinic)
+                                {
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Workdays</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("PSR", "Index", "Workdays")</li>
+                                            <li>@Html.ActionLink("Individual", "IndividualWorkdays", "Workdays")</li>
+                                            <li>@Html.ActionLink("Group", "GroupWorkdays", "Workdays")</li>
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="dropdown-submenu disabled">
+                                        <a class="test" tabindex="-1" href="#">Workdays</a>
+                                    </li>
+                                }                               
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Templates DOC.", "Index", "TemplatesDOC")</li>
                             </ul>
@@ -266,7 +298,15 @@
                                 <li>@Html.ActionLink("Emergency Contacts", "Index", "EmergencyContacts")</li>
                                 <li>@Html.ActionLink("Referreds", "Index", "Referreds")</li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
+                                @if (setting != null && setting.MentalHealthClinic)
+                                {
+                                    <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">MTPs</a></li>
+                                }
+
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Diagnostics", "Index", "Diagnostics")</li>
                             </ul>
