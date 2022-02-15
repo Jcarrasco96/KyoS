@@ -1,13 +1,20 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using KyoS.Web.Data.Entities
+@using KyoS.Web.Data
 @inject UserManager<UserEntity> UserManager
+@inject DataContext DataContext
 @{
     UserEntity user = await UserManager.GetUserAsync(User);
+
     var name = string.Empty;
     if (user != null)
     {
         name = user.FullName;
-    }    
+    }
+
+    SettingEntity setting = null;
+    if(user.Clinic != null)
+        setting = DataContext.Settings.FirstOrDefault(s => s.Clinic.Id == user.Clinic.Id);
  }
 
 <!DOCTYPE html>
@@ -194,15 +201,30 @@
                         <li><a asp-area="" asp-controller="Settings" asp-action="Index">Settings</a></li>
                     }
                     else
-               if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
+                    if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 General <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
-                                <li>@Html.ActionLink("Facilitators", "Index", "Facilitators")</li>
+                                @if (setting != null && setting.MentalHealthClinic)
+                                {
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Mental Health</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
+                                            <li><a asp-area="" asp-controller="Facilitators" asp-action="Index">Facilitators</a></li>
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="dropdown-submenu disabled">
+                                        <a class="test" tabindex="-1" href="#">Mental Health</a>                                        
+                                    </li>
+                                }
+                                
                                 <li>@Html.ActionLink("Case Managers", "Index", "CaseMannager")</li>
                                 <li>@Html.ActionLink("TCM Supervisors", "Index", "SupervisorTCM")</li>
                                 <li role="separator" class="divider"></li>
@@ -253,7 +275,7 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-               if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
+                    if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -285,8 +307,8 @@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
-                    else
-                   if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
+                        else
+                            if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -320,8 +342,8 @@
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
-                    else
-                    if (User.Identity.IsAuthenticated && (User.IsInRole("CaseManager")))
+                            else
+                                if (User.Identity.IsAuthenticated && (User.IsInRole("CaseManager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -390,31 +412,31 @@
                             }
                         </a>
                     </li>
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
-                                @*<div class="user-info">*@
-                                <span class="name pdd-right-5">@name</span>
-                                @*<i class="ti-angle-down font-size-10"></i>*@
-                                <span class="caret"></span>
-                                @*</div>*@
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="#">
-                                        <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
-                                        <span>Inbox</span>
-                                    </a>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                                <li>
-                                    <a asp-area="" asp-controller="Account" asp-action="Logout">
-                                        <i class="icon-off" style="padding-right: 10px !important;"></i>
-                                        <span>Logout</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                    <li class="class=" dropdown open"">
+                        <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                            @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
+                            @*<div class="user-info">*@
+                            <span class="name pdd-right-5">@name</span>
+                            @*<i class="ti-angle-down font-size-10"></i>*@
+                            <span class="caret"></span>
+                            @*</div>*@
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#">
+                                    <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
+                                    <span>Inbox</span>
+                                </a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a asp-area="" asp-controller="Account" asp-action="Logout">
+                                    <i class="icon-off" style="padding-right: 10px !important;"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     }
                 </ul>
             </div>

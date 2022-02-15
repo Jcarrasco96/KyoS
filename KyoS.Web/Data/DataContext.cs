@@ -14,7 +14,7 @@ namespace KyoS.Web.Data
         public DbSet<ClientEntity> Clients { get; set; }
         public DbSet<SupervisorEntity> Supervisors { get; set; }
         public DbSet<FacilitatorEntity> Facilitators { get; set; }
-        public DbSet<CaseMannagerEntity> CaseMannager { get; set; }
+        public DbSet<CaseMannagerEntity> CaseManagers { get; set; }
         public DbSet<ThemeEntity> Themes { get; set; }
         public DbSet<ActivityEntity> Activities { get; set; }
         public DbSet<NotePrototypeEntity> NotesPrototypes { get; set; }
