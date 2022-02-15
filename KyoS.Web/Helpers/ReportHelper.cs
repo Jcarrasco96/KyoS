@@ -1822,7 +1822,10 @@ namespace KyoS.Web.Helpers
             }
 
             i = 0;
-            foreach (Workday_Activity_Facilitator item in workdayClient.Workday.Workdays_Activities_Facilitators)
+            List<Workday_Activity_Facilitator> waf = workdayClient.Workday.Workdays_Activities_Facilitators
+                                                                          .Where(waf => waf.Facilitator.Id == workdayClient.Facilitator.Id)
+                                                                          .ToList();
+            foreach (Workday_Activity_Facilitator item in waf)
             {
                 if (i == 0)
                 {
