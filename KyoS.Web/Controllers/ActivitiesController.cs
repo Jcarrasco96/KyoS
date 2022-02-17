@@ -35,7 +35,13 @@ namespace KyoS.Web.Controllers
         {
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
 
             if (user_logged.Clinic.Schema == SchemaType.Schema3)
             {
@@ -62,8 +68,14 @@ namespace KyoS.Web.Controllers
         {
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            
+
+            if (!user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
             if (user_logged.Clinic == null)
                 return View(await _context.Activities
                                             .Include(a => a.Theme)
@@ -419,9 +431,16 @@ namespace KyoS.Web.Controllers
         {
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);           
+
             if (user_logged.Clinic == null)
                 return View(null);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
 
             return View(await _context.Weeks
 
@@ -444,9 +463,16 @@ namespace KyoS.Web.Controllers
         {
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
             if (user_logged.Clinic == null)
                 return View(null);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
 
             return View(await _context.Weeks
 
@@ -474,11 +500,16 @@ namespace KyoS.Web.Controllers
             List<SelectListItem> list3 = new List<SelectListItem>();
             List<SelectListItem> list4 = new List<SelectListItem>();
             Workday_Activity_FacilitatorViewModel model;
-            UserEntity user_logged;
+            
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
-            user_logged = await _context.Users
-                                        .Include(u => u.Clinic)
-                                        .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
 
             WorkdayEntity workday = await _context.Workdays.Include(wd => wd.Week)
                                                            .ThenInclude(w => w.Clinic)
@@ -780,11 +811,16 @@ namespace KyoS.Web.Controllers
             IEnumerable<SelectListItem> list4;
 
             Workday_Activity_Facilitator3ViewModel model;
-            UserEntity user_logged;
+            
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
-            user_logged = await _context.Users
-                                        .Include(u => u.Clinic)
-                                        .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
 
             WorkdayEntity workday = await _context.Workdays
                                                   
@@ -1049,11 +1085,16 @@ namespace KyoS.Web.Controllers
             List<SelectListItem> list3 = new List<SelectListItem>();
             
             Workday_Activity_Facilitator4ViewModel model;
-            UserEntity user_logged;
 
-            user_logged = await _context.Users
-                                        .Include(u => u.Clinic)
-                                        .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
 
             WorkdayEntity workday = await _context.Workdays.Include(wd => wd.Week)
                                                            .ThenInclude(w => w.Clinic)
@@ -1336,11 +1377,16 @@ namespace KyoS.Web.Controllers
         {
             List<ThemeEntity> topics;
             Workday_Activity_FacilitatorGroupViewModel model;
-            UserEntity user_logged;
+            
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
-            user_logged = await _context.Users
-                                        .Include(u => u.Clinic)
-                                        .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
 
             WorkdayEntity workday = await _context.Workdays
 

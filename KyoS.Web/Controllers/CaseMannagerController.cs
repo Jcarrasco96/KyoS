@@ -31,6 +31,18 @@ namespace KyoS.Web.Controllers
         
         public async Task<IActionResult> Index(int idError = 0)
         {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
             if (idError == 1) //Imposible to delete
             {
                 ViewBag.Delete = "N";
@@ -40,11 +52,6 @@ namespace KyoS.Web.Controllers
                 return View(await _context.CaseManagers.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
             else
             {
-                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-                if (user_logged.Clinic == null)
-                    return View(await _context.CaseManagers.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
-
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
                 if (clinic != null)
                     return View(await _context.CaseManagers.Include(f => f.Clinic)
