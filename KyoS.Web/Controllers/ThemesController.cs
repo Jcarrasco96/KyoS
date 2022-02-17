@@ -33,23 +33,23 @@ namespace KyoS.Web.Controllers
                 ViewBag.Delete = "N";
             }
 
-            UserEntity user_logged = await _context.Users
-                                                   .Include(u => u.Clinic)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
             if (user_logged.Clinic.Schema == SchemaType.Schema3)
             {
                 return RedirectToAction(nameof(Index3), "Themes");
             }
                      
-            if (user_logged.Clinic == null)
-            { 
-                return View(await _context.Themes
-                                          .Include(t => t.Clinic)
-                                          .Where(t => t.Day != null)
-                                          .OrderBy(t => t.Day).ToListAsync());
-            }
-
             ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
             if (clinic != null)
                 return View(await _context.Themes

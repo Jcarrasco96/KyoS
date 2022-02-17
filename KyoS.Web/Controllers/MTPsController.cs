@@ -32,45 +32,40 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> Index(int idError = 0)
         {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
             if (idError == 1) //Imposible to delete
             {
                 ViewBag.Delete = "N";
             }
-
-            if (User.IsInRole("Admin"))
+            
+            ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+            if (clinic != null)
             {
                 return View(await _context.MTPs
-                                          .Include(m => m.Client)
-                                          .ThenInclude(c => c.Clinic)
-                                          .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+                                            .Include(m => m.Client)
+                                            .ThenInclude(c => c.Clinic)
+                                            .Where(m => m.Client.Clinic.Id == clinic.Id)
+                                            .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
             }
             else
-            {
-                UserEntity user_logged = await _context.Users
-                                                       .Include(u => u.Clinic)
-                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-                if (user_logged.Clinic == null)
-                    return View(null);
-
-                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
-                if (clinic != null)
-                {
-
-                    return View(await _context.MTPs
-                                              .Include(m => m.Client)
-                                              .ThenInclude(c => c.Clinic)
-                                              .Where(m => m.Client.Clinic.Id == clinic.Id)
-                                              .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
-                }
-                else
-                    return View(null);
-            }
+                return View(null);            
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public IActionResult Create(int id = 0, int idClient = 0)
         {
             if (id == 1)
@@ -145,7 +140,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> Create(MTPViewModel mtpViewModel, IFormCollection form)
         {
             if (ModelState.IsValid)
@@ -213,7 +208,7 @@ namespace KyoS.Web.Controllers
             return View(mtpViewModel);
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -250,7 +245,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -285,7 +280,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> Edit(int id, MTPViewModel mtpViewModel, IFormCollection form)
         {
             if (id != mtpViewModel.Id)
@@ -358,7 +353,7 @@ namespace KyoS.Web.Controllers
             return View(mtpViewModel);
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Manager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Manager, Facilitator")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -386,7 +381,7 @@ namespace KyoS.Web.Controllers
             return View(mtpEntity);
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> UpdateGoals(int? id, int idError = 0)
         {
             if (id == null)
@@ -410,7 +405,7 @@ namespace KyoS.Web.Controllers
             return View(mtpEntity);
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> CreateGoal(int? id)
         {
             if (id == null)
@@ -439,7 +434,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> CreateGoal(int id, GoalViewModel model)
         {
             if (id != model.Id)
@@ -496,7 +491,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> DeleteGoal(int? id)
         {
             if (id == null)
@@ -523,7 +518,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("UpdateGoals", new { id = goalEntity.MTP.Id });
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> EditGoal(int? id)
         {
             if (id == null)
@@ -544,7 +539,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> EditGoal(int id, GoalViewModel model)
         {
             if (id != model.Id)
@@ -601,7 +596,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> UpdateObjectives(int? id, int idError = 0)
         {
             if (id == null)
@@ -626,7 +621,7 @@ namespace KyoS.Web.Controllers
             return View(goalEntity);
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> CreateObjective(int? id)
         {
             if (id == null)
@@ -662,7 +657,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> CreateObjective(ObjectiveViewModel model, IFormCollection form)
         {
             if (ModelState.IsValid)
@@ -751,7 +746,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> DeleteObjective(int? id)
         {
             if (id == null)
@@ -778,7 +773,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("UpdateObjectives", new { objectiveEntity.Goal.Id });
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> EditObjective(int? id)
         {
             if (id == null)
@@ -813,7 +808,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> EditObjective(ObjectiveViewModel model, IFormCollection form)
         {
             GoalEntity goal = await _context.Goals

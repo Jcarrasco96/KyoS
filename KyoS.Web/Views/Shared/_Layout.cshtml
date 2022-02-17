@@ -1,13 +1,20 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using KyoS.Web.Data.Entities
+@using KyoS.Web.Data
 @inject UserManager<UserEntity> UserManager
+@inject DataContext DataContext
 @{
     UserEntity user = await UserManager.GetUserAsync(User);
+
     var name = string.Empty;
     if (user != null)
     {
         name = user.FullName;
-    }    
+    }
+
+    SettingEntity setting = null;
+    if(user.Clinic != null)
+        setting = DataContext.Settings.FirstOrDefault(s => s.Clinic.Id == user.Clinic.Id);
  }
 
 <!DOCTYPE html>
@@ -19,7 +26,7 @@
     <link href="~/css/font-awesome.css" rel="stylesheet">
     <link href="~/css/font-awesome.min.css" rel="stylesheet">
     <link href="~/css/font-awesome-ie7.css" rel="stylesheet">
-    <link href="~/css/font-awesome-ie7.min.css" rel="stylesheet">
+    <link href="~/css/font-awesome-ie7.min.css" rel="stylesheet">    
     <link href="~/css/site.css" rel="stylesheet" />
 
     <style>
@@ -63,77 +70,76 @@
                 float: none;
             }
 
-            .dropdown-submenu.pull-left > .dropdown-menu {
-                left: -100%;
-                margin-left: 10px;
-                -webkit-border-radius: 6px 0 6px 6px;
-                -moz-border-radius: 6px 0 6px 6px;
-                border-radius: 6px 0 6px 6px;
-            }
-
-            .center-div {
-                width: 300px;
-                height: 300px;
-                position: absolute;
-                left: 50%;
-                top: 70%;
-                margin-left: -150px;
-                margin-top: -150px;
-            }
-
-            .spinner {
-                position: fixed;
-                z-index: 999;
-                height: 100%;
-                width: 100%;
-                top: 0;
-                left: 0;
-                background-color: black;
-                filter: alpha(opacity=90);
-                opacity: 0.9;
-                -moz-opacity: 0.8;
-            }
-
-            .loader {
-                margin: auto;
-                border: 8px solid #f3f3f3;
-                border-radius: 50%;
-                border-top: 8px solid #15a0ec;
-                border-bottom: 8px solid #15a0ec;
-                width: 35px;
-                height: 35px;
-                -webkit-animation: spin 1.2s linear infinite;
-                animation: spin 1.2s linear infinite;
-            }
-
-            .inner-div {
-                background-color: black;
-                border-radius: 15px;
-                margin: auto;
-                padding: 2%;
-                width: 100px;
-            }
-
-            @@-webkit-keyframes spin {
-                0% {
-                    -webkit-transform: rotate(0deg);
+                .dropdown-submenu.pull-left > .dropdown-menu {
+                    left: -100%;
+                    margin-left: 10px;
+                    -webkit-border-radius: 6px 0 6px 6px;
+                    -moz-border-radius: 6px 0 6px 6px;
+                    border-radius: 6px 0 6px 6px;
                 }
 
-                100% {
-                    -webkit-transform: rotate(360deg);
-                }
+        .center-div {
+            width: 300px;
+            height: 300px;
+            position: absolute;
+            left: 50%;
+            top: 70%;
+            margin-left: -150px;
+            margin-top: -150px;
+        }
+
+        .spinner {
+            position: fixed;
+            z-index: 999;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background-color: black;
+            filter: alpha(opacity=90);
+            opacity: 0.9;
+            -moz-opacity: 0.8;
+        }
+
+        .loader {
+            margin: auto;
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #15a0ec;
+            border-bottom: 8px solid #15a0ec;
+            width: 35px;
+            height: 35px;
+            -webkit-animation: spin 1.2s linear infinite;
+            animation: spin 1.2s linear infinite;
+        }
+
+        .inner-div {
+            background-color: black;
+            border-radius: 15px;
+            margin: auto;
+            padding: 2%;
+            width: 100px;
+        }
+
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
             }
 
-            @@keyframes spin {
-                0% {
-                    transform: rotate(0deg);
-                }
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
 
-                100% {
-                    transform: rotate(360deg);
-                }
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
             }
 
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 
     <environment include="Development">
@@ -194,38 +200,85 @@
                         <li><a asp-area="" asp-controller="Settings" asp-action="Index">Settings</a></li>
                     }
                     else
-               if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
+                    if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 General <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
-                                <li>@Html.ActionLink("Facilitators", "Index", "Facilitators")</li>
-                                <li>@Html.ActionLink("Case Managers", "Index", "CaseMannager")</li>
-                                <li>@Html.ActionLink("TCM Supervisors", "Index", "SupervisorTCM")</li>
+                                @if (setting != null && setting.MentalHealthClinic)
+                                {
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Mental Health</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
+                                            <li><a asp-area="" asp-controller="Facilitators" asp-action="Index">Facilitators</a></li>
+                                            <li role="separator" class="divider"></li>
+                                            <li>@Html.ActionLink("Topics / Themes", "Index", "Themes")</li>
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="dropdown-submenu disabled">
+                                        <a class="test" tabindex="-1" href="#">Mental Health</a>
+                                    </li>
+                                }
+
+                                @if (setting != null && setting.TCMClinic)
+                                {
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">TCM</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("Case Managers", "Index", "CaseMannager")</li>
+                                            <li>@Html.ActionLink("TCM Supervisors", "Index", "SupervisorTCM")</li>
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="dropdown-submenu disabled">
+                                        <a class="test" tabindex="-1" href="#">TCM</a>
+                                    </li>
+                                }
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Health Insurances", "Index", "HealthInsurances")</li>
                                 <li role="separator" class="divider"></li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Groups</a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("PSR", "Index", "Groups")</li>
-                                        <li>@Html.ActionLink("Group", "Group", "Groups")</li>
-                                    </ul>
-                                </li>
+                                @if (setting != null && setting.MentalHealthClinic)
+                                {
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Groups</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("PSR", "Index", "Groups")</li>
+                                            <li>@Html.ActionLink("Group", "Group", "Groups")</li>
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="dropdown-submenu disabled">
+                                        <a class="test" tabindex="-1" href="#">Groups</a>
+                                    </li>
+                                }
                                 <li role="separator" class="divider"></li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Workdays</a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("PSR", "Index", "Workdays")</li>
-                                        <li>@Html.ActionLink("Individual", "IndividualWorkdays", "Workdays")</li>
-                                        <li>@Html.ActionLink("Group", "GroupWorkdays", "Workdays")</li>
-                                    </ul>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Topics / Themes", "Index", "Themes")</li>
+                                @if (setting != null && setting.MentalHealthClinic)
+                                {
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Workdays</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("PSR", "Index", "Workdays")</li>
+                                            <li>@Html.ActionLink("Individual", "IndividualWorkdays", "Workdays")</li>
+                                            <li>@Html.ActionLink("Group", "GroupWorkdays", "Workdays")</li>
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="dropdown-submenu disabled">
+                                        <a class="test" tabindex="-1" href="#">Workdays</a>
+                                    </li>
+                                }                               
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Templates DOC.", "Index", "TemplatesDOC")</li>
                             </ul>
@@ -235,25 +288,89 @@
                                 Clinic Management <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
-                                <li>@Html.ActionLink("Units per Insurances / Clients", "UnitsAvailability", "HealthInsurances")</li>
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Clients</a></li>
+                                }
+
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("Units per Insurances / Clients", "UnitsAvailability", "HealthInsurances")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Units per Insurances / Clients</a></li>
+                                }
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Doctors", "Index", "Doctors")</li>
-                                <li>@Html.ActionLink("Psychiatrists", "Index", "Psychiatrists")</li>
-                                <li>@Html.ActionLink("Legal Guardians", "Index", "LegalGuardians")</li>
-                                <li>@Html.ActionLink("Emergency Contacts", "Index", "EmergencyContacts")</li>
-                                <li>@Html.ActionLink("Referreds", "Index", "Referreds")</li>
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("Doctors", "Index", "Doctors")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Doctors</a></li>
+                                }
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("Psychiatrists", "Index", "Psychiatrists")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Psychiatrists</a></li>
+                                }
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("Legal Guardians", "Index", "LegalGuardians")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Legal Guardians</a></li>
+                                }
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("Emergency Contacts", "Index", "EmergencyContacts")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Emergency Contacts</a></li>
+                                }
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("Referreds", "Index", "Referreds")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Referreds</a></li>
+                                }                                
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
+                                @if (setting != null && setting.MentalHealthClinic)
+                                {
+                                    <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">MTPs</a></li>
+                                }
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Diagnostics", "Index", "Diagnostics")</li>
+                                @if (setting != null && setting.MentalHealthClinic)
+                                {
+                                    <li>@Html.ActionLink("Diagnostics", "Index", "Diagnostics")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Diagnostics</a></li>
+                                }
                             </ul>
                         </li>
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-               if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
+                    if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -285,8 +402,8 @@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
-                    else
-                   if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
+                        else
+                            if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -320,8 +437,8 @@
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
-                    else
-                    if (User.Identity.IsAuthenticated && (User.IsInRole("CaseManager")))
+                            else
+                                if (User.Identity.IsAuthenticated && (User.IsInRole("CaseManager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -390,31 +507,31 @@
                             }
                         </a>
                     </li>
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
-                                @*<div class="user-info">*@
-                                <span class="name pdd-right-5">@name</span>
-                                @*<i class="ti-angle-down font-size-10"></i>*@
-                                <span class="caret"></span>
-                                @*</div>*@
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="#">
-                                        <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
-                                        <span>Inbox</span>
-                                    </a>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                                <li>
-                                    <a asp-area="" asp-controller="Account" asp-action="Logout">
-                                        <i class="icon-off" style="padding-right: 10px !important;"></i>
-                                        <span>Logout</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                    <li class="class=" dropdown open"">
+                        <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                            @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
+                            @*<div class="user-info">*@
+                            <span class="name pdd-right-5">@name</span>
+                            @*<i class="ti-angle-down font-size-10"></i>*@
+                            <span class="caret"></span>
+                            @*</div>*@
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#">
+                                    <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
+                                    <span>Inbox</span>
+                                </a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a asp-area="" asp-controller="Account" asp-action="Logout">
+                                    <i class="icon-off" style="padding-right: 10px !important;"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     }
                 </ul>
             </div>
@@ -427,7 +544,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2021 - KyoS Notes</p>
+            <p>&copy; 2022 - KyoS Notes</p>
         </footer>
     </div>    
 
