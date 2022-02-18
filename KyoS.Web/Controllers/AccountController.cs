@@ -146,7 +146,7 @@ namespace KyoS.Web.Controllers
                         PhoneNumber = string.Empty,
                         Address = string.Empty,
                         Document = string.Empty,
-                        UserType = (model.RoleId == 1) ? UserType.Facilitator : (model.RoleId == 2) ? UserType.Supervisor : (model.RoleId == 3) ? UserType.CaseManager : (model.RoleId == 4) ? UserType.SupervisorTCM : (model.RoleId == 5) ? UserType.Manager : UserType.Admin,
+                        UserType = (model.RoleId == 1) ? UserType.Facilitator : (model.RoleId == 2) ? UserType.Supervisor : (model.RoleId == 3) ? UserType.CaseManager : (model.RoleId == 4) ? UserType.TCMsupervisor : (model.RoleId == 5) ? UserType.Manager : UserType.Admin,
                         Active = model.Active,
                         Clinic = (model.IdClinic != 0) ? _context.Clinics.FirstOrDefault(c => c.Id == model.IdClinic) : null                    
                     };
@@ -248,7 +248,7 @@ namespace KyoS.Web.Controllers
                 LastName = user.LastName,
                 Email = user.Email,
                 RoleId = (user.UserType == UserType.Facilitator) ? 1 : (user.UserType == UserType.Supervisor) ? 2 : (user.UserType == UserType.CaseManager) ? 3
-                                                                     : (user.UserType == UserType.SupervisorTCM) ? 4 : (user.UserType == UserType.Manager) ? 5
+                                                                     : (user.UserType == UserType.TCMsupervisor) ? 4 : (user.UserType == UserType.Manager) ? 5
                                                                      : (user.UserType == UserType.Admin) ? 6 : 0,
                 Roles = _combosHelper.GetComboRoles(),
                 IdClinic = (user.Clinic != null) ? user.Clinic.Id : 0,
@@ -275,7 +275,7 @@ namespace KyoS.Web.Controllers
                     user.PhoneNumber = string.Empty;
                     user.Address = string.Empty;
                     user.Document = string.Empty;
-                    user.UserType = (model.RoleId == 1) ? UserType.Facilitator : (model.RoleId == 2) ? UserType.Supervisor : (model.RoleId == 3) ? UserType.CaseManager : (model.RoleId == 4) ? UserType.SupervisorTCM : (model.RoleId == 5) ? UserType.Manager : UserType.Admin;
+                    user.UserType = (model.RoleId == 1) ? UserType.Facilitator : (model.RoleId == 2) ? UserType.Supervisor : (model.RoleId == 3) ? UserType.CaseManager : (model.RoleId == 4) ? UserType.TCMsupervisor : (model.RoleId == 5) ? UserType.Manager : UserType.Admin;
                     user.Active = model.Active;
                     user.Clinic = (model.IdClinic != 0) ? _context.Clinics.FirstOrDefault(c => c.Id == model.IdClinic) : null;
                     

@@ -106,7 +106,6 @@
     <None Include="Views\CaseMannager\Edit.cshtml" />
     <None Include="Views\CaseMannager\Index.cshtml" />
     <None Include="Views\CaseMannager\_CaseMannager.cshtml" />
-    <None Include="Views\SupervisorTCM\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
