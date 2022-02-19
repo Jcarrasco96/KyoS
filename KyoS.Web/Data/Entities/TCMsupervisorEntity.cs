@@ -25,8 +25,8 @@ namespace KyoS.Web.Data.Entities
         [Display(Name = "Signature")]
         public string SignaturePath { get; set; }
 
-        public ClinicEntity Clinic { get; set; }
+        public bool TCMActive { get; set; }
 
-        
+        public ClinicEntity Clinic { get; set; }
     }
 }

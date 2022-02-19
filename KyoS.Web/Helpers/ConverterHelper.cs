@@ -326,7 +326,7 @@ namespace KyoS.Web.Helpers
                 Clinics = _combosHelper.GetComboClinics(),
                 IdUser = _userHelper.GetIdByUserName(supervisorEntity.LinkedUser),
                 UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, idClinic),
-                SignaturePath = supervisorEntity.SignaturePath
+                SignaturePath = supervisorEntity.SignaturePath,
             };
         }
 
@@ -339,7 +339,8 @@ namespace KyoS.Web.Helpers
                 Code = model.Code,
                 LinkedUser = _userHelper.GetUserNameById(model.IdUser),
                 Name = model.Name,
-                SignaturePath = signaturePath
+                SignaturePath = signaturePath,
+                TCMActive = model.TCM_Active
             };
         }
 
@@ -355,7 +356,9 @@ namespace KyoS.Web.Helpers
                 IdUser = _userHelper.GetIdByUserName(atcmSupervisorEntity.LinkedUser),
                 LinkedUser = atcmSupervisorEntity.LinkedUser,
                 UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, idClinic),
-                SignaturePath = atcmSupervisorEntity.SignaturePath
+                SignaturePath = atcmSupervisorEntity.SignaturePath,
+                TCM_Active = atcmSupervisorEntity.TCMActive
+                
             };
         }
 

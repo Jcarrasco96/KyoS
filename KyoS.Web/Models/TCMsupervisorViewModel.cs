@@ -23,5 +23,8 @@ namespace KyoS.Web.Models
 
         [Display(Name = "Signature")]
         public IFormFile SignatureFile { get; set; }
+        
+        [Display(Name = "User Active")]
+        public bool TCM_Active { get; set; }
     }
 }

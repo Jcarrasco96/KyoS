@@ -205,7 +205,7 @@ namespace KyoS.Web.Controllers
                 {
                    tcmSupervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMsupervisor, 0);
                 }
-              
+                tcmSupervisorViewModel.TCM_Active = tcmSupervisorEntity.TCMActive;
             }
             else
                 tcmSupervisorViewModel = _converterHelper.ToTCMsupervisorViewModel(tcmSupervisorEntity, 0);
