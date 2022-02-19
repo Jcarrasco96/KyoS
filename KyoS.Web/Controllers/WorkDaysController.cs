@@ -38,12 +38,16 @@ namespace KyoS.Web.Controllers
                 ViewBag.Delete = "N";
             }
 
-            UserEntity user_logged = await _context.Users
-                                                   .Include(u => u.Clinic)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (user_logged.Clinic == null)
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
-                return RedirectToAction("Home/Error404");
+                return RedirectToAction("NotAuthorized", "Account");
             }
 
             return View(await _context.Weeks
@@ -59,11 +63,16 @@ namespace KyoS.Web.Controllers
                 ViewBag.Delete = "N";
             }
 
-            UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
-                                                         .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (user_logged.Clinic == null)
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
-                return RedirectToAction("Home/Error404");
+                return RedirectToAction("NotAuthorized", "Account");
             }
 
             return View(await _context.Weeks.Include(w => w.Days)
@@ -78,12 +87,16 @@ namespace KyoS.Web.Controllers
                 ViewBag.Delete = "N";
             }
 
-            UserEntity user_logged = await _context.Users
-                                                   .Include(u => u.Clinic)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (user_logged.Clinic == null)
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
-                return RedirectToAction("Home/Error404");
+                return RedirectToAction("NotAuthorized", "Account");
             }
 
             return View(await _context.Weeks
@@ -987,9 +1000,7 @@ namespace KyoS.Web.Controllers
             }
 
             return RedirectToAction(nameof(Index));
-        }
-
-        
+        }        
 
         #region Utils Functions     
         private bool VerifyFreeTimeOfFacilitator(int idFacilitator, ServiceType service, string session, DateTime date)

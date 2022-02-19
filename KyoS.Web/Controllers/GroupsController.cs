@@ -32,14 +32,18 @@ namespace KyoS.Web.Controllers
         }
 
         public async Task<IActionResult> Index()
-        {            
-            UserEntity user_logged = await _context.Users
-                                                   .Include(u => u.Clinic)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (user_logged.Clinic == null)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
-                return RedirectToAction("Home/Error404");
-            }    
+                return RedirectToAction("NotAuthorized", "Account");
+            }
 
             ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
             

@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220214151418_ModifySettingEntity1")]
+    partial class ModifySettingEntity1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2123,46 +2125,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("Supervisors");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMsupervisorEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ClinicId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Firm")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LinkedUser")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("SignaturePath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TCMActive")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClinicId");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("TCMsupervisors");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.TemplateDOCEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -3058,15 +3020,6 @@ namespace KyoS.Web.Migrations
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
                         .WithMany("Supervisors")
-                        .HasForeignKey("ClinicId");
-
-                    b.Navigation("Clinic");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMsupervisorEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
-                        .WithMany()
                         .HasForeignKey("ClinicId");
 
                     b.Navigation("Clinic");

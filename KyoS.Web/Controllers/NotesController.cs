@@ -56,16 +56,17 @@ namespace KyoS.Web.Controllers
                 ViewBag.FinishEdition = "Y";
             }
 
-            
-            UserEntity user_logged = await _context.Users
-                                                   .Include(u => u.Clinic)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (user_logged.Clinic == null)
+
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
-                return View(await _context.Weeks
-                                          .Include(w => w.Clinic)
-                                          .Include(w => w.Days)
-                                          .ThenInclude(d => d.Workdays_Clients).ToListAsync());
+                return RedirectToAction("NotAuthorized", "Account");
             }
 
             return View(await _context.Weeks
@@ -100,15 +101,16 @@ namespace KyoS.Web.Controllers
             }
 
 
-            UserEntity user_logged = await _context.Users
-                                                   .Include(u => u.Clinic)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (user_logged.Clinic == null)
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
-                return View(await _context.Weeks
-                                          .Include(w => w.Clinic)
-                                          .Include(w => w.Days)
-                                          .ThenInclude(d => d.Workdays_Clients).ToListAsync());
+                return RedirectToAction("NotAuthorized", "Account");
             }
 
             return View(await _context.Weeks
@@ -138,15 +140,16 @@ namespace KyoS.Web.Controllers
             }
 
 
-            UserEntity user_logged = await _context.Users
-                                                   .Include(u => u.Clinic)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (user_logged.Clinic == null)
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
-                return View(await _context.Weeks
-                                          .Include(w => w.Clinic)
-                                          .Include(w => w.Days)
-                                          .ThenInclude(d => d.Workdays_Clients).ToListAsync());
+                return RedirectToAction("NotAuthorized", "Account");
             }
 
             return View(await _context.Weeks
