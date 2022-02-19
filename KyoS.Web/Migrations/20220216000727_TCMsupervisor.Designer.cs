@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220216000727_TCMsupervisor")]
+    partial class TCMsupervisor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,7 +96,7 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("CaseManagers");
+                    b.ToTable("CaseMannager");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClassificationEntity", b =>
@@ -2072,12 +2074,6 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("MentalHealthClinic")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("TCMClinic")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Clinic_FK")
@@ -2149,9 +2145,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<string>("SignaturePath")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TCMActive")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

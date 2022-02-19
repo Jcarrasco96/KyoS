@@ -7,6 +7,6 @@
         Supervisor,
         Facilitator,
         CaseManager,
-        SupervisorTCM
+        TCMsupervisor
     }
 }

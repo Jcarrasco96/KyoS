@@ -326,7 +326,39 @@ namespace KyoS.Web.Helpers
                 Clinics = _combosHelper.GetComboClinics(),
                 IdUser = _userHelper.GetIdByUserName(supervisorEntity.LinkedUser),
                 UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, idClinic),
-                SignaturePath = supervisorEntity.SignaturePath
+                SignaturePath = supervisorEntity.SignaturePath,
+            };
+        }
+
+        public async Task<TCMsupervisorEntity> ToTCMsupervisorEntity(TCMsupervisorViewModel model, string signaturePath, bool isNew)
+        {
+            return new TCMsupervisorEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
+                Code = model.Code,
+                LinkedUser = _userHelper.GetUserNameById(model.IdUser),
+                Name = model.Name,
+                SignaturePath = signaturePath,
+                TCMActive = model.TCM_Active
+            };
+        }
+
+        public TCMsupervisorViewModel ToTCMsupervisorViewModel(TCMsupervisorEntity atcmSupervisorEntity, int idClinic)
+        {
+            return new TCMsupervisorViewModel
+            {
+                Id = atcmSupervisorEntity.Id,
+                Name = atcmSupervisorEntity.Name,
+                Code = atcmSupervisorEntity.Code,
+                IdClinic = atcmSupervisorEntity.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics(),
+                IdUser = _userHelper.GetIdByUserName(atcmSupervisorEntity.LinkedUser),
+                LinkedUser = atcmSupervisorEntity.LinkedUser,
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, idClinic),
+                SignaturePath = atcmSupervisorEntity.SignaturePath,
+                TCM_Active = atcmSupervisorEntity.TCMActive
+                
             };
         }
 
@@ -1049,6 +1081,8 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
             };
-        }        
+        }
+
+        
     }
 }
