@@ -4158,10 +4158,14 @@ namespace KyoS.Web.Controllers
             if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DAVILA")
             {
                 Stream stream = _reportHelper.DavilaIndNoteReportSchema1(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-                
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);                
             }
-            
+            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            {
+                Stream stream = _reportHelper.FloridaSocialHSIndNoteReportSchema1(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
             return null;
         }
 
