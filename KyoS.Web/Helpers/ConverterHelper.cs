@@ -330,9 +330,9 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMsupervisorEntity> ToTCMsupervisorEntity(TCMsupervisorViewModel model, string signaturePath, bool isNew)
+        public async Task<TCMSupervisorEntity> ToTCMsupervisorEntity(TCMSupervisorViewModel model, string signaturePath, bool isNew)
         {
-            return new TCMsupervisorEntity
+            return new TCMSupervisorEntity
             {
                 Id = isNew ? 0 : model.Id,
                 Clinic = await _context.Clinics.FindAsync(model.IdClinic),
@@ -340,25 +340,25 @@ namespace KyoS.Web.Helpers
                 LinkedUser = _userHelper.GetUserNameById(model.IdUser),
                 Name = model.Name,
                 SignaturePath = signaturePath,
-                TCMActive = model.TCM_Active
+                Status = StatusUtils.GetStatusByIndex(model.IdStatus),
             };
         }
 
-        public TCMsupervisorViewModel ToTCMsupervisorViewModel(TCMsupervisorEntity atcmSupervisorEntity, int idClinic)
+        public TCMSupervisorViewModel ToTCMsupervisorViewModel(TCMSupervisorEntity TCMSupervisorEntity, int idClinic)
         {
-            return new TCMsupervisorViewModel
+            return new TCMSupervisorViewModel
             {
-                Id = atcmSupervisorEntity.Id,
-                Name = atcmSupervisorEntity.Name,
-                Code = atcmSupervisorEntity.Code,
-                IdClinic = atcmSupervisorEntity.Clinic.Id,
+                Id = TCMSupervisorEntity.Id,
+                Name = TCMSupervisorEntity.Name,
+                Code = TCMSupervisorEntity.Code,
+                IdClinic = TCMSupervisorEntity.Clinic.Id,
                 Clinics = _combosHelper.GetComboClinics(),
-                IdUser = _userHelper.GetIdByUserName(atcmSupervisorEntity.LinkedUser),
-                LinkedUser = atcmSupervisorEntity.LinkedUser,
-                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, idClinic),
-                SignaturePath = atcmSupervisorEntity.SignaturePath,
-                TCM_Active = atcmSupervisorEntity.TCMActive
-                
+                IdUser = _userHelper.GetIdByUserName(TCMSupervisorEntity.LinkedUser),
+                LinkedUser = TCMSupervisorEntity.LinkedUser,
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, idClinic),
+                SignaturePath = TCMSupervisorEntity.SignaturePath,
+                IdStatus = (TCMSupervisorEntity.Status == StatusType.Open) ? 1 : 2,
+                StatusList = _combosHelper.GetComboClientStatus()
             };
         }
 

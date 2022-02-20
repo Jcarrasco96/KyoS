@@ -34,27 +34,28 @@
 
     <script type="text/javascript">
                         $(document).ready(function () {
-                            //$('#MyTable').DataTable({                                
-                            //    "pageLength": 100
-                            //});
-
-                            // Delete item
-                            @*var item_to_delete;
-
-                            $('.deleteItem').click((e) => {
-                                item_to_delete = e.currentTarget.dataset.id;
-                            });
-
-                            $("#btnYesDelete").click(function () {
-                                var url = "@Url.Action("Delete", "TemplatesDOC")";
-                                window.location.href = url + '/' + item_to_delete;
-                            });*@
+                            $('#MyTable').DataTable({                                
+                                "pageLength": 100
+                            });                            
                         });
 
                         var DeleteTemplate = function (idTem) {
                             var url = "@Url.Action("Delete", "TemplatesDOC")";
                             $.get(url, { id: idTem }, function (data) {
                                 $('#view-templates').html(data.html);
+
+                                $('#MyTable').DataTable({                                
+                                "pageLength": 100
+                                });
+                                // Delete item
+                                var item_to_delete;
+                                $('.deleteItem').click((e) => {
+                                    item_to_delete = e.currentTarget.dataset.id;
+                                });
+                                $("#btnYesDelete").click(function () {
+                                    var url = "@Url.Action("Delete", "TemplatesDOC")";
+                                    window.location.href = url + '/' + item_to_delete;
+                                });
                             });
                         }  
 
