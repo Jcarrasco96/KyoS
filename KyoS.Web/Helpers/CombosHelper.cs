@@ -25,7 +25,7 @@ namespace KyoS.Web.Helpers
                                 { new SelectListItem { Text = UserType.Facilitator.ToString(), Value = "1"},
                                   new SelectListItem { Text = UserType.Supervisor.ToString(), Value = "2"},
                                   new SelectListItem { Text = UserType.CaseManager.ToString(), Value = "3"},
-                                  new SelectListItem { Text = UserType.TCMsupervisor.ToString(), Value = "4"},
+                                  new SelectListItem { Text = UserType.TCMSupervisor.ToString(), Value = "4"},
                                   new SelectListItem { Text = UserType.Manager.ToString(), Value = "5"},
                                   new SelectListItem { Text = UserType.Admin.ToString(), Value = "6"}
             };

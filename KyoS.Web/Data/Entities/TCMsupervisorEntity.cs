@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using KyoS.Common.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class TCMsupervisorEntity
+    public class TCMSupervisorEntity
     {
         public int Id { get; set; }
 
@@ -25,7 +22,8 @@ namespace KyoS.Web.Data.Entities
         [Display(Name = "Signature")]
         public string SignaturePath { get; set; }
 
-        public bool TCMActive { get; set; }
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public StatusType Status { get; set; }
 
         public ClinicEntity Clinic { get; set; }
     }

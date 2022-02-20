@@ -13,7 +13,7 @@ namespace KyoS.Web.Data
         public DbSet<ClinicEntity> Clinics { get; set; }
         public DbSet<ClientEntity> Clients { get; set; }
         public DbSet<SupervisorEntity> Supervisors { get; set; }
-        public DbSet<TCMsupervisorEntity> TCMsupervisors { get; set; }
+        public DbSet<TCMSupervisorEntity> TCMSupervisors { get; set; }
         public DbSet<FacilitatorEntity> Facilitators { get; set; }
         public DbSet<CaseMannagerEntity> CaseManagers { get; set; }
         public DbSet<ThemeEntity> Themes { get; set; }
@@ -76,7 +76,7 @@ namespace KyoS.Web.Data
                         .HasIndex(s => s.Name)
                         .IsUnique();
             
-            modelBuilder.Entity<TCMsupervisorEntity>()
+            modelBuilder.Entity<TCMSupervisorEntity>()
                         .HasIndex(s => s.Name)
                         .IsUnique();
 

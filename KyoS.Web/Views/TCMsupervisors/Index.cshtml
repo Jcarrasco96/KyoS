@@ -1,6 +1,6 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMsupervisorEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMSupervisorEntity>
 @{
-    ViewData["Title"] = "TCMsupervisor";
+    ViewData["Title"] = "TCM Supervisor";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,22 +11,22 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">TCMsupervisor</li>
+        <li class="active">TCM Supervisor</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <p>
-    <a onclick="showInPopup('@Url.Action("Create", "TCMsupervisors", null, Context.Request.Scheme)','Create TCM Supervisor')" class="btn btn-primary" title="Create TCM Supervisors"><i class="glyphicon glyphicon-plus"></i>Create TCM Supervisors</a>
+    <a onclick="showInPopup('@Url.Action("Create", "TCMSupervisors", null, Context.Request.Scheme)','Add TCM Supervisor')" class="btn btn-primary" title="Create TCM Supervisors"><i class="glyphicon glyphicon-plus"></i> Create TCM Supervisor</a>
 </p>
 
 <div class="row">
-    <div id="view-tcmSupervisor">
-        @await Html.PartialAsync("_ViewTCMsupervisors", Model.OrderByDescending(d => d.Name).ToList())
+    <div id="view-templates">
+        @await Html.PartialAsync("_ViewTCMSupervisors", Model.ToList())
     </div>
 </div>
 
-<partial name="_DeleteDialog" />
 <partial name="_ModalPopup" />
+<partial name="_DeleteDialog" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -39,14 +39,14 @@
                                 "pageLength": 100
                             });
 
-                              // Delete item
+                            // Delete item
                             var item_to_delete;
-    
+
                             $('.deleteItem').click((e) => {
                               item_to_delete = e.currentTarget.dataset.id;
                             });
                             $("#btnYesDelete").click(function () {
-                                var url = "@Url.Action("Delete", "TCMsupervisors")";
+                                var url = "@Url.Action("Delete", "TCMSupervisors")";
                                 window.location.href = url + '/' + item_to_delete;
                             });
                         });
