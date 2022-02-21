@@ -157,8 +157,11 @@ namespace KyoS.Web.Controllers
                             });
                             tcmSupervisorViewModel.Clinics = list;
                             tcmSupervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, user_logged.Clinic.Id);
-                        }                        
-                        
+                        }
+
+                        tcmSupervisorViewModel.IdStatus = 1;
+                        tcmSupervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
+
                         ModelState.AddModelError(string.Empty, "You must select a linked user");
                         return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmSupervisorViewModel) });
                     }
