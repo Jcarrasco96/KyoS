@@ -1083,6 +1083,31 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        
+        public async Task<TCMServiceEntity> ToTCMServiceEntity(TCMServiceViewModel model, bool isNew)
+        {
+            return new TCMServiceEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
+                Name = model.Name,
+                Description = model.Description,
+                Code = model.Code
+            };
+        }
+
+        public TCMServiceViewModel ToTCMServiceViewModel(TCMServiceEntity TcmServiceEntity, int idClinic)
+        {
+            return new TCMServiceViewModel
+            {
+                Id = TcmServiceEntity.Id,
+                Name = TcmServiceEntity.Name,
+                Code = TcmServiceEntity.Code,
+                IdClinic = TcmServiceEntity.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics(),
+                Description = TcmServiceEntity.Description
+            };
+        }
+
+
     }
 }

@@ -64,5 +64,7 @@ namespace KyoS.Web.Helpers
         UnitsAvailabilityViewModel ToClientHealthInsuranceViewModel(Client_HealthInsurance model,  int idClinic);
         Task<SettingEntity> ToSettingEntity(SettingViewModel model, bool isNew, string userId);
         SettingViewModel ToSettingViewModel(SettingEntity model);
+        Task<TCMServiceEntity> ToTCMServiceEntity(TCMServiceViewModel model, bool isNew);
+        TCMServiceViewModel ToTCMServiceViewModel(TCMServiceEntity model, int idClinic);
     }
 }

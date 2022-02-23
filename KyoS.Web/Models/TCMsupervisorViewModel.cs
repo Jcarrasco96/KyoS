@@ -31,6 +31,6 @@ namespace KyoS.Web.Models
         [Display(Name = "Signature")]
         public IFormFile SignatureFile { get; set; }
 
-        
+    
     }
 }
