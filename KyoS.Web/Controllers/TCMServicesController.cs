@@ -280,5 +280,91 @@ namespace KyoS.Web.Controllers
 
             return View(tcmServiceViewModel);
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<IActionResult> Edit(int id, TCMServiceViewModel tcmServiceViewModel)
+        {
+            if (id != tcmServiceViewModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                /*if (tcmServiceViewModel.IdUser == "0")
+                {
+                    if (User.IsInRole("Admin"))
+                    {
+                        tcmServiceViewModel.Clinics = _combosHelper.GetComboClinics();
+                    }
+                    else
+                    {
+                        List<SelectListItem> list = new List<SelectListItem>();
+                        list.Insert(0, new SelectListItem
+                        {
+                            Text = user_logged.Clinic.Name,
+                            Value = $"{user_logged.Clinic.Id}"
+                        });
+                        tcmServiceViewModel.Clinics = list;
+                    }
+
+                    ModelState.AddModelError(string.Empty, "You must select a linked user");
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", tcmServiceViewModel) });
+                }*/
+
+                TCMServiceEntity tcmServiceEntity = await _converterHelper.ToTCMServiceEntity(tcmServiceViewModel, false);
+                _context.Update(tcmServiceEntity);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<TCMServiceEntity> tcmService = await _context.TCMServices
+
+                                                                            .Include(s => s.Clinic)
+
+                                                                            .OrderBy(f => f.Name)
+                                                                            .ToListAsync();
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMServices", tcmService) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the TCM service: {tcmServiceEntity.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            //recovery data
+            if (User.IsInRole("Admin"))
+            {
+                tcmServiceViewModel.Clinics = _combosHelper.GetComboClinics();
+            }
+            else
+            {
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Insert(0, new SelectListItem
+                {
+                    Text = user_logged.Clinic.Name,
+                    Value = $"{user_logged.Clinic.Id}"
+                });
+
+                tcmServiceViewModel.Clinics = list;
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", tcmServiceViewModel) });
+        }
     }
 }
