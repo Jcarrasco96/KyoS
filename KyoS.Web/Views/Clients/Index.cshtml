@@ -15,9 +15,12 @@
     </ul><!--.breadcrumb-->
 </div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Client</a>
-</p>
+@if (!User.IsInRole("Facilitator"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Client</a>
+    </p>
+}
 
 <div class="row">
     <div class="col-md-12">
@@ -46,7 +49,7 @@
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Therapy
+                                MH Therapy
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Birth's date
@@ -69,97 +72,115 @@
                         {
                             @if (item.Status == KyoS.Common.Enums.StatusType.Close)
                             {
-                            <tr style="color: darkgrey;">
-                            <td>
-                                @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
-                                {
-                                    <i class="glyphicon glyphicon-user btn-danger"></i>
-                                }
-                                @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
-                                {
-                                    <i class="glyphicon glyphicon-user btn-primary"></i>
-                                }
-                                &nbsp;
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.Service)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.DateOfBirth)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Clinic.Name)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.Code)
-                            </td>
-                            <td align="center">
-                                @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                                {
-                                    <span class="label label-success">
-                                        Open
-                                    </span>
-                                }
-                                @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                                {
-                                    <span class="label label-default">
-                                        Close
-                                    </span>
-                                }
-                            </td>
-                            <td align="right">
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
-                            </td>
-                        </tr>
+                                <tr style="color: darkgrey;">
+                                    <td>
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Service)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.DateOfBirth)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Clinic.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-success">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                        }
+                                    </td>
+                                    @if (!User.IsInRole("Facilitator"))
+                                    {
+                                        <td align="right">
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td align="right">
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>                                            
+                                        </td>
+                                    }
+                                </tr>
                             }
                             @if (item.Status == KyoS.Common.Enums.StatusType.Open)
                             {
-                            <tr>
-                                <td>
-                                    @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                <tr>
+                                    <td>
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Service)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.DateOfBirth)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Clinic.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-success">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                        }
+                                    </td>
+                                    @if (!User.IsInRole("Facilitator"))
                                     {
-                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        <td align="right">
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                        </td>
                                     }
-                                    @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    else
                                     {
-                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        <td align="right">
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                        </td>
                                     }
-                                    &nbsp;
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Service)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.DateOfBirth)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Clinic.Name)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Code)
-                                </td>
-                                <td align="center">
-                                    @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                                    {
-                                        <span class="label label-success">
-                                            Open
-                                        </span>
-                                    }
-                                    @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                                    {
-                                        <span class="label label-default">
-                                            Close
-                                        </span>
-                                    }
-                                </td>
-                                <td align="right">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
-                                </td>
-                            </tr>
+                                </tr>
                             }
                         }
                     </tbody>
@@ -181,7 +202,7 @@
                                 "order": [[0, "asc"]],
                                 "pageLength": 100
                             });
-                            
+
                             // Delete item
                             var item_to_delete;
 
@@ -191,7 +212,7 @@
 
                             $("#btnYesDelete").click(function () {
                                 var url = "@Url.Action("Delete", "Clients")";
-                                window.location.href = url + '/' + item_to_delete;                                  
+                                window.location.href = url + '/' + item_to_delete;
                             });
                         });
     </script>
