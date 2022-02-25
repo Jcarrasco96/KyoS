@@ -1,0 +1,9 @@
+﻿@model KyoS.Web.Models.ClientViewModel
+<div class="col-md-push-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">    
+    <div id="view-documents">
+        @await Html.PartialAsync("_ViewDocument", Model.DocumentTemp.OrderByDescending(d => d.CreatedOn))        
+    </div>
+</div>

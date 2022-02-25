@@ -1,0 +1,9 @@
+﻿@model KyoS.Web.Models.ClientViewModel
+<div class="col-md-push-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">    
+    <div id="view-diagnosis">
+        @await Html.PartialAsync("_ViewDiagnostic", Model.DiagnosticTemp)
+    </div>
+</div>
