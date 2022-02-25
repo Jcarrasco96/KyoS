@@ -60,6 +60,7 @@ namespace KyoS.Web.Data
         public DbSet<GroupNote_Activity> GroupNotes_Activities { get; set; }
         public DbSet<SettingEntity> Settings { get; set; }
         public DbSet<TCMServiceEntity> TCMServices { get; set; }
+        public DbSet<TCMStageEntity> TCMStages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -86,6 +87,10 @@ namespace KyoS.Web.Data
                         .IsUnique();
 
             modelBuilder.Entity<TCMServiceEntity>()
+                        .HasIndex(s => s.Name)
+                        .IsUnique();
+
+            modelBuilder.Entity<TCMStageEntity>()
                         .HasIndex(s => s.Name)
                         .IsUnique();
 

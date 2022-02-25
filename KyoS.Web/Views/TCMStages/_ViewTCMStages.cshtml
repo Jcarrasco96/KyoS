@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMServiceEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMStageEntity>
 
 @if (Model != null)
 {
@@ -10,7 +10,7 @@
                     <i class="icon-remove"></i>
                 </button>
                 <strong class="red">
-                    Error. It is not posible delete the TCM service
+                    Error. It is not posible delete the TCM Stage
                 </strong>
             </div>
         }
@@ -19,20 +19,23 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">TCM Services</h3>
+                <h3 class="panel-title">TCM Stages</h3>
             </div>
-            <div class="panel-body" id="view-tcmservices">
+            <div class="panel-body" id="view-tcmStage">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
                             <th class="col-md-2" align="center">
-                                @Html.DisplayNameFor(model => model.Code)
+                                Service Code
                             </th>
-                            <th class="col-md-3" align="center">
-                                @Html.DisplayNameFor(model => model.Name)
+                            <th class="col-md-2" align="center">
+                                Stage
                             </th>
                             <th class="col-md-5" align="center">
-                                @Html.DisplayNameFor(model => model.Description)
+                                Stage Name
+                            </th>
+                            <th class="col-md-1" align="center">
+                                Units
                             </th>
                             <th class="col-md-2" align="center">
                             </th>
@@ -43,17 +46,19 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Code)
+                                    @Html.DisplayFor(modelItem => item.tCMservice.Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ID_Etapa)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Description)
+                                    @Html.DisplayFor(modelItem => item.Units)
                                 </td>
                                 <td align="right">
-                                    <a onclick="showInPopup('@Url.Action("Create", "TCMStages", new { id = item.Id }, Context.Request.Scheme)','Add TCM Stage')" class="btn btn-success" title="Add Stages"><i class="glyphicon glyphicon-list"></i></a>
-                                    <a onclick="showInPopup('@Url.Action("Edit", "TCMServices", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Service')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <a onclick="showInPopup('@Url.Action("Edit", "TCMStages", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Stage')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
                                     <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
                                 </td>
                             </tr>
@@ -65,4 +70,5 @@
     </div>
 
 }
+
 

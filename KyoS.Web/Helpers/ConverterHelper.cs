@@ -1107,7 +1107,35 @@ namespace KyoS.Web.Helpers
                 Description = TcmServiceEntity.Description
             };
         }
+        public async Task<TCMStageEntity> ToTCMStageEntity(TCMStageViewModel model, bool isNew)
+        {
+            return new TCMStageEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                tCMservice = await _context.TCMServices.FindAsync(model.Id_TCMService),
+                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
+                Name = model.Name,
+                Description = model.Description,
+                Units = model.Units,
+                ID_Etapa = model.ID_Etapa
+            };
+        }
 
+        public TCMStageViewModel ToTCMStageViewModel(TCMStageEntity TcmStageEntity)
+        {
+            return new TCMStageViewModel
+            {
+                Id = TcmStageEntity.Id,
+                Name = TcmStageEntity.Name,
+                Id_TCMService = TcmStageEntity.tCMservice.Id,
+                ID_Etapa = TcmStageEntity.ID_Etapa,
+                IdClinic = TcmStageEntity.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics(),
+                Description = TcmStageEntity.Description,
+              //  tCMservice.Code = TcmStageEntity.tCMservice.Code
+
+            };
+        }
 
     }
 }

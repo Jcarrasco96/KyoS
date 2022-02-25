@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220224004403_add_TCMStage")]
+    partial class add_TCMStage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2155,45 +2157,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("TCMServices");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMStageEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ClinicId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ID_Etapa")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Units")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("tCMserviceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClinicId");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.HasIndex("tCMserviceId");
-
-                    b.ToTable("TCMStages");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMSupervisorEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -3141,21 +3104,6 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("ClinicId");
 
                     b.Navigation("Clinic");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMStageEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
-                        .WithMany()
-                        .HasForeignKey("ClinicId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.TCMServiceEntity", "tCMservice")
-                        .WithMany()
-                        .HasForeignKey("tCMserviceId");
-
-                    b.Navigation("Clinic");
-
-                    b.Navigation("tCMservice");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMSupervisorEntity", b =>
