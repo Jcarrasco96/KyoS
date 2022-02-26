@@ -67,7 +67,7 @@ namespace KyoS.Web.Controllers
                                         .ToListAsync());
             }
         }
-        public IActionResult Create(int id = 0)
+        public async Task<IActionResult> Create(int id = 0)
         {
             if (id == 1)
             {
@@ -84,8 +84,11 @@ namespace KyoS.Web.Controllers
                     ViewBag.Creado = "N";
                 }
             }
-
             TCMStageViewModel model;
+            //TCMServiceEntity tcmservice = await _context.TCMServices.FirstOrDefaultAsync(m => m.Id == id);
+            TCMServiceEntity tcmservice = await _context.TCMServices
+                                                .Include(g => g.Stages)
+                                                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (!User.IsInRole("Admin"))
             {
@@ -104,12 +107,12 @@ namespace KyoS.Web.Controllers
                     });
                     model = new TCMStageViewModel
                     {
+                        tCMservice = tcmservice,
                         Clinics = list,
                         IdClinic = clinic.Id,
-                        Id_TCMService = id,// revisar como es
-                        //StatusList = _combosHelper.GetComboClientStatus(),
-                        //UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, user_logged.Clinic.Id)
+                        Id_TCMService = id,
                     };
+ 
                     return View(model);
                 }
             }
@@ -118,10 +121,10 @@ namespace KyoS.Web.Controllers
             {
                 Clinics = _combosHelper.GetComboClinics(),
                 Id_TCMService = id,
-                //IdStatus = 1,
-                //StatusList = _combosHelper.GetComboClientStatus(),
-                //UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, 0)
+                tCMservice = tcmservice,
+                ID_Etapa = tcmservice.Stages.Count() + 1,
             };
+
             return View(model);
         }
         [HttpPost]
@@ -132,82 +135,27 @@ namespace KyoS.Web.Controllers
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
+            TCMStageEntity tcmStageEntity = await _converterHelper.ToTCMStageEntity(tcmStageViewModel, true);
+            TCMServiceEntity tcmservice = await _context.TCMServices
+                                               .Include(g => g.Stages)
+                                               .FirstOrDefaultAsync(m => m.Id == tcmStageViewModel.Id_TCMService);
             if (ModelState.IsValid)
             {
-                TCMStageEntity tcmStageEntity = await _context.TCMStages.FirstOrDefaultAsync(s => s.Name == tcmStageViewModel.Name);
-                if (tcmStageEntity == null)
+                
+                tcmStageEntity.tCMservice = tcmservice;
+                _context.Add(tcmStageEntity);
+                try
                 {
-                    /*if (tcmStageViewModel.IdUser == "0")
-                    {
-                        if (User.IsInRole("Admin"))
-                        {
-                            tcmSupervisorViewModel.Clinics = _combosHelper.GetComboClinics();
-                            tcmSupervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, 0);
-                        }
-                        else
-                        {
-                            List<SelectListItem> list = new List<SelectListItem>();
-                            list.Insert(0, new SelectListItem
-                            {
-                                Text = user_logged.Clinic.Name,
-                                Value = $"{user_logged.Clinic.Id}"
-                            });
-                            tcmSupervisorViewModel.Clinics = list;
-                            tcmSupervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, user_logged.Clinic.Id);
-                        }
-
-                        tcmSupervisorViewModel.IdStatus = 1;
-                        tcmSupervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
-
-                        ModelState.AddModelError(string.Empty, "You must select a linked user");
-                        return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmSupervisorViewModel) });
-                    }
-                    string path = string.Empty;
-                    if (tcmSupervisorViewModel.SignatureFile != null)
-                    {
-                        path = await _imageHelper.UploadImageAsync(tcmSupervisorViewModel.SignatureFile, "Signatures");
-                    }
-                    */
-                    tcmStageEntity = await _converterHelper.ToTCMStageEntity(tcmStageViewModel, true);
-                    _context.Add(tcmStageEntity);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-                        List<TCMStageEntity> tcmStage = await _context.TCMStages
-
-                                                                                .Include(s => s.Clinic)
-
-                                                                                .OrderBy(t => t.Name)
-                                                                                .ToListAsync();
-                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMStages", tcmStage) });
-                    }
-                    catch (System.Exception ex)
-                    {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                    }
+                    await _context.SaveChangesAsync();
+                    List<TCMStageEntity> tcmStage = await _context.TCMStages
+                                                                  .Include(s => s.Clinic)
+                                                                  .OrderBy(t => t.Name)
+                                                                  .ToListAsync();
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMStages", tcmStage) });
                 }
-                else
+                catch (System.Exception ex)
                 {
-                    ModelState.AddModelError(string.Empty, "Already exists the TCM stage.");
-
-                    if (User.IsInRole("Admin"))
-                    {
-                        tcmStageViewModel.Clinics = _combosHelper.GetComboClinics();
-                        
-                    }
-                    else
-                    {
-                        List<SelectListItem> list = new List<SelectListItem>();
-                        list.Insert(0, new SelectListItem
-                        {
-                            Text = user_logged.Clinic.Name,
-                            Value = $"{user_logged.Clinic.Id}"
-                        });
-
-                        tcmStageViewModel.Clinics = list;
-                    }
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmStageViewModel) });
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                 }
             }
 
@@ -227,7 +175,7 @@ namespace KyoS.Web.Controllers
 
                 tcmStageViewModel.Clinics = list;
             }
-
+            tcmStageViewModel.tCMservice = tcmservice;
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmStageViewModel) });
         }
 
@@ -256,6 +204,5 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
-    }
+    }   
 }

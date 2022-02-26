@@ -34,10 +34,12 @@ namespace KyoS.Web.Controllers
         {
             if (User.IsInRole("Admin"))
             {
-                return View(await _context.TCMServices
-                                          .Include(f => f.Clinic)
-                                          .OrderBy(f => f.Name)
-                                          .ToListAsync());
+                List<TCMServiceEntity> tcmservices = await _context.TCMServices
+                                       .Include(m => m.Stages)
+                                       .OrderBy(f => f.Name)
+                                       .ToListAsync();
+              
+                return View(tcmservices);
             }
             else
             {
@@ -57,13 +59,12 @@ namespace KyoS.Web.Controllers
                 {
                     ViewBag.Delete = "N";
                 }
+                List<TCMServiceEntity> tcmservices = await _context.TCMServices
+                                       .Include(m => m.Stages)
+                                       .OrderBy(f => f.Name)
+                                       .ToListAsync();
 
-
-                return View(await _context.TCMServices
-                                        .Include(f => f.Clinic)
-                                        .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
-                                        .OrderBy(f => f.Name)
-                                        .ToListAsync());
+                return View(tcmservices);
             }
         }
 
@@ -133,37 +134,15 @@ namespace KyoS.Web.Controllers
                 TCMServiceEntity tcmServiceEntity = await _context.TCMServices.FirstOrDefaultAsync(s => s.Name == tcmServiceViewModel.Name);
                 if (tcmServiceEntity == null)
                 {
-                    /*if (tcmServisorViewModel.IdUser == "0")
-                    {
-                        if (User.IsInRole("Admin"))
-                        {
-                            tcmServiceViewModel.Clinics = _combosHelper.GetComboClinics();
-                        }
-                        else
-                        {
-                            List<SelectListItem> list = new List<SelectListItem>();
-                            list.Insert(0, new SelectListItem
-                            {
-                                Text = user_logged.Clinic.Name,
-                                Value = $"{user_logged.Clinic.Id}"
-                            });
-                            tcmServiceViewModel.Clinics = list;
-                        }
-   
-                        return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmServiceViewModel) });
-                    }*/
-                    
                     tcmServiceEntity = await _converterHelper.ToTCMServiceEntity(tcmServiceViewModel,true);
                     _context.Add(tcmServiceEntity);
                     try
                     {
                         await _context.SaveChangesAsync();
                         List<TCMServiceEntity> tcmService = await _context.TCMServices
-
-                                                                                .Include(s => s.Clinic)
-
-                                                                                .OrderBy(t => t.Name)
-                                                                                .ToListAsync();
+                                                                           .Include(m => m.Stages)
+                                                                           .OrderBy(f => f.Name)
+                                                                           .ToListAsync();
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMServices", tcmService) });
                     }
                     catch (System.Exception ex)
@@ -298,27 +277,6 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                /*if (tcmServiceViewModel.IdUser == "0")
-                {
-                    if (User.IsInRole("Admin"))
-                    {
-                        tcmServiceViewModel.Clinics = _combosHelper.GetComboClinics();
-                    }
-                    else
-                    {
-                        List<SelectListItem> list = new List<SelectListItem>();
-                        list.Insert(0, new SelectListItem
-                        {
-                            Text = user_logged.Clinic.Name,
-                            Value = $"{user_logged.Clinic.Id}"
-                        });
-                        tcmServiceViewModel.Clinics = list;
-                    }
-
-                    ModelState.AddModelError(string.Empty, "You must select a linked user");
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", tcmServiceViewModel) });
-                }*/
-
                 TCMServiceEntity tcmServiceEntity = await _converterHelper.ToTCMServiceEntity(tcmServiceViewModel, false);
                 _context.Update(tcmServiceEntity);
 
@@ -327,11 +285,9 @@ namespace KyoS.Web.Controllers
                     await _context.SaveChangesAsync();
 
                     List<TCMServiceEntity> tcmService = await _context.TCMServices
-
-                                                                            .Include(s => s.Clinic)
-
-                                                                            .OrderBy(f => f.Name)
-                                                                            .ToListAsync();
+                                                                      .Include(m => m.Stages)
+                                                                      .OrderBy(f => f.Name)
+                                                                      .ToListAsync();
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMServices", tcmService) });
                 }
                 catch (System.Exception ex)

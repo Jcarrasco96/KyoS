@@ -26,7 +26,7 @@
                     <thead>
                         <tr>
                             <th class="col-md-2" align="center">
-                                Service Code
+                                Code
                             </th>
                             <th class="col-md-2" align="center">
                                 Stage
@@ -44,24 +44,24 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.tCMservice.Code)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ID_Etapa)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Units)
-                                </td>
-                                <td align="right">
-                                    <a onclick="showInPopup('@Url.Action("Edit", "TCMStages", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Stage')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                       e     @Html.DisplayFor(modelItem => item.tCMservice.Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ID_Etapa)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Units)
+                            </td>
+                            <td align="right">
+                                <a onclick="showInPopup('@Url.Action("Edit", "TCMStages", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Stage')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

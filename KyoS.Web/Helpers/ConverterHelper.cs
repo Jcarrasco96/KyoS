@@ -1132,8 +1132,7 @@ namespace KyoS.Web.Helpers
                 IdClinic = TcmStageEntity.Clinic.Id,
                 Clinics = _combosHelper.GetComboClinics(),
                 Description = TcmStageEntity.Description,
-              //  tCMservice.Code = TcmStageEntity.tCMservice.Code
-
+                //tCMservice.Code = TcmStageEntity.tCMservice.Code
             };
         }
 

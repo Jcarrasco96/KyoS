@@ -22,5 +22,8 @@ namespace KyoS.Web.Data.Entities
         public string Description { get; set; }
 
         public ClinicEntity Clinic { get; set; }
+        public IEnumerable<TCMStageEntity> Stages { get; set; }
+
+        
     }
 }

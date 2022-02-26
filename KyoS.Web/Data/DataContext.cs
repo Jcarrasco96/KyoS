@@ -91,8 +91,14 @@ namespace KyoS.Web.Data
                         .IsUnique();
 
             modelBuilder.Entity<TCMStageEntity>()
-                        .HasIndex(s => s.Name)
-                        .IsUnique();
+                        .HasOne(o => o.tCMservice)
+                        .WithMany(g => g.Stages)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            /*modelBuilder.Entity<TCMStageEntity>()
+                        .HasOne(o => o.tCMservice)
+                        .WithMany(g => g.ID_Etapa)
+                        .OnDelete(DeleteBehavior.Cascade);*/
 
             //modelBuilder.Entity<ClientEntity>()
             //    .HasIndex(c => c.Name)
