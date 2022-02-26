@@ -85,6 +85,7 @@
                                     </td>
                                     <td align="right">
                                         <a onclick="showInPopup('@Url.Action("Edit", "TCMServices", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Service')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("Create", "TCMStages", new { id = item.Id }, Context.Request.Scheme)','Create TCM Stage')" class="btn btn-info" title="Create"><i class="glyphicon glyphicon-align-justify"></i></a>
                                         <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
                                     </td>
                                 </tr>
