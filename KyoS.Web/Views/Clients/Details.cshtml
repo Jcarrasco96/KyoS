@@ -1,0 +1,171 @@
+﻿@model KyoS.Web.Models.ClientViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Clients", "Index", "Clients")
+        </li>
+        <li class="active">Details</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<h4>Details of client</h4>
+@*<hr />*@
+<div class="row">
+    <div>
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div class="form-group col-md-12">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">General</a></li>
+                    <li role="presentation"><a href="#others" aria-controls="others" role="tab" data-toggle="tab">Others</a></li>
+                    <li role="presentation"><a href="#diagnostics" aria-controls="diagnostics" role="tab" data-toggle="tab">Diagnostics</a></li>
+                    <li role="presentation"><a href="#documents" aria-controls="documents" role="tab" data-toggle="tab">Documents</a></li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="general">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="PhotoPath" />
+                        <input type="hidden" asp-for="SignPath" />
+                        <input type="hidden" asp-for="CreatedBy" />
+                        <input type="hidden" asp-for="CreatedOn" />
+                        <input type="hidden" asp-for="Origin" />
+                        <partial name="_ClientsReadOnly" />
+                        <div class="form-group col-md-12">                            
+                            @if (Model.Origin == 0) //viene de la pagina Index de los clientes
+                            {
+                                <a asp-action="Index" class="btn btn-success">Back</a>
+                            }                            
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="others">
+                        <partial name="_ClientsOthersReadOnly" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="diagnostics">
+                        <partial name="_ClientsDiagnosticsReadOnly" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="documents">
+                        <partial name="_ClientsDocumentsReadOnly" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<partial name="_ModalPopup" />
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            //$('#MyTableDoc').DataTable({
+            //    "order": [[2, "desc"]],
+            //    "pageLength": 100
+            //});
+
+            $("#photoBrowser").change(function () {
+
+                var File = this.files;
+
+                if (File && File[0]) {
+                    ReadImagePhoto(File[0]);
+                }
+            });
+
+            $("#signBrowser").change(function () {
+
+                var File = this.files;
+
+                if (File && File[0]) {
+                    ReadImageSign(File[0]);
+                }
+            });
+
+        });
+
+        var DeleteDocumentTemp = function (idDoc) {
+            var url = "@Url.Action("DeleteDocumentTemp", "Clients")";
+            $.get(url, { id: idDoc }, function (data) {
+                $('#view-documents').html(data.html);
+            });
+        }
+
+        var DeleteDiagnosticTemp = function (idDoc) {
+            var url = "@Url.Action("DeleteDiagnosticTemp", "Clients")";
+            $.get(url, { id: idDoc }, function (data) {
+                $('#view-diagnosis').html(data.html);
+            });
+        }
+
+        var ReadImagePhoto = function (file) {
+        var reader = new FileReader;
+        var image = new Image;
+        reader.readAsDataURL(file);
+        reader.onload = function (_file) {
+            image.src = _file.target.result;
+            image.onload = function () {
+                var height = this.height;
+                var width = this.width;
+                var type = file.type;
+                var size = ~~(file.size / 1024) + "KB";
+
+                $("#targetImgPhoto").attr('src', _file.target.result);
+                //$("#descriptionPhoto").text(/*"Size:" + */size + ", " + height + "x" + width/* + ", " + type + ""*/);
+                $("#imgPreviewPhoto").show();
+                $("#lbPhoto").show();
+               }
+            }
+        }
+
+        var ReadImageSign = function (file) {
+        var reader = new FileReader;
+        var image = new Image;
+        reader.readAsDataURL(file);
+        reader.onload = function (_file) {
+            image.src = _file.target.result;
+            image.onload = function () {
+                var height = this.height;
+                var width = this.width;
+                var type = file.type;
+                var size = ~~(file.size / 1024) + "KB";
+
+                $("#targetImgSign").attr('src', _file.target.result);
+                //$("#descriptionSign").text(/*"Size:" + */size + ", " + height + "x" + width/* + ", " + type + ""*/);
+                $("#imgPreviewSign").show();
+                $("#lbSign").show();
+               }
+            }
+        }
+
+        var ClearPreviewPhoto = function () {
+            $("#photoBrowser").val('');
+            $("#descriptionPhoto").text('');
+            $("#targetImgPhoto").attr('src', "/images/Clients/noImage.png");
+            $("#lbPhoto").hide();
+            //$("#imgPreviewPhoto").hide();
+        }
+
+        var ClearPreviewSign = function () {
+            $("#signBrowser").val('');
+            $("#descriptionSign").text('');
+            $("#targetImgSign").attr('src', "/images/Clients/noImage.png");
+            $("#lbSign").hide();
+            //$("#imgPreviewSign").hide();
+        }
+    </script>
+}

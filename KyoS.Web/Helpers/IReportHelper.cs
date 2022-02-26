@@ -30,6 +30,7 @@ namespace KyoS.Web.Helpers
 
         #region Approved Individual Notes reports
         Stream DavilaIndNoteReportSchema1(Workday_Client workdayClient);
+        Stream FloridaSocialHSIndNoteReportSchema1(Workday_Client workdayClient);
         #endregion
 
         #region Approved Group Notes reports

@@ -406,9 +406,11 @@
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Activities / Interventions <span class="caret"></span>
+                                General <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
+                                <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Activities / Facilitator's Interventions", "Index", "Activities")</li>
                                 <li>@Html.ActionLink("Activities / Facilitator's Interventions per PSR week", "ActivitiesPerWeek", "Activities")</li>
                                 <li>@Html.ActionLink("Activities / Facilitator's Interventions per Group week", "ActivitiesPerGroupWeek", "Activities")</li>

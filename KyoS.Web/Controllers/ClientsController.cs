@@ -13,10 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Manager, Supervisor")]
     public class ClientsController : Controller
     {
         private readonly DataContext _context;
@@ -35,33 +33,33 @@ namespace KyoS.Web.Controllers
             _imageHelper = imageHelper;
             _mimeType = mimeType;
         }
+        
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
         public async Task<IActionResult> Index(int idError = 0)
         {
-            UserEntity user_logged = await _context.Users
-                                                   .Include(u => u.Clinic)
-                                                   .ThenInclude(c => c.Setting)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-
-            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
-            {
-                return RedirectToAction("NotAuthorized", "Account");
-            }
-
             if (idError == 1) //Imposible to delete
             {
                 ViewBag.Delete = "N";
             }
+           
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
-            if (User.IsInRole("Admin"))
+            if (user_logged.Clinic == null)
                 return View(await _context.Clients.Include(c => c.Clinic).OrderBy(c => c.Clinic.Name).ToListAsync());
-            else
-            {
+
+            ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+            if (clinic != null)
                 return View(await _context.Clients
                                           .Include(c => c.Clinic)
-                                          .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
-                                          .OrderBy(c => c.Name).ToListAsync());                
-            }
+                                          .Where(c => c.Clinic.Id == clinic.Id).OrderBy(c => c.Name)
+                                          .ToListAsync());
+            else
+                return View(await _context.Clients.Include(c => c.Clinic).OrderBy(c => c.Clinic.Name).ToListAsync());            
         }
+
+        [Authorize(Roles = "Mannager, Supervisor")]
         public IActionResult Create(int id = 0)
         {
             if (id == 1)
@@ -148,8 +146,10 @@ namespace KyoS.Web.Controllers
             };
             return View(model);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mannager, Supervisor")]
         public async Task<IActionResult> Create(ClientViewModel clientViewModel)
         {
             if (ModelState.IsValid)
@@ -233,6 +233,7 @@ namespace KyoS.Web.Controllers
             return View(clientViewModel);
         }
 
+        [Authorize(Roles = "Mannager, Supervisor")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -260,6 +261,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Mannager, Supervisor")]
         public async Task<IActionResult> Edit(int? id, int origin = 0)
         {
             if (id == null)
@@ -311,6 +313,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mannager, Supervisor")]
         public async Task<IActionResult> Edit(int id, ClientViewModel clientViewModel)
         {
             if (id != clientViewModel.Id)
@@ -408,6 +411,55 @@ namespace KyoS.Web.Controllers
             return View(clientViewModel);
         }
 
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        public async Task<IActionResult> Details(int? id, int origin = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ClientEntity clientEntity = await _context.Clients
+                                                      .Include(c => c.Clinic)
+                                                      .Include(c => c.Doctor)
+                                                      .Include(c => c.Psychiatrist)
+                                                      .Include(c => c.Referred)
+                                                      .Include(c => c.LegalGuardian)
+                                                      .Include(c => c.EmergencyContact)
+                                                      .FirstOrDefaultAsync(c => c.Id == id);
+            if (clientEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            this.DeleteDiagnosticsTemp();
+            this.DeleteDocumentsTemp();
+
+            this.SetDiagnosticsTemp(clientEntity);
+            this.SetDocumentsTemp(clientEntity);
+
+            ClientViewModel clientViewModel = _converterHelper.ToClientViewModel(clientEntity, user_logged.Id);
+                        
+            if (user_logged.Clinic != null)
+            {
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Insert(0, new SelectListItem
+                {
+                    Text = user_logged.Clinic.Name,
+                    Value = $"{user_logged.Clinic.Id}"
+                });
+                clientViewModel.Clinics = list;
+            }
+            
+            clientViewModel.Origin = origin;
+            return View(clientViewModel);
+        }
+
+        [Authorize(Roles = "Mannager, Supervisor")]
         public async Task<IActionResult> ClientsWithoutMTP()
         {
             if (User.IsInRole("Admin"))
@@ -434,6 +486,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "Mannager, Supervisor")]
         public async Task<IActionResult> ClientsWithoutDOC()
         {
             if (User.IsInRole("Admin"))
@@ -467,19 +520,13 @@ namespace KyoS.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "Mannager, Supervisor")]
         public IActionResult AddDiagnostic(int id = 0)
         {
             if (id == 0)
             {
-                UserEntity user_logged =  _context.Users
-                                                  .Include(u => u.Clinic)
-                                                  .ThenInclude(c => c.Setting)
-                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
-                {
-                    return RedirectToAction("NotAuthorized", "Account");
-                }
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 DiagnosticTempViewModel model = new DiagnosticTempViewModel
                 {
@@ -496,7 +543,8 @@ namespace KyoS.Web.Controllers
         }          
 
         [HttpPost]
-        [ValidateAntiForgeryToken]        
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mannager, Supervisor")]
         public async Task<IActionResult> AddDiagnostic(int id, DiagnosticTempViewModel diagnosticTempViewModel)
         {
             if (ModelState.IsValid)
@@ -527,6 +575,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddDiagnostic", model) });
         }
 
+        [Authorize(Roles = "Mannager, Supervisor")]
         public IActionResult AddDocument(int id = 0)
         {
             DocumentTempViewModel entity = new DocumentTempViewModel()
@@ -539,6 +588,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mannager, Supervisor")]
         public async Task<IActionResult> AddDocument(int id, DocumentTempViewModel documentTempViewModel)
         {
             if (ModelState.IsValid)
@@ -568,6 +618,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddDocument", documentTempViewModel) });
         }
 
+        [Authorize(Roles = "Mannager, Supervisor")]
         public async Task<IActionResult> DeleteDiagnosticTemp(int? id)
         {
             if (id == null)
@@ -587,6 +638,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.DiagnosticsTemp.ToList()) });
         }
 
+        [Authorize(Roles = "Mannager, Supervisor")]
         public async Task<IActionResult> DeleteDocumentTemp(int? id)
         {
             if (id == null)
@@ -611,6 +663,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.OrderByDescending(d => d.CreatedOn).ToList()) });
         }
 
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
         public async Task<IActionResult> OpenDocument(int id)
         {
             DocumentTempEntity document = await _context.DocumentsTemp
@@ -623,6 +676,7 @@ namespace KyoS.Web.Controllers
             return File(document.DocumentPath, mimeType);
         }
 
+        [Authorize(Roles = "Mannager, Supervisor")]
         public void DeleteDiagnosticsTemp()
         {
             //delete all DiagnosticsTemp
@@ -634,6 +688,7 @@ namespace KyoS.Web.Controllers
             _context.SaveChanges();
         }
 
+        [Authorize(Roles = "Mannager, Supervisor")]
         public void SetDiagnosticsTemp(ClientEntity client)
         {
             IEnumerable<Client_Diagnostic> clientsDiagnostics = _context.Clients_Diagnostics
@@ -657,6 +712,7 @@ namespace KyoS.Web.Controllers
             }            
         }
 
+        [Authorize(Roles = "Mannager, Supervisor")]
         public void SetDocumentsTemp(ClientEntity client)
         {
             IEnumerable<DocumentEntity> documents = _context.Documents                                                            
@@ -681,6 +737,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "Mannager, Supervisor")]
         public void DeleteDocumentsTemp()
         {
             //delete all DiagnosticsTemp

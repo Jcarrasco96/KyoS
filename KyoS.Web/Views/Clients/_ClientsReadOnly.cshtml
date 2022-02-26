@@ -1,0 +1,102 @@
+﻿@model KyoS.Web.Models.ClientViewModel
+<div class="col-md-push-12">
+    &nbsp;
+</div>
+<div class="col-push-md-12">
+    <div class="form-group col-md-3">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" readonly/>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="IdClinic" class="control-label"></label>
+        <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control" disabled></select>
+        <span asp-validation-for="IdClinic" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="IdStatus" class="control-label"></label>
+        <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control" disabled></select>
+        <span asp-validation-for="IdStatus" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="DateOfBirth" class="control-label"></label>
+        <input asp-for="DateOfBirth" class="form-control" readonly/>
+        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="IdGender" class="control-label"></label>
+        <select asp-for="IdGender" asp-items="Model.GenderList" class="form-control" disabled></select>
+        <span asp-validation-for="IdGender" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="PhotoFile" class="control-label"></label>
+        <div id="imgPreviewPhoto" class="thumbnail">
+            @if (!string.IsNullOrEmpty(Model.PhotoPath))
+            {
+                <img class="img-responsive" id="targetImgPhoto" src="@Url.Content(Model.PhotoPath)" width="150" />
+                <div class="caption" id="lbPhoto">
+                    <center>
+                        <span id="descriptionPhoto"></span>                        
+                    </center>
+                </div>
+            }
+            else
+            {
+                <img class="img-responsive" id="targetImgPhoto" src="~/images/Clients/noImage.png" width="150" />
+                <div class="caption" style="display:none" id="lbPhoto">
+                    <center>
+                        <span id="descriptionPhoto"></span>                        
+                    </center>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="SignFile" class="control-label"></label>
+        <div id="imgPreviewSign" class="thumbnail">
+            @if (!string.IsNullOrEmpty(Model.SignPath))
+            {
+                <img class="img-responsive" id="targetImgSign" src="@Url.Content(Model.SignPath)" width="150" />
+                <div class="caption" id="lbSign">
+                    <center>
+                        <span id="descriptionSign"></span>                        
+                    </center>
+                </div>
+            }
+            else
+            {
+                <img class="img-responsive" id="targetImgSign" src="~/images/Clients/noImage.png" width="150" />
+                <div class="caption" style="display:none" id="lbSign">
+                    <center>
+                        <span id="descriptionSign"></span>                        
+                    </center>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="Code" class="control-label"></label>
+        <input asp-for="Code" class="form-control" readonly/>
+        <span asp-validation-for="Code" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="SSN" class="control-label"></label>
+        <input asp-for="SSN" class="form-control" readonly/>
+        <span asp-validation-for="SSN" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" class="form-control" readonly/>
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="MedicaidID" class="control-label"></label>
+        <input asp-for="MedicaidID" class="form-control" readonly/>
+        <span asp-validation-for="MedicaidID" class="text-danger"></span>
+    </div>
+</div>

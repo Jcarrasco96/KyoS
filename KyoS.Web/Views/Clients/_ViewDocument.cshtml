@@ -39,7 +39,10 @@
                                     </td>
                                     <td align="right">
                                         <a asp-action="OpenDocument" asp-route-id="@item.Id" class="btn btn-default" title="View document" target="_blank"><i class="glyphicon glyphicon-download-alt"></i></a>
-                                        <button type="button" onclick="DeleteDocumentTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete document"><i class="glyphicon glyphicon-trash"></i></button>
+                                        @if (!User.IsInRole("Facilitator"))
+                                        {
+                                            <button type="button" onclick="DeleteDocumentTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete document"><i class="glyphicon glyphicon-trash"></i></button>
+                                        }
                                     </td>
                                 </tr>
                             }
