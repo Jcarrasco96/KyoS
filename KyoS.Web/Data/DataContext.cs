@@ -58,7 +58,9 @@ namespace KyoS.Web.Data
         public DbSet<IndividualNoteEntity> IndividualNotes { get; set; }
         public DbSet<GroupNoteEntity> GroupNotes { get; set; }
         public DbSet<GroupNote_Activity> GroupNotes_Activities { get; set; }
-        public DbSet<SettingEntity> Settings { get; set; }        
+        public DbSet<SettingEntity> Settings { get; set; }
+        public DbSet<TCMServiceEntity> TCMServices { get; set; }
+        public DbSet<TCMStageEntity> TCMStages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -83,6 +85,20 @@ namespace KyoS.Web.Data
             modelBuilder.Entity<CaseMannagerEntity>()
                         .HasIndex(s => s.Name)
                         .IsUnique();
+
+            modelBuilder.Entity<TCMServiceEntity>()
+                        .HasIndex(s => s.Name)
+                        .IsUnique();
+
+            modelBuilder.Entity<TCMStageEntity>()
+                        .HasOne(o => o.tCMservice)
+                        .WithMany(g => g.Stages)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            /*modelBuilder.Entity<TCMStageEntity>()
+                        .HasOne(o => o.tCMservice)
+                        .WithMany(g => g.ID_Etapa)
+                        .OnDelete(DeleteBehavior.Cascade);*/
 
             //modelBuilder.Entity<ClientEntity>()
             //    .HasIndex(c => c.Name)

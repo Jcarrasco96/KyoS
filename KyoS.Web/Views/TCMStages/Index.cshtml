@@ -1,0 +1,56 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMStageEntity>
+@{
+    ViewData["Title"] = "TCM Stage";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">TCM Stage</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<p>
+    <a onclick="showInPopup('@Url.Action("Create", "TCMStages", null, Context.Request.Scheme)','Add TCM Stage')" class="btn btn-primary" title="Create TCM Stages"><i class="glyphicon glyphicon-plus"></i> Create TCM Stage</a>
+</p>
+
+<div class="row">
+    <div id="view-tcmStages">
+        @await Html.PartialAsync("_ViewTCMStages", Model.ToList())
+    </div>
+</div>
+
+<partial name="_ModalPopup" />
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+                         $(document).ready(function () {
+                             $('#MyTable').DataTable({
+                               "order": [[0, "asc"]],
+                                "pageLength": 100
+                            });
+
+                            // Delete item
+                            var item_to_delete;
+
+                            $('.deleteItem').click((e) => {
+                              item_to_delete = e.currentTarget.dataset.id;
+                            });
+                            $("#btnYesDelete").click(function () {
+                                var url = "@Url.Action("Delete", "TCMStages")";
+                                window.location.href = url + '/' + item_to_delete;
+                            });
+                        });
+    </script>
+}
+
+
