@@ -61,7 +61,8 @@ namespace KyoS.Web.Data
         public DbSet<SettingEntity> Settings { get; set; }
         public DbSet<TCMServiceEntity> TCMServices { get; set; }
         public DbSet<TCMStageEntity> TCMStages { get; set; }
-
+        public DbSet<TCMClientEntity> TCMClient { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -188,6 +189,8 @@ namespace KyoS.Web.Data
                         .HasOne(c => c.Setting)
                         .WithOne(s => s.Clinic)
                         .OnDelete(DeleteBehavior.Cascade);
+            
+       
         }
     }
 }

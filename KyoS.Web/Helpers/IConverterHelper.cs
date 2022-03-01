@@ -68,5 +68,7 @@ namespace KyoS.Web.Helpers
         TCMServiceViewModel ToTCMServiceViewModel(TCMServiceEntity model, int idClinic);
         Task<TCMStageEntity> ToTCMStageEntity(TCMStageViewModel model, bool isNew);
         TCMStageViewModel ToTCMStageViewModel(TCMStageEntity model);
+        Task<TCMClientEntity> ToTCMClientEntity(TCMClientViewModel model, bool isNew);
+        TCMClientViewModel ToTCMClientViewModel(TCMClientEntity model);
     }
 }

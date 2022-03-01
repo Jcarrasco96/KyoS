@@ -1135,6 +1135,27 @@ namespace KyoS.Web.Helpers
                 //tCMservice.Code = TcmStageEntity.tCMservice.Code
             };
         }
+        public async Task<TCMClientEntity> ToTCMClientEntity(TCMClientViewModel model, bool isNew)
+        {
+            return new TCMClientEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Casemanager = model.Casemanager,
+                Clients = model.Clients
+            };
+        }
+
+        public TCMClientViewModel ToTCMClientViewModel(TCMClientEntity tcmClientEntity)
+        {
+            return new TCMClientViewModel
+            {
+                Id = tcmClientEntity.Id,
+                Casemanager = tcmClientEntity.Casemanager,
+                IdCaseMannager = tcmClientEntity.Casemanager.Id,
+                CaseMannagers = _combosHelper.GetComboCaseManager(),
+                Clients = tcmClientEntity.Clients
+            };
+        }
 
     }
 }

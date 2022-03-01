@@ -855,6 +855,40 @@ namespace KyoS.Web.Helpers
             };
 
             return list;
-        }        
+        }
+
+        public IEnumerable<SelectListItem> GetComboCasemannagersByClinic(int idClinic)
+        {
+            List<SelectListItem> list = _context.CaseManagers.Where(f => f.Clinic.Id == idClinic).Select(f => new SelectListItem
+            {
+                Text = $"{f.Name}",
+                Value = $"{f.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Casemanager...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboCaseManager()
+        {
+            List<SelectListItem> list = _context.CaseManagers.Select(f => new SelectListItem
+            {
+                Text = $"{f.Name}",
+                Value = $"{f.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Casemanager...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

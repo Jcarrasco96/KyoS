@@ -45,5 +45,7 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboIncidentsStatus();
         IEnumerable<SelectListItem> GetComboActiveInsurancesByClinic(int idClinic);
         IEnumerable<SelectListItem> GetComboServices();
+        IEnumerable<SelectListItem> GetComboCaseManager();
+        IEnumerable<SelectListItem> GetComboCasemannagersByClinic(int idClinic);
     }
 }
