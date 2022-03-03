@@ -70,5 +70,7 @@ namespace KyoS.Web.Helpers
         TCMStageViewModel ToTCMStageViewModel(TCMStageEntity model);
         Task<TCMClientEntity> ToTCMClientEntity(TCMClientViewModel model, bool isNew);
         TCMClientViewModel ToTCMClientViewModel(TCMClientEntity model);
+        Task<TCMServicePlanEntity> ToTCMServicePlanEntity(TCMServicePlanViewModel model, bool isNew);
+        TCMServicePlanViewModel ToTCMServicePlanViewModel(TCMServicePlanEntity model);
     }
 }

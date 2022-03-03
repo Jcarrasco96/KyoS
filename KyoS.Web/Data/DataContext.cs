@@ -62,7 +62,10 @@ namespace KyoS.Web.Data
         public DbSet<TCMServiceEntity> TCMServices { get; set; }
         public DbSet<TCMStageEntity> TCMStages { get; set; }
         public DbSet<TCMClientEntity> TCMClient { get; set; }
-        
+        public DbSet<TCMObjetiveEntity> TCMObjetives { get; set; }
+        public DbSet<TCMDomainEntity> TCMDomains { get; set; }
+        public DbSet<TCMServicePlanEntity> TCMServicePlans { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -189,8 +192,19 @@ namespace KyoS.Web.Data
                         .HasOne(c => c.Setting)
                         .WithOne(s => s.Clinic)
                         .OnDelete(DeleteBehavior.Cascade);
-            
-       
+
+            modelBuilder.Entity<TCMDomainEntity>()
+                                    .HasIndex(s => s.Name)
+                                    .IsUnique();
+
+            modelBuilder.Entity<TCMObjetiveEntity>()
+                        .HasOne(o => o.TcmDomain)
+                        .WithMany(g => g.TCMObjetive)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMServicePlanEntity>()
+                                   .HasIndex(s => s.CaseNumber)
+                                   .IsUnique();
         }
     }
 }

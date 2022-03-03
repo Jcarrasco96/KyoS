@@ -1,0 +1,122 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMClientEntity>
+@{
+    ViewData["Title"] = "TCMClientList";
+}
+
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">TCM Clients</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        @if (ViewBag.Delete == "N")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <strong class="red">
+                    Error. It is not posible delete the Client
+                </strong>
+            </div>
+        }
+    </div>
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">TCM Client</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-4">
+                                Client name
+                            </th>
+                            <th class="col-md-3">
+                               Medicaid ID
+                            </th>
+                            <th class="col-md-3">
+                                Clinic
+                            </th>
+                            <th class="col-md-2">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            @foreach (var client in item.Clients)
+                            {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => client.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => client.MedicaidID)</td>
+                            <td>@Html.DisplayFor(modelItem => client.MedicaidID)</td>
+                            <td align="right">
+                                <a asp-action="Create" asp-controller="TCMServicePlans" asp-route-id="@client.Id" class="btn btn-success" title="Edit TCM group"><i class="glyphicon glyphicon-upload"></i></a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit TCM group"><i class="glyphicon glyphicon-pencil"></i></a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
+                            </td>
+                        </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "order": [[1, "asc"]],
+                "pageLength": 25
+            });
+
+            // Delete item
+            var item_to_delete;
+
+            $('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                var url = "@Url.Action("Delete", "Groups")";
+                window.location.href = url + '/' + item_to_delete;
+            });
+        });
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+
+    </script>
+}
+

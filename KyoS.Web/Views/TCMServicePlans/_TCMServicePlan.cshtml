@@ -1,0 +1,85 @@
+﻿@model KyoS.Web.Models.TCMServicePlanViewModel
+@{
+    ViewData["Title"] = "_TCMServicePlan";
+    
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="Client.Name" class="control-label"></label>
+            <input asp-for="Client.Name" asp-items="Model.Client" class="form-control" readonly/>
+            <span asp-validation-for="Client.Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="Case_Number" class="control-label"></label>
+            <input asp-for="Case_Number" class="form-control" />
+            <span asp-validation-for="Case_Number" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="Client.Clinic.Name" class="control-label"></label>
+            <input asp-for="Client.Clinic.Name" class="form-control" readonly />
+            <span asp-validation-for="Client.Clinic.Name" class="text-danger"></span>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="Date_Intake" class="control-label"></label>
+            <input asp-for="Date_Intake" class="form-control" />
+            <span asp-validation-for="Date_Intake" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="Date_ServicePlan" class="control-label"></label>
+            <input asp-for="Date_ServicePlan" class="form-control" />
+            <span asp-validation-for="Date_ServicePlan" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="Date_Assessment" class="control-label"></label>
+            <input asp-for="Date_Assessment" class="form-control" />
+            <span asp-validation-for="Date_Assessment" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="Date_Certification" class="control-label"></label>
+            <input asp-for="Date_Certification" class="form-control">
+            <span asp-validation-for="Date_Certification" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="strengths" class="control-label"></label>
+            <input asp-for="strengths" class="form-control">
+            <span asp-validation-for="strengths" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="weakness" class="control-label"></label>
+            <input asp-for="weakness" class="form-control" />
+            <span asp-validation-for="weakness" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="dischargerCriteria" class="control-label"></label>
+            <input asp-for="dischargerCriteria" class="form-control" />
+            <span asp-validation-for="dischargerCriteria" class="text-danger"></span>
+        </div>
+    </div>
+   
+</div>
+

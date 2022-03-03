@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Manager")]
+    
     public class TCMClientsController : Controller
     {
         private readonly DataContext _context;
@@ -30,7 +30,8 @@ namespace KyoS.Web.Controllers
             _converterHelper = converterHelper;
             _reportHelper = reportHelper;
         }
-        
+
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Index()
         {
             UserEntity user_logged = _context.Users
@@ -40,13 +41,26 @@ namespace KyoS.Web.Controllers
 
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            /*if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            if (user_logged.UserType.ToString() != "Admin")
             {
-                return RedirectToAction("NotAuthorized", "Account");
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                {
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
+                return View(await _context.TCMClient
+
+                                      .Include(g => g.Casemanager)
+
+                                      .Include(g => g.Clients)
+
+                                      .Where(g => (g.Casemanager.Id == caseManager.Id))
+                                      .OrderBy(g => g.Casemanager.Name)
+                                      .ToListAsync());
             }
-
-            ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);*/
-
+           
             return View(await _context.TCMClient
 
                                       .Include(g => g.Casemanager)
@@ -56,8 +70,10 @@ namespace KyoS.Web.Controllers
                                       //.Where(g => (g.Casemanager.Clinic.Id == clinic.Id))
                                       .OrderBy(g => g.Casemanager.Name)
                                       .ToListAsync());
+          
         }
 
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Create(int id = 0, int error = 0, int idCaseMannager = 0, int idClient = 0)
         {
             if (id == 1)
@@ -138,6 +154,7 @@ namespace KyoS.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Manager")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TCMClientViewModel model, IFormCollection form)
         {
@@ -186,6 +203,8 @@ namespace KyoS.Web.Controllers
 
             return View(model);
         }
+
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -211,6 +230,7 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Edit(int? id, int error = 0, int idFacilitator = 0, int idClient = 0)
         {
             if (id == null)
@@ -309,6 +329,37 @@ namespace KyoS.Web.Controllers
             ViewData["clients"] = client_list;
 
             return View(tcmclientViewModel);
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> TCMClientList()
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.UserType.ToString() == "CaseManager")
+            {
+               /* if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                {
+                    return RedirectToAction("NotAuthorized", "Account");
+                }*/
+
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
+                List<TCMClientEntity> Client = await _context.TCMClient
+                                                    .Include(g => g.Clients)
+                                                    .Where(g => (g.Casemanager.Id == caseManager.Id))
+                                                    .ToListAsync();
+                                                    
+                return View(Client);
+            }
+
+            return View(null);
+
         }
     }
 }
