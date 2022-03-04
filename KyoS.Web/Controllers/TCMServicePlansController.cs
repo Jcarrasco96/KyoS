@@ -53,7 +53,7 @@ namespace KyoS.Web.Controllers
                     ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
                     CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
                     List<TCMClientEntity> Client = await _context.TCMClient
-                                                        .Include(g => g.Clients)
+                                                        .Include(g => g.Client)
                                                         .Where(g => (g.Casemanager.Id == caseManager.Id))
                                                         .ToListAsync();
                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_TCMServicePlan", Client) });

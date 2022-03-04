@@ -47,5 +47,7 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboServices();
         IEnumerable<SelectListItem> GetComboCaseManager();
         IEnumerable<SelectListItem> GetComboCasemannagersByClinic(int idClinic);
+        IEnumerable<SelectListItem> GetComboClientsForTCMCaseNotOpen(int idClinic);
+       
     }
 }

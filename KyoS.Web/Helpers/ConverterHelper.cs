@@ -1141,7 +1141,13 @@ namespace KyoS.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 Casemanager = model.Casemanager,
-                Clients = model.Clients
+                Status = StatusUtils.GetStatusByIndex(model.IdStatus),
+                CaseNumber = model.CaseNumber,
+                DataOpen = model.DataOpen,
+                DataClose = model.DataClose,
+                Period = model.Period,
+                Client = model.Client
+
             };
         }
 
@@ -1153,7 +1159,14 @@ namespace KyoS.Web.Helpers
                 Casemanager = tcmClientEntity.Casemanager,
                 IdCaseMannager = tcmClientEntity.Casemanager.Id,
                 CaseMannagers = _combosHelper.GetComboCaseManager(),
-                Clients = tcmClientEntity.Clients
+                IdClient = tcmClientEntity.Client.Id,
+                Clients = _combosHelper.GetComboClients(),
+                IdStatus = (tcmClientEntity.Status == StatusType.Open) ? 1 : 2,
+                StatusList = _combosHelper.GetComboClientStatus(),
+                CaseNumber = tcmClientEntity.CaseNumber,
+                DataOpen = tcmClientEntity.DataOpen,
+                DataClose = tcmClientEntity.DataClose,
+                Period = tcmClientEntity.Period
             };
         }
 
