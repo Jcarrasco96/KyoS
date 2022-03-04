@@ -893,6 +893,12 @@ namespace KyoS.Web.Controllers
                 ViewBag.Error = "5";
             }
 
+            //la nota no tiene seleccionada las respuestas de clientes
+            if (error == 6)
+            {
+                ViewBag.Error = "6";
+            }
+
             Workday_Client workday_Client = await _context.Workdays_Clients
                                                           
                                                           .Include(wc => wc.Workday)
@@ -1291,6 +1297,15 @@ namespace KyoS.Web.Controllers
             NotePEntity noteEntity;
             if (ModelState.IsValid)
             {
+                //The user must select at least one client response per theme 
+                if ((!model.Cooperative1 && !model.Assertive1 && !model.Passive1 && !model.Variable1 && !model.Uninterested1 && !model.Engaged1 && !model.Distractible1 && !model.Confused1 && !model.Aggresive1 && !model.Resistant1 && !model.Other1)
+                    || (!model.Cooperative2 && !model.Assertive2 && !model.Passive2 && !model.Variable2 && !model.Uninterested2 && !model.Engaged2 && !model.Distractible2 && !model.Confused2 && !model.Aggresive2 && !model.Resistant2 && !model.Other2)
+                    || (!model.Cooperative3 && !model.Assertive3 && !model.Passive3 && !model.Variable3 && !model.Uninterested3 && !model.Engaged3 && !model.Distractible3 && !model.Confused3 && !model.Aggresive3 && !model.Resistant3 && !model.Other3)
+                    || (!model.Cooperative4 && !model.Assertive4 && !model.Passive4 && !model.Variable4 && !model.Uninterested4 && !model.Engaged4 && !model.Distractible4 && !model.Confused4 && !model.Aggresive4 && !model.Resistant4 && !model.Other4))
+                {
+                    return RedirectToAction(nameof(EditNoteP), new { id = model.Id, error = 6, origin = model.Origin });
+                }
+
                 NotePEntity note = await _context.NotesP.Include(n => n.Workday_Cient)
                                                         .ThenInclude(wc => wc.Messages)
                                                         .FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
@@ -1710,7 +1725,7 @@ namespace KyoS.Web.Controllers
                     Goals1 = goals,
                     Objetives1 = objs,
                     Workday_Cient = workday_Client,
-                    Clients = _combosHelper.GetComboClientsForIndNotes(user_logged.Clinic.Id, workday_Client.Workday.Week.Id),
+                    Clients = _combosHelper.GetComboClientsForIndNotes(user_logged.Clinic.Id, workday_Client.Workday.Week.Id, facilitator_logged.Id),
                     IdClient = 0
                 };
             }

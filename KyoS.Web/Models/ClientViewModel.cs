@@ -70,7 +70,7 @@ namespace KyoS.Web.Models
         public int IdRelationship { get; set; }
         public IEnumerable<SelectListItem> Relationships { get; set; }
 
-        [Display(Name = "Therapy")]
+        [Display(Name = "MH Therapy")]
         public int IdService { get; set; }
         public IEnumerable<SelectListItem> Services { get; set; }
 
@@ -80,5 +80,9 @@ namespace KyoS.Web.Models
 
         //este campo lo uso para saber de que pagina se viene
         public int Origin { get; set; }
+
+        [Display(Name = "Facilitator for individual therapy")]
+        public int IdFacilitatorIT { get; set; }
+        public IEnumerable<SelectListItem> ITFacilitators { get; set; }
     }
 }
