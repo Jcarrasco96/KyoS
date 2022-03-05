@@ -31,12 +31,14 @@ namespace KyoS.Web.Controllers
             _renderHelper = renderHelper;
         }
 
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (User.IsInRole("Admin"))
             {
                 return View(await _context.TCMStages
                                           .Include(f => f.Clinic)
+                                          .Include(g => g.tCMservice)
                                           .OrderBy(f => f.Name)
                                           .ToListAsync());
             }
@@ -62,11 +64,14 @@ namespace KyoS.Web.Controllers
 
                 return View(await _context.TCMStages
                                         .Include(f => f.Clinic)
+                                        .Include(g => g.tCMservice)
                                         .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
                                         .OrderBy(f => f.Name)
                                         .ToListAsync());
             }
         }
+
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Create(int id = 0)
         {
             if (id == 1)
@@ -127,6 +132,7 @@ namespace KyoS.Web.Controllers
 
             return View(model);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Manager")]
@@ -136,22 +142,20 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
             TCMStageEntity tcmStageEntity = await _converterHelper.ToTCMStageEntity(tcmStageViewModel, true);
-            TCMServiceEntity tcmservice = await _context.TCMServices
-                                               .Include(g => g.Stages)
-                                               .FirstOrDefaultAsync(m => m.Id == tcmStageViewModel.Id_TCMService);
+            
             if (ModelState.IsValid)
             {
-                
-                tcmStageEntity.tCMservice = tcmservice;
+                 
                 _context.Add(tcmStageEntity);
                 try
                 {
                     await _context.SaveChangesAsync();
-                    List<TCMStageEntity> tcmStage = await _context.TCMStages
-                                                                  .Include(s => s.Clinic)
-                                                                  .OrderBy(t => t.Name)
-                                                                  .ToListAsync();
-                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMStages", tcmStage) });
+                   
+                    List<TCMServiceEntity> tcmService = await _context.TCMServices
+                                                                       .Include(m => m.Stages)
+                                                                       .OrderBy(f => f.Name)
+                                                                       .ToListAsync();
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "index", tcmService) });
                 }
                 catch (System.Exception ex)
                 {
@@ -175,6 +179,10 @@ namespace KyoS.Web.Controllers
 
                 tcmStageViewModel.Clinics = list;
             }
+
+            TCMServiceEntity tcmservice = await _context.TCMServices
+                                               .Include(g => g.Stages)
+                                               .FirstOrDefaultAsync(m => m.Id == tcmStageViewModel.Id_TCMService);
             tcmStageViewModel.tCMservice = tcmservice;
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmStageViewModel) });
         }
@@ -203,6 +211,84 @@ namespace KyoS.Web.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<IActionResult> Edit(int id = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.Creado = "Y";
+            }
+            else
+            {
+                if (id == 2)
+                {
+                    ViewBag.Creado = "E";
+                }
+                else
+                {
+                    ViewBag.Creado = "N";
+                }
+            }
+            TCMStageViewModel model;
+            TCMStageEntity tcmStage = await _context.TCMStages
+                                                .Include(g => g.tCMservice)
+                                                .Include(g => g.Clinic)
+                                                .FirstOrDefaultAsync(m => m.Id == id);
+           
+            model = _converterHelper.ToTCMStageViewModel(tcmStage);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<IActionResult> Edit(TCMStageViewModel tcmStageViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            TCMStageEntity tcmStageEntity = await _converterHelper.ToTCMStageEntity(tcmStageViewModel, false);
+            
+            if (ModelState.IsValid)
+            {
+                
+                _context.Update(tcmStageEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    List<TCMStageEntity> tcmStage = await _context.TCMStages
+                                                                  .Include(s => s.Clinic)
+                                                                  .Include(s => s.tCMservice)
+                                                                  .OrderBy(t => t.Name)
+                                                                  .ToListAsync();
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMStages", tcmStage) });
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+            }
+
+            //recovery data
+            if (User.IsInRole("Admin"))
+            {
+                tcmStageViewModel.Clinics = _combosHelper.GetComboClinics();
+            }
+            else
+            {
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Insert(0, new SelectListItem
+                {
+                    Text = user_logged.Clinic.Name,
+                    Value = $"{user_logged.Clinic.Id}"
+                });
+
+                tcmStageViewModel.Clinics = list;
+            }
+            //tcmStageViewModel.tCMservice = tcmservice;
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", tcmStageViewModel) });
         }
     }   
 }

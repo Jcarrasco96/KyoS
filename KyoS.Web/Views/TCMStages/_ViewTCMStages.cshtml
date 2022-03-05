@@ -26,15 +26,18 @@
                     <thead>
                         <tr>
                             <th class="col-md-2" align="center">
-                                Code
+                                Service Code
+                            </th>
+                            <th class="col-md-2" align="left">
+                                Service Name
                             </th>
                             <th class="col-md-2" align="center">
                                 Stage
                             </th>
-                            <th class="col-md-5" align="center">
+                            <th class="col-md-2" align="left">
                                 Stage Name
                             </th>
-                            <th class="col-md-1" align="center">
+                            <th class="col-md-2" align="right">
                                 Units
                             </th>
                             <th class="col-md-2" align="center">
@@ -46,7 +49,10 @@
                         {
                         <tr>
                             <td>
-                            @Html.DisplayFor(modelItem => item.tCMservice.Code)
+                                @Html.DisplayFor(modelItem => item.tCMservice.Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tCMservice.Name)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.ID_Etapa)

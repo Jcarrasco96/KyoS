@@ -15,12 +15,8 @@
     </ul><!--.breadcrumb-->
 </div>
 
-<p>
-    <a onclick="showInPopup('@Url.Action("Create", "TCMStages", null, Context.Request.Scheme)','Add TCM Stage')" class="btn btn-primary" title="Create TCM Stages"><i class="glyphicon glyphicon-plus"></i> Create TCM Stage</a>
-</p>
-
 <div class="row">
-    <div id="view-tcmStages">
+    <div id="view-tcmStage">
         @await Html.PartialAsync("_ViewTCMStages", Model.ToList())
     </div>
 </div>

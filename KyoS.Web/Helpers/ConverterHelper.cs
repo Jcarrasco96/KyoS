@@ -1132,7 +1132,8 @@ namespace KyoS.Web.Helpers
                 IdClinic = TcmStageEntity.Clinic.Id,
                 Clinics = _combosHelper.GetComboClinics(),
                 Description = TcmStageEntity.Description,
-                //tCMservice.Code = TcmStageEntity.tCMservice.Code
+                Units = TcmStageEntity.Units,
+                tCMservice = TcmStageEntity.tCMservice
             };
         }
         public async Task<TCMClientEntity> ToTCMClientEntity(TCMClientViewModel model, bool isNew)
