@@ -43,10 +43,10 @@ namespace KyoS.Web.Controllers
 
             if (user_logged.UserType.ToString() == "CaseManager")
             {
-                /*if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
                 {
                     return RedirectToAction("NotAuthorized", "Account");
-                }*/
+                }
 
                CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
                return View(await _context.TCMClient
@@ -58,10 +58,10 @@ namespace KyoS.Web.Controllers
             }
             if (user_logged.UserType.ToString() == "Manager")
             {
-                /*if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
                 {
                     return RedirectToAction("NotAuthorized", "Account");
-                }*/
+                }
                 List <TCMClientEntity> tcmClient = await _context.TCMClient
                                                           .Include(g => g.Casemanager)
                                                           .Include(g => g.Client)

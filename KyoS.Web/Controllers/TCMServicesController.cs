@@ -30,6 +30,7 @@ namespace KyoS.Web.Controllers
             _imageHelper = imageHelper;
             _renderHelper = renderHelper;
         }
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (User.IsInRole("Admin"))
@@ -38,7 +39,7 @@ namespace KyoS.Web.Controllers
                                        .Include(m => m.Stages)
                                        .OrderBy(f => f.Name)
                                        .ToListAsync();
-              
+
                 return View(tcmservices);
             }
             else
@@ -134,7 +135,7 @@ namespace KyoS.Web.Controllers
                 TCMServiceEntity tcmServiceEntity = await _context.TCMServices.FirstOrDefaultAsync(s => s.Name == tcmServiceViewModel.Name);
                 if (tcmServiceEntity == null)
                 {
-                    tcmServiceEntity = await _converterHelper.ToTCMServiceEntity(tcmServiceViewModel,true);
+                    tcmServiceEntity = await _converterHelper.ToTCMServiceEntity(tcmServiceViewModel, true);
                     _context.Add(tcmServiceEntity);
                     try
                     {
@@ -192,6 +193,8 @@ namespace KyoS.Web.Controllers
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmServiceViewModel) });
         }
+
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
