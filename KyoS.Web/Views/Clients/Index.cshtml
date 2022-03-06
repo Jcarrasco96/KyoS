@@ -54,7 +54,7 @@
                             <th class="col-md-2" style="text-align:center;">
                                 Birth's date
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-2" style="text-align:center;">
                                 Individual Therapy
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -91,8 +91,11 @@
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.DateOfBirth)
                                     </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.IndividualTherapyFacilitator.Name)
+                                    <td align="center">
+                                        @if (item.IndividualTherapyFacilitator != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.IndividualTherapyFacilitator.Name)
+                                        }
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Code)
@@ -147,8 +150,11 @@
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.DateOfBirth)
                                     </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.IndividualTherapyFacilitator.Name)
+                                    <td align="center">
+                                        @if (item.IndividualTherapyFacilitator != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.IndividualTherapyFacilitator.Name)
+                                        }
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Code)

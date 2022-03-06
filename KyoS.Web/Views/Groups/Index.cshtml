@@ -20,6 +20,15 @@
 </p>
 
 <div class="row">
+    @if (ViewBag.Message == "1")
+    {
+        <div class="col-md-12">
+            <p class="alert alert-block alert-danger">
+                <strong class="red"> Note: </strong> There are PSR active clients that are not in any group.
+            </p>
+        </div>        
+    }
+
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -55,57 +64,57 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td align="center">
-                                @if (item.Clients.Count() != 0)
-                                {
-                                    <a class="icon-plus-sign-alt"></a>
-                                }
-                                else
-                                {
+                            <tr>
+                                <td align="center">
+                                    @if (item.Clients.Count() != 0)
+                                    {
+                                        <a class="icon-plus-sign-alt"></a>
+                                    }
+                                    else
+                                    {
 
-                                }
-                                <div style="display:none">
-                                    <table class="table table-striped table-bordered">
-                                        <tr>
-                                            <th class="col-md-8">Client Name</th>
-                                            <th class="col-md-4">Medical ID</th>
-                                        </tr>
-                                        @foreach (var client in item.Clients)
-                                        {
+                                    }
+                                    <div style="display:none">
+                                        <table class="table table-striped table-bordered">
                                             <tr>
-                                                <td>@Html.DisplayFor(modelItem => client.Name)</td>
-                                                <td>@Html.DisplayFor(modelItem => client.MedicaidID)</td>
+                                                <th class="col-md-8">Client Name</th>
+                                                <th class="col-md-4">Medical ID</th>
                                             </tr>
-                                        }
-                                    </table>
-                                </div>
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Facilitator.Name)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.Service)
-                            </td>
-                            <td align="center">
-                                @item.Clients.Count()
-                            </td>
-                            <td align="center">
-                                @if (item.Am)
-                                {
-                                    <i class="icon-ok green"></i>
-                                }
-                            </td>
-                            <td align="center">
-                                @if (item.Pm)
-                                {
-                                    <i class="icon-ok green"></i>
-                                }
-                            </td>
-                            <td align="right">
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit PSR group"><i class="glyphicon glyphicon-pencil"></i></a>
-                            </td>
-                        </tr>
+                                            @foreach (var client in item.Clients)
+                                            {
+                                                <tr>
+                                                    <td>@Html.DisplayFor(modelItem => client.Name)</td>
+                                                    <td>@Html.DisplayFor(modelItem => client.MedicaidID)</td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    </div>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Facilitator.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Service)
+                                </td>
+                                <td align="center">
+                                    @item.Clients.Count()
+                                </td>
+                                <td align="center">
+                                    @if (item.Am)
+                                    {
+                                        <i class="icon-ok green"></i>
+                                    }
+                                </td>
+                                <td align="center">
+                                    @if (item.Pm)
+                                    {
+                                        <i class="icon-ok green"></i>
+                                    }
+                                </td>
+                                <td align="right">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit PSR group"><i class="glyphicon glyphicon-pencil"></i></a>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>

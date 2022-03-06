@@ -47,17 +47,18 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic == null)
-                return View(await _context.Clients.Include(c => c.Clinic).OrderBy(c => c.Clinic.Name).ToListAsync());
-
-            ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
-            if (clinic != null)
                 return View(await _context.Clients
                                           .Include(c => c.Clinic)
                                           .Include(c => c.IndividualTherapyFacilitator)
-                                          .Where(c => c.Clinic.Id == clinic.Id).OrderBy(c => c.Name)
+                                          .OrderBy(c => c.Clinic.Name)
                                           .ToListAsync());
-            else
-                return View(await _context.Clients.Include(c => c.Clinic).OrderBy(c => c.Clinic.Name).ToListAsync());            
+
+            return View(await _context.Clients
+                                      .Include(c => c.Clinic)
+                                      .Include(c => c.IndividualTherapyFacilitator)
+                                      .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
+                                      .OrderBy(c => c.Name)
+                                      .ToListAsync());            
         }
 
         [Authorize(Roles = "Mannager, Supervisor")]

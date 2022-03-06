@@ -39,17 +39,24 @@ namespace KyoS.Web.Controllers
             if (user_logged.Clinic == null)
             {
                 return RedirectToAction("Home/Error404");
-            }    
+            }
 
-            ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
-            
+            int count = await _context.Clients
+                                      .Where(c => (c.Status == StatusType.Open && c.Group == null && c.Clinic.Id == user_logged.Clinic.Id &&
+                                                   c.MTPs.Count() > 0 && c.Service == ServiceType.PSR))
+                                      .CountAsync();
+            if (count > 0)
+            {
+                ViewBag.Message = "1";
+            }
+
             return View(await _context.Groups
 
                                       .Include(g => g.Facilitator)
 
                                       .Include(g => g.Clients)
 
-                                      .Where(g => (g.Facilitator.Clinic.Id == clinic.Id && g.Service == Common.Enums.ServiceType.PSR))
+                                      .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id && g.Service == Common.Enums.ServiceType.PSR))
                                       .OrderBy(g => g.Facilitator.Name)
                                       .ToListAsync());            
         }
@@ -454,7 +461,14 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+            int count = await _context.Clients
+                                      .Where(c => (c.Status == StatusType.Open && c.Group == null && c.Clinic.Id == user_logged.Clinic.Id &&
+                                                   c.MTPs.Count() > 0 && c.Service == ServiceType.Group))
+                                      .CountAsync();
+            if (count > 0)
+            {
+                ViewBag.Message = "1";
+            }           
 
             return View(await _context.Groups
 
@@ -462,7 +476,7 @@ namespace KyoS.Web.Controllers
 
                                       .Include(g => g.Clients)
 
-                                      .Where(g => (g.Facilitator.Clinic.Id == clinic.Id && g.Service == Common.Enums.ServiceType.Group))
+                                      .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id && g.Service == Common.Enums.ServiceType.Group))
                                       .OrderBy(g => g.Facilitator.Name)
                                       .ToListAsync());
         }
