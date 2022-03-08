@@ -21,7 +21,7 @@ namespace KyoS.Web.Helpers
         Task<CaseMannagerEntity> ToCaseMannagerEntity(CaseMannagerViewModel model, string signaturePath, bool isNew);
         CaseMannagerViewModel ToCaseMannagerViewModel(CaseMannagerEntity model, int idClinic);
         Task<ClientEntity> ToClientEntity(ClientViewModel model, bool isNew, string photoPath, string signPath, string userId);
-        ClientViewModel ToClientViewModel(ClientEntity model, string userId);
+        Task<ClientViewModel> ToClientViewModel(ClientEntity model, string userId);
         Task<SupervisorEntity> ToSupervisorEntity(SupervisorViewModel model, string signaturePath, bool isNew);
         SupervisorViewModel ToSupervisorViewModel(SupervisorEntity model, int idClinic);
         Task<TCMSupervisorEntity> ToTCMsupervisorEntity(TCMSupervisorViewModel model, string signaturePath, bool isNew);

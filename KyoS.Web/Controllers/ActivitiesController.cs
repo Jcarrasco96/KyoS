@@ -803,8 +803,12 @@ namespace KyoS.Web.Controllers
 
         //Schema 3
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> CreateActivitiesWeek3(int id = 0)
+        public async Task<IActionResult> CreateActivitiesWeek3(int id = 0, int error = 0)
         {
+            //The user must select at least one skill adressed per theme 
+            if (error == 1)
+                ViewBag.Error = "1";
+
             IEnumerable<SelectListItem> list1;
             IEnumerable<SelectListItem> list2;
             IEnumerable<SelectListItem> list3;
@@ -963,6 +967,15 @@ namespace KyoS.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                //The user must select at least one skill adressed per theme 
+                if ((!model.activityDailyLiving1 && !model.communityResources1 && !model.copingSkills1 && !model.diseaseManagement1 && !model.healthyLiving1 && !model.lifeSkills1 && !model.relaxationTraining1 && !model.socialSkills1 && !model.stressManagement1)
+                    || (!model.activityDailyLiving2 && !model.communityResources2 && !model.copingSkills2 && !model.diseaseManagement2 && !model.healthyLiving2 && !model.lifeSkills2 && !model.relaxationTraining2 && !model.socialSkills2 && !model.stressManagement2)
+                    || (!model.activityDailyLiving3 && !model.communityResources3 && !model.copingSkills3 && !model.diseaseManagement3 && !model.healthyLiving3 && !model.lifeSkills3 && !model.relaxationTraining3 && !model.socialSkills3 && !model.stressManagement3)
+                    || (!model.activityDailyLiving4 && !model.communityResources4 && !model.copingSkills4 && !model.diseaseManagement4 && !model.healthyLiving4 && !model.lifeSkills4 && !model.relaxationTraining4 && !model.socialSkills4 && !model.stressManagement4))
+                {
+                    return RedirectToAction(nameof(CreateActivitiesWeek3), new { id = model.IdWorkday, error = 1 });
+                }
+
                 FacilitatorEntity facilitator_logged = await _context.Facilitators
 
                                                                      .Include(f => f.Clinic)
