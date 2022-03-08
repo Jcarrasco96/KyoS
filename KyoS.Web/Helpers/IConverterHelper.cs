@@ -19,7 +19,7 @@ namespace KyoS.Web.Helpers
         Task<FacilitatorEntity> ToFacilitatorEntity(FacilitatorViewModel model, string signaturePath, bool isNew);
         FacilitatorViewModel ToFacilitatorViewModel(FacilitatorEntity model, int idClinic);
         Task<ClientEntity> ToClientEntity(ClientViewModel model, bool isNew, string photoPath, string signPath, string userId);
-        ClientViewModel ToClientViewModel(ClientEntity model, string userId);
+        Task<ClientViewModel> ToClientViewModel(ClientEntity model, string userId);
         Task<SupervisorEntity> ToSupervisorEntity(SupervisorViewModel model, string signaturePath, bool isNew);
         SupervisorViewModel ToSupervisorViewModel(SupervisorEntity model, int idClinic);
         Task<MTPEntity> ToMTPEntity(MTPViewModel model, bool isNew);

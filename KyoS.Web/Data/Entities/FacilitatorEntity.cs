@@ -30,5 +30,7 @@ namespace KyoS.Web.Data.Entities
         public ICollection<Workday_Client> Workdays_Clients { get; set; }
 
         public ICollection<Workday_Activity_Facilitator> Workdays_Activities_Facilitators { get; set; }
+
+        public ICollection<ClientEntity> ClientsFromIndividualTherapy { get; set; }
     }
 }

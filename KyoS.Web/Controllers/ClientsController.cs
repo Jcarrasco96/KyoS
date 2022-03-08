@@ -47,16 +47,18 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic == null)
-                return View(await _context.Clients.Include(c => c.Clinic).OrderBy(c => c.Clinic.Name).ToListAsync());
-
-            ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
-            if (clinic != null)
                 return View(await _context.Clients
                                           .Include(c => c.Clinic)
-                                          .Where(c => c.Clinic.Id == clinic.Id).OrderBy(c => c.Name)
+                                          .Include(c => c.IndividualTherapyFacilitator)
+                                          .OrderBy(c => c.Clinic.Name)
                                           .ToListAsync());
-            else
-                return View(await _context.Clients.Include(c => c.Clinic).OrderBy(c => c.Clinic.Name).ToListAsync());            
+
+            return View(await _context.Clients
+                                      .Include(c => c.Clinic)
+                                      .Include(c => c.IndividualTherapyFacilitator)
+                                      .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
+                                      .OrderBy(c => c.Name)
+                                      .ToListAsync());            
         }
 
         [Authorize(Roles = "Mannager, Supervisor")]
@@ -276,6 +278,7 @@ namespace KyoS.Web.Controllers
                                                       .Include(c => c.Referred)
                                                       .Include(c => c.LegalGuardian)
                                                       .Include(c => c.EmergencyContact)
+                                                      .Include(c => c.IndividualTherapyFacilitator)
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
             {
@@ -292,7 +295,7 @@ namespace KyoS.Web.Controllers
             this.SetDiagnosticsTemp(clientEntity);
             this.SetDocumentsTemp(clientEntity);
 
-            ClientViewModel clientViewModel = _converterHelper.ToClientViewModel(clientEntity, user_logged.Id);            
+            ClientViewModel clientViewModel = await _converterHelper.ToClientViewModel(clientEntity, user_logged.Id);            
 
             if (!User.IsInRole("Admin"))
             {
@@ -426,6 +429,7 @@ namespace KyoS.Web.Controllers
                                                       .Include(c => c.Referred)
                                                       .Include(c => c.LegalGuardian)
                                                       .Include(c => c.EmergencyContact)
+                                                      .Include(c => c.IndividualTherapyFacilitator)
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
             {
@@ -442,7 +446,7 @@ namespace KyoS.Web.Controllers
             this.SetDiagnosticsTemp(clientEntity);
             this.SetDocumentsTemp(clientEntity);
 
-            ClientViewModel clientViewModel = _converterHelper.ToClientViewModel(clientEntity, user_logged.Id);
+            ClientViewModel clientViewModel = await _converterHelper.ToClientViewModel(clientEntity, user_logged.Id);
                         
             if (user_logged.Clinic != null)
             {

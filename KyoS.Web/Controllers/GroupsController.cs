@@ -39,17 +39,24 @@ namespace KyoS.Web.Controllers
             if (user_logged.Clinic == null)
             {
                 return RedirectToAction("Home/Error404");
-            }    
+            }
 
-            ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
-            
+            int count = await _context.Clients
+                                      .Where(c => (c.Status == StatusType.Open && c.Group == null && c.Clinic.Id == user_logged.Clinic.Id &&
+                                                   c.MTPs.Count() > 0 && c.Service == ServiceType.PSR))
+                                      .CountAsync();
+            if (count > 0)
+            {
+                ViewBag.Message = "1";
+            }
+
             return View(await _context.Groups
 
                                       .Include(g => g.Facilitator)
 
                                       .Include(g => g.Clients)
 
-                                      .Where(g => (g.Facilitator.Clinic.Id == clinic.Id && g.Service == Common.Enums.ServiceType.PSR))
+                                      .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id && g.Service == Common.Enums.ServiceType.PSR))
                                       .OrderBy(g => g.Facilitator.Name)
                                       .ToListAsync());            
         }
@@ -93,46 +100,33 @@ namespace KyoS.Web.Controllers
             GroupViewModel model;
             MultiSelectList client_list;
             List<ClientEntity> clients = new List<ClientEntity>();
-
-            if (!User.IsInRole("Admin"))
+                        
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                    .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic != null)
             {
-                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
-                if (user_logged.Clinic != null)
+                model = new GroupViewModel
                 {
-                    model = new GroupViewModel
-                    {
-                        Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id)
-                    };
+                    Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id)
+                };
 
-                    clients = await _context.Clients
+                clients = await _context.Clients
 
-                                            .Include(c => c.MTPs)
+                                        .Include(c => c.MTPs)
 
-                                            .Where(c => (c.Clinic.Id == user_logged.Clinic.Id 
-                                                && c.Status == Common.Enums.StatusType.Open
-                                                && c.Service == Common.Enums.ServiceType.PSR))
-                                            .OrderBy(c => c.Name).ToListAsync();
+                                        .Where(c => (c.Clinic.Id == user_logged.Clinic.Id 
+                                                    && c.Status == Common.Enums.StatusType.Open
+                                                    && c.Service == Common.Enums.ServiceType.PSR
+                                                    && c.Group == null))
+                                        .OrderBy(c => c.Name).ToListAsync();
 
-                    clients = clients.Where(c => c.MTPs.Count > 0).ToList();
-                    client_list = new MultiSelectList(clients, "Id", "Name");
-                    ViewData["clients"] = client_list;
-                    return View(model);
-                }
+                clients = clients.Where(c => c.MTPs.Count > 0).ToList();
+                client_list = new MultiSelectList(clients, "Id", "Name", clients);
+                ViewData["clients"] = client_list;
+                return View(model);
             }
 
-            model = new GroupViewModel
-            {
-                Facilitators = _combosHelper.GetComboFacilitators()
-            };
-
-            clients = await _context.Clients
-                                    .Include(c => c.MTPs)
-                                    .OrderBy(c => c.Name).ToListAsync();
-            clients = clients.Where(c => c.MTPs.Count > 0).ToList();
-            client_list = new MultiSelectList(clients, "Id", "Name");
-            ViewData["clients"] = client_list;
-            return View(model);
+            return View(null);
         }
 
         [HttpPost]
@@ -288,37 +282,35 @@ namespace KyoS.Web.Controllers
             GroupViewModel groupViewModel = _converterHelper.ToGroupViewModel(groupEntity);
             ViewData["am"] = groupViewModel.Am ? "true" : "false";
             List<ClientEntity> clients = new List<ClientEntity>();
-
-            if (!User.IsInRole("Admin"))
+                        
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                    .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic != null)
             {
-                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
-                if (user_logged.Clinic != null)
+                groupViewModel.Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id);
+
+                clients = await _context.Clients
+
+                                        .Include(c => c.MTPs)
+
+                                        .Where(c => (c.Clinic.Id == user_logged.Clinic.Id 
+                                                    && c.Status == Common.Enums.StatusType.Open
+                                                    && c.Service == Common.Enums.ServiceType.PSR
+                                                    && c.Group == null))
+                                        .OrderBy(c => c.Name)
+                                        .ToListAsync();
+
+                clients = clients.Where(c => c.MTPs.Count > 0).ToList();
+                foreach (ClientEntity item in groupViewModel.Clients)
                 {
-                    groupViewModel.Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id);
-
-                    clients = await _context.Clients
-
-                                            .Include(c => c.MTPs)
-
-                                            .Where(c => (c.Clinic.Id == user_logged.Clinic.Id 
-                                                      && c.Status == Common.Enums.StatusType.Open
-                                                      && c.Service == Common.Enums.ServiceType.PSR))
-                                            .OrderBy(c => c.Name)
-                                            .ToListAsync();
-
-                    clients = clients.Where(c => c.MTPs.Count > 0).ToList();
-                    client_list = new MultiSelectList(clients, "Id", "Name", groupViewModel.Clients.Select(c => c.Id));
-                    ViewData["clients"] = client_list;
-                    return View(groupViewModel);
+                    clients.Add(item);
                 }
-            }
-
-            clients = await _context.Clients.Include(c => c.MTPs).ToListAsync();
-            clients = clients.Where(c => c.MTPs.Count > 0).ToList();
-            client_list = new MultiSelectList(clients, "Id", "Name", groupViewModel.Clients.Select(c => c.Id));
-            ViewData["clients"] = client_list;
-            return View(groupViewModel);
+                client_list = new MultiSelectList(clients, "Id", "Name", groupViewModel.Clients.Select(c => c.Id));
+                ViewData["clients"] = client_list;
+                return View(groupViewModel);
+            }          
+                        
+            return View(null);
         }
 
         [HttpPost]
@@ -469,7 +461,14 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+            int count = await _context.Clients
+                                      .Where(c => (c.Status == StatusType.Open && c.Group == null && c.Clinic.Id == user_logged.Clinic.Id &&
+                                                   c.MTPs.Count() > 0 && c.Service == ServiceType.Group))
+                                      .CountAsync();
+            if (count > 0)
+            {
+                ViewBag.Message = "1";
+            }           
 
             return View(await _context.Groups
 
@@ -477,7 +476,7 @@ namespace KyoS.Web.Controllers
 
                                       .Include(g => g.Clients)
 
-                                      .Where(g => (g.Facilitator.Clinic.Id == clinic.Id && g.Service == Common.Enums.ServiceType.Group))
+                                      .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id && g.Service == Common.Enums.ServiceType.Group))
                                       .OrderBy(g => g.Facilitator.Name)
                                       .ToListAsync());
         }
@@ -542,7 +541,8 @@ namespace KyoS.Web.Controllers
 
                                     .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                         && c.Status == Common.Enums.StatusType.Open
-                                        && c.Service == Common.Enums.ServiceType.Group))
+                                        && c.Service == Common.Enums.ServiceType.Group
+                                        && c.Group == null))
                                     .OrderBy(c => c.Name).ToListAsync();
 
             clients = clients.Where(c => c.MTPs.Count > 0).ToList();
@@ -737,11 +737,16 @@ namespace KyoS.Web.Controllers
 
                                     .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                 && c.Status == Common.Enums.StatusType.Open
-                                                && c.Service == Common.Enums.ServiceType.Group))
+                                                && c.Service == Common.Enums.ServiceType.Group
+                                                && c.Group == null))
                                     .OrderBy(c => c.Name)
                                     .ToListAsync();
 
             clients = clients.Where(c => c.MTPs.Count > 0).ToList();
+            foreach (ClientEntity item in groupViewModel.Clients)
+            {
+                clients.Add(item);
+            }
             client_list = new MultiSelectList(clients, "Id", "Name", groupViewModel.Clients.Select(c => c.Id));
             ViewData["clients"] = client_list;
             return View(groupViewModel);                                   

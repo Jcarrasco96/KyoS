@@ -170,20 +170,31 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboFacilitatorsByClinic(int idClinic)
+        public IEnumerable<SelectListItem> GetComboFacilitatorsByClinic(int idClinic, bool blank)
         {
-            List<SelectListItem> list = _context.Facilitators.Where(f => f.Clinic.Id == idClinic).Select(f => new SelectListItem
+            List<SelectListItem> list = _context.Facilitators.Where(f => f.Clinic.Id == idClinic).OrderBy(f => f.Name).Select(f => new SelectListItem
             {
                 Text = $"{f.Name}",
                 Value = $"{f.Id}"
             }).ToList();
 
-            list.Insert(0, new SelectListItem
+            if (!blank)
             {
-                Text = "[Select facilitator...]",
-                Value = "0"
-            });
-
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select facilitator...]",
+                    Value = "0"
+                });
+            }
+            else
+            {
+                list.Insert(0, new SelectListItem
+                {
+                    Text = string.Empty,
+                    Value = "0"
+                });
+            }
+            
             return list;
         }
 
@@ -265,11 +276,12 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboClientsForIndNotes(int idClinic, int idWeek)
+        public IEnumerable<SelectListItem> GetComboClientsForIndNotes(int idClinic, int idWeek, int idFacilitator)
         {
             List<ClientEntity> clients = _context.Clients
                                                  .Where(c => (c.Clinic.Id == idClinic
-                                                           && c.MTPs.Where(m => m.Active == true).Count() > 0 && c.Status == StatusType.Open))
+                                                           && c.MTPs.Where(m => m.Active == true).Count() > 0 && c.Status == StatusType.Open
+                                                           && c.IndividualTherapyFacilitator.Id == idFacilitator))
                                                  .ToList();
 
             List<Workday_Client> workdays_clients = _context.Workdays_Clients
