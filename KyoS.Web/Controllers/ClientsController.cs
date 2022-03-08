@@ -276,6 +276,7 @@ namespace KyoS.Web.Controllers
                                                       .Include(c => c.Referred)
                                                       .Include(c => c.LegalGuardian)
                                                       .Include(c => c.EmergencyContact)
+                                                      .Include(c => c.IndividualTherapyFacilitator)
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
             {
@@ -292,7 +293,7 @@ namespace KyoS.Web.Controllers
             this.SetDiagnosticsTemp(clientEntity);
             this.SetDocumentsTemp(clientEntity);
 
-            ClientViewModel clientViewModel = _converterHelper.ToClientViewModel(clientEntity, user_logged.Id);            
+            ClientViewModel clientViewModel = await _converterHelper.ToClientViewModel(clientEntity, user_logged.Id);            
 
             if (!User.IsInRole("Admin"))
             {
