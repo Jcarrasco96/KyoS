@@ -203,7 +203,7 @@ namespace KyoS.Web.Data
                         .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<TCMServicePlanEntity>()
-                                   .HasIndex(s => s.CaseNumber)
+                                   .HasIndex(s => s.Id)
                                    .IsUnique();
         }
     }

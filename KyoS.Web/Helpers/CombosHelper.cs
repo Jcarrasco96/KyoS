@@ -926,5 +926,31 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboClientsForTCMCaseOpen(int idClinic)
+        {
+            
+            List<TCMClientEntity> tcmClients_Open = _context.TCMClient
+                                                 .Include(g => g.Client)
+                                                 .Where(c => (c.Client.Clinic.Id == idClinic
+                                                            && c.Status == StatusType.Open))
+                                                 .ToList();
+
+            List<SelectListItem> list = tcmClients_Open.Select(c => new SelectListItem
+            {
+                Text = $"{c.Client.Name}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select client...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
     }
 }

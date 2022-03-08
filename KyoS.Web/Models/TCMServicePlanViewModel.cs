@@ -11,23 +11,20 @@ namespace KyoS.Web.Models
 {
     public class TCMServicePlanViewModel : TCMServicePlanEntity
     {
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
+       /* [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Clinic")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a clinic.")]
         public int IdClinic { get; set; }
 
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public int ID_CaseManager { get; set; }
+        public int ID_TcmClient { get; set; }*/
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public int ID_Client { get; set; }
+        public int ID_Status { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime Date_ServicePlan { get; set; }
-
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public int Case_Number { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime Date_Intake { get; set; }
@@ -44,7 +41,8 @@ namespace KyoS.Web.Models
 
         public string dischargerCriteria { get; set; }
 
-        public IEnumerable<SelectListItem> Clients { get; set; }
-        public IEnumerable<SelectListItem> Clinics { get; set; }
+       // public IEnumerable<SelectListItem> TcmClients { get; set; }
+       // public IEnumerable<SelectListItem> Clinics { get; set; }
+        public IEnumerable<SelectListItem> Status { get; set; }
     }
 }

@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220308031655_TCMServicePlan_update6")]
+    partial class TCMServicePlan_update6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3328,7 +3330,7 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("ClinicId");
 
                     b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanEntity", "TcmServicePlan")
-                        .WithMany()
+                        .WithMany("TCMDomain")
                         .HasForeignKey("TcmServicePlanId");
 
                     b.Navigation("Clinic");
@@ -3689,6 +3691,11 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServiceEntity", b =>
                 {
                     b.Navigation("Stages");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServicePlanEntity", b =>
+                {
+                    b.Navigation("TCMDomain");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.WeekEntity", b =>

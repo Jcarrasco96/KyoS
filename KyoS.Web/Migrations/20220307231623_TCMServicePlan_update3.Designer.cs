@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220307231623_TCMServicePlan_update3")]
+    partial class TCMServicePlan_update3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2288,6 +2290,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<int?>("CaseManagerId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
 
@@ -2306,6 +2311,9 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("DischargerCriteria")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("IDCaseManager")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -2319,6 +2327,8 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CaseManagerId");
 
                     b.HasIndex("ClinicId");
 
@@ -3328,7 +3338,7 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("ClinicId");
 
                     b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanEntity", "TcmServicePlan")
-                        .WithMany()
+                        .WithMany("TCMDomain")
                         .HasForeignKey("TcmServicePlanId");
 
                     b.Navigation("Clinic");
@@ -3363,6 +3373,10 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServicePlanEntity", b =>
                 {
+                    b.HasOne("KyoS.Web.Data.Entities.CaseMannagerEntity", "CaseManager")
+                        .WithMany()
+                        .HasForeignKey("CaseManagerId");
+
                     b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
                         .WithMany()
                         .HasForeignKey("ClinicId");
@@ -3370,6 +3384,8 @@ namespace KyoS.Web.Migrations
                     b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
                         .WithMany()
                         .HasForeignKey("TcmClientId");
+
+                    b.Navigation("CaseManager");
 
                     b.Navigation("Clinic");
 
@@ -3689,6 +3705,11 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServiceEntity", b =>
                 {
                     b.Navigation("Stages");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServicePlanEntity", b =>
+                {
+                    b.Navigation("TCMDomain");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.WeekEntity", b =>

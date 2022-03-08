@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using KyoS.Common.Enums;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -11,13 +12,7 @@ namespace KyoS.Web.Data.Entities
         public int Id { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public int IDCaseManager { get; set; }
-
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime DateServicePlan{ get; set; }
-
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public int CaseNumber { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime DateIntake { get; set; }
@@ -34,11 +29,11 @@ namespace KyoS.Web.Data.Entities
 
         public string DischargerCriteria { get; set; }
 
-        public bool Active { get; set; }
+        public StatusType Status { get; set; }
 
-       // public CaseMannagerEntity CaseManager { get; set; }
-        public ClientEntity Client { get; set; }
+        // public CaseMannagerEntity CaseManager { get; set; }
+        public TCMClientEntity TcmClient { get; set; }
         public ClinicEntity Clinic { get; set; }
-        public List <TCMDomainEntity> TCMDomain { get; set; } 
+       // public List <TCMDomainEntity> TCMDomain { get; set; } 
     }
 }

@@ -1180,12 +1180,10 @@ namespace KyoS.Web.Helpers
                 Date_ServicePlan = TcmServicePlanEntity.DateServicePlan,
                 Date_Assessment = TcmServicePlanEntity.DateAssessment,
                 Date_Certification = TcmServicePlanEntity.DateCertification,
-                IdClinic = TcmServicePlanEntity.Clinic.Id,
-                Clinics = _combosHelper.GetComboClinics(),
                 dischargerCriteria = TcmServicePlanEntity.DischargerCriteria,
                 strengths = TcmServicePlanEntity.Strengths,
                 weakness = TcmServicePlanEntity.Weakness,
-                ID_Client = TcmServicePlanEntity.Client.Id
+                //TCMDomain = TcmServicePlanEntity.TCMDomain
 
             };
         }
@@ -1199,13 +1197,13 @@ namespace KyoS.Web.Helpers
                 DateServicePlan = model.Date_ServicePlan,
                 DateAssessment = model.Date_Assessment,
                 DateCertification = model.Date_Certification,
-                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
-                Client = await _context.Clients.FindAsync(model.ID_Client),
-                CaseNumber = model.Case_Number,
+                Clinic = model.Clinic,
+                TcmClient = model.TcmClient,
                 DischargerCriteria = model.dischargerCriteria,
                 Weakness = model.weakness,
-                Strengths = model.strengths
-
+                Strengths = model.strengths,
+                Status = StatusUtils.GetStatusByIndex(model.ID_Status),
+                //TCMDomain = null
             };
         }
     }
