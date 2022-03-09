@@ -56,15 +56,20 @@ namespace KyoS.Web.Controllers
 
                      List<TCMServicePlanEntity> servicePlan = await _context.TCMServicePlans
                                                          .Include(g => g.TcmClient)
+                                                         .ThenInclude(f => f.Client)
+                                                         .Include(t => t.TcmClient.Casemanager)
                                                          .Where(g => (g.TcmClient.Casemanager.Id == caseManager.Id))
                                                          .ToListAsync();
+                
                     return View(servicePlan);
                 }
                 if (user_logged.UserType.ToString() == "Manager")
                 {
                    List<TCMServicePlanEntity> servicePlan = await _context.TCMServicePlans
                                                         .Include(g => g.TcmClient)
-                                                        .Where(g => (g.Clinic.Id == clinic.Id))
+                                                        .ThenInclude(f => f.Client)
+                                                        .Include(t => t.TcmClient.Casemanager)
+                                                        .Where(g => (g.TcmClient.Client.Clinic.Id == clinic.Id))
                                                         .ToListAsync();
                     return View(servicePlan);
                 }
@@ -82,9 +87,10 @@ namespace KyoS.Web.Controllers
         {
             TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans.Include(u => u.TcmClient)
                                                          .FirstOrDefault(u => u.TcmClient.Id == id);
-            if(tcmServicePlan == null)
+            TCMServicePlanViewModel model;
+
+            if (tcmServicePlan == null)
             {
-                TCMServicePlanViewModel model;
                 if (User.IsInRole("CaseManager"))
                 {
                     UserEntity user_logged = _context.Users.Include(u => u.Clinic)
@@ -92,17 +98,38 @@ namespace KyoS.Web.Controllers
 
                     if (user_logged.Clinic != null)
                     {
+                        List <TCMClientEntity> tcmClient = _context.TCMClient
+                                                        .Include(u => u.Client)
+                                                        .Where(u => u.Id == id)
+                                                        .ToList();
+
+                        List<SelectListItem> list_Client = tcmClient.Select(c => new SelectListItem
+                        {
+                            Text = $"{c.Client.Name}",
+                            Value = $"{c.Id}"
+                        })
+                            .ToList();
+
+                        List<ClinicEntity> clinic = _context.Clinics                                                         
+                                                         .Where(u => u.Id == user_logged.Clinic.Id)
+                                                         .ToList();
+
+                        List<SelectListItem> list_Clinins = clinic.Select(c => new SelectListItem
+                        {
+                            Text = $"{c.Name}",
+                            Value = $"{c.Id}"
+                        })
+                            .ToList();
 
                         model = new TCMServicePlanViewModel
                         {
-                           /* IdClinic = user_logged.Clinic.Id,
-                            ID_TcmClient = id,*/
-                            TcmClient = _context.TCMClient.Include(u => u.Casemanager)
-                                                           .Include(d => d.Client)
-                                                           .FirstOrDefault(u => u.Id == id),
-                            Clinic = _context.Clinics.FirstOrDefault(u => u.Id == user_logged.Clinic.Id),
+                            ID_TcmClient = id,
+                            TcmClients = list_Client,
+                            ID_Clinic = user_logged.Clinic.Id,
+                            Clinics = list_Clinins,
                             ID_Status = 1,
-                            Status = _combosHelper.GetComboClientStatus(),
+                            status = _combosHelper.GetComboClientStatus(),
+                            CaseNumber = _context.TCMClient.FirstOrDefault(u => u.Id == id).CaseNumber,
                             Date_ServicePlan = DateTime.Today.Date,
                             Date_Intake = DateTime.Today.Date,
                             Date_Assessment = DateTime.Today.Date,
@@ -113,8 +140,8 @@ namespace KyoS.Web.Controllers
                     return RedirectToAction("NotAuthorized", "Account");
                 }
             }
-            
-            return View(null);
+
+            return RedirectToAction("Index", "TCMServicePlans");
         }
 
         [HttpPost]
@@ -123,14 +150,12 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> Create(TCMServicePlanViewModel tcmServicePlanViewModel)
         {
             UserEntity user_logged = _context.Users
-                                             .Include(u => u.Clinic)
+                                             .Include(u => u.Clinic) 
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (ModelState.IsValid)
             {
-                TCMServicePlanEntity tcmServicePlanEntity = await _context.TCMServicePlans
-                                                                    .Include(s => s.TcmClient)
-                                                                    .FirstOrDefaultAsync(s => s.TcmClient.CaseNumber == tcmServicePlanViewModel.TcmClient.CaseNumber);
+                TCMServicePlanEntity tcmServicePlanEntity = await _context.TCMServicePlans.FindAsync(tcmServicePlanViewModel.ID_TcmClient);
                 if (tcmServicePlanEntity == null)
                 {
                     tcmServicePlanEntity = await _converterHelper.ToTCMServicePlanEntity(tcmServicePlanViewModel, true);
@@ -138,12 +163,8 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        List<TCMServicePlanEntity> servicePlans = await _context.TCMServicePlans
-                                                          .Include(g => g.TcmClient)
-                                                          .Where(g => (g.TcmClient.Casemanager.Id == tcmServicePlanViewModel.TcmClient.Casemanager.Id))
-                                                          .ToListAsync();
-
-                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_TCMServicePlan", servicePlans) });
+                       
+                        return RedirectToAction("Index", "TCMServicePlans");
                     }
                     catch (System.Exception ex)
                     {
@@ -161,18 +182,103 @@ namespace KyoS.Web.Controllers
            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmServicePlanViewModel) });
         }
 
-        public void UpdateTCMServicePlanToNonActive(ClientEntity client)
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> Edit(int? Id)
         {
-           /* List<TCMServicePlanEntity> tcmServicePlan_list = _context.TCMServicePlans.Where(m => m.Client == client).ToList();
-            if (tcmServicePlan_list.Count() > 0)
+            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
+                                                          .Include(f => f.TcmClient)
+                                                          .FirstOrDefault(u => u.Id == Id);
+            TCMServicePlanViewModel model;
+
+            if (tcmServicePlan != null)
             {
-                foreach (TCMServicePlanEntity item in tcmServicePlan_list)
+                if (User.IsInRole("CaseManager"))
                 {
-                  //  item.Active = false;
-                    _context.Update(item);
+                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    if (user_logged.Clinic != null)
+                    {
+                        List<TCMClientEntity> tcmClient = _context.TCMClient
+                                                       .Include(u => u.Client)
+                                                       .Where(u => u.Id == tcmServicePlan.TcmClient.Id)
+                                                       .ToList();
+
+                        List<SelectListItem> list_Client = tcmClient.Select(c => new SelectListItem
+                        {
+                            Text = $"{c.Client.Name}",
+                            Value = $"{c.Id}"
+                        })
+                            .ToList();
+
+                        List<ClinicEntity> clinic = _context.Clinics
+                                                         .Where(u => u.Id == user_logged.Clinic.Id)
+                                                         .ToList();
+
+                        List<SelectListItem> list_Clinins = clinic.Select(c => new SelectListItem
+                        {
+                            Text = $"{c.Name}",
+                            Value = $"{c.Id}"
+                        })
+                            .ToList();
+
+                        model = new TCMServicePlanViewModel
+                        {
+                            ID_TcmClient = tcmServicePlan.TcmClient.Id,
+                            TcmClients = list_Client,
+                            ID_Clinic = user_logged.Clinic.Id,
+                            Clinics = list_Clinins,
+                            Status = tcmServicePlan.Status,
+                            ID_Status = (tcmServicePlan.Status == StatusType.Open) ? 1 : 2,
+                            status = _combosHelper.GetComboClientStatus(),
+                            CaseNumber = _context.TCMClient.FirstOrDefault(u => u.Id == tcmServicePlan.TcmClient.Id).CaseNumber,
+                            Date_ServicePlan = tcmServicePlan.DateServicePlan,
+                            Date_Intake = tcmServicePlan.DateIntake,
+                            Date_Assessment = tcmServicePlan.DateAssessment,
+                            Date_Certification = tcmServicePlan.DateCertification,
+                            strengths = tcmServicePlan.Strengths,
+                            weakness = tcmServicePlan.Weakness,
+                            dischargerCriteria = tcmServicePlan.DischargerCriteria
+                        };
+                        //model = _converterHelper.ToTCMServicePlanViewModel(tcmServicePlan);
+                        return View(model);
+                    }
+                    return RedirectToAction("NotAuthorized", "Account");
                 }
-                _context.SaveChangesAsync();
-            }*/
+            }
+
+            return RedirectToAction("Index", "TCMServicePlans");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> Edit(int id, TCMServicePlanViewModel serviceplanViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                              .Include(u => u.Clinic)
+                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+             if (ModelState.IsValid)
+             {
+                 
+                  TCMServicePlanEntity tcmServicePlanEntity = await _converterHelper.ToTCMServicePlanEntity(serviceplanViewModel, false);
+                  _context.Update(tcmServicePlanEntity);
+                  try
+                  {
+                       await _context.SaveChangesAsync();
+                     
+                       return RedirectToAction("Index", "TCMServicePlans");
+                  }
+                  catch (System.Exception ex)
+                  {
+                       ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                  }
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", serviceplanViewModel) });
+        }
+
+           
     }
 }

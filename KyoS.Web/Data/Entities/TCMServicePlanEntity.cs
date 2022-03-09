@@ -31,9 +31,9 @@ namespace KyoS.Web.Data.Entities
 
         public StatusType Status { get; set; }
 
-        // public CaseMannagerEntity CaseManager { get; set; }
+        
         public TCMClientEntity TcmClient { get; set; }
-        public ClinicEntity Clinic { get; set; }
+       
        // public List <TCMDomainEntity> TCMDomain { get; set; } 
     }
 }

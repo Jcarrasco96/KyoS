@@ -1176,6 +1176,7 @@ namespace KyoS.Web.Helpers
             return new TCMServicePlanViewModel
             {
                 Id = TcmServicePlanEntity.Id,
+                ID_TcmClient = TcmServicePlanEntity.TcmClient.Id,
                 Date_Intake = TcmServicePlanEntity.DateIntake,
                 Date_ServicePlan = TcmServicePlanEntity.DateServicePlan,
                 Date_Assessment = TcmServicePlanEntity.DateAssessment,
@@ -1183,6 +1184,9 @@ namespace KyoS.Web.Helpers
                 dischargerCriteria = TcmServicePlanEntity.DischargerCriteria,
                 strengths = TcmServicePlanEntity.Strengths,
                 weakness = TcmServicePlanEntity.Weakness,
+                CaseNumber = TcmServicePlanEntity.TcmClient.CaseNumber,
+                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2,
+                //TcmClients = _combosHelper.GetComboClientsForTCMCaseOpen(TcmServicePlanEntity.TcmClient.Client.Clinic.Id),
                 //TCMDomain = TcmServicePlanEntity.TCMDomain
 
             };
@@ -1197,13 +1201,12 @@ namespace KyoS.Web.Helpers
                 DateServicePlan = model.Date_ServicePlan,
                 DateAssessment = model.Date_Assessment,
                 DateCertification = model.Date_Certification,
-                Clinic = model.Clinic,
-                TcmClient = model.TcmClient,
+                TcmClient = await _context.TCMClient.FindAsync(model.ID_TcmClient),
                 DischargerCriteria = model.dischargerCriteria,
                 Weakness = model.weakness,
                 Strengths = model.strengths,
                 Status = StatusUtils.GetStatusByIndex(model.ID_Status),
-                //TCMDomain = null
+               
             };
         }
     }

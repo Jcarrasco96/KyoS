@@ -7,94 +7,87 @@
 <div class="row">
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="TcmClient.Client.Name" class="control-label"></label>
-            <input asp-for="TcmClient.Client.Name" asp-items="Model.Client" class="form-control" readonly />
-            <span asp-validation-for="TcmClient.Client.Name" class="text-danger"></span>
+            <label asp-for="ID_TcmClient" class="control-label">TCM Client Name</label>
+            <select asp-for="ID_TcmClient" asp-items="Model.TcmClients" class="form-control" readonly></select>
+            <span asp-validation-for="ID_TcmClient" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="TcmClient.CaseNumber" class="control-label">Case number</label>
-            <input asp-for="TcmClient.CaseNumber" class="form-control" readonly />
-            <span asp-validation-for="TcmClient.CaseNumber" class="text-danger"></span>
+            <label asp-for="ID_Status" class="control-label">Service Plan Status</label>
+            <select asp-for="ID_Status" asp-items="Model.status" class="form-control"></select>
+            <span asp-validation-for="ID_Status" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="TcmClient.Casemanager.Name" class="control-label">Casemanager</label>
-            <input asp-for="TcmClient.Casemanager.Name" asp-items="Model.CaseManager" class="form-control" readonly />
-            <span asp-validation-for="TcmClient.Casemanager.Name" class="text-danger"></span>
+            <label asp-for="CaseNumber" class="control-label">Case number</label>
+            <input asp-for="CaseNumber" class="form-control" readonly/>
+            <span asp-validation-for="CaseNumber" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="Clinic.Name" class="control-label">Clinic</label>
-            <input asp-for="Clinic.Name" asp-items="Model.Clinic" class="form-control" readonly />
-            <span asp-validation-for="Clinic.Name" class="text-danger"></span>
+            <label asp-for="ID_Clinic" class="control-label">Clinic Name</label>
+            <select asp-for="ID_Clinic" asp-items="Model.Clinics" class="form-control" readonly></select>
+            <span asp-validation-for="ID_Clinic" class="text-danger"></span>
         </div>
     </div>
-
+   
 </div>
 <div class="row">
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="Date_Intake" class="control-label"></label>
+            <label asp-for="Date_Intake" class="control-label">Intake Date</label>
             <input asp-for="Date_Intake" class="form-control" />
             <span asp-validation-for="Date_Intake" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="Date_ServicePlan" class="control-label"></label>
+            <label asp-for="Date_ServicePlan" class="control-label">Services Plan Date</label>
             <input asp-for="Date_ServicePlan" class="form-control" />
             <span asp-validation-for="Date_ServicePlan" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="Date_Assessment" class="control-label"></label>
+            <label asp-for="Date_Assessment" class="control-label">Assessment Date</label>
             <input asp-for="Date_Assessment" class="form-control" />
             <span asp-validation-for="Date_Assessment" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="Date_Certification" class="control-label"></label>
+            <label asp-for="Date_Certification" class="control-label">Certification Date</label>
             <input asp-for="Date_Certification" class="form-control">
             <span asp-validation-for="Date_Certification" class="text-danger"></span>
         </div>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="form-group">
-            <label asp-for="strengths" class="control-label"></label>
-            <input asp-for="strengths" class="form-control">
+            <label asp-for="strengths" class="control-label">Strengths</label>
+            <textarea asp-for="strengths" class="form-control" rows="4"></textarea>
             <span asp-validation-for="strengths" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="form-group">
-            <label asp-for="weakness" class="control-label"></label>
-            <input asp-for="weakness" class="form-control" />
+            <label asp-for="weakness" class="control-label">Weakness</label>
+            <textarea asp-for="weakness" class="form-control" rows="4"></textarea>
             <span asp-validation-for="weakness" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="form-group">
-            <label asp-for="dischargerCriteria" class="control-label"></label>
-            <input asp-for="dischargerCriteria" class="form-control" />
+            <label asp-for="dischargerCriteria" class="control-label">Discharger Criteria</label>
+            <textarea asp-for="dischargerCriteria" class="form-control" rows="4"></textarea>
             <span asp-validation-for="dischargerCriteria" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label asp-for="ID_Status" class="control-label"></label>
-            <select asp-for="ID_Status" asp-items="Model.Status" class="form-control"></select>
-            <span asp-validation-for="ID_Status" class="text-danger"></span>
-        </div>
-    </div>
-
+   
 </div>
 
 @section Scripts {
