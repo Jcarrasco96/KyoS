@@ -101,6 +101,8 @@ namespace KyoS.Web.Data.Entities
 
         public ServiceType Service { get; set; }
 
+        public FacilitatorEntity IndividualTherapyFacilitator { get; set; }
+
         public string MissingDoc 
         {
             get

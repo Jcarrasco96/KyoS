@@ -234,6 +234,7 @@ namespace KyoS.Web.Helpers
                 LegalGuardian = await _context.LegalGuardians.FirstOrDefaultAsync(lg => lg.Id == model.IdLegalGuardian),
                 EmergencyContact = await _context.EmergencyContacts.FirstOrDefaultAsync(ec => ec.Id == model.IdEmergencyContact),
                 RelationShipOfLegalGuardian = RelationshipUtils.GetRelationshipByIndex(model.IdRelationship),
+                IndividualTherapyFacilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.Id == model.IdFacilitatorIT),
                 Service = isNew ? ServiceType.PSR : ServiceUtils.GetServiceByIndex(model.IdService),
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
@@ -242,8 +243,11 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public ClientViewModel ToClientViewModel(ClientEntity clientEntity, string userId)
+        public async Task<ClientViewModel> ToClientViewModel(ClientEntity clientEntity, string userId)
         {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.Id == userId);
 
             return new ClientViewModel
             {
@@ -298,7 +302,9 @@ namespace KyoS.Web.Helpers
                 DiagnosticTemp = _context.DiagnosticsTemp,
                 DocumentTemp = _context.DocumentsTemp,
                 IdService = Convert.ToInt32(clientEntity.Service),
-                Services = _combosHelper.GetComboServices()
+                Services = _combosHelper.GetComboServices(),
+                IdFacilitatorIT = (clientEntity.IndividualTherapyFacilitator != null) ? clientEntity.IndividualTherapyFacilitator.Id : 0,
+                ITFacilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, true)
             };
         }
 

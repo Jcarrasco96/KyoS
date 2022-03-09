@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220227205157_ModifyClientWithFacilitatorForIndividualTherapies")]
+    partial class ModifyClientWithFacilitatorForIndividualTherapies
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,43 +60,6 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("ThemeId");
 
                     b.ToTable("Activities");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.CaseMannagerEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ClinicId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Codigo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LinkedUser")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("SignaturePath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClinicId");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("CaseManagers");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClassificationEntity", b =>
@@ -2077,12 +2042,6 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("MentalHealthClinic")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("TCMClinic")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Clinic_FK")
@@ -2126,284 +2085,6 @@ namespace KyoS.Web.Migrations
                         .IsUnique();
 
                     b.ToTable("Supervisors");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMClientEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("CaseNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CasemanagerId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DataClose")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DataOpen")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Period")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CasemanagerId");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("TCMClient");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDomainEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ClinicId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateIdentified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("NeedsIdentified")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TcmServicePlanId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClinicId");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.HasIndex("TcmServicePlanId");
-
-                    b.ToTable("TCMDomains");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMObjetiveEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ClinicId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IdObjetive")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("TargetDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("TcmDomainId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Units")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClinicId");
-
-                    b.HasIndex("TcmDomainId");
-
-                    b.ToTable("TCMObjetives");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServiceEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ClinicId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClinicId");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("TCMServices");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServicePlanEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("DateAssessment")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateCertification")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateIntake")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateServicePlan")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DischargerCriteria")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Strengths")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TcmClientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Weakness")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.HasIndex("TcmClientId");
-
-                    b.ToTable("TCMServicePlans");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMStageEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ClinicId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ID_Etapa")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Units")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("tCMserviceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClinicId");
-
-                    b.HasIndex("tCMserviceId");
-
-                    b.ToTable("TCMStages");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMSupervisorEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ClinicId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Firm")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LinkedUser")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("SignaturePath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClinicId");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("TCMSupervisors");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TemplateDOCEntity", b =>
@@ -2869,15 +2550,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Theme");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.CaseMannagerEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
-                        .WithMany("CaseManagers")
-                        .HasForeignKey("ClinicId");
-
-                    b.Navigation("Clinic");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClientEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
@@ -3312,95 +2984,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Clinic");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMClientEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.CaseMannagerEntity", "Casemanager")
-                        .WithMany()
-                        .HasForeignKey("CasemanagerId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId");
-
-                    b.Navigation("Casemanager");
-
-                    b.Navigation("Client");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDomainEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
-                        .WithMany()
-                        .HasForeignKey("ClinicId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanEntity", "TcmServicePlan")
-                        .WithMany()
-                        .HasForeignKey("TcmServicePlanId");
-
-                    b.Navigation("Clinic");
-
-                    b.Navigation("TcmServicePlan");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMObjetiveEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
-                        .WithMany()
-                        .HasForeignKey("ClinicId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.TCMDomainEntity", "TcmDomain")
-                        .WithMany("TCMObjetive")
-                        .HasForeignKey("TcmDomainId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Clinic");
-
-                    b.Navigation("TcmDomain");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServiceEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
-                        .WithMany()
-                        .HasForeignKey("ClinicId");
-
-                    b.Navigation("Clinic");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServicePlanEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
-                        .WithMany()
-                        .HasForeignKey("TcmClientId");
-
-                    b.Navigation("TcmClient");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMStageEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
-                        .WithMany()
-                        .HasForeignKey("ClinicId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.TCMServiceEntity", "tCMservice")
-                        .WithMany("Stages")
-                        .HasForeignKey("tCMserviceId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Clinic");
-
-                    b.Navigation("tCMservice");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMSupervisorEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
-                        .WithMany()
-                        .HasForeignKey("ClinicId");
-
-                    b.Navigation("Clinic");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.TemplateDOCEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
@@ -3570,8 +3153,6 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClinicEntity", b =>
                 {
-                    b.Navigation("CaseManagers");
-
                     b.Navigation("Clients");
 
                     b.Navigation("Facilitators");
@@ -3681,16 +3262,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Notes");
 
                     b.Navigation("NotesP");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDomainEntity", b =>
-                {
-                    b.Navigation("TCMObjetive");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServiceEntity", b =>
-                {
-                    b.Navigation("Stages");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.WeekEntity", b =>
