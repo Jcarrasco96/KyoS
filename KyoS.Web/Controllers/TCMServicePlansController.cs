@@ -279,6 +279,100 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", serviceplanViewModel) });
         }
 
-           
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult Create_Domain(int id)
+        {
+            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans.Include(u => u.TcmClient)
+                                                         .ThenInclude(u => u.Client)
+                                                         .FirstOrDefault(u => u.Id == id);
+            TCMDomainViewModel model = null;
+
+            if (tcmServicePlan != null)
+            {
+                if (User.IsInRole("CaseManager"))
+                {
+                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    if (user_logged.Clinic != null)
+                    {
+                        /*List<TCMServiceEntity> tcmServices = _context.TCMServices
+                                                                      .Include(n => n.Stages)
+                                                                      .OrderBy(n => n.Code)
+                                                                      .ToList();
+
+                        List<SelectListItem> list_Services = tcmServices.Select(c => new SelectListItem
+                        {
+                            Text = $"{c.Code+"-"+c.Name}",
+                            Value = $"{c.Id}"
+                        })
+                            .ToList();
+                        list_Services.Insert(0, new SelectListItem
+                        {
+                            Text = "[Select service...]",
+                            Value = "0"
+                        });*/
+                        IEnumerable <SelectListItem> list_Services = _combosHelper.GetComboServicesNotUsed(tcmServicePlan.Id);
+                            
+                        model = new TCMDomainViewModel
+                        {
+                            Date_Identified = DateTime.Today.Date,
+                            Services = list_Services,
+                            TcmServicePlan = tcmServicePlan,
+                            Id_ServicePlan = id,
+                        };
+                        return View(model);
+                    }
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+            }
+
+            return RedirectToAction("Index", "TCMServicePlans");
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> Create_Domain(TCMDomainViewModel tcmDomainViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                           .Include(u => u.Clinic)
+                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
+                                                     .FirstOrDefault(g => g.Id == tcmDomainViewModel.Id_ServicePlan);
+                tcmDomainViewModel.TcmServicePlan = tcmServicePlan;
+                TCMDomainEntity tcmDomainEntity = _context.TCMDomains
+                                              .Include(f => f.TcmServicePlan)
+                                              .FirstOrDefault(g => (g.TcmServicePlan.Id == tcmDomainViewModel.TcmServicePlan.Id
+                                              && g.Code == tcmDomainViewModel.Code));
+                if (tcmDomainEntity == null)
+                {
+                    tcmDomainEntity = await _converterHelper.ToTCMDomainEntity(tcmDomainViewModel, true);
+                    _context.Add(tcmDomainEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "TCMServicePlans");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                   // ModelState.AddModelError(string.Empty, "Already exists the TCM service.");
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmDomainViewModel) });
+                }
+            }
+
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create_Domain", tcmDomainViewModel) });
+        }
     }
 }

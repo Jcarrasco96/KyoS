@@ -74,7 +74,8 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Create(int id = 0)
         {
-            if (id == 1)
+            //id = IdService, not IdStage
+           /* if (id == 1)
             {
                 ViewBag.Creado = "Y";
             }
@@ -88,7 +89,7 @@ namespace KyoS.Web.Controllers
                 {
                     ViewBag.Creado = "N";
                 }
-            }
+            }*/
             TCMStageViewModel model;
             //TCMServiceEntity tcmservice = await _context.TCMServices.FirstOrDefaultAsync(m => m.Id == id);
             TCMServiceEntity tcmservice = await _context.TCMServices
@@ -116,6 +117,7 @@ namespace KyoS.Web.Controllers
                         Clinics = list,
                         IdClinic = clinic.Id,
                         Id_TCMService = id,
+                        ID_Etapa = tcmservice.Stages.Count() + 1,
                     };
  
                     return View(model);

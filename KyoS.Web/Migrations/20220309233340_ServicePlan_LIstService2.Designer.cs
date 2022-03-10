@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220309233340_ServicePlan_LIstService2")]
+    partial class ServicePlan_LIstService2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2180,6 +2182,9 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("DateIdentified")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -2188,7 +2193,7 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("NeedsIdentified")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TcmServicePlanId")
+                    b.Property<int?>("TCMServicePlanEntityId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -2196,7 +2201,7 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.HasIndex("TcmServicePlanId");
+                    b.HasIndex("TCMServicePlanEntityId");
 
                     b.ToTable("TCMDomains");
                 });
@@ -3329,11 +3334,9 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDomainEntity", b =>
                 {
-                    b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanEntity", "TcmServicePlan")
+                    b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanEntity", null)
                         .WithMany("TCMDomain")
-                        .HasForeignKey("TcmServicePlanId");
-
-                    b.Navigation("TcmServicePlan");
+                        .HasForeignKey("TCMServicePlanEntityId");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMObjetiveEntity", b =>

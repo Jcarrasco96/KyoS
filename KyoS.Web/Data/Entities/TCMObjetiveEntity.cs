@@ -24,6 +24,7 @@ namespace KyoS.Web.Data.Entities
 
         public string Description { get; set; }
 
+        public bool Finish { get; set; }
         public DateTime StartDate{ get; set; }
         public DateTime TargetDate { get; set; }
         public DateTime EndDate { get; set; }

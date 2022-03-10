@@ -1215,5 +1215,37 @@ namespace KyoS.Web.Helpers
                
             };
         }
+
+        public TCMDomainViewModel ToTCMDomainViewModel(TCMDomainEntity TcmDomainEntity)
+        {
+            return new TCMDomainViewModel
+            {
+                Id = TcmDomainEntity.Id,
+                Date_Identified = TcmDomainEntity.DateIdentified,
+                Needs_Identified = TcmDomainEntity.NeedsIdentified,
+                Id_ServicePlan = TcmDomainEntity.TcmServicePlan.Id,
+                //Id_Service = 
+                //Services
+                //TCMObjetive
+                //TcmServicePlan
+                
+            };
+        }
+
+        public async Task<TCMDomainEntity> ToTCMDomainEntity(TCMDomainViewModel model, bool isNew)
+        {
+            return new TCMDomainEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                DateIdentified = model.Date_Identified,
+                NeedsIdentified = model.Needs_Identified,
+                TCMObjetive = model.TCMObjetive,
+                Code = model.Code,
+                Name = model.Name,
+                TcmServicePlan = model.TcmServicePlan
+
+                //TcmServicePlan
+            };
+        }
     }
 }

@@ -964,5 +964,44 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboServicesNotUsed(int idServicePlan)
+        {
+            List<TCMServiceEntity> Services_Total = _context.TCMServices
+                                                                     .Include(n => n.Stages)
+                                                                     .OrderBy(n => n.Code)
+                                                                     .ToList();
+            List<TCMDomainEntity> Services_Domain = _context.TCMDomains
+                                                    .Include(d => d.TcmServicePlan)
+                                                 .Where(d => d.TcmServicePlan.Id == idServicePlan)
+                                                 .ToList();
+            TCMServiceEntity Service = null;
+
+            foreach (var item in Services_Domain)
+            {
+                if (item.TcmServicePlan != null)
+                {
+                    if (Services_Total.Exists(c => c.Code == item.Code))
+                    {
+                        Service = _context.TCMServices.FirstOrDefault(n => n.Code == item.Code);
+                        Services_Total.Remove(Service);
+                    } 
+                }
+            }
+
+            List<SelectListItem> list = Services_Total.Select(c => new SelectListItem
+            {
+                Text = $"{c.Code + "-" + c.Name}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select client...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

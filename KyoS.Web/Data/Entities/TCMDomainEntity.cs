@@ -18,15 +18,12 @@ namespace KyoS.Web.Data.Entities
         [Display(Name = "Code")]
         public string Code { get; set; }
 
-        [Display(Name = "Description")]
-        public string Description { get; set; }
-
         public string NeedsIdentified { get; set; }
 
         public DateTime DateIdentified { get; set; }
 
         public TCMServicePlanEntity TcmServicePlan { get; set; }
-        public ClinicEntity Clinic { get; set; }
+        //public ClinicEntity Clinic { get; set; }
         public List <TCMObjetiveEntity> TCMObjetive { get; set; }
 
     }

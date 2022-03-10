@@ -34,6 +34,7 @@ namespace KyoS.Web.Data.Entities
         
         public TCMClientEntity TcmClient { get; set; }
        
-       // public List <TCMDomainEntity> TCMDomain { get; set; } 
+        public List <TCMDomainEntity> TCMDomain { get; set; }
+        public List <TCMServiceEntity> TCMService { get; set; }
     }
 }
