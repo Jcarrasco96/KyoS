@@ -1,6 +1,6 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMServicePlanEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMDomainEntity>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "TCM Domain";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,15 +11,17 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">MTPs</li>
+        <li class="active">TCM Domain</li>
     </ul><!--.breadcrumb-->
 </div>
 
+
 <div class="row">
-    <div id="view-tcmServicePlan">
-        @await Html.PartialAsync("_TCMServicePlan", Model.ToList())
+    <div id="view-tcmdomains">
+        @await Html.PartialAsync("_ViewTCMDomain", Model.ToList())
     </div>
 </div>
+
 <partial name="_ModalPopup" />
 <partial name="_DeleteDialog" />
 
@@ -30,8 +32,8 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#MyTable').DataTable({
-               "order": [[0, "asc"]],
-               "pageLength": 100
+                "order": [[1, "asc"]],
+                "pageLength": 25
             });
 
             // Delete item
@@ -40,9 +42,10 @@
             $('.deleteItem').click((e) => {
                 item_to_delete = e.currentTarget.dataset.id;
             });
+
             $("#btnYesDelete").click(function () {
-               var url = "@Url.Action("Delete", "TCMServicePlans")";
-               window.location.href = url + '/' + item_to_delete;
+                var url = "@Url.Action("Delete", "TCMDomains")";
+                window.location.href = url + '/' + item_to_delete;
             });
         });
         $(function () {
@@ -61,5 +64,3 @@
 
     </script>
 }
-
-

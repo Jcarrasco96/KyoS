@@ -1224,11 +1224,10 @@ namespace KyoS.Web.Helpers
                 Date_Identified = TcmDomainEntity.DateIdentified,
                 Needs_Identified = TcmDomainEntity.NeedsIdentified,
                 Id_ServicePlan = TcmDomainEntity.TcmServicePlan.Id,
-                //Id_Service = 
-                //Services
-                //TCMObjetive
-                //TcmServicePlan
-                
+                Code = TcmDomainEntity.Code,
+                Name = TcmDomainEntity.Name,
+                TcmServicePlan = TcmDomainEntity.TcmServicePlan,
+                Services = _combosHelper.GetComboServicesNotUsed(TcmDomainEntity.TcmServicePlan.Id)
             };
         }
 
@@ -1244,7 +1243,6 @@ namespace KyoS.Web.Helpers
                 Name = model.Name,
                 TcmServicePlan = model.TcmServicePlan
 
-                //TcmServicePlan
             };
         }
     }

@@ -55,6 +55,7 @@ namespace KyoS.Web.Controllers
                 {
 
                      List<TCMServicePlanEntity> servicePlan = await _context.TCMServicePlans
+                                                         .Include(h => h.TCMDomain)
                                                          .Include(g => g.TcmClient)
                                                          .ThenInclude(f => f.Client)
                                                          .Include(t => t.TcmClient.Casemanager)
@@ -66,6 +67,7 @@ namespace KyoS.Web.Controllers
                 if (user_logged.UserType.ToString() == "Manager")
                 {
                    List<TCMServicePlanEntity> servicePlan = await _context.TCMServicePlans
+                                                        .Include(h => h.TCMDomain)
                                                         .Include(g => g.TcmClient)
                                                         .ThenInclude(f => f.Client)
                                                         .Include(t => t.TcmClient.Casemanager)
@@ -340,11 +342,24 @@ namespace KyoS.Web.Controllers
                                            .Include(u => u.Clinic)
                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
+                                                     .Include(u => u.TcmClient)
+                                                     .ThenInclude(u => u.Client)
+                                                     .FirstOrDefault(g => g.Id == tcmDomainViewModel.Id_ServicePlan);
+            tcmDomainViewModel.TcmServicePlan = tcmServicePlan;
+
+            if (tcmDomainViewModel.Id_Service == 0)
+            {
+                ModelState.AddModelError(string.Empty, "You must select a linked user");
+
+
+                return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create_Domain", tcmDomainViewModel) });
+                //return View(tcmDomainViewModel);
+            }
+           
             if (ModelState.IsValid)
             {
-                TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
-                                                     .FirstOrDefault(g => g.Id == tcmDomainViewModel.Id_ServicePlan);
-                tcmDomainViewModel.TcmServicePlan = tcmServicePlan;
+                
                 TCMDomainEntity tcmDomainEntity = _context.TCMDomains
                                               .Include(f => f.TcmServicePlan)
                                               .FirstOrDefault(g => (g.TcmServicePlan.Id == tcmDomainViewModel.TcmServicePlan.Id
@@ -371,8 +386,8 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create_Domain", tcmDomainViewModel) });
+            return View(tcmDomainViewModel);
+           // return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create_Domain", tcmDomainViewModel) });
         }
     }
 }

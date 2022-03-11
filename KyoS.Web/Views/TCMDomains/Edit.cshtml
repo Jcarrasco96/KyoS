@@ -5,7 +5,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Create_Domain" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMDomain(this);">
+        <form asp-action="Edit" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMDomain(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Id_ServicePlan" />
@@ -26,31 +26,25 @@
             <div class="col-md-12">
                 &nbsp;
             </div>
-            <div class="form-group col-md-12">
-                <div class="">
-                    <label asp-for="Id_Service" class="control-label">Service Code</label>
-                    <select asp-for="Id_Service" asp-items="Model.Services" class="form-control" id="Code_Name" onchange="getCode();"></select>
-                    <span asp-validation-for="Id_Service" class="text-danger"></span>
-                </div>
-          </div>
+            
             <br />
             <div class="form-group">
-                <div class="col-md-7">
-                    <label asp-for="@Model.Code" class="control-label">Service Code</label><br />
-                    <input asp-for="@Model.Code" id="GetCode" style="font-weight:normal" />
-                    <span asp-validation-for="@Model.Code" class="text-danger"></span>
+                <div class="col-md-3">
+                    <label asp-for="Code" class="control-label"></label>&nbsp;*
+                    <input asp-for="Code" class="form-control" readonly/>
+                    <span asp-validation-for="Code" class="text-danger"></span>
                 </div>
 
-                <div class="col-md-5">
-                    <label asp-for="@Model.Name" class="control-label">Service Name</label><br />
-                    <input asp-for="@Model.Name" id="GetName" style="font-weight:normal" />
-                    <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                <div class="col-md-9">
+                    <label asp-for="Name" class="control-label"></label>&nbsp;*
+                    <input asp-for="Name" class="form-control" readonly/>
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label asp-for="Needs_Identified" class="control-label">Identified Needs</label>
-                    <textarea asp-for="Needs_Identified" class="form-control" rows="5" />
+                    <label asp-for="Needs_Identified" class="control-label">Need Identified</label>
+                    <textarea asp-for="Needs_Identified" class="form-control" rows="4"></textarea>
                     <span asp-validation-for="Needs_Identified" class="text-danger"></span>
                 </div>
             </div>
@@ -79,13 +73,13 @@
         }
         document.getElementById('GetCode').value = code;
         document.getElementById('GetName').value = name;
-        
+
     }
 </script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/jquery.dataTables.min.js"></script>
-    
+
     <script type="text/javascript">
                                 //    jQueryAjaxPost = form => {
                                 //        try {
@@ -117,4 +111,5 @@
                                 //}
     </script>
 }
+
 

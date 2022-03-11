@@ -16,6 +16,8 @@ namespace KyoS.Web.Models
         public DateTime Date_Identified { get; set; }
 
         public int Id_ServicePlan { get; set; }
+
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public int Id_Service { get; set; }
         public IEnumerable<SelectListItem> Services { get; set; }
     }

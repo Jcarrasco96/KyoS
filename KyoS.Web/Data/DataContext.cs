@@ -194,7 +194,7 @@ namespace KyoS.Web.Data
                         .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<TCMDomainEntity>()
-                                    .HasIndex(s => s.Name)
+                                    .HasIndex(s => s.Id)
                                     .IsUnique();
 
             modelBuilder.Entity<TCMObjetiveEntity>()

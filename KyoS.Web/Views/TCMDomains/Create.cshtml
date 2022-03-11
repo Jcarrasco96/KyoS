@@ -5,7 +5,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Create_Domain" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMDomain(this);">
+        <form asp-action="Create" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMDomain(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Id_ServicePlan" />
@@ -32,19 +32,19 @@
                     <select asp-for="Id_Service" asp-items="Model.Services" class="form-control" id="Code_Name" onchange="getCode();"></select>
                     <span asp-validation-for="Id_Service" class="text-danger"></span>
                 </div>
-          </div>
+            </div>
             <br />
             <div class="form-group">
-                <div class="col-md-7">
-                    <label asp-for="@Model.Code" class="control-label">Service Code</label><br />
-                    <input asp-for="@Model.Code" id="GetCode" style="font-weight:normal" />
-                    <span asp-validation-for="@Model.Code" class="text-danger"></span>
+                <div class="form-group col-md-7">
+                    <label asp-for="Code" class="control-label">Service Code</label><br />
+                    <input asp-for="Code" id="GetCode" class="form-control" readonly />
+                    <span asp-validation-for="Code" class="text-danger"></span>
                 </div>
 
-                <div class="col-md-5">
-                    <label asp-for="@Model.Name" class="control-label">Service Name</label><br />
-                    <input asp-for="@Model.Name" id="GetName" style="font-weight:normal" />
-                    <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                <div class="form-group col-md-5">
+                    <label asp-for="Name" class="control-label">Service Name</label><br />
+                    <input asp-for="Name" id="GetName" class="form-control" readonly />
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">
@@ -73,19 +73,26 @@
         var y = x.options[x.selectedIndex].text;
         var code = y[0] + y[1];
         var name = y[3];
-        for (var i = 4; i < y.length; i++)
-        {
-            name = name + y[i];
+        if (y[0] != '[') {
+            for (var i = 4; i < y.length; i++) {
+                name = name + y[i];
+            }
+            document.getElementById('GetCode').value = code;
+            document.getElementById('GetName').value = name;
         }
-        document.getElementById('GetCode').value = code;
-        document.getElementById('GetName').value = name;
+        else
+        {
+            document.getElementById('GetCode').value = "";
+            document.getElementById('GetName').value = "";
+        }
         
+
     }
 </script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/jquery.dataTables.min.js"></script>
-    
+
     <script type="text/javascript">
                                 //    jQueryAjaxPost = form => {
                                 //        try {
