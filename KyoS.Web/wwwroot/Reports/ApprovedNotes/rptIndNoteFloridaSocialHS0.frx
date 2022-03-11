@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="10/25/2021 16:28:52" ReportInfo.Modified="03/11/2022 09:46:32" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="10/25/2021 16:28:52" ReportInfo.Modified="03/11/2022 10:47:28" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u39o+E21ZwBA2qid59kDBZHA==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3+wxXUpLbEa31sdfSOM2pcA==">
       <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -362,7 +362,7 @@
       <TextObject Name="Text56" Top="505.85" Width="737.1" Height="47.25" CanGrow="true" CanShrink="true" Text="[IndividualNotes.PlanNote]" HorzAlign="Justify" Font="Times New Roman, 10pt"/>
       <TextObject Name="Text67" Left="77.6" Top="202.45" Width="661.5" Height="47.25" CanGrow="true" CanShrink="true" Text="[obj_text]" HorzAlign="Justify" Font="Times New Roman, 10pt"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="702.22" Width="740.5" Height="75.6">
+    <PageFooterBand Name="PageFooter1" Top="702.22" Width="740.5" Height="108.85">
       <LineObject Name="Line5" Left="756" Top="45.35" Width="-766.55"/>
       <TextObject Name="Text57" Top="45.35" Width="236.25" Height="18.9" Text="Group Facilitator / Credentials" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
       <TextObject Name="Text59" Left="330.75" Top="45.35" Width="47.25" Height="18.9" Text="Date" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
@@ -370,6 +370,13 @@
       <TextObject Name="Text63" Left="293.4" Top="27.45" Width="122.85" Height="18.9" Text="[dateFacilitator]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
       <TextObject Name="Text65" Left="495.05" Top="26" Width="255.15" Height="18.9" Text="[Facilitators.Name] , [Facilitators.Codigo]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
       <PictureObject Name="Picture2" Left="52.9" Top="1" Width="95" Height="54" DataColumn="Signatures.facilitatorSignature"/>
+      <PictureObject Name="Picture3" Left="52.25" Top="48.25" Width="92.61" Height="57.46" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text64" Left="292.95" Top="68.6" Width="122.85" Height="18.9" Text="[dateSupervisor]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text66" Left="495.05" Top="68.6" Width="255.15" Height="18.9" Text="[Supervisors.Name] , [Supervisors.Code]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text58" Top="87.5" Width="160.65" Height="18.9" Text="Supervisor / Credentials" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text60" Left="330.75" Top="87.5" Width="47.25" Height="18.9" Text="Date" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text62" Left="495.05" Top="89.95" Width="255.15" Height="18.9" Text="Supervisor (print legibly)" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
+      <LineObject Name="Line6" Left="718.2" Top="87.15" Width="-766.55"/>
     </PageFooterBand>
   </ReportPage>
 </Report>
