@@ -1245,5 +1245,47 @@ namespace KyoS.Web.Helpers
 
             };
         }
+
+        public async Task<TCMObjetiveEntity> ToTCMObjetiveEntity(TCMObjetiveViewModel model, bool isNew)
+        {
+            
+            return new TCMObjetiveEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmDomain = await _context.TCMDomains.FindAsync(model.Id_Domain),
+                //Clinic = await _context.Clinics.FindAsync(model.IdClinic),
+                Name = model.name,
+                Task = model.task,
+                Long_Term = model.long_Term,
+                StartDate = model.Start_Date,
+                TargetDate = model.Target_Date,
+                EndDate = model.End_Date,
+                Finish = model.Finish,
+                IdObjetive = model.ID_Objetive
+            };
+        }
+
+        public TCMObjetiveViewModel ToTCMObjetiveViewModel(TCMObjetiveEntity TcmObjetiveEntity)
+        {
+            return new TCMObjetiveViewModel
+            {
+                Id = TcmObjetiveEntity.Id,
+                Id_Domain = TcmObjetiveEntity.TcmDomain.Id,
+                IdObjetive= TcmObjetiveEntity.IdObjetive,
+                //IdClinic = TcmObjetiveEntity.Clinic.Id,
+                //Clinics = _combosHelper.GetComboClinics(),
+                name = TcmObjetiveEntity.Name,
+                task = TcmObjetiveEntity.Task,
+                long_Term = TcmObjetiveEntity.Long_Term,
+                Start_Date = TcmObjetiveEntity.StartDate,
+                Target_Date = TcmObjetiveEntity.TargetDate,
+                End_Date = TcmObjetiveEntity.EndDate,
+                Finish = TcmObjetiveEntity.Finish,
+                TcmDomain = TcmObjetiveEntity.TcmDomain,
+                Stages = _combosHelper.GetComboStagesNotUsed(TcmObjetiveEntity.TcmDomain.Code)
+               // Services = _combosHelper.GetComboServicesNotUsed(TcmDomainEntity.TcmServicePlan.Id)
+
+            };
+        }
     }
 }

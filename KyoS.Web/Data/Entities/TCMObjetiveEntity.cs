@@ -15,14 +15,11 @@ namespace KyoS.Web.Data.Entities
         public string Name { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        [Display(Name = "Units")]
-        public int Units { get; set; }
-
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "ID_Objetive")]
         public int IdObjetive { get; set; }
 
-        public string Description { get; set; }
+        public string Task { get; set; }
+        public string Long_Term { get; set; }
 
         public bool Finish { get; set; }
         public DateTime StartDate{ get; set; }
@@ -30,6 +27,6 @@ namespace KyoS.Web.Data.Entities
         public DateTime EndDate { get; set; }
 
         public TCMDomainEntity TcmDomain { get; set; }
-        public ClinicEntity Clinic { get; set; }
+        //public ClinicEntity Clinic { get; set; }  
     }
 }

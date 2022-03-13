@@ -959,6 +959,7 @@ namespace KyoS.Web.Helpers
             {
                 Text = "[Select client...]",
                 Value = "0"
+                
             });
 
             return list;
@@ -997,11 +998,53 @@ namespace KyoS.Web.Helpers
 
             list.Insert(0, new SelectListItem
             {
-                Text = "[Select client...]",
+                Text = "[Select service...]",
                 Value = "0"
             });
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboStagesNotUsed(string codeDomain)
+        {
+            List<TCMStageEntity> Stages_Total = _context.TCMStages
+                                                        .Where(f => f.tCMservice.Code == codeDomain)
+                                                        .OrderBy(n => n.Name)
+                                                        .ToList();
+            List<TCMObjetiveEntity> Stages_Objetive = _context.TCMObjetives
+                                                    .Where(f => f.TcmDomain.Code == codeDomain)
+                                                        .OrderBy(n => n.Name)
+                                                        .ToList();
+            TCMStageEntity Stage = null;
+
+            foreach (var item in Stages_Objetive)
+            {
+                if (item.TcmDomain != null)
+                {
+                    if (Stages_Total.Exists(c => c.Name == item.Name))
+                    {
+                        Stage = _context.TCMStages.FirstOrDefault(n => (n.Name == item.Name
+                                                                    && n.tCMservice.Code == codeDomain));
+                        Stages_Total.Remove(Stage);
+                    }
+                }
+            }
+
+            List<SelectListItem> list = Stages_Total.Select(c => new SelectListItem
+            {
+                Text = $"{c.Name}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select stage...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+       
     }
 }

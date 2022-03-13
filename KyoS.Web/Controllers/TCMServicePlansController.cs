@@ -56,6 +56,7 @@ namespace KyoS.Web.Controllers
 
                      List<TCMServicePlanEntity> servicePlan = await _context.TCMServicePlans
                                                          .Include(h => h.TCMDomain)
+                                                         .ThenInclude(h => h.TCMObjetive)
                                                          .Include(g => g.TcmClient)
                                                          .ThenInclude(f => f.Client)
                                                          .Include(t => t.TcmClient.Casemanager)
@@ -68,6 +69,7 @@ namespace KyoS.Web.Controllers
                 {
                    List<TCMServicePlanEntity> servicePlan = await _context.TCMServicePlans
                                                         .Include(h => h.TCMDomain)
+                                                        .ThenInclude(h => h.TCMObjetive)
                                                         .Include(g => g.TcmClient)
                                                         .ThenInclude(f => f.Client)
                                                         .Include(t => t.TcmClient.Casemanager)
@@ -136,6 +138,7 @@ namespace KyoS.Web.Controllers
                             Date_Intake = DateTime.Today.Date,
                             Date_Assessment = DateTime.Today.Date,
                             Date_Certification = DateTime.Today.Date,
+                            
                         };
                         return View(model);
                     }

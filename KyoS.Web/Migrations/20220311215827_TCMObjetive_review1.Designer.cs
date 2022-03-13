@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220311215827_TCMObjetive_review1")]
+    partial class TCMObjetive_review1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2208,6 +2210,12 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<int?>("ClinicId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
@@ -2217,27 +2225,18 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("IdObjetive")
                         .HasColumnType("int");
 
-                    b.Property<string>("Long_Term")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("TargetDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Task")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("TcmDomainId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClinicId");
 
                     b.HasIndex("TcmDomainId");
 
@@ -3333,10 +3332,16 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMObjetiveEntity", b =>
                 {
+                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
+                        .WithMany()
+                        .HasForeignKey("ClinicId");
+
                     b.HasOne("KyoS.Web.Data.Entities.TCMDomainEntity", "TcmDomain")
                         .WithMany("TCMObjetive")
                         .HasForeignKey("TcmDomainId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Clinic");
 
                     b.Navigation("TcmDomain");
                 });
