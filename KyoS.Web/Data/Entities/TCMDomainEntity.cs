@@ -19,8 +19,9 @@ namespace KyoS.Web.Data.Entities
         public string Code { get; set; }
 
         public string NeedsIdentified { get; set; }
-
+        public string LongTerm { get; set; }
         public DateTime DateIdentified { get; set; }
+        
 
         public TCMServicePlanEntity TcmServicePlan { get; set; }
         //public ClinicEntity Clinic { get; set; }

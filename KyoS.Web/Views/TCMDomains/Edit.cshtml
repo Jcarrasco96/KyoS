@@ -26,18 +26,18 @@
             <div class="col-md-12">
                 &nbsp;
             </div>
-            
+
             <br />
             <div class="form-group">
                 <div class="col-md-3">
                     <label asp-for="Code" class="control-label"></label>&nbsp;*
-                    <input asp-for="Code" class="form-control" readonly/>
+                    <input asp-for="Code" class="form-control" readonly />
                     <span asp-validation-for="Code" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-9">
                     <label asp-for="Name" class="control-label"></label>&nbsp;*
-                    <input asp-for="Name" class="form-control" readonly/>
+                    <input asp-for="Name" class="form-control" readonly />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
             </div>
@@ -46,6 +46,13 @@
                     <label asp-for="Needs_Identified" class="control-label">Need Identified</label>
                     <textarea asp-for="Needs_Identified" class="form-control" rows="4"></textarea>
                     <span asp-validation-for="Needs_Identified" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Long_Term" class="control-label">Need Identified</label>
+                    <textarea asp-for="Long_Term" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Long_Term" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">

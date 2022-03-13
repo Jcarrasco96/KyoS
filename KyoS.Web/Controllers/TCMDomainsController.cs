@@ -143,7 +143,7 @@ namespace KyoS.Web.Controllers
                                                             .ThenInclude(g => g.TcmClient)
                                                             .ThenInclude(g => g.Client)
                                                             .Where(s => s.TcmServicePlan.TcmClient.Casemanager.LinkedUser == user_logged.UserName)
-                                                            .OrderBy(f => f.Name)
+                                                            .OrderBy(f => f.Code)
                                                             .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMDomain", tcmDomain) });
@@ -263,5 +263,31 @@ namespace KyoS.Web.Controllers
             // return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create_Domain", tcmDomainViewModel) });
         }
 
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMDomainEntity tcmDomainEntity = await _context.TCMDomains.FirstOrDefaultAsync(s => s.Id == id);
+            if (tcmDomainEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.TCMDomains.Remove(tcmDomainEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

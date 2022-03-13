@@ -114,12 +114,12 @@ namespace KyoS.Web.Controllers
                         Start_Date = DateTime.Today.Date,
                         Target_Date = DateTime.Today.Date,
                         End_Date = DateTime.Today.Date,
-                        task = "si se puede",
-                        long_Term = "si se puede",
+                        task = "es para que veas el problema del textarea",
+                        //long_Term = "es para que veas el problema del textarea",
                     };
-
-                    return View(model);
-                }
+                    
+                        return View(model);
+                 }
             }
 
             return View(model);
@@ -244,7 +244,7 @@ namespace KyoS.Web.Controllers
                     Target_Date = objetiveEntity.TargetDate,
                     End_Date = objetiveEntity.EndDate,
                     task = objetiveEntity.Task,
-                    long_Term = objetiveEntity.Long_Term,
+                   // long_Term = objetiveEntity.Long_Term,
                 };
 
                 return View(model);
@@ -287,7 +287,8 @@ namespace KyoS.Web.Controllers
                                                                        .Where(s => s.TcmServicePlan.TcmClient.Casemanager.LinkedUser == user_logged.UserName)
                                                                        .OrderBy(f => f.Name)
                                                                        .ToListAsync();
-                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "index", tcmDomain) });
+                       
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "Index", tcmDomain) });
                     }
                     catch (System.Exception ex)
                     {
@@ -311,5 +312,31 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMObjetiveEntity tcmObjetiveEntity = await _context.TCMObjetives.FirstOrDefaultAsync(s => s.Id == id);
+            if (tcmObjetiveEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.TCMObjetives.Remove(tcmObjetiveEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

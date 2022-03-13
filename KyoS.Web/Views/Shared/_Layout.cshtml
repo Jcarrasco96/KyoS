@@ -199,7 +199,7 @@
                         <li><a asp-area="" asp-controller="Settings" asp-action="Index">Settings</a></li>
                     }
                     else
-                    if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
+                   if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -277,7 +277,7 @@
                                     <li class="dropdown-submenu disabled">
                                         <a class="test" tabindex="-1" href="#">Workdays</a>
                                     </li>
-                                }                               
+                                }
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Templates DOC.", "Index", "TemplatesDOC")</li>
                             </ul>
@@ -344,7 +344,7 @@
                                 else
                                 {
                                     <li class="disabled"><a class="test" href="#">Referreds</a></li>
-                                }                                
+                                }
                                 <li role="separator" class="divider"></li>
                                 @if (setting != null && setting.MentalHealthClinic)
                                 {
@@ -365,11 +365,53 @@
                                 }
                             </ul>
                         </li>
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Agency Management <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">@*cambiar a agency de TCM*@
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("TCM Clients", "Index", "TCMClients")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">TCM Clients</a></li>
+                                }
+
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("Services Plans / Clients", "Index", "TCMServiceplans")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Services Plans / Clients</a></li>
+                                }
+                                <li role="separator" class="divider"></li>
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("Services / Stages", "Index", "TCMServices")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Services / Stages</a></li>
+                                }
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("Stages", "Index", "TCMStages")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Stages</a></li>
+                                }
+                               
+                            </ul>
+                        </li>
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                    if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
+                   if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -401,8 +443,8 @@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
-                        else
-                            if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
+                    else
+                           if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -438,17 +480,17 @@
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
-                            else
-                                if (User.Identity.IsAuthenticated && (User.IsInRole("CaseManager")))
+                    else
+                               if (User.Identity.IsAuthenticated && (User.IsInRole("CaseManager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 Cases <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Not Started", "Index", "Activities")</li>
-                                <li>@Html.ActionLink("Open", "ActivitiesPerWeek", "Activities")</li>
-                                <li>@Html.ActionLink("Closed", "ActivitiesPerGroupWeek", "Activities")</li>
+                                <li>@Html.ActionLink("Not Started", "Index", "TCMClients")</li>
+                                <li>@Html.ActionLink("Open", "Index", "TCMClients")</li>
+                                <li>@Html.ActionLink("Closed", "Index", "TCMClients")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
@@ -456,8 +498,11 @@
                                 Services Plan <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Started", "Index", "Notes")</li>
-                                <li>@Html.ActionLink("Closed", "IndividualNotes", "Notes")</li>
+                                <li>@Html.ActionLink("Started", "Index", "TCMServiceplans")</li>
+                                <li>@Html.ActionLink("Closed", "Index", "TCMServiceplans")</li>
+                                <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("Domain/Objetives", "Index", "TCMDomains")</li>
+                                <li>@Html.ActionLink("Objetives", "Index", "TCMObjetives")</li>
                             </ul>
                         </li>
 

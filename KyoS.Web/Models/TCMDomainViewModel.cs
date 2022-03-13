@@ -12,6 +12,7 @@ namespace KyoS.Web.Models
     public class TCMDomainViewModel : TCMDomainEntity
     {
         public string Needs_Identified { get; set; }
+        public string Long_Term { get; set; }
 
         public DateTime Date_Identified { get; set; }
 

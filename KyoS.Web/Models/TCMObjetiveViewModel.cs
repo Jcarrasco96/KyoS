@@ -28,7 +28,7 @@ namespace KyoS.Web.Models
         public string name { get; set; }
 
         public string task { get; set; }
-        public string long_Term { get; set; }
+        //public string long_Term { get; set; }
 
         public DateTime Start_Date { get; set; }
         public DateTime Target_Date { get; set; }

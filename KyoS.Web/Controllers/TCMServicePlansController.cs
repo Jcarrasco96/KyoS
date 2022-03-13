@@ -32,7 +32,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Admin, Manager, TCMSupervisor, CaseManager")]
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             UserEntity user_logged = _context.Users
@@ -41,8 +41,7 @@ namespace KyoS.Web.Controllers
                                              .ThenInclude(c => c.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            if(user_logged.UserType.ToString() != "Admin")
-            {
+            
                 if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
                 {
                     return RedirectToAction("NotAuthorized", "Account");
@@ -77,11 +76,6 @@ namespace KyoS.Web.Controllers
                                                         .ToListAsync();
                     return View(servicePlan);
                 }
-                return View(null);
-
-            }
-
-            else
                 return View(null);
 
         }
@@ -301,22 +295,6 @@ namespace KyoS.Web.Controllers
 
                     if (user_logged.Clinic != null)
                     {
-                        /*List<TCMServiceEntity> tcmServices = _context.TCMServices
-                                                                      .Include(n => n.Stages)
-                                                                      .OrderBy(n => n.Code)
-                                                                      .ToList();
-
-                        List<SelectListItem> list_Services = tcmServices.Select(c => new SelectListItem
-                        {
-                            Text = $"{c.Code+"-"+c.Name}",
-                            Value = $"{c.Id}"
-                        })
-                            .ToList();
-                        list_Services.Insert(0, new SelectListItem
-                        {
-                            Text = "[Select service...]",
-                            Value = "0"
-                        });*/
                         IEnumerable <SelectListItem> list_Services = _combosHelper.GetComboServicesNotUsed(tcmServicePlan.Id);
                             
                         model = new TCMDomainViewModel
@@ -334,63 +312,6 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("Index", "TCMServicePlans");
         }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> Create_Domain(TCMDomainViewModel tcmDomainViewModel)
-        {
-            UserEntity user_logged = _context.Users
-                                           .Include(u => u.Clinic)
-                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
-                                                     .Include(u => u.TcmClient)
-                                                     .ThenInclude(u => u.Client)
-                                                     .FirstOrDefault(g => g.Id == tcmDomainViewModel.Id_ServicePlan);
-            tcmDomainViewModel.TcmServicePlan = tcmServicePlan;
-
-            if (tcmDomainViewModel.Id_Service == 0)
-            {
-                ModelState.AddModelError(string.Empty, "You must select a linked user");
-
-
-                return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create_Domain", tcmDomainViewModel) });
-                //return View(tcmDomainViewModel);
-            }
-           
-            if (ModelState.IsValid)
-            {
-                
-                TCMDomainEntity tcmDomainEntity = _context.TCMDomains
-                                              .Include(f => f.TcmServicePlan)
-                                              .FirstOrDefault(g => (g.TcmServicePlan.Id == tcmDomainViewModel.TcmServicePlan.Id
-                                              && g.Code == tcmDomainViewModel.Code));
-                if (tcmDomainEntity == null)
-                {
-                    tcmDomainEntity = await _converterHelper.ToTCMDomainEntity(tcmDomainViewModel, true);
-                    _context.Add(tcmDomainEntity);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "TCMServicePlans");
-                    }
-                    catch (System.Exception ex)
-                    {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                    }
-                }
-                else
-                {
-                   // ModelState.AddModelError(string.Empty, "Already exists the TCM service.");
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmDomainViewModel) });
-                }
-            }
-
-            return View(tcmDomainViewModel);
-           // return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create_Domain", tcmDomainViewModel) });
-        }
+        
     }
 }
