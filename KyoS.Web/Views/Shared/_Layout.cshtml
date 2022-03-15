@@ -199,7 +199,7 @@
                         <li><a asp-area="" asp-controller="Settings" asp-action="Index">Settings</a></li>
                     }
                     else
-                   if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
+                    if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -372,13 +372,20 @@
                             <ul class="dropdown-menu" role="menu">@*cambiar a agency de TCM*@
                                 @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
                                 {
-                                    <li>@Html.ActionLink("TCM Clients", "Index", "TCMClients")</li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">TCM Clients</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a asp-area="" asp-controller="TCMClients" asp-action="Index">Open Cases</a></li>
+                                            <li><a asp-area="" asp-controller="TCMClients" asp-action="GetCaseNotServicePlan">Not Started Cases</a></li>
+                                            <li><a asp-area="" asp-controller="TCMClients" asp-action="GetCaseClose">Close Cases</a></li>
+                                        </ul>
+                                    </li>
                                 }
                                 else
                                 {
                                     <li class="disabled"><a class="test" href="#">TCM Clients</a></li>
                                 }
-
+                                <li role="separator" class="divider"></li>
                                 @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
                                 {
                                     <li>@Html.ActionLink("Services Plans / Clients", "Index", "TCMServiceplans")</li>
@@ -411,7 +418,7 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                   if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
+                    if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -444,7 +451,7 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                           if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
+                    if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -481,6 +488,35 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
+                    if (User.Identity.IsAuthenticated && (User.IsInRole("TCMSupervisor")))
+                    {
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Cases <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Not Started", "GetCaseNotServicePlan", "TCMClients")</li>
+                                <li>@Html.ActionLink("Open", "GetCaseOpen", "TCMClients")</li>
+                                <li>@Html.ActionLink("Closed", "GetCaseClose", "TCMClients")</li>
+                            </ul>
+                        </li>
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Services Plan <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Started", "Index", "TCMServiceplans")</li>
+                                <li>@Html.ActionLink("Closed", "Index", "TCMServiceplans")</li>
+                                <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("Pending Approval", "AproveServicePlan", "TCMServicePlans")</li>
+                                <li>@Html.ActionLink("In Review", "Index", "TCMServicePlans")</li>
+                            </ul>
+                        </li>
+
+                        <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                    }
+                     else
                                if (User.Identity.IsAuthenticated && (User.IsInRole("CaseManager")))
                     {
                         <li class="class=" dropdown open"">
@@ -488,9 +524,9 @@
                                 Cases <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Not Started", "Index", "TCMClients")</li>
-                                <li>@Html.ActionLink("Open", "Index", "TCMClients")</li>
-                                <li>@Html.ActionLink("Closed", "Index", "TCMClients")</li>
+                                <li>@Html.ActionLink("Not Started", "GetCaseNotServicePlan", "TCMClients")</li>
+                                <li>@Html.ActionLink("Open", "GetCaseOpen", "TCMClients")</li>
+                                <li>@Html.ActionLink("Closed", "GetCaseClose", "TCMClients")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">

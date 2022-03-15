@@ -28,7 +28,7 @@
             </div>
             <div class="form-group col-md-12">
                 <div class="">
-                    <label asp-for="Id_Service" class="control-label">Service Code</label>
+                    <label asp-for="Id_Service" class="control-label">Service Code</label>&nbsp;*
                     <select asp-for="Id_Service" asp-items="Model.Services" class="form-control" id="Code_Name" onchange="getCode();"></select>
                     <span asp-validation-for="Id_Service" class="text-danger"></span>
                 </div>
@@ -36,13 +36,13 @@
             <br />
             <div class="form-group">
                 <div class="form-group col-md-7">
-                    <label asp-for="Code" class="control-label">Service Code</label><br />
+                    <label asp-for="Code" class="control-label">Service Code</label>&nbsp;*
                     <input asp-for="Code" id="GetCode" class="form-control" readonly />
                     <span asp-validation-for="Code" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-md-5">
-                    <label asp-for="Name" class="control-label">Service Name</label><br />
+                    <label asp-for="Name" class="control-label">Service Name</label>&nbsp;*
                     <input asp-for="Name" id="GetName" class="form-control" readonly />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>

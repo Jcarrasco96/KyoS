@@ -19,7 +19,8 @@ namespace KyoS.Web.Data.Entities
         public int IdObjetive { get; set; }
 
         public string Task { get; set; }
-       // public string Long_Term { get; set; }
+        public int Status { get; set; }
+        // public string Long_Term { get; set; }
 
         public bool Finish { get; set; }
         public DateTime StartDate{ get; set; }

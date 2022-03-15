@@ -76,7 +76,20 @@ namespace KyoS.Web.Controllers
                                                         .ToListAsync();
                     return View(servicePlan);
                 }
-                return View(null);
+            if (user_logged.UserType.ToString() == "TCMSupervisor")
+            {
+                List<TCMServicePlanEntity> servicePlan = await _context.TCMServicePlans
+                                                     .Include(h => h.TCMDomain)
+                                                     .ThenInclude(h => h.TCMObjetive)
+                                                     .Include(g => g.TcmClient)
+                                                     .ThenInclude(f => f.Client)
+                                                     .Include(t => t.TcmClient.Casemanager)
+                                                     .Where(g => (g.TcmClient.Client.Clinic.Id == clinic.Id))
+                                                     .ToListAsync();
+                return View(servicePlan);
+            }
+
+            return View(null);
 
         }
 
@@ -312,6 +325,129 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("Index", "TCMServicePlans");
         }
-        
+
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> FinishEditing(int id)
+        {
+            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans.Include(u => u.TcmClient)
+                                                         .ThenInclude(u => u.Client)
+                                                         .FirstOrDefault(u => u.Id == id);
+           
+            if (tcmServicePlan != null)
+            {
+                if (User.IsInRole("CaseManager"))
+                {
+                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    if (user_logged.Clinic != null)
+                    {
+                        tcmServicePlan.Approved = 1;
+                        _context.Update(tcmServicePlan);
+                        try
+                        {
+                            await _context.SaveChangesAsync();
+
+                            return RedirectToAction("Index", "TCMServicePlans");
+                        }
+                        catch (System.Exception ex)
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+            }
+
+            return RedirectToAction("Index", "TCMServicePlans");
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> AproveServicePlan()
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+            TCMSupervisorEntity tcmSupervisor = await _context.TCMSupervisors.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
+
+            if (user_logged.UserType.ToString() == "TCMSupervisor")
+            {
+
+                List<TCMServicePlanEntity> servicePlan = await _context.TCMServicePlans
+                                                    .Include(h => h.TCMDomain)
+                                                    .ThenInclude(h => h.TCMObjetive)
+                                                    .Include(g => g.TcmClient)
+                                                    .ThenInclude(f => f.Client)
+                                                    .Include(t => t.TcmClient.Casemanager)
+                                                    .Where(g => (g.Approved == 1
+                                                        && g.TcmClient.Client.Clinic.Id == clinic.Id))
+                                                    .ToListAsync();
+
+                return View(servicePlan);
+            }
+            if (user_logged.UserType.ToString() == "Manager")
+            {
+                List<TCMServicePlanEntity> servicePlan = await _context.TCMServicePlans
+                                                     .Include(h => h.TCMDomain)
+                                                     .ThenInclude(h => h.TCMObjetive)
+                                                     .Include(g => g.TcmClient)
+                                                     .ThenInclude(f => f.Client)
+                                                     .Include(t => t.TcmClient.Casemanager)
+                                                     .Where(g => (g.Approved == 1
+                                                        && g.TcmClient.Client.Clinic.Id == clinic.Id))
+                                                     .ToListAsync();
+                return View(servicePlan);
+            }
+            return View(null);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> AproveServicePlan(int id)
+        {
+            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans.Include(u => u.TcmClient)
+                                                         .ThenInclude(u => u.Client)
+                                                         .FirstOrDefault(u => u.Id == id);
+
+            if (tcmServicePlan != null)
+            {
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    if (user_logged.Clinic != null)
+                    {
+                        tcmServicePlan.Approved = 2;
+                        _context.Update(tcmServicePlan);
+                        try
+                        {
+                            await _context.SaveChangesAsync();
+
+                            return RedirectToAction("Index", "TCMServicePlans");
+                        }
+                        catch (System.Exception ex)
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+            }
+
+            return RedirectToAction("Index", "TCMServicePlans");
+        }
     }
 }

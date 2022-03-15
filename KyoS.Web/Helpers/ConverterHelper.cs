@@ -1263,7 +1263,9 @@ namespace KyoS.Web.Helpers
                 TargetDate = model.Target_Date,
                 EndDate = model.End_Date,
                 Finish = model.Finish,
-                IdObjetive = model.ID_Objetive
+                IdObjetive = model.ID_Objetive,
+                Status = model.Status
+                
             };
         }
 
@@ -1278,15 +1280,14 @@ namespace KyoS.Web.Helpers
                 //Clinics = _combosHelper.GetComboClinics(),
                 name = TcmObjetiveEntity.Name,
                 task = TcmObjetiveEntity.Task,
-                //long_Term = TcmObjetiveEntity.Long_Term,
+                Status = TcmObjetiveEntity.Status,
                 Start_Date = TcmObjetiveEntity.StartDate,
                 Target_Date = TcmObjetiveEntity.TargetDate,
                 End_Date = TcmObjetiveEntity.EndDate,
                 Finish = TcmObjetiveEntity.Finish,
                 TcmDomain = TcmObjetiveEntity.TcmDomain,
                 Stages = _combosHelper.GetComboStagesNotUsed(TcmObjetiveEntity.TcmDomain.Code)
-               // Services = _combosHelper.GetComboServicesNotUsed(TcmDomainEntity.TcmServicePlan.Id)
-
+               
             };
         }
     }

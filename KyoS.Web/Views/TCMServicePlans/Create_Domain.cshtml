@@ -18,7 +18,7 @@
                     <i>@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Client.Name)</i>
                 </div>
                 <div class="col-md-6">
-                    <label asp-for="Date_Identified" class="control-label">Identified Date</label>
+                    <label asp-for="Date_Identified" class="control-label">Identified Date</label>&nbsp;*
                     <input asp-for="Date_Identified" class="form-control" />
                     <span asp-validation-for="Date_Identified" class="text-danger"></span>
                 </div>
@@ -28,7 +28,7 @@
             </div>
             <div class="form-group col-md-12">
                 <div class="">
-                    <label asp-for="Id_Service" class="control-label">Service Code</label>
+                    <label asp-for="Id_Service" class="control-label">Service Code</label>&nbsp;*
                     <select asp-for="Id_Service" asp-items="Model.Services" class="form-control" id="Code_Name" onchange="getCode();"></select>
                     <span asp-validation-for="Id_Service" class="text-danger"></span>
                 </div>
@@ -36,13 +36,13 @@
             <br />
             <div class="form-group">
                 <div class="col-md-7">
-                    <label asp-for="@Model.Code" class="control-label">Service Code</label><br />
+                    <label asp-for="@Model.Code" class="control-label">Service Code</label><br />&nbsp;*
                     <input asp-for="@Model.Code" id="GetCode" style="font-weight:normal" />
                     <span asp-validation-for="@Model.Code" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-5">
-                    <label asp-for="@Model.Name" class="control-label">Service Name</label><br />
+                    <label asp-for="@Model.Name" class="control-label">Service Name</label><br />&nbsp;*
                     <input asp-for="@Model.Name" id="GetName" style="font-weight:normal" />
                     <span asp-validation-for="@Model.Name" class="text-danger"></span>
                 </div>

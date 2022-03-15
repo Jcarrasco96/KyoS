@@ -31,7 +31,8 @@ namespace KyoS.Web.Data.Entities
 
         public StatusType Status { get; set; }
 
-        
+        public int Approved { get; set; }
+
         public TCMClientEntity TcmClient { get; set; }
        
         public List <TCMDomainEntity> TCMDomain { get; set; }

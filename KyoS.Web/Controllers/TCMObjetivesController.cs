@@ -202,7 +202,7 @@ namespace KyoS.Web.Controllers
                                                   .ThenInclude(c => c.Setting)
 
                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (User.IsInRole("CaseManager"))
+            if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
             {
 
                 if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
@@ -246,8 +246,9 @@ namespace KyoS.Web.Controllers
                     task = objetiveEntity.Task,
                    // long_Term = objetiveEntity.Long_Term,
                 };
-
-                return View(model);
+               
+                    return View(model);
+              
             }
             else
             {

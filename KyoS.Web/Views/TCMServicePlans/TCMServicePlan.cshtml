@@ -7,28 +7,28 @@
 <div class="row">
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="ID_TcmClient" class="control-label">TCM Client Name</label>
+            <label asp-for="ID_TcmClient" class="control-label">TCM Client Name</label>&nbsp;*
             <select asp-for="ID_TcmClient" asp-items="Model.TcmClients" class="form-control" readonly></select>
             <span asp-validation-for="ID_TcmClient" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="ID_Status" class="control-label">Service Plan Status</label>
+            <label asp-for="ID_Status" class="control-label">Service Plan Status</label>&nbsp;*
             <select asp-for="ID_Status" asp-items="Model.status" class="form-control"></select>
             <span asp-validation-for="ID_Status" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="CaseNumber" class="control-label">Case number</label>
-            <input asp-for="CaseNumber" class="form-control" readonly/>
+            <label asp-for="CaseNumber" class="control-label">Case number</label>&nbsp;*
+            <input asp-for="CaseNumber" class="form-control" readonly />
             <span asp-validation-for="CaseNumber" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="ID_Clinic" class="control-label">Clinic Name</label>
+            <label asp-for="ID_Clinic" class="control-label">Clinic Name</label>&nbsp;*
             <select asp-for="ID_Clinic" asp-items="Model.Clinics" class="form-control" readonly></select>
             <span asp-validation-for="ID_Clinic" class="text-danger"></span>
         </div>
@@ -38,28 +38,28 @@
 <div class="row">
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="Date_Intake" class="control-label">Intake Date</label>
+            <label asp-for="Date_Intake" class="control-label">Intake Date</label>&nbsp;*
             <input asp-for="Date_Intake" class="form-control" />
             <span asp-validation-for="Date_Intake" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="Date_ServicePlan" class="control-label">Services Plan Date</label>
+            <label asp-for="Date_ServicePlan" class="control-label">Services Plan Date</label>&nbsp;*
             <input asp-for="Date_ServicePlan" class="form-control" />
             <span asp-validation-for="Date_ServicePlan" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="Date_Assessment" class="control-label">Assessment Date</label>
+            <label asp-for="Date_Assessment" class="control-label">Assessment Date</label>&nbsp;*
             <input asp-for="Date_Assessment" class="form-control" />
             <span asp-validation-for="Date_Assessment" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="Date_Certification" class="control-label">Certification Date</label>
+            <label asp-for="Date_Certification" class="control-label">Certification Date</label>&nbsp;*
             <input asp-for="Date_Certification" class="form-control">
             <span asp-validation-for="Date_Certification" class="text-danger"></span>
         </div>
