@@ -45,7 +45,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                       @foreach (var item in Model)
                         {
                         <tr>
                             <td align="center">
@@ -67,63 +67,63 @@
                                             <th class="col-md-1">Date Identified</th>
                                             <th class="col-md-2"></th>
                                         </tr>
-                                        @foreach (var product in item.TCMDomain)
+                                       @foreach (var product in item.TCMDomain)
                                         {
-                                    <tr>
-                                        <td align="center">
-                                            @if (product.TCMObjetive.Count() != 0)
-                                            {
-                                                <a class="icon-plus-sign-alt"></a>
-                                            }
-                                            else
-                                            {
+                                            <tr>
+                                                <td align="center">
+                                                    @if (product.TCMObjetive.Count() != 0)
+                                                     {
+                                                        <a class="icon-plus-sign-alt"></a>
+                                                     }
+                                                     else
+                                                     {
 
-                                            }
-                                            <div style="display:none">
-                                                <table class="table table-striped table-bordered">
-                                                    <tr>
-                                                        <th class="col-md-3">Objetive Number</th>
-                                                        <th class="col-md-4">Start Date</th>
-                                                        <th class="col-md-4">Target Date</th>
-                                                        <th class="col-md-2"></th>
-                                                    </tr>
-                                                    @foreach (var product1 in product.TCMObjetive)
+                                                     }
+                                                     <div style="display:none">
+                                                         <table class="table table-striped table-bordered">
+                                                            <tr>
+                                                                <th class="col-md-3">Objetive Number</th>
+                                                                <th class="col-md-4">Start Date</th>
+                                                                <th class="col-md-4">Target Date</th>
+                                                                <th class="col-md-2"></th>
+                                                            </tr>
+                                                            @foreach (var product1 in product.TCMObjetive)
+                                                             {
+                                                                 <tr>
+                                                                     <td>@Html.DisplayFor(modelItem => product1.IdObjetive)</td>
+                                                                     <td>@Html.DisplayFor(modelItem => product1.StartDate)</td>
+                                                                     <td>@Html.DisplayFor(modelItem => product1.TargetDate)</td>
+                                                                     <td>
+                                                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("CaseManager"))
+                                                                         {
+                                                                            @if (item.Approved == 0)
+                                                                             {
+                                                                                <a onclick="showInPopup('@Url.Action("Edit", "TCMObjetives", new { id = product1.Id }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                             }
+                                                                         }
+                                                                     </td>
+                                                                 </tr>
+                                                                 @* cant_unit = cant_unit + product.Units;*@
+                                                             }
+                                                         </table>
+                                                     </div>
+                                                 </td>
+                                                <td>@Html.DisplayFor(modelItem => product.Code)</td>
+                                                <td>@Html.DisplayFor(modelItem => product.Name)</td>
+                                                <td>@Html.DisplayFor(modelItem => product.NeedsIdentified)</td>
+                                                <td>@Html.DisplayFor(modelItem => product.DateIdentified)</td>
+                                                <td>
+                                                   @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("CaseManager"))
                                                     {
-                                                        <tr>
-                                                            <td>@Html.DisplayFor(modelItem => product1.IdObjetive)</td>
-                                                            <td>@Html.DisplayFor(modelItem => product1.StartDate)</td>
-                                                            <td>@Html.DisplayFor(modelItem => product1.TargetDate)</td>
-                                                            <td>
-                                                                @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("CaseManager"))
-                                                                {
-                                                                    @if (item.Approved == 0)
-                                                                    {
-                                                                        <a onclick="showInPopup('@Url.Action("Edit", "TCMObjetives", new { id = product1.Id }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                    }
-                                                                }
-                                                            </td>
-                                                        </tr>
-                                                        @* cant_unit = cant_unit + product.Units;*@
+                                                       @if (item.Approved == 0)
+                                                        {
+                                                           <a onclick="showInPopup('@Url.Action("Edit", "TCMDomains", new { id = product.Id }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                           <a onclick="showInPopup('@Url.Action("Create", "TCMObjetives", new { id = product.Id }, Context.Request.Scheme)','Create TCM Objetive')" class="btn btn-info" title="Create"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                                        }
                                                     }
-                                                </table>
-                                            </div>
-                                        </td>
-                                        <td>@Html.DisplayFor(modelItem => product.Code)</td>
-                                        <td>@Html.DisplayFor(modelItem => product.Name)</td>
-                                        <td>@Html.DisplayFor(modelItem => product.NeedsIdentified)</td>
-                                        <td>@Html.DisplayFor(modelItem => product.DateIdentified)</td>
-                                        <td>
-                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("CaseManager"))
-                                            {
-                                                @if (item.Approved == 0)
-                                                {
-                                                    <a onclick="showInPopup('@Url.Action("Edit", "TCMDomains", new { id = product.Id }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                    <a onclick="showInPopup('@Url.Action("Create", "TCMObjetives", new { id = product.Id }, Context.Request.Scheme)','Create TCM Objetive')" class="btn btn-info" title="Create"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                                }
-                                             }
-                                        </td>
-                                    </tr>
-                                           @* cant_unit = cant_unit + product.Units;*@
+                                                </td>
+                                            </tr>
+                                             @* cant_unit = cant_unit + product.Units;*@
                                         }
                                     </table>
                                 </div>

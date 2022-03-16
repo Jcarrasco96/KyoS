@@ -110,7 +110,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, CaseManager")]
+        [Authorize(Roles = "CaseManager")]
         public async Task<IActionResult> Edit(int id, TCMDomainViewModel tcmDomainViewModel)
         {
             if (id != tcmDomainViewModel.Id)
@@ -188,6 +188,7 @@ namespace KyoS.Web.Controllers
                     }
                     return RedirectToAction("NotAuthorized", "Account");
                 }
+                return RedirectToAction("NotAuthorized", "Account");
             }
 
             return RedirectToAction("Index", "TCMServicePlans");

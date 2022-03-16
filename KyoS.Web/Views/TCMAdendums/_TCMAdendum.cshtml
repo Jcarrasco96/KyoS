@@ -45,7 +45,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                       @foreach (var item in Model)
                         {
                         <tr>
                             <td align="center">
@@ -60,23 +60,61 @@
                                 <div style="display:none">
                                     <table class="table table-striped table-bordered">
                                         <tr>
-                                            <th class="col-md-3">Domain Code</th>
+                                            <th class="col-md-1"></th>
+                                            <th class="col-md-1">Domain Code</th>
                                             <th class="col-md-4">Domain Name</th>
                                             <th class="col-md-4">Need Identified</th>
                                             <th class="col-md-2"></th>
                                         </tr>
                                         <tr>
+                                            <td align="center">
+                                               @if (item.TcmDomain.TCMObjetive.Count() != 0)
+                                                {
+                                                    <a class="icon-plus-sign-alt"></a>
+                                                }
+                                                else
+                                                {
+
+                                                }
+                                                <div style="display:none">
+                                                    <table class="table table-striped table-bordered">
+                                                        <tr>
+                                                            <th class="col-md-2">Objetive Number</th>
+                                                            <th class="col-md-4">Start Date</th>
+                                                            <th class="col-md-4">Target Date</th>
+                                                            <th class="col-md-2"></th>
+                                                        </tr>
+                                                       @foreach (var product in item.TcmDomain.TCMObjetive)
+                                                        {
+                                                            <tr>
+                                                                <td>@Html.DisplayFor(modelItem => product.IdObjetive)</td>
+                                                                <td>@Html.DisplayFor(modelItem => product.StartDate)</td>
+                                                                <td>@Html.DisplayFor(modelItem => product.TargetDate)</td>
+                                                                <td>
+                                                                   @if (item.TcmServicePlan.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("CaseManager"))
+                                                                    {
+                                                                       @if (item.Approved == 0)
+                                                                        {
+                                                                            <a onclick="showInPopup('@Url.Action("Edit", "TCMObjetives", new { id = product.Id }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                        }
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </table>
+                                                </div>
+                                            </td>
                                             <td>@Html.DisplayFor(modelItem => item.TcmDomain.Code)</td>
                                             <td>@Html.DisplayFor(modelItem => item.TcmDomain.Name)</td>
                                             <td>@Html.DisplayFor(modelItem => item.TcmDomain.NeedsIdentified)</td>
                                             <td>
-                                                @if (User.IsInRole("CaseManager") && item.Approved == 0)
-                                                {
-                                                    <a onclick="showInPopup('@Url.Action("Edit", "TCMDomains", new { id = item.TcmDomain.Id }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                }
-                                            </td>
+                                            @if (User.IsInRole("CaseManager") && item.Approved == 0)
+                                            {
+                                                <a onclick="showInPopup('@Url.Action("Edit", "TCMDomains", new { id = item.TcmDomain.Id }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a onclick="showInPopup('@Url.Action("Create", "TCMObjetives", new { id = item.TcmDomain.Id }, Context.Request.Scheme)','Create TCM Objetive')" class="btn btn-info" title="Create"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                            }
+                                        </td>
                                         </tr>
-                                        
                                     </table>
                                 </div>
                             </td>

@@ -56,6 +56,7 @@ namespace KyoS.Web.Controllers
 
                 List<TCMAdendumEntity> adendum = await _context.TCMAdendums
                                                     .Include(h => h.TcmDomain)
+                                                    .ThenInclude(h => h.TCMObjetive)
                                                     .Include(h => h.TcmServicePlan)
                                                     .ThenInclude(h => (h.TcmClient))
                                                     .ThenInclude(h => (h.Client))
@@ -186,36 +187,43 @@ namespace KyoS.Web.Controllers
             tcmAdendumViewModel.TcmServicePlan = tcmServicePlan;
             tcmAdendumViewModel.TcmDomain = tcmDomain;
 
-
-            if (ModelState.IsValid)
+            if (user_logged.UserType.ToString() == "CaseManager")
             {
-                TCMAdendumEntity tcmAdendum = await _converterHelper.ToTCMAdendumEntity(tcmAdendumViewModel, true);
-                _context.Add(tcmAdendum);
-                try
+                if (ModelState.IsValid)
                 {
-                    await _context.SaveChangesAsync();
+                    TCMAdendumEntity tcmAdendum = await _converterHelper.ToTCMAdendumEntity(tcmAdendumViewModel, true);
+                    _context.Add(tcmAdendum);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
 
-                    List<TCMAdendumEntity> adendum = await _context.TCMAdendums
-                                                    .Include(h => h.TcmDomain)
-                                                    .Include(h => h.TcmServicePlan)
-                                                    .Include(h => h.TcmServicePlan.TcmClient.Casemanager)
-                                                    .Include(h => (h.TcmServicePlan.TcmClient.Client))
-                                                    .ToListAsync();
+                        List<TCMAdendumEntity> adendum = await _context.TCMAdendums
+                                                   .Include(h => h.TcmDomain)
+                                                   .Include(h => h.TcmServicePlan)
+                                                   .Include(h => h.TcmServicePlan.TcmClient.Casemanager)
+                                                   .Include(h => (h.TcmServicePlan.TcmClient.Client))
+                                                   .ToListAsync();
 
-                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_TCMAdendum", adendum) });
-                        
-                }
-                catch (System.Exception ex)
-                {
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_TCMAdendum", adendum) });
+
+                    }
+                    catch (System.Exception ex)
+                    {
                         ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
                 }
+                else
+                {
+                    // ModelState.AddModelError(string.Empty, "Already exists the TCM Adendums.");
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmAdendumViewModel) });
+                }
+
             }
             else
             {
-                    // ModelState.AddModelError(string.Empty, "Already exists the TCM Adendums.");
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmAdendumViewModel) });
+                return RedirectToAction("NotAuthorized", "Account");
             }
-        
+            
             return View(tcmAdendumViewModel);
         }
 
@@ -290,5 +298,74 @@ namespace KyoS.Web.Controllers
             return View(tcmAdendumViewModel);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> Edit(int id, TCMAdendumViewModel tcmAdendumViewModel)
+        {
+            if (id != tcmAdendumViewModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
+                                                           .Include(u => u.TcmClient)
+                                                           .ThenInclude(g => g.Client)
+                                                           .FirstOrDefault(h => h.Id == tcmAdendumViewModel.ID_TcmServicePlan);
+            TCMDomainEntity tcmDomain = _context.TCMDomains
+                                                .Include(u => u.TCMObjetive)
+                                                .FirstOrDefault(h => h.Id == tcmAdendumViewModel.ID_TcmDominio);
+           
+            tcmAdendumViewModel.TcmServicePlan = tcmServicePlan;
+            tcmDomain.NeedsIdentified = tcmAdendumViewModel.Needs_Identified;
+            tcmDomain.LongTerm = tcmAdendumViewModel.Long_term;
+            tcmDomain.DateIdentified = tcmAdendumViewModel.Date_Identified;
+            tcmAdendumViewModel.TcmDomain = tcmDomain;
+            
+            CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
+
+            if (user_logged.UserType.ToString() == "CaseManager")
+            {
+                if (ModelState.IsValid)
+                {
+                    TCMAdendumEntity tcmAdendumEntity = await _converterHelper.ToTCMAdendumEntity(tcmAdendumViewModel, false);
+                    _context.Update(tcmAdendumEntity);
+
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        List<TCMAdendumEntity> tcmAdendums = await _context.TCMAdendums
+                                                      .Include(h => h.TcmDomain)
+                                                      .Include(h => h.TcmServicePlan)
+                                                      .ThenInclude(h => (h.TcmClient))
+                                                      .ThenInclude(h => (h.Client))
+                                                      .Where(h => (h.TcmServicePlan.TcmClient.Casemanager.Id == caseManager.Id
+                                                      && h.TcmServicePlan.TcmClient.Casemanager.Clinic.Id == caseManager.Clinic.Id))
+                                                      .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_TCMAdendum", tcmAdendums) });
+                       
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", tcmAdendumViewModel) });
+                }
+            }
+            else
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            return RedirectToAction("Home/Error404");
+
+        }
     }
 }
