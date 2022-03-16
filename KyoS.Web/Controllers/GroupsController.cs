@@ -190,21 +190,21 @@ namespace KyoS.Web.Controllers
 
                             foreach (WorkdayEntity item in workdays)
                             {
-                                //Verify the client is not present in other services of notes at the same time
-                                if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.PSR))
-                                {
-                                    return RedirectToAction(nameof(Create), new { error = 2, idClient = client.Id });
-                                }
-
-                                //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
-                                if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.PSR, group.Meridian, item.Date))
-                                {
-                                    return RedirectToAction(nameof(Create), new { error = 1, idFacilitator = group.Facilitator.Id });
-                                }
-
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
                                 if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
                                 {
+                                    //Verify the client is not present in other services of notes at the same time
+                                    if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.PSR))
+                                    {
+                                        return RedirectToAction(nameof(Create), new { error = 2, idClient = client.Id });
+                                    }
+
+                                    //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
+                                    if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.PSR, group.Meridian, item.Date))
+                                    {
+                                        return RedirectToAction(nameof(Create), new { error = 1, idFacilitator = group.Facilitator.Id });
+                                    }
+
                                     workday_client = new Workday_Client
                                     {
                                         Workday = item,
@@ -382,21 +382,21 @@ namespace KyoS.Web.Controllers
                                                      .ToListAsync();
                             foreach (WorkdayEntity item in workdays)
                             {
-                                //Verify the client is not present in other services of notes at the same time
-                                if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.PSR))
-                                {
-                                    return RedirectToAction(nameof(Edit), new { id = model.Id, error = 2, idClient = client.Id });
-                                }
-
-                                //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
-                                if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.PSR, group.Meridian, item.Date))
-                                {
-                                    return RedirectToAction(nameof(Edit), new { id = model.Id, error = 1, idFacilitator = group.Facilitator.Id });
-                                }
-
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
                                 if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
                                 {
+                                    //Verify the client is not present in other services of notes at the same time
+                                    if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.PSR))
+                                    {
+                                        return RedirectToAction(nameof(Edit), new { id = model.Id, error = 2, idClient = client.Id });
+                                    }
+
+                                    //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
+                                    if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.PSR, group.Meridian, item.Date))
+                                    {
+                                        return RedirectToAction(nameof(Edit), new { id = model.Id, error = 1, idFacilitator = group.Facilitator.Id });
+                                    }
+
                                     workday_client = new Workday_Client
                                     {
                                         Workday = item,
@@ -615,21 +615,21 @@ namespace KyoS.Web.Controllers
 
                             foreach (WorkdayEntity item in workdays)
                             {
-                                //Verify the client is not present in other services of notes at the same time
-                                if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
-                                {
-                                    return RedirectToAction(nameof(CreateGT), new { error = 2, idClient = client.Id });
-                                }
-
-                                //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
-                                if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date))
-                                {
-                                    return RedirectToAction(nameof(CreateGT), new { error = 1, idFacilitator = group.Facilitator.Id });
-                                }
-
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
                                 if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
                                 {
+                                    //Verify the client is not present in other services of notes at the same time
+                                    if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
+                                    {
+                                        return RedirectToAction(nameof(CreateGT), new { error = 2, idClient = client.Id });
+                                    }
+
+                                    //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
+                                    if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date))
+                                    {
+                                        return RedirectToAction(nameof(CreateGT), new { error = 1, idFacilitator = group.Facilitator.Id });
+                                    }
+
                                     workday_client = new Workday_Client
                                     {
                                         Workday = item,
@@ -826,21 +826,21 @@ namespace KyoS.Web.Controllers
 
                             foreach (WorkdayEntity item in workdays)
                             {
-                                //Verify the client is not present in other services of notes at the same time
-                                if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
-                                {
-                                    return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 2, idClient = client.Id });
-                                }
-
-                                //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
-                                if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date))
-                                {
-                                    return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 1, idFacilitator = group.Facilitator.Id });
-                                }
-
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
                                 if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
                                 {
+                                    //Verify the client is not present in other services of notes at the same time
+                                    if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
+                                    {
+                                        return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 2, idClient = client.Id });
+                                    }
+
+                                    //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
+                                    if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date))
+                                    {
+                                        return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 1, idFacilitator = group.Facilitator.Id });
+                                    }
+
                                     workday_client = new Workday_Client
                                     {
                                         Workday = item,
