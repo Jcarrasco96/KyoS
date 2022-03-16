@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220315153942_TCMAdendumVersion1")]
+    partial class TCMAdendumVersion1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2135,28 +2137,20 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("Approved")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateAdendum")
+                    b.Property<DateTime>("DateIdentified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("TcmDomainId")
-                        .HasColumnType("int");
+                    b.Property<string>("NeedsIdentified")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("TcmServicePlanId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.HasIndex("TcmDomainId");
-
                     b.HasIndex("TcmServicePlanId");
 
-                    b.ToTable("TCMAdendums");
+                    b.ToTable("TCMAdendumEntity");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMClientEntity", b =>
@@ -2203,6 +2197,9 @@ namespace KyoS.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
+
+                    b.Property<int>("Adendum")
+                        .HasColumnType("int");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -3349,15 +3346,9 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMAdendumEntity", b =>
                 {
-                    b.HasOne("KyoS.Web.Data.Entities.TCMDomainEntity", "TcmDomain")
-                        .WithMany()
-                        .HasForeignKey("TcmDomainId");
-
                     b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanEntity", "TcmServicePlan")
                         .WithMany("TCMAdendum")
                         .HasForeignKey("TcmServicePlanId");
-
-                    b.Navigation("TcmDomain");
 
                     b.Navigation("TcmServicePlan");
                 });

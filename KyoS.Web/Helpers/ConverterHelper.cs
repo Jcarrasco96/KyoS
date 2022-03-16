@@ -1290,5 +1290,31 @@ namespace KyoS.Web.Helpers
                
             };
         }
+
+        public async Task<TCMAdendumEntity> ToTCMAdendumEntity(TCMAdendumViewModel model, bool isNew)
+        {
+
+            return new TCMAdendumEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                DateAdendum = model.Date_Identified,
+                TcmServicePlan = model.TcmServicePlan,
+                TcmDomain = model.TcmDomain
+                
+            };
+        }
+
+        public TCMAdendumViewModel ToTCMAdendumViewModel(TCMAdendumEntity TcmAdendumEntity)
+        {
+            return new TCMAdendumViewModel
+            {
+                Id = TcmAdendumEntity.Id,
+                TcmServicePlan = TcmAdendumEntity.TcmServicePlan,
+                ListTcmServicePlan = _combosHelper.GetComboServicesPlan(TcmAdendumEntity.TcmServicePlan.TcmClient.Casemanager.Clinic.Id),
+                TcmDominio = _combosHelper.GetComboTCMServices(),
+                TcmDomain = TcmAdendumEntity.TcmDomain,
+                DateAdendum = TcmAdendumEntity.DateAdendum
+            };
+        }
     }
 }

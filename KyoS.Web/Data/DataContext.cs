@@ -65,6 +65,7 @@ namespace KyoS.Web.Data
         public DbSet<TCMObjetiveEntity> TCMObjetives { get; set; }
         public DbSet<TCMDomainEntity> TCMDomains { get; set; }
         public DbSet<TCMServicePlanEntity> TCMServicePlans { get; set; }
+        public DbSet<TCMAdendumEntity> TCMAdendums { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -203,6 +204,10 @@ namespace KyoS.Web.Data
                         .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<TCMServicePlanEntity>()
+                                   .HasIndex(s => s.Id)
+                                   .IsUnique();
+
+            modelBuilder.Entity<TCMAdendumEntity>()
                                    .HasIndex(s => s.Id)
                                    .IsUnique();
         }

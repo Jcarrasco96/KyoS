@@ -388,7 +388,13 @@
                                 <li role="separator" class="divider"></li>
                                 @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
                                 {
-                                    <li>@Html.ActionLink("Services Plans / Clients", "Index", "TCMServiceplans")</li>
+                                     <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Services Plans / Clients</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a asp-area="" asp-controller="TCMServicePlans" asp-action="Index">Services Plans</a></li>
+                                            <li><a asp-area="" asp-controller="TCMAdendums" asp-action="Index">Adendums</a></li>
+                                        </ul>
+                                     </li>
                                 }
                                 else
                                 {
@@ -510,6 +516,8 @@
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Pending Approval", "AproveServicePlan", "TCMServicePlans")</li>
                                 <li>@Html.ActionLink("In Review", "Index", "TCMServicePlans")</li>
+                                <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("Adendums", "Index", "TCMAdendums")</li>
                             </ul>
                         </li>
 
@@ -536,6 +544,8 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Started", "Index", "TCMServiceplans")</li>
                                 <li>@Html.ActionLink("Closed", "Index", "TCMServiceplans")</li>
+                                <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("Adendums", "Index", "TCMAdendums")</li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Domain/Objetives", "Index", "TCMDomains")</li>
                                 <li>@Html.ActionLink("Objetives", "Index", "TCMObjetives")</li>

@@ -20,6 +20,7 @@ namespace KyoS.Web.Data.Entities
 
         public string Task { get; set; }
         public int Status { get; set; }
+        public int Adendum { get; set; }
         // public string Long_Term { get; set; }
 
         public bool Finish { get; set; }

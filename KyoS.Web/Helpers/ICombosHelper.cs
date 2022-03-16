@@ -51,6 +51,9 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboClientsForTCMCaseOpen(int idClinic);
         IEnumerable<SelectListItem> GetComboServicesNotUsed(int idServicePlan);
         IEnumerable<SelectListItem> GetComboStagesNotUsed(string codeDomain);
-        
+        IEnumerable<SelectListItem> GetComboServicesPlan(int idClinic);
+        IEnumerable<SelectListItem> GetComboTCMServices();
+        IEnumerable<SelectListItem> GetComboTCMStages();
+
     }
 }

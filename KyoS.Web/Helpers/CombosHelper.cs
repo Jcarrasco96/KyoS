@@ -1045,6 +1045,81 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
-       
+
+        public IEnumerable<SelectListItem> GetComboServicesPlan(int idClinic)
+        {
+
+            List<TCMServicePlanEntity> tcmSerivicePlan= _context.TCMServicePlans
+                                                 .Include(g => g.TcmClient)
+                                                 .ThenInclude(g => g.Client)
+                                                 .Where(c => (c.TcmClient.Client.Clinic.Id == idClinic
+                                                            && c.Status == StatusType.Open 
+                                                            && c.Approved == 2))
+                                                 .ToList();
+
+            List<SelectListItem> list = tcmSerivicePlan.Select(c => new SelectListItem
+            {
+                Text = $"{c.TcmClient.CaseNumber}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Case Number...]",
+                Value = "0"
+
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboTCMServices()
+        {
+
+            List<TCMServiceEntity> tcmSerivices = _context.TCMServices
+                                                  .OrderBy(g => g.Code)
+                                                  .ToList();
+
+            List<SelectListItem> list = tcmSerivices.Select(c => new SelectListItem
+            {
+                Text = $"{c.Code + "-" + c.Name}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select TCM Service...]",
+                Value = "0"
+
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboTCMStages()
+        {
+
+            List<TCMStageEntity> tcmStages = _context.TCMStages
+                                                  .OrderBy(g => g.Name)
+                                                  .ToList();
+
+            List<SelectListItem> list = tcmStages.Select(c => new SelectListItem
+            {
+                Text = $"{c.Name}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select TCM Stage...]",
+                Value = "0"
+
+            });
+
+            return list;
+        }
     }
 }

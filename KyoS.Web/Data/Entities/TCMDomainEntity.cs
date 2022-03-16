@@ -22,7 +22,6 @@ namespace KyoS.Web.Data.Entities
         public string LongTerm { get; set; }
         public DateTime DateIdentified { get; set; }
         
-
         public TCMServicePlanEntity TcmServicePlan { get; set; }
         //public ClinicEntity Clinic { get; set; }
         public List <TCMObjetiveEntity> TCMObjetive { get; set; }
