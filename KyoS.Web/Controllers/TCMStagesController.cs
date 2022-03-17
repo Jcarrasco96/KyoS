@@ -42,7 +42,7 @@ namespace KyoS.Web.Controllers
                                           .OrderBy(f => f.Name)
                                           .ToListAsync());
             }
-            else
+            if (User.IsInRole("Manager"))
             {
                 UserEntity user_logged = await _context.Users
 
@@ -69,34 +69,20 @@ namespace KyoS.Web.Controllers
                                         .OrderBy(f => f.Name)
                                         .ToListAsync());
             }
+            return RedirectToAction("NotAuthorized", "Account");
         }
 
         [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Create(int id = 0)
         {
-            //id = IdService, not IdStage
-           /* if (id == 1)
-            {
-                ViewBag.Creado = "Y";
-            }
-            else
-            {
-                if (id == 2)
-                {
-                    ViewBag.Creado = "E";
-                }
-                else
-                {
-                    ViewBag.Creado = "N";
-                }
-            }*/
+          
             TCMStageViewModel model;
-            //TCMServiceEntity tcmservice = await _context.TCMServices.FirstOrDefaultAsync(m => m.Id == id);
+           
             TCMServiceEntity tcmservice = await _context.TCMServices
                                                 .Include(g => g.Stages)
                                                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (!User.IsInRole("Admin"))
+            if (User.IsInRole("Manager"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -145,23 +131,26 @@ namespace KyoS.Web.Controllers
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
             TCMStageEntity tcmStageEntity = await _converterHelper.ToTCMStageEntity(tcmStageViewModel, true);
             
-            if (ModelState.IsValid)
+            if (User.IsInRole("Manager"))
             {
-                 
-                _context.Add(tcmStageEntity);
-                try
+                if (ModelState.IsValid)
                 {
-                    await _context.SaveChangesAsync();
-                   
-                    List<TCMServiceEntity> tcmService = await _context.TCMServices
-                                                                       .Include(m => m.Stages)
-                                                                       .OrderBy(f => f.Name)
-                                                                       .ToListAsync();
-                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "index", tcmService) });
-                }
-                catch (System.Exception ex)
-                {
-                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+
+                    _context.Add(tcmStageEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        List<TCMServiceEntity> tcmService = await _context.TCMServices
+                                                                           .Include(m => m.Stages)
+                                                                           .OrderBy(f => f.Name)
+                                                                           .ToListAsync();
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "index", tcmService) });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
                 }
             }
 
@@ -253,23 +242,26 @@ namespace KyoS.Web.Controllers
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
             TCMStageEntity tcmStageEntity = await _converterHelper.ToTCMStageEntity(tcmStageViewModel, false);
             
-            if (ModelState.IsValid)
+            if (User.IsInRole("Manager"))
             {
-                
-                _context.Update(tcmStageEntity);
-                try
+                if (ModelState.IsValid)
                 {
-                    await _context.SaveChangesAsync();
-                    List<TCMStageEntity> tcmStage = await _context.TCMStages
-                                                                  .Include(s => s.Clinic)
-                                                                  .Include(s => s.tCMservice)
-                                                                  .OrderBy(t => t.Name)
-                                                                  .ToListAsync();
-                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMStages", tcmStage) });
-                }
-                catch (System.Exception ex)
-                {
-                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+
+                    _context.Update(tcmStageEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        List<TCMStageEntity> tcmStage = await _context.TCMStages
+                                                                      .Include(s => s.Clinic)
+                                                                      .Include(s => s.tCMservice)
+                                                                      .OrderBy(t => t.Name)
+                                                                      .ToListAsync();
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMStages", tcmStage) });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
                 }
             }
 

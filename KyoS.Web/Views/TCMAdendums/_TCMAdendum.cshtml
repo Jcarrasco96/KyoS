@@ -131,10 +131,21 @@
                                 @Html.DisplayFor(modelItem => item.DateAdendum)
                             </td>
                             <td align="right">
-                                @if (User.IsInRole("CaseManager") && item.Approved == 0)
+                               @if (User.IsInRole("CaseManager") && item.TcmServicePlan.Status == KyoS.Common.Enums.StatusType.Open)
                                 {
-                                    <a onclick="showInPopup('@Url.Action("Edit", "TCMAdendums", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Adendum')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <a asp-action="FinishEditing" asp-route-id="@item.Id" class="btn btn-success"><i class="glyphicon glyphicon-arrow-up"></i></a>
+                                   @if (item.Approved == 0)
+                                    {
+                                       <a onclick="showInPopup('@Url.Action("Edit", "TCMAdendums", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Adendum')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                       <a asp-action="FinishEditing" asp-route-id="@item.Id" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></a>
+                                    }
+                                   @if (item.Approved == 1)
+                                    {
+                                       <i class="btn btn-warning glyphicon glyphicon-search"></i>
+                                    }
+                                   @if (item.Approved == 2)
+                                    {
+                                       <i class="btn btn-success glyphicon glyphicon-flag"></i>
+                                    }
                                 }
                             </td>
                         </tr>

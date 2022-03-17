@@ -33,7 +33,7 @@ namespace KyoS.Web.Controllers
             _renderHelper = renderHelper;
         }
 
-        [Authorize(Roles = "Manager,CaseManager")]
+        [Authorize(Roles = "Manager,CaseManager, TCMSupervisor")]
         public async Task<IActionResult> Index()
         {
             UserEntity user_logged = _context.Users
@@ -56,7 +56,7 @@ namespace KyoS.Web.Controllers
                                       .OrderBy(g => g.Client.Name)
                                       .ToListAsync());
             }
-            if (user_logged.UserType.ToString() == "Manager")
+            if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "TCMSupervisor")
             {
                 if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
                 {
@@ -74,7 +74,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, TCMSupervisor")]
         public async Task<IActionResult> Create(int id = 0)
         {
             if (id == 1)
@@ -95,7 +95,7 @@ namespace KyoS.Web.Controllers
 
             TCMClientViewModel model;
            
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
             {
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                        .FirstOrDefault(u => u.UserName == User.Identity.Name);
@@ -119,45 +119,61 @@ namespace KyoS.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, TCMSupervisor")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TCMClientViewModel model)
         {
             UserEntity user_logged = _context.Users
                                                 .Include(u => u.Clinic)
                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-            if (ModelState.IsValid)
+            if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
             {
-                model.Casemanager = _context.CaseManagers.FirstOrDefault(u => u.Id == model.IdCaseMannager);
-                model.Client = _context.Clients.FirstOrDefault(u => u.Id == model.IdClient);
-                TCMClientEntity tcmClient = await _context.TCMClient.FirstOrDefaultAsync(s => s.Client.Id == model.IdClient
-                                                                                         && s.Status == StatusType.Open);
-                if (tcmClient == null)
+                if (ModelState.IsValid)
                 {
-                    model.DataClose = model.DataOpen.AddMonths(model.Period);
-                    tcmClient = await _converterHelper.ToTCMClientEntity(model, true);
-                    _context.Add(tcmClient);
-                    try
+                    model.Casemanager = _context.CaseManagers.FirstOrDefault(u => u.Id == model.IdCaseMannager);
+                    model.Client = _context.Clients.FirstOrDefault(u => u.Id == model.IdClient);
+                    TCMClientEntity tcmClient = await _context.TCMClient.FirstOrDefaultAsync(s => s.Client.Id == model.IdClient
+                                                                                             && s.Status == StatusType.Open);
+                    if (tcmClient == null)
                     {
-                        await _context.SaveChangesAsync();
-                        List<TCMClientEntity> tcmClients = await _context.TCMClient
-                                                         .Include(g => g.Casemanager)
-                                                         .Include(g => g.Client)
-                                                         .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id)
-                                                         .OrderBy(g => g.Casemanager.Name)
-                                                         .ToListAsync();
-                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMClient", tcmClients) });
+                        model.DataClose = model.DataOpen.AddMonths(model.Period);
+                        tcmClient = await _converterHelper.ToTCMClientEntity(model, true);
+                        _context.Add(tcmClient);
+                        try
+                        {
+                            await _context.SaveChangesAsync();
+                            List<TCMClientEntity> tcmClients = await _context.TCMClient
+                                                             .Include(g => g.Casemanager)
+                                                             .Include(g => g.Client)
+                                                             .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id)
+                                                             .OrderBy(g => g.Casemanager.Name)
+                                                             .ToListAsync();
+                            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMClient", tcmClients) });
+                        }
+                        catch (System.Exception ex)
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+
                     }
-                    catch (System.Exception ex)
+                    else
                     {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        ModelState.AddModelError(string.Empty, "Already exists the TCM Case.");
+                        model = new TCMClientViewModel
+                        {
+                            CaseMannagers = _combosHelper.GetComboCasemannagersByClinic(user_logged.Clinic.Id),
+                            Clients = _combosHelper.GetComboClientsForTCMCaseNotOpen(user_logged.Clinic.Id),
+                            IdStatus = 1,
+                            StatusList = _combosHelper.GetComboClientStatus(),
+                            DataOpen = DateTime.Today.Date,
+                            Period = 6,
+                        };
+                        return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
                     }
 
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Already exists the TCM Case.");
                     model = new TCMClientViewModel
                     {
                         CaseMannagers = _combosHelper.GetComboCasemannagersByClinic(user_logged.Clinic.Id),
@@ -169,24 +185,11 @@ namespace KyoS.Web.Controllers
                     };
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
                 }
-       
             }
-            else 
+            else
             {
-                //  return RedirectToAction("Create", new { id = 2 });
-                // return RedirectToAction("Create", new { id = 1 });
-                model = new TCMClientViewModel
-                {
-                    CaseMannagers = _combosHelper.GetComboCasemannagersByClinic(user_logged.Clinic.Id),
-                    Clients = _combosHelper.GetComboClientsForTCMCaseNotOpen(user_logged.Clinic.Id),
-                    IdStatus = 1,
-                    StatusList = _combosHelper.GetComboClientStatus(),
-                    DataOpen = DateTime.Today.Date,
-                    Period = 6,
-                };
-                return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
+                return RedirectToAction("NotAuthorized", "Account");
             }
-
             model.CaseMannagers = _combosHelper.GetComboCaseManager();
 
             MultiSelectList client_list = new MultiSelectList(await _context.Clients.OrderBy(c => c.Name).ToListAsync(), "Id", "Name");
@@ -195,7 +198,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Manager, TCMSupervisor")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -221,7 +224,7 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, TCMSupervisor")]
         public async Task<IActionResult> Edit(int? id, int error = 0, int idFacilitator = 0, int idClient = 0)
         {
             UserEntity user_logged = _context.Users
@@ -253,7 +256,7 @@ namespace KyoS.Web.Controllers
 
             TCMClientViewModel tcmClientViewModel = _converterHelper.ToTCMClientViewModel(tcmClientEntity);
 
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
             {
                 List<SelectListItem> list = _context.Clients.Where(c => (c.Id == tcmClientViewModel.IdClient))
                                                             .Select(c => new SelectListItem
@@ -282,7 +285,7 @@ namespace KyoS.Web.Controllers
         }
         
         [HttpPost]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, TCMSupervisor")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(TCMClientViewModel model)
         {
@@ -295,7 +298,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-               if (model.Casemanager != null)
+                if (model.Casemanager != null)
                 {
                     if (model.Client != null)
                     {
@@ -371,11 +374,7 @@ namespace KyoS.Web.Controllers
 
             if (user_logged.UserType.ToString() == "CaseManager")
             {
-               /* if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
-                {
-                    return RedirectToAction("NotAuthorized", "Account");
-                }*/
-
+               
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
                 CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
                 List<TCMClientEntity> Client = await _context.TCMClient
@@ -390,7 +389,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager, CaseManager")]
+        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor")]
         public async Task<IActionResult> GetCaseOpen()
         {
             UserEntity user_logged = _context.Users
@@ -432,7 +431,7 @@ namespace KyoS.Web.Controllers
                 }
                 return View(tcmClientsTemp);
             }
-            if (user_logged.UserType.ToString() == "Manager")
+            if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "TCMSupervisor")
             {
                 if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
                 {
@@ -467,7 +466,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager, CaseManager")]
+        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor")]
         public async Task<IActionResult> GetCaseClose()
         {
             UserEntity user_logged = _context.Users
@@ -491,7 +490,7 @@ namespace KyoS.Web.Controllers
                                        .OrderBy(g => g.Client.Name)
                                        .ToListAsync());
             }
-            if (user_logged.UserType.ToString() == "Manager")
+            if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "TCMSupervisor")
             {
                 if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
                 {
@@ -510,7 +509,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
         
-        [Authorize(Roles = "Manager, CaseManager")]
+        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor")]
         public async Task<IActionResult> GetCaseNotServicePlan()
         {
             UserEntity user_logged = _context.Users
@@ -553,7 +552,7 @@ namespace KyoS.Web.Controllers
 
                 return View(tcmClientsTemp);
             }
-            if (user_logged.UserType.ToString() == "Manager")
+            if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "TCMSupervisor")
             {
                 if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
                 {
@@ -589,5 +588,6 @@ namespace KyoS.Web.Controllers
             }
             return RedirectToAction("NotAuthorized", "Account");
         }
+
     }
 }

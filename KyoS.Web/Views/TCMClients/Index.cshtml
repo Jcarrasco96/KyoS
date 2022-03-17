@@ -14,7 +14,7 @@
         <li class="active">TCM Clients</li>
     </ul><!--.breadcrumb-->
 </div>
-@if (User.IsInRole("Manager"))
+@if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
 {
 <p>
     <a onclick="showInPopup('@Url.Action("Create", "TCMClients", null, Context.Request.Scheme)','Open TCM Case')" class="btn btn-primary" title="Open TCM Case"><i class="glyphicon glyphicon-plus"></i> Open TCM Case</a>
