@@ -1005,37 +1005,48 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboStagesNotUsed(string codeDomain)
+        public IEnumerable<SelectListItem> GetComboStagesNotUsed(TCMDomainEntity Domain)
         {
             List<TCMStageEntity> Stages_Total = _context.TCMStages
-                                                        .Where(f => f.tCMservice.Code == codeDomain)
+                                                        .Where(f => f.tCMservice.Code == Domain.Code)
                                                         .OrderBy(n => n.Name)
                                                         .ToList();
-            List<TCMObjetiveEntity> Stages_Objetive = _context.TCMObjetives
-                                                    .Where(f => f.TcmDomain.Code == codeDomain)
-                                                        .OrderBy(n => n.Name)
-                                                        .ToList();
+            List<TCMDomainEntity> allDomain = _context.TCMDomains
+                                                         .Where(g => g.TcmServicePlan.Id == Domain.TcmServicePlan.Id)
+                                                         .OrderBy(g => g.Code)
+                                                         .ToList();
+            
+           
             TCMStageEntity Stage = null;
-
-            foreach (var item in Stages_Objetive)
+            List<TCMObjetiveEntity> Stages_Objetive = null;
+            foreach (var itemDomain in allDomain)
             {
-                if (item.TcmDomain != null)
+
+                Stages_Objetive = _context.TCMObjetives
+                                                   .Where(f => f.TcmDomain.Code == itemDomain.Code)
+                                                       .OrderBy(n => n.Name)
+                                                       .ToList();
+                foreach (var item in Stages_Objetive)
                 {
-                    if (Stages_Total.Exists(c => c.Name == item.Name))
+                    if (item.TcmDomain != null)
                     {
-                        Stage = _context.TCMStages.FirstOrDefault(n => (n.Name == item.Name
-                                                                    && n.tCMservice.Code == codeDomain));
-                        Stages_Total.Remove(Stage);
+                        if (Stages_Total.Exists(c => c.Name == item.Name))
+                        {
+                            Stage = _context.TCMStages.FirstOrDefault(n => (n.Name == item.Name
+                                                                        && n.tCMservice.Code == itemDomain.Code));
+                            Stages_Total.Remove(Stage);
+                        }
                     }
                 }
             }
+            
 
             List<SelectListItem> list = Stages_Total.Select(c => new SelectListItem
             {
                 Text = $"{c.Name}",
                 Value = $"{c.Id}"
             })
-                                                .ToList();
+                .ToList();
 
             list.Insert(0, new SelectListItem
             {

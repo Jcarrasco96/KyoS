@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220318184053_TCMObjetive_AddResponsible")]
+    partial class TCMObjetive_AddResponsible
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2382,7 +2384,7 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("TCMServicePlanReviewEntityId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TcmDomainId")
+                    b.Property<int?>("TcmServicePlanId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -2392,7 +2394,7 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("TCMServicePlanReviewEntityId");
 
-                    b.HasIndex("TcmDomainId");
+                    b.HasIndex("TcmServicePlanId");
 
                     b.ToTable("TCMServicePlanReviewDomains");
                 });
@@ -3490,11 +3492,11 @@ namespace KyoS.Web.Migrations
                         .WithMany("TCMServicePlanRevDomain")
                         .HasForeignKey("TCMServicePlanReviewEntityId");
 
-                    b.HasOne("KyoS.Web.Data.Entities.TCMDomainEntity", "TcmDomain")
+                    b.HasOne("KyoS.Web.Data.Entities.TCMDomainEntity", "TcmServicePlan")
                         .WithMany()
-                        .HasForeignKey("TcmDomainId");
+                        .HasForeignKey("TcmServicePlanId");
 
-                    b.Navigation("TcmDomain");
+                    b.Navigation("TcmServicePlan");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServicePlanReviewEntity", b =>

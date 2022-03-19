@@ -13,13 +13,17 @@ namespace KyoS.Web.Data.Entities
        
         public CaseMannagerEntity Casemanager { get; set; }
         public ClientEntity Client { get; set; }
+
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string CaseNumber { get; set; }
+
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime DataOpen { get; set; }
+
         public DateTime DataClose { get; set; }
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public int Period { get; set; }
+
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public StatusType Status { get; set; }
 

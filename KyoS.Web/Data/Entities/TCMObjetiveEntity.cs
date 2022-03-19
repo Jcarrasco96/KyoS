@@ -20,8 +20,8 @@ namespace KyoS.Web.Data.Entities
 
         public string Task { get; set; }
         public int Status { get; set; }
-        public int Adendum { get; set; }
-        // public string Long_Term { get; set; }
+        public string Responsible { get; set; }
+       
 
         public bool Finish { get; set; }
         public DateTime StartDate{ get; set; }
@@ -29,6 +29,6 @@ namespace KyoS.Web.Data.Entities
         public DateTime EndDate { get; set; }
 
         public TCMDomainEntity TcmDomain { get; set; }
-        //public ClinicEntity Clinic { get; set; }  
+        
     }
 }

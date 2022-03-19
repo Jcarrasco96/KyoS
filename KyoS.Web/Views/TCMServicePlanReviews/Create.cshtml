@@ -1,0 +1,39 @@
+﻿@model KyoS.Web.Models.TCMServicePlanReviewViewModel
+@{
+    ViewData["Title"] = "Create Service Plan Review";
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("TCMServicePlanReviews", "Index", "TCMServicePlanReviews")
+        </li>
+        <li class="active">Create</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<h4>Create new service plan review</h4>
+<hr />
+<div>
+    
+    <div>
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <partial name="TCMServicePlanReview" />
+            <div class="form-group">
+                <input type="submit" value="Create Service Plan Review" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-success">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<partial name="_ModalPopup" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+

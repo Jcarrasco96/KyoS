@@ -1264,7 +1264,8 @@ namespace KyoS.Web.Helpers
                 EndDate = model.End_Date,
                 Finish = model.Finish,
                 IdObjetive = model.ID_Objetive,
-                Status = model.Status
+                Status = model.Status,
+                Responsible = model.Responsible
                 
             };
         }
@@ -1286,8 +1287,9 @@ namespace KyoS.Web.Helpers
                 End_Date = TcmObjetiveEntity.EndDate,
                 Finish = TcmObjetiveEntity.Finish,
                 TcmDomain = TcmObjetiveEntity.TcmDomain,
-                Stages = _combosHelper.GetComboStagesNotUsed(TcmObjetiveEntity.TcmDomain.Code)
-               
+                Stages = _combosHelper.GetComboStagesNotUsed(TcmObjetiveEntity.TcmDomain),
+                Responsible = TcmObjetiveEntity.Responsible
+
             };
         }
 

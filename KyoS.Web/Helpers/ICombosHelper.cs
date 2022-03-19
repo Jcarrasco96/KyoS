@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using KyoS.Web.Data.Entities;
 
 namespace KyoS.Web.Helpers
 {
@@ -50,7 +51,7 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboClientsForTCMCaseNotOpen(int idClinic);
         IEnumerable<SelectListItem> GetComboClientsForTCMCaseOpen(int idClinic);
         IEnumerable<SelectListItem> GetComboServicesNotUsed(int idServicePlan);
-        IEnumerable<SelectListItem> GetComboStagesNotUsed(string codeDomain);
+        IEnumerable<SelectListItem> GetComboStagesNotUsed(TCMDomainEntity Domain);
         IEnumerable<SelectListItem> GetComboServicesPlan(int idClinic);
         IEnumerable<SelectListItem> GetComboTCMServices();
         IEnumerable<SelectListItem> GetComboTCMStages();

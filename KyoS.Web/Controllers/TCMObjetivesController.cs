@@ -106,9 +106,9 @@ namespace KyoS.Web.Controllers
                     model = new TCMObjetiveViewModel
                     {
                         TcmDomain = tcmdomain,
-
+                        Id = 0,
                         Id_Stage = 0,
-                        Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain.Code),
+                        Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain),
                         Id_Domain = id,
                         ID_Objetive = tcmdomain.TCMObjetive.Count() + 1,
                         Start_Date = DateTime.Today.Date,
@@ -169,10 +169,11 @@ namespace KyoS.Web.Controllers
                 {
                     TCMDomainEntity tcmdomain = await _context.TCMDomains
                                                    .Include(g => g.TCMObjetive)
+                                                   .Include(g => g.TcmServicePlan)
                                                    .FirstOrDefaultAsync(m => m.Id == tcmObjetiveViewModel.Id_Domain);
                     tcmObjetiveViewModel.TcmDomain = tcmdomain;
                     tcmObjetiveViewModel.Id_Stage = 0;
-                    tcmObjetiveViewModel.Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain.Code);
+                    tcmObjetiveViewModel.Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain);
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmObjetiveViewModel) });
                 }
 
@@ -244,7 +245,8 @@ namespace KyoS.Web.Controllers
                     Target_Date = objetiveEntity.TargetDate,
                     End_Date = objetiveEntity.EndDate,
                     task = objetiveEntity.Task,
-                   // long_Term = objetiveEntity.Long_Term,
+                    Responsible = objetiveEntity.Responsible,
+                    // long_Term = objetiveEntity.Long_Term,
                 };
                
                     return View(model);
@@ -300,10 +302,11 @@ namespace KyoS.Web.Controllers
                 {
                     TCMDomainEntity tcmdomain = await _context.TCMDomains
                                                    .Include(g => g.TCMObjetive)
+                                                   .Include(g => g.TcmServicePlan)
                                                    .FirstOrDefaultAsync(m => m.Id == tcmObjetiveViewModel.Id_Domain);
                    
                     tcmObjetiveViewModel.TcmDomain = tcmdomain;
-                    tcmObjetiveViewModel.Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain.Code);
+                    tcmObjetiveViewModel.Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain);
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", tcmObjetiveViewModel) });
                 }
 

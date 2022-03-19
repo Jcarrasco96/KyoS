@@ -23,7 +23,6 @@ namespace KyoS.Web.Data.Entities
         public DateTime DateIdentified { get; set; }
         
         public TCMServicePlanEntity TcmServicePlan { get; set; }
-        //public ClinicEntity Clinic { get; set; }
         public List <TCMObjetiveEntity> TCMObjetive { get; set; }
 
     }
