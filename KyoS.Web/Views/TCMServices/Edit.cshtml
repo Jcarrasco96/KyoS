@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Edit" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMService(this);">
+        <form asp-action="Edit" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMService(this);" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="col-md-12">
@@ -18,12 +18,12 @@
             </div>
             <div class="">
                 <div class="form-group col-md-6">
-                    <label asp-for="Code" class="control-label"></label>
+                    <label asp-for="Code" class="control-label"></label>&nbsp;*
                     <input asp-for="Code" class="form-control" />
                     <span asp-validation-for="Code" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-6">
-                    <label asp-for="IdClinic" class="control-label"></label>
+                    <label asp-for="IdClinic" class="control-label"></label>&nbsp;*
                     <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control"></select>
                     <span asp-validation-for="IdClinic" class="text-danger"></span>
                 </div>
@@ -31,8 +31,8 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Description" class="control-label"></label>&nbsp;
-                    <input asp-for="Description" class="form-control" />
-                    <span asp-validation-for="Description" class="text-danger"></span>
+                    <textarea asp-for="Description" class="form-control" rows="2"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>                    
                 </div>
             </div>
             <div class="col-md-12">

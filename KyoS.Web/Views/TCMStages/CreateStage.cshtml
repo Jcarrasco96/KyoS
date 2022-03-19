@@ -5,50 +5,44 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Create" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMStage(this);">
+        <form  asp-route-id="@Model.Id" >
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Id_TCMService" />
-            <div class="">
+            <div>
                 <div class="form-group col-md-3">
-                    <b>Service code:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.tCMservice.Code)</i>
+                    <label class="control-label">Service Code</label>
+                    <input class="form-control" asp-for="@Model.tCMservice.Code" readonly/>
+                    
                 </div>
                 <div class="form-group col-md-9">
-                    <b>Service name:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.tCMservice.Name)</i>
+                    <label class="control-label">Service Name</label>
+                    <input class="form-control" asp-for="@Model.tCMservice.Name" readonly/>
                  </div>
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>&nbsp;*
+                    <label class="control-label">Stage Name</label>&nbsp;*
                     <input asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
             </div>
-            <div class="">
-                <div class="form-group col-md-6">
-                    <label asp-for="ID_Etapa" class="control-label"></label>&nbsp;*
-                    <input asp-for="ID_Etapa" class="form-control" readonly />
-                    <span asp-validation-for="ID_Etapa" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-6">
+            <div>
+                <div class="form-group col-md-3">
                     <label asp-for="Units" class="control-label"></label>&nbsp;*
                     <input asp-for="Units" class="form-control" />
                     <span asp-validation-for="Units" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
+                <div class="form-group col-md-9">
                     <label asp-for="IdClinic" class="control-label"></label>&nbsp;*
                     <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control"></select>
                     <span asp-validation-for="IdClinic" class="text-danger"></span>
                 </div>
-            </div>
+            </div>            
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Description" class="control-label"></label>
-                    <input asp-for="Description" class="form-control" />
+                    <textarea asp-for="Description" class="form-control" rows="2"></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
             </div>
@@ -57,7 +51,7 @@
             </div>
             <div>
                 <div class="col-md-offset-9">
-                    <input type="submit" value="Submit" class="btn btn-primary" asp-all-route-id="model.tCMservice.Id" />
+                    @*<input type="submit" value="Submit" class="btn btn-primary"/>*@
                     <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
             </div>

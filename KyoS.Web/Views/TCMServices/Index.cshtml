@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMServiceEntity>
 @{
-    ViewData["Title"] = "TCMService";
+    ViewData["Title"] = "TCM Services";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -20,8 +20,10 @@
 </p>
 
 <div class="row">
-    <div id="view-tcmservices">
-        @await Html.PartialAsync("_ViewTCMServices", Model.ToList())
+    <div class="col-md-12">
+        <div id="view-tcmservices">
+            @await Html.PartialAsync("_ViewTCMServices", Model.OrderBy(f => f.Name).ToList())
+        </div>
     </div>
 </div>
 
@@ -35,7 +37,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#MyTable').DataTable({
-                "order": [[1, "asc"]],
+                "order": [[2, "asc"]],
                 "pageLength": 25
             });
 

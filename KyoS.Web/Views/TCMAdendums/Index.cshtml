@@ -15,15 +15,18 @@
     </ul><!--.breadcrumb-->
 </div>
 
-<p>
-    <a onclick="showInPopup('@Url.Action("Create", "TCMAdendums", null, Context.Request.Scheme)','Add TCM Adendum')" class="btn btn-primary" title="Create TCM Adendum"><i class="glyphicon glyphicon-plus"></i> Create TCM Adendum</a>
-</p>
-
+@if (User.IsInRole("CaseManager"))
+{
+    <p>
+        <a onclick="showInPopup('@Url.Action("Create", "TCMAdendums", null, Context.Request.Scheme)','Add TCM Adendum')" class="btn btn-primary" title="Create TCM Adendum"><i class="glyphicon glyphicon-plus"></i> Create TCM Adendum</a>
+    </p>
+}
 <div class="row">
     <div id="view-tcmAdendum">
         @await Html.PartialAsync("_TCMAdendum", Model.ToList())
     </div>
 </div>
+
 <partial name="_ModalPopup" />
 <partial name="_DeleteDialog" />
 
@@ -32,36 +35,36 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('#MyTable').DataTable({
-                "order": [[0, "asc"]],
-                "pageLength": 100
-            });
-
-            // Delete item
-            var item_to_delete;
-
-            $('.deleteItem').click((e) => {
-                item_to_delete = e.currentTarget.dataset.id;
-            });
-            $("#btnYesDelete").click(function () {
-                var url = "@Url.Action("Delete", "TCMAdendums")";
-                window.location.href = url + '/' + item_to_delete;
-            });
+    $(document).ready(function () {
+        $('#MyTable').DataTable({
+            "order": [[0, "asc"]],
+            "pageLength": 100
         });
-        $(function () {
 
-            //Assign Click event to Plus Image.
-            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
-                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
-                $(this).attr("class", "icon-minus-sign-alt");
-            });
-            //Assign Click event to Minus Image.
-            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
-                $(this).attr("class", "icon-plus-sign-alt");
-                $(this).closest("tr").next().remove();
-            });
+        // Delete item
+        var item_to_delete;
+
+        $('.deleteItem').click((e) => {
+            item_to_delete = e.currentTarget.dataset.id;
         });
+        $("#btnYesDelete").click(function () {
+            var url = "@Url.Action("Delete", "TCMAdendums")";
+            window.location.href = url + '/' + item_to_delete;
+        });
+    });
+    $(function () {
+
+        //Assign Click event to Plus Image.
+        $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+            $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+            $(this).attr("class", "icon-minus-sign-alt");
+        });
+        //Assign Click event to Minus Image.
+        $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+            $(this).attr("class", "icon-plus-sign-alt");
+            $(this).closest("tr").next().remove();
+        });
+    });
     </script>
 }
 

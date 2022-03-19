@@ -145,7 +145,7 @@ namespace KyoS.Web.Controllers
                                                                            .Include(m => m.Stages)
                                                                            .OrderBy(f => f.Name)
                                                                            .ToListAsync();
-                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "index", tcmService) });
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMServices", tcmService) });
                     }
                     catch (System.Exception ex)
                     {
