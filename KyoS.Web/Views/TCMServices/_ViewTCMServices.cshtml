@@ -79,7 +79,7 @@
                                                     <td>@Html.DisplayFor(modelItem => product.Description)</td>
                                                     <td align="center">@Html.DisplayFor(modelItem => product.Units)</td>
                                                     <td align="center">
-                                                        <a onclick="showInPopup('@Url.Action("Edit", "TCMStages", new { id = product.Id }, Context.Request.Scheme)','Edit TCM Stage')" class="btn btn-warning" title="Edit stage"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a onclick="showInPopup('@Url.Action("EditStage", "TCMServices", new { id = product.Id }, Context.Request.Scheme)','Edit TCM Stage')" class="btn btn-warning" title="Edit stage"><i class="glyphicon glyphicon-pencil"></i></a>
                                                     </td>
                                                  </tr>
                                                 cant_unit = cant_unit + product.Units;
