@@ -5,7 +5,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Create" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMDomain(this);">
+        <form asp-action="EditDomain" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMServicePlan(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Id_ServicePlan" />
@@ -26,38 +26,32 @@
             <div class="col-md-12">
                 &nbsp;
             </div>
-            <div class="form-group col-md-12">
-                <div class="">
-                    <label asp-for="Id_Service" class="control-label">Service Code</label>&nbsp;*
-                    <select asp-for="Id_Service" asp-items="Model.Services" class="form-control" id="Code_Name" onchange="getCode();"></select>
-                    <span asp-validation-for="Id_Service" class="text-danger"></span>
-                </div>
-            </div>
+
             <br />
             <div class="form-group">
-                <div class="form-group col-md-3">
-                    <label asp-for="Code" class="control-label">Service Code</label>&nbsp;*
-                    <input asp-for="Code" id="GetCode" class="form-control" readonly />
+                <div class="col-md-3">
+                    <label asp-for="Code" class="control-label"></label>&nbsp;*
+                    <input asp-for="Code" class="form-control" readonly />
                     <span asp-validation-for="Code" class="text-danger"></span>
                 </div>
 
-                <div class="form-group col-md-9">
-                    <label asp-for="Name" class="control-label">Service Name</label>&nbsp;*
-                    <input asp-for="Name" id="GetName" class="form-control" readonly />
+                <div class="col-md-9">
+                    <label asp-for="Name" class="control-label"></label>&nbsp;*
+                    <input asp-for="Name" class="form-control" readonly />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label asp-for="Needs_Identified" class="control-label">Identified Needs</label>
-                    <textarea asp-for="Needs_Identified" class="form-control" rows="5" />
+                    <label asp-for="Needs_Identified" class="control-label">Need Identified</label>
+                    <textarea asp-for="Needs_Identified" class="form-control" rows="4"></textarea>
                     <span asp-validation-for="Needs_Identified" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Long_Term" class="control-label">Long Term</label>
-                    <textarea asp-for="Long_Term" class="form-control" rows="5" />
+                    <textarea asp-for="Long_Term" class="form-control" rows="4"></textarea>
                     <span asp-validation-for="Long_Term" class="text-danger"></span>
                 </div>
             </div>
@@ -80,19 +74,12 @@
         var y = x.options[x.selectedIndex].text;
         var code = y[0] + y[1];
         var name = y[3];
-        if (y[0] != '[') {
-            for (var i = 4; i < y.length; i++) {
-                name = name + y[i];
-            }
-            document.getElementById('GetCode').value = code;
-            document.getElementById('GetName').value = name;
-        }
-        else
+        for (var i = 4; i < y.length; i++)
         {
-            document.getElementById('GetCode').value = "";
-            document.getElementById('GetName').value = "";
+            name = name + y[i];
         }
-        
+        document.getElementById('GetCode').value = code;
+        document.getElementById('GetName').value = name;
 
     }
 </script>
@@ -131,4 +118,5 @@
                                 //}
     </script>
 }
+
 
