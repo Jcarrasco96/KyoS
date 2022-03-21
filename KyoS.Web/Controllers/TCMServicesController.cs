@@ -383,7 +383,7 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
             TCMStageEntity tcmStageEntity = await _converterHelper.ToTCMStageEntity(tcmStageViewModel, true);
-
+           
             if (User.IsInRole("Manager"))
             {
                 if (ModelState.IsValid)
@@ -394,11 +394,11 @@ namespace KyoS.Web.Controllers
                     {
                         await _context.SaveChangesAsync();
 
-                        List<TCMServiceEntity> tcmService = await _context.TCMServices
+                        List<TCMServiceEntity> tcmServices = await _context.TCMServices
                                                                            .Include(m => m.Stages)
                                                                            .OrderBy(f => f.Code)
                                                                            .ToListAsync();
-                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMServices", tcmService) });
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMServices", tcmServices) });
                     }
                     catch (System.Exception ex)
                     {
@@ -425,8 +425,9 @@ namespace KyoS.Web.Controllers
             }
 
             TCMServiceEntity tcmservice = await _context.TCMServices
-                                               .Include(g => g.Stages)
-                                               .FirstOrDefaultAsync(m => m.Id == tcmStageViewModel.Id_TCMService);
+                                              .Include(g => g.Stages)
+                                              .FirstOrDefaultAsync(m => m.Id == tcmStageViewModel.Id_TCMService);
+
             tcmStageViewModel.tCMservice = tcmservice;
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateStage", tcmStageViewModel) });
         }
@@ -500,7 +501,7 @@ namespace KyoS.Web.Controllers
                                                .Include(g => g.Stages)
                                                .FirstOrDefaultAsync(m => m.Id == tcmStageViewModel.Id_TCMService);
             tcmStageViewModel.tCMservice = tcmservice;
-            tcmStageViewModel.tCMservice = tcmservice;
+            
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditStage", tcmStageViewModel) });
         }
     }

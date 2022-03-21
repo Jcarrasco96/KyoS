@@ -1123,7 +1123,7 @@ namespace KyoS.Web.Helpers
                 Name = model.Name,
                 Description = model.Description,
                 Units = model.Units,
-                ID_Etapa = model.ID_Etapa
+                ID_Etapa = isNew ? model.ID_Etapa + 1 : model.ID_Etapa
             };
         }
 
