@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMClientEntity>
 @{
-    ViewData["Title"] = "TCM Client";
+    ViewData["Title"] = "TCM Cases";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,7 +11,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">TCM Clients</li>
+        <li class="active">TCM Cases</li>
     </ul><!--.breadcrumb-->
 </div>
 @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))

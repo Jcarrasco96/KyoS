@@ -18,9 +18,12 @@ namespace KyoS.Web.Data.Entities
         public string CaseNumber { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [DataType(DataType.Date)]
         public DateTime DataOpen { get; set; }
 
+        [DataType(DataType.Date)]
         public DateTime DataClose { get; set; }
+        
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public int Period { get; set; }
 

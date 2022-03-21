@@ -879,7 +879,7 @@ namespace KyoS.Web.Helpers
 
             list.Insert(0, new SelectListItem
             {
-                Text = "[Select Casemanager...]",
+                Text = "[Select Case Manager...]",
                 Value = "0"
             });
 

@@ -3,60 +3,53 @@
     Layout = null;
 }
 
-<div class="row">
-    <div class="col-md-12">
+<div class="row">    
         <form asp-action="Edit" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMClient(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="">
-                <div class="form-group col-md-9">
+            <div class="container-fluid">
+                <div class="form-group col-md-8">
                     <label asp-for="IdClient" class="control-label">Client Name</label>&nbsp;*
-                    <select asp-for="IdClient" asp-items="Model.Clients" class="form-control" readonly></select>
+                    <select asp-for="IdClient" asp-items="Model.Clients" class="form-control"></select>
                     <span asp-validation-for="IdClient" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
+                    <label asp-for="DataOpen" class="control-label">Open Date</label>&nbsp;*
+                    <input asp-for="DataOpen" class="form-control">
+                    <span asp-validation-for="DataOpen" class="text-danger"></span>
+                </div>                
+            </div>
+            <div class="container-fluid">
+                <div class="form-group col-md-8">
+                    <label asp-for="IdCaseMannager" class="control-label">Case Manager</label>&nbsp;*
+                    <select asp-for="IdCaseMannager" asp-items="Model.CaseMannagers" class="form-control"></select>
+                    <span asp-validation-for="IdCaseMannager" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
                     <label asp-for="CaseNumber" class="control-label">Case Number</label>&nbsp;*
                     <input asp-for="CaseNumber" class="form-control">
                     <span asp-validation-for="CaseNumber" class="text-danger"></span>
                 </div>
             </div>
-            <div class="">
-                <div class="form-group col-md-9">
-                    <label asp-for="IdCaseMannager" class="control-label">Casemanager Name</label>&nbsp;*
-                    <select asp-for="IdCaseMannager" asp-items="Model.CaseMannagers" class="form-control"></select>
-                    <span asp-validation-for="IdCaseMannager" class="text-danger"></span>
+            <div class="container-fluid">
+                <div class="form-group col-md-4">
+                    <label asp-for="Period" class="control-label">Period (months)</label>&nbsp;*
+                    <input asp-for="Period" class="form-control">
+                    <span asp-validation-for="Period" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                     <label asp-for="IdStatus" class="control-label"></label>&nbsp;
                     <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
                     <span asp-validation-for="IdStatus" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="">
-                <div class="form-group col-md-9">
-                    <label asp-for="DataOpen" class="control-label"></label>
-                    <input asp-for="DataOpen" class="form-control">
-                    <span asp-validation-for="DataOpen" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-3">
-                    <label asp-for="Period" class="control-label"></label>
-                    <input asp-for="Period" class="form-control">
-                    <span asp-validation-for="Period" class="text-danger"></span>
-                </div>
-
-            </div>
-
-            <div class="col-md-12">
-                &nbsp;
-            </div>
-            <div>
+            </div>            
+            <div class="container-fluid">
                 <div class="col-md-offset-9">
                     <input type="submit" value="Submit" class="btn btn-primary" />
                     <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
             </div>
-        </form>
-    </div>
+        </form>    
 </div>
 
 

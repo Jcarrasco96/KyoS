@@ -22,7 +22,6 @@ namespace KyoS.Web.Models
         public int IdClient { get; set; }
         public IEnumerable<SelectListItem> Clients { get; set; }
 
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Status")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a status.")]
         public int IdStatus { get; set; }

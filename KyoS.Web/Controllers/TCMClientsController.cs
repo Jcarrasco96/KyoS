@@ -1,21 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using KyoS.Common.Enums;
+﻿using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    
+
     public class TCMClientsController : Controller
     {
         private readonly DataContext _context;
@@ -33,7 +32,7 @@ namespace KyoS.Web.Controllers
             _renderHelper = renderHelper;
         }
 
-        [Authorize(Roles = "Manager,CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor")]
         public async Task<IActionResult> Index()
         {
             UserEntity user_logged = _context.Users
@@ -43,31 +42,34 @@ namespace KyoS.Web.Controllers
 
             if (user_logged.UserType.ToString() == "CaseManager")
             {
-                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
                 {
                     return RedirectToAction("NotAuthorized", "Account");
                 }
 
-               CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
-               return View(await _context.TCMClient
-                                      .Include(g => g.Casemanager)
-                                      .Include(g => g.Client)
-                                      .Where(g => (g.Casemanager.Id == caseManager.Id))
-                                      .OrderBy(g => g.Client.Name)
-                                      .ToListAsync());
+                CaseMannagerEntity caseManager = await _context.CaseManagers
+                                                               .FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
+
+                return View(await _context.TCMClient
+                                          .Include(g => g.Casemanager)
+                                          .Include(g => g.Client)
+                                          .Where(g => (g.Casemanager.Id == caseManager.Id))
+                                          .OrderBy(g => g.Client.Name)
+                                          .ToListAsync());
             }
+
             if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "TCMSupervisor")
             {
-                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
                 {
                     return RedirectToAction("NotAuthorized", "Account");
                 }
-                List <TCMClientEntity> tcmClient = await _context.TCMClient
-                                                          .Include(g => g.Casemanager)
-                                                          .Include(g => g.Client)
-                                                          .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id)
-                                                          .OrderBy(g => g.Casemanager.Name)
-                                                          .ToListAsync();
+                List<TCMClientEntity> tcmClient = await _context.TCMClient
+                                                                 .Include(g => g.Casemanager)
+                                                                 .Include(g => g.Client)
+                                                                 .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id)
+                                                                 .OrderBy(g => g.Casemanager.Name)
+                                                                 .ToListAsync();
                 return View(tcmClient);
             }
 
@@ -94,14 +96,14 @@ namespace KyoS.Web.Controllers
             }
 
             TCMClientViewModel model;
-           
+
             if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
             {
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                        .FirstOrDefault(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic != null)
                 {
-                   model = new TCMClientViewModel
+                    model = new TCMClientViewModel
                     {
                         CaseMannagers = _combosHelper.GetComboCasemannagersByClinic(user_logged.Clinic.Id),
                         Clients = _combosHelper.GetComboClientsForTCMCaseNotOpen(user_logged.Clinic.Id),
@@ -224,35 +226,27 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
         [Authorize(Roles = "Manager, TCMSupervisor")]
         public async Task<IActionResult> Edit(int? id, int error = 0, int idFacilitator = 0, int idClient = 0)
         {
             UserEntity user_logged = _context.Users
-                                           .Include(u => u.Clinic)
-                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (id == null)
             {
                 return RedirectToAction("Home/Error404");
             }
 
-            TCMClientEntity tcmClientEntity = await _context.TCMClient.Include(g => g.Casemanager)
-                                                           .Include(g => g.Client).FirstOrDefaultAsync(g => g.Id == id);
+            TCMClientEntity tcmClientEntity = await _context.TCMClient
+                                                            .Include(g => g.Casemanager)
+                                                            .Include(g => g.Client)
+                                                            .FirstOrDefaultAsync(g => g.Id == id);
             if (tcmClientEntity == null)
             {
                 return RedirectToAction("Home/Error404");
-            }
-
-            if (tcmClientEntity.Status == StatusType.Close)
-            {
-                List<TCMClientEntity> tcmClients = await _context.TCMClient
-                                                         .Include(g => g.Casemanager)
-                                                         .Include(g => g.Client)
-                                                         .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id)
-                                                         .OrderBy(g => g.Casemanager.Name)
-                                                         .ToListAsync();
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMClient", tcmClients) });
-            }
+            }            
 
             TCMClientViewModel tcmClientViewModel = _converterHelper.ToTCMClientViewModel(tcmClientEntity);
 
@@ -260,16 +254,16 @@ namespace KyoS.Web.Controllers
             {
                 List<SelectListItem> list = _context.Clients.Where(c => (c.Id == tcmClientViewModel.IdClient))
                                                             .Select(c => new SelectListItem
-                {
-                    Text = $"{c.Name}",
-                    Value = $"{c.Id}"
-                }).ToList();
+                                                            {
+                                                                Text = $"{c.Name}",
+                                                                Value = $"{c.Id}"
+                                                            }).ToList();
                 tcmClientViewModel.Clients = list;
 
                 List<SelectListItem> list_Status = new List<SelectListItem>
                                 { new SelectListItem { Text = StatusType.Open.ToString(), Value = "1"},
                                   new SelectListItem { Text = StatusType.Close.ToString(), Value = "2"}};
-                
+
                 tcmClientViewModel.StatusList = list_Status;
 
                 List<SelectListItem> listCaseManager = _context.CaseManagers.Select(f => new SelectListItem
@@ -283,7 +277,7 @@ namespace KyoS.Web.Controllers
             }
             return RedirectToAction("NotAuthorized", "Account");
         }
-        
+
         [HttpPost]
         [Authorize(Roles = "Manager, TCMSupervisor")]
         [ValidateAntiForgeryToken]
@@ -292,7 +286,7 @@ namespace KyoS.Web.Controllers
             UserEntity user_logged = _context.Users
                                            .Include(u => u.Clinic)
                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
-            
+
             model.Casemanager = _context.CaseManagers.FirstOrDefault(u => u.Id == model.IdCaseMannager);
             model.Client = _context.Clients.FirstOrDefault(u => u.Id == model.IdClient);
 
@@ -330,7 +324,7 @@ namespace KyoS.Web.Controllers
                 }
                 ModelState.AddModelError(string.Empty, "Already not exists the Casemanager.");
             }
-            
+
             List<SelectListItem> listClient = _context.Clients.Where(c => (c.Id == model.IdClient))
                                             .Select(c => new SelectListItem
                                             {
@@ -349,7 +343,7 @@ namespace KyoS.Web.Controllers
             if (model.IdClient == 0)
             {
                 return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", model) });
-            } 
+            }
             if (model.IdCaseMannager == 0)
             {
                 return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", model) });
@@ -358,7 +352,7 @@ namespace KyoS.Web.Controllers
             {
                 return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", model) });
             }
-           
+
             return View(model);
         }
 
@@ -374,14 +368,14 @@ namespace KyoS.Web.Controllers
 
             if (user_logged.UserType.ToString() == "CaseManager")
             {
-               
+
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
                 CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
                 List<TCMClientEntity> Client = await _context.TCMClient
                                                     .Include(g => g.Client)
                                                     .Where(g => (g.Casemanager.Id == caseManager.Id))
                                                     .ToListAsync();
-                                                    
+
                 return View(Client);
             }
 
@@ -437,7 +431,7 @@ namespace KyoS.Web.Controllers
                 {
                     return RedirectToAction("NotAuthorized", "Account");
                 }
-                List <TCMClientEntity> tcmClient = await _context.TCMClient
+                List<TCMClientEntity> tcmClient = await _context.TCMClient
                                                           .Include(g => g.Casemanager)
                                                           .Include(g => g.Client)
                                                           .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
@@ -445,7 +439,7 @@ namespace KyoS.Web.Controllers
                                                           .OrderBy(g => g.Casemanager.Name)
                                                           .ToListAsync();
                 TCMServicePlanEntity servicePlan = null;
-                List <TCMClientEntity> tcmClientsTemp = await _context.TCMClient
+                List<TCMClientEntity> tcmClientsTemp = await _context.TCMClient
                                                           .Include(g => g.Casemanager)
                                                           .Include(g => g.Client)
                                                           .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
@@ -508,7 +502,7 @@ namespace KyoS.Web.Controllers
             }
             return RedirectToAction("NotAuthorized", "Account");
         }
-        
+
         [Authorize(Roles = "Manager, CaseManager, TCMSupervisor")]
         public async Task<IActionResult> GetCaseNotServicePlan()
         {
@@ -525,7 +519,7 @@ namespace KyoS.Web.Controllers
                 }
 
                 CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
-                List <TCMClientEntity> tcmClientsT =  await _context.TCMClient
+                List<TCMClientEntity> tcmClientsT = await _context.TCMClient
                                        .Include(g => g.Casemanager)
                                        .Include(g => g.Client)
                                        .Where(g => (g.Casemanager.Id == caseManager.Id
@@ -533,7 +527,7 @@ namespace KyoS.Web.Controllers
                                        .OrderBy(g => g.Client.Name)
                                        .ToListAsync();
                 TCMServicePlanEntity servicePlan = null;
-                List <TCMClientEntity> tcmClientsTemp = await _context.TCMClient
+                List<TCMClientEntity> tcmClientsTemp = await _context.TCMClient
                                        .Include(g => g.Casemanager)
                                        .Include(g => g.Client)
                                        .Where(g => (g.Casemanager.Id == caseManager.Id
@@ -558,7 +552,7 @@ namespace KyoS.Web.Controllers
                 {
                     return RedirectToAction("NotAuthorized", "Account");
                 }
-                List <TCMClientEntity> tcmClients = await _context.TCMClient
+                List<TCMClientEntity> tcmClients = await _context.TCMClient
                                                           .Include(g => g.Casemanager)
                                                           .Include(g => g.Client)
                                                           .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
@@ -567,7 +561,7 @@ namespace KyoS.Web.Controllers
                                                           .ToListAsync();
 
                 TCMServicePlanEntity servicePlan = null;
-                List <TCMClientEntity> tcmClientsTemp = await _context.TCMClient
+                List<TCMClientEntity> tcmClientsTemp = await _context.TCMClient
                                                           .Include(g => g.Casemanager)
                                                           .Include(g => g.Client)
                                                           .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
