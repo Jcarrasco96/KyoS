@@ -382,13 +382,16 @@ namespace KyoS.Web.Controllers
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
-            TCMStageEntity tcmStageEntity = await _converterHelper.ToTCMStageEntity(tcmStageViewModel, true);
-           
+
+            TCMServiceEntity tcmservice = await _context.TCMServices
+                                               .Include(g => g.Stages)
+                                               .FirstOrDefaultAsync(m => m.Id == tcmStageViewModel.Id_TCMService);
             if (User.IsInRole("Manager"))
             {
                 if (ModelState.IsValid)
                 {
-
+                    TCMStageEntity tcmStageEntity = await _converterHelper.ToTCMStageEntity(tcmStageViewModel, true);
+                    tcmStageEntity.ID_Etapa = tcmservice.Stages.Count() + 1;
                     _context.Add(tcmStageEntity);
                     try
                     {
@@ -424,10 +427,7 @@ namespace KyoS.Web.Controllers
                 tcmStageViewModel.Clinics = list;
             }
 
-            TCMServiceEntity tcmservice = await _context.TCMServices
-                                              .Include(g => g.Stages)
-                                              .FirstOrDefaultAsync(m => m.Id == tcmStageViewModel.Id_TCMService);
-
+            
             tcmStageViewModel.tCMservice = tcmservice;
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateStage", tcmStageViewModel) });
         }
@@ -463,7 +463,7 @@ namespace KyoS.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-
+                   
                     _context.Update(tcmStageEntity);
                     try
                     {
