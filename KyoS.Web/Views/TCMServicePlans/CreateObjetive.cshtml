@@ -5,9 +5,9 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="CreateObjetive" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMServicePlan(this);">
+        <form asp-action="CreateObjetive" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMAdendum(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
+            <input type="hidden" asp-for="Origin" />
             <input type="hidden" asp-for="Id_Domain" />
             <div class="">
                 <div class="form-group col-md-3">
@@ -83,7 +83,17 @@
             </div>
             <div>
                 <div class="col-md-offset-9">
-                    <input type="submit" value="Submit" class="btn btn-primary" asp-all-route-id="model.tCMservice.Id" />
+                    @if (Model.Origin == 0) //viene de la pagina Index de las notas
+                    {
+                        <input type="submit" value="Submit" class="btn btn-primary" asp-all-route-id="model.tCMservice.Id" asp-route-Origin="0" />
+
+                    }
+                    @if (Model.Origin == 1) //viene de la pagina Index de las notas
+                    {
+                        <input type="submit" value="Submit" class="btn btn-primary" asp-all-route-id="model.tCMservice.Id" asp-route-Origin="1" />
+
+                    }
+                    
                     <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
             </div>

@@ -99,7 +99,7 @@
                                                                             {
                                                                                 @if (item.Approved == 0)
                                                                                 {
-                                                                                    <a onclick="showInPopup('@Url.Action("EditObjetive", "TCMServicePlans", new { id = product1.Id }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                                    <a onclick="showInPopup('@Url.Action("EditObjetive", "TCMServicePlans", new { id = product1.Id, Origin = 0}, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
                                                                                 }
                                                                             }
                                                                         </td>
@@ -119,7 +119,7 @@
                                                             @if (item.Approved == 0)
                                                             {
                                                                 <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlans", new { id = product.Id }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlans", new { id = product.Id }, Context.Request.Scheme)','Create TCM Objetive')" class="btn btn-info" title="Create"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                                                <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlans", new { id = product.Id, Origin = 0}, Context.Request.Scheme)','Create TCM Objetive')" class="btn btn-info" title="Create"><i class="glyphicon glyphicon-align-justify"></i></a>
                                                             }
                                                         }
                                                     </td>

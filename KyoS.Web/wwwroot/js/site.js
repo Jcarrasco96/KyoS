@@ -269,7 +269,7 @@ jQueryAjaxPostTCMAdendums = form => {
                         item_to_delete = e.currentTarget.dataset.id;
                     });
                     $("#btnYesDelete").click(function () {
-                        var url = 'TCMAdendums/Delete';
+                        var url = 'TCMServicePlans/DeleteAdendum';
                         window.location.href = url + '/' + item_to_delete;
                     });
                 }

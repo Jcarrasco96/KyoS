@@ -18,7 +18,7 @@
 @if (User.IsInRole("CaseManager"))
 {
     <p>
-        <a onclick="showInPopup('@Url.Action("Create", "TCMAdendums", null, Context.Request.Scheme)','Add TCM Adendum')" class="btn btn-primary" title="Create TCM Adendum"><i class="glyphicon glyphicon-plus"></i> Create TCM Adendum</a>
+        <a onclick="showInPopup('@Url.Action("CreateAdendum", "TCMServicePlans", null, Context.Request.Scheme)','Add TCM Adendum')" class="btn btn-primary" title="Create TCM Adendum"><i class="glyphicon glyphicon-plus"></i> Create TCM Adendum</a>
     </p>
 }
 <div class="row">
@@ -48,7 +48,7 @@
             item_to_delete = e.currentTarget.dataset.id;
         });
         $("#btnYesDelete").click(function () {
-            var url = "@Url.Action("Delete", "TCMAdendums")";
+            var url = "@Url.Action("DeleteAdendum", "TCMServicePlans")";
             window.location.href = url + '/' + item_to_delete;
         });
     });

@@ -41,7 +41,7 @@
                 item_to_delete = e.currentTarget.dataset.id;
             });
             $("#btnYesDelete").click(function () {
-               var url = "@Url.Action("Delete", "TCMServicePlans")";
+               var url = "@Url.Action("DeleteAdendum", "TCMServicePlans")";
                window.location.href = url + '/' + item_to_delete;
             });
         });

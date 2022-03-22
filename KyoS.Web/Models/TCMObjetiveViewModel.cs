@@ -35,6 +35,9 @@ namespace KyoS.Web.Models
         public DateTime End_Date { get; set; }
         public string descriptionStages { get; set; }
 
+        //este campo lo uso para saber de que pagina se viene
+        public int Origin { get; set; }
+
         public int Id_Domain { get; set; }
         // public IEnumerable<SelectListItem> Clinics { get; set; }
         public IEnumerable<SelectListItem> Stages { get; set; }

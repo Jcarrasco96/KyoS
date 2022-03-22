@@ -5,7 +5,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Edit" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMAdendums(this);">
+        <form asp-action="EditAdendum" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMAdendums(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -30,14 +30,14 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Needs_Identified" class="control-label">Identified Needs</label>
-                    <input asp-for="Needs_Identified" class="form-control"/>
+                    <input asp-for="Needs_Identified" class="form-control" />
                     <span asp-validation-for="Needs_Identified" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Long_term" class="control-label">Long Term</label>
-                    <input asp-for="Long_term" class="form-control"/>
+                    <input asp-for="Long_term" class="form-control" />
                     <span asp-validation-for="Long_term" class="text-danger"></span>
                 </div>
             </div>
@@ -90,4 +90,5 @@
             //}
     </script>
 }
+
 
