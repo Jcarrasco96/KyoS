@@ -353,7 +353,8 @@ namespace KyoS.Web.Helpers
                 Number = model.Number,
                 Name = model.Name,
                 AreaOfFocus = model.AreaOfFocus,
-                MTP = await _context.MTPs.FindAsync(model.IdMTP)
+                MTP = await _context.MTPs.FindAsync(model.IdMTP),
+                Service = ServiceUtils.GetServiceByIndex(model.IdService)
             };
         }
 
@@ -366,7 +367,9 @@ namespace KyoS.Web.Helpers
                 MTP = goalEntity.MTP,
                 IdMTP = goalEntity.MTP.Id,
                 Name = goalEntity.Name,
-                AreaOfFocus = goalEntity.AreaOfFocus
+                AreaOfFocus = goalEntity.AreaOfFocus,
+                IdService = Convert.ToInt32(goalEntity.Service),
+                Services = _combosHelper.GetComboServices()
             };
         }
 

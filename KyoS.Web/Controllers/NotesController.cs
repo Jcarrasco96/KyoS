@@ -423,12 +423,12 @@ namespace KyoS.Web.Controllers
                 IEnumerable<SelectListItem> objs = null;
                 if (mtp != null)
                 {
-                    goals = _combosHelper.GetComboGoals(mtp.Id);
+                    goals = _combosHelper.GetComboGoals(mtp.Id, ServiceType.PSR);
                     objs = _combosHelper.GetComboObjetives(0);
                 }
                 else
                 {
-                    goals = _combosHelper.GetComboGoals(0);
+                    goals = _combosHelper.GetComboGoals(0, ServiceType.PSR);
                     objs = _combosHelper.GetComboObjetives(0);
                 }                
 
@@ -486,12 +486,12 @@ namespace KyoS.Web.Controllers
                 IEnumerable<SelectListItem> objs = null;
                 if (mtp != null)
                 {
-                    goals = _combosHelper.GetComboGoals(mtp.Id);
+                    goals = _combosHelper.GetComboGoals(mtp.Id, ServiceType.PSR);
                     objs = _combosHelper.GetComboObjetives(0);
                 }
                 else
                 {
-                    goals = _combosHelper.GetComboGoals(0);
+                    goals = _combosHelper.GetComboGoals(0, ServiceType.PSR);
                     objs = _combosHelper.GetComboObjetives(0);
                 }
 
@@ -978,12 +978,12 @@ namespace KyoS.Web.Controllers
                 IEnumerable<SelectListItem> objs = null;
                 if (mtp != null)
                 {
-                    goals = _combosHelper.GetComboGoals(mtp.Id);
+                    goals = _combosHelper.GetComboGoals(mtp.Id, ServiceType.PSR);
                     objs = _combosHelper.GetComboObjetives(0);
                 }
                 else
                 {
-                    goals = _combosHelper.GetComboGoals(0);
+                    goals = _combosHelper.GetComboGoals(0, ServiceType.PSR);
                     objs = _combosHelper.GetComboObjetives(0);
                 }
 
@@ -1074,12 +1074,12 @@ namespace KyoS.Web.Controllers
                 IEnumerable<SelectListItem> objs = null;
                 if (mtp != null)
                 {
-                    goals = _combosHelper.GetComboGoals(mtp.Id);
+                    goals = _combosHelper.GetComboGoals(mtp.Id, ServiceType.PSR);
                     objs = _combosHelper.GetComboObjetives(0);
                 }
                 else
                 {
-                    goals = _combosHelper.GetComboGoals(0);
+                    goals = _combosHelper.GetComboGoals(0, ServiceType.PSR);
                     objs = _combosHelper.GetComboObjetives(0);
                 }
 
@@ -1702,12 +1702,12 @@ namespace KyoS.Web.Controllers
             IEnumerable<SelectListItem> objs = null;
             if (mtp != null)
             {
-                goals = _combosHelper.GetComboGoals(mtp.Id);
+                goals = _combosHelper.GetComboGoals(mtp.Id, ServiceType.Individual);
                 objs = _combosHelper.GetComboObjetives(0);
             }
             else
             {
-                goals = _combosHelper.GetComboGoals(0);
+                goals = _combosHelper.GetComboGoals(0, ServiceType.Individual);
                 objs = _combosHelper.GetComboObjetives(0);
             }
 
@@ -2106,12 +2106,12 @@ namespace KyoS.Web.Controllers
                 IEnumerable<SelectListItem> objs = null;
                 if (mtp != null)
                 {
-                    goals = _combosHelper.GetComboGoals(mtp.Id);
+                    goals = _combosHelper.GetComboGoals(mtp.Id, ServiceType.Group);
                     objs = _combosHelper.GetComboObjetives(0);
                 }
                 else
                 {
-                    goals = _combosHelper.GetComboGoals(0);
+                    goals = _combosHelper.GetComboGoals(0, ServiceType.Group);
                     objs = _combosHelper.GetComboObjetives(0);
                 }
 
@@ -2155,12 +2155,12 @@ namespace KyoS.Web.Controllers
                 IEnumerable<SelectListItem> objs = null;
                 if (mtp != null)
                 {
-                    goals = _combosHelper.GetComboGoals(mtp.Id);
+                    goals = _combosHelper.GetComboGoals(mtp.Id, ServiceType.Group);
                     objs = _combosHelper.GetComboObjetives(0);
                 }
                 else
                 {
-                    goals = _combosHelper.GetComboGoals(0);
+                    goals = _combosHelper.GetComboGoals(0, ServiceType.Group);
                     objs = _combosHelper.GetComboObjetives(0);
                 }
 
@@ -2778,7 +2778,7 @@ namespace KyoS.Web.Controllers
 
             if (mtp != null)
             {
-                list = _context.Goals.Where(g => g.MTP.Id == mtp.Id).Select(g => new SelectListItem
+                list = _context.Goals.Where(g => (g.MTP.Id == mtp.Id && g.Service == ServiceType.PSR)).Select(g => new SelectListItem
                 {
                     Text = $"{g.Number}",
                     Value = $"{g.Id}"
@@ -2797,6 +2797,72 @@ namespace KyoS.Web.Controllers
                     Value = "0"
                 });
             }         
+
+            return Json(new SelectList(list, "Value", "Text"));
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public JsonResult GetGoalsIndList(int idClient)
+        {
+            MTPEntity mtp = _context.MTPs
+                                    .FirstOrDefault(m => (m.Client.Id == idClient && m.Active == true));
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (mtp != null)
+            {
+                list = _context.Goals.Where(g => (g.MTP.Id == mtp.Id && g.Service == ServiceType.Individual)).Select(g => new SelectListItem
+                {
+                    Text = $"{g.Number}",
+                    Value = $"{g.Id}"
+                }).ToList();
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select goal...]",
+                    Value = "0"
+                });
+            }
+            else
+            {
+                list.Add(new SelectListItem
+                {
+                    Text = "[Select goal...]",
+                    Value = "0"
+                });
+            }
+
+            return Json(new SelectList(list, "Value", "Text"));
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public JsonResult GetGoalsGroupList(int idClient)
+        {
+            MTPEntity mtp = _context.MTPs
+                                    .FirstOrDefault(m => (m.Client.Id == idClient && m.Active == true));
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (mtp != null)
+            {
+                list = _context.Goals.Where(g => (g.MTP.Id == mtp.Id && g.Service == ServiceType.Group)).Select(g => new SelectListItem
+                {
+                    Text = $"{g.Number}",
+                    Value = $"{g.Id}"
+                }).ToList();
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select goal...]",
+                    Value = "0"
+                });
+            }
+            else
+            {
+                list.Add(new SelectListItem
+                {
+                    Text = "[Select goal...]",
+                    Value = "0"
+                });
+            }
 
             return Json(new SelectList(list, "Value", "Text"));
         }

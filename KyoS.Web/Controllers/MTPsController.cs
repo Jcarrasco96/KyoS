@@ -399,8 +399,14 @@ namespace KyoS.Web.Controllers
                 ViewBag.Delete = "N";
             }
 
-            MTPEntity mtpEntity = await _context.MTPs.Include(m => m.Goals)
-                                                     .Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == id);
+            MTPEntity mtpEntity = await _context.MTPs
+                                                
+                                                .Include(m => m.Goals)
+                                                .ThenInclude(g => g.Objetives)
+
+                                                .Include(m => m.Client)
+                                                
+                                                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (mtpEntity == null)
             {
@@ -431,7 +437,9 @@ namespace KyoS.Web.Controllers
             {
                 MTP = mtpEntity,
                 IdMTP = mtpEntity.Id,
-                Number = mtpEntity.Goals.Count() + 1
+                Number = mtpEntity.Goals.Count() + 1,
+                IdService = 0,
+                Services = _combosHelper.GetComboServices()
             };
 
             return View(model);
