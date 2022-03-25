@@ -22,8 +22,6 @@
             <div class="row">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
-                <input type="hidden" asp-for="IdServicePlan" />
-               
 
                 <div class="col-md-2">
                     <div class="form-group">
@@ -98,34 +96,41 @@
                                     <th class="col-md-3" align="center">
                                         Name
                                     </th>
-                                    <th class="col-md-1" align="center">
+                                    <th class="col-md-2" align="center">
                                         Status
                                     </th>
-                                    <th class="col-md-2" align="center">
-                                        Objectives Status / Objectives Name
-                                    </th>
-                                    <th class="col-md-6" align="center">
+                                    <th class="col-md-7" align="center">
                                         Objectives Changes/Updates
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @for (int i = 0; i < Model.Domain_List.Count(); i++)
+                                @foreach (var item in Model._TCMServicePlanRevDomain)
                                 {
-                                     <tr>
-                                         <td>@Html.DisplayFor(modelItem => Model.Domain_List[i].Code) @Html.DisplayFor(modelItem => Model.Domain_List[i].Name)</td>
-                                         <td>
-                                             <div class="form-group">
-                                                <select asp-for="@Model.Domain_List[i].Status" asp-items="Model.StatusList" class="form-control" readonly></select>
-                                                <span asp-validation-for="@Model.Domain_List[i].Status" class="text-danger"></span>
-                                             </div>
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.TcmDomain.Code)  @Html.DisplayFor(modelItem => item.TcmDomain.Name)</td>
+                                        <td>
+                                            <div class="form-group">
+                                                <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control" readonly></select>
+                                                <span asp-validation-for="IdStatus" class="text-danger"></span>
+                                            </div>
 
-                                         </td>
-                                         <td>
-                                            
-                                         </td>
-                                         <td><input asp-for="@Model.Domain_List[i].Recomendation" class="form-control" /></td>
-                                        
+                                        </td>
+                                        <td>
+                                            @foreach (var operador in item.TcmDomain.TCMObjetive)
+                                            {
+                                                @if (@operador.Status == 0)
+                                                {
+                                                    <input type="checkbox" checked /><label>&nbsp;Open&nbsp;&nbsp;&nbsp;&nbsp;</label>@operador.Name<br />
+                                                    <input asp-for="Recomendation" class="form-control" />
+                                                }
+                                                @if (@operador.Status == 1)
+                                                {
+                                                    <input type="checkbox" checked /><label>&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</label>@operador.Name<br />
+                                                    <input asp-for="Recomendation" class="form-control" />
+                                                }
+                                            }
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
@@ -133,17 +138,18 @@
                     </div>
 
                 </div>
+                <div class="form-group">
+                    <input type="submit" value="Create Service Plan Review" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                </div>
+            </div>
 
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create Service Plan Review" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-success">Back</a>
-            </div>
         </form>
     </div>
 </div>
 
 
-<partial name="_ModalPopup" />
+
+
 
 

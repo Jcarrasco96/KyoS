@@ -1318,5 +1318,78 @@ namespace KyoS.Web.Helpers
                 DateAdendum = TcmAdendumEntity.DateAdendum
             };
         }
+
+        public TCMServicePlanReviewViewModel ToTCMServicePlanReviewViewModel(TCMServicePlanReviewEntity TcmServicePlanReviewEntity)
+        {
+            return new TCMServicePlanReviewViewModel
+            {
+                Id = TcmServicePlanReviewEntity.Id,
+                DateOpending  = TcmServicePlanReviewEntity.DateOpending,
+                DateServicePlanReview = TcmServicePlanReviewEntity.DateServicePlanReview,
+                Recomendation = TcmServicePlanReviewEntity.Recomendation,
+                SummaryProgress = TcmServicePlanReviewEntity.SummaryProgress,
+                TcmServicePlan = TcmServicePlanReviewEntity.TcmServicePlan,
+                TCMServicePlanRevDomain = TcmServicePlanReviewEntity.TCMServicePlanRevDomain,
+                IdStatus = 1,
+                StatusList = _combosHelper.GetComboClientStatus(),
+                IdServicePlan = TcmServicePlanReviewEntity.TcmServicePlan.Id,
+                _TCMServicePlanRevDomain = TcmServicePlanReviewEntity.TCMServicePlanRevDomain,
+
+                //ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2,
+
+            };
+        }
+
+        public async Task<TCMServicePlanReviewEntity> ToTCMServicePlanReviewEntity(TCMServicePlanReviewViewModel model, bool isNew)
+        {
+            return new TCMServicePlanReviewEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                DateOpending = model.DateOpending,
+                DateServicePlanReview = model.DateServicePlanReview,
+                Recomendation = model.Recomendation,
+                SummaryProgress = model.SummaryProgress,
+                TcmServicePlan = model.TcmServicePlan,
+                TCMServicePlanRevDomain = model.TCMServicePlanRevDomain,
+                
+                //TcmClient = await _context.TCMClient.FindAsync(model.ID_TcmClient),
+                
+                //Status = StatusUtils.GetStatusByIndex(model.ID_Status),
+
+            };
+        }
+
+        public TCMServicePlanReviewDomainViewModel ToTCMServicePlanReviewDomainViewModel(TCMServicePlanReviewDomainEntity TcmServicePlanReviewDomianEntity)
+        {
+            return new TCMServicePlanReviewDomainViewModel
+            {
+                Id = TcmServicePlanReviewDomianEntity.Id,
+                ChangesUpdate = TcmServicePlanReviewDomianEntity.ChangesUpdate,
+                IdTcmDomain = TcmServicePlanReviewDomianEntity.TcmDomain.Id,
+                TcmDomain = TcmServicePlanReviewDomianEntity.TcmDomain,
+                status = _combosHelper.GetComboClientStatus(),
+                
+                //ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2,
+
+            };
+        }
+
+        public async Task<TCMServicePlanReviewDomainEntity> ToTCMServicePlanReviewDomainEntity(TCMServicePlanReviewDomainViewModel model, bool isNew)
+        {
+            return new TCMServicePlanReviewDomainEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmDomain = model.TcmDomain,
+                ChangesUpdate = model.ChangesUpdate,
+                
+                //Status = model.
+
+                //TcmClient = await _context.TCMClient.FindAsync(model.ID_TcmClient),
+
+                //Status = StatusUtils.GetStatusByIndex(model.ID_Status),
+
+            };
+        }
+
     }
 }
