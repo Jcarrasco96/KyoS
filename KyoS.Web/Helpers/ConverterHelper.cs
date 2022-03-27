@@ -1003,6 +1003,9 @@ namespace KyoS.Web.Helpers
                 Id = isNew ? 0 : model.Id,
                 Clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == model.IdClinic),
                 AvailableCreateNewWorkdays = model.AvailableCreateNewWorkdays,
+                MentalHealthClinic = model.MentalHealthClinic,
+                TCMClinic = model.TCMClinic,
+                MHClassificationOfGoals = model.MHClassificationOfGoals,
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
@@ -1018,11 +1021,14 @@ namespace KyoS.Web.Helpers
                 IdClinic = model.Clinic.Id,
                 Clinics = _combosHelper.GetComboClinics(),
                 AvailableCreateNewWorkdays = model.AvailableCreateNewWorkdays,
+                MentalHealthClinic = model.MentalHealthClinic,
+                TCMClinic = model.TCMClinic,
+                MHClassificationOfGoals = model.MHClassificationOfGoals,
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
             };
-        }        
+        }
     }
 }
