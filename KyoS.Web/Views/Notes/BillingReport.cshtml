@@ -84,9 +84,10 @@
                                                     <table class="table table-striped">
                                                         <tr>
                                                             <th class="col-md-1" style="text-align:center;">Code</th>
-                                                            <th class="col-md-3">Client Name</th>
+                                                            <th class="col-md-2">Client Name</th>
                                                             <th class="col-md-2" style="text-align:center;">Medicaid ID</th>
                                                             <th class="col-md-1" style="text-align:center;">Date</th>
+                                                            <th class="col-md-1" style="text-align:center;">Session</th>
                                                             <th class="col-md-2" style="text-align:center;">Diagnostics</th>
                                                             <th class="col-md-1" style="text-align:center;">Billed</th>
                                                             <th class="col-md-1" style="text-align:center;">Notes</th>
@@ -106,6 +107,9 @@
                                                                 </td>
                                                                 <td align="center">
                                                                     @Html.DisplayFor(modelItem => workdayClient.Workday.Date)
+                                                                </td>
+                                                                <td align="center">
+                                                                    @Html.DisplayFor(modelItem => workdayClient.Session)
                                                                 </td>
                                                                 <td align="center">
                                                                     @Html.DisplayFor(modelItem => workdayClient.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code)
