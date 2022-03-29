@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.TCMServicePlanReviewViewModel
 @{
-    ViewData["Title"] = "Create Service Plan Review";
+    ViewData["Title"] = "Edit Service Plan Review";
 }
 
 <div class="breadcrumbs" id="breadcrumbs">
@@ -18,10 +18,11 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Create" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMServicePlanReview(this);">
+        <form asp-action="Edit" asp-route-id="@Model.Id">
             <div class="row">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="IdServicePlan" />
 
                 <div class="col-md-2">
                     <div class="form-group">
@@ -93,44 +94,54 @@
                         <table class="table table-hover table-responsive table-striped">
                             <thead>
                                 <tr>
-                                    <th class="col-md-3" align="center">
-                                        Name
+                                    <th class="col-md-1" align="center">
+                                        Code
                                     </th>
                                     <th class="col-md-2" align="center">
+                                        Name
+                                    </th>
+                                    <th class="col-md-1" align="center">
                                         Status
                                     </th>
-                                    <th class="col-md-7" align="center">
+                                    <th class="col-md-2" align="center">
+                                        Objectives Status / Objectives Name
+                                    </th>
+                                    <th class="col-md-4" align="center">
                                         Objectives Changes/Updates
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model._TCMServicePlanRevDomain)
+                                @for (int i = 0; i < Model.Domain_List.Count(); i++)
                                 {
                                     <tr>
-                                        <td>@Html.DisplayFor(modelItem => item.TcmDomain.Code)  @Html.DisplayFor(modelItem => item.TcmDomain.Name)</td>
+                                        <td>
+                                            <input asp-for="@Model.Domain_List[i].Code" class="form-control" readonly />
+                                            @Model.Domain_List[i].Addendum_ServicePlan
+                                        </td>
+                                        <td>
+                                            <input asp-for="@Model.Domain_List[i].Name" class="form-control" readonly />
+                                        </td>
                                         <td>
                                             <div class="form-group">
-                                                <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control" readonly></select>
-                                                <span asp-validation-for="IdStatus" class="text-danger"></span>
+                                                <select asp-for="@Model.Domain_List[i].Status" asp-items="Model.StatusListDomain" class="form-control"></select>
+                                                <span asp-validation-for="@Model.Domain_List[i].Status" class="text-danger"></span><br />
+                                                <input asp-for="@Model.Domain_List[i].ID" readonly />
                                             </div>
-
                                         </td>
                                         <td>
-                                            @foreach (var operador in item.TcmDomain.TCMObjetive)
+
+                                            @for (int j = 0; j < Model.Domain_List[i].ObjectiveList.Count(); j++)
                                             {
-                                                @if (@operador.Status == 0)
-                                                {
-                                                    <input type="checkbox" checked /><label>&nbsp;Open&nbsp;&nbsp;&nbsp;&nbsp;</label>@operador.Name<br />
-                                                    <input asp-for="Recomendation" class="form-control" />
-                                                }
-                                                @if (@operador.Status == 1)
-                                                {
-                                                    <input type="checkbox" checked /><label>&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</label>@operador.Name<br />
-                                                    <input asp-for="Recomendation" class="form-control" />
-                                                }
+                                                <input asp-for="@Model.Domain_List[i].ObjectiveList[j].ID" readonly />
+                                                <select asp-for="@Model.Domain_List[i].ObjectiveList[j].Status" asp-items="Model.StatusListObjetive" class="form-control">@Model.Domain_List[i].ObjectiveList[j].Name</select>
+                                                <span asp-validation-for="@Model.Domain_List[i].ObjectiveList[j].Status" class="text-danger"></span>
+
+                                                <input asp-for="@Model.Domain_List[i].ObjectiveList[j].Name" class="form-control" readonly />
                                             }
                                         </td>
+                                        <td><input asp-for="@Model.Domain_List[i].Updates_Changes" class="form-control" /></td>
+
                                     </tr>
                                 }
                             </tbody>
@@ -138,18 +149,13 @@
                     </div>
 
                 </div>
-                <div class="form-group">
-                    <input type="submit" value="Create Service Plan Review" class="btn btn-primary" />
-                    <a asp-action="Index" class="btn btn-success">Back</a>
-                </div>
-            </div>
 
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Edit Service Plan Review" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-success">Back</a>
+            </div>
         </form>
     </div>
 </div>
-
-
-
-
-
 

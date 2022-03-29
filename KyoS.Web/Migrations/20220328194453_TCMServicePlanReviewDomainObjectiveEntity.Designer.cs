@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220328194453_TCMServicePlanReviewDomainObjectiveEntity")]
+    partial class TCMServicePlanReviewDomainObjectiveEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2410,9 +2412,6 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("IdObjective")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
                     b.Property<int?>("TCMServicePlanReviewDomainEntityId")
                         .HasColumnType("int");
 
@@ -2432,9 +2431,6 @@ namespace KyoS.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
-
-                    b.Property<int>("Approved")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateOpending")
                         .HasColumnType("datetime2");

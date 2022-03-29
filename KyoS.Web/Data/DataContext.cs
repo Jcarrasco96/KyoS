@@ -68,6 +68,7 @@ namespace KyoS.Web.Data
         public DbSet<TCMAdendumEntity> TCMAdendums { get; set; }
         public DbSet<TCMServicePlanReviewDomainEntity> TCMServicePlanReviewDomains { get; set; }
         public DbSet<TCMServicePlanReviewEntity> TCMServicePlanReviews { get; set; }
+        public DbSet<TCMServicePlanReviewDomainObjectiveEntity> TCMServicePlanReviewDomainObjectives { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -218,6 +219,10 @@ namespace KyoS.Web.Data
                                    .IsUnique();
 
             modelBuilder.Entity<TCMServicePlanReviewEntity>()
+                                   .HasIndex(s => s.Id)
+                                   .IsUnique();
+
+            modelBuilder.Entity<TCMServicePlanReviewDomainObjectiveEntity>()
                                    .HasIndex(s => s.Id)
                                    .IsUnique();
         }

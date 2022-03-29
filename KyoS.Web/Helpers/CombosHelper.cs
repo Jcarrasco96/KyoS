@@ -1132,5 +1132,15 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboObjetiveStatus()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = StatusType.Open.ToString(), Value = "0"},
+                                  new SelectListItem { Text = StatusType.Close.ToString(), Value = "1"}};
+
+           
+            return list;
+        }
     }
 }

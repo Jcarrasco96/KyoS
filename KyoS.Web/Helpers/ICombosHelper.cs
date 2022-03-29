@@ -55,6 +55,7 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboServicesPlan(int idClinic);
         IEnumerable<SelectListItem> GetComboTCMServices();
         IEnumerable<SelectListItem> GetComboTCMStages();
+        IEnumerable<SelectListItem> GetComboObjetiveStatus();
 
     }
 }

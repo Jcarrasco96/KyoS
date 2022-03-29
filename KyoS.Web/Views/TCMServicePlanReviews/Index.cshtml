@@ -20,12 +20,12 @@
 </p>
 
 <div class="row">
-    <div id="view-ServicePlanReview">
+    <div id="view-tcmServicePlanReview">
         @await Html.PartialAsync("_ViewTCMServicesPlanReviews", Model.ToList())
     </div>
 </div>
 
-<partial name="_ModalPopup" />
+
 <partial name="_DeleteDialog" />
 
 @section Scripts {

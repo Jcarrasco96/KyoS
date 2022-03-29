@@ -26,6 +26,8 @@ namespace KyoS.Web.Data.Entities
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string Recomendation { get; set; }
 
+        public int Approved { get; set; }
+
         public TCMServicePlanEntity TcmServicePlan { get; set; }
         public List<TCMServicePlanReviewDomainEntity> TCMServicePlanRevDomain { get; set; }
     }

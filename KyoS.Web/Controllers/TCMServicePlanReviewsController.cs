@@ -114,90 +114,85 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager")]
         public async Task<IActionResult> Create(int id, int IdServicePlan)
         {
-            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                      .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (User.IsInRole("CaseManager"))
+            {
+                TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
                                                              .Include(b => b.TCMDomain)
                                                              .Include(f => f.TcmClient)
                                                              .Include(f => f.TcmClient.Casemanager)
                                                              .Include(f => f.TcmClient.Client)
                                                              .FirstOrDefault(f => (f.Id == IdServicePlan && f.Approved == 2));
-            List<TCMDomainEntity> tcmDomainList = _context.TCMDomains
-                                                             .Include(b => b.TCMObjetive)
-                                                             .Where(f => (f.TcmServicePlan.Id == IdServicePlan))
-                                                             .OrderBy(f => f.Code)
-                                                             .ToList();
-            tcmServicePlan.TCMDomain = tcmDomainList;
-            List<SelectListItem> list_Status = new List<SelectListItem>
-                                { new SelectListItem { Text = StatusType.Open.ToString(), Value = "1"},
-                                  new SelectListItem { Text = StatusType.Close.ToString(), Value = "2"}};
-            
-            TCMServicePlanReviewEntity tcmServicePlanReviewEntity = null;
-            TCMServicePlanReviewDomainEntity tcmServicePlanreviewDomain = null;
-            tcmServicePlanReviewEntity = new TCMServicePlanReviewEntity
-            {
-                DateServicePlanReview = DateTime.Today.Date,
-                DateOpending = DateTime.Today.Date,
-                TcmServicePlan = tcmServicePlan,
-                Recomendation = "",
-                SummaryProgress = "",
-               
-            };
-            tcmServicePlanReviewEntity.TCMServicePlanRevDomain = new List<TCMServicePlanReviewDomainEntity>();
+                List<TCMDomainEntity> tcmDomainList = _context.TCMDomains
+                                                                 .Include(b => b.TCMObjetive)
+                                                                 .Where(f => (f.TcmServicePlan.Id == IdServicePlan))
+                                                                 .OrderBy(f => f.Code)
+                                                                 .ToList();
+                tcmServicePlan.TCMDomain = tcmDomainList;
+                TCMServicePlanReviewEntity tcmServicePlanReviewEntity = null;
 
-            List <TCMDomainObjetiveReview> domainObjetiveReview = new List<TCMDomainObjetiveReview>();
-            TCMDomainObjetiveReview temp_Domain = new TCMDomainObjetiveReview();
-            TCMObjetiveReview temp_Objetive = new TCMObjetiveReview();
-            for (int i = 0; i < tcmDomainList.Count(); i++)
-            {
-                temp_Domain.ID = tcmDomainList[i].Id;
-                temp_Domain.Status = 0;
-                temp_Domain.Code = tcmDomainList[i].Code;
-                temp_Domain.Name = tcmDomainList[i].Name;
-                temp_Domain.Recomendation = "";
-                temp_Domain.ObjectiveList = new TCMObjetiveReview [tcmDomainList[i].TCMObjetive.Count()];
-                for (int j = 0; j < tcmDomainList[i].TCMObjetive.Count(); j++)
+                tcmServicePlanReviewEntity = new TCMServicePlanReviewEntity
                 {
-                    temp_Objetive.ID = tcmDomainList[i].TCMObjetive[j].Id ;
-                    temp_Objetive.Name = tcmDomainList[i].TCMObjetive[j].Name;
-                    temp_Objetive.Status = tcmDomainList[i].TCMObjetive[j].Status;
+                    DateServicePlanReview = DateTime.Today.Date,
+                    DateOpending = DateTime.Today.Date,
+                    TcmServicePlan = tcmServicePlan,
+                    Recomendation = "",
+                    SummaryProgress = "",
 
-                    temp_Domain.ObjectiveList[j] = temp_Objetive;
-                    temp_Objetive = new TCMObjetiveReview();
-                }
-                domainObjetiveReview.Add(temp_Domain);
-                temp_Domain = new TCMDomainObjetiveReview();
-                /*tcmServicePlanreviewDomain = new TCMServicePlanReviewDomainEntity
-                {
-                    Id = 0,
-                    ChangesUpdate = "",
-                    Status = StatusType.Open,
-
-                    TcmDomain = tcmDomainList[i],
                 };
 
-                tcmServicePlanReviewEntity.TCMServicePlanRevDomain.Add(tcmServicePlanreviewDomain);*/
-            }
+                tcmServicePlanReviewEntity.TCMServicePlanRevDomain = new List<TCMServicePlanReviewDomainEntity>();
+                List<TCMDomainObjetiveReview> domainObjetiveReview = new List<TCMDomainObjetiveReview>();
 
-            if (User.IsInRole("CaseManager"))
-            {
-                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                TCMDomainObjetiveReview temp_Domain = new TCMDomainObjetiveReview();
+                TCMObjetiveReview temp_Objetive = new TCMObjetiveReview();
+
+                foreach (TCMDomainEntity item in tcmDomainList)
+                {
+                    temp_Domain.ID = item.Id;
+                    temp_Domain.Status = 0;
+                    temp_Domain.Code = item.Code;
+                    temp_Domain.Name = item.Name;
+                    temp_Domain.Updates_Changes = "";
+                    if (_context.TCMAdendums.FirstOrDefault(n => n.TcmDomain.Id == item.Id) != null)
+                        temp_Domain.Addendum_ServicePlan = "Service Plan";
+                    else
+                        temp_Domain.Addendum_ServicePlan = "Addendum";
+                    temp_Domain.ObjectiveList = new List<TCMObjetiveReview>();
+
+                    foreach (TCMObjetiveEntity item_objective in item.TCMObjetive)
+                    {
+                        if (item_objective.Status == 0)//Not insert the objectives closed
+                        {
+                            temp_Objetive.ID = item_objective.Id;
+                            temp_Objetive.Name = item_objective.Name;
+                            temp_Objetive.Status = item_objective.Status;
+                            temp_Domain.ObjectiveList.Add(temp_Objetive);
+                            temp_Objetive = new TCMObjetiveReview();
+                        }
+
+                    }
+                    if (temp_Domain.ObjectiveList.Count > 0)//Only insert the domian with number of open objectives is more than 0
+                    {
+                        domainObjetiveReview.Add(temp_Domain);
+                        temp_Domain = new TCMDomainObjetiveReview();
+                    }
+
+                }
+
                 TCMServicePlanReviewViewModel model = _converterHelper.ToTCMServicePlanReviewViewModel(tcmServicePlanReviewEntity);
                 model.Domain_List = domainObjetiveReview;
-                //model.Domain_ListReview = list_Domain;
-                // _context.Add(tcmServicePlanReviewEntity);
 
                 try
                 {
-                   // _context.SaveChanges();
-                    //model.Id = _context.TCMServicePlanReviews.FirstOrDefault(g => g.TcmServicePlan.Id == tcmServicePlanReviewEntity.TcmServicePlan.Id).Id;
-                    //return RedirectToAction("Index", "TCMServicePlanReviews");
                     return View(model);
                 }
                 catch (System.Exception ex)
                 {
                     ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                 }
-                
+
                 return RedirectToAction("NotAuthorized", "Account");
 
             }
@@ -218,15 +213,82 @@ namespace KyoS.Web.Controllers
                 TCMServicePlanReviewEntity tcmServicePlanReviewEntity = _context.TCMServicePlanReviews
                                                                                       .Include(g => g.TcmServicePlan.TCMDomain)
                                                                                       .FirstOrDefault(g => g.TcmServicePlan.Id == tcmServicePlanreviewViewModel.TcmServicePlan.Id);
+               
                 if (tcmServicePlanReviewEntity == null)
                 {
                     tcmServicePlanReviewEntity = await _converterHelper.ToTCMServicePlanReviewEntity(tcmServicePlanreviewViewModel, true);
+
+                    TCMServicePlanReviewDomainEntity tcmDomainReview = new TCMServicePlanReviewDomainEntity();
+                    tcmServicePlanReviewEntity.TCMServicePlanRevDomain = new List<TCMServicePlanReviewDomainEntity> ();
+
+                    foreach (TCMDomainObjetiveReview item in tcmServicePlanreviewViewModel.Domain_List)
+                    {
+                        tcmDomainReview.ChangesUpdate = item.Updates_Changes;
+                        tcmDomainReview.TcmDomain = _context.TCMDomains.FirstOrDefault(n => n.Id == item.ID);
+                        if (item.Status == 0)
+                        {
+                            tcmDomainReview.Status = StatusType.Open;
+                        }
+                        else
+                        {
+                            tcmDomainReview.Status = StatusType.Close;
+                        }
+                        tcmDomainReview.TCMServicePlanRevDomainObjectiive = new List<TCMServicePlanReviewDomainObjectiveEntity>();
+                        TCMServicePlanReviewDomainObjectiveEntity tcmDomainObjectives = new TCMServicePlanReviewDomainObjectiveEntity();
+                        foreach(TCMObjetiveReview item_Objective in item.ObjectiveList)
+                        {
+                            tcmDomainObjectives.IdObjective = item_Objective.ID;
+                            if (item_Objective.Status == 0)
+                            {
+                                tcmDomainObjectives.Status = StatusType.Open;
+                            }
+                            if (item_Objective.Status == 1)
+                            {
+                                tcmDomainObjectives.Status = StatusType.Close;
+                                tcmDomainObjectives.DateEndObjective = DateTime.Now;
+                            }
+                            tcmDomainReview.TCMServicePlanRevDomainObjectiive.Add(tcmDomainObjectives);
+                            tcmDomainObjectives = new TCMServicePlanReviewDomainObjectiveEntity();
+                        }
+                        tcmServicePlanReviewEntity.TCMServicePlanRevDomain.Add(tcmDomainReview);
+                        tcmDomainReview = new TCMServicePlanReviewDomainEntity();
+
+                    }
+
                     _context.Add(tcmServicePlanReviewEntity);
                     try
                     {
                         await _context.SaveChangesAsync();
-                       
-                        return RedirectToAction("Index", "TCMServicePlans");
+
+                        //UPDATE STATUS OF THE OBJECTIVES
+                        TCMObjetiveEntity tcmObjetive = new TCMObjetiveEntity();
+                        List<TCMObjetiveEntity> tcmObjetives = new List<TCMObjetiveEntity>();
+                        for (int i = 0; i < tcmServicePlanreviewViewModel.Domain_List.Count(); i++)
+                        {
+                            for (int j = 0; j < tcmServicePlanreviewViewModel.Domain_List[i].ObjectiveList.Count(); j++)
+                            {
+                                tcmObjetive = _context.TCMObjetives.FirstOrDefault(n => n.Id == tcmServicePlanreviewViewModel.Domain_List[i].ObjectiveList[j].ID);
+                                tcmObjetive.Status = tcmServicePlanreviewViewModel.Domain_List[i].ObjectiveList[j].Status;
+                                if (tcmServicePlanreviewViewModel.Domain_List[i].ObjectiveList[j].Status == 1)
+                                {
+                                    tcmObjetive.EndDate = DateTime.Now;
+                                }
+                                _context.TCMObjetives.Update(tcmObjetive);
+                                tcmObjetive = new TCMObjetiveEntity();
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+
+                        List<TCMServicePlanReviewEntity> servicePlanReview = await _context.TCMServicePlanReviews
+                                                                               .Include(f => f.TcmServicePlan)
+                                                                               .ThenInclude(f => f.TcmClient)
+                                                                               .ThenInclude(f => f.Client)
+                                                                               .Include(f => f.TcmServicePlan.TcmClient.Casemanager)
+                                                                               .Where(s => s.TcmServicePlan.TcmClient.Casemanager.Clinic.Id == user_logged.Clinic.Id)
+                                                                               .OrderBy(f => f.TcmServicePlan.TcmClient.CaseNumber)
+                                                                               .ToListAsync();
+                        
+                        return RedirectToAction("Index", "TCMServicePlanReviews");
                     }
                     catch (System.Exception ex)
                     {
@@ -235,7 +297,7 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Already exists the TCM service.");
+                    ModelState.AddModelError(string.Empty, "Already exists the TCM Service Plan Review.");
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmServicePlanreviewViewModel) });
                 }
             }
@@ -245,83 +307,252 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> EditDomainReview(int IdObjetive)
+        public async Task<IActionResult> Edit(int Id, int IdServicePlan)
         {
-
-            TCMObjetiveEntity tcmObjetive = _context.TCMObjetives
-                                                    .Include(f => f.TcmDomain)
-                                                    .FirstOrDefault(f => f.Id == IdObjetive); 
-            
-            TCMServicePlanReviewDomainEntity domainReview = _context.TCMServicePlanReviewDomains
-                                                                    .Include(g => g.TcmDomain)
-                                                                    .ThenInclude(g => g.TCMObjetive)
-                                                                    .FirstOrDefault(g => g.TcmDomain.Id == tcmObjetive.TcmDomain.Id);
-
-            /*List<TCMObjetiveEntity> tcmObjetives = _context.TCMObjetives
-                                                           .Where(g => g.TcmDomain.Id == domainReview.TcmDomain.Id)
-                                                           .OrderBy(g => g.IdObjetive)
-                                                           .ToList();
-            domainReview.TcmDomain.TCMObjetive = tcmObjetives;
-            TCMServicePlanReviewDomainViewModel model = _converterHelper.ToTCMServicePlanReviewDomainViewModel(domainReview);
-
-            model.IdStatusObjetive = new List<SelectListItem>();
-
-            SelectListItem a = null;
-            for (int i = 0; i < tcmObjetives.Count; i++)
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                        .FirstOrDefault(u => u.UserName == User.Identity.Name);
+           
+            if (User.IsInRole("CaseManager"))
             {
+                TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
+                                                           .Include(b => b.TCMDomain)
+                                                           .Include(f => f.TcmClient)
+                                                           .Include(f => f.TcmClient.Casemanager)
+                                                           .Include(f => f.TcmClient.Client)
+                                                           .FirstOrDefault(f => (f.Id == IdServicePlan && f.Approved == 2));
+                List<TCMDomainEntity> tcmDomainList = _context.TCMDomains
+                                                                 .Include(b => b.TCMObjetive)
+                                                                 .Where(f => (f.TcmServicePlan.Id == IdServicePlan))
+                                                                 .OrderBy(f => f.Code)
+                                                                 .ToList();
+                tcmServicePlan.TCMDomain = tcmDomainList;
 
-                model.IdStatusObjetive.Insert(i, new SelectListItem
+                TCMServicePlanReviewEntity tcmServicePlanReviewEntity = _context.TCMServicePlanReviews
+                                                                                .Include(n => n.TCMServicePlanRevDomain)
+
+                                                                                .FirstOrDefault(n => n.Id == Id);
+                tcmServicePlanReviewEntity.TcmServicePlan = tcmServicePlan;
+
+                List<TCMDomainObjetiveReview> domainObjetiveReview = new List<TCMDomainObjetiveReview>();
+
+                TCMDomainObjetiveReview temp_Domain = new TCMDomainObjetiveReview();
+                TCMObjetiveReview temp_Objetive = new TCMObjetiveReview();
+                TCMDomainEntity domain_Temp = new TCMDomainEntity();
+                TCMObjetiveEntity objective_Temp = new TCMObjetiveEntity();
+                TCMServicePlanReviewDomainEntity item_Temp = new TCMServicePlanReviewDomainEntity();
+                foreach (TCMServicePlanReviewDomainEntity item in tcmServicePlanReviewEntity.TCMServicePlanRevDomain)
                 {
-                    Text = $"{tcmObjetives[i].Status}",
-                    Value = $"{tcmObjetives[i].Id}"
+                    temp_Domain.ID = item.Id;
+                    temp_Domain.Status = (item.Status == StatusType.Open) ? 0 : 1;
 
-                });
+                    domain_Temp = _context.TCMDomains.FirstOrDefault(f => f.Id == item.TcmDomain.Id);
 
-            }*/
-            TCMServicePlanReviewDomainViewModel model = _converterHelper.ToTCMServicePlanReviewDomainViewModel(domainReview);
-            model.IdStatusObjetive = IdObjetive;
+                    temp_Domain.Code = domain_Temp.Code;
+                    temp_Domain.Name = domain_Temp.Name;
+                    temp_Domain.Updates_Changes = item.ChangesUpdate;
 
-            return View(model);
+                    if (_context.TCMAdendums.FirstOrDefault(n => n.TcmDomain.Id == item.TcmDomain.Id) != null)
+                        temp_Domain.Addendum_ServicePlan = "Service Plan";
+                    else
+                        temp_Domain.Addendum_ServicePlan = "Addendum";
+                    temp_Domain.ObjectiveList = new List<TCMObjetiveReview>();
+
+                    item_Temp = _context.TCMServicePlanReviewDomains.Include(f => f.TCMServicePlanRevDomainObjectiive)
+                                                               .FirstOrDefault(f => f.Id == item.Id);
+                    foreach (TCMServicePlanReviewDomainObjectiveEntity item_objective in item_Temp.TCMServicePlanRevDomainObjectiive)
+                    {
+
+                        objective_Temp = _context.TCMObjetives.FirstOrDefault(f => f.Id == item_objective.IdObjective);
+
+                        temp_Objetive.ID = item_objective.Id;
+                        temp_Objetive.Name = objective_Temp.Name;
+                        temp_Objetive.Status = objective_Temp.Status;
+                        temp_Domain.ObjectiveList.Add(temp_Objetive);
+                        temp_Objetive = new TCMObjetiveReview();
+
+
+                    }
+                    if (temp_Domain.ObjectiveList.Count > 0)
+                    {
+                        domainObjetiveReview.Add(temp_Domain);
+                        temp_Domain = new TCMDomainObjetiveReview();
+                    }
+
+                }
+
+                TCMServicePlanReviewViewModel model = _converterHelper.ToTCMServicePlanReviewViewModel(tcmServicePlanReviewEntity);
+                model.Domain_List = domainObjetiveReview;
+                try
+                {
+                    return View(model);
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+
+                return RedirectToAction("NotAuthorized", "Account");
+            
+            }
+            return RedirectToAction("NotAuthorized", "Account");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> EditDomainReview(TCMServicePlanReviewDomainViewModel DomainReview)
+        public async Task<IActionResult> Edit(TCMServicePlanReviewViewModel tcmServicePlanreviewViewModel)
         {
             UserEntity user_logged = _context.Users
-                                               .Include(u => u.Clinic)
-                                               .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                            .Include(u => u.Clinic)
+                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (ModelState.IsValid)
             {
-                TCMServicePlanReviewDomainEntity tcmServicePlanReviewDomainEntity =  _context.TCMServicePlanReviewDomains
-                                                                                             .Include(g => g.TcmDomain)
-                                                                                             .FirstOrDefault(g => g.Id == DomainReview.Id);
-                if (tcmServicePlanReviewDomainEntity != null)
-                {
-                    DomainReview.TcmDomain = tcmServicePlanReviewDomainEntity.TcmDomain;
-                    tcmServicePlanReviewDomainEntity = await _converterHelper.ToTCMServicePlanReviewDomainEntity(DomainReview, false);
+                TCMServicePlanReviewEntity tcmServicePlanReviewEntity = _context.TCMServicePlanReviews
+                                                                                .Include(n => n.TcmServicePlan)
+                                                                                
+                                                                                .FirstOrDefault(n => n.Id == tcmServicePlanreviewViewModel.Id);
+                tcmServicePlanReviewEntity.Recomendation = tcmServicePlanreviewViewModel.Recomendation;
+                tcmServicePlanReviewEntity.SummaryProgress = tcmServicePlanreviewViewModel.SummaryProgress;
+               
+                TCMServicePlanReviewDomainEntity tcmDomainReview = new TCMServicePlanReviewDomainEntity();
                     
-                    _context.Update(tcmServicePlanReviewDomainEntity);
+                foreach (TCMDomainObjetiveReview item in tcmServicePlanreviewViewModel.Domain_List)
+                {
+                    tcmDomainReview = _context.TCMServicePlanReviewDomains.FirstOrDefault(n => n.Id == item.ID);
+                    
+                    if (tcmDomainReview != null)
+                    {
+                        tcmDomainReview.ChangesUpdate = item.Updates_Changes;
+                        tcmDomainReview.Id = item.ID;
+                        _context.TCMServicePlanReviewDomains.Update(tcmDomainReview);
+
+                        if (item.Status == 0)
+                        {
+                            tcmDomainReview.Status = StatusType.Open;
+                        }
+                        else
+                        {
+                            tcmDomainReview.Status = StatusType.Close;
+                        }
+                    }
+                    else
+                    {
+                    
+                    }
+                        
+                    TCMServicePlanReviewDomainObjectiveEntity tcmDomainObjectives = new TCMServicePlanReviewDomainObjectiveEntity();
+                    foreach (TCMObjetiveReview item_Objective in item.ObjectiveList)
+                    {
+                        tcmDomainObjectives = _context.TCMServicePlanReviewDomainObjectives.FirstOrDefault(n => n.Id == item_Objective.ID);
+                        if (tcmDomainObjectives != null)
+                        {
+                           
+                            if (item_Objective.Status == 0)
+                            {
+                                tcmDomainObjectives.Status = StatusType.Open;
+                            }
+                            if (item_Objective.Status == 1)
+                            {
+                                tcmDomainObjectives.Status = StatusType.Close;
+                                tcmDomainObjectives.DateEndObjective = DateTime.Now;
+                            }
+                           
+                            _context.TCMServicePlanReviewDomainObjectives.Update(tcmDomainObjectives);
+                            tcmDomainObjectives = new TCMServicePlanReviewDomainObjectiveEntity();
+                        }
+                        else
+                        { 
+                        
+                        }
+                           
+                    }
+                      
+                }
+
+                    _context.Update(tcmServicePlanReviewEntity);
                     try
                     {
                         await _context.SaveChangesAsync();
 
-                        return RedirectToAction("Index", "TCMServicePlans");
+                        //UPDATE STATUS OF THE OBJECTIVES
+                        TCMObjetiveEntity tcmObjetive = new TCMObjetiveEntity();
+                        TCMServicePlanReviewDomainObjectiveEntity tcmObjetive_Review = new TCMServicePlanReviewDomainObjectiveEntity();
+                        List<TCMObjetiveEntity> tcmObjetives = new List<TCMObjetiveEntity>();
+                        for (int i = 0; i < tcmServicePlanreviewViewModel.Domain_List.Count(); i++)
+                        {
+                            for (int j = 0; j < tcmServicePlanreviewViewModel.Domain_List[i].ObjectiveList.Count(); j++)
+                            {
+                                tcmObjetive_Review = _context.TCMServicePlanReviewDomainObjectives.FirstOrDefault(n => n.Id == tcmServicePlanreviewViewModel.Domain_List[i].ObjectiveList[j].ID);
+                                tcmObjetive = _context.TCMObjetives.FirstOrDefault(n => n.Id == tcmObjetive_Review.IdObjective);
+                                tcmObjetive.Status = tcmServicePlanreviewViewModel.Domain_List[i].ObjectiveList[j].Status;
+                                if (tcmServicePlanreviewViewModel.Domain_List[i].ObjectiveList[j].Status == 1)
+                                {
+                                    tcmObjetive.EndDate = DateTime.Now;
+                                }
+                                _context.TCMObjetives.Update(tcmObjetive);
+                                tcmObjetive = new TCMObjetiveEntity();
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+
+                        List<TCMServicePlanReviewEntity> servicePlanReview = await _context.TCMServicePlanReviews
+                                                                               .Include(f => f.TcmServicePlan)
+                                                                               .ThenInclude(f => f.TcmClient)
+                                                                               .ThenInclude(f => f.Client)
+                                                                               .Include(f => f.TcmServicePlan.TcmClient.Casemanager)
+                                                                               .Where(s => s.TcmServicePlan.TcmClient.Casemanager.Clinic.Id == user_logged.Clinic.Id)
+                                                                               .OrderBy(f => f.TcmServicePlan.TcmClient.CaseNumber)
+                                                                               .ToListAsync();
+
+                        return RedirectToAction("Index", "TCMServicePlanReviews");
                     }
                     catch (System.Exception ex)
                     {
                         ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                     }
+               
+                    ModelState.AddModelError(string.Empty, "Already exists the TCM Service Plan Review.");
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmServicePlanreviewViewModel) });
                 }
-                else
+            
+
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmServicePlanreviewViewModel) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> FinishEditing(int id)
+        {
+            TCMServicePlanReviewEntity tcmServicePlanReview = _context.TCMServicePlanReviews.FirstOrDefault(u => u.Id == id);
+
+            if (tcmServicePlanReview != null)
+            {
+                if (User.IsInRole("CaseManager"))
                 {
-                    ModelState.AddModelError(string.Empty, "Already exists the TCM service.");
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", DomainReview) });
+                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    if (user_logged.Clinic != null)
+                    {
+                        tcmServicePlanReview.Approved = 1;
+                        _context.Update(tcmServicePlanReview);
+                        try
+                        {
+                            await _context.SaveChangesAsync();
+
+                            return RedirectToAction("Index", "TCMServicePlanReviews");
+                        }
+                        catch (System.Exception ex)
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                    return RedirectToAction("NotAuthorized", "Account");
                 }
             }
-            return View(DomainReview);
+
+            return RedirectToAction("Index", "TCMServicePlanReviews");
         }
     }
 }

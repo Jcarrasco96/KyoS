@@ -1330,8 +1330,8 @@ namespace KyoS.Web.Helpers
                 SummaryProgress = TcmServicePlanReviewEntity.SummaryProgress,
                 TcmServicePlan = TcmServicePlanReviewEntity.TcmServicePlan,
                 TCMServicePlanRevDomain = TcmServicePlanReviewEntity.TCMServicePlanRevDomain,
-                IdStatus = 1,
-                StatusList = _combosHelper.GetComboClientStatus(),
+                StatusListDomain = _combosHelper.GetComboObjetiveStatus(),
+                StatusListObjetive = _combosHelper.GetComboObjetiveStatus(),
                 IdServicePlan = TcmServicePlanReviewEntity.TcmServicePlan.Id,
                 _TCMServicePlanRevDomain = TcmServicePlanReviewEntity.TCMServicePlanRevDomain,
 
@@ -1342,20 +1342,17 @@ namespace KyoS.Web.Helpers
 
         public async Task<TCMServicePlanReviewEntity> ToTCMServicePlanReviewEntity(TCMServicePlanReviewViewModel model, bool isNew)
         {
+            TCMServicePlanEntity tcmServicePlan = await _context.TCMServicePlans.FirstOrDefaultAsync(n => n.Id == model.IdServicePlan);
             return new TCMServicePlanReviewEntity
             {
                 Id = isNew ? 0 : model.Id,
-                DateOpending = model.DateOpending,
+                DateOpending = tcmServicePlan.DateIntake,
                 DateServicePlanReview = model.DateServicePlanReview,
                 Recomendation = model.Recomendation,
                 SummaryProgress = model.SummaryProgress,
-                TcmServicePlan = model.TcmServicePlan,
+                TcmServicePlan = tcmServicePlan,
                 TCMServicePlanRevDomain = model.TCMServicePlanRevDomain,
                 
-                //TcmClient = await _context.TCMClient.FindAsync(model.ID_TcmClient),
-                
-                //Status = StatusUtils.GetStatusByIndex(model.ID_Status),
-
             };
         }
 
@@ -1368,9 +1365,7 @@ namespace KyoS.Web.Helpers
                 IdTcmDomain = TcmServicePlanReviewDomianEntity.TcmDomain.Id,
                 TcmDomain = TcmServicePlanReviewDomianEntity.TcmDomain,
                 status = _combosHelper.GetComboClientStatus(),
-                
-                //ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2,
-
+              
             };
         }
 
@@ -1381,13 +1376,7 @@ namespace KyoS.Web.Helpers
                 Id = isNew ? 0 : model.Id,
                 TcmDomain = model.TcmDomain,
                 ChangesUpdate = model.ChangesUpdate,
-                
-                //Status = model.
-
-                //TcmClient = await _context.TCMClient.FindAsync(model.ID_TcmClient),
-
-                //Status = StatusUtils.GetStatusByIndex(model.ID_Status),
-
+               
             };
         }
 

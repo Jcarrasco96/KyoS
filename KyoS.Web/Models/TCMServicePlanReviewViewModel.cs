@@ -16,15 +16,15 @@ namespace KyoS.Web.Models
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Status")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a status.")]
-        public int IdStatus { get; set; }
-
+        
         public int IdServicePlan { get; set; }
 
        //public List <SelectListItem> Domain_ListReview { get; set; }
 
         public List <TCMDomainObjetiveReview> Domain_List { get; set; }
 
-        public IEnumerable<SelectListItem> StatusList { get; set; }
+        public IEnumerable<SelectListItem> StatusListDomain { get; set; }
+        public IEnumerable<SelectListItem> StatusListObjetive { get; set; }
         public List<TCMServicePlanReviewDomainEntity> _TCMServicePlanRevDomain { get; set; }
     }
 }
