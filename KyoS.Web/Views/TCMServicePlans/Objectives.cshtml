@@ -1,0 +1,53 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMObjetiveEntity>
+@{
+    ViewData["Title"] = "TCM Objetive";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">TCM Objetive</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div id="view-tcmObjetive">
+        @await Html.PartialAsync("_ViewTCMObjetives", Model.ToList())
+    </div>
+</div>
+
+<partial name="_ModalPopup" />
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+                         $(document).ready(function () {
+                             $('#MyTable').DataTable({
+                               "order": [[0, "asc"]],
+                                "pageLength": 100
+                            });
+
+                            // Delete item
+                            var item_to_delete;
+
+                            $('.deleteItem').click((e) => {
+                              item_to_delete = e.currentTarget.dataset.id;
+                            });
+                            $("#btnYesDelete").click(function () {
+                                var url = "@Url.Action("Delete", "TCMObjetives")";
+                                window.location.href = url + '/' + item_to_delete;
+                            });
+                        });
+    </script>
+}
+
+
+

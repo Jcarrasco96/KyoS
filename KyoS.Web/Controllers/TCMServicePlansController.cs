@@ -1491,5 +1491,86 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("Adendum", "TCMServicePlans");
         }
+
+        [Authorize(Roles = "Manager, CaseManager")]
+        public async Task<IActionResult> Domains(int idError = 0)
+        {
+            if (User.IsInRole("Manager"))
+            {
+                return View(await _context.TCMDomains
+                                          .Include(f => f.TCMObjetive)
+                                          .Include(g => g.TcmServicePlan)
+                                          .ThenInclude(g => g.TcmClient)
+                                          .ThenInclude(g => g.Client)
+                                          .OrderBy(f => f.TcmServicePlan.TcmClient.Casemanager)
+                                          .ToListAsync());
+            }
+            else
+            {
+                UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+                {
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+
+                if (idError == 1) //Imposible to delete
+                {
+                    ViewBag.Delete = "N";
+                }
+
+
+                return View(await _context.TCMDomains
+                                          .Include(f => f.TCMObjetive)
+                                          .Include(g => g.TcmServicePlan)
+                                          .ThenInclude(g => g.TcmClient)
+                                          .ThenInclude(g => g.Client)
+                                          .Where(s => s.TcmServicePlan.TcmClient.Casemanager.LinkedUser == user_logged.UserName)
+                                          .OrderBy(f => f.Name)
+                                          .ToListAsync());
+            }
+        }
+
+        [Authorize(Roles = "Manager, CaseManager")]
+        public async Task<IActionResult> Objectives(int idError = 0)
+        {
+            if (User.IsInRole("Manager"))
+            {
+                return View(await _context.TCMObjetives
+                                          .Include(g => g.TcmDomain)
+                                          .OrderBy(f => f.IdObjetive)
+                                          .ToListAsync());
+            }
+            else
+            {
+                UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+                {
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+
+                if (idError == 1) //Imposible to delete
+                {
+                    ViewBag.Delete = "N";
+                }
+
+
+                return View(await _context.TCMObjetives
+                                        .Include(g => g.TcmDomain)
+                                        .OrderBy(f => f.IdObjetive)
+                                        .ToListAsync());
+            }
+        }
     }
 }
