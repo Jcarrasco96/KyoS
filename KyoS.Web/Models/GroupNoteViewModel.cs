@@ -41,7 +41,7 @@ namespace KyoS.Web.Models
         public int IdGoal2 { get; set; }
         public IEnumerable<SelectListItem> Goals2 { get; set; }
 
-        [Display(Name = "Objetive")]
+        [Display(Name = "Objective")]
         public int IdObjetive2 { get; set; }
         public IEnumerable<SelectListItem> Objetives2 { get; set; }
 

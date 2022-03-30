@@ -40,7 +40,7 @@ namespace KyoS.Web.Models
         public int IdGoal2 { get; set; }
         public IEnumerable<SelectListItem> Goals2 { get; set; }
 
-        [Display(Name = "Objetive")]
+        [Display(Name = "Objective")]
         public int IdObjetive2 { get; set; }
         public IEnumerable<SelectListItem> Objetives2 { get; set; }
 
@@ -58,7 +58,7 @@ namespace KyoS.Web.Models
         public int IdGoal3 { get; set; }
         public IEnumerable<SelectListItem> Goals3 { get; set; }
 
-        [Display(Name = "Objetive")]
+        [Display(Name = "Objective")]
         public int IdObjetive3 { get; set; }
         public IEnumerable<SelectListItem> Objetives3 { get; set; }
         public string Intervention3 { get; set; }
@@ -75,7 +75,7 @@ namespace KyoS.Web.Models
         public int IdGoal4 { get; set; }
         public IEnumerable<SelectListItem> Goals4 { get; set; }
 
-        [Display(Name = "Objetive")]
+        [Display(Name = "Objective")]
         public int IdObjetive4 { get; set; }
         public IEnumerable<SelectListItem> Objetives4 { get; set; }
         public string Intervention4 { get; set; }

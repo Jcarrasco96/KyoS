@@ -133,7 +133,7 @@
         $(document).ready(function () {
             
             $("#cbClient").change(function () {
-                var url = "@Url.Action("GetGoalsList", "Notes")";
+                var url = "@Url.Action("GetGoalsIndList", "Notes")";
                 $.get(url, { idClient: $("#cbClient").val() }, function (data) {
                     $("#cbGoal1").empty();
                     $.each(data, function (index, row) {

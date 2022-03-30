@@ -11,7 +11,8 @@
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#basic" aria-controls="basic" role="tab" data-toggle="tab">Basic</a></li>
-                    <li role="presentation"><a href="#advanced" aria-controls="advanced" role="tab" data-toggle="tab">Advanced</a></li>
+                    <li role="presentation"><a href="#mh" aria-controls="mh" role="tab" data-toggle="tab">Mental Health</a></li>
+                    <li role="presentation"><a href="#tcm" aria-controls="tcm" role="tab" data-toggle="tab">TCM</a></li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content">
@@ -26,15 +27,37 @@
                                 <select asp-for="IdClinic" class="form-control" asp-items="Model.Clinics"></select>
                                 <span asp-validation-for="IdClinic" class="text-danger"></span>
                             </div>
+                        </div>                        
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="mh">
+                        <div class="col-md-12">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="checkbox" asp-for="MentalHealthClinic" /> Enable mental health clinic
+                            </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <input type="checkbox" asp-for="AvailableCreateNewWorkdays" /> Enable to create new workdays (weeks)
                             </div>
                         </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="checkbox" asp-for="MHClassificationOfGoals" /> Enable classification of Goals - MTP (This action can modify editing notes and pending notes)
+                            </div>
+                        </div>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="advanced">
-                        <br />
+                    <div role="tabpanel" class="tab-pane" id="tcm">
+                        <div class="col-md-12">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="checkbox" asp-for="TCMClinic" /> Enable TCM clinic
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

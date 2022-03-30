@@ -417,13 +417,24 @@ namespace KyoS.Web.Controllers
                                                                           .Where(waf => waf.Facilitator == facilitator_logged)
                                                                           .ToList();
 
+            //Evaluate setting for goals's classification
+            SettingEntity setting = _context.Settings
+                                            .FirstOrDefault(s => s.Clinic.Id == facilitator_logged.Clinic.Id);
+
             if (note == null)   //la nota no está creada
             {
                 IEnumerable<SelectListItem> goals = null;
                 IEnumerable<SelectListItem> objs = null;
                 if (mtp != null)
                 {
-                    goals = _combosHelper.GetComboGoals(mtp.Id);
+                    if (setting != null)
+                    {
+                        if (setting.MHClassificationOfGoals)
+                            goals = _combosHelper.GetComboGoalsByService(mtp.Id, ServiceType.PSR);
+                        else
+                            goals = _combosHelper.GetComboGoals(mtp.Id);
+                    }
+                    
                     objs = _combosHelper.GetComboObjetives(0);
                 }
                 else
@@ -484,9 +495,17 @@ namespace KyoS.Web.Controllers
 
                 IEnumerable<SelectListItem> goals = null;
                 IEnumerable<SelectListItem> objs = null;
+                
                 if (mtp != null)
                 {
-                    goals = _combosHelper.GetComboGoals(mtp.Id);
+                    if (setting != null)
+                    {
+                        if (setting.MHClassificationOfGoals)
+                            goals = _combosHelper.GetComboGoalsByService(mtp.Id, ServiceType.PSR);
+                        else
+                            goals = _combosHelper.GetComboGoals(mtp.Id);
+                    }
+
                     objs = _combosHelper.GetComboObjetives(0);
                 }
                 else
@@ -972,13 +991,25 @@ namespace KyoS.Web.Controllers
                                                                           .Where(waf => waf.Facilitator == facilitator_logged)
                                                                           .ToList();
 
+            //Evaluate setting for goals's classification
+            SettingEntity setting = _context.Settings
+                                            .FirstOrDefault(s => s.Clinic.Id == facilitator_logged.Clinic.Id);
+
             if (note == null)   //la nota no está creada
             {
                 IEnumerable<SelectListItem> goals = null;
                 IEnumerable<SelectListItem> objs = null;
+                
                 if (mtp != null)
                 {
-                    goals = _combosHelper.GetComboGoals(mtp.Id);
+                    if (setting != null)
+                    {
+                        if (setting.MHClassificationOfGoals)
+                            goals = _combosHelper.GetComboGoalsByService(mtp.Id, ServiceType.PSR);
+                        else
+                            goals = _combosHelper.GetComboGoals(mtp.Id);
+                    }
+
                     objs = _combosHelper.GetComboObjetives(0);
                 }
                 else
@@ -1074,7 +1105,14 @@ namespace KyoS.Web.Controllers
                 IEnumerable<SelectListItem> objs = null;
                 if (mtp != null)
                 {
-                    goals = _combosHelper.GetComboGoals(mtp.Id);
+                    if (setting != null)
+                    {
+                        if (setting.MHClassificationOfGoals)
+                            goals = _combosHelper.GetComboGoalsByService(mtp.Id, ServiceType.PSR);
+                        else
+                            goals = _combosHelper.GetComboGoals(mtp.Id);
+                    }
+
                     objs = _combosHelper.GetComboObjetives(0);
                 }
                 else
@@ -1702,7 +1740,18 @@ namespace KyoS.Web.Controllers
             IEnumerable<SelectListItem> objs = null;
             if (mtp != null)
             {
-                goals = _combosHelper.GetComboGoals(mtp.Id);
+                //Evaluate setting for goals's classification
+                SettingEntity setting = _context.Settings
+                                                .FirstOrDefault(s => s.Clinic.Id == facilitator_logged.Clinic.Id);
+
+                if (setting != null)
+                {
+                    if (setting.MHClassificationOfGoals)
+                        goals = _combosHelper.GetComboGoalsByService(mtp.Id, ServiceType.Individual);
+                    else
+                        goals = _combosHelper.GetComboGoals(mtp.Id);
+                }
+
                 objs = _combosHelper.GetComboObjetives(0);
             }
             else
@@ -2100,13 +2149,24 @@ namespace KyoS.Web.Controllers
                                                                           .Where(waf => waf.Facilitator == facilitator_logged)
                                                                           .ToList();
 
+            //Evaluate setting for goals's classification
+            SettingEntity setting = _context.Settings
+                                            .FirstOrDefault(s => s.Clinic.Id == facilitator_logged.Clinic.Id);
+
             if (note == null)   //la nota no está creada
             {
                 IEnumerable<SelectListItem> goals = null;
                 IEnumerable<SelectListItem> objs = null;
                 if (mtp != null)
                 {
-                    goals = _combosHelper.GetComboGoals(mtp.Id);
+                    if (setting != null)
+                    {
+                        if (setting.MHClassificationOfGoals)
+                            goals = _combosHelper.GetComboGoalsByService(mtp.Id, ServiceType.Group);
+                        else
+                            goals = _combosHelper.GetComboGoals(mtp.Id);
+                    }
+
                     objs = _combosHelper.GetComboObjetives(0);
                 }
                 else
@@ -2155,7 +2215,14 @@ namespace KyoS.Web.Controllers
                 IEnumerable<SelectListItem> objs = null;
                 if (mtp != null)
                 {
-                    goals = _combosHelper.GetComboGoals(mtp.Id);
+                    if (setting != null)
+                    {
+                        if (setting.MHClassificationOfGoals)
+                            goals = _combosHelper.GetComboGoalsByService(mtp.Id, ServiceType.Group);
+                        else
+                            goals = _combosHelper.GetComboGoals(mtp.Id);
+                    }
+
                     objs = _combosHelper.GetComboObjetives(0);
                 }
                 else
@@ -2778,7 +2845,7 @@ namespace KyoS.Web.Controllers
 
             if (mtp != null)
             {
-                list = _context.Goals.Where(g => g.MTP.Id == mtp.Id).Select(g => new SelectListItem
+                list = _context.Goals.Where(g => (g.MTP.Id == mtp.Id && g.Service == ServiceType.PSR)).Select(g => new SelectListItem
                 {
                     Text = $"{g.Number}",
                     Value = $"{g.Id}"
@@ -2797,6 +2864,94 @@ namespace KyoS.Web.Controllers
                     Value = "0"
                 });
             }         
+
+            return Json(new SelectList(list, "Value", "Text"));
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public JsonResult GetGoalsIndList(int idClient)
+        {
+            MTPEntity mtp = _context.MTPs
+                                    .FirstOrDefault(m => (m.Client.Id == idClient && m.Active == true));
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (mtp != null)
+            {
+                UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                //Evaluate setting for goals's classification
+                SettingEntity setting =  _context.Settings
+                                                 .FirstOrDefault(s => s.Clinic.Id == user_logged.Clinic.Id);
+                if (setting != null)
+                {
+                    if (setting.MHClassificationOfGoals)
+                    {
+                        list = _context.Goals.Where(g => (g.MTP.Id == mtp.Id && g.Service == ServiceType.Individual)).Select(g => new SelectListItem
+                        {
+                            Text = $"{g.Number}",
+                            Value = $"{g.Id}"
+                        }).ToList();
+                    }
+                    else
+                    {
+                        list = _context.Goals.Where(g => (g.MTP.Id == mtp.Id)).Select(g => new SelectListItem
+                        {
+                            Text = $"{g.Number}",
+                            Value = $"{g.Id}"
+                        }).ToList();
+                    }
+                }
+                
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select goal...]",
+                    Value = "0"
+                });
+            }
+            else
+            {
+                list.Add(new SelectListItem
+                {
+                    Text = "[Select goal...]",
+                    Value = "0"
+                });
+            }
+
+            return Json(new SelectList(list, "Value", "Text"));
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public JsonResult GetGoalsGroupList(int idClient)
+        {
+            MTPEntity mtp = _context.MTPs
+                                    .FirstOrDefault(m => (m.Client.Id == idClient && m.Active == true));
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (mtp != null)
+            {
+                list = _context.Goals.Where(g => (g.MTP.Id == mtp.Id && g.Service == ServiceType.Group)).Select(g => new SelectListItem
+                {
+                    Text = $"{g.Number}",
+                    Value = $"{g.Id}"
+                }).ToList();
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select goal...]",
+                    Value = "0"
+                });
+            }
+            else
+            {
+                list.Add(new SelectListItem
+                {
+                    Text = "[Select goal...]",
+                    Value = "0"
+                });
+            }
 
             return Json(new SelectList(list, "Value", "Text"));
         }
