@@ -172,7 +172,8 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMServicePlanEntity tcmServicePlanEntity = await _context.TCMServicePlans.FindAsync(tcmServicePlanViewModel.ID_TcmClient);
+                TCMServicePlanEntity tcmServicePlanEntity = _context.TCMServicePlans
+                                                                          .FirstOrDefault(n => n.TcmClient.Id == tcmServicePlanViewModel.ID_TcmClient);
                 if (tcmServicePlanEntity == null)
                 {
                     tcmServicePlanEntity = await _converterHelper.ToTCMServicePlanEntity(tcmServicePlanViewModel, true);
