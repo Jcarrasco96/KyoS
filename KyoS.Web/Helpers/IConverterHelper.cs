@@ -82,5 +82,7 @@ namespace KyoS.Web.Helpers
         TCMServicePlanReviewViewModel ToTCMServicePlanReviewViewModel(TCMServicePlanReviewEntity model);
         Task<TCMServicePlanReviewDomainEntity> ToTCMServicePlanReviewDomainEntity(TCMServicePlanReviewDomainViewModel model, bool isNew);
         TCMServicePlanReviewDomainViewModel ToTCMServicePlanReviewDomainViewModel(TCMServicePlanReviewDomainEntity model);
+        Task<TCMDischargeEntity> ToTCMDischargeEntity(TCMDischargeViewModel model, bool isNew);
+        TCMDischargeViewModel ToTCMDischargeViewModel(TCMDischargeEntity model);
     }
 }

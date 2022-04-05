@@ -1380,5 +1380,62 @@ namespace KyoS.Web.Helpers
             };
         }
 
+        public TCMDischargeViewModel ToTCMDischargeViewModel(TCMDischargeEntity TcmDischargeEntity)
+        {
+            return new TCMDischargeViewModel
+            {
+                Id = TcmDischargeEntity.Id,
+                AdministrativeDischarge = TcmDischargeEntity.AdministrativeDischarge,
+                AdministrativeDischarge_Explain = TcmDischargeEntity.AdministrativeDischarge_Explain,
+                AllServiceInPlace = TcmDischargeEntity.AllServiceInPlace,
+                ClientLeftVoluntarily = TcmDischargeEntity.ClientLeftVoluntarily,
+                ClientMovedOutArea = TcmDischargeEntity.ClientMovedOutArea,
+                DischargeDate = TcmDischargeEntity.DischargeDate,
+                IdServicePlan = TcmDischargeEntity.TcmServicePlan.Id,
+                TcmServicePlan = TcmDischargeEntity.TcmServicePlan,
+                LackOfProgress = TcmDischargeEntity.LackOfProgress,
+                NonComplianceWithAgencyRules = TcmDischargeEntity.NonComplianceWithAgencyRules,
+                Other = TcmDischargeEntity.Other,
+                Other_Explain = TcmDischargeEntity.Other_Explain,
+                PresentProblems = TcmDischargeEntity.PresentProblems,
+                ProgressToward = TcmDischargeEntity.ProgressToward,
+                Referred = TcmDischargeEntity.Referred,
+                StaffingDate = DateTime.Now,
+                StaffSignatureDate = DateTime.Now,
+                SupervisorSignatureDate = DateTime.Now,
+                TcmDischargeFollowUp = TcmDischargeEntity.TcmDischargeFollowUp,
+                TcmDischargeServiceStatus = TcmDischargeEntity.TcmDischargeServiceStatus,
+                TcmServices = TcmDischargeEntity.TcmServicePlan.TCMService,
+
+            };
+        }
+
+        public async Task<TCMDischargeEntity> ToTCMDischargeEntity(TCMDischargeViewModel model, bool isNew)
+        {
+            return new TCMDischargeEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                StaffingDate = model.StaffingDate,
+                DischargeDate = model.DischargeDate,
+                PresentProblems = model.PresentProblems,
+                ProgressToward = model.ProgressToward,
+                TcmDischargeServiceStatus = model.TcmDischargeServiceStatus,
+                AllServiceInPlace = model.AllServiceInPlace,
+                NonComplianceWithAgencyRules = model.NonComplianceWithAgencyRules,
+                Referred = model.Referred,
+                ClientMovedOutArea =model.ClientMovedOutArea,
+                ClientLeftVoluntarily = model.ClientLeftVoluntarily,
+                LackOfProgress = model.LackOfProgress,
+                Other = model.Other,
+                Other_Explain = model.Other_Explain,
+                AdministrativeDischarge = model.AdministrativeDischarge,
+                AdministrativeDischarge_Explain = model.AdministrativeDischarge_Explain,
+                TcmDischargeFollowUp = model.TcmDischargeFollowUp,
+                StaffSignatureDate = model.StaffSignatureDate,
+                SupervisorSignatureDate = model.SupervisorSignatureDate,
+                TcmServicePlan = _context.TCMServicePlans.Find(model.IdServicePlan),
+
+            };
+        }
     }
 }

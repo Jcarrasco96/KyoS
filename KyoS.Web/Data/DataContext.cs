@@ -69,6 +69,9 @@ namespace KyoS.Web.Data
         public DbSet<TCMServicePlanReviewDomainEntity> TCMServicePlanReviewDomains { get; set; }
         public DbSet<TCMServicePlanReviewEntity> TCMServicePlanReviews { get; set; }
         public DbSet<TCMServicePlanReviewDomainObjectiveEntity> TCMServicePlanReviewDomainObjectives { get; set; }
+        public DbSet<TCMDischargeFollowUpEntity> TCMDischargeFollowUp { get; set; }
+        public DbSet<TCMDischargeEntity> TCMDischarge { get; set; }
+        public DbSet<TCMDischargeServiceStatusEntity> TCMDischargeServiceStatus { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -225,6 +228,22 @@ namespace KyoS.Web.Data
             modelBuilder.Entity<TCMServicePlanReviewDomainObjectiveEntity>()
                                    .HasIndex(s => s.Id)
                                    .IsUnique();
+
+            modelBuilder.Entity<TCMDischargeEntity>()
+                                  .HasIndex(s => s.Id)
+                                  .IsUnique();
+
+            modelBuilder.Entity<TCMDischargeFollowUpEntity>()
+                       .HasOne(o => o.TcmDischarge)
+                       .WithMany(g => g.TcmDischargeFollowUp)
+                       .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMDischargeServiceStatusEntity>()
+                       .HasOne(o => o.TcmDischarge)
+                       .WithMany(g => g.TcmDischargeServiceStatus)
+                       .OnDelete(DeleteBehavior.Cascade);
+
+
         }
     }
 }

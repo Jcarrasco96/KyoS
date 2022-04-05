@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220331203027_TCMDischargeAndTCMDischargeFollowUp")]
+    partial class TCMDischargeAndTCMDischargeFollowUp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2213,9 +2215,6 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("AllServiceInPlace")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Approved")
-                        .HasColumnType("int");
-
                     b.Property<bool>("ClientLeftVoluntarily")
                         .HasColumnType("bit");
 
@@ -2298,32 +2297,6 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("TcmDischargeId");
 
                     b.ToTable("TCMDischargeFollowUp");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDischargeServiceStatusEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("CodeService")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NameService")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("TcmDischargeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TcmDischargeId");
-
-                    b.ToTable("TCMDischargeServiceStatus");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDomainEntity", b =>
@@ -3623,16 +3596,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TcmDischarge");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDischargeServiceStatusEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.TCMDischargeEntity", "TcmDischarge")
-                        .WithMany("TcmDischargeServiceStatus")
-                        .HasForeignKey("TcmDischargeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("TcmDischarge");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDomainEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanEntity", "TcmServicePlan")
@@ -4013,8 +3976,6 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDischargeEntity", b =>
                 {
                     b.Navigation("TcmDischargeFollowUp");
-
-                    b.Navigation("TcmDischargeServiceStatus");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDomainEntity", b =>

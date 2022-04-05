@@ -73,13 +73,13 @@
                                     @Html.DisplayFor(modelItem => item.TcmClient.Casemanager.Name)
                                 </td>
                                 <td>
-                                    @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                    @if ((item.Status == KyoS.Common.Enums.StatusType.Open) && (item.Approved == 2))
                                     {
                                         <span class="label label-success">
                                             Open
                                         </span>
                                     }
-                                    @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                    @if ((item.Status == KyoS.Common.Enums.StatusType.Close) && (item.Approved == 2))
                                     {
                                         <span class="label label-default">
                                             Close
