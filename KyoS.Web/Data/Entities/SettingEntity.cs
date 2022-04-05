@@ -10,5 +10,6 @@ namespace KyoS.Web.Data.Entities
         public bool AvailableCreateNewWorkdays { get; set; }
         public bool MentalHealthClinic { get; set; }
         public bool TCMClinic { get; set; }
+        public bool MHClassificationOfGoals { get; set; }
     }
 }

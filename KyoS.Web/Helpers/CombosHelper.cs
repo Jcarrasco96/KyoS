@@ -485,7 +485,7 @@ namespace KyoS.Web.Helpers
 
         public IEnumerable<SelectListItem> GetComboGoals(int idMTP)
         {
-            List<SelectListItem> list = _context.Goals.Where(g => g.MTP.Id == idMTP).Select(g => new SelectListItem
+            List<SelectListItem> list = _context.Goals.Where(g => (g.MTP.Id == idMTP)).Select(g => new SelectListItem
             {
                 Text = $"{g.Number}",
                 Value = $"{g.Id}"
@@ -497,6 +497,23 @@ namespace KyoS.Web.Helpers
                 Value = "0"
             });
 
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboGoalsByService(int idMTP, ServiceType service)
+        {            
+            List<SelectListItem> list = _context.Goals.Where(g => (g.MTP.Id == idMTP && g.Service == service)).Select(g => new SelectListItem
+            {
+                Text = $"{g.Number}",
+                Value = $"{g.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select goal...]",
+                Value = "0"
+            });
+            
             return list;
         }
 
