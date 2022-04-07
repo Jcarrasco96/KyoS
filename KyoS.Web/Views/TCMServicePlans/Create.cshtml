@@ -1,0 +1,75 @@
+﻿@model KyoS.Web.Models.TCMServicePlanViewModel
+@{
+    ViewData["Title"] = "Create Service Plan";
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("TCMServicesPlans", "Index", "TCMServicesPlans")
+        </li>
+        <li class="active">Create</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<h4>Create new service plan</h4>
+<hr />
+<div>
+    <div>
+        @if (ViewBag.Creado == "Y")
+        {
+            <div class="alert alert-block alert-success">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok green"></i>
+                <strong class="green">
+                    Service plan been successfully created
+                </strong>
+
+            </div>
+        }
+        @if (ViewBag.Creado == "E")
+        {
+            <div class="alert alert-block alert-warning">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok red"></i>
+                <strong class="red">
+                    Error. Services plan already exist
+                </strong>
+            </div>
+        }
+        @if (ViewBag.Creado == "EG")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok red"></i>
+                <strong class="red">
+                    Error. There are gender issues in: @ViewBag.errorText
+                </strong>
+            </div>
+        }
+    </div>
+    <div>
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <partial name="TCMServicePlan" />
+            <div class="form-group">
+                <input type="submit" value="Create Service Plan" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-success">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<partial name="_ModalPopup" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

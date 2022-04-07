@@ -1143,9 +1143,304 @@ namespace KyoS.Web.Helpers
                 IdClinic = TcmStageEntity.Clinic.Id,
                 Clinics = _combosHelper.GetComboClinics(),
                 Description = TcmStageEntity.Description,
-                //tCMservice.Code = TcmStageEntity.tCMservice.Code
+                Units = TcmStageEntity.Units,
+                tCMservice = TcmStageEntity.tCMservice
+            };
+        }
+        public async Task<TCMClientEntity> ToTCMClientEntity(TCMClientViewModel model, bool isNew)
+        {
+            return new TCMClientEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Casemanager = model.Casemanager,
+                Status = StatusUtils.GetStatusByIndex(model.IdStatus),
+                CaseNumber = model.CaseNumber,
+                DataOpen = model.DataOpen,
+                DataClose = model.DataClose,
+                Period = model.Period,
+                Client = model.Client
+
             };
         }
 
+        public TCMClientViewModel ToTCMClientViewModel(TCMClientEntity tcmClientEntity)
+        {
+            return new TCMClientViewModel
+            {
+                Id = tcmClientEntity.Id,
+                Casemanager = tcmClientEntity.Casemanager,
+                IdCaseMannager = tcmClientEntity.Casemanager.Id,
+                CaseMannagers = _combosHelper.GetComboCaseManager(),
+                IdClient = tcmClientEntity.Client.Id,
+                Clients = _combosHelper.GetComboClients(),
+                IdStatus = (tcmClientEntity.Status == StatusType.Open) ? 1 : 2,
+                StatusList = _combosHelper.GetComboClientStatus(),
+                CaseNumber = tcmClientEntity.CaseNumber,
+                DataOpen = tcmClientEntity.DataOpen,
+                DataClose = tcmClientEntity.DataClose,
+                Period = tcmClientEntity.Period
+            };
+        }
+
+        public TCMServicePlanViewModel ToTCMServicePlanViewModel(TCMServicePlanEntity TcmServicePlanEntity)
+        {
+            return new TCMServicePlanViewModel
+            {
+                Id = TcmServicePlanEntity.Id,
+                ID_TcmClient = TcmServicePlanEntity.TcmClient.Id,
+                Date_Intake = TcmServicePlanEntity.DateIntake,
+                Date_ServicePlan = TcmServicePlanEntity.DateServicePlan,
+                Date_Assessment = TcmServicePlanEntity.DateAssessment,
+                Date_Certification = TcmServicePlanEntity.DateCertification,
+                dischargerCriteria = TcmServicePlanEntity.DischargerCriteria,
+                strengths = TcmServicePlanEntity.Strengths,
+                weakness = TcmServicePlanEntity.Weakness,
+                CaseNumber = TcmServicePlanEntity.TcmClient.CaseNumber,
+                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2,
+                //TcmClients = _combosHelper.GetComboClientsForTCMCaseOpen(TcmServicePlanEntity.TcmClient.Client.Clinic.Id),
+                //TCMDomain = TcmServicePlanEntity.TCMDomain
+
+            };
+        }
+
+        public async Task<TCMServicePlanEntity> ToTCMServicePlanEntity(TCMServicePlanViewModel model, bool isNew)
+        {
+            return new TCMServicePlanEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                DateIntake = model.Date_Intake,
+                DateServicePlan = model.Date_ServicePlan,
+                DateAssessment = model.Date_Assessment,
+                DateCertification = model.Date_Certification,
+                TcmClient = await _context.TCMClient.FindAsync(model.ID_TcmClient),
+                DischargerCriteria = model.dischargerCriteria,
+                Weakness = model.weakness,
+                Strengths = model.strengths,
+                Status = StatusUtils.GetStatusByIndex(model.ID_Status),
+               
+            };
+        }
+
+        public TCMDomainViewModel ToTCMDomainViewModel(TCMDomainEntity TcmDomainEntity)
+        {
+            return new TCMDomainViewModel
+            {
+                Id = TcmDomainEntity.Id,
+                Date_Identified = TcmDomainEntity.DateIdentified,
+                Needs_Identified = TcmDomainEntity.NeedsIdentified,
+                Long_Term = TcmDomainEntity.LongTerm,
+                Id_ServicePlan = TcmDomainEntity.TcmServicePlan.Id,
+                Code = TcmDomainEntity.Code,
+                Name = TcmDomainEntity.Name,
+                TcmServicePlan = TcmDomainEntity.TcmServicePlan,
+                Services = _combosHelper.GetComboServicesNotUsed(TcmDomainEntity.TcmServicePlan.Id)
+            };
+        }
+
+        public async Task<TCMDomainEntity> ToTCMDomainEntity(TCMDomainViewModel model, bool isNew)
+        {
+            return new TCMDomainEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                DateIdentified = model.Date_Identified,
+                NeedsIdentified = model.Needs_Identified,
+                LongTerm = model.Long_Term,
+                TCMObjetive = model.TCMObjetive,
+                Code = model.Code,
+                Name = model.Name,
+                TcmServicePlan = model.TcmServicePlan
+
+            };
+        }
+
+        public async Task<TCMObjetiveEntity> ToTCMObjetiveEntity(TCMObjetiveViewModel model, bool isNew)
+        {
+            
+            return new TCMObjetiveEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmDomain = await _context.TCMDomains.FindAsync(model.Id_Domain),
+                //Clinic = await _context.Clinics.FindAsync(model.IdClinic),
+                Name = model.name,
+                Task = model.task,
+                //Long_Term = model.long_Term,
+                StartDate = model.Start_Date,
+                TargetDate = model.Target_Date,
+                EndDate = model.End_Date,
+                Finish = model.Finish,
+                IdObjetive = model.ID_Objetive,
+                Status = model.Status,
+                Responsible = model.Responsible
+                
+            };
+        }
+
+        public TCMObjetiveViewModel ToTCMObjetiveViewModel(TCMObjetiveEntity TcmObjetiveEntity)
+        {
+            return new TCMObjetiveViewModel
+            {
+                Id = TcmObjetiveEntity.Id,
+                Id_Domain = TcmObjetiveEntity.TcmDomain.Id,
+                IdObjetive= TcmObjetiveEntity.IdObjetive,
+                //IdClinic = TcmObjetiveEntity.Clinic.Id,
+                //Clinics = _combosHelper.GetComboClinics(),
+                name = TcmObjetiveEntity.Name,
+                task = TcmObjetiveEntity.Task,
+                Status = TcmObjetiveEntity.Status,
+                Start_Date = TcmObjetiveEntity.StartDate,
+                Target_Date = TcmObjetiveEntity.TargetDate,
+                End_Date = TcmObjetiveEntity.EndDate,
+                Finish = TcmObjetiveEntity.Finish,
+                TcmDomain = TcmObjetiveEntity.TcmDomain,
+                Stages = _combosHelper.GetComboStagesNotUsed(TcmObjetiveEntity.TcmDomain),
+                Responsible = TcmObjetiveEntity.Responsible
+
+            };
+        }
+
+        public async Task<TCMAdendumEntity> ToTCMAdendumEntity(TCMAdendumViewModel model, bool isNew)
+        {
+
+            return new TCMAdendumEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                DateAdendum = model.Date_Identified,
+                TcmServicePlan = model.TcmServicePlan,
+                TcmDomain = model.TcmDomain
+                
+            };
+        }
+
+        public TCMAdendumViewModel ToTCMAdendumViewModel(TCMAdendumEntity TcmAdendumEntity)
+        {
+            return new TCMAdendumViewModel
+            {
+                Id = TcmAdendumEntity.Id,
+                TcmServicePlan = TcmAdendumEntity.TcmServicePlan,
+                ListTcmServicePlan = _combosHelper.GetComboServicesPlan(TcmAdendumEntity.TcmServicePlan.TcmClient.Casemanager.Clinic.Id),
+                TcmDominio = _combosHelper.GetComboTCMServices(),
+                TcmDomain = TcmAdendumEntity.TcmDomain,
+                DateAdendum = TcmAdendumEntity.DateAdendum
+            };
+        }
+
+        public TCMServicePlanReviewViewModel ToTCMServicePlanReviewViewModel(TCMServicePlanReviewEntity TcmServicePlanReviewEntity)
+        {
+            return new TCMServicePlanReviewViewModel
+            {
+                Id = TcmServicePlanReviewEntity.Id,
+                DateOpending  = TcmServicePlanReviewEntity.DateOpending,
+                DateServicePlanReview = TcmServicePlanReviewEntity.DateServicePlanReview,
+                Recomendation = TcmServicePlanReviewEntity.Recomendation,
+                SummaryProgress = TcmServicePlanReviewEntity.SummaryProgress,
+                TcmServicePlan = TcmServicePlanReviewEntity.TcmServicePlan,
+                TCMServicePlanRevDomain = TcmServicePlanReviewEntity.TCMServicePlanRevDomain,
+                StatusListDomain = _combosHelper.GetComboObjetiveStatus(),
+                StatusListObjetive = _combosHelper.GetComboObjetiveStatus(),
+                IdServicePlan = TcmServicePlanReviewEntity.TcmServicePlan.Id,
+                _TCMServicePlanRevDomain = TcmServicePlanReviewEntity.TCMServicePlanRevDomain,
+
+                //ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2,
+
+            };
+        }
+
+        public async Task<TCMServicePlanReviewEntity> ToTCMServicePlanReviewEntity(TCMServicePlanReviewViewModel model, bool isNew)
+        {
+            TCMServicePlanEntity tcmServicePlan = await _context.TCMServicePlans.FirstOrDefaultAsync(n => n.Id == model.IdServicePlan);
+            return new TCMServicePlanReviewEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                DateOpending = tcmServicePlan.DateIntake,
+                DateServicePlanReview = model.DateServicePlanReview,
+                Recomendation = model.Recomendation,
+                SummaryProgress = model.SummaryProgress,
+                TcmServicePlan = tcmServicePlan,
+                TCMServicePlanRevDomain = model.TCMServicePlanRevDomain,
+                
+            };
+        }
+
+        public TCMServicePlanReviewDomainViewModel ToTCMServicePlanReviewDomainViewModel(TCMServicePlanReviewDomainEntity TcmServicePlanReviewDomianEntity)
+        {
+            return new TCMServicePlanReviewDomainViewModel
+            {
+                Id = TcmServicePlanReviewDomianEntity.Id,
+                ChangesUpdate = TcmServicePlanReviewDomianEntity.ChangesUpdate,
+                IdTcmDomain = TcmServicePlanReviewDomianEntity.TcmDomain.Id,
+                TcmDomain = TcmServicePlanReviewDomianEntity.TcmDomain,
+                status = _combosHelper.GetComboClientStatus(),
+              
+            };
+        }
+
+        public async Task<TCMServicePlanReviewDomainEntity> ToTCMServicePlanReviewDomainEntity(TCMServicePlanReviewDomainViewModel model, bool isNew)
+        {
+            return new TCMServicePlanReviewDomainEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmDomain = model.TcmDomain,
+                ChangesUpdate = model.ChangesUpdate,
+               
+            };
+        }
+
+        public TCMDischargeViewModel ToTCMDischargeViewModel(TCMDischargeEntity TcmDischargeEntity)
+        {
+            return new TCMDischargeViewModel
+            {
+                Id = TcmDischargeEntity.Id,
+                AdministrativeDischarge = TcmDischargeEntity.AdministrativeDischarge,
+                AdministrativeDischarge_Explain = TcmDischargeEntity.AdministrativeDischarge_Explain,
+                AllServiceInPlace = TcmDischargeEntity.AllServiceInPlace,
+                ClientLeftVoluntarily = TcmDischargeEntity.ClientLeftVoluntarily,
+                ClientMovedOutArea = TcmDischargeEntity.ClientMovedOutArea,
+                DischargeDate = TcmDischargeEntity.DischargeDate,
+                IdServicePlan = TcmDischargeEntity.TcmServicePlan.Id,
+                TcmServicePlan = TcmDischargeEntity.TcmServicePlan,
+                LackOfProgress = TcmDischargeEntity.LackOfProgress,
+                NonComplianceWithAgencyRules = TcmDischargeEntity.NonComplianceWithAgencyRules,
+                Other = TcmDischargeEntity.Other,
+                Other_Explain = TcmDischargeEntity.Other_Explain,
+                PresentProblems = TcmDischargeEntity.PresentProblems,
+                ProgressToward = TcmDischargeEntity.ProgressToward,
+                Referred = TcmDischargeEntity.Referred,
+                StaffingDate = DateTime.Now,
+                StaffSignatureDate = DateTime.Now,
+                SupervisorSignatureDate = DateTime.Now,
+                TcmDischargeFollowUp = TcmDischargeEntity.TcmDischargeFollowUp,
+                TcmDischargeServiceStatus = TcmDischargeEntity.TcmDischargeServiceStatus,
+                TcmServices = TcmDischargeEntity.TcmServicePlan.TCMService,
+
+            };
+        }
+
+        public async Task<TCMDischargeEntity> ToTCMDischargeEntity(TCMDischargeViewModel model, bool isNew)
+        {
+            return new TCMDischargeEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                StaffingDate = model.StaffingDate,
+                DischargeDate = model.DischargeDate,
+                PresentProblems = model.PresentProblems,
+                ProgressToward = model.ProgressToward,
+                TcmDischargeServiceStatus = model.TcmDischargeServiceStatus,
+                AllServiceInPlace = model.AllServiceInPlace,
+                NonComplianceWithAgencyRules = model.NonComplianceWithAgencyRules,
+                Referred = model.Referred,
+                ClientMovedOutArea =model.ClientMovedOutArea,
+                ClientLeftVoluntarily = model.ClientLeftVoluntarily,
+                LackOfProgress = model.LackOfProgress,
+                Other = model.Other,
+                Other_Explain = model.Other_Explain,
+                AdministrativeDischarge = model.AdministrativeDischarge,
+                AdministrativeDischarge_Explain = model.AdministrativeDischarge_Explain,
+                TcmDischargeFollowUp = model.TcmDischargeFollowUp,
+                StaffSignatureDate = model.StaffSignatureDate,
+                SupervisorSignatureDate = model.SupervisorSignatureDate,
+                TcmServicePlan = _context.TCMServicePlans.Find(model.IdServicePlan),
+
+            };
+        }
     }
 }

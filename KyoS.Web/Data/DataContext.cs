@@ -61,6 +61,17 @@ namespace KyoS.Web.Data
         public DbSet<SettingEntity> Settings { get; set; }
         public DbSet<TCMServiceEntity> TCMServices { get; set; }
         public DbSet<TCMStageEntity> TCMStages { get; set; }
+        public DbSet<TCMClientEntity> TCMClient { get; set; }
+        public DbSet<TCMObjetiveEntity> TCMObjetives { get; set; }
+        public DbSet<TCMDomainEntity> TCMDomains { get; set; }
+        public DbSet<TCMServicePlanEntity> TCMServicePlans { get; set; }
+        public DbSet<TCMAdendumEntity> TCMAdendums { get; set; }
+        public DbSet<TCMServicePlanReviewDomainEntity> TCMServicePlanReviewDomains { get; set; }
+        public DbSet<TCMServicePlanReviewEntity> TCMServicePlanReviews { get; set; }
+        public DbSet<TCMServicePlanReviewDomainObjectiveEntity> TCMServicePlanReviewDomainObjectives { get; set; }
+        public DbSet<TCMDischargeFollowUpEntity> TCMDischargeFollowUp { get; set; }
+        public DbSet<TCMDischargeEntity> TCMDischarge { get; set; }
+        public DbSet<TCMDischargeServiceStatusEntity> TCMDischargeServiceStatus { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -188,6 +199,51 @@ namespace KyoS.Web.Data
                         .HasOne(c => c.Setting)
                         .WithOne(s => s.Clinic)
                         .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMDomainEntity>()
+                                    .HasIndex(s => s.Id)
+                                    .IsUnique();
+
+            modelBuilder.Entity<TCMObjetiveEntity>()
+                        .HasOne(o => o.TcmDomain)
+                        .WithMany(g => g.TCMObjetive)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMServicePlanEntity>()
+                                   .HasIndex(s => s.Id)
+                                   .IsUnique();
+
+            modelBuilder.Entity<TCMAdendumEntity>()
+                                   .HasIndex(s => s.Id)
+                                   .IsUnique();
+
+            modelBuilder.Entity<TCMServicePlanReviewDomainEntity>()
+                                   .HasIndex(s => s.Id)
+                                   .IsUnique();
+
+            modelBuilder.Entity<TCMServicePlanReviewEntity>()
+                                   .HasIndex(s => s.Id)
+                                   .IsUnique();
+
+            modelBuilder.Entity<TCMServicePlanReviewDomainObjectiveEntity>()
+                                   .HasIndex(s => s.Id)
+                                   .IsUnique();
+
+            modelBuilder.Entity<TCMDischargeEntity>()
+                                  .HasIndex(s => s.Id)
+                                  .IsUnique();
+
+            modelBuilder.Entity<TCMDischargeFollowUpEntity>()
+                       .HasOne(o => o.TcmDischarge)
+                       .WithMany(g => g.TcmDischargeFollowUp)
+                       .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMDischargeServiceStatusEntity>()
+                       .HasOne(o => o.TcmDischarge)
+                       .WithMany(g => g.TcmDischargeServiceStatus)
+                       .OnDelete(DeleteBehavior.Cascade);
+
+
         }
     }
 }

@@ -68,5 +68,21 @@ namespace KyoS.Web.Helpers
         TCMServiceViewModel ToTCMServiceViewModel(TCMServiceEntity model, int idClinic);
         Task<TCMStageEntity> ToTCMStageEntity(TCMStageViewModel model, bool isNew);
         TCMStageViewModel ToTCMStageViewModel(TCMStageEntity model);
+        Task<TCMClientEntity> ToTCMClientEntity(TCMClientViewModel model, bool isNew);
+        TCMClientViewModel ToTCMClientViewModel(TCMClientEntity model);
+        Task<TCMServicePlanEntity> ToTCMServicePlanEntity(TCMServicePlanViewModel model, bool isNew);
+        TCMServicePlanViewModel ToTCMServicePlanViewModel(TCMServicePlanEntity model);
+        Task<TCMDomainEntity> ToTCMDomainEntity(TCMDomainViewModel model, bool isNew);
+        TCMDomainViewModel ToTCMDomainViewModel(TCMDomainEntity model);
+        Task<TCMObjetiveEntity> ToTCMObjetiveEntity(TCMObjetiveViewModel model, bool isNew);
+        TCMObjetiveViewModel ToTCMObjetiveViewModel(TCMObjetiveEntity model);
+        Task<TCMAdendumEntity> ToTCMAdendumEntity(TCMAdendumViewModel model, bool isNew);
+        TCMAdendumViewModel ToTCMAdendumViewModel(TCMAdendumEntity model);
+        Task<TCMServicePlanReviewEntity> ToTCMServicePlanReviewEntity(TCMServicePlanReviewViewModel model, bool isNew);
+        TCMServicePlanReviewViewModel ToTCMServicePlanReviewViewModel(TCMServicePlanReviewEntity model);
+        Task<TCMServicePlanReviewDomainEntity> ToTCMServicePlanReviewDomainEntity(TCMServicePlanReviewDomainViewModel model, bool isNew);
+        TCMServicePlanReviewDomainViewModel ToTCMServicePlanReviewDomainViewModel(TCMServicePlanReviewDomainEntity model);
+        Task<TCMDischargeEntity> ToTCMDischargeEntity(TCMDischargeViewModel model, bool isNew);
+        TCMDischargeViewModel ToTCMDischargeViewModel(TCMDischargeEntity model);
     }
 }

@@ -1,0 +1,94 @@
+﻿@model KyoS.Web.Models.TCMAdendumViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="EditAdendum" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMAdendums(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <div class="col-md-6">
+                    <label asp-for="ID_TcmServicePlan" class="control-label">Case Number</label>&nbsp;*
+                    <select asp-for="ID_TcmServicePlan" asp-items="Model.ListTcmServicePlan" class="form-control" readonly></select>
+                    <span asp-validation-for="ID_TcmServicePlan" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Date_Identified" class="control-label">Identified Date</label>
+                    <input asp-for="Date_Identified" class="form-control" />
+                    <span asp-validation-for="Date_Identified" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group col-md-12">
+                    <label asp-for="ID_TcmDominio" class="control-label">Service Code</label>&nbsp;*
+                    <select asp-for="ID_TcmDominio" asp-items="Model.TcmDominio" class="form-control" readonly></select>
+                    <span asp-validation-for="ID_TcmDominio" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Needs_Identified" class="control-label">Identified Needs</label>
+                    <input asp-for="Needs_Identified" class="form-control" />
+                    <span asp-validation-for="Needs_Identified" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Long_term" class="control-label">Long Term</label>
+                    <input asp-for="Long_term" class="form-control" />
+                    <span asp-validation-for="Long_term" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+            //    jQueryAjaxPost = form => {
+            //        try {
+            //            $.ajax({
+            //                type: 'POST',
+            //                url: form.action,
+            //                data: new FormData(form),
+            //                contentType: false,
+            //                processData: false,
+            //                success: function (res) {
+            //                    if (res.isValid) {
+            //                        $('#view-all').html(res.html)
+            //                        $('#form-modal .modal-body').html('');
+            //                        $('#form-modal .modal-title').html('');
+            //                        $('#form-modal').modal('hide');
+            //                    }
+            //                    else
+            //                        $('#form-modal .modal-body').html(res.html);
+            //                },
+            //                error: function (err) {
+            //                    console.log(err)
+            //                }
+            //            })
+            //            //to prevent default form submit event
+            //            return false;
+            //        } catch (ex) {
+            //            console.log(ex)
+            //        }
+            //}
+    </script>
+}
+
+
