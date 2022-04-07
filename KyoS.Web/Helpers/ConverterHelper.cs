@@ -27,7 +27,14 @@ namespace KyoS.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 LogoPath = path,
-                Name = model.Name
+                Name = model.Name,
+                CEO = model.CEO,
+                Address = model.Address,
+                City = model.City,
+                State = model.State,
+                ZipCode = model.ZipCode,
+                Phone = model.Phone,
+                FaxNo = model.FaxNo
             };
         }
 
@@ -37,7 +44,14 @@ namespace KyoS.Web.Helpers
             {
                 Id = clinicEntity.Id,
                 LogoPath = clinicEntity.LogoPath,
-                Name = clinicEntity.Name
+                Name = clinicEntity.Name,
+                CEO = clinicEntity.CEO,
+                Address = clinicEntity.Address,
+                City = clinicEntity.City,
+                State = clinicEntity.State,
+                ZipCode = clinicEntity.ZipCode,
+                Phone = clinicEntity.Phone,
+                FaxNo = clinicEntity.FaxNo
             };
         }
 
