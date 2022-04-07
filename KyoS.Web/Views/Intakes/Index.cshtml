@@ -1,0 +1,116 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.IntakeScreeningEntity>
+@{
+    ViewData["Title"] = "Intake";
+}
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Intake Screening</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<p>
+    <a asp-action="IntakeCandidates" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Candidate Intake Screening</a>
+</p>
+
+<div class="row">
+    <div class="col-md-12">
+        @if (ViewBag.Delete == "N")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <strong class="red">
+                    Error. It is not posible delete the Intake Screening
+                </strong>
+            </div>
+        }
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Intake Screening</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-4">
+                                @Html.DisplayNameFor(model => model.Client.Name)
+                            </th>
+                            <th class="col-md-3">
+                                @Html.DisplayNameFor(model => model.Client.Code)
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.DateAdmision)
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.Client.Status)
+                            </th>
+                            <th class="col-md-1">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Client.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Client.Code)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DateAdmision)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Client.Status)
+                                </td>
+                                <td align="right">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Intake Screening"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete Intake Screening"><i class="glyphicon glyphicon-trash"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+                        $(document).ready(function () {
+                            $('#MyTable').DataTable({
+                                "order": [[0, "asc"]],
+                                "pageLength": 100
+                            });
+
+                            // Delete item
+                            var item_to_delete;
+
+                            $('.deleteItem').click((e) => {
+                                item_to_delete = e.currentTarget.dataset.id;
+                            });
+
+                            $("#btnYesDelete").click(function () {
+                                var url = "@Url.Action("Delete", "LegalGuardians")";
+                                window.location.href = url + '/' + item_to_delete;
+                            });
+                        });
+    </script>
+}
+

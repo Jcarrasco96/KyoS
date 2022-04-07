@@ -1,0 +1,109 @@
+﻿@model KyoS.Web.Models.IntakeScreeningViewModel
+
+<div class="container-fluid">
+    <div class="form-group col-md-4">
+        <label asp-for="Client.Name" class="control-label">Name of Recipient</label>&nbsp;*
+        <input asp-for="Client.Name" class="form-control" readonly>
+        <span asp-validation-for="Client.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.Code" class="control-label">Case No.</label>&nbsp;*
+        <input asp-for="Client.Code" class="form-control" readonly>
+        <span asp-validation-for="Client.Code" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="DateAdmision" class="control-label">Date of Admission</label>&nbsp;*
+        <input asp-for="DateAdmision" class="form-control" readonly>
+        <span asp-validation-for="DateAdmision" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="DateDischarge" class="control-label">Date of Discharge</label>&nbsp;*
+        <input asp-for="DateDischarge" class="form-control" readonly>
+        <span asp-validation-for="DateDischarge" class="text-danger"></span>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="form-group col-md-4">
+        <label asp-for="Client.FullAddress" class="control-label">Address</label>&nbsp;*
+        <input asp-for="Client.FullAddress" class="form-control" readonly>
+        <span asp-validation-for="Client.FullAddress" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.City" class="control-label">City</label>&nbsp;*
+        <input asp-for="Client.City" class="form-control" readonly>
+        <span asp-validation-for="Client.City" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.State" class="control-label">State</label>&nbsp;*
+        <input asp-for="Client.State" class="form-control" readonly>
+        <span asp-validation-for="Client.State" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.ZipCode" class="control-label">Zip Code</label>&nbsp;*
+        <input asp-for="Client.ZipCode" class="form-control" readonly>
+        <span asp-validation-for="Client.ZipCode" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.Telephone" class="control-label">Telephone</label>&nbsp;*
+        <input asp-for="Client.Telephone" class="form-control" readonly>
+        <span asp-validation-for="Client.Telephone" class="text-danger"></span>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="form-group col-md-4">
+        <label asp-for="IdClientIs" class="control-label">Client Is</label>&nbsp;*
+        <select asp-for="IdClientIs" asp-items="Model.ClientIs_Status" class="form-control" ></select>
+        <span asp-validation-for="IdClientIs" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="IdBehaviorIs" class="control-label">Behavior Is</label>&nbsp;*
+        <select asp-for="IdBehaviorIs" asp-items="Model.BehaviorIs_Status" class="form-control" ></select>
+        <span asp-validation-for="IdBehaviorIs" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="IdSpeechIs" class="control-label">Speech Is</label>&nbsp;*
+        <select asp-for="IdSpeechIs" asp-items="Model.SpeechIs_Status" class="form-control" ></select>
+        <span asp-validation-for="IdSpeechIs" class="text-danger"></span>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="form-group col-md-6">
+        <input type="checkbox" asp-for="DoesClientKnowHisName" class="form-check-input" id="DoesClientKnowHisName">
+        <label asp-for="DoesClientKnowHisName" class="forgot">Does the Client know his/her Name?</label>
+    </div>
+    <div class="form-group col-md-6">
+        <input type="checkbox" asp-for="DoesClientKnowWhereIs" class="form-check-input" id="DoesClientKnowWhereIs">
+        <label asp-for="DoesClientKnowWhereIs" class="forgot">Does the Client know where he/she is?</label>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="form-group col-md-6">
+        <input type="checkbox" asp-for="DoesClientKnowTodayDate" class="form-check-input" id="DoesClientKnowTodayDate">
+        <label asp-for="DoesClientKnowTodayDate" class="forgot">Does the Client know today's Date?</label>
+    </div>
+    <div class="form-group col-md-6">
+        <input type="checkbox" asp-for="DoesClientKnowTimeOfDay" class="form-check-input" id="DoesClientKnowTimeOfDay">
+        <label asp-for="DoesClientKnowTimeOfDay" class="forgot">Does the Client know the time of day?</label>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="form-group col-md-4">
+        <label asp-for="InformationGatheredBy" class="control-label">Information gathered by:</label>&nbsp;*
+        <input asp-for="InformationGatheredBy" class="form-control" readonly>
+        <span asp-validation-for="InformationGatheredBy" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="DateSignatureClient" class="control-label">Client Signature Date</label>&nbsp;*
+        <input asp-for="DateSignatureClient" class="form-control" id="DateSignatureClient">
+        <span asp-validation-for="DateSignatureClient" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="DateSignatureWitness" class="control-label">Witness Signature Date</label>&nbsp;*
+        <input asp-for="DateSignatureWitness" class="form-control" id="DateSignatureWitness">
+        <span asp-validation-for="DateSignatureWitness" class="text-danger"></span>
+    </div>
+</div>
+<br />
+
+
+

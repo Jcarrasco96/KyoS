@@ -56,7 +56,8 @@ namespace KyoS.Web.Data
         public DbSet<IndividualNoteEntity> IndividualNotes { get; set; }
         public DbSet<GroupNoteEntity> GroupNotes { get; set; }
         public DbSet<GroupNote_Activity> GroupNotes_Activities { get; set; }
-        public DbSet<SettingEntity> Settings { get; set; }        
+        public DbSet<SettingEntity> Settings { get; set; }
+        public DbSet<IntakeScreeningEntity> IntakeScreenings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -162,6 +163,13 @@ namespace KyoS.Web.Data
                         .HasOne(c => c.Setting)
                         .WithOne(s => s.Clinic)
                         .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ClientEntity>()
+                        .HasOne(c => c.IntakeScreening)
+                        .WithOne(s => s.Client)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<IntakeScreeningEntity>(s => s.Client_FK);
+
         }
     }
 }

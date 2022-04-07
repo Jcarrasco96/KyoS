@@ -103,6 +103,8 @@ namespace KyoS.Web.Data.Entities
 
         public FacilitatorEntity IndividualTherapyFacilitator { get; set; }
 
+        public IntakeScreeningEntity IntakeScreening { get; set; }
+
         public string MissingDoc 
         {
             get

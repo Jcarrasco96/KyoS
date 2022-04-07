@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220407151901_UpdateClient_IntakeScreening1")]
+    partial class UpdateClient_IntakeScreening1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1295,9 +1297,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateAdmision")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateDischarge")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateSignatureClient")

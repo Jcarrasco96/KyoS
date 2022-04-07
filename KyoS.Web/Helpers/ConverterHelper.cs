@@ -1034,6 +1034,57 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
             };
-        }        
+        }
+        public async Task<IntakeScreeningEntity> ToIntakeEntity(IntakeScreeningViewModel model, bool isNew)
+        {
+            return new IntakeScreeningEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient),
+                DateAdmision = model.DateAdmision,
+                DateDischarge = model.DateDischarge,
+                DateSignatureClient = model.DateSignatureClient,
+                DateSignatureWitness = model.DateSignatureWitness,
+                DoesClientKnowHisName = model.DoesClientKnowHisName,
+                DoesClientKnowTimeOfDay = model.DoesClientKnowTimeOfDay,
+                DoesClientKnowTodayDate = model.DoesClientKnowTodayDate,
+                DoesClientKnowWhereIs = model.DoesClientKnowWhereIs,
+                Client_FK = model.IdClient,
+                InformationGatheredBy = model.InformationGatheredBy,
+                ClientIsStatus = IntakeScreeninigType.GetClientIsByIndex(model.IdClientIs),
+                BehaviorIsStatus = IntakeScreeninigType.GetBehaviorIsByIndex(model.IdBehaviorIs),
+                SpeechIsStatus = IntakeScreeninigType.GetSpeechIsByIndex(model.IdSpeechIs)
+
+
+            };
+        }
+
+        public IntakeScreeningViewModel ToIntakeViewModel(IntakeScreeningEntity model)
+        {
+            IntakeScreeningViewModel aux;
+            aux = new   IntakeScreeningViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                DateAdmision = model.DateAdmision,
+                DateDischarge = model.DateDischarge,
+                DateSignatureClient = model.DateSignatureClient,
+                DateSignatureWitness = model.DateSignatureWitness,
+                DoesClientKnowHisName = model.DoesClientKnowHisName,
+                DoesClientKnowTimeOfDay = model.DoesClientKnowTimeOfDay,
+                DoesClientKnowTodayDate = model.DoesClientKnowTodayDate,
+                DoesClientKnowWhereIs = model.DoesClientKnowWhereIs,
+                Client_FK = model.Client_FK,
+                IdClient = model.Client.Id,
+                InformationGatheredBy = model.InformationGatheredBy,
+                IdClientIs = Convert.ToInt32(model.ClientIsStatus) + 1,
+                ClientIs_Status = _combosHelper.GetComboIntake_ClientIs(),
+                IdBehaviorIs = Convert.ToInt32(model.BehaviorIsStatus) + 1,
+                BehaviorIs_Status = _combosHelper.GetComboIntake_BehaviorIs(),
+                IdSpeechIs = Convert.ToInt32(model.SpeechIsStatus) + 1,
+                SpeechIs_Status = _combosHelper.GetComboIntake_SpeechIs(),
+            };
+            return (aux);
+        }
     }
 }
