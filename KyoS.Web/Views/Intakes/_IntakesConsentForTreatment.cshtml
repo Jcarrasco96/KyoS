@@ -1,0 +1,126 @@
+﻿@model KyoS.Web.Models.IntakeConsentForTreatmentViewModel
+
+<div class="container-fluid">
+    <div class="form-group col-md-2">
+
+        <input asp-for="Client.Name" class="form-control" readonly>
+        <span asp-validation-for="Client.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-10">
+        <label asp-for="Client.Name" class="control-label">an applicant for the services of Mental Health and if applicable; </label>&nbsp;*
+    </div>
+ </div>
+<div class="container-fluid">
+    <div class="form-group col-md-2">
+
+        @* <input asp-for="Client.LegalGuardian.Name" class="form-control" readonly>
+        <span asp-validation-for="Client.LegalGuardian.Name" class="text-danger"></span>*@
+    </div>
+    <div class="form-group col-md-10">
+        <label asp-for="Client.LegalGuardian.Name" class="control-label">representative/guardian of the above named applicant:  </label>&nbsp;*
+    </div>
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="AuthorizeStaff" class="form-check-input" id="AuthorizeStaff">
+        <label asp-for="AuthorizeStaff" class="forgot">I, Authorize the staff of FLORIDA SOCIAL HEALTH SOLUTIONS. (FSHS) to provide services. </label>
+    </div>
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="AuthorizeRelease" class="form-check-input" id="AuthorizeRelease">
+        <label asp-for="AuthorizeRelease" class="forgot">
+            I, Authorize release of necessary information from my service record to any insurer , compensation carrier , or other
+            agency providing financial assistance for treatment / services Information from clinical records may be used by The
+            Department of Children and Families , and/or Human Rights Advocacy Committee for the purpose of monitoring facility ,
+            activity and complaints concerning the facility.
+        </label>
+    </div>
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Underestand" class="form-check-input" id="Underestand">
+        <label asp-for="Underestand" class="forgot">
+            I, Understand that, except for the above case, all information that you furnish to FLORIDA SOCIAL HEALTH SOLUTIONS.
+            (FSHS) will be kept in strictest confidence, as required by Florida law, and will not be shared with any agency or person
+            outside the facility, unless so requested by you.
+        </label>
+    </div>
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Aggre" class="form-check-input" id="Aggre">
+        <label asp-for="Aggre" class="forgot">
+            I, Agree that I could be treated with certain psychotropic medications only after I have been informed of my right to accept
+            or refuse such medications and have consented to the administration of such medications . I have been provided with
+            sufficient information by the physician prescribing such medications, which shall include the following:
+            • The nature of my emotional problem.
+            • The reasons for me to take such medication, including the likelihood of my improving or not improving without such
+            medication and my consent, once given may be withdrawn at any time by me stating such intention to any member of
+            the treating staff.
+            • The reasonable alternative treatments available, if any.
+            • The type, range of frequency and amount, method (oral or injection) of taking the medications.
+            • The probable side effects of these drugs known to commonly occur and any particular side effects likely to occur in my
+            particular case.
+            Required medications will be registered by my assigned psychiatrist in the medical records and medication management will be
+            performed upon requirement.
+        </label>
+    </div>
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Aggre1" class="form-check-input" id="Aggre1">
+        <label asp-for="Aggre1" class="forgot">
+            I, Agree that FLORIDA SOCIAL HEALTH SOLUTIONS. (FSHS) staff may contact me after the completion of
+            treatment/service in order to evaluate its effectiveness.
+        </label>
+    </div>
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Certify" class="form-check-input" id="Certify">
+        <label asp-for="Certify" class="forgot">
+            I, Agree that FLORIDA SOCIAL HEALTH SOLUTIONS. (FSHS) staff may contact me after the completion of
+            treatment/service in order to evaluate its effectiveness.
+        </label>
+    </div>
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Certify1" class="form-check-input" id="Certify1">
+        <label asp-for="Certify1" class="forgot">
+            Certify that I have read and fully understand the above.
+        </label>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="form-group col-md-4">
+        <label asp-for="DateSignatureEmployee" class="control-label">Person Served Signature </label>&nbsp;*
+        <input asp-for="DateSignatureEmployee" class="form-control">
+        <span asp-validation-for="DateSignatureEmployee" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="DateSignatureLegalGuardian" class="control-label">Parent, Legal Guardian or Authorized Representative</label>&nbsp;*
+        <input asp-for="DateSignatureLegalGuardian" class="form-control" id="DateSignatureClient">
+        <span asp-validation-for="DateSignatureLegalGuardian" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="DateSignatureEmployee" class="control-label">Employee Signature</label>&nbsp;*
+        <input asp-for="DateSignatureEmployee" class="form-control" id="DateSignatureWitness">
+        <span asp-validation-for="DateSignatureEmployee" class="text-danger"></span>
+    </div>
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents">
+        <label asp-for="Documents" class="forgot">
+            Documents were verbally translated to me in my native language.
+            FLORIDA SOCIAL HEALTH SOLUTIONS. (FSHS)
+        </label>
+    </div>
+</div>
+<br />
+
+
+
+

@@ -54,7 +54,7 @@
                                 @Html.DisplayNameFor(model => model.Client.Status)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.Client.Service)
+                                Consent For Treatment
                             </th>
                             <th class="col-md-1">
                             </th>
@@ -97,24 +97,7 @@
                                 }
                             </td>
                             <td align="center">
-                               @if (item.Client.Service == KyoS.Common.Enums.ServiceType.PSR)
-                                {
-                                    <span class="label label-success">
-                                        PSR
-                                    </span>
-                                }
-                               @if (item.Client.Service == KyoS.Common.Enums.ServiceType.Group)
-                                {
-                                    <span class="label label-default">
-                                        Group
-                                    </span>
-                                }
-                               @if (item.Client.Service == KyoS.Common.Enums.ServiceType.Individual)
-                                {
-                                    <span class="label label-default">
-                                        Individual
-                                    </span>
-                                }
+                                    <a asp-action="CreateConsentForTreatment" asp-route-id="@item.Client.Id" class="btn btn-danger" title="Create Intake Consent For Treatment"><i class="glyphicon glyphicon-align-justify"></i></a>
                             </td>
                             <td align="right">
                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Intake Screening"><i class="glyphicon glyphicon-pencil"></i></a>

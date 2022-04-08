@@ -62,5 +62,7 @@ namespace KyoS.Web.Helpers
         SettingViewModel ToSettingViewModel(SettingEntity model);
         Task<IntakeScreeningEntity> ToIntakeEntity(IntakeScreeningViewModel model, bool isNew);
         IntakeScreeningViewModel ToIntakeViewModel(IntakeScreeningEntity model);
+        Task<IntakeConsentForTreatmentEntity> ToIntakeConsentForTreatmentEntity(IntakeConsentForTreatmentViewModel model, bool isNew);
+        IntakeConsentForTreatmentViewModel ToIntakeConsentForTreatmentViewModel(IntakeConsentForTreatmentEntity model);
     }
 }

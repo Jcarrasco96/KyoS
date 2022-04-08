@@ -1061,8 +1061,7 @@ namespace KyoS.Web.Helpers
 
         public IntakeScreeningViewModel ToIntakeViewModel(IntakeScreeningEntity model)
         {
-            IntakeScreeningViewModel aux;
-            aux = new   IntakeScreeningViewModel
+            return new   IntakeScreeningViewModel
             {
                 Id = model.Id,
                 Client = model.Client,
@@ -1084,7 +1083,55 @@ namespace KyoS.Web.Helpers
                 IdSpeechIs = Convert.ToInt32(model.SpeechIsStatus) + 1,
                 SpeechIs_Status = _combosHelper.GetComboIntake_SpeechIs(),
             };
-            return (aux);
+           
+        }
+
+        public async Task<IntakeConsentForTreatmentEntity> ToIntakeConsentForTreatmentEntity(IntakeConsentForTreatmentViewModel model, bool isNew)
+        {
+            return new IntakeConsentForTreatmentEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                
+                Aggre = model.Aggre,
+                Aggre1 = model.Aggre1,
+                AuthorizeRelease = model.AuthorizeRelease,
+                AuthorizeStaff = model.AuthorizeStaff,
+                Certify = model.Certify,
+                Certify1 = model.Certify1,
+                Client_FK = model.Client_FK,//model.Client.Id,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Underestand = model.Underestand
+                
+
+            };
+        }
+
+        public IntakeConsentForTreatmentViewModel ToIntakeConsentForTreatmentViewModel(IntakeConsentForTreatmentEntity model)
+        {
+            return new IntakeConsentForTreatmentViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Aggre = model.Aggre,
+                Aggre1 = model.Aggre1,
+                AuthorizeRelease = model.AuthorizeRelease,
+                AuthorizeStaff = model.AuthorizeStaff,
+                Certify = model.Certify,
+                Certify1 = model.Certify1,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Underestand = model.Underestand
+               
+            };
+            
         }
     }
 }

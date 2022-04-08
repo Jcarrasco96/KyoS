@@ -105,6 +105,8 @@ namespace KyoS.Web.Data.Entities
 
         public IntakeScreeningEntity IntakeScreening { get; set; }
 
+        public IntakeConsentForTreatmentEntity IntakeConsentForTreatment { get; set; }
+
         public string MissingDoc 
         {
             get

@@ -58,6 +58,7 @@ namespace KyoS.Web.Data
         public DbSet<GroupNote_Activity> GroupNotes_Activities { get; set; }
         public DbSet<SettingEntity> Settings { get; set; }
         public DbSet<IntakeScreeningEntity> IntakeScreenings { get; set; }
+        public DbSet<IntakeConsentForTreatmentEntity> IntakeConsentForTreatment { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -170,6 +171,11 @@ namespace KyoS.Web.Data
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasForeignKey<IntakeScreeningEntity>(s => s.Client_FK);
 
+            modelBuilder.Entity<ClientEntity>()
+                        .HasOne(c => c.IntakeConsentForTreatment)
+                        .WithOne(s => s.Client)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<IntakeConsentForTreatmentEntity>(s => s.Client_FK);
         }
     }
 }

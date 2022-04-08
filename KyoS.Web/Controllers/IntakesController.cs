@@ -336,5 +336,145 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize(Roles = "Mannager")]
+        public IActionResult CreateConsentForTreatment(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            IntakeConsentForTreatmentViewModel model;
+
+            if (User.IsInRole("Mannager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    IntakeConsentForTreatmentEntity intakeConsent = _context.IntakeConsentForTreatment
+                                                                            .Include(n => n.Client)
+                                                                            .FirstOrDefault(n => n.Client.Id == id);
+                    if (intakeConsent == null)
+                    {
+                        model = new IntakeConsentForTreatmentViewModel
+                        {
+                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            Aggre = true,
+                            Aggre1 = true,
+                            AuthorizeRelease = true,
+                            AuthorizeStaff = true,
+                            Certify = true,
+                            Certify1 = true,
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardian = DateTime.Now,
+                            DateSignaturePerson = DateTime.Now,
+                            Documents = true,
+                            Id = 0,
+                            Underestand = true,
+                            IdClient = id,
+                            Client_FK = id
+                            
+                        };
+                        
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToIntakeConsentForTreatmentViewModel(intakeConsent);
+
+                        return View(model);
+                    }
+                    
+                }
+            }
+
+            model = new IntakeConsentForTreatmentViewModel
+            {
+                Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                Aggre = true,
+                Aggre1 = true,
+                AuthorizeRelease = true,
+                AuthorizeStaff = true,
+                Certify = true,
+                Certify1 = true,
+                DateSignatureEmployee = DateTime.Now,
+                DateSignatureLegalGuardian = DateTime.Now,
+                DateSignaturePerson = DateTime.Now,
+                Documents = true,
+                Id = 0,
+                Underestand = true,
+                IdClient = id,
+                Client_FK = id
+                
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> CreateConsentForTreatment(IntakeConsentForTreatmentViewModel IntakeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                IntakeConsentForTreatmentEntity IntakeConsentEntity = await _converterHelper.ToIntakeConsentForTreatmentEntity(IntakeViewModel, false);
+                
+                if (IntakeConsentEntity.Id == 0)
+                {
+                    IntakeConsentEntity.Client = null;
+                    _context.IntakeConsentForTreatment.Add(IntakeConsentEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakeConsentEntity.Client = null;
+                    _context.IntakeConsentForTreatment.Update(IntakeConsentEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            IntakeConsentForTreatmentViewModel model;
+            model = new IntakeConsentForTreatmentViewModel
+            {
+                IdClient = IntakeViewModel.Id,
+                Client = _context.Clients.Find(IntakeViewModel.Id),
+                Aggre = true,
+                Aggre1 = true,
+                AuthorizeRelease = true,
+                AuthorizeStaff = true,
+                Certify = true,
+                Certify1 = true,
+                Client_FK = IntakeViewModel.Id,
+                DateSignatureEmployee = DateTime.Now,
+                DateSignatureLegalGuardian = DateTime.Now,
+                DateSignaturePerson = DateTime.Now,
+                Documents = true,
+                Id = IntakeViewModel.Id, 
+                Underestand = true
+            };
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", IntakeViewModel) });
+        }
+
     }
 }
