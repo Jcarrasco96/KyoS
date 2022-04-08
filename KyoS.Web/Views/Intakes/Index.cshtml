@@ -41,10 +41,10 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-4">
+                            <th class="col-md-3">
                                 @Html.DisplayNameFor(model => model.Client.Name)
                             </th>
-                            <th class="col-md-3">
+                            <th class="col-md-2">
                                 @Html.DisplayNameFor(model => model.Client.Code)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
@@ -53,31 +53,74 @@
                             <th class="col-md-2" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Client.Status)
                             </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.Client.Service)
+                            </th>
                             <th class="col-md-1">
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                       @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Client.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Client.Code)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.DateAdmision)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Client.Status)
-                                </td>
-                                <td align="right">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Intake Screening"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete Intake Screening"><i class="glyphicon glyphicon-trash"></i></button>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                               @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                {
+                                    <i class="glyphicon glyphicon-user btn-danger"></i>
+                                }
+                               @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                {
+                                    <i class="glyphicon glyphicon-user btn-primary"></i>
+                                }
+                                &nbsp;
+                                @Html.DisplayFor(modelItem => item.Client.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Client.Code)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.DateAdmision)
+                            </td>
+                            <td align="center">
+                               @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                {
+                                    <span class="label label-success">
+                                        Open
+                                    </span>
+                                }
+                               @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
+                                {
+                                    <span class="label label-default">
+                                        Close
+                                    </span>
+                                }
+                            </td>
+                            <td align="center">
+                               @if (item.Client.Service == KyoS.Common.Enums.ServiceType.PSR)
+                                {
+                                    <span class="label label-success">
+                                        PSR
+                                    </span>
+                                }
+                               @if (item.Client.Service == KyoS.Common.Enums.ServiceType.Group)
+                                {
+                                    <span class="label label-default">
+                                        Group
+                                    </span>
+                                }
+                               @if (item.Client.Service == KyoS.Common.Enums.ServiceType.Individual)
+                                {
+                                    <span class="label label-default">
+                                        Individual
+                                    </span>
+                                }
+                            </td>
+                            <td align="right">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Intake Screening"><i class="glyphicon glyphicon-pencil"></i></a>
+                                <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete Intake Screening"><i class="glyphicon glyphicon-trash"></i></button>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -107,7 +150,7 @@
                             });
 
                             $("#btnYesDelete").click(function () {
-                                var url = "@Url.Action("Delete", "LegalGuardians")";
+                                var url = "@Url.Action("Delete", "Intakes")";
                                 window.location.href = url + '/' + item_to_delete;
                             });
                         });

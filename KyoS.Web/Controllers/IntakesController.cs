@@ -309,5 +309,32 @@ namespace KyoS.Web.Controllers
             return View(ClientList);
 
         }
+
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            IntakeScreeningEntity intakeEntity = await _context.IntakeScreenings.FirstOrDefaultAsync(s => s.Id == id);
+            if (intakeEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.IntakeScreenings.Remove(intakeEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
