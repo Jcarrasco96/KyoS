@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220408180933_UpdateClient_IntakeConsentForRelease")]
+    partial class UpdateClient_IntakeConsentForRelease
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1285,6 +1287,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<bool>("AuthorizeStaff")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Client_FK")
                         .HasColumnType("int");
 
@@ -1303,17 +1308,8 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Documents")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("ForPurpose_CaseManagement")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("ForPurpose_Other")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ForPurpose_OtherExplain")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("ForPurpose_Treatment")
-                        .HasColumnType("bit");
+                    b.Property<int>("ForThePorpuseOf")
+                        .HasColumnType("int");
 
                     b.Property<bool>("History")
                         .HasColumnType("bit");
@@ -1321,14 +1317,8 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("HospitalRecord")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("InForm_Facsimile")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("InForm_VerbalInformation")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("InForm_WrittenRecords")
-                        .HasColumnType("bit");
+                    b.Property<int>("InTheFormOf")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IncidentReport")
                         .HasColumnType("bit");

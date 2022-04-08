@@ -41,10 +41,10 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-3">
+                            <th class="col-md-2">
                                 @Html.DisplayNameFor(model => model.Client.Name)
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-1">
                                 @Html.DisplayNameFor(model => model.Client.Code)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
@@ -56,6 +56,9 @@
                             <th class="col-md-2" style="text-align:center;">
                                 Consent For Treatment
                             </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Consent For Release
+                            </th>
                             <th class="col-md-1">
                             </th>
                         </tr>
@@ -65,11 +68,11 @@
                         {
                         <tr>
                             <td>
-                               @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                 {
                                     <i class="glyphicon glyphicon-user btn-danger"></i>
                                 }
-                               @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
                                 {
                                     <i class="glyphicon glyphicon-user btn-primary"></i>
                                 }
@@ -83,13 +86,13 @@
                                 @Html.DisplayFor(modelItem => item.DateAdmision)
                             </td>
                             <td align="center">
-                               @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
                                 {
                                     <span class="label label-success">
                                         Open
                                     </span>
                                 }
-                               @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
+                                @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
                                 {
                                     <span class="label label-default">
                                         Close
@@ -97,7 +100,10 @@
                                 }
                             </td>
                             <td align="center">
-                                    <a asp-action="CreateConsentForTreatment" asp-route-id="@item.Client.Id" class="btn btn-danger" title="Create Intake Consent For Treatment"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                <a asp-action="CreateConsentForTreatment" asp-route-id="@item.Client.Id" class="btn btn-danger" title="Create Intake Consent For Treatment"><i class="glyphicon glyphicon-align-justify"></i></a>
+                            </td>
+                            <td align="center">
+                                <a asp-action="CreateConsentForRelease" asp-route-id="@item.Client.Id" class="btn btn-danger" title="Create Intake Consent For Release"><i class="glyphicon glyphicon-align-justify"></i></a>
                             </td>
                             <td align="right">
                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Intake Screening"><i class="glyphicon glyphicon-pencil"></i></a>

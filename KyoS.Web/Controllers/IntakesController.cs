@@ -292,20 +292,6 @@ namespace KyoS.Web.Controllers
                                                           .Where(n => n.IntakeScreening == null)
                                                           .ToListAsync();
 
-           /* List<IntakeScreeningEntity> IntakeList = await _context.IntakeScreenings
-                                                                      .Include(f => f.Client)
-                                                                      .ToListAsync();
-            TCMDischargeEntity tcmDiscaharge = new TCMDischargeEntity();
-            for (int i = 0; i < tcmDischargeList.Count(); i++)
-            {
-                tcmDiscaharge.TcmServicePlan = tcmServicePlanList.FirstOrDefault(g => g.Id == tcmDischargeList[i].TcmServicePlan.Id);
-                if (tcmDiscaharge != null)
-                {
-                    tcmServicePlanList.Remove(tcmDiscaharge.TcmServicePlan);
-                }
-
-            }*/
-
             return View(ClientList);
 
         }
@@ -388,26 +374,7 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            model = new IntakeConsentForTreatmentViewModel
-            {
-                Client = _context.Clients.FirstOrDefault(n => n.Id == id),
-                Aggre = true,
-                Aggre1 = true,
-                AuthorizeRelease = true,
-                AuthorizeStaff = true,
-                Certify = true,
-                Certify1 = true,
-                DateSignatureEmployee = DateTime.Now,
-                DateSignatureLegalGuardian = DateTime.Now,
-                DateSignaturePerson = DateTime.Now,
-                Documents = true,
-                Id = 0,
-                Underestand = true,
-                IdClient = id,
-                Client_FK = id
-                
-            };
-            return View(model);
+            return RedirectToAction("Index", "Intakes");
         }
 
         [HttpPost]
@@ -454,27 +421,126 @@ namespace KyoS.Web.Controllers
                     }
                 }
             }
-            IntakeConsentForTreatmentViewModel model;
-            model = new IntakeConsentForTreatmentViewModel
-            {
-                IdClient = IntakeViewModel.Id,
-                Client = _context.Clients.Find(IntakeViewModel.Id),
-                Aggre = true,
-                Aggre1 = true,
-                AuthorizeRelease = true,
-                AuthorizeStaff = true,
-                Certify = true,
-                Certify1 = true,
-                Client_FK = IntakeViewModel.Id,
-                DateSignatureEmployee = DateTime.Now,
-                DateSignatureLegalGuardian = DateTime.Now,
-                DateSignaturePerson = DateTime.Now,
-                Documents = true,
-                Id = IntakeViewModel.Id, 
-                Underestand = true
-            };
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", IntakeViewModel) });
+
+            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
+            
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsentForTreatment", IntakeViewModel) });
         }
 
+
+        [Authorize(Roles = "Mannager")]
+        public IActionResult CreateConsentForRelease(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            IntakeConsentForReleaseViewModel model;
+
+            if (User.IsInRole("Mannager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    IntakeConsentForReleaseEntity intakeConsent = _context.IntakeConsentForRelease
+                                                                            .Include(n => n.Client)
+                                                                            .FirstOrDefault(n => n.Client.Id == id);
+                    if (intakeConsent == null)
+                    {
+                        model = new IntakeConsentForReleaseViewModel
+                        {
+                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            IdClient = id,
+                            Client_FK = id,
+                            Id = 0,
+                            ToRelease = false,
+                            ForPurpose_CaseManagement = false,
+                            ForPurpose_Other = false,
+                            ForPurpose_OtherExplain = "",
+                            ForPurpose_Treatment = false,
+                            InForm_Facsimile = false,
+                            InForm_VerbalInformation = false,
+                            InForm_WrittenRecords = false,
+                            Discaherge = false,
+                            SchoolRecord = false,
+                            ProgressReports = false,
+                            IncidentReport = false,
+                            PsychologycalEvaluation = false,
+                            History = false,
+                            LabWork = false,
+                            HospitalRecord = false,
+                            Other = false,
+                            Other_Explain = "",
+                            Documents = true,
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardian = DateTime.Now,
+                            DateSignaturePerson = DateTime.Now,
+
+                        };
+
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToIntakeConsentForReleaseViewModel(intakeConsent);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> CreateConsentForRelease(IntakeConsentForReleaseViewModel IntakeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                IntakeConsentForReleaseEntity IntakeConsentEntity = await _converterHelper.ToIntakeConsentForReleaseEntity(IntakeViewModel, false);
+
+                if (IntakeConsentEntity.Id == 0)
+                {
+                    IntakeConsentEntity.Client = null;
+                    _context.IntakeConsentForRelease.Add(IntakeConsentEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakeConsentEntity.Client = null;
+                    _context.IntakeConsentForRelease.Update(IntakeConsentEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            //Preparing Data
+            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
+            
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsentForRelease", IntakeViewModel) });
+        }
     }
 }

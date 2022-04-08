@@ -1133,5 +1133,74 @@ namespace KyoS.Web.Helpers
             };
             
         }
+
+        public async Task<IntakeConsentForReleaseEntity> ToIntakeConsentForReleaseEntity(IntakeConsentForReleaseViewModel model, bool isNew)
+        {
+            return new IntakeConsentForReleaseEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Discaherge = model.Discaherge,
+                ForPurpose_CaseManagement = model.ForPurpose_CaseManagement,
+                ForPurpose_Other = model.ForPurpose_Other,
+                ForPurpose_OtherExplain = model.ForPurpose_OtherExplain,
+                ForPurpose_Treatment = model.ForPurpose_Treatment,
+                InForm_Facsimile = model.InForm_Facsimile,
+                InForm_VerbalInformation = model.InForm_VerbalInformation,
+                InForm_WrittenRecords = model.InForm_WrittenRecords,
+                History = model.History,
+                HospitalRecord = model.HospitalRecord,
+                IncidentReport = model.IncidentReport,
+                
+                LabWork = model.LabWork,
+                Other = model.Other,
+                Other_Explain = model.Other_Explain,
+                ProgressReports = model.ProgressReports,
+                PsychologycalEvaluation = model.PsychologycalEvaluation,
+                SchoolRecord = model.SchoolRecord,
+                ToRelease = model.ToRelease
+            };
+        }
+
+        public IntakeConsentForReleaseViewModel ToIntakeConsentForReleaseViewModel(IntakeConsentForReleaseEntity model)
+        {
+            return new IntakeConsentForReleaseViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                ToRelease = model.ToRelease,
+                SchoolRecord = model.SchoolRecord,
+                PsychologycalEvaluation = model.PsychologycalEvaluation,
+                ProgressReports = model.ProgressReports,
+                Other = model.Other,
+                Other_Explain = model.Other_Explain,
+                Discaherge = model.Discaherge,
+                LabWork = model.LabWork,
+                History = model.History,
+                HospitalRecord = model.HospitalRecord,
+                IncidentReport = model.IncidentReport,
+                ForPurpose_CaseManagement = model.ForPurpose_CaseManagement,
+                ForPurpose_Other = model.ForPurpose_Other,
+                ForPurpose_OtherExplain = model.ForPurpose_OtherExplain,
+                ForPurpose_Treatment = model.ForPurpose_Treatment,
+                InForm_Facsimile = model.InForm_Facsimile,
+                InForm_VerbalInformation = model.InForm_VerbalInformation,
+                InForm_WrittenRecords = model.InForm_WrittenRecords
+
+
+            };
+
+        }
     }
 }
