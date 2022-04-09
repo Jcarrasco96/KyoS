@@ -62,8 +62,14 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Consumer Rights
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 Acknowledgement HIPPA
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Access To Services
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Orientation CheckList
                             </th>
                             <th class="col-md-1">
                             </th>
@@ -115,7 +121,13 @@
                                 <a asp-action="CreateConsumerRights" asp-route-id="@item.Client.Id" class="btn btn-danger" title="Create Intake Consumer Rights"><i class="glyphicon glyphicon-align-justify"></i></a>
                             </td>
                             <td align="center">
-                                <a asp-action="CreateAcknowledgementHippa" asp-route-id="@item.Client.Id" class="btn btn-danger" title="Create Intake Consumer Rights"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                <a asp-action="CreateAcknowledgementHippa" asp-route-id="@item.Client.Id" class="btn btn-danger" title="Create Intake Acknowledgement"><i class="glyphicon glyphicon-align-justify"></i></a>
+                            </td>
+                            <td align="center">
+                                <a asp-action="CreateAccessToServices" asp-route-id="@item.Client.Id" class="btn btn-danger" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                            </td>
+                            <td align="center">
+                                <a asp-action="CreateOrientationCheckList" asp-route-id="@item.Client.Id" class="btn btn-danger" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
                             </td>
                             <td align="right">
                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Intake Screening"><i class="glyphicon glyphicon-pencil"></i></a>

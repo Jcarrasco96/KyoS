@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220409161333_UpdateClient_IntakeOrientationCheckList")]
+    partial class UpdateClient_IntakeOrientationCheckList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1513,23 +1515,23 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<bool>("Access")
-                        .HasColumnType("bit");
+                    b.Property<string>("Access")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("AgencyExpectation")
-                        .HasColumnType("bit");
+                    b.Property<string>("AgencyExpectation")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("AgencyPolice")
-                        .HasColumnType("bit");
+                    b.Property<string>("AgencyPolice")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Client_FK")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Code")
-                        .HasColumnType("bit");
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Confidentiality")
-                        .HasColumnType("bit");
+                    b.Property<string>("Confidentiality")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateSignatureEmployee")
                         .HasColumnType("datetime2");
@@ -1540,62 +1542,62 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("DateSignaturePerson")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("Discharge")
-                        .HasColumnType("bit");
+                    b.Property<string>("Discharge")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Documents")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("Education")
-                        .HasColumnType("bit");
+                    b.Property<string>("Education")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Explanation")
-                        .HasColumnType("bit");
+                    b.Property<string>("Explanation")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Fire")
-                        .HasColumnType("bit");
+                    b.Property<string>("Fire")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Identification")
-                        .HasColumnType("bit");
+                    b.Property<string>("Identification")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IndividualPlan")
-                        .HasColumnType("bit");
+                    b.Property<string>("IndividualPlan")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Insent")
-                        .HasColumnType("bit");
+                    b.Property<string>("Insent")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Methods")
-                        .HasColumnType("bit");
+                    b.Property<string>("Methods")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("PoliceGrievancce")
-                        .HasColumnType("bit");
+                    b.Property<string>("PoliceGrievancce")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("PoliceIllicit")
-                        .HasColumnType("bit");
+                    b.Property<string>("PoliceIllicit")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("PoliceTobacco")
-                        .HasColumnType("bit");
+                    b.Property<string>("PoliceTobacco")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("PoliceWeapons")
-                        .HasColumnType("bit");
+                    b.Property<string>("PoliceWeapons")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Program")
-                        .HasColumnType("bit");
+                    b.Property<string>("Program")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Purpose")
-                        .HasColumnType("bit");
+                    b.Property<string>("Purpose")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Rights")
-                        .HasColumnType("bit");
+                    b.Property<string>("Rights")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Services")
-                        .HasColumnType("bit");
+                    b.Property<string>("Services")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("TheAbove")
-                        .HasColumnType("bit");
+                    b.Property<string>("TheAbove")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("TourFacility")
-                        .HasColumnType("bit");
+                    b.Property<string>("TourFacility")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

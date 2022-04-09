@@ -113,6 +113,10 @@ namespace KyoS.Web.Data.Entities
 
         public IntakeAcknowledgementHippaEntity IntakeAcknowledgementHipa { get; set; }
 
+        public IntakeAccessToServicesEntity IntakeAccessToServices { get; set; }
+
+        public IntakeOrientationChecklistEntity IntakeOrientationChecklist { get; set; }
+
         public string MissingDoc 
         {
             get

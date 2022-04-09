@@ -1268,5 +1268,114 @@ namespace KyoS.Web.Helpers
             };
 
         }
+        public async Task<IntakeAccessToServicesEntity> ToIntakeAccessToServicesEntity(IntakeAccessToServicesViewModel model, bool isNew)
+        {
+            return new IntakeAccessToServicesEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents
+
+            };
+        }
+
+        public IntakeAccessToServicesViewModel ToIntakeAccessToServicesViewModel(IntakeAccessToServicesEntity model)
+        {
+            return new IntakeAccessToServicesViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents
+
+            };
+
+        }
+
+        public async Task<IntakeOrientationChecklistEntity> ToIntakeOrientationChecklistEntity(IntakeOrientationCheckListViewModel model, bool isNew)
+        {
+            return new IntakeOrientationChecklistEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Access = model.Access,
+                AgencyExpectation = model.AgencyExpectation,
+                AgencyPolice = model.AgencyPolice,
+                Code = model.Code,
+                Confidentiality = model.Confidentiality,
+                Discharge = model.Discharge,
+                Education = model.Education,
+                Explanation = model.Explanation,
+                Fire = model.Fire,
+                Identification = model.Identification,
+                IndividualPlan = model.IndividualPlan,
+                Insent = model.Insent,
+                Methods = model.Methods,
+                PoliceGrievancce = model.PoliceGrievancce,
+                PoliceIllicit = model.PoliceIllicit,
+                PoliceTobacco = model.PoliceTobacco,
+                PoliceWeapons = model.PoliceWeapons,
+                Program = model.Program,
+                Purpose = model.Purpose,
+                Rights = model.Rights,
+                Services = model.Services,
+                TheAbove = model.TheAbove,
+                TourFacility = model.TourFacility
+                
+            };
+        }
+
+        public IntakeOrientationCheckListViewModel ToIntakeOrientationChecklistViewModel(IntakeOrientationChecklistEntity model)
+        {
+            return new IntakeOrientationCheckListViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Access = model.Access,
+                AgencyExpectation = model.AgencyExpectation,
+                AgencyPolice = model.AgencyPolice,
+                Code = model.Code,
+                Confidentiality = model.Confidentiality,
+                Discharge = model.Discharge,
+                Education = model.Education,
+                Explanation = model.Explanation,
+                Fire = model.Fire,
+                Identification = model.Identification,
+                IndividualPlan = model.IndividualPlan,
+                Insent = model.Insent,
+                Methods = model.Methods,
+                PoliceGrievancce = model.PoliceGrievancce,
+                PoliceIllicit = model.PoliceIllicit,
+                PoliceTobacco = model.PoliceTobacco,
+                PoliceWeapons = model.PoliceWeapons,
+                Program = model.Program,
+                Purpose = model.Purpose,
+                Rights = model.Rights,
+                Services = model.Services,
+                TheAbove = model.TheAbove,
+                TourFacility = model.TourFacility
+
+            };
+
+        }
     }
 }
