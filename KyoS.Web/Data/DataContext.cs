@@ -64,6 +64,7 @@ namespace KyoS.Web.Data
         public DbSet<IntakeAcknowledgementHippaEntity> IntakeAcknowledgement { get; set; }
         public DbSet<IntakeAccessToServicesEntity> IntakeAccessToServices { get; set; }
         public DbSet<IntakeOrientationChecklistEntity> IntakeOrientationCheckList { get; set; }
+        public DbSet<IntakeTransportationEntity> IntakeTransportation { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -211,6 +212,12 @@ namespace KyoS.Web.Data
                      .WithOne(s => s.Client)
                      .OnDelete(DeleteBehavior.Cascade)
                      .HasForeignKey<IntakeOrientationChecklistEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                     .HasOne(c => c.IntakeTransportation)
+                     .WithOne(s => s.Client)
+                     .OnDelete(DeleteBehavior.Cascade)
+                     .HasForeignKey<IntakeTransportationEntity>(s => s.Client_FK);
         }
     }
 }

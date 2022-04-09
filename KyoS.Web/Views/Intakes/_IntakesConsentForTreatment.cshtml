@@ -14,7 +14,7 @@
     <div class="form-group col-md-8">
 
         <pre>
-        <input type="checkbox" asp-for="AuthorizeStaff" class="form-check-input" id="AuthorizeStaff"> I, Authorize the staff of FLORIDA SOCIAL HEALTH SOLUTIONS. (FSHS) to provide services. 
+        <input type="checkbox" asp-for="AuthorizeStaff" class="form-check-input" id="AuthorizeStaff"> I, Authorize the staff of <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  to provide services. 
         </pre>
     </div>
 </div>
@@ -33,8 +33,8 @@
     <div class="form-group col-md-8">
 
         <pre>
-        <input type="checkbox" asp-for="Underestand" class="form-check-input" id="Underestand"> I, Understand that, except for the above case, all information that you furnish to FLORIDA SOCIAL HEALTH SOLUTIONS.
-            (FSHS) will be kept in strictest confidence, as required by Florida law, and will not be shared with any agency or person
+        <input type="checkbox" asp-for="Underestand" class="form-check-input" id="Underestand"> I, Understand that, except for the above case, all information that you furnish to 
+            <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  will be kept in strictest confidence, as required by Florida law, and will not be shared with any agency or person
             outside the facility, unless so requested by you.
         </pre>
     </div>
@@ -62,7 +62,7 @@
 <div>
     <div class="form-group col-md-8">
         <pre>
-        <input type="checkbox" asp-for="Aggre1" class="form-check-input" id="Aggre1"> I, Agree that FLORIDA SOCIAL HEALTH SOLUTIONS. (FSHS) staff may contact me after the completion of
+        <input type="checkbox" asp-for="Aggre1" class="form-check-input" id="Aggre1"> I, Agree that <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  staff may contact me after the completion of
             treatment/service in order to evaluate its effectiveness.
         <input type="checkbox" asp-for="Certify" class="form-check-input" id="Certify"> Certify that I will be responsible for all charges for treatment/services, commensurate with my ability to pay. 
         <input type="checkbox" asp-for="Certify1" class="form-check-input" id="Certify1"> Certify that I have read and fully understand the above.

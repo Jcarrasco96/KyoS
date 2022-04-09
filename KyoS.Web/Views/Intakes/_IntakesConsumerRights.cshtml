@@ -30,13 +30,13 @@
                 services. (Exception: the law requires all treatment facilities to notify the Health Department when communicable diseases
                 are uncovered).
                 YOU HAVE A RIGHT TO:
-                1. FLORIDA SOCIAL HEALTH SOLUTIONS. (FSHS) determine the amount of information to be released either to or
+                1. <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  determine the amount of information to be released either to or
                     from anyone outside by signing a permission form.
-                2. FLORIDA SOCIAL HEALTH SOLUTIONS. (FSHS) determine the length of time that Information may be released
+                2. <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  determine the length of time that Information may be released
                     and cancel your permission at any time. (However, Information may be released without your permission in a medical
                     emergency to save lives, to prevent injury to yourself or others, or when court ordered).
                 3. See your record and/or obtain a copy of it after your written request has been approved by the Executive Director of
-                FLORIDA SOCIAL HEALTH SOLUTIONS. (FSHS) or designee.
+                    <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  or designee.
 
             IV. Right to Humane Mental and Physical Environment
                 YOU HAVE A RIGHT TO:
@@ -76,9 +76,9 @@
                         proceed to Step 2. 
                 STEP 2 If therapist cannot resolve the problem satisfactorily, you may seek out the clinical director and present your 
                         complaint verbally or in writing. An answer from the supervisor will be presented to you within 5 working days. 
-                STEP 3: If you are not satisfied with the decision of the supervisor, you may send the grievance, in writing, to FLORIDA
-                        SOCIAL HEALTH SOLUTIONS Program Administrator. 
-    <strong>
+                STEP 3: If you are not satisfied with the decision of the supervisor, you may send the grievance, in writing, to 
+                        <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  Program Administrator. 
+                        <strong>
                         Phone number: @Html.DisplayFor(modelItem => Model.Client.Clinic.Phone)   Fax Number: @Html.DisplayFor(modelItem => Model.Client.Clinic.FaxNo)
                         Address: @Html.DisplayFor(modelItem => Model.Client.Clinic.Address) @Html.DisplayFor(modelItem => Model.Client.Clinic.City) @Html.DisplayFor(modelItem => Model.Client.Clinic.State) @Html.DisplayFor(modelItem => Model.Client.Clinic.ZipCode) 
                         </strong>
@@ -86,7 +86,7 @@
             If necessary, the Executive Director will make a decision and will respond to you within thirty (30) days, sending a copy of the 
             response to the supervisor of your targeted case manager. The decision of the Executive Director will be final. 
 
-            It is the sincere desire of the staff of FLORIDA SOCIAL HEALTH SOLUTIONS. (FSHS) to address your grievances with an 
+            It is the sincere desire of the staff of <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  to address your grievances with an 
             attitude of open mindedness and without prejudice. Every effort will be made to resolve your grievance at the lowest 
             possible step in the procedure so as not to prolong any difficulty or problem. 
 

@@ -117,6 +117,8 @@ namespace KyoS.Web.Data.Entities
 
         public IntakeOrientationChecklistEntity IntakeOrientationChecklist { get; set; }
 
+        public IntakeTransportationEntity IntakeTransportation { get; set; }
+
         public string MissingDoc 
         {
             get

@@ -1,0 +1,55 @@
+﻿@model KyoS.Web.Models.IntakeTransportationViewModel
+
+<br />
+<div class="container-fluid col-md-9">
+    <pre>
+            It is the policy of <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong> . that all clients transported by 
+            <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong> must wear seatbelts at all times. If you fail to follow this policy, you agree 
+            that you do so at your own risk. 
+            If an injury occurs as a result of failure to follow this policy, you agree that you will be fully responsible for any 
+            injuries sustained as a result of your failure to wear a seatbelt and you release <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong> 
+            from any liability whatever, resulting from the injury. 
+                                                            & 
+            It is the policy of <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong> . from time to time, to distribute snacks and 
+            prepared foods, including breakfast and lunch, to clients attending the program. I hereby release <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong> .
+            from any liability, in the rare event that a possible ill effect may occur, as 
+            the result of our organization’s food distribution. This release of liability also applies to lunches that I may choose 
+            to take home to enjoy following the program. 
+            We, at <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  strive to provide the best quality of services to our 
+            clients, and, as such, have implemented strict controls to closely monitor our food service process in order to 
+            prevent ill effects from occurring. 
+            I have read and understand all of the conditions stated above. Furthermore, I assert that I am the legal guardian of 
+            the above named client and that as such, I have the right to sign on behalf of the client. 
+        </pre>
+</div>
+<div class="container-fluid">
+    <div class="form-group col-md-4">
+        <label asp-for="DateSignatureEmployee" class="control-label">Person Served Signature </label>&nbsp;*
+        <input asp-for="DateSignatureEmployee" class="form-control">
+        <span asp-validation-for="DateSignatureEmployee" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="DateSignatureLegalGuardian" class="control-label">Parent, Legal Guardian or Authorized Representative</label>&nbsp;*
+        <input asp-for="DateSignatureLegalGuardian" class="form-control" id="DateSignatureClient">
+        <span asp-validation-for="DateSignatureLegalGuardian" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="DateSignatureEmployee" class="control-label">Employee Signature</label>&nbsp;*
+        <input asp-for="DateSignatureEmployee" class="form-control" id="DateSignatureWitness">
+        <span asp-validation-for="DateSignatureEmployee" class="text-danger"></span>
+    </div>
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents">
+        <label asp-for="Documents" class="forgot">
+            Documents were verbally translated to me in my native language.
+            FLORIDA SOCIAL HEALTH SOLUTIONS. (FSHS)
+        </label>
+    </div>
+</div>
+<br />
+
+
+
+

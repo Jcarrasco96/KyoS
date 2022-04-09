@@ -74,5 +74,7 @@ namespace KyoS.Web.Helpers
         IntakeAccessToServicesViewModel ToIntakeAccessToServicesViewModel(IntakeAccessToServicesEntity model);
         Task<IntakeOrientationChecklistEntity> ToIntakeOrientationChecklistEntity(IntakeOrientationCheckListViewModel model, bool isNew);
         IntakeOrientationCheckListViewModel ToIntakeOrientationChecklistViewModel(IntakeOrientationChecklistEntity model);
+        Task<IntakeTransportationEntity> ToIntakeTransportationEntity(IntakeTransportationViewModel model, bool isNew);
+        IntakeTransportationViewModel ToIntakeTransportationViewModel(IntakeTransportationEntity model);
     }
 }

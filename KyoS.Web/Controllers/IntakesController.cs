@@ -289,7 +289,7 @@ namespace KyoS.Web.Controllers
 
             List<ClientEntity> ClientList = await _context.Clients
                                                           .Include(n => n.IntakeScreening)
-                                                          .Where(n => n.IntakeScreening == null)
+                                                          .Where(n => n.IntakeScreening == null && n.Clinic.Id == user_logged.Clinic.Id)
                                                           .ToListAsync();
 
             return View(ClientList);
@@ -964,6 +964,103 @@ namespace KyoS.Web.Controllers
             IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateOrientationCheckList", IntakeViewModel) });
+        }
+
+        [Authorize(Roles = "Mannager")]
+        public IActionResult CreateTransportation(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            IntakeTransportationViewModel model;
+
+            if (User.IsInRole("Mannager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    IntakeTransportationEntity intakeTransportation = _context.IntakeTransportation
+                                                                            .Include(n => n.Client)
+                                                                            .FirstOrDefault(n => n.Client.Id == id);
+                    if (intakeTransportation == null)
+                    {
+                        model = new IntakeTransportationViewModel
+                        {
+                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            IdClient = id,
+                            Client_FK = id,
+                            Id = 0,
+                            Documents = true,
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardian = DateTime.Now,
+                            DateSignaturePerson = DateTime.Now,
+
+                        };
+
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToIntakeTransportationViewModel(intakeTransportation);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> CreateTransportation(IntakeTransportationViewModel IntakeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                IntakeTransportationEntity IntakeTransportationEntity = await _converterHelper.ToIntakeTransportationEntity(IntakeViewModel, false);
+
+                if (IntakeTransportationEntity.Id == 0)
+                {
+                    IntakeTransportationEntity.Client = null;
+                    _context.IntakeTransportation.Add(IntakeTransportationEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakeTransportationEntity.Client = null;
+                    _context.IntakeTransportation.Update(IntakeTransportationEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            //Preparing Data
+            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTransportation", IntakeViewModel) });
         }
     }
 }
