@@ -47,10 +47,10 @@
                             <th class="col-md-1">
                                 @Html.DisplayNameFor(model => model.Client.Code)
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.DateAdmision)
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Client.Status)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
@@ -58,6 +58,9 @@
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Consent For Release
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Consumer Rights
                             </th>
                             <th class="col-md-1">
                             </th>
@@ -104,6 +107,9 @@
                             </td>
                             <td align="center">
                                 <a asp-action="CreateConsentForRelease" asp-route-id="@item.Client.Id" class="btn btn-danger" title="Create Intake Consent For Release"><i class="glyphicon glyphicon-align-justify"></i></a>
+                            </td>
+                            <td align="center">
+                                <a asp-action="CreateConsumerRights" asp-route-id="@item.Client.Id" class="btn btn-danger" title="Create Intake Consumer Rights"><i class="glyphicon glyphicon-align-justify"></i></a>
                             </td>
                             <td align="right">
                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Intake Screening"><i class="glyphicon glyphicon-pencil"></i></a>

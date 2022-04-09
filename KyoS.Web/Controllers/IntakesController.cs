@@ -339,12 +339,15 @@ namespace KyoS.Web.Controllers
                 {
                     IntakeConsentForTreatmentEntity intakeConsent = _context.IntakeConsentForTreatment
                                                                             .Include(n => n.Client)
+                                                                            .ThenInclude(n => n.LegalGuardian)
                                                                             .FirstOrDefault(n => n.Client.Id == id);
+                    if (intakeConsent.Client.LegalGuardian == null)
+                        intakeConsent.Client.LegalGuardian = new LegalGuardianEntity();
                     if (intakeConsent == null)
                     {
                         model = new IntakeConsentForTreatmentViewModel
                         {
-                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            Client = _context.Clients.Include(d => d.LegalGuardian).FirstOrDefault(n => n.Id == id),
                             Aggre = true,
                             Aggre1 = true,
                             AuthorizeRelease = true,
@@ -541,6 +544,105 @@ namespace KyoS.Web.Controllers
             IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
             
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsentForRelease", IntakeViewModel) });
+        }
+
+
+        [Authorize(Roles = "Mannager")]
+        public IActionResult CreateConsumerRights(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            IntakeConsumerRightsViewModel model;
+
+            if (User.IsInRole("Mannager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    IntakeConsumerRightsEntity intakeConsent = _context.IntakeConsumerRights
+                                                                            .Include(n => n.Client)
+                                                                            .FirstOrDefault(n => n.Client.Id == id);
+                    if (intakeConsent == null)
+                    {
+                        model = new IntakeConsumerRightsViewModel
+                        {
+                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            IdClient = id,
+                            Client_FK = id,
+                            Id = 0,
+                            ServedOf = user_logged.FullName,
+                            Documents = true,
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardian = DateTime.Now,
+                            DateSignaturePerson = DateTime.Now,
+                            
+                        };
+
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToIntakeConsumerRightsViewModel(intakeConsent);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> CreateConsumerRights(IntakeConsumerRightsViewModel IntakeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                IntakeConsumerRightsEntity IntakeConsumerEntity = await _converterHelper.ToIntakeConsumerRightsEntity(IntakeViewModel, false);
+
+                if (IntakeConsumerEntity.Id == 0)
+                {
+                    IntakeConsumerEntity.Client = null;
+                    _context.IntakeConsumerRights.Add(IntakeConsumerEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakeConsumerEntity.Client = null;
+                    _context.IntakeConsumerRights.Update(IntakeConsumerEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            //Preparing Data
+            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsumerRights", IntakeViewModel) });
         }
     }
 }

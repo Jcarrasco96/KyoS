@@ -108,7 +108,9 @@ namespace KyoS.Web.Data.Entities
         public IntakeConsentForTreatmentEntity IntakeConsentForTreatment { get; set; }
 
         public IntakeConsentForReleaseEntity IntakeConsentForRelease { get; set; }
-        
+
+        public IntakeConsumerRightsEntity IntakeConsumerRights { get; set; }
+
         public string MissingDoc 
         {
             get

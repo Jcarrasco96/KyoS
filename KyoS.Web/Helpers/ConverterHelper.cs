@@ -1202,5 +1202,39 @@ namespace KyoS.Web.Helpers
             };
 
         }
+
+        public async Task<IntakeConsumerRightsEntity> ToIntakeConsumerRightsEntity(IntakeConsumerRightsViewModel model, bool isNew)
+        {
+            return new IntakeConsumerRightsEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                ServedOf = model.ServedOf,
+                Documents = model.Documents
+                
+            };
+        }
+
+        public IntakeConsumerRightsViewModel ToIntakeConsumerRightsViewModel(IntakeConsumerRightsEntity model)
+        {
+            return new IntakeConsumerRightsViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                ServedOf = model.ServedOf,
+                Documents = model.Documents
+                
+            };
+
+        }
     }
 }
