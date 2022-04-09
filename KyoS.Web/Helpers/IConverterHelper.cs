@@ -68,5 +68,7 @@ namespace KyoS.Web.Helpers
         IntakeConsentForReleaseViewModel ToIntakeConsentForReleaseViewModel(IntakeConsentForReleaseEntity model);
         Task<IntakeConsumerRightsEntity> ToIntakeConsumerRightsEntity(IntakeConsumerRightsViewModel model, bool isNew);
         IntakeConsumerRightsViewModel ToIntakeConsumerRightsViewModel(IntakeConsumerRightsEntity model);
+        Task<IntakeAcknowledgementHippaEntity> ToIntakeAcknoewledgementHippaEntity(IntakeAcknoewledgementHippaViewModel model, bool isNew);
+        IntakeAcknoewledgementHippaViewModel ToIntakeAcknoewledgementHippaViewModel(IntakeAcknowledgementHippaEntity model);
     }
 }

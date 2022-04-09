@@ -111,6 +111,8 @@ namespace KyoS.Web.Data.Entities
 
         public IntakeConsumerRightsEntity IntakeConsumerRights { get; set; }
 
+        public IntakeAcknowledgementHippaEntity IntakeAcknowledgementHipa { get; set; }
+
         public string MissingDoc 
         {
             get

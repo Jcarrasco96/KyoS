@@ -341,8 +341,7 @@ namespace KyoS.Web.Controllers
                                                                             .Include(n => n.Client)
                                                                             .ThenInclude(n => n.LegalGuardian)
                                                                             .FirstOrDefault(n => n.Client.Id == id);
-                    if (intakeConsent.Client.LegalGuardian == null)
-                        intakeConsent.Client.LegalGuardian = new LegalGuardianEntity();
+                    
                     if (intakeConsent == null)
                     {
                         model = new IntakeConsentForTreatmentViewModel
@@ -364,11 +363,14 @@ namespace KyoS.Web.Controllers
                             Client_FK = id
                             
                         };
-                        
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
                         return View(model);
                     }
                     else
                     {
+                        if (intakeConsent.Client.LegalGuardian == null)
+                            intakeConsent.Client.LegalGuardian = new LegalGuardianEntity();
                         model = _converterHelper.ToIntakeConsentForTreatmentViewModel(intakeConsent);
 
                         return View(model);
@@ -644,5 +646,109 @@ namespace KyoS.Web.Controllers
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsumerRights", IntakeViewModel) });
         }
+
+        [Authorize(Roles = "Mannager")]
+        public IActionResult CreateAcknowledgementHippa(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            IntakeAcknoewledgementHippaViewModel model;
+
+            if (User.IsInRole("Mannager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    IntakeAcknowledgementHippaEntity intakeAck = _context.IntakeAcknowledgement
+                                                                            .Include(n => n.Client)
+                                                                            .ThenInclude(n => n.LegalGuardian)
+                                                                            .FirstOrDefault(n => n.Client.Id == id);
+                    
+                    if (intakeAck == null)
+                    {
+                       
+                        model = new IntakeAcknoewledgementHippaViewModel
+                        {
+                            Client = _context.Clients.Include(d => d.LegalGuardian).FirstOrDefault(n => n.Id == id),
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardian = DateTime.Now,
+                            DateSignaturePerson = DateTime.Now,
+                            Documents = true,
+                            Id = 0,
+                            IdClient = id,
+                            Client_FK = id
+
+                        };
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
+                        return View(model);
+                    }
+                    else
+                    {
+                        if (intakeAck.Client.LegalGuardian == null)
+                            intakeAck.Client.LegalGuardian = new LegalGuardianEntity();
+                        model = _converterHelper.ToIntakeAcknoewledgementHippaViewModel(intakeAck);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> CreateAcknowledgementHippa(IntakeAcknoewledgementHippaViewModel IntakeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                IntakeAcknowledgementHippaEntity IntakeAckNowEntity = await _converterHelper.ToIntakeAcknoewledgementHippaEntity(IntakeViewModel, false);
+
+                if (IntakeAckNowEntity.Id == 0)
+                {
+                    IntakeAckNowEntity.Client = null;
+                    _context.IntakeAcknowledgement.Add(IntakeAckNowEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakeAckNowEntity.Client = null;
+                    _context.IntakeAcknowledgement.Update(IntakeAckNowEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateAcknowledgementHippa", IntakeViewModel) });
+        }
+
     }
 }

@@ -1236,5 +1236,37 @@ namespace KyoS.Web.Helpers
             };
 
         }
+
+        public async Task<IntakeAcknowledgementHippaEntity> ToIntakeAcknoewledgementHippaEntity(IntakeAcknoewledgementHippaViewModel model, bool isNew)
+        {
+            return new IntakeAcknowledgementHippaEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents
+                
+            };
+        }
+
+        public IntakeAcknoewledgementHippaViewModel ToIntakeAcknoewledgementHippaViewModel(IntakeAcknowledgementHippaEntity model)
+        {
+            return new IntakeAcknoewledgementHippaViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents
+                
+            };
+
+        }
     }
 }
