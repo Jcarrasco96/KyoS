@@ -61,6 +61,10 @@ namespace KyoS.Web.Data
         public DbSet<IntakeConsentForTreatmentEntity> IntakeConsentForTreatment { get; set; }
         public DbSet<IntakeConsentForReleaseEntity> IntakeConsentForRelease { get; set; }
         public DbSet<IntakeConsumerRightsEntity> IntakeConsumerRights { get; set; }
+        public DbSet<IntakeAcknowledgementHippaEntity> IntakeAcknowledgement { get; set; }
+        public DbSet<IntakeAccessToServicesEntity> IntakeAccessToServices { get; set; }
+        public DbSet<IntakeOrientationChecklistEntity> IntakeOrientationCheckList { get; set; }
+        public DbSet<IntakeTransportationEntity> IntakeTransportation { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -190,6 +194,30 @@ namespace KyoS.Web.Data
                        .WithOne(s => s.Client)
                        .OnDelete(DeleteBehavior.Cascade)
                        .HasForeignKey<IntakeConsumerRightsEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                      .HasOne(c => c.IntakeAcknowledgementHipa)
+                      .WithOne(s => s.Client)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasForeignKey<IntakeAcknowledgementHippaEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                     .HasOne(c => c.IntakeAccessToServices)
+                     .WithOne(s => s.Client)
+                     .OnDelete(DeleteBehavior.Cascade)
+                     .HasForeignKey<IntakeAccessToServicesEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                     .HasOne(c => c.IntakeOrientationChecklist)
+                     .WithOne(s => s.Client)
+                     .OnDelete(DeleteBehavior.Cascade)
+                     .HasForeignKey<IntakeOrientationChecklistEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                     .HasOne(c => c.IntakeTransportation)
+                     .WithOne(s => s.Client)
+                     .OnDelete(DeleteBehavior.Cascade)
+                     .HasForeignKey<IntakeTransportationEntity>(s => s.Client_FK);
         }
     }
 }

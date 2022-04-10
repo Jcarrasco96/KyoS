@@ -292,7 +292,7 @@ namespace KyoS.Web.Controllers
 
             List<ClientEntity> ClientList = await _context.Clients
                                                           .Include(n => n.IntakeScreening)
-                                                          .Where(n => n.IntakeScreening == null)
+                                                          .Where(n => n.IntakeScreening == null && n.Clinic.Id == user_logged.Clinic.Id)
                                                           .ToListAsync();
 
             return View(ClientList);
@@ -344,8 +344,7 @@ namespace KyoS.Web.Controllers
                                                                             .Include(n => n.Client)
                                                                             .ThenInclude(n => n.LegalGuardian)
                                                                             .FirstOrDefault(n => n.Client.Id == id);
-                    if (intakeConsent.Client.LegalGuardian == null)
-                        intakeConsent.Client.LegalGuardian = new LegalGuardianEntity();
+                    
                     if (intakeConsent == null)
                     {
                         model = new IntakeConsentForTreatmentViewModel
@@ -367,11 +366,14 @@ namespace KyoS.Web.Controllers
                             Client_FK = id
                             
                         };
-                        
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
                         return View(model);
                     }
                     else
                     {
+                        if (intakeConsent.Client.LegalGuardian == null)
+                            intakeConsent.Client.LegalGuardian = new LegalGuardianEntity();
                         model = _converterHelper.ToIntakeConsentForTreatmentViewModel(intakeConsent);
 
                         return View(model);

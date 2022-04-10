@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220409152738_UpdateClient_IntakeAccessToServices")]
+    partial class UpdateClient_IntakeAccessToServices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1506,105 +1508,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("IntakeConsumerRights");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeOrientationChecklistEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<bool>("Access")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("AgencyExpectation")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("AgencyPolice")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Client_FK")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Code")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Confidentiality")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("DateSignatureEmployee")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignatureLegalGuardian")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignaturePerson")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Discharge")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Documents")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Education")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Explanation")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Fire")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Identification")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IndividualPlan")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Insent")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Methods")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("PoliceGrievancce")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("PoliceIllicit")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("PoliceTobacco")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("PoliceWeapons")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Program")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Purpose")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Rights")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Services")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("TheAbove")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("TourFacility")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Client_FK")
-                        .IsUnique();
-
-                    b.ToTable("IntakeOrientationCheckList");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeScreeningEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -1657,36 +1560,6 @@ namespace KyoS.Web.Migrations
                         .IsUnique();
 
                     b.ToTable("IntakeScreenings");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeTransportationEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("Client_FK")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateSignatureEmployee")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignatureLegalGuardian")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignaturePerson")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Documents")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Client_FK")
-                        .IsUnique();
-
-                    b.ToTable("IntakeTransportation");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.LegalGuardianEntity", b =>
@@ -3288,33 +3161,11 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeOrientationChecklistEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
-                        .WithOne("IntakeOrientationChecklist")
-                        .HasForeignKey("KyoS.Web.Data.Entities.IntakeOrientationChecklistEntity", "Client_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeScreeningEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
                         .WithOne("IntakeScreening")
                         .HasForeignKey("KyoS.Web.Data.Entities.IntakeScreeningEntity", "Client_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeTransportationEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
-                        .WithOne("IntakeTransportation")
-                        .HasForeignKey("KyoS.Web.Data.Entities.IntakeTransportationEntity", "Client_FK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -3674,11 +3525,7 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("IntakeConsumerRights");
 
-                    b.Navigation("IntakeOrientationChecklist");
-
                     b.Navigation("IntakeScreening");
-
-                    b.Navigation("IntakeTransportation");
 
                     b.Navigation("MTPs");
 

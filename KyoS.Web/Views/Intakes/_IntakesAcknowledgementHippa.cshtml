@@ -1,0 +1,61 @@
+﻿@model KyoS.Web.Models.IntakeAcknoewledgementHippaViewModel
+
+<div>
+    <div class="form-group col-md-8">
+        <pre>
+        <strong>_@Html.DisplayFor(modelItem => Model.Client.Name)_</strong> an applicant for the services of Mental Health and if applicable; <br />
+        <strong>_@Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Name)_</strong> representative/guardian of the above named applicant:
+        </pre>
+
+    </div>
+</div>
+
+<div>
+    <div class="form-group col-md-8">
+        <pre>
+            Hereby acknowledge receipt of <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  Notice of Privacy 
+            Practices. This Notice of Privacy Practices provides detailed information about how 
+            <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  may use and disclose my protected health and confidential 
+            information. The Notice contains a Client’s Rights section describing your rights under the law. You 
+            have the right to review the Notice before signing this form. You have the right to request that we 
+            restrict how protected health information about you is used or disclosed for treatment, payment, or 
+            health care operations.
+ 
+            I understand that <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  reserved the right to change the 
+            Privacy Practices that are described in the Notice. I also understand that a copy of any revised notice 
+            with be made available to me upon request. 
+
+        <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  provides this form to comply with the Heath 
+            Insurance Portability and Accountability Act (HIPPA). 
+        </pre>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="form-group col-md-4">
+        <label asp-for="DateSignatureEmployee" class="control-label">Person Served Signature </label>&nbsp;*
+        <input asp-for="DateSignatureEmployee" class="form-control">
+        <span asp-validation-for="DateSignatureEmployee" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="DateSignatureLegalGuardian" class="control-label">Parent, Legal Guardian or Authorized Representative</label>&nbsp;*
+        <input asp-for="DateSignatureLegalGuardian" class="form-control" id="DateSignatureClient">
+        <span asp-validation-for="DateSignatureLegalGuardian" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="DateSignatureEmployee" class="control-label">Employee Signature</label>&nbsp;*
+        <input asp-for="DateSignatureEmployee" class="form-control" id="DateSignatureWitness">
+        <span asp-validation-for="DateSignatureEmployee" class="text-danger"></span>
+    </div>
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents">
+        <label asp-for="Documents" class="forgot">
+            Documents were verbally translated to me in my native language.
+            FLORIDA SOCIAL HEALTH SOLUTIONS. (FSHS)
+        </label>
+    </div>
+</div>
+<br />

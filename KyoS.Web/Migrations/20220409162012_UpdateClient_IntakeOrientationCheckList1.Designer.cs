@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220409162012_UpdateClient_IntakeOrientationCheckList1")]
+    partial class UpdateClient_IntakeOrientationCheckList1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1659,36 +1661,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("IntakeScreenings");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeTransportationEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("Client_FK")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateSignatureEmployee")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignatureLegalGuardian")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignaturePerson")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Documents")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Client_FK")
-                        .IsUnique();
-
-                    b.ToTable("IntakeTransportation");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.LegalGuardianEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -3310,17 +3282,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeTransportationEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
-                        .WithOne("IntakeTransportation")
-                        .HasForeignKey("KyoS.Web.Data.Entities.IntakeTransportationEntity", "Client_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.MTPEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
@@ -3677,8 +3638,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("IntakeOrientationChecklist");
 
                     b.Navigation("IntakeScreening");
-
-                    b.Navigation("IntakeTransportation");
 
                     b.Navigation("MTPs");
 
