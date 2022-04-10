@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace KyoS.Web.Controllers
 {
@@ -22,15 +23,17 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IRenderHelper _renderHelper;
+        private readonly IReportHelper _reportHelper;
         private readonly DataContext _context;
 
-        public IntakesController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context)
+        public IntakesController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context, IReportHelper reportHelper)
         {
             _userHelper = userHelper;
             _combosHelper = combosHelper;
             _context = context;
             _renderHelper = renderHelper;
             _converterHelper = converterHelper;
+            _reportHelper = reportHelper;
         }
 
         public async Task<IActionResult> Index(int idError = 0)
@@ -647,420 +650,41 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsumerRights", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Mannager")]
-        public IActionResult CreateAcknowledgementHippa(int id = 0)
+        public IActionResult PrintIntake(int id)
         {
+            IntakeScreeningEntity entity = _context.IntakeScreenings
 
-            UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.Clinic)
 
-            IntakeAcknoewledgementHippaViewModel model;
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.IntakeConsentForRelease)
 
-            if (User.IsInRole("Mannager"))
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.IntakeConsumerRights)
+
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.IntakeConsentForRelease)
+
+                                                   .FirstOrDefault(i => (i.Id == id));
+            if (entity == null)
             {
-                if (user_logged.Clinic != null)
-                {
-                    IntakeAcknowledgementHippaEntity intakeAck = _context.IntakeAcknowledgement
-                                                                            .Include(n => n.Client)
-                                                                            .ThenInclude(n => n.LegalGuardian)
-                                                                            .FirstOrDefault(n => n.Client.Id == id);
-                    
-                    if (intakeAck == null)
-                    {
-                       
-                        model = new IntakeAcknoewledgementHippaViewModel
-                        {
-                            Client = _context.Clients.Include(d => d.LegalGuardian).FirstOrDefault(n => n.Id == id),
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
-                            Documents = true,
-                            Id = 0,
-                            IdClient = id,
-                            Client_FK = id
-
-                        };
-                        if (model.Client.LegalGuardian == null)
-                            model.Client.LegalGuardian = new LegalGuardianEntity();
-                        return View(model);
-                    }
-                    else
-                    {
-                        if (intakeAck.Client.LegalGuardian == null)
-                            intakeAck.Client.LegalGuardian = new LegalGuardianEntity();
-                        model = _converterHelper.ToIntakeAcknoewledgementHippaViewModel(intakeAck);
-
-                        return View(model);
-                    }
-
-                }
+                return RedirectToAction("Home/Error404");
             }
 
-            return RedirectToAction("Index", "Intakes");
-        }
+            //if (entity.Client.Clinic.Name == "DAVILA")
+            //{
+            //    Stream stream = _reportHelper.FloridaSocialHSIntakeReport(entity);
+            //    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            //}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
-        public async Task<IActionResult> CreateAcknowledgementHippa(IntakeAcknoewledgementHippaViewModel IntakeViewModel)
-        {
-            UserEntity user_logged = _context.Users
-                                             .Include(u => u.Clinic)
-                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-            if (ModelState.IsValid)
+            if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
-                IntakeAcknowledgementHippaEntity IntakeAckNowEntity = await _converterHelper.ToIntakeAcknoewledgementHippaEntity(IntakeViewModel, false);
+                Stream stream = _reportHelper.FloridaSocialHSIntakeReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }            
 
-                if (IntakeAckNowEntity.Id == 0)
-                {
-                    IntakeAckNowEntity.Client = null;
-                    _context.IntakeAcknowledgement.Add(IntakeAckNowEntity);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
-                    }
-                    catch (System.Exception ex)
-                    {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                    }
-                }
-                else
-                {
-                    IntakeAckNowEntity.Client = null;
-                    _context.IntakeAcknowledgement.Update(IntakeAckNowEntity);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
-                    }
-                    catch (System.Exception ex)
-                    {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                    }
-                }
-            }
-
-            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
-
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateAcknowledgementHippa", IntakeViewModel) });
-        }
-
-        [Authorize(Roles = "Mannager")]
-        public IActionResult CreateAccessToServices(int id = 0)
-        {
-
-            UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-            IntakeAccessToServicesViewModel model;
-
-            if (User.IsInRole("Mannager"))
-            {
-                if (user_logged.Clinic != null)
-                {
-                    IntakeAccessToServicesEntity intakeAccess = _context.IntakeAccessToServices
-                                                                            .Include(n => n.Client)
-                                                                            .FirstOrDefault(n => n.Client.Id == id);
-                    if (intakeAccess == null)
-                    {
-                        model = new IntakeAccessToServicesViewModel
-                        {
-                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
-                            IdClient = id,
-                            Client_FK = id,
-                            Id = 0,
-                            Documents = true,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
-
-                        };
-
-                        return View(model);
-                    }
-                    else
-                    {
-                        model = _converterHelper.ToIntakeAccessToServicesViewModel(intakeAccess);
-
-                        return View(model);
-                    }
-
-                }
-            }
-
-            return RedirectToAction("Index", "Intakes");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
-        public async Task<IActionResult> CreateAccessToServices(IntakeAccessToServicesViewModel IntakeViewModel)
-        {
-            UserEntity user_logged = _context.Users
-                                             .Include(u => u.Clinic)
-                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-            if (ModelState.IsValid)
-            {
-                IntakeAccessToServicesEntity IntakeAccessEntity = await _converterHelper.ToIntakeAccessToServicesEntity(IntakeViewModel, false);
-
-                if (IntakeAccessEntity.Id == 0)
-                {
-                    IntakeAccessEntity.Client = null;
-                    _context.IntakeAccessToServices.Add(IntakeAccessEntity);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
-                    }
-                    catch (System.Exception ex)
-                    {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                    }
-                }
-                else
-                {
-                    IntakeAccessEntity.Client = null;
-                    _context.IntakeAccessToServices.Update(IntakeAccessEntity);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
-                    }
-                    catch (System.Exception ex)
-                    {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                    }
-                }
-            }
-            //Preparing Data
-            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
-
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateAccessToServices", IntakeViewModel) });
-        }
-
-        [Authorize(Roles = "Mannager")]
-        public IActionResult CreateOrientationCheckList(int id = 0)
-        {
-
-            UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-            IntakeOrientationCheckListViewModel model;
-
-            if (User.IsInRole("Mannager"))
-            {
-                if (user_logged.Clinic != null)
-                {
-                    IntakeOrientationChecklistEntity intakeAccess = _context.IntakeOrientationCheckList
-                                                                            .Include(n => n.Client)
-                                                                            .FirstOrDefault(n => n.Client.Id == id);
-                    if (intakeAccess == null)
-                    {
-                        model = new IntakeOrientationCheckListViewModel
-                        {
-                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
-                            IdClient = id,
-                            Client_FK = id,
-                            Id = 0,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
-                            Access = true,
-                            AgencyExpectation = true,
-                            AgencyPolice = true,
-                            Code = true,
-                            Confidentiality = true,
-                            Discharge = true,
-                            Education = true,
-                            Explanation = true,
-                            Fire = true,
-                            Identification = true,
-                            IndividualPlan = true,
-                            Insent = true,
-                            Methods = true,
-                            PoliceGrievancce = true,
-                            PoliceIllicit = true,
-                            PoliceTobacco = true,
-                            PoliceWeapons = true,
-                            Program = true,
-                            Purpose = true,
-                            Rights = true,
-                            Services = true,
-                            TheAbove = true,
-                            TourFacility = true,
-                            Documents = true,
-                        };
-
-                        return View(model);
-                    }
-                    else
-                    {
-                        model = _converterHelper.ToIntakeOrientationChecklistViewModel(intakeAccess);
-
-                        return View(model);
-                    }
-
-                }
-            }
-
-            return RedirectToAction("Index", "Intakes");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
-        public async Task<IActionResult> CreateOrientationCheckList(IntakeOrientationCheckListViewModel IntakeViewModel)
-        {
-            UserEntity user_logged = _context.Users
-                                             .Include(u => u.Clinic)
-                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-            if (ModelState.IsValid)
-            {
-                IntakeOrientationChecklistEntity IntakeOrientationEntity = await _converterHelper.ToIntakeOrientationChecklistEntity(IntakeViewModel, false);
-
-                if (IntakeOrientationEntity.Id == 0)
-                {
-                    IntakeOrientationEntity.Client = null;
-                    _context.IntakeOrientationCheckList.Add(IntakeOrientationEntity);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
-                    }
-                    catch (System.Exception ex)
-                    {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                    }
-                }
-                else
-                {
-                    IntakeOrientationEntity.Client = null;
-                    _context.IntakeOrientationCheckList.Update(IntakeOrientationEntity);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
-                    }
-                    catch (System.Exception ex)
-                    {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                    }
-                }
-            }
-            //Preparing Data
-            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
-
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateOrientationCheckList", IntakeViewModel) });
-        }
-
-        [Authorize(Roles = "Mannager")]
-        public IActionResult CreateTransportation(int id = 0)
-        {
-
-            UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-            IntakeTransportationViewModel model;
-
-            if (User.IsInRole("Mannager"))
-            {
-                if (user_logged.Clinic != null)
-                {
-                    IntakeTransportationEntity intakeTransportation = _context.IntakeTransportation
-                                                                            .Include(n => n.Client)
-                                                                            .FirstOrDefault(n => n.Client.Id == id);
-                    if (intakeTransportation == null)
-                    {
-                        model = new IntakeTransportationViewModel
-                        {
-                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
-                            IdClient = id,
-                            Client_FK = id,
-                            Id = 0,
-                            Documents = true,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
-
-                        };
-
-                        return View(model);
-                    }
-                    else
-                    {
-                        model = _converterHelper.ToIntakeTransportationViewModel(intakeTransportation);
-
-                        return View(model);
-                    }
-
-                }
-            }
-
-            return RedirectToAction("Index", "Intakes");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
-        public async Task<IActionResult> CreateTransportation(IntakeTransportationViewModel IntakeViewModel)
-        {
-            UserEntity user_logged = _context.Users
-                                             .Include(u => u.Clinic)
-                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-            if (ModelState.IsValid)
-            {
-                IntakeTransportationEntity IntakeTransportationEntity = await _converterHelper.ToIntakeTransportationEntity(IntakeViewModel, false);
-
-                if (IntakeTransportationEntity.Id == 0)
-                {
-                    IntakeTransportationEntity.Client = null;
-                    _context.IntakeTransportation.Add(IntakeTransportationEntity);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
-                    }
-                    catch (System.Exception ex)
-                    {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                    }
-                }
-                else
-                {
-                    IntakeTransportationEntity.Client = null;
-                    _context.IntakeTransportation.Update(IntakeTransportationEntity);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
-                    }
-                    catch (System.Exception ex)
-                    {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                    }
-                }
-            }
-            //Preparing Data
-            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
-
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTransportation", IntakeViewModel) });
+            return null;
         }
 
         [Authorize(Roles = "Mannager")]
