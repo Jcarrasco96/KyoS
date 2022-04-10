@@ -48,7 +48,7 @@
                                 @Html.DisplayNameFor(model => model.Client.Code)
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.DateAdmision)
+                                Admission Date
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Client.Status)
@@ -59,10 +59,10 @@
                             <th class="col-md-2" style="text-align:center;">
                                 Consent For Release
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 Consumer Rights
                             </th>
-                            <th class="col-md-1">
+                            <th class="col-md-2">
                             </th>
                         </tr>
                     </thead>
@@ -103,16 +103,17 @@
                                 }
                             </td>
                             <td align="center">
-                                <a asp-action="CreateConsentForTreatment" asp-route-id="@item.Client.Id" class="btn btn-danger" title="Create Intake Consent For Treatment"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                <a asp-action="CreateConsentForTreatment" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Consent For Treatment"><i class="glyphicon glyphicon-align-justify"></i></a>
                             </td>
                             <td align="center">
-                                <a asp-action="CreateConsentForRelease" asp-route-id="@item.Client.Id" class="btn btn-danger" title="Create Intake Consent For Release"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                <a asp-action="CreateConsentForRelease" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Consent For Release"><i class="glyphicon glyphicon-align-justify"></i></a>
                             </td>
                             <td align="center">
-                                <a asp-action="CreateConsumerRights" asp-route-id="@item.Client.Id" class="btn btn-danger" title="Create Intake Consumer Rights"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                <a asp-action="CreateConsumerRights" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Consumer Rights"><i class="glyphicon glyphicon-align-justify"></i></a>
                             </td>
                             <td align="right">
                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Intake Screening"><i class="glyphicon glyphicon-pencil"></i></a>
+                                <a asp-action="PrintIntake" asp-route-id="@item.Id" class="btn btn-success" title="Print Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                 <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete Intake Screening"><i class="glyphicon glyphicon-trash"></i></button>
                             </td>
                         </tr>

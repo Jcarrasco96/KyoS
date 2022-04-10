@@ -2317,6 +2317,38 @@ namespace KyoS.Web.Helpers
         }
         #endregion
 
+        #region Intake reports
+        public Stream FloridaSocialHSIntakeReport(IntakeScreeningEntity intake)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Intakes\\rptIntakeFloridaSocialHS.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intake.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intake.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeScreeningsDS(intake.Client.IntakeScreening));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeScreenings");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
+
         #region Utils functions
         public byte[] ConvertStreamToByteArray(Stream stream)
         {
@@ -2545,13 +2577,71 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Name", typeof(string));
             dt.Columns.Add("LogoPath", typeof(string));
             dt.Columns.Add("Schema", typeof(int));
+            dt.Columns.Add("Address", typeof(string));
+            dt.Columns.Add("CEO", typeof(string));
+            dt.Columns.Add("City", typeof(string));
+            dt.Columns.Add("FaxNo", typeof(string));
+            dt.Columns.Add("Phone", typeof(string));
+            dt.Columns.Add("State", typeof(string));
+            dt.Columns.Add("ZipCode", typeof(string));
 
             dt.Rows.Add(new object[]
                                         {
                                             clinic.Id,
                                             clinic.Name,
                                             clinic.LogoPath,
-                                            clinic.Schema
+                                            clinic.Schema,
+                                            clinic.Address,
+                                            clinic.CEO,
+                                            clinic.City,
+                                            clinic.FaxNo,
+                                            clinic.Phone,
+                                            clinic.State,
+                                            clinic.ZipCode
+                                        });
+
+            return dt;
+        }
+
+        private DataTable GetIntakeScreeningsDS(IntakeScreeningEntity intake)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IntakeScreening"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+            dt.Columns.Add("InformationGatheredBy", typeof(string));
+            dt.Columns.Add("DateAdmision", typeof(DateTime));
+            dt.Columns.Add("DateSignatureClient", typeof(DateTime));
+            dt.Columns.Add("DateSignatureWitness", typeof(DateTime));
+            dt.Columns.Add("ClientIsStatus", typeof(int));
+            dt.Columns.Add("BehaviorIsStatus", typeof(int));
+            dt.Columns.Add("SpeechIsStatus", typeof(int));
+            dt.Columns.Add("DoesClientKnowHisName", typeof(bool));
+            dt.Columns.Add("DoesClientKnowTodayDate", typeof(bool));
+            dt.Columns.Add("DoesClientKnowWhereIs", typeof(bool));
+            dt.Columns.Add("DoesClientKnowTimeOfDay", typeof(bool));
+            dt.Columns.Add("DateDischarge", typeof(DateTime));
+
+            dt.Rows.Add(new object[]
+                                        {
+                                            intake.Id,
+                                            intake.Client_FK,
+                                            intake.InformationGatheredBy,
+                                            intake.DateAdmision,
+                                            intake.DateSignatureClient,
+                                            intake.DateSignatureWitness,
+                                            intake.ClientIsStatus,
+                                            intake.BehaviorIsStatus,
+                                            intake.SpeechIsStatus,
+                                            intake.DoesClientKnowHisName,
+                                            intake.DoesClientKnowTodayDate,
+                                            intake.DoesClientKnowWhereIs,
+                                            intake.DoesClientKnowTimeOfDay,
+                                            intake.DateDischarge
                                         });
 
             return dt;

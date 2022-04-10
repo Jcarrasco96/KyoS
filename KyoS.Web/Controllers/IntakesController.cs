@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace KyoS.Web.Controllers
 {
@@ -22,15 +23,17 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IRenderHelper _renderHelper;
+        private readonly IReportHelper _reportHelper;
         private readonly DataContext _context;
 
-        public IntakesController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context)
+        public IntakesController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context, IReportHelper reportHelper)
         {
             _userHelper = userHelper;
             _combosHelper = combosHelper;
             _context = context;
             _renderHelper = renderHelper;
             _converterHelper = converterHelper;
+            _reportHelper = reportHelper;
         }
 
         public async Task<IActionResult> Index(int idError = 0)
@@ -643,6 +646,43 @@ namespace KyoS.Web.Controllers
             IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsumerRights", IntakeViewModel) });
+        }
+
+        public IActionResult PrintIntake(int id)
+        {
+            IntakeScreeningEntity entity = _context.IntakeScreenings
+
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.Clinic)
+
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.IntakeConsentForRelease)
+
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.IntakeConsumerRights)
+
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.IntakeConsentForRelease)
+
+                                                   .FirstOrDefault(i => (i.Id == id));
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            //if (entity.Client.Clinic.Name == "DAVILA")
+            //{
+            //    Stream stream = _reportHelper.FloridaSocialHSIntakeReport(entity);
+            //    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            //}
+
+            if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            {
+                Stream stream = _reportHelper.FloridaSocialHSIntakeReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }            
+
+            return null;
         }
     }
 }
