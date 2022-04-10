@@ -1409,5 +1409,57 @@ namespace KyoS.Web.Helpers
             };
 
         }
+
+        public async Task<IntakeConsentPhotographEntity> ToIntakeConsentPhotographEntity(IntakeConsentPhotographViewModel model, bool isNew)
+        {
+            return new IntakeConsentPhotographEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Photograph = model.Photograph,
+                Filmed = model.Filmed,
+                VideoTaped = model.VideoTaped,
+                Interviwed = model.Interviwed,
+                NoneOfTheForegoing = model.NoneOfTheForegoing,
+                Other = model.Other,
+                Publication = model.Publication,
+                Broadcast = model.Broadcast,
+                Markrting = model.Markrting,
+                ByTODocument = model.ByTODocument
+
+            };
+        }
+
+        public IntakeConsentPhotographViewModel ToIntakeConsentPhotographViewModel(IntakeConsentPhotographEntity model)
+        {
+            return new IntakeConsentPhotographViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Photograph = model.Photograph,
+                Filmed = model.Filmed,
+                VideoTaped = model.VideoTaped,
+                Interviwed = model.Interviwed,
+                NoneOfTheForegoing = model.NoneOfTheForegoing,
+                Other = model.Other,
+                Publication = model.Publication,
+                Broadcast = model.Broadcast,
+                Markrting = model.Markrting,
+                ByTODocument = model.ByTODocument
+
+            };
+
+        }
     }
 }

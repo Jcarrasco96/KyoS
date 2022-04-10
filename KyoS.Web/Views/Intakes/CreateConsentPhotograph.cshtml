@@ -1,0 +1,57 @@
+﻿@model KyoS.Web.Models.IntakeConsentPhotographViewModel
+@{
+    ViewData["Title"] = "Create PATIENT CONSENT TO PHOTOGRAPH/VIDEOTAPE/FILM/INTERVIEW AND/OR AUTHORIZATION TO RELEASE PROTECTED HEALTH INFORMATION";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>
+        CREATE PATIENT CONSENT TO PHOTOGRAPH/VIDEOTAPE/FILM/INTERVIEW AND/OR AUTHORIZATION TO RELEASE PROTECTED HEALTH INFORMATION
+    </title>
+</head>
+<body>
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("Intakes", "Index", "Intakes")
+            </li>
+            <li class="active">
+                Create Intake PATIENT CONSENT TO PHOTOGRAPH/VIDEOTAPE/FILM/INTERVIEW AND/OR AUTHORIZATION TO RELEASE PROTECTED HEALTH INFORMATION
+            </li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+    <h4>Create PATIENT CONSENT TO PHOTOGRAPH/VIDEOTAPE/FILM/INTERVIEW AND/OR AUTHORIZATION TO RELEASE PROTECTED HEALTH INFORMATION</h4>
+    <hr />
+    <div class="row">
+
+        <div>
+            <form asp-action="CreateConsentPhotograph" asp-route-id="@Model.Id" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="IdClient" />
+                <input type="hidden" asp-for="Client_FK" />
+                <partial name="_IntakesConsentPhotograph" />
+                <div class="form-group col-md-12">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+
+    </script>
+}
+

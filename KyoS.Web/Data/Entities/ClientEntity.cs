@@ -119,6 +119,8 @@ namespace KyoS.Web.Data.Entities
 
         public IntakeTransportationEntity IntakeTransportation { get; set; }
 
+        public IntakeConsentPhotographEntity IntakeConsentPhotograph{ get; set; }
+
         public string MissingDoc 
         {
             get

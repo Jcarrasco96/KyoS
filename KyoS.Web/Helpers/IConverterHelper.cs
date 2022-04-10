@@ -76,5 +76,7 @@ namespace KyoS.Web.Helpers
         IntakeOrientationCheckListViewModel ToIntakeOrientationChecklistViewModel(IntakeOrientationChecklistEntity model);
         Task<IntakeTransportationEntity> ToIntakeTransportationEntity(IntakeTransportationViewModel model, bool isNew);
         IntakeTransportationViewModel ToIntakeTransportationViewModel(IntakeTransportationEntity model);
+        Task<IntakeConsentPhotographEntity> ToIntakeConsentPhotographEntity(IntakeConsentPhotographViewModel model, bool isNew);
+        IntakeConsentPhotographViewModel ToIntakeConsentPhotographViewModel(IntakeConsentPhotographEntity model);
     }
 }

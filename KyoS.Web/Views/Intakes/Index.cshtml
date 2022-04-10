@@ -51,9 +51,6 @@
                                 @Html.DisplayNameFor(model => model.DateAdmision)
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.Client.Status)
-                            </th>
-                            <th class="col-md-1" style="text-align:center;">
                                 CONSENT FOR TREATMENT
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -73,6 +70,9 @@
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 TRANSPORTATION / FOOD
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                CONSENT FILMED / PHOTOGRAPH
                             </th>
                             <th class="col-md-1">
                             </th>
@@ -100,20 +100,20 @@
                             <td align="center">
                                 @Html.DisplayFor(modelItem => item.DateAdmision)
                             </td>
-                            <td align="center">
-                                @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
-                                {
-                                    <span class="label label-success">
-                                        Open
-                                    </span>
-                                }
-                                @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
-                                {
-                                    <span class="label label-default">
-                                        Close
-                                    </span>
-                                }
-                            </td>
+                            @* <td align="center">
+            @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+            {
+                <span class="label label-success">
+                    Open
+                </span>
+            }
+            @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
+            {
+                <span class="label label-default">
+                    Close
+                </span>
+            }
+        </td>*@
                             <td align="center">
                                 <a asp-action="CreateConsentForTreatment" asp-route-id="@item.Client.Id" class="btn btn-danger" title="Create Intake Consent For Treatment"><i class="glyphicon glyphicon-align-justify"></i></a>
                             </td>
@@ -134,6 +134,9 @@
                             </td>
                             <td align="center">
                                 <a asp-action="CreateTransportation" asp-route-id="@item.Client.Id" class="btn btn-danger" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                            </td>
+                            <td align="center">
+                                <a asp-action="CreateConsentPhotograph" asp-route-id="@item.Client.Id" class="btn btn-danger" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
                             </td>
                             <td align="right">
                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Intake Screening"><i class="glyphicon glyphicon-pencil"></i></a>

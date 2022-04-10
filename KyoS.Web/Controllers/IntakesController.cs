@@ -1062,5 +1062,112 @@ namespace KyoS.Web.Controllers
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTransportation", IntakeViewModel) });
         }
+
+        [Authorize(Roles = "Mannager")]
+        public IActionResult CreateConsentPhotograph(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            IntakeConsentPhotographViewModel model;
+
+            if (User.IsInRole("Mannager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    IntakeConsentPhotographEntity intakeConsentPhotograph = _context.IntakeConsentPhotograph
+                                                                            .Include(n => n.Client)
+                                                                            .FirstOrDefault(n => n.Client.Id == id);
+                    if (intakeConsentPhotograph == null)
+                    {
+                        model = new IntakeConsentPhotographViewModel
+                        {
+                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            IdClient = id,
+                            Client_FK = id,
+                            Id = 0,
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardian = DateTime.Now,
+                            DateSignaturePerson = DateTime.Now,
+                            Photograph = true,
+                            Filmed = true,
+                            VideoTaped = true,
+                            Interviwed = true,
+                            NoneOfTheForegoing = true,
+                            Other = "",
+                            Publication = true,
+                            Broadcast = true,
+                            Markrting = true,
+                            ByTODocument = true,
+
+                            Documents = true,
+                        };
+
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToIntakeConsentPhotographViewModel(intakeConsentPhotograph);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> CreateConsentPhotograph(IntakeConsentPhotographViewModel IntakeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                IntakeConsentPhotographEntity IntakeConsentPhotographEntity = await _converterHelper.ToIntakeConsentPhotographEntity(IntakeViewModel, false);
+
+                if (IntakeConsentPhotographEntity.Id == 0)
+                {
+                    IntakeConsentPhotographEntity.Client = null;
+                    _context.IntakeConsentPhotograph.Add(IntakeConsentPhotographEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakeConsentPhotographEntity.Client = null;
+                    _context.IntakeConsentPhotograph.Update(IntakeConsentPhotographEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            //Preparing Data
+            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsentPhotograph", IntakeViewModel) });
+        }
     }
 }
