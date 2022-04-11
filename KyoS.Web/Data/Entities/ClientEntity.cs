@@ -121,6 +121,8 @@ namespace KyoS.Web.Data.Entities
 
         public IntakeConsentPhotographEntity IntakeConsentPhotograph{ get; set; }
 
+        public IntakeFeeAgreementEntity IntakeFeeAgreement { get; set; }
+
         public string MissingDoc 
         {
             get

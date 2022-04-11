@@ -66,6 +66,7 @@ namespace KyoS.Web.Data
         public DbSet<IntakeOrientationChecklistEntity> IntakeOrientationCheckList { get; set; }
         public DbSet<IntakeTransportationEntity> IntakeTransportation { get; set; }
         public DbSet<IntakeConsentPhotographEntity> IntakeConsentPhotograph { get; set; }
+        public DbSet<IntakeFeeAgreementEntity> IntakeFeeAgreement { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -225,6 +226,12 @@ namespace KyoS.Web.Data
                     .WithOne(s => s.Client)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasForeignKey<IntakeConsentPhotographEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                   .HasOne(c => c.IntakeFeeAgreement)
+                   .WithOne(s => s.Client)
+                   .OnDelete(DeleteBehavior.Cascade)
+                   .HasForeignKey<IntakeFeeAgreementEntity>(s => s.Client_FK);
         }
     }
 }

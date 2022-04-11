@@ -44,10 +44,10 @@
                             <th class="col-md-1">
                                 @Html.DisplayNameFor(model => model.Client.Name)
                             </th>
-                            <th class="col-md-1">
+                            @*<th class="col-md-1">
                                 @Html.DisplayNameFor(model => model.Client.Code)
-                            </th>
-                            @*<th class="col-md-1" style="text-align:center;">
+                                </th>
+                                <th class="col-md-1" style="text-align:center;">
                                 Admission Date
                             </th>*@
                             <th class="col-md-1" style="text-align:center;">
@@ -74,6 +74,9 @@
                             <th class="col-md-1" style="text-align:center;">
                                 CONSENT TO / PHOTOGRAPH
                             </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                FEE AGREEMENT
+                            </th>
                             <th class="col-md-2">
                             </th>
                         </tr>
@@ -94,10 +97,10 @@
                                 &nbsp;
                                 @Html.DisplayFor(modelItem => item.Client.Name)
                             </td>
-                            <td>
+                            @*<td>
                                 @Html.DisplayFor(modelItem => item.Client.Code)
                             </td>
-                            @*<td align="center">
+                            <td align="center">
                                 @Html.DisplayFor(modelItem => item.DateAdmision)
                             </td>
                             <td align="center">
@@ -137,6 +140,9 @@
                             </td>
                             <td align="center">
                                 <a asp-action="CreateConsentPhotograph" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                            </td>
+                            <td align="center">
+                                <a asp-action="CreateFeeAgreement" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
                             </td>
                             <td align="right">
                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Intake Screening"><i class="glyphicon glyphicon-pencil"></i></a>

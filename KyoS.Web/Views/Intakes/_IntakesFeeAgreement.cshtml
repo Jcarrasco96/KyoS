@@ -1,0 +1,64 @@
+﻿@model KyoS.Web.Models.IntakeFeeAgreementViewModel
+
+<br />
+<div class="container-fluid col-md-9">
+    <pre>
+            I hereby certify that the financial information I have provided is true and complete to the best of my knowledge. I 
+            understand that <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong> may use my protected health information in 
+            order to secure payment of my services from outside funding sources such as Medicaid, Florida Department 
+            of Children and Families, etc. 
+            
+            For more information concerning the use and disclosure of your protected health information, please refer to a copy 
+            of the <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong> notice of Privacy Practices. 
+            
+            I understand and agree to be responsible for any outstanding balance which may be refused for payment by my 
+            insurance company. I understand that I will be responsible for the unpaid balance or my sliding fee scale, 
+            whichever is less. If I have no insurance, I understand I am responsible for payment of services based on my 
+            sliding fee scale assessment. 
+
+                    Brief Mental Assessment Screening               $29.32           0.00 
+                    Psychiatric evaluation                          $210.00          0.00 
+                    Medication management                           $60.00           0.00 
+                    Bio –psychosocial assessment                    $48.00           0.00 
+                    Limited functional assessment                   $15.00           0.00 
+                    Treatment plan                                  $97.00           0.00 
+                    Treatment plan review                           $48.50           0.00 
+                    Individual and family therapy                   $73.32           0.00 
+                    Therapeutic behavioral onsite services      $64.00 per hour      0.00 
+                    Psychosocial rehabilitation services        $36.00 per hour      0.00 
+                    Home Visit (as needed)                      $48.00 per hour      0.00 
+                    Community Visit (as needed)                 $48.00 per hour      0.00 
+                    Case Management Assessment                      $96.00           0.00 
+                    Service Planning                                $120.00          0.00 
+                    Service Plan Review                             $120.00          0.00
+          </pre>
+</div>
+<div class="container-fluid">
+    <div class="form-group col-md-4">
+        <label asp-for="DateSignatureEmployee" class="control-label">Person Served Signature </label>&nbsp;*
+        <input asp-for="DateSignatureEmployee" class="form-control">
+        <span asp-validation-for="DateSignatureEmployee" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="DateSignatureLegalGuardian" class="control-label">Parent, Legal Guardian or Authorized Representative</label>&nbsp;*
+        <input asp-for="DateSignatureLegalGuardian" class="form-control" id="DateSignatureClient">
+        <span asp-validation-for="DateSignatureLegalGuardian" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="DateSignatureEmployee" class="control-label">Employee Signature</label>&nbsp;*
+        <input asp-for="DateSignatureEmployee" class="form-control" id="DateSignatureWitness">
+        <span asp-validation-for="DateSignatureEmployee" class="text-danger"></span>
+    </div>
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+        <label asp-for="Documents" class="forgot">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>
+        </label>
+    </div>
+</div>
+<br />
+
+
+

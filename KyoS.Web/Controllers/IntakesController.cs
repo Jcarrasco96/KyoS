@@ -1210,5 +1210,102 @@ namespace KyoS.Web.Controllers
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsentPhotograph", IntakeViewModel) });
         }
+
+        [Authorize(Roles = "Mannager")]
+        public IActionResult CreateFeeAgreement(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            IntakeFeeAgreementViewModel model;
+
+            if (User.IsInRole("Mannager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    IntakeFeeAgreementEntity intakefeeAgreement = _context.IntakeFeeAgreement
+                                                                            .Include(n => n.Client)
+                                                                            .FirstOrDefault(n => n.Client.Id == id);
+                    if (intakefeeAgreement == null)
+                    {
+                        model = new IntakeFeeAgreementViewModel
+                        {
+                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            IdClient = id,
+                            Client_FK = id,
+                            Id = 0,
+                            Documents = true,
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardian = DateTime.Now,
+                            DateSignaturePerson = DateTime.Now,
+
+                        };
+
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToIntakeFeeAgreementViewModel(intakefeeAgreement);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> CreateFeeAgreement(IntakeFeeAgreementViewModel IntakeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                IntakeFeeAgreementEntity IntakefeeAgreementEntity = await _converterHelper.ToIntakeFeeAgreementEntity(IntakeViewModel, false);
+
+                if (IntakefeeAgreementEntity.Id == 0)
+                {
+                    IntakefeeAgreementEntity.Client = null;
+                    _context.IntakeFeeAgreement.Add(IntakefeeAgreementEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakefeeAgreementEntity.Client = null;
+                    _context.IntakeFeeAgreement.Update(IntakefeeAgreementEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            //Preparing Data
+            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateFeeAgreement", IntakeViewModel) });
+        }
     }
 }
