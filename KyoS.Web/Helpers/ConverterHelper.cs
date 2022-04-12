@@ -1493,5 +1493,91 @@ namespace KyoS.Web.Helpers
             };
 
         }
+
+        public async Task<IntakeTuberculosisEntity> ToIntakeTuberculosisEntity(IntakeTuberculosisViewModel model, bool isNew)
+        {
+            return new IntakeTuberculosisEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+
+                DoYouCurrently = model.DoYouCurrently,
+                DoYouBring = model.DoYouBring,
+                DoYouCough = model.DoYouCough,
+                DoYouSweat = model.DoYouSweat,
+                DoYouHaveFever = model.DoYouHaveFever,
+                HaveYouLost = model.HaveYouLost,
+                DoYouHaveChest = model.DoYouHaveChest,
+                If2OrMore = model.If2OrMore,
+
+                HaveYouRecently = model.HaveYouRecently,
+                AreYouRecently = model.AreYouRecently,
+                IfYesWhich = model.IfYesWhich,
+                DoYouOr = model.DoYouOr,
+                HaveYouEverBeen = model.HaveYouEverBeen,
+                HaveYouEverWorked = model.HaveYouEverWorked,
+                HaveYouEverHadOrgan = model.HaveYouEverHadOrgan,
+                HaveYouEverConsidered = model.HaveYouEverConsidered,
+                HaveYouEverHadAbnormal = model.HaveYouEverHadAbnormal,
+                If3OrMore = model.If3OrMore,
+
+                HaveYouEverHadPositive = model.HaveYouEverHadPositive,
+                IfYesWhere = model.IfYesWhere,
+                When = model.When,
+                HaveYoyEverBeenTold = model.HaveYoyEverBeenTold,
+                AgencyExpectation = model.AgencyExpectation,
+                If1OrMore = model.If1OrMore,
+                
+            };
+        }
+
+        public IntakeTuberculosisViewModel ToIntakeTuberculosisViewModel(IntakeTuberculosisEntity model)
+        {
+            return new IntakeTuberculosisViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+
+                DoYouCurrently = model.DoYouCurrently,
+                DoYouBring = model.DoYouBring,
+                DoYouCough = model.DoYouCough,
+                DoYouSweat = model.DoYouSweat,
+                DoYouHaveFever = model.DoYouHaveFever,
+                HaveYouLost = model.HaveYouLost,
+                DoYouHaveChest = model.DoYouHaveChest,
+                If2OrMore = model.If2OrMore,
+
+                HaveYouRecently = model.HaveYouRecently,
+                AreYouRecently = model.AreYouRecently,
+                IfYesWhich = model.IfYesWhich,
+                DoYouOr = model.DoYouOr,
+                HaveYouEverBeen = model.HaveYouEverBeen,
+                HaveYouEverWorked = model.HaveYouEverWorked,
+                HaveYouEverHadOrgan = model.HaveYouEverHadOrgan,
+                HaveYouEverConsidered = model.HaveYouEverConsidered,
+                HaveYouEverHadAbnormal = model.HaveYouEverHadAbnormal,
+                If3OrMore = model.If3OrMore,
+
+                HaveYouEverHadPositive = model.HaveYouEverHadPositive,
+                IfYesWhere = model.IfYesWhere,
+                When = model.When,
+                HaveYoyEverBeenTold = model.HaveYoyEverBeenTold,
+                AgencyExpectation = model.AgencyExpectation,
+                If1OrMore = model.If1OrMore,
+
+            };
+
+        }
     }
 }

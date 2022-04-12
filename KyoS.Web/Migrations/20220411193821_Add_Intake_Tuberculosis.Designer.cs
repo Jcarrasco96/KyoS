@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220411193821_Add_Intake_Tuberculosis")]
+    partial class Add_Intake_Tuberculosis
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1828,6 +1830,9 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Documents")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("Education")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("HaveYouEverBeen")
                         .HasColumnType("bit");
 
@@ -1868,6 +1873,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IfYesWhich")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TheAbove")
                         .HasColumnType("bit");
 
                     b.Property<string>("When")

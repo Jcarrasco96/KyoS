@@ -1,0 +1,539 @@
+﻿@model KyoS.Web.Models.IntakeTuberculosisViewModel
+
+<br />
+<div class="container-fluid col-md-9">
+    <pre>
+    <strong>ASSESMENT QUESTIONS</strong><br />
+    <strong>1. Symptoms:</strong>   
+
+            Do you currently have a cough that has lasted 3 weeks or longer?                            Yes <input type="checkbox" asp-for="DoYouCurrently" class="form-check-input" readonly id="check1">   No <input type="checkbox" class="form-check-input" id="check101"> 
+            Do you bring up anything when you cough?                                                    Yes <input type="checkbox" asp-for="DoYouBring" class="form-check-input" id="check2">   No <input type="checkbox" class="form-check-input" readonly id="check102" > 
+            Do you cough up blood?                                                                      Yes <input type="checkbox" asp-for="DoYouCough" class="form-check-input" id="check3">   No <input type="checkbox" class="form-check-input" readonly id="check103" > 
+            Do you sweat at night, enough to soak the sheets                                            Yes <input type="checkbox" asp-for="DoYouSweat" class="form-check-input" id="check4">   No <input type="checkbox" class="form-check-input" readonly id="check104" > 
+            Do you have a fever or chills?                                                              Yes <input type="checkbox" asp-for="DoYouHaveFever" class="form-check-input" id="check5">   No <input type="checkbox" class="form-check-input" readonly id="check105" > 
+            Have you lost weight recently (10 pounds or more) without trying?                           Yes <input type="checkbox" asp-for="HaveYouLost" class="form-check-input" id="check6">   No <input type="checkbox" class="form-check-input" readonly id="check106" > 
+            Do you have chest pain?                                                                     Yes <input type="checkbox" asp-for="DoYouHaveChest" class="form-check-input" id="check7">   No <input type="checkbox"  class="form-check-input" readonly id="check107" > 
+            <strong>If 2 or more “Yes” boxes are checked, a TB test will be required before                    TB Test Required
+            entering the program.                                                                       Yes <input type="checkbox" asp-for="If2OrMore" class="form-check-input" id="check8">   No <input type="checkbox" class="form-check-input" readonly id="check108" > <br />
+    2. Risk factors:
+            </strong>
+            Have you recently been around someone who was sick with tuberculosis?                       Yes <input type="checkbox" asp-for="HaveYouRecently" class="form-check-input" id="check9">   No <input type="checkbox" class="form-check-input" readonly id="check109" > 
+            Are you a recent immigrant from a country with a high rate of TB?                           Yes <input type="checkbox" asp-for="AreYouRecently" class="form-check-input" id="check10">   No <input type="checkbox" class="form-check-input" readonly id="check110" > 
+            if yes, which country?                                                                      Yes <input type="checkbox" asp-for="IfYesWhich" class="form-check-input" id="check11">   No <input type="checkbox" class="form-check-input" readonly id="check111" > 
+            Do you or have you ever injected drugs?                                                     Yes <input type="checkbox" asp-for="DoYouOr" class="form-check-input" id="check12">   No <input type="checkbox" class="form-check-input" readonly id="check112" > 
+            Have you ever been in jail, prison, or a nursing home?                                      Yes <input type="checkbox" asp-for="HaveYouEverBeen" class="form-check-input" id="check13">   No <input type="checkbox" class="form-check-input" readonly id="check113" > 
+            Have you ever worked in a lab that processed TB specimens?                                  Yes <input type="checkbox" asp-for="HaveYouEverWorked" class="form-check-input" id="check14">   No <input type="checkbox" class="form-check-input" readonly id="check114" > 
+            Have you ever had an organ transplant?                                                      Yes <input type="checkbox" asp-for="HaveYouEverHadOrgan" class="form-check-input" id="check15">   No <input type="checkbox" class="form-check-input" readonly id="check115" > 
+            Have you ever considered yourself to be homeless?                                           Yes <input type="checkbox" asp-for="HaveYouEverConsidered" class="form-check-input" id="check16">   No <input type="checkbox" class="form-check-input" readonly id="check116" > 
+            Have you ever had an abnormal chest x-ray?                                                  Yes <input type="checkbox" asp-for="HaveYouEverHadAbnormal" class="form-check-input" id="check17">   No <input type="checkbox" class="form-check-input" readonly id="check117" > 
+            <strong>If 3 or more “Yes” boxes are checked, a TB test will be required before                    TB Test Required
+            entering the program.                                                                       Yes <input type="checkbox" asp-for="If2OrMore" class="form-check-input" id="check18">   No <input type="checkbox" class="form-check-input" readonly id="check118" > <br />
+    3. Past history:</strong>
+            Have you ever had a positive TB skin test?                                                  Yes <input type="checkbox" asp-for="HaveYouEverHadPositive" class="form-check-input" id="check19">   No <input type="checkbox" class="form-check-input" readonly id="check119" > 
+            (TB test: needle inserted on the underside of the arm which may cause a bump after 2 days)
+            If yes: Where (city, state, clinic, or facility)                                         <input asp-for="IfYesWhere" class="form-check-input" readonly checked>
+            When (month/year)                                                                        <input asp-for="When" class="form-check-input" readonly checked>
+            Have you ever been told you had tuberculosis?                                               Yes <input type="checkbox" asp-for="HaveYoyEverBeenTold" class="form-check-input" id="check20">   No <input type="checkbox" class="form-check-input" readonly id="check120" > 
+            <strong>If 1 or more “Yes” boxes are checked, a TB test will be required before                    TB Test Required
+            entering the program.                                                                       Yes <input type="checkbox" asp-for="If1OrMore" class="form-check-input" id="check21">   No <input type="checkbox" class="form-check-input" readonly id="check121" > <br />
+        </strong>
+
+</pre>
+<pre>
+            <strong>PLEASE NOTE:</strong> If “TB Test Required” is marked “Yes” above you must get TB tested before entering into the 
+            program. 
+
+            This form has been translated and reviewed in the client’s native language. (If applicable) 
+</pre>
+</div>
+<div class="container-fluid">
+    <div class="form-group col-md-4">
+        <label asp-for="DateSignatureEmployee" class="control-label">Person Served Signature </label>&nbsp;*
+        <input asp-for="DateSignatureEmployee" class="form-control">
+        <span asp-validation-for="DateSignatureEmployee" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="DateSignatureLegalGuardian" class="control-label">Parent, Legal Guardian or Authorized Representative</label>&nbsp;*
+        <input asp-for="DateSignatureLegalGuardian" class="form-control" id="DateSignatureClient">
+        <span asp-validation-for="DateSignatureLegalGuardian" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="DateSignatureEmployee" class="control-label">Employee Signature</label>&nbsp;*
+        <input asp-for="DateSignatureEmployee" class="form-control" id="DateSignatureWitness">
+        <span asp-validation-for="DateSignatureEmployee" class="text-danger"></span>
+    </div>
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+        <label asp-for="Documents" class="forgot">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>
+        </label>
+    </div>
+</div>
+<br />
+
+<script>
+     
+    check1.addEventListener('change', (e) => {
+        if (check1.checked == true) {
+            check101.checked = false;
+        } else {
+            check101.checked = true;
+        }
+        
+    })
+    check101.addEventListener('change', (e) => {
+        if (check101.checked == true) {
+            check1.checked = false;
+        } else {
+            check1.checked = true;
+        }
+
+    })
+    if (check1.checked == true) {
+        check101.checked = false;
+    } else {
+        check101.checked = true;
+    }
+    //-------------------------------
+    check2.addEventListener('change', (e) => {
+        if (check1.checked == true) {
+            check102.checked = false;
+        } else {
+            check102.checked = true;
+        }
+
+    })
+    check102.addEventListener('change', (e) => {
+        if (check102.checked == true) {
+            check2.checked = false;
+        } else {
+            check2.checked = true;
+        }
+
+    })
+    if (check2.checked == true) {
+        check102.checked = false;
+    } else {
+        check102.checked = true;
+    }
+    //--------------------------------
+    check3.addEventListener('change', (e) => {
+        if (check3.checked == true) {
+            check103.checked = false;
+        } else {
+            check101.checked = true;
+        }
+
+    })
+    check103.addEventListener('change', (e) => {
+        if (check103.checked == true) {
+            check3.checked = false;
+        } else {
+            check3.checked = true;
+        }
+
+    })
+    if (check3.checked == true) {
+        check103.checked = false;
+    } else {
+        check103.checked = true;
+    }
+    //----------------------------
+    check4.addEventListener('change', (e) => {
+        if (check4.checked == true) {
+            check104.checked = false;
+        } else {
+            check104.checked = true;
+        }
+
+    })
+    check104.addEventListener('change', (e) => {
+        if (check104.checked == true) {
+            check4.checked = false;
+        } else {
+            check4.checked = true;
+        }
+
+    })
+    if (check4.checked == true) {
+        check104.checked = false;
+    } else {
+        check104.checked = true;
+    }
+    //--------------------------------
+    check5.addEventListener('change', (e) => {
+        if (check5.checked == true) {
+            check105.checked = false;
+        } else {
+            check105.checked = true;
+        }
+
+    })
+    check105.addEventListener('change', (e) => {
+        if (check105.checked == true) {
+            check5.checked = false;
+        } else {
+            check5.checked = true;
+        }
+
+    })
+    if (check5.checked == true) {
+        check105.checked = false;
+    } else {
+        check105.checked = true;
+    }
+    //--------------------------------------
+    check6.addEventListener('change', (e) => {
+        if (check6.checked == true) {
+            check106.checked = false;
+        } else {
+            check106.checked = true;
+        }
+
+    })
+    check106.addEventListener('change', (e) => {
+        if (check106.checked == true) {
+            check6.checked = false;
+        } else {
+            check6.checked = true;
+        }
+
+    })
+    if (check6.checked == true) {
+        check106.checked = false;
+    } else {
+        check106.checked = true;
+    }
+    //-----------------------------------
+    check7.addEventListener('change', (e) => {
+        if (check7.checked == true) {
+            check107.checked = false;
+        } else {
+            check107.checked = true;
+        }
+
+    })
+    check107.addEventListener('change', (e) => {
+        if (check107.checked == true) {
+            check7.checked = false;
+        } else {
+            check7.checked = true;
+        }
+
+    })
+    if (check7.checked == true) {
+        check107.checked = false;
+    } else {
+        check107.checked = true;
+    }
+    //---------------------------------
+    check8.addEventListener('change', (e) => {
+        if (check8.checked == true) {
+            check108.checked = false;
+        } else {
+            check108.checked = true;
+        }
+
+    })
+    check108.addEventListener('change', (e) => {
+        if (check108.checked == true) {
+            check8.checked = false;
+        } else {
+            check8.checked = true;
+        }
+
+    })
+    if (check8.checked == true) {
+        check108.checked = false;
+    } else {
+        check108.checked = true;
+    }
+    //--------------------------------
+    check9.addEventListener('change', (e) => {
+        if (check9.checked == true) {
+            check109.checked = false;
+        } else {
+            check109.checked = true;
+        }
+
+    })
+    check109.addEventListener('change', (e) => {
+        if (check109.checked == true) {
+            check9.checked = false;
+        } else {
+            check9.checked = true;
+        }
+
+    })
+    if (check9.checked == true) {
+        check109.checked = false;
+    } else {
+        check109.checked = true;
+    }
+    //------------------------------
+    check10.addEventListener('change', (e) => {
+        if (check10.checked == true) {
+            check110.checked = false;
+        } else {
+            check110.checked = true;
+        }
+        
+    })
+    check110.addEventListener('change', (e) => {
+        if (check110.checked == true) {
+            check10.checked = false;
+        } else {
+            check10.checked = true;
+        }
+
+    })
+    if (check10.checked == true) {
+        check110.checked = false;
+    } else {
+        check110.checked = true;
+    }
+    //------------------------------
+    check11.addEventListener('change', (e) => {
+        if (check11.checked == true) {
+            check111.checked = false;
+        } else {
+            check111.checked = true;
+        }
+
+    })
+    check111.addEventListener('change', (e) => {
+        if (check111.checked == true) {
+            check11.checked = false;
+        } else {
+            check11.checked = true;
+        }
+
+    })
+    if (check11.checked == true) {
+        check111.checked = false;
+    } else {
+        check111.checked = true;
+    }
+    //------------------------------
+    check12.addEventListener('change', (e) => {
+        if (check12.checked == true) {
+            check112.checked = false;
+        } else {
+            check112.checked = true;
+        }
+
+    })
+    check112.addEventListener('change', (e) => {
+        if (check112.checked == true) {
+            check12.checked = false;
+        } else {
+            check12.checked = true;
+        }
+
+    })
+    if (check12.checked == true) {
+        check112.checked = false;
+    } else {
+        check112.checked = true;
+    }
+    //------------------------------
+    check13.addEventListener('change', (e) => {
+        if (check13.checked == true) {
+            check113.checked = false;
+        } else {
+            check113.checked = true;
+        }
+
+    })
+    check113.addEventListener('change', (e) => {
+        if (check113.checked == true) {
+            check13.checked = false;
+        } else {
+            check13.checked = true;
+        }
+
+    })
+    if (check13.checked == true) {
+        check113.checked = false;
+    } else {
+        check113.checked = true;
+    }
+    //------------------------------
+    check14.addEventListener('change', (e) => {
+        if (check14.checked == true) {
+            check114.checked = false;
+        } else {
+            check114.checked = true;
+        }
+
+    })
+    check114.addEventListener('change', (e) => {
+        if (check114.checked == true) {
+            check14.checked = false;
+        } else {
+            check14.checked = true;
+        }
+
+    })
+    if (check14.checked == true) {
+        check114.checked = false;
+    } else {
+        check114.checked = true;
+    }
+    //------------------------------
+    check15.addEventListener('change', (e) => {
+        if (check15.checked == true) {
+            check115.checked = false;
+        } else {
+            check115.checked = true;
+        }
+
+    })
+    check115.addEventListener('change', (e) => {
+        if (check115.checked == true) {
+            check15.checked = false;
+        } else {
+            check15.checked = true;
+        }
+
+    })
+    if (check15.checked == true) {
+        check115.checked = false;
+    } else {
+        check115.checked = true;
+    }
+    //------------------------------
+    check16.addEventListener('change', (e) => {
+        if (check16.checked == true) {
+            check116.checked = false;
+        } else {
+            check116.checked = true;
+        }
+
+    })
+    check116.addEventListener('change', (e) => {
+        if (check116.checked == true) {
+            check16.checked = false;
+        } else {
+            check16.checked = true;
+        }
+
+    })
+    if (check16.checked == true) {
+        check116.checked = false;
+    } else {
+        check116.checked = true;
+    }
+    //------------------------------
+    check17.addEventListener('change', (e) => {
+        if (check17.checked == true) {
+            check117.checked = false;
+        } else {
+            check117.checked = true;
+        }
+
+    })
+    check117.addEventListener('change', (e) => {
+        if (check117.checked == true) {
+            check17.checked = false;
+        } else {
+            check17.checked = true;
+        }
+
+    })
+    if (check17.checked == true) {
+        check117.checked = false;
+    } else {
+        check117.checked = true;
+    }
+    //------------------------------
+    check18.addEventListener('change', (e) => {
+        if (check18.checked == true) {
+            check118.checked = false;
+        } else {
+            check118.checked = true;
+        }
+
+    })
+    check118.addEventListener('change', (e) => {
+        if (check118.checked == true) {
+            check18.checked = false;
+        } else {
+            check18.checked = true;
+        }
+
+    })
+    if (check18.checked == true) {
+        check118.checked = false;
+    } else {
+        check118.checked = true;
+    }
+    //------------------------------
+    check19.addEventListener('change', (e) => {
+        if (check19.checked == true) {
+            check119.checked = false;
+        } else {
+            check119.checked = true;
+        }
+
+    })
+    check119.addEventListener('change', (e) => {
+        if (check119.checked == true) {
+            check19.checked = false;
+        } else {
+            check10.checked = true;
+        }
+
+    })
+    if (check19.checked == true) {
+        check119.checked = false;
+    } else {
+        check119.checked = true;
+    }
+    //------------------------------
+    check20.addEventListener('change', (e) => {
+        if (check20.checked == true) {
+            check120.checked = false;
+        } else {
+            check120.checked = true;
+        }
+
+    })
+    check120.addEventListener('change', (e) => {
+        if (check120.checked == true) {
+            check20.checked = false;
+        } else {
+            check20.checked = true;
+        }
+
+    })
+    if (check20.checked == true) {
+        check120.checked = false;
+    } else {
+        check120.checked = true;
+    }
+    //------------------------------
+    check21.addEventListener('change', (e) => {
+        if (check21.checked == true) {
+            check121.checked = false;
+        } else {
+            check121.checked = true;
+        }
+
+    })
+    check121.addEventListener('change', (e) => {
+        if (check121.checked == true) {
+            check21.checked = false;
+        } else {
+            check21.checked = true;
+        }
+
+    })
+    if (check21.checked == true) {
+        check121.checked = false;
+    } else {
+        check121.checked = true;
+    }
+</script>

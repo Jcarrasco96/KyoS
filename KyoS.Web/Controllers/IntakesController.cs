@@ -1307,5 +1307,130 @@ namespace KyoS.Web.Controllers
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateFeeAgreement", IntakeViewModel) });
         }
+
+        [Authorize(Roles = "Mannager")]
+        public IActionResult CreateTuberculosis(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            IntakeTuberculosisViewModel model;
+
+            if (User.IsInRole("Mannager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    IntakeTuberculosisEntity intakeTuberculosis = _context.IntakeTuberculosis
+                                                                            .Include(n => n.Client)
+                                                                            .FirstOrDefault(n => n.Client.Id == id);
+                    if (intakeTuberculosis == null)
+                    {
+                        model = new IntakeTuberculosisViewModel
+                        {
+                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            IdClient = id,
+                            Client_FK = id,
+                            Id = 0,
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardian = DateTime.Now,
+                            DateSignaturePerson = DateTime.Now,
+
+                            DoYouCurrently  = false,
+                            DoYouBring = false,
+                            DoYouCough = false,
+                            DoYouSweat = false,
+                            DoYouHaveFever = false,
+                            HaveYouLost = false,
+                            DoYouHaveChest = false,
+                            If2OrMore = false,
+                        
+                            HaveYouRecently = false,
+                            AreYouRecently = false,
+                            IfYesWhich = false,
+                            DoYouOr = false,
+                            HaveYouEverBeen = false,
+                            HaveYouEverWorked = false,
+                            HaveYouEverHadOrgan = false,
+                            HaveYouEverConsidered = false,
+                            HaveYouEverHadAbnormal = false,
+                            If3OrMore = false,
+
+                            HaveYouEverHadPositive = false,
+                            IfYesWhere = "",
+                            When = "",
+                            HaveYoyEverBeenTold = false,
+                            AgencyExpectation = false,
+                            If1OrMore = false,
+
+                            Documents = true,
+                        };
+
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToIntakeTuberculosisViewModel(intakeTuberculosis);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> CreateTuberculosis(IntakeTuberculosisViewModel IntakeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                IntakeTuberculosisEntity IntakeTuberculosisEntity = await _converterHelper.ToIntakeTuberculosisEntity(IntakeViewModel, false);
+
+                if (IntakeTuberculosisEntity.Id == 0)
+                {
+                    IntakeTuberculosisEntity.Client = null;
+                    _context.IntakeTuberculosis.Add(IntakeTuberculosisEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakeTuberculosisEntity.Client = null;
+                    _context.IntakeTuberculosis.Update(IntakeTuberculosisEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            //Preparing Data
+            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTuberculosis", IntakeViewModel) });
+        }
+
     }
 }

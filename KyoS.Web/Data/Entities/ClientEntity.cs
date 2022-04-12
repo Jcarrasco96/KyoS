@@ -123,6 +123,8 @@ namespace KyoS.Web.Data.Entities
 
         public IntakeFeeAgreementEntity IntakeFeeAgreement { get; set; }
 
+        public IntakeTuberculosisEntity IntakeTuberculosis { get; set; }
+
         public string MissingDoc 
         {
             get
