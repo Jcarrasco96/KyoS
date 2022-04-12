@@ -45,11 +45,11 @@
                                 @Html.DisplayNameFor(model => model.Client.Name)
                             </th>
                             @*<th class="col-md-1">
-            @Html.DisplayNameFor(model => model.Client.Code)
-            </th>
-            <th class="col-md-1" style="text-align:center;">
-            Admission Date
-        </th>*@
+                                @Html.DisplayNameFor(model => model.Client.Code)
+                                </th>
+                                <th class="col-md-1" style="text-align:center;">
+                                Admission Date
+                            </th>*@
                             <th class="col-md-1" style="text-align:center;">
                                 CONSENT FOR TREATMENT
                             </th>
@@ -101,54 +101,124 @@
                                 @Html.DisplayFor(modelItem => item.Client.Name)
                             </td>
                             @*<td>
-            @Html.DisplayFor(modelItem => item.Client.Code)
-        </td>
-        <td align="center">
-            @Html.DisplayFor(modelItem => item.DateAdmision)
-        </td>
-        <td align="center">
-            @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
-            {
-                <span class="label label-success">
-                    Open
-                </span>
-            }
-            @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
-            {
-                <span class="label label-default">
-                    Close
-                </span>
-            }
-        </td>*@
-                            <td align="center">
-                                <a asp-action="CreateConsentForTreatment" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Consent For Treatment"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                @Html.DisplayFor(modelItem => item.Client.Code)
                             </td>
                             <td align="center">
-                                <a asp-action="CreateConsentForRelease" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Consent For Release"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                @Html.DisplayFor(modelItem => item.DateAdmision)
                             </td>
                             <td align="center">
-                                <a asp-action="CreateConsumerRights" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Consumer Rights"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                {
+                                    <span class="label label-success">
+                                        Open
+                                    </span>
+                                }
+                                @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
+                                {
+                                    <span class="label label-default">
+                                        Close
+                                    </span>
+                                }
+                            </td>*@
+                            <td align="center">
+                               @if (item.Client.IntakeConsentForTreatment != null)
+                               {
+                                    <a asp-action="CreateConsentForTreatment" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Consent For Treatment"><i class="glyphicon glyphicon-align-justify"></i></a>
+                               }
+                               else
+                               { 
+                                    <a asp-action="CreateConsentForTreatment" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Consent For Treatment"><i class="glyphicon glyphicon-align-justify"></i></a>
+                               }
                             </td>
                             <td align="center">
-                                <a asp-action="CreateAcknowledgementHippa" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Acknowledgement"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                @if (item.Client.IntakeConsentForRelease != null)
+                                {
+                                    <a asp-action="CreateConsentForRelease" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Consent For Release"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
+                                else
+                                {
+                                    <a asp-action="CreateConsentForRelease" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Consent For Release"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
                             </td>
                             <td align="center">
-                                <a asp-action="CreateAccessToServices" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                @if (item.Client.IntakeConsumerRights != null)
+                                {
+                                    <a asp-action="CreateConsumerRights" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Consumer Rights"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
+                                else
+                                {
+                                    <a asp-action="CreateConsumerRights" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Consumer Rights"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
                             </td>
                             <td align="center">
-                                <a asp-action="CreateOrientationCheckList" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                @if (item.Client.IntakeAcknowledgementHipa != null)
+                                {
+                                    <a asp-action="CreateAcknowledgementHippa" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Acknowledgement"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
+                                else
+                                {
+                                    <a asp-action="CreateAcknowledgementHippa" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Acknowledgement"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
                             </td>
                             <td align="center">
-                                <a asp-action="CreateTransportation" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                @if (item.Client.IntakeAccessToServices != null)
+                                {
+                                    <a asp-action="CreateAccessToServices" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
+                                else
+                                {
+                                    <a asp-action="CreateAccessToServices" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
                             </td>
                             <td align="center">
-                                <a asp-action="CreateConsentPhotograph" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                @if (item.Client.IntakeOrientationChecklist != null)
+                                {
+                                    <a asp-action="CreateOrientationCheckList" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
+                                else
+                                {
+                                    <a asp-action="CreateOrientationCheckList" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
                             </td>
                             <td align="center">
-                                <a asp-action="CreateFeeAgreement" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                @if (item.Client.IntakeTransportation != null)
+                                {
+                                    <a asp-action="CreateTransportation" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
+                                else
+                                {
+                                    <a asp-action="CreateTransportation" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
                             </td>
                             <td align="center">
-                                <a asp-action="CreateTuberculosis" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                @if (item.Client.IntakeConsentPhotograph != null)
+                                {
+                                    <a asp-action="CreateConsentPhotograph" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
+                                else
+                                {
+                                    <a asp-action="CreateConsentPhotograph" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
+                            </td>
+                            <td align="center">
+                                @if (item.Client.IntakeFeeAgreement != null)
+                                {
+                                    <a asp-action="CreateFeeAgreement" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
+                                else
+                                {
+                                    <a asp-action="CreateFeeAgreement" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
+                            </td>
+                            <td align="center">
+                                @if (item.Client.IntakeTuberculosis != null)
+                                {
+                                    <a asp-action="CreateTuberculosis" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
+                                else
+                                {
+                                    <a asp-action="CreateTuberculosis" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                }
                             </td>
                             <td align="right">
                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Intake Screening"><i class="glyphicon glyphicon-pencil"></i></a>

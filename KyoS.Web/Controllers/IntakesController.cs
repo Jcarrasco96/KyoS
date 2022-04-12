@@ -57,6 +57,17 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Mannager"))
                     return View(await _context.IntakeScreenings
                                               .Include(f => f.Client)
+                                              .ThenInclude(f => f.IntakeConsentForTreatment)
+                                              .Include(f => f.Client.IntakeAccessToServices)
+                                              .Include(f => f.Client.IntakeAcknowledgementHipa)
+                                              .Include(f => f.Client.IntakeConsentForRelease)
+                                              .Include(f => f.Client.IntakeConsentPhotograph)
+                                              .Include(f => f.Client.IntakeConsumerRights)
+                                              .Include(f => f.Client.IntakeFeeAgreement)
+                                              .Include(f => f.Client.IntakeOrientationChecklist)
+                                              .Include(f => f.Client.IntakeScreening)
+                                              .Include(f => f.Client.IntakeTransportation)
+                                              .Include(f => f.Client.IntakeTuberculosis)
                                               .OrderBy(f => f.Client.Name)
                                               .ToListAsync());
 
