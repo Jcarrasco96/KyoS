@@ -68,6 +68,7 @@ namespace KyoS.Web.Controllers
                                               .Include(f => f.Client.IntakeScreening)
                                               .Include(f => f.Client.IntakeTransportation)
                                               .Include(f => f.Client.IntakeTuberculosis)
+                                              .Include(f => f.Client.IntakeMedicalHistory)
                                               .OrderBy(f => f.Client.Name)
                                               .ToListAsync());
 
@@ -1441,6 +1442,248 @@ namespace KyoS.Web.Controllers
             IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTuberculosis", IntakeViewModel) });
+        }
+
+        [Authorize(Roles = "Mannager")]
+        public IActionResult CreateMedicalhistory(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            IntakeMedicalHistoryViewModel model;
+
+            if (User.IsInRole("Mannager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    IntakeMedicalHistoryEntity intakeMedicalHistory = _context.IntakeMedicalHistory
+                                                                            .Include(n => n.Client)
+                                                                            .FirstOrDefault(n => n.Client.Id == id);
+                    if (intakeMedicalHistory == null)
+                    {
+                        model = new IntakeMedicalHistoryViewModel
+                        {
+                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            IdClient = id,
+                            Client_FK = id,
+                            Id = 0,
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardian = DateTime.Now,
+                            DateSignaturePerson = DateTime.Now,
+                            Documents = true,
+
+                            AddressPhysician = "",
+                            AgeFirstTalked = "",
+                            AgeFirstWalked = "",
+                            AgeToiletTrained = "",
+                            AgeWeaned = "",
+                            Allergies = false,
+                            Allergies_Describe = "",
+                            AndOrSoiling = false,
+                            Anemia = false,
+                            AreYouCurrently = false,
+                            AreYouPhysician = false,
+                            Arthritis = false,
+                            AssumingCertainPositions = false,
+                            BackPain = false,
+                            BeingConfused = false,
+                            BeingDisorientated = false,
+                            BirthWeight = "",
+                            BlackStools = false,
+                            BloodInUrine = false,
+                            BloodyStools = false,
+                            BottleFedUntilAge = "",
+                            BreastFed = false,
+                            BurningUrine = false,
+                            Calculating = false,
+                            Cancer = false,
+                            ChestPain = false,
+                            ChronicCough = false,
+                            ChronicIndigestion = false,
+                            City = "",
+                            Complications = false,
+                            Complications_Explain = "",
+                            Comprehending = false,
+                            Concentrating = false,
+                            Constipation = false,
+                            ConvulsionsOrFits = false,
+                            CoughingOfBlood = false,
+                            DescriptionOfChild = "",
+                            Diabetes = false,
+                            Diphtheria = false,
+                            DoYouSmoke = false,
+                            DoYouSmoke_PackPerDay = "",
+                            DoYouSmoke_Year = "",
+                            EarInfections = false,
+                            Epilepsy = false,
+                            EyeTrouble = false,
+                            Fainting = false,
+                            FamilyAsthma = false,
+                            FamilyAsthma_ = "",
+                            FamilyCancer = false,
+                            FamilyCancer_ = "",
+                            FamilyDiabetes = false,
+                            FamilyDiabetes_ = "",
+                            FamilyEpilepsy = false,
+                            FamilyEpilepsy_ = "",
+                            FamilyGlaucoma = false,
+                            FamilyGlaucoma_ = "",
+                            FamilyHayFever = false,
+                            FamilyHayFever_ = "",
+                            FamilyHeartDisease = false,
+                            FamilyHeartDisease_ = "",
+                            FamilyHighBloodPressure = false,
+                            FamilyHighBloodPressure_ = "",
+                            FamilyKidneyDisease = false,
+                            FamilyKidneyDisease_ = "",
+                            FamilyNervousDisorders = false,
+                            FamilyNervousDisorders_ = "",
+                            FamilyOther = false,
+                            FamilyOther_ = "",
+                            FamilySyphilis = false,
+                            FamilySyphilis_ = "",
+                            FamilyTuberculosis = false,
+                            FamilyTuberculosis_ = "",
+                            FirstYearMedical = "",
+                            Fractures = false,
+                            FrequentColds = false,
+                            FrequentHeadaches = false,
+                            FrequentNoseBleeds = false,
+                            FrequentSoreThroat = false,
+                            FrequentVomiting = false,
+                            HaveYouEverBeenPregnant = false,
+                            HaveYouEverHadComplications = false,
+                            HaveYouEverHadExcessive = false,
+                            HaveYouEverHadPainful = false,
+                            HaveYouEverHadSpotting = false,
+                            HayFever = false,
+                            HeadInjury = false,
+                            Hearing = false,
+                            HearingTrouble = false,
+                            HeartPalpitation = false,
+                            Hemorrhoids = false,
+                            Hepatitis = false,
+                            Hernia = false,
+                            HighBloodPressure = false,
+                            Hoarseness = false,
+                            Immunizations = "",
+                            InfectiousDisease = false,
+                            Jaundice = false,
+                            KidneyStones = false,
+                            KidneyTrouble = false,
+                            Length = "",
+                            ListAllCurrentMedications = "",
+                            LossOfMemory = false,
+                            Mumps = false,
+                            Nervousness = false,
+                            NightSweats = false,
+                            Normal = false,
+                            PainfulJoints = false,
+                            PainfulMuscles = false,
+                            PainfulUrination = false,
+                            PerformingCertainMotions = false,
+                            Planned = false,
+                            Poliomyelitis = false,
+                            PrimaryCarePhysician = "",
+                            ProblemWithBedWetting = false,
+                            Reading = false,
+                            RheumaticFever = false,
+                            Rheumatism = false,
+                            ScarletFever = false,
+                            Seeing = false,
+                            SeriousInjury = false,
+                            ShortnessOfBreath = false,
+                            SkinTrouble = false,
+                            Speaking = false,
+                            State = "",
+                            StomachPain = false,
+                            Surgery = false,
+                            SwellingOfFeet = false,
+                            SwollenAnkles = false,
+                            Tuberculosis = false,
+                            Unplanned = false,
+                            VaricoseVeins = false,
+                            VenerealDisease = false,
+                            VomitingOfBlood = false,
+                            Walking = false,
+                            WeightLoss = false,
+                            WhoopingCough = false,
+                            WritingSentence = false,
+                            ZipCode = "",
+                            AgeOfFirstMenstruation = "",
+                            DateOfLastBreastExam = DateTime.Now,
+                            DateOfLastPelvic = DateTime.Now,
+                            DateOfLastPeriod = DateTime.Now,
+                            UsualDurationOfPeriods = "",
+                            UsualIntervalBetweenPeriods = ""
+
+                        };
+
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToIntakeMedicalHistoryViewModel(intakeMedicalHistory);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> CreateMedicalhistory(IntakeMedicalHistoryViewModel IntakeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                IntakeMedicalHistoryEntity IntakeMedicalHistoryEntity = await _converterHelper.ToIntakeMedicalHistoryEntity(IntakeViewModel, false);
+
+                if (IntakeMedicalHistoryEntity.Id == 0)
+                {
+                    IntakeMedicalHistoryEntity.Client = null;
+                    _context.IntakeMedicalHistory.Add(IntakeMedicalHistoryEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakeMedicalHistoryEntity.Client = null;
+                    _context.IntakeMedicalHistory.Update(IntakeMedicalHistoryEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Intakes");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            //Preparing Data
+            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMedicalhistory", IntakeViewModel) });
         }
 
     }

@@ -125,6 +125,8 @@ namespace KyoS.Web.Data.Entities
 
         public IntakeTuberculosisEntity IntakeTuberculosis { get; set; }
 
+        public IntakeMedicalHistoryEntity IntakeMedicalHistory { get; set; }
+
         public string MissingDoc 
         {
             get

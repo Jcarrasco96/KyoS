@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220413010444_IntakeMedicalHistory")]
+    partial class IntakeMedicalHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1612,9 +1614,6 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("AgeFirstWalked")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("AgeOfFirstMenstruation")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("AgeToiletTrained")
                         .HasColumnType("nvarchar(max)");
 
@@ -1716,15 +1715,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<bool>("CoughingOfBlood")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime>("DateOfLastBreastExam")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateOfLastPelvic")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateOfLastPeriod")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateSignatureEmployee")
                         .HasColumnType("datetime2");
@@ -1918,9 +1908,6 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("InfectiousDisease")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("InformationProvided")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("Jaundice")
                         .HasColumnType("bit");
 
@@ -2022,12 +2009,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<bool>("Unplanned")
                         .HasColumnType("bit");
-
-                    b.Property<string>("UsualDurationOfPeriods")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UsualIntervalBetweenPeriods")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("VaricoseVeins")
                         .HasColumnType("bit");
