@@ -125,7 +125,7 @@ namespace KyoS.Web.Controllers
                         BehaviorIs_Status = _combosHelper.GetComboIntake_BehaviorIs(),
                         IdSpeechIs = 1,
                         SpeechIs_Status = _combosHelper.GetComboIntake_SpeechIs(),
-                        
+                        AdmissionedFor = user_logged.FullName
 
                     };
                     return View(model);
@@ -153,6 +153,7 @@ namespace KyoS.Web.Controllers
                 BehaviorIs_Status = _combosHelper.GetComboIntake_BehaviorIs(),
                 IdSpeechIs = 1,
                 SpeechIs_Status = _combosHelper.GetComboIntake_SpeechIs(),
+                AdmissionedFor = user_logged.FullName
             };
             return View(model);
         }
@@ -213,6 +214,7 @@ namespace KyoS.Web.Controllers
                 BehaviorIs_Status = _combosHelper.GetComboIntake_BehaviorIs(),
                 IdSpeechIs = IntakeViewModel.IdSpeechIs,
                 SpeechIs_Status = _combosHelper.GetComboIntake_SpeechIs(),
+                AdmissionedFor = user_logged.FullName
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", IntakeViewModel) });
         }
@@ -375,8 +377,9 @@ namespace KyoS.Web.Controllers
                             Id = 0,
                             Underestand = true,
                             IdClient = id,
-                            Client_FK = id
-                            
+                            Client_FK = id,
+                            AdmissionedFor = user_logged.FullName
+
                         };
                         if (model.Client.LegalGuardian == null)
                             model.Client.LegalGuardian = new LegalGuardianEntity();
@@ -464,12 +467,13 @@ namespace KyoS.Web.Controllers
                 {
                     IntakeConsentForReleaseEntity intakeConsent = _context.IntakeConsentForRelease
                                                                             .Include(n => n.Client)
+                                                                            .ThenInclude(n => n.LegalGuardian)
                                                                             .FirstOrDefault(n => n.Client.Id == id);
                     if (intakeConsent == null)
                     {
                         model = new IntakeConsentForReleaseViewModel
                         {
-                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
@@ -495,13 +499,17 @@ namespace KyoS.Web.Controllers
                             DateSignatureEmployee = DateTime.Now,
                             DateSignatureLegalGuardian = DateTime.Now,
                             DateSignaturePerson = DateTime.Now,
+                            AdmissionedFor = user_logged.FullName
 
                         };
-
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
                         return View(model);
                     }
                     else
                     {
+                        if (intakeConsent.Client.LegalGuardian == null)
+                            intakeConsent.Client.LegalGuardian = new LegalGuardianEntity();
                         model = _converterHelper.ToIntakeConsentForReleaseViewModel(intakeConsent);
 
                         return View(model);
@@ -580,12 +588,13 @@ namespace KyoS.Web.Controllers
                 {
                     IntakeConsumerRightsEntity intakeConsent = _context.IntakeConsumerRights
                                                                             .Include(n => n.Client)
+                                                                            .ThenInclude(n => n.LegalGuardian)
                                                                             .FirstOrDefault(n => n.Client.Id == id);
                     if (intakeConsent == null)
                     {
                         model = new IntakeConsumerRightsViewModel
                         {
-                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
@@ -594,13 +603,17 @@ namespace KyoS.Web.Controllers
                             DateSignatureEmployee = DateTime.Now,
                             DateSignatureLegalGuardian = DateTime.Now,
                             DateSignaturePerson = DateTime.Now,
-                            
-                        };
+                            AdmissionedFor = user_logged.FullName
 
+                        };
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
                         return View(model);
                     }
                     else
                     {
+                        if (intakeConsent.Client.LegalGuardian == null)
+                            intakeConsent.Client.LegalGuardian = new LegalGuardianEntity();
                         model = _converterHelper.ToIntakeConsumerRightsViewModel(intakeConsent);
 
                         return View(model);
@@ -739,7 +752,8 @@ namespace KyoS.Web.Controllers
                             Documents = true,
                             Id = 0,
                             IdClient = id,
-                            Client_FK = id
+                            Client_FK = id,
+                            AdmissionedFor = user_logged.FullName
 
                         };
                         if (model.Client.LegalGuardian == null)
@@ -827,12 +841,13 @@ namespace KyoS.Web.Controllers
                 {
                     IntakeAccessToServicesEntity intakeAccess = _context.IntakeAccessToServices
                                                                             .Include(n => n.Client)
+                                                                            .ThenInclude(n => n.LegalGuardian)
                                                                             .FirstOrDefault(n => n.Client.Id == id);
                     if (intakeAccess == null)
                     {
                         model = new IntakeAccessToServicesViewModel
                         {
-                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
@@ -840,13 +855,19 @@ namespace KyoS.Web.Controllers
                             DateSignatureEmployee = DateTime.Now,
                             DateSignatureLegalGuardian = DateTime.Now,
                             DateSignaturePerson = DateTime.Now,
+                            AdmissionedFor = user_logged.FullName,
 
                         };
-
+                        
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
                         return View(model);
                     }
                     else
                     {
+                        
+                        if (intakeAccess.Client.LegalGuardian == null)
+                            intakeAccess.Client.LegalGuardian = new LegalGuardianEntity();
                         model = _converterHelper.ToIntakeAccessToServicesViewModel(intakeAccess);
 
                         return View(model);
@@ -922,14 +943,15 @@ namespace KyoS.Web.Controllers
             {
                 if (user_logged.Clinic != null)
                 {
-                    IntakeOrientationChecklistEntity intakeAccess = _context.IntakeOrientationCheckList
+                    IntakeOrientationChecklistEntity intakeCheckList = _context.IntakeOrientationCheckList
                                                                             .Include(n => n.Client)
+                                                                            .ThenInclude(n => n.LegalGuardian)
                                                                             .FirstOrDefault(n => n.Client.Id == id);
-                    if (intakeAccess == null)
+                    if (intakeCheckList == null)
                     {
                         model = new IntakeOrientationCheckListViewModel
                         {
-                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
@@ -960,13 +982,17 @@ namespace KyoS.Web.Controllers
                             TheAbove = true,
                             TourFacility = true,
                             Documents = true,
+                            AdmissionedFor = user_logged.FullName,
                         };
-
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
                         return View(model);
                     }
                     else
                     {
-                        model = _converterHelper.ToIntakeOrientationChecklistViewModel(intakeAccess);
+                        if (intakeCheckList.Client.LegalGuardian == null)
+                            intakeCheckList.Client.LegalGuardian = new LegalGuardianEntity();
+                        model = _converterHelper.ToIntakeOrientationChecklistViewModel(intakeCheckList);
 
                         return View(model);
                     }
@@ -1043,12 +1069,13 @@ namespace KyoS.Web.Controllers
                 {
                     IntakeTransportationEntity intakeTransportation = _context.IntakeTransportation
                                                                             .Include(n => n.Client)
+                                                                            .ThenInclude(n => n.LegalGuardian)
                                                                             .FirstOrDefault(n => n.Client.Id == id);
                     if (intakeTransportation == null)
                     {
                         model = new IntakeTransportationViewModel
                         {
-                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
@@ -1056,13 +1083,17 @@ namespace KyoS.Web.Controllers
                             DateSignatureEmployee = DateTime.Now,
                             DateSignatureLegalGuardian = DateTime.Now,
                             DateSignaturePerson = DateTime.Now,
+                            AdmissionedFor = user_logged.FullName,
 
                         };
-
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
                         return View(model);
                     }
                     else
                     {
+                        if (intakeTransportation.Client.LegalGuardian == null)
+                            intakeTransportation.Client.LegalGuardian = new LegalGuardianEntity();
                         model = _converterHelper.ToIntakeTransportationViewModel(intakeTransportation);
 
                         return View(model);
@@ -1141,12 +1172,13 @@ namespace KyoS.Web.Controllers
                 {
                     IntakeConsentPhotographEntity intakeConsentPhotograph = _context.IntakeConsentPhotograph
                                                                             .Include(n => n.Client)
+                                                                            .ThenInclude(n => n.LegalGuardian)
                                                                             .FirstOrDefault(n => n.Client.Id == id);
                     if (intakeConsentPhotograph == null)
                     {
                         model = new IntakeConsentPhotographViewModel
                         {
-                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
@@ -1165,12 +1197,16 @@ namespace KyoS.Web.Controllers
                             ByTODocument = true,
 
                             Documents = true,
+                            AdmissionedFor = user_logged.FullName,
                         };
-
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
                         return View(model);
                     }
                     else
                     {
+                        if (intakeConsentPhotograph.Client.LegalGuardian == null)
+                            intakeConsentPhotograph.Client.LegalGuardian = new LegalGuardianEntity();
                         model = _converterHelper.ToIntakeConsentPhotographViewModel(intakeConsentPhotograph);
 
                         return View(model);
@@ -1248,12 +1284,13 @@ namespace KyoS.Web.Controllers
                 {
                     IntakeFeeAgreementEntity intakefeeAgreement = _context.IntakeFeeAgreement
                                                                             .Include(n => n.Client)
+                                                                            .ThenInclude(n => n.LegalGuardian)
                                                                             .FirstOrDefault(n => n.Client.Id == id);
                     if (intakefeeAgreement == null)
                     {
                         model = new IntakeFeeAgreementViewModel
                         {
-                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
@@ -1261,13 +1298,17 @@ namespace KyoS.Web.Controllers
                             DateSignatureEmployee = DateTime.Now,
                             DateSignatureLegalGuardian = DateTime.Now,
                             DateSignaturePerson = DateTime.Now,
+                            AdmissionedFor = user_logged.FullName,
 
                         };
-
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
                         return View(model);
                     }
                     else
                     {
+                        if (intakefeeAgreement.Client.LegalGuardian == null)
+                            intakefeeAgreement.Client.LegalGuardian = new LegalGuardianEntity();
                         model = _converterHelper.ToIntakeFeeAgreementViewModel(intakefeeAgreement);
 
                         return View(model);
@@ -1345,12 +1386,13 @@ namespace KyoS.Web.Controllers
                 {
                     IntakeTuberculosisEntity intakeTuberculosis = _context.IntakeTuberculosis
                                                                             .Include(n => n.Client)
+                                                                            .ThenInclude(n => n.LegalGuardian)
                                                                             .FirstOrDefault(n => n.Client.Id == id);
                     if (intakeTuberculosis == null)
                     {
                         model = new IntakeTuberculosisViewModel
                         {
-                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
@@ -1386,12 +1428,16 @@ namespace KyoS.Web.Controllers
                             If1OrMore = false,
 
                             Documents = true,
+                            AdmissionedFor = user_logged.FullName,
                         };
-
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
                         return View(model);
                     }
                     else
                     {
+                        if (intakeTuberculosis.Client.LegalGuardian == null)
+                            intakeTuberculosis.Client.LegalGuardian = new LegalGuardianEntity();
                         model = _converterHelper.ToIntakeTuberculosisViewModel(intakeTuberculosis);
 
                         return View(model);
@@ -1469,12 +1515,13 @@ namespace KyoS.Web.Controllers
                 {
                     IntakeMedicalHistoryEntity intakeMedicalHistory = _context.IntakeMedicalHistory
                                                                             .Include(n => n.Client)
+                                                                            .ThenInclude(n => n.LegalGuardian)
                                                                             .FirstOrDefault(n => n.Client.Id == id);
                     if (intakeMedicalHistory == null)
                     {
                         model = new IntakeMedicalHistoryViewModel
                         {
-                            Client = _context.Clients.FirstOrDefault(n => n.Id == id),
+                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
@@ -1626,14 +1673,18 @@ namespace KyoS.Web.Controllers
                             DateOfLastPelvic = DateTime.Now,
                             DateOfLastPeriod = DateTime.Now,
                             UsualDurationOfPeriods = "",
-                            UsualIntervalBetweenPeriods = ""
+                            UsualIntervalBetweenPeriods = "",
+                            AdmissionedFor = user_logged.FullName,
 
                         };
-
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
                         return View(model);
                     }
                     else
                     {
+                        if (intakeMedicalHistory.Client.LegalGuardian == null)
+                            intakeMedicalHistory.Client.LegalGuardian = new LegalGuardianEntity();
                         model = _converterHelper.ToIntakeMedicalHistoryViewModel(intakeMedicalHistory);
 
                         return View(model);

@@ -1053,8 +1053,8 @@ namespace KyoS.Web.Helpers
                 InformationGatheredBy = model.InformationGatheredBy,
                 ClientIsStatus = IntakeScreeninigType.GetClientIsByIndex(model.IdClientIs),
                 BehaviorIsStatus = IntakeScreeninigType.GetBehaviorIsByIndex(model.IdBehaviorIs),
-                SpeechIsStatus = IntakeScreeninigType.GetSpeechIsByIndex(model.IdSpeechIs)
-
+                SpeechIsStatus = IntakeScreeninigType.GetSpeechIsByIndex(model.IdSpeechIs),
+                AdmissionedFor = model.AdmissionedFor,
 
             };
         }
@@ -1082,6 +1082,7 @@ namespace KyoS.Web.Helpers
                 BehaviorIs_Status = _combosHelper.GetComboIntake_BehaviorIs(),
                 IdSpeechIs = Convert.ToInt32(model.SpeechIsStatus) + 1,
                 SpeechIs_Status = _combosHelper.GetComboIntake_SpeechIs(),
+                AdmissionedFor = model.AdmissionedFor,
             };
            
         }
@@ -1104,8 +1105,8 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                Underestand = model.Underestand
-                
+                Underestand = model.Underestand,
+                AdmissionedFor = model.AdmissionedFor,
 
             };
         }
@@ -1128,8 +1129,9 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                Underestand = model.Underestand
-               
+                Underestand = model.Underestand,
+                AdmissionedFor = model.AdmissionedFor,
+
             };
             
         }
@@ -1163,7 +1165,8 @@ namespace KyoS.Web.Helpers
                 ProgressReports = model.ProgressReports,
                 PsychologycalEvaluation = model.PsychologycalEvaluation,
                 SchoolRecord = model.SchoolRecord,
-                ToRelease = model.ToRelease
+                ToRelease = model.ToRelease,
+                AdmissionedFor = model.AdmissionedFor,
             };
         }
 
@@ -1196,8 +1199,8 @@ namespace KyoS.Web.Helpers
                 ForPurpose_Treatment = model.ForPurpose_Treatment,
                 InForm_Facsimile = model.InForm_Facsimile,
                 InForm_VerbalInformation = model.InForm_VerbalInformation,
-                InForm_WrittenRecords = model.InForm_WrittenRecords
-
+                InForm_WrittenRecords = model.InForm_WrittenRecords,
+                AdmissionedFor = model.AdmissionedFor,
 
             };
 
@@ -1214,8 +1217,9 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 ServedOf = model.ServedOf,
-                Documents = model.Documents
-                
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+
             };
         }
 
@@ -1231,8 +1235,9 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 ServedOf = model.ServedOf,
-                Documents = model.Documents
-                
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+
             };
 
         }
@@ -1247,8 +1252,9 @@ namespace KyoS.Web.Helpers
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
-                Documents = model.Documents
-                
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+
             };
         }
 
@@ -1263,8 +1269,9 @@ namespace KyoS.Web.Helpers
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
-                Documents = model.Documents
-                
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+               
             };
 
         }
@@ -1278,7 +1285,8 @@ namespace KyoS.Web.Helpers
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
-                Documents = model.Documents
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
 
             };
         }
@@ -1294,8 +1302,9 @@ namespace KyoS.Web.Helpers
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
-                Documents = model.Documents
-
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+                
             };
 
         }
@@ -1333,8 +1342,9 @@ namespace KyoS.Web.Helpers
                 Rights = model.Rights,
                 Services = model.Services,
                 TheAbove = model.TheAbove,
-                TourFacility = model.TourFacility
-                
+                TourFacility = model.TourFacility,
+                AdmissionedFor = model.AdmissionedFor,
+
             };
         }
 
@@ -1372,7 +1382,8 @@ namespace KyoS.Web.Helpers
                 Rights = model.Rights,
                 Services = model.Services,
                 TheAbove = model.TheAbove,
-                TourFacility = model.TourFacility
+                TourFacility = model.TourFacility,
+                AdmissionedFor = model.AdmissionedFor,
 
             };
 
@@ -1388,7 +1399,8 @@ namespace KyoS.Web.Helpers
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
-                Documents = model.Documents
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
 
             };
         }
@@ -1404,7 +1416,8 @@ namespace KyoS.Web.Helpers
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
-                Documents = model.Documents
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
 
             };
 
@@ -1430,7 +1443,8 @@ namespace KyoS.Web.Helpers
                 Publication = model.Publication,
                 Broadcast = model.Broadcast,
                 Markrting = model.Markrting,
-                ByTODocument = model.ByTODocument
+                ByTODocument = model.ByTODocument,
+                AdmissionedFor = model.AdmissionedFor,
 
             };
         }
@@ -1456,7 +1470,9 @@ namespace KyoS.Web.Helpers
                 Publication = model.Publication,
                 Broadcast = model.Broadcast,
                 Markrting = model.Markrting,
-                ByTODocument = model.ByTODocument
+                ByTODocument = model.ByTODocument,
+                AdmissionedFor = model.AdmissionedFor,
+
 
             };
 
@@ -1472,7 +1488,8 @@ namespace KyoS.Web.Helpers
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
-                Documents = model.Documents
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
 
             };
         }
@@ -1488,7 +1505,9 @@ namespace KyoS.Web.Helpers
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
-                Documents = model.Documents
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+                
 
             };
 
@@ -1532,7 +1551,10 @@ namespace KyoS.Web.Helpers
                 HaveYoyEverBeenTold = model.HaveYoyEverBeenTold,
                 AgencyExpectation = model.AgencyExpectation,
                 If1OrMore = model.If1OrMore,
+
+                AdmissionedFor = model.AdmissionedFor,
                 
+
             };
         }
 
@@ -1575,6 +1597,8 @@ namespace KyoS.Web.Helpers
                 HaveYoyEverBeenTold = model.HaveYoyEverBeenTold,
                 AgencyExpectation = model.AgencyExpectation,
                 If1OrMore = model.If1OrMore,
+                
+                AdmissionedFor = model.AdmissionedFor,
 
             };
 
@@ -1736,7 +1760,10 @@ namespace KyoS.Web.Helpers
                 DateOfLastPelvic = model.DateOfLastPelvic,
                 DateOfLastPeriod = model.DateOfLastPeriod,
                 UsualDurationOfPeriods = model.UsualDurationOfPeriods,
-                UsualIntervalBetweenPeriods = model.UsualIntervalBetweenPeriods
+                UsualIntervalBetweenPeriods = model.UsualIntervalBetweenPeriods,
+
+                AdmissionedFor = model.AdmissionedFor,
+                InformationProvided = model.InformationProvided
 
             };
         }
@@ -1898,9 +1925,10 @@ namespace KyoS.Web.Helpers
                 DateOfLastPelvic = model.DateOfLastPelvic,
                 DateOfLastPeriod = model.DateOfLastPeriod,
                 UsualDurationOfPeriods = model.UsualDurationOfPeriods,
-                UsualIntervalBetweenPeriods = model.UsualIntervalBetweenPeriods
+                UsualIntervalBetweenPeriods = model.UsualIntervalBetweenPeriods,
 
-                
+                AdmissionedFor = model.AdmissionedFor,
+                InformationProvided = model.InformationProvided
             };
 
         }

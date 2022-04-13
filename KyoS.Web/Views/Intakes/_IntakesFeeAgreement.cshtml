@@ -33,23 +33,40 @@
                     Service Plan Review                             $120.00          0.00
           </pre>
 </div>
-<div class="container-fluid">
-    <div class="form-group col-md-4">
-        <label asp-for="DateSignatureEmployee" class="control-label">Person Served Signature </label>&nbsp;*
-        <input asp-for="DateSignatureEmployee" class="form-control">
-        <span asp-validation-for="DateSignatureEmployee" class="text-danger"></span>
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.Client.Name)</u></strong><br />
+        <i>Person Served Signature</i>
     </div>
-    <div class="form-group col-md-4">
-        <label asp-for="DateSignatureLegalGuardian" class="control-label">Parent, Legal Guardian or Authorized Representative</label>&nbsp;*
-        <input asp-for="DateSignatureLegalGuardian" class="form-control" id="DateSignatureClient">
-        <span asp-validation-for="DateSignatureLegalGuardian" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-4">
-        <label asp-for="DateSignatureEmployee" class="control-label">Employee Signature</label>&nbsp;*
-        <input asp-for="DateSignatureEmployee" class="form-control" id="DateSignatureWitness">
-        <span asp-validation-for="DateSignatureEmployee" class="text-danger"></span>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignaturePerson" class="form-control">
+        <i>Signature Date</i>
     </div>
 </div>
+<br />
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Name)</u></strong><br />
+        <i>Parent, (Legal Guardian or Authorized Representative Signature)</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignatureLegalGuardian" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.AdmissionedFor)</u></strong><br />
+        <i>Employee Signature</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignatureEmployee" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+
 <div>
     <div class="form-group col-md-12">
         <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />

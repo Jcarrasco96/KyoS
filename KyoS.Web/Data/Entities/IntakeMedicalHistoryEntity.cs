@@ -162,6 +162,8 @@ namespace KyoS.Web.Data.Entities
         [Display(Name = "Date of last breast exam")]
         [DataType(DataType.Date)]
 
+        public string AdmissionedFor { get; set; }
+
         public DateTime DateOfLastBreastExam { get; set; }
 
         //sheet 3

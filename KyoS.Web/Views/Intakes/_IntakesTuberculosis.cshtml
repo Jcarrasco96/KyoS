@@ -7,62 +7,79 @@
     <strong>1. Symptoms:</strong>   
 
             Do you currently have a cough that has lasted 3 weeks or longer?                            Yes <input type="checkbox" asp-for="DoYouCurrently" class="form-check-input" readonly id="check1">   No <input type="checkbox" class="form-check-input" id="check101"> 
-            Do you bring up anything when you cough?                                                    Yes <input type="checkbox" asp-for="DoYouBring" class="form-check-input" id="check2">   No <input type="checkbox" class="form-check-input" readonly id="check102" > 
-            Do you cough up blood?                                                                      Yes <input type="checkbox" asp-for="DoYouCough" class="form-check-input" id="check3">   No <input type="checkbox" class="form-check-input" readonly id="check103" > 
-            Do you sweat at night, enough to soak the sheets                                            Yes <input type="checkbox" asp-for="DoYouSweat" class="form-check-input" id="check4">   No <input type="checkbox" class="form-check-input" readonly id="check104" > 
-            Do you have a fever or chills?                                                              Yes <input type="checkbox" asp-for="DoYouHaveFever" class="form-check-input" id="check5">   No <input type="checkbox" class="form-check-input" readonly id="check105" > 
-            Have you lost weight recently (10 pounds or more) without trying?                           Yes <input type="checkbox" asp-for="HaveYouLost" class="form-check-input" id="check6">   No <input type="checkbox" class="form-check-input" readonly id="check106" > 
-            Do you have chest pain?                                                                     Yes <input type="checkbox" asp-for="DoYouHaveChest" class="form-check-input" id="check7">   No <input type="checkbox"  class="form-check-input" readonly id="check107" > 
-            <strong>If 2 or more “Yes” boxes are checked, a TB test will be required before                    TB Test Required
-            entering the program.                                                                       Yes <input type="checkbox" asp-for="If2OrMore" class="form-check-input" id="check8">   No <input type="checkbox" class="form-check-input" readonly id="check108" > <br />
+            Do you bring up anything when you cough?                                                    Yes <input type="checkbox" asp-for="DoYouBring" class="form-check-input" id="check2">   No <input type="checkbox" class="form-check-input" readonly id="check102"> 
+            Do you cough up blood?                                                                      Yes <input type="checkbox" asp-for="DoYouCough" class="form-check-input" id="check3">   No <input type="checkbox" class="form-check-input" readonly id="check103"> 
+            Do you sweat at night, enough to soak the sheets                                            Yes <input type="checkbox" asp-for="DoYouSweat" class="form-check-input" id="check4">   No <input type="checkbox" class="form-check-input" readonly id="check104"> 
+            Do you have a fever or chills?                                                              Yes <input type="checkbox" asp-for="DoYouHaveFever" class="form-check-input" id="check5">   No <input type="checkbox" class="form-check-input" readonly id="check105"> 
+            Have you lost weight recently (10 pounds or more) without trying?                           Yes <input type="checkbox" asp-for="HaveYouLost" class="form-check-input" id="check6">   No <input type="checkbox" class="form-check-input" readonly id="check106"> 
+            Do you have chest pain?                                                                     Yes <input type="checkbox" asp-for="DoYouHaveChest" class="form-check-input" id="check7">   No <input type="checkbox" class="form-check-input" readonly id="check107"> 
+    <strong>If 2 or more “Yes” boxes are checked, a TB test will be required before                    TB Test Required
+            entering the program.                                                                       Yes <input type="checkbox" asp-for="If2OrMore" class="form-check-input" id="check8">   No <input type="checkbox" class="form-check-input" readonly id="check108"> <br />
     2. Risk factors:
             </strong>
-            Have you recently been around someone who was sick with tuberculosis?                       Yes <input type="checkbox" asp-for="HaveYouRecently" class="form-check-input" id="check9">   No <input type="checkbox" class="form-check-input" readonly id="check109" > 
-            Are you a recent immigrant from a country with a high rate of TB?                           Yes <input type="checkbox" asp-for="AreYouRecently" class="form-check-input" id="check10">   No <input type="checkbox" class="form-check-input" readonly id="check110" > 
-            if yes, which country?                                                                      Yes <input type="checkbox" asp-for="IfYesWhich" class="form-check-input" id="check11">   No <input type="checkbox" class="form-check-input" readonly id="check111" > 
-            Do you or have you ever injected drugs?                                                     Yes <input type="checkbox" asp-for="DoYouOr" class="form-check-input" id="check12">   No <input type="checkbox" class="form-check-input" readonly id="check112" > 
-            Have you ever been in jail, prison, or a nursing home?                                      Yes <input type="checkbox" asp-for="HaveYouEverBeen" class="form-check-input" id="check13">   No <input type="checkbox" class="form-check-input" readonly id="check113" > 
-            Have you ever worked in a lab that processed TB specimens?                                  Yes <input type="checkbox" asp-for="HaveYouEverWorked" class="form-check-input" id="check14">   No <input type="checkbox" class="form-check-input" readonly id="check114" > 
-            Have you ever had an organ transplant?                                                      Yes <input type="checkbox" asp-for="HaveYouEverHadOrgan" class="form-check-input" id="check15">   No <input type="checkbox" class="form-check-input" readonly id="check115" > 
-            Have you ever considered yourself to be homeless?                                           Yes <input type="checkbox" asp-for="HaveYouEverConsidered" class="form-check-input" id="check16">   No <input type="checkbox" class="form-check-input" readonly id="check116" > 
-            Have you ever had an abnormal chest x-ray?                                                  Yes <input type="checkbox" asp-for="HaveYouEverHadAbnormal" class="form-check-input" id="check17">   No <input type="checkbox" class="form-check-input" readonly id="check117" > 
-            <strong>If 3 or more “Yes” boxes are checked, a TB test will be required before                    TB Test Required
-            entering the program.                                                                       Yes <input type="checkbox" asp-for="If2OrMore" class="form-check-input" id="check18">   No <input type="checkbox" class="form-check-input" readonly id="check118" > <br />
+            Have you recently been around someone who was sick with tuberculosis?                       Yes <input type="checkbox" asp-for="HaveYouRecently" class="form-check-input" id="check9">   No <input type="checkbox" class="form-check-input" readonly id="check109"> 
+            Are you a recent immigrant from a country with a high rate of TB?                           Yes <input type="checkbox" asp-for="AreYouRecently" class="form-check-input" id="check10">   No <input type="checkbox" class="form-check-input" readonly id="check110"> 
+            if yes, which country?                                                                      Yes <input type="checkbox" asp-for="IfYesWhich" class="form-check-input" id="check11">   No <input type="checkbox" class="form-check-input" readonly id="check111"> 
+            Do you or have you ever injected drugs?                                                     Yes <input type="checkbox" asp-for="DoYouOr" class="form-check-input" id="check12">   No <input type="checkbox" class="form-check-input" readonly id="check112"> 
+            Have you ever been in jail, prison, or a nursing home?                                      Yes <input type="checkbox" asp-for="HaveYouEverBeen" class="form-check-input" id="check13">   No <input type="checkbox" class="form-check-input" readonly id="check113"> 
+            Have you ever worked in a lab that processed TB specimens?                                  Yes <input type="checkbox" asp-for="HaveYouEverWorked" class="form-check-input" id="check14">   No <input type="checkbox" class="form-check-input" readonly id="check114"> 
+            Have you ever had an organ transplant?                                                      Yes <input type="checkbox" asp-for="HaveYouEverHadOrgan" class="form-check-input" id="check15">   No <input type="checkbox" class="form-check-input" readonly id="check115"> 
+            Have you ever considered yourself to be homeless?                                           Yes <input type="checkbox" asp-for="HaveYouEverConsidered" class="form-check-input" id="check16">   No <input type="checkbox" class="form-check-input" readonly id="check116"> 
+            Have you ever had an abnormal chest x-ray?                                                  Yes <input type="checkbox" asp-for="HaveYouEverHadAbnormal" class="form-check-input" id="check17">   No <input type="checkbox" class="form-check-input" readonly id="check117"> 
+    <strong>If 3 or more “Yes” boxes are checked, a TB test will be required before                    TB Test Required
+            entering the program.                                                                       Yes <input type="checkbox" asp-for="If2OrMore" class="form-check-input" id="check18">   No <input type="checkbox" class="form-check-input" readonly id="check118"> <br />
     3. Past history:</strong>
-            Have you ever had a positive TB skin test?                                                  Yes <input type="checkbox" asp-for="HaveYouEverHadPositive" class="form-check-input" id="check19">   No <input type="checkbox" class="form-check-input" readonly id="check119" > 
+            Have you ever had a positive TB skin test?                                                  Yes <input type="checkbox" asp-for="HaveYouEverHadPositive" class="form-check-input" id="check19">   No <input type="checkbox" class="form-check-input" readonly id="check119"> 
             (TB test: needle inserted on the underside of the arm which may cause a bump after 2 days)
-            If yes: Where (city, state, clinic, or facility)                                         <input asp-for="IfYesWhere" class="form-check-input" >
-            When (month/year)                                                                        <input asp-for="When" class="form-check-input"  >
-            Have you ever been told you had tuberculosis?                                               Yes <input type="checkbox" asp-for="HaveYoyEverBeenTold" class="form-check-input" id="check20">   No <input type="checkbox" class="form-check-input" readonly id="check120" > 
-            <strong>If 1 or more “Yes” boxes are checked, a TB test will be required before                    TB Test Required
-            entering the program.                                                                       Yes <input type="checkbox" asp-for="If1OrMore" class="form-check-input" id="check21">   No <input type="checkbox" class="form-check-input" readonly id="check121" > <br />
+            If yes: Where (city, state, clinic, or facility)                                         <input asp-for="IfYesWhere" class="form-check-input">
+            When (month/year)                                                                        <input asp-for="When" class="form-check-input">
+            Have you ever been told you had tuberculosis?                                               Yes <input type="checkbox" asp-for="HaveYoyEverBeenTold" class="form-check-input" id="check20">   No <input type="checkbox" class="form-check-input" readonly id="check120"> 
+    <strong>If 1 or more “Yes” boxes are checked, a TB test will be required before                    TB Test Required
+            entering the program.                                                                       Yes <input type="checkbox" asp-for="If1OrMore" class="form-check-input" id="check21">   No <input type="checkbox" class="form-check-input" readonly id="check121"> <br />
         </strong>
 
 </pre>
 <pre>
-            <strong>PLEASE NOTE:</strong> If “TB Test Required” is marked “Yes” above you must get TB tested before entering into the 
+    <strong>PLEASE NOTE:</strong> If “TB Test Required” is marked “Yes” above you must get TB tested before entering into the 
             program. 
 
             This form has been translated and reviewed in the client’s native language. (If applicable) 
 </pre>
 </div>
-<div class="container-fluid">
-    <div class="form-group col-md-4">
-        <label asp-for="DateSignatureEmployee" class="control-label">Person Served Signature </label>&nbsp;*
-        <input asp-for="DateSignatureEmployee" class="form-control">
-        <span asp-validation-for="DateSignatureEmployee" class="text-danger"></span>
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.Client.Name)</u></strong><br />
+        <i>Person Served Signature</i>
     </div>
-    <div class="form-group col-md-4">
-        <label asp-for="DateSignatureLegalGuardian" class="control-label">Parent, Legal Guardian or Authorized Representative</label>&nbsp;*
-        <input asp-for="DateSignatureLegalGuardian" class="form-control" id="DateSignatureClient">
-        <span asp-validation-for="DateSignatureLegalGuardian" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-4">
-        <label asp-for="DateSignatureEmployee" class="control-label">Employee Signature</label>&nbsp;*
-        <input asp-for="DateSignatureEmployee" class="form-control" id="DateSignatureWitness">
-        <span asp-validation-for="DateSignatureEmployee" class="text-danger"></span>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignaturePerson" class="form-control">
+        <i>Signature Date</i>
     </div>
 </div>
+<br />
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Name)</u></strong><br />
+        <i>Parent, (Legal Guardian or Authorized Representative Signature)</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignatureLegalGuardian" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.AdmissionedFor)</u></strong><br />
+        <i>Employee Signature</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignatureEmployee" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+
 <div>
     <div class="form-group col-md-12">
         <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
@@ -74,14 +91,14 @@
 <br />
 
 <script>
-     
+
     check1.addEventListener('change', (e) => {
         if (check1.checked == true) {
             check101.checked = false;
         } else {
             check101.checked = true;
         }
-        
+
     })
     check101.addEventListener('change', (e) => {
         if (check101.checked == true) {
@@ -279,7 +296,7 @@
         } else {
             check110.checked = true;
         }
-        
+
     })
     check110.addEventListener('change', (e) => {
         if (check110.checked == true) {

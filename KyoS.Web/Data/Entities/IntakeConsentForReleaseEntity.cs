@@ -31,6 +31,8 @@ namespace KyoS.Web.Data.Entities
 
         public DateTime DateSignatureEmployee { get; set; }
 
+        public string AdmissionedFor { get; set; }
+
         public bool ToRelease { get; set; }
 
         public bool InForm_VerbalInformation { get; set; }

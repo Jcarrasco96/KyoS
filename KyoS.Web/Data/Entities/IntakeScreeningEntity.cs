@@ -56,6 +56,7 @@ namespace KyoS.Web.Data.Entities
 
         public bool DoesClientKnowTimeOfDay { get; set; }
 
-        
+        public string AdmissionedFor { get; set; }
+
     }
 }

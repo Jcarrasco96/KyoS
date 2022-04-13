@@ -29,6 +29,8 @@ namespace KyoS.Web.Data.Entities
         [DataType(DataType.Date)]
 
         public DateTime DateSignatureEmployee { get; set; }
+        
+        public string AdmissionedFor { get; set; }
 
         public bool Documents { get; set; }
     }

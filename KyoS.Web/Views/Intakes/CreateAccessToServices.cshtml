@@ -22,7 +22,7 @@
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Create Intake Consumer Rights</h4>
+    <h4>Create Intake ACCESS TO SERVICES IN AN EMERGENCY</h4>
     <hr />
     <div class="row">
 
@@ -31,6 +31,7 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="IdClient" />
                 <input type="hidden" asp-for="Client_FK" />
+                <input type="hidden" asp-for="AdmissionedFor" />
                 <partial name="_IntakesAccessToServices" />
                 <div class="form-group col-md-12">
                     <input type="submit" value="Save" class="btn btn-primary" />
