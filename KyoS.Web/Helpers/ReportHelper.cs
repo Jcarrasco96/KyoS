@@ -2336,8 +2336,28 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
 
             dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(intake.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(intake.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
             dataSet.Tables.Add(GetIntakeScreeningsDS(intake.Client.IntakeScreening));
             WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeScreenings");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeConsentForTreatmentDS(intake.Client.IntakeConsentForTreatment));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsentForTreatment");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeConsentForReleaseDS(intake.Client.IntakeConsentForRelease));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsentForRelease");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeConsumerRightsDS(intake.Client.IntakeConsumerRights));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsumerRights");
 
             WebReport.Report.Prepare();
 
@@ -2470,6 +2490,36 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("MedicalID", typeof(string));
             dt.Columns.Add("Status", typeof(int));
             dt.Columns.Add("GroupId", typeof(int));
+            dt.Columns.Add("AlternativeAddress", typeof(string));
+            dt.Columns.Add("City", typeof(string));
+            dt.Columns.Add("Country", typeof(string));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("DoctorId", typeof(int));
+            dt.Columns.Add("Email", typeof(string));
+            dt.Columns.Add("EmergencyContactId", typeof(int));
+            dt.Columns.Add("Ethnicity", typeof(int));
+            dt.Columns.Add("FullAddress", typeof(string));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("LegalGuardianId", typeof(int));
+            dt.Columns.Add("MaritalStatus", typeof(int));
+            dt.Columns.Add("MedicaidID", typeof(string));
+            dt.Columns.Add("OtherLanguage", typeof(string));
+            dt.Columns.Add("PhotoPath", typeof(string));
+            dt.Columns.Add("PreferredLanguage", typeof(int));
+            dt.Columns.Add("PsychiatristId", typeof(int));
+            dt.Columns.Add("Race", typeof(int));
+            dt.Columns.Add("ReferredId", typeof(int));
+            dt.Columns.Add("SSN", typeof(string));
+            dt.Columns.Add("SignPath", typeof(string));
+            dt.Columns.Add("State", typeof(string));
+            dt.Columns.Add("Telephone", typeof(string));
+            dt.Columns.Add("TelephoneSecondary", typeof(string));
+            dt.Columns.Add("RelationShipOfLegalGuardian", typeof(int));
+            dt.Columns.Add("Service", typeof(int));
+            dt.Columns.Add("IndividualTherapyFacilitatorId", typeof(int));
+            dt.Columns.Add("ZipCode", typeof(string));
 
             if (client != null)
             {
@@ -2483,8 +2533,38 @@ namespace KyoS.Web.Helpers
                                             client.DateOfBirth,
                                             client.MedicaidID,
                                             client.Status,
-                                            0
-                                            });
+                                            0,
+                                            client.AlternativeAddress,
+                                            client.City,
+                                            client.Country,
+                                            client.CreatedBy,
+                                            client.CreatedOn,
+                                            0,
+                                            client.Email,
+                                            0,
+                                            client.Ethnicity,
+                                            client.FullAddress,
+                                            client.LastModifiedBy,
+                                            client.LastModifiedOn,
+                                            0,
+                                            client.MaritalStatus,
+                                            client.MedicaidID,
+                                            client.OtherLanguage,
+                                            client.PhotoPath,
+                                            client.PreferredLanguage,
+                                            0,
+                                            client.Race,
+                                            0,
+                                            client.SSN,
+                                            client.SignPath,
+                                            client.State,
+                                            client.Telephone,
+                                            client.TelephoneSecondary,
+                                            client.RelationShipOfLegalGuardian,
+                                            client.Service,
+                                            0,
+                                            client.ZipCode
+            });
             }
             else
             {
@@ -2498,7 +2578,178 @@ namespace KyoS.Web.Helpers
                                             new DateTime(),
                                             string.Empty,
                                             Common.Enums.StatusType.Close,
-                                            0
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+
+                                            string.Empty,
+                                            string.Empty,
+                                            new DateTime(),
+                                            0,
+                                            string.Empty,
+                                            0,
+                                            Common.Enums.EthnicityType.HispanicLatino,
+                                            string.Empty,
+                                            string.Empty,
+                                            new DateTime(),
+                                            0,
+                                            Common.Enums.MaritalStatus.Single,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            Common.Enums.PreferredLanguage.English,
+                                            0,
+                                            Common.Enums.RaceType.Black,
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            Common.Enums.RelationshipType.Brother,
+                                            Common.Enums.ServiceType.Group,
+                                            0,
+                                            string.Empty 
+                                            });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetEmergencyContactDS(EmergencyContactEntity contact)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "EmergencyContacts"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Address", typeof(string));
+            dt.Columns.Add("Telephone", typeof(string));
+            dt.Columns.Add("Email", typeof(string));
+            dt.Columns.Add("Country", typeof(string));
+            dt.Columns.Add("City", typeof(string));
+            dt.Columns.Add("State", typeof(string));
+            dt.Columns.Add("ZipCode", typeof(string));
+            dt.Columns.Add("TelephoneSecondary", typeof(string));
+            dt.Columns.Add("AddressLine2", typeof(string));           
+
+            if (contact != null)
+            {
+                dt.Rows.Add(new object[]
+                                            {
+                                            contact.Id,
+                                            contact.CreatedBy,
+                                            contact.CreatedOn,
+                                            contact.LastModifiedBy,
+                                            contact.LastModifiedOn,
+                                            contact.Name,
+                                            contact.Address,
+                                            contact.Telephone,
+                                            contact.Email,
+                                            contact.Country,
+                                            contact.City,
+                                            contact.State,
+                                            contact.ZipCode,
+                                            contact.TelephoneSecondary,
+                                            contact.AdressLine2
+            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                            {
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),                                            
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,                                            
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty
+                                            });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetLegalGuardianDS(LegalGuardianEntity legal)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "LegalGuardians"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Address", typeof(string));
+            dt.Columns.Add("Telephone", typeof(string));
+            dt.Columns.Add("Email", typeof(string));
+            dt.Columns.Add("Country", typeof(string));
+            dt.Columns.Add("City", typeof(string));
+            dt.Columns.Add("State", typeof(string));
+            dt.Columns.Add("ZipCode", typeof(string));
+            dt.Columns.Add("TelephoneSecondary", typeof(string));
+            dt.Columns.Add("AddressLine2", typeof(string));
+
+            if (legal != null)
+            {
+                dt.Rows.Add(new object[]
+                                            {
+                                            legal.Id,
+                                            legal.CreatedBy,
+                                            legal.CreatedOn,
+                                            legal.LastModifiedBy,
+                                            legal.LastModifiedOn,
+                                            legal.Name,
+                                            legal.Address,
+                                            legal.Telephone,
+                                            legal.Email,
+                                            legal.Country,
+                                            legal.City,
+                                            legal.State,
+                                            legal.ZipCode,
+                                            legal.TelephoneSecondary,
+                                            legal.AdressLine2
+            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                            {
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty
                                             });
             }
 
@@ -2626,7 +2877,9 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("DoesClientKnowTimeOfDay", typeof(bool));
             dt.Columns.Add("DateDischarge", typeof(DateTime));
 
-            dt.Rows.Add(new object[]
+            if (intake != null)
+            {
+                dt.Rows.Add(new object[]
                                         {
                                             intake.Id,
                                             intake.Client_FK,
@@ -2643,6 +2896,236 @@ namespace KyoS.Web.Helpers
                                             intake.DoesClientKnowTimeOfDay,
                                             intake.DateDischarge
                                         });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            0,
+                                            0,
+                                            0,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            new DateTime()                                            
+                                       });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetIntakeConsentForTreatmentDS(IntakeConsentForTreatmentEntity intake)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IntakeConsentForTreatment"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));            
+            dt.Columns.Add("AuthorizeStaff", typeof(bool));
+            dt.Columns.Add("AuthorizeRelease", typeof(bool));
+            dt.Columns.Add("Underestand", typeof(bool));
+            dt.Columns.Add("Aggre", typeof(bool));
+            dt.Columns.Add("Aggre1", typeof(bool));
+            dt.Columns.Add("Certify", typeof(bool));
+            dt.Columns.Add("Certify1", typeof(bool));
+            dt.Columns.Add("Documents", typeof(bool));
+
+            if (intake != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intake.Id,
+                                            intake.Client_FK,
+                                            intake.DateSignatureLegalGuardian,
+                                            intake.DateSignaturePerson,
+                                            intake.DateSignatureEmployee,
+                                            intake.AuthorizeStaff,
+                                            intake.AuthorizeRelease,
+                                            intake.Underestand,
+                                            intake.Aggre,
+                                            intake.Aggre1,
+                                            intake.Certify,
+                                            intake.Certify1,
+                                            intake.Documents
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,                                            
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),                                            
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false
+                                       });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetIntakeConsentForReleaseDS(IntakeConsentForReleaseEntity intake)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IntakeConsentForRelease"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("ToRelease", typeof(bool));
+            dt.Columns.Add("Discaherge", typeof(bool));
+            dt.Columns.Add("SchoolRecord", typeof(bool));
+            dt.Columns.Add("ProgressReports", typeof(bool));
+            dt.Columns.Add("IncidentReport", typeof(bool));
+            dt.Columns.Add("PsychologycalEvaluation", typeof(bool));
+            dt.Columns.Add("History", typeof(bool));
+            dt.Columns.Add("LabWork", typeof(bool));
+            dt.Columns.Add("HospitalRecord", typeof(bool));
+            dt.Columns.Add("Other", typeof(bool));
+            dt.Columns.Add("Other_Explain", typeof(string));
+            dt.Columns.Add("Documents", typeof(bool));
+            dt.Columns.Add("ForPurpose_CaseManagement", typeof(bool));
+            dt.Columns.Add("ForPurpose_Other", typeof(bool));
+            dt.Columns.Add("ForPurpose_OtherExplain", typeof(string));
+            dt.Columns.Add("ForPurpose_Treatment", typeof(bool));
+            dt.Columns.Add("InForm_Facsimile", typeof(bool));
+            dt.Columns.Add("InForm_VerbalInformation", typeof(bool));
+            dt.Columns.Add("InForm_WrittenRecords", typeof(bool));
+
+            if (intake != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intake.Id,
+                                            intake.Client_FK,
+                                            intake.DateSignatureLegalGuardian,
+                                            intake.DateSignaturePerson,
+                                            intake.DateSignatureEmployee,
+                                            intake.ToRelease,
+                                            intake.Discaherge,
+                                            intake.SchoolRecord,
+                                            intake.ProgressReports,
+                                            intake.IncidentReport,
+                                            intake.PsychologycalEvaluation,
+                                            intake.History,
+                                            intake.LabWork,
+                                            intake.HospitalRecord,
+                                            intake.Other,
+                                            intake.Other_Explain,
+                                            intake.Documents,
+                                            intake.ForPurpose_CaseManagement,
+                                            intake.ForPurpose_Other,
+                                            intake.ForPurpose_OtherExplain,
+                                            intake.ForPurpose_Treatment,
+                                            intake.InForm_Facsimile,
+                                            intake.InForm_VerbalInformation,
+                                            intake.InForm_WrittenRecords
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,                                            
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false
+                                        });
+            }
+            
+
+            return dt;
+        }
+
+        private DataTable GetIntakeConsumerRightsDS(IntakeConsumerRightsEntity intake)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IntakeConsumerRights"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("Documents", typeof(bool));
+            dt.Columns.Add("ServedOf", typeof(string));            
+
+            if (intake != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intake.Id,
+                                            intake.Client_FK,
+                                            intake.DateSignatureLegalGuardian,
+                                            intake.DateSignaturePerson,
+                                            intake.DateSignatureEmployee,
+                                            intake.Documents,
+                                            intake.ServedOf
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            false,                                            
+                                            string.Empty                                            
+                                        });
+            }
+
 
             return dt;
         }

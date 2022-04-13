@@ -658,13 +658,22 @@ namespace KyoS.Web.Controllers
                                                    .ThenInclude(c => c.Clinic)
 
                                                    .Include(i => i.Client)
+                                                   .ThenInclude(c => c.EmergencyContact)
+
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.LegalGuardian)
+
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.IntakeScreening)
+
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.IntakeConsentForTreatment)
+
+                                                   .Include(i => i.Client)
                                                    .ThenInclude(c => c.IntakeConsentForRelease)
 
                                                    .Include(i => i.Client)
                                                    .ThenInclude(c => c.IntakeConsumerRights)
-
-                                                   .Include(i => i.Client)
-                                                   .ThenInclude(c => c.IntakeConsentForRelease)
 
                                                    .FirstOrDefault(i => (i.Id == id));
             if (entity == null)
