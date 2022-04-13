@@ -78,5 +78,11 @@ namespace KyoS.Web.Helpers
         IntakeTransportationViewModel ToIntakeTransportationViewModel(IntakeTransportationEntity model);
         Task<IntakeConsentPhotographEntity> ToIntakeConsentPhotographEntity(IntakeConsentPhotographViewModel model, bool isNew);
         IntakeConsentPhotographViewModel ToIntakeConsentPhotographViewModel(IntakeConsentPhotographEntity model);
+        Task<IntakeFeeAgreementEntity> ToIntakeFeeAgreementEntity(IntakeFeeAgreementViewModel model, bool isNew);
+        IntakeFeeAgreementViewModel ToIntakeFeeAgreementViewModel(IntakeFeeAgreementEntity model);
+        Task<IntakeTuberculosisEntity> ToIntakeTuberculosisEntity(IntakeTuberculosisViewModel model, bool isNew);
+        IntakeTuberculosisViewModel ToIntakeTuberculosisViewModel(IntakeTuberculosisEntity model);
+        Task<IntakeMedicalHistoryEntity> ToIntakeMedicalHistoryEntity(IntakeMedicalHistoryViewModel model, bool isNew);
+        IntakeMedicalHistoryViewModel ToIntakeMedicalHistoryViewModel(IntakeMedicalHistoryEntity model);
     }
 }
