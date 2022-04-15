@@ -92,10 +92,10 @@
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Client.Service)
                                     </td>
-                                    <td>
+                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.Client.Clinic.Name)
                                     </td>
-                                    <td>
+                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.Client.Code)
                                     </td>
                                     <td align="center">
@@ -144,8 +144,11 @@
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Client.Service)
                                 </td>
-                                <td>
+                                <td align="center">
                                     @Html.DisplayFor(modelItem => item.Client.Clinic.Name)
+                                </td>
+                                <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Client.Code)
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Active)

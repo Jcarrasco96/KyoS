@@ -5,7 +5,7 @@
     <pre>
     <strong>MEDICAL HISTORY</strong><br />
             Recipient: <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>                                    Case No:<strong>@Html.DisplayFor(modelItem => Model.Client.Code)</strong>
-            Primary Care Physician: <input asp-for="PrimaryCarePhysician" >
+            Primary Care Physician: <input asp-for="PrimaryCarePhysician">
             Address Physician:      <input asp-for="AddressPhysician">
             City:                   <input asp-for="City">                           State: <input asp-for="State">                Zip:  <input asp-for="ZipCode">
     </pre>
@@ -89,7 +89,7 @@
     <pre>
     <strong>SECTION V.</strong> 
     <label asp-for="ListAllCurrentMedications" class="control-label">List all current medications (include prescription and non-prescription): </label>
-            <input asp-for="ListAllCurrentMedications" class="form-control">            
+    <input asp-for="ListAllCurrentMedications" class="form-control">            
     </pre>
 </div>
 <div class="container-fluid col-md-9">
@@ -120,21 +120,36 @@
     <input asp-for="Immunizations" class="form-control">
     </pre>
 </div>
-<div class="container-fluid">
-    <div class="form-group col-md-4">
-        <label asp-for="DateSignaturePerson" class="control-label">Person Served Signature </label>&nbsp;*
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.Client.Name)</u></strong><br />
+        <i>Person Served Signature</i>
+    </div>
+    <div class="form-group col-md-2">
         <input asp-for="DateSignaturePerson" class="form-control">
-        <span asp-validation-for="DateSignaturePerson" class="text-danger"></span>
+        <i>Signature Date</i>
     </div>
-    <div class="form-group col-md-4">
-        <label asp-for="DateSignatureLegalGuardian" class="control-label">Parent, Legal Guardian or Authorized Representative</label>&nbsp;*
-        <input asp-for="DateSignatureLegalGuardian" class="form-control" id="DateSignatureClient">
-        <span asp-validation-for="DateSignatureLegalGuardian" class="text-danger"></span>
+</div>
+<br />
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Name)</u></strong><br />
+        <i>Parent, (Legal Guardian or Authorized Representative Signature)</i>
     </div>
-    <div class="form-group col-md-4">
-        <label asp-for="DateSignatureEmployee" class="control-label">Employee Signature</label>&nbsp;*
-        <input asp-for="DateSignatureEmployee" class="form-control" id="DateSignatureWitness">
-        <span asp-validation-for="DateSignatureEmployee" class="text-danger"></span>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignatureLegalGuardian" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.AdmissionedFor)</u></strong><br />
+        <i>Employee Signature</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignatureEmployee" class="form-control">
+        <i>Signature Date</i>
     </div>
 </div>
 <div>

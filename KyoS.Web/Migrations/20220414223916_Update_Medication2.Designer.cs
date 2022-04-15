@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220414223916_Update_Medication2")]
+    partial class Update_Medication2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -514,6 +516,9 @@ namespace KyoS.Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Client_FK")
+                        .IsUnique();
+
+                    b.HasIndex("Id")
                         .IsUnique();
 
                     b.ToTable("Discharge");
@@ -2607,23 +2612,20 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Dosage")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Frequency")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
 
                     b.ToTable("Medication");
                 });
@@ -4222,8 +4224,7 @@ namespace KyoS.Web.Migrations
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
                         .WithMany("MedicationList")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ClientId");
 
                     b.Navigation("Client");
                 });

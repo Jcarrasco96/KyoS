@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220415011509_Update_Medication3")]
+    partial class Update_Medication3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2625,6 +2627,9 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("ClientId");
 
+                    b.HasIndex("Id")
+                        .IsUnique();
+
                     b.ToTable("Medication");
                 });
 
@@ -4222,8 +4227,7 @@ namespace KyoS.Web.Migrations
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
                         .WithMany("MedicationList")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ClientId");
 
                     b.Navigation("Client");
                 });

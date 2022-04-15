@@ -1,0 +1,102 @@
+﻿@model KyoS.Web.Models.DischargeViewModel
+
+<br />
+<div class="container-fluid col-md-9">
+    <pre>
+            Client Name: <strong>@Html.DisplayFor(modelItem => Model.Client.Name)</strong>                      Case Number: <strong>@Html.DisplayFor(modelItem => Model.Client.Code)</strong> 
+            DOB: <strong>@Html.DisplayFor(modelItem => Model.Client.DateOfBirth)</strong>                       Date of Report: <input asp-for="DateReport">
+            Date of Admission:                                                                                  Date of Discharge: <input asp-for="DateDischarge">   
+            Diagnosis at Discharge:                                                                             Diagnosis Text
+
+            <input type="checkbox" asp-for="Planned" class="form-check-input"> Planned Discharge <input type="checkbox" asp-for="Planned" class="form-check-input"> Unplanned Discharge        
+    </pre>
+    <pre>
+            Brief History: 
+            <input asp-for="BriefHistory" class="form-control">            
+            Course of Treatment: 
+            <input asp-for="CourseTreatment" class="form-control">
+            Condition on Discharge: 
+            <input asp-for="ConditionalDischarge" class="form-control">
+    </pre>
+    <pre>
+            <input type="checkbox" asp-for="TreatmentPlanObjCumpl" class="form-check-input"> Treatment Plan Objectives Completed  <input type="checkbox" asp-for="TreatmentPlanObjCumpl" class="form-check-input"> Treatment Plan Objectives Not Completed. (other appropriate services not available)
+            <input type="checkbox" asp-for="AgencyDischargeClient" class="form-check-input">Agency Discharged Client Due to Non-cooperation.    <input type="checkbox" asp-for="ClientDischargeAgainst" class="form-check-input">Client Discharged Against Recommendation of Agency
+            <input type="checkbox" asp-for="ClientDeceased" class="form-check-input">Client deceased   <input type="checkbox" asp-for="ClientMoved" class="form-check-input">Client moved  <input type="checkbox" asp-for="PhysicallyUnstable" class="form-check-input">Physically unstable  <input type="checkbox" asp-for="Hospitalization" class="form-check-input">Hospitalization
+    </pre>
+    <pre>
+            Follow Discharge: 
+            <input asp-for="FollowDischarge" class="form-control">
+    </pre>
+             Medications at the time of Discharge: 
+             <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-2">
+                               Type
+                            </th>
+                            <th class="col-md-1">
+                               Dosage
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Frequency
+                            </th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Client.MedicationList)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Dosage)
+                                </td>
+                                <td align="center">
+
+                                    @Html.DisplayFor(modelItem => item.Frequency)
+
+                                </td>
+                                
+                                
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+    
+    <pre>
+            <input type="checkbox" asp-for="ClientReferred" class="form-check-input"> Client referred to another agency:                             <input type="checkbox" asp-for="Others" class="form-check-input"> Others:
+            Referral for:       <input asp-for="ReferralFor1">                        Referral for:       <input asp-for="ReferralFor2"> 
+            Agency:             <input asp-for="ReferralAgency1">                        Agency:             <input asp-for="ReferralAgency2"> 
+            Contact Person:     <input asp-for="ReferralContactPersonal1">                        Contact Person:     <input asp-for="ReferralContactPersonal2"> 
+            Phone #:            <input asp-for="ReferralPhone1">                        Phone #:            <input asp-for="ReferralPhone2" />
+            Hours of Operation: <input asp-for="ReferralHoursOperation1">                        Hours of Operation: <input asp-for="ReferralHoursOperation2">
+     </pre>
+</div>
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.Client.Name)</u></strong><br />
+        <i>Person Served Signature</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignaturePerson" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.AdmissionedFor)</u></strong><br />
+        <i>Employee Signature</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignatureEmployee" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+
+
+
+
+

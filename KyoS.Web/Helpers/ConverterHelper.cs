@@ -1275,6 +1275,7 @@ namespace KyoS.Web.Helpers
             };
 
         }
+        
         public async Task<IntakeAccessToServicesEntity> ToIntakeAccessToServicesEntity(IntakeAccessToServicesViewModel model, bool isNew)
         {
             return new IntakeAccessToServicesEntity
@@ -1929,6 +1930,116 @@ namespace KyoS.Web.Helpers
 
                 AdmissionedFor = model.AdmissionedFor,
                 InformationProvided = model.InformationProvided
+            };
+
+        }
+
+        public async Task<DischargeEntity> ToDischargeEntity(DischargeViewModel model, bool isNew)
+        {
+            return new DischargeEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient),
+                // Client_FK = isNew ? model.IdClient : model.Client_FK,
+                Client_FK = model.IdClient,
+                AdmissionedFor = model.AdmissionedFor,
+                AgencyDischargeClient = model.AgencyDischargeClient,
+                BriefHistory = model.BriefHistory,
+                ClientDeceased = model.ClientDeceased,
+                ClientDischargeAgainst = model.ClientDischargeAgainst,
+                ClientMoved = model.ClientMoved,
+                ClientReferred = model.ClientReferred,
+                ConditionalDischarge = model.ConditionalDischarge,
+                CourseTreatment = model.CourseTreatment,
+                DateDischarge = model.DateDischarge,
+                DateReport = model.DateReport,
+                FollowDischarge = model.FollowDischarge,
+                PhysicallyUnstable = model.PhysicallyUnstable,
+                Planned = model.Planned,
+                ReasonDischarge = model.ReasonDischarge,
+                ReferralAgency1 = model.ReferralAgency1,
+                ReferralAgency2 = model.ReferralAgency2,
+                ReferralContactPersonal1 = model.ReferralContactPersonal1,
+                ReferralContactPersonal2 = model.ReferralContactPersonal2,
+                ReferralFor1 = model.ReferralFor1,
+                ReferralFor2 = model.ReferralFor2,
+                ReferralHoursOperation1 = model.ReferralHoursOperation1,
+                ReferralHoursOperation2 = model.ReferralHoursOperation2,
+                ReferralPhone1 = model.ReferralPhone1,
+                ReferralPhone2 = model.ReferralPhone2,
+                TreatmentPlanObjCumpl = model.TreatmentPlanObjCumpl,
+                Others = model.Others,
+                Hospitalization = model.Hospitalization,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignaturePerson = model.DateSignaturePerson,
+            };
+        }
+
+        public DischargeViewModel ToDischargeViewModel(DischargeEntity model)
+        {
+            return new DischargeViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                AgencyDischargeClient = model.AgencyDischargeClient,
+                BriefHistory = model.BriefHistory,
+                ClientDeceased = model.ClientDeceased,
+                ClientDischargeAgainst = model.ClientDischargeAgainst,
+                ClientMoved = model.ClientMoved,
+                ClientReferred = model.ClientReferred,
+                ConditionalDischarge = model.ConditionalDischarge,
+                CourseTreatment = model.CourseTreatment,
+                DateDischarge = model.DateDischarge,
+                DateReport = model.DateReport,
+                FollowDischarge = model.FollowDischarge,
+                PhysicallyUnstable = model.PhysicallyUnstable,
+                Planned = model.Planned,
+                ReasonDischarge = model.ReasonDischarge,
+                ReferralAgency1 = model.ReferralAgency1,
+                ReferralAgency2 = model.ReferralAgency2,
+                ReferralContactPersonal1 = model.ReferralContactPersonal1,
+                ReferralContactPersonal2 = model.ReferralContactPersonal2,
+                ReferralFor1 = model.ReferralFor1,
+                ReferralFor2 = model.ReferralFor2,
+                ReferralHoursOperation1 = model.ReferralHoursOperation1,
+                ReferralHoursOperation2 = model.ReferralHoursOperation2,
+                ReferralPhone1 = model.ReferralPhone1,
+                ReferralPhone2 = model.ReferralPhone2,
+                TreatmentPlanObjCumpl = model.TreatmentPlanObjCumpl,
+                Others = model.Others,
+                Hospitalization = model.Hospitalization,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignaturePerson = model.DateSignaturePerson,
+            };
+
+        }
+
+        public async Task<MedicationEntity> ToMedicationEntity(MedicationViewModel model, bool isNew)
+        {
+            return new MedicationEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient),
+                Dosage = model.Dosage,
+                Name = model.Name,
+                Frequency = model.Frequency,
+            };
+        }
+
+        public MedicationViewModel ToMedicationViewModel(MedicationEntity model)
+        {
+            return new MedicationViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Dosage = model.Dosage,
+                Name = model.Name,
+                Frequency = model.Frequency,
+
             };
 
         }

@@ -69,6 +69,8 @@ namespace KyoS.Web.Data
         public DbSet<IntakeFeeAgreementEntity> IntakeFeeAgreement { get; set; }
         public DbSet<IntakeTuberculosisEntity> IntakeTuberculosis { get; set; }
         public DbSet<IntakeMedicalHistoryEntity> IntakeMedicalHistory { get; set; }
+        public DbSet<DischargeEntity> Discharge { get; set; }
+        public DbSet<MedicationEntity> Medication { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -246,6 +248,17 @@ namespace KyoS.Web.Data
                  .WithOne(s => s.Client)
                  .OnDelete(DeleteBehavior.Cascade)
                  .HasForeignKey<IntakeMedicalHistoryEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                .HasOne(c => c.Discharge)
+                .WithOne(s => s.Client)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasForeignKey<DischargeEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                                  .HasMany(c => c.MedicationList)
+                                  .WithOne(s => s.Client)
+                                  .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

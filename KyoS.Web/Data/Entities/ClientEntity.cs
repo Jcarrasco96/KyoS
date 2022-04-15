@@ -127,6 +127,10 @@ namespace KyoS.Web.Data.Entities
 
         public IntakeMedicalHistoryEntity IntakeMedicalHistory { get; set; }
 
+        public List<MedicationEntity> MedicationList { get; set; }
+
+        public DischargeEntity Discharge { get; set; }
+
         public string MissingDoc 
         {
             get

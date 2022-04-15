@@ -219,7 +219,7 @@
                                     }
                                 </td>
                                 <td align="center">
-                                    @if (item.Client.IntakeTuberculosis != null)
+                                    @if (item.Client.IntakeMedicalHistory != null)
                                     {
                                         <a asp-action="CreateMedicalhistory" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
                                     }
@@ -232,7 +232,7 @@
                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Intake Screening"><i class="glyphicon glyphicon-pencil"></i></a>
                                     @if ((item.Client.IntakeConsentForTreatment != null) && (item.Client.IntakeConsentForRelease != null) && (item.Client.IntakeConsumerRights != null) && (item.Client.IntakeAcknowledgementHipa != null) && (item.Client.IntakeAccessToServices != null)
                                        && (item.Client.IntakeOrientationChecklist != null) && (item.Client.IntakeTransportation != null) && (item.Client.IntakeConsentPhotograph != null) && (item.Client.IntakeFeeAgreement != null) && (item.Client.IntakeTuberculosis != null)
-                                       && (item.Client.IntakeTuberculosis != null))
+                                       && (item.Client.IntakeMedicalHistory != null))
                                     {
                                         <a asp-action="PrintIntake" asp-route-id="@item.Id" class="btn btn-success" title="Print Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                     }
