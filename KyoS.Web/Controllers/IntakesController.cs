@@ -700,6 +700,30 @@ namespace KyoS.Web.Controllers
                                                    .Include(i => i.Client)
                                                    .ThenInclude(c => c.IntakeConsumerRights)
 
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.IntakeAcknowledgementHipa)
+
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.IntakeAccessToServices)
+
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.IntakeOrientationChecklist)
+
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.IntakeFeeAgreement)
+
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.IntakeTuberculosis)
+
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.IntakeTransportation)
+
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.IntakeConsentPhotograph)
+
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.IntakeMedicalHistory)
+
                                                    .FirstOrDefault(i => (i.Id == id));
             if (entity == null)
             {

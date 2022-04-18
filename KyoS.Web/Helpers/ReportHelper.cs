@@ -2359,6 +2359,38 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetIntakeConsumerRightsDS(intake.Client.IntakeConsumerRights));
             WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsumerRights");
 
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeAcknowledgementDS(intake.Client.IntakeAcknowledgementHipa));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeAcknowledgement");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeAccessToServicesDS(intake.Client.IntakeAccessToServices));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeAccessToServices");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeOrientationCheckListDS(intake.Client.IntakeOrientationChecklist));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeOrientationCheckList");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeFeeAgreementDS(intake.Client.IntakeFeeAgreement));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeFeeAgreement");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeTuberculosisDS(intake.Client.IntakeTuberculosis));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeTuberculosis");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeTransportationDS(intake.Client.IntakeTransportation));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeTransportation");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeConsentPhotographDS(intake.Client.IntakeConsentPhotograph));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsentPhotograph");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeMedicalHistoryDS(intake.Client.IntakeMedicalHistory));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeMedicalHistory");
+
             WebReport.Report.Prepare();
 
             Stream stream = new MemoryStream();
@@ -3126,6 +3158,965 @@ namespace KyoS.Web.Helpers
                                         });
             }
 
+
+            return dt;
+        }
+
+        private DataTable GetIntakeAcknowledgementDS(IntakeAcknowledgementHippaEntity intake)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IntakeAcknowledgement"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("Documents", typeof(bool));           
+
+            if (intake != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intake.Id,
+                                            intake.Client_FK,
+                                            intake.DateSignatureLegalGuardian,
+                                            intake.DateSignaturePerson,
+                                            intake.DateSignatureEmployee,
+                                            intake.Documents
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            false
+                                        });
+            }
+
+
+            return dt;
+        }
+
+        private DataTable GetIntakeAccessToServicesDS(IntakeAccessToServicesEntity intake)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IntakeAccessToServices"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));            
+            dt.Columns.Add("Documents", typeof(bool));            
+
+            if (intake != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intake.Id,
+                                            intake.Client_FK,
+                                            intake.DateSignatureLegalGuardian,
+                                            intake.DateSignaturePerson,
+                                            intake.DateSignatureEmployee,                                            
+                                            intake.Documents
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            false                                            
+                                        });
+            }
+
+
+            return dt;
+        }
+
+        private DataTable GetIntakeOrientationCheckListDS(IntakeOrientationChecklistEntity intake)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IntakeOrientationCheckList"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("TourFacility", typeof(bool));
+            dt.Columns.Add("Rights", typeof(bool));
+            dt.Columns.Add("PoliceGrievancce", typeof(bool));
+            dt.Columns.Add("Insent", typeof(bool));
+            dt.Columns.Add("Services", typeof(bool));
+            dt.Columns.Add("Access", typeof(bool));
+            dt.Columns.Add("Code", typeof(bool));
+            dt.Columns.Add("Confidentiality", typeof(bool));
+            dt.Columns.Add("Methods", typeof(bool));
+            dt.Columns.Add("Explanation", typeof(bool));
+            dt.Columns.Add("Fire", typeof(bool));
+            dt.Columns.Add("PoliceTobacco", typeof(bool));
+            dt.Columns.Add("PoliceIllicit", typeof(bool));
+            dt.Columns.Add("PoliceWeapons", typeof(bool));
+            dt.Columns.Add("Identification", typeof(bool));
+            dt.Columns.Add("Program", typeof(bool));
+            dt.Columns.Add("Purpose", typeof(bool));
+            dt.Columns.Add("IndividualPlan", typeof(bool));
+            dt.Columns.Add("Discharge", typeof(bool));
+            dt.Columns.Add("AgencyPolice", typeof(bool));
+            dt.Columns.Add("AgencyExpectation", typeof(bool));
+            dt.Columns.Add("Education", typeof(bool));
+            dt.Columns.Add("TheAbove", typeof(bool));
+            dt.Columns.Add("Documents", typeof(bool));
+
+            if (intake != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intake.Id,
+                                            intake.Client_FK,
+                                            intake.DateSignatureLegalGuardian,
+                                            intake.DateSignaturePerson,
+                                            intake.DateSignatureEmployee,
+                                            intake.TourFacility,
+                                            intake.Rights,
+                                            intake.PoliceGrievancce,
+                                            intake.Insent,
+                                            intake.Services,
+                                            intake.Access,
+                                            intake.Code,
+                                            intake.Confidentiality,
+                                            intake.Methods,
+                                            intake.Explanation,
+                                            intake.Fire,
+                                            intake.PoliceTobacco,
+                                            intake.PoliceIllicit,
+                                            intake.PoliceWeapons,
+                                            intake.Identification,
+                                            intake.Program,
+                                            intake.Purpose,
+                                            intake.IndividualPlan,
+                                            intake.Discharge,
+                                            intake.AgencyPolice,
+                                            intake.AgencyExpectation,
+                                            intake.Education,
+                                            intake.TheAbove,
+                                            intake.Documents
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,                                           
+                                            false,
+                                            false,
+                                            false,                                            
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false
+                                        });
+            }
+
+
+            return dt;
+        }
+
+        private DataTable GetIntakeFeeAgreementDS(IntakeFeeAgreementEntity intake)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IntakeFeeAgreement"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("Documents", typeof(bool));
+
+            if (intake != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intake.Id,
+                                            intake.Client_FK,
+                                            intake.DateSignatureLegalGuardian,
+                                            intake.DateSignaturePerson,
+                                            intake.DateSignatureEmployee,
+                                            intake.Documents
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            false
+                                        });
+            }
+
+
+            return dt;
+        }
+
+        private DataTable GetIntakeTuberculosisDS(IntakeTuberculosisEntity intake)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IntakeTuberculosis"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("DoYouCurrently", typeof(bool));
+            dt.Columns.Add("DoYouBring", typeof(bool));
+            dt.Columns.Add("DoYouCough", typeof(bool));
+            dt.Columns.Add("DoYouSweat", typeof(bool));
+            dt.Columns.Add("DoYouHaveFever", typeof(bool));
+            dt.Columns.Add("HaveYouLost", typeof(bool));
+            dt.Columns.Add("DoYouHaveChest", typeof(bool));
+            dt.Columns.Add("If2OrMore", typeof(bool));
+            dt.Columns.Add("HaveYouRecently", typeof(bool));
+            dt.Columns.Add("AreYouRecently", typeof(bool));
+            dt.Columns.Add("IfYesWhich", typeof(bool));
+            dt.Columns.Add("DoYouOr", typeof(bool));
+            dt.Columns.Add("HaveYouEverBeen", typeof(bool));
+            dt.Columns.Add("HaveYouEverWorked", typeof(bool));
+            dt.Columns.Add("HaveYouEverHadOrgan", typeof(bool));
+            dt.Columns.Add("HaveYouEverConsidered", typeof(bool));
+            dt.Columns.Add("HaveYouEverHadAbnormal", typeof(bool));
+            dt.Columns.Add("If3OrMore", typeof(bool));
+            dt.Columns.Add("HaveYouEverHadPositive", typeof(bool));
+            dt.Columns.Add("IfYesWhere", typeof(string));
+            dt.Columns.Add("When", typeof(string));
+            dt.Columns.Add("HaveYoyEverBeenTold", typeof(bool));
+            dt.Columns.Add("AgencyExpectation", typeof(bool));
+            dt.Columns.Add("If1OrMore", typeof(bool));
+            dt.Columns.Add("Documents", typeof(bool));           
+
+            if (intake != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intake.Id,
+                                            intake.Client_FK,
+                                            intake.DateSignatureLegalGuardian,
+                                            intake.DateSignaturePerson,
+                                            intake.DateSignatureEmployee,
+                                            intake.DoYouCurrently,
+                                            intake.DoYouBring,
+                                            intake.DoYouCough,
+                                            intake.DoYouSweat,
+                                            intake.DoYouHaveFever,
+                                            intake.HaveYouLost,
+                                            intake.DoYouHaveChest,
+                                            intake.If2OrMore,
+                                            intake.HaveYouRecently,
+                                            intake.AreYouRecently,
+                                            intake.IfYesWhich,
+                                            intake.DoYouOr,
+                                            intake.HaveYouEverBeen,
+                                            intake.HaveYouEverWorked,
+                                            intake.HaveYouEverHadOrgan,
+                                            intake.HaveYouEverConsidered,
+                                            intake.HaveYouEverHadAbnormal,
+                                            intake.If3OrMore,
+                                            intake.HaveYouEverHadPositive,
+                                            intake.IfYesWhere,
+                                            intake.When,
+                                            intake.HaveYoyEverBeenTold,
+                                            intake.AgencyExpectation,
+                                            intake.If1OrMore,
+                                            intake.Documents
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,                                           
+                                            false
+                                        });
+            }
+
+
+            return dt;
+        }
+
+        private DataTable GetIntakeTransportationDS(IntakeTransportationEntity intake)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IntakeTransportation"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("Documents", typeof(bool));
+
+            if (intake != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intake.Id,
+                                            intake.Client_FK,
+                                            intake.DateSignatureLegalGuardian,
+                                            intake.DateSignaturePerson,
+                                            intake.DateSignatureEmployee,
+                                            intake.Documents
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            false
+                                        });
+            }
+
+
+            return dt;
+        }
+
+        private DataTable GetIntakeConsentPhotographDS(IntakeConsentPhotographEntity intake)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IntakeConsentPhotograph"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("Photograph", typeof(bool));
+            dt.Columns.Add("Filmed", typeof(bool));
+            dt.Columns.Add("VideoTaped", typeof(bool));
+            dt.Columns.Add("Interviwed", typeof(bool));
+            dt.Columns.Add("NoneOfTheForegoing", typeof(bool));
+            dt.Columns.Add("Publication", typeof(bool));
+            dt.Columns.Add("Broadcast", typeof(bool));
+            dt.Columns.Add("Markrting", typeof(bool));
+            dt.Columns.Add("ByTODocument", typeof(bool));
+            dt.Columns.Add("Documents", typeof(bool));            
+            dt.Columns.Add("Other", typeof(string));
+            
+
+            if (intake != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intake.Id,
+                                            intake.Client_FK,
+                                            intake.DateSignatureLegalGuardian,
+                                            intake.DateSignaturePerson,
+                                            intake.DateSignatureEmployee,
+                                            intake.Photograph,
+                                            intake.Filmed,
+                                            intake.VideoTaped,
+                                            intake.Interviwed,
+                                            intake.NoneOfTheForegoing,
+                                            intake.Publication,
+                                            intake.Broadcast,
+                                            intake.Markrting,
+                                            intake.ByTODocument,
+                                            intake.Documents,
+                                            intake.Other
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty                                            
+                                        });
+            }
+
+
+            return dt;
+        }
+
+        
+        private DataTable GetIntakeMedicalHistoryDS(IntakeMedicalHistoryEntity intake)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IntakeMedicalHistory"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("PrimaryCarePhysician", typeof(string));
+            dt.Columns.Add("AddressPhysician", typeof(string));
+            dt.Columns.Add("City", typeof(string));
+            dt.Columns.Add("State", typeof(string));
+            dt.Columns.Add("ZipCode", typeof(string));            
+            dt.Columns.Add("Diphtheria", typeof(bool));
+            dt.Columns.Add("Mumps", typeof(bool));
+            dt.Columns.Add("Poliomyelitis", typeof(bool));
+            dt.Columns.Add("RheumaticFever", typeof(bool));
+            dt.Columns.Add("WhoopingCough", typeof(bool));
+            dt.Columns.Add("Tuberculosis", typeof(bool));
+            dt.Columns.Add("ScarletFever", typeof(bool));
+            dt.Columns.Add("Hepatitis", typeof(bool));
+            dt.Columns.Add("HighBloodPressure", typeof(bool));
+            dt.Columns.Add("KidneyTrouble", typeof(bool));
+            dt.Columns.Add("KidneyStones", typeof(bool));
+            dt.Columns.Add("BloodInUrine", typeof(bool));
+            dt.Columns.Add("BurningUrine", typeof(bool));
+            dt.Columns.Add("PainfulUrination", typeof(bool));
+            dt.Columns.Add("EyeTrouble", typeof(bool));
+            dt.Columns.Add("HearingTrouble", typeof(bool));
+            dt.Columns.Add("Fractures", typeof(bool));
+            dt.Columns.Add("EarInfections", typeof(bool));
+            dt.Columns.Add("FrequentNoseBleeds", typeof(bool));
+            dt.Columns.Add("FrequentSoreThroat", typeof(bool));
+            dt.Columns.Add("Hoarseness", typeof(bool));
+            dt.Columns.Add("Allergies", typeof(bool));
+            dt.Columns.Add("Allergies_Describe", typeof(string));         
+            dt.Columns.Add("StomachPain", typeof(bool));
+            dt.Columns.Add("BlackStools", typeof(bool));
+            dt.Columns.Add("NightSweats", typeof(bool));
+            dt.Columns.Add("FrequentVomiting", typeof(bool));
+            dt.Columns.Add("SkinTrouble", typeof(bool));
+            dt.Columns.Add("PainfulMuscles", typeof(bool));
+            dt.Columns.Add("PainfulJoints", typeof(bool));
+            dt.Columns.Add("BackPain", typeof(bool));
+            dt.Columns.Add("SeriousInjury", typeof(bool));
+            dt.Columns.Add("Surgery", typeof(bool));
+            dt.Columns.Add("Arthritis", typeof(bool));
+            dt.Columns.Add("Hemorrhoids", typeof(bool));
+            dt.Columns.Add("WeightLoss", typeof(bool));
+            dt.Columns.Add("FrequentHeadaches", typeof(bool));
+            dt.Columns.Add("Fainting", typeof(bool));
+            dt.Columns.Add("ConvulsionsOrFits", typeof(bool));
+            dt.Columns.Add("LossOfMemory", typeof(bool));
+            dt.Columns.Add("Nervousness", typeof(bool));
+            dt.Columns.Add("ChronicCough", typeof(bool));
+            dt.Columns.Add("CoughingOfBlood", typeof(bool));
+            dt.Columns.Add("VenerealDisease", typeof(bool));
+            dt.Columns.Add("FrequentColds", typeof(bool));
+            dt.Columns.Add("HeartPalpitation", typeof(bool));
+            dt.Columns.Add("ChestPain", typeof(bool));
+            dt.Columns.Add("ShortnessOfBreath", typeof(bool));
+            dt.Columns.Add("SwellingOfFeet", typeof(bool));
+            dt.Columns.Add("SwollenAnkles", typeof(bool));
+            dt.Columns.Add("ChronicIndigestion", typeof(bool));
+            dt.Columns.Add("VomitingOfBlood", typeof(bool));
+            dt.Columns.Add("Jaundice", typeof(bool));
+            dt.Columns.Add("Constipation", typeof(bool));
+            dt.Columns.Add("BloodyStools", typeof(bool));
+            dt.Columns.Add("Cancer", typeof(bool));
+            dt.Columns.Add("Diabetes", typeof(bool));
+            dt.Columns.Add("HayFever", typeof(bool));
+            dt.Columns.Add("Hernia", typeof(bool));
+            dt.Columns.Add("HeadInjury", typeof(bool));
+            dt.Columns.Add("Rheumatism", typeof(bool));
+            dt.Columns.Add("Epilepsy", typeof(bool));
+            dt.Columns.Add("VaricoseVeins", typeof(bool));
+            dt.Columns.Add("Anemia", typeof(bool));
+            dt.Columns.Add("InfectiousDisease", typeof(bool));
+            dt.Columns.Add("FamilyDiabetes", typeof(bool));
+            dt.Columns.Add("FamilyDiabetes_", typeof(string));
+            dt.Columns.Add("FamilyCancer", typeof(bool));
+            dt.Columns.Add("FamilyCancer_", typeof(string));
+            dt.Columns.Add("FamilyTuberculosis", typeof(bool));
+            dt.Columns.Add("FamilyTuberculosis_", typeof(string));
+            dt.Columns.Add("FamilyHeartDisease", typeof(bool));
+            dt.Columns.Add("FamilyHeartDisease_", typeof(string));
+            dt.Columns.Add("FamilyKidneyDisease", typeof(bool));
+            dt.Columns.Add("FamilyKidneyDisease_", typeof(string));
+            dt.Columns.Add("FamilyHighBloodPressure", typeof(bool));
+            dt.Columns.Add("FamilyHighBloodPressure_", typeof(string));
+            dt.Columns.Add("FamilyHayFever", typeof(bool));
+            dt.Columns.Add("FamilyHayFever_", typeof(string));
+            dt.Columns.Add("FamilyAsthma", typeof(bool));
+            dt.Columns.Add("FamilyAsthma_", typeof(string));
+            dt.Columns.Add("FamilyEpilepsy", typeof(bool));
+            dt.Columns.Add("FamilyEpilepsy_", typeof(string));
+            dt.Columns.Add("FamilyGlaucoma", typeof(bool));
+            dt.Columns.Add("FamilyGlaucoma_", typeof(string));
+            dt.Columns.Add("FamilySyphilis", typeof(bool));
+            dt.Columns.Add("FamilySyphilis_", typeof(string));
+            dt.Columns.Add("FamilyNervousDisorders", typeof(bool));
+            dt.Columns.Add("FamilyNervousDisorders_", typeof(string));
+            dt.Columns.Add("FamilyOther", typeof(bool));
+            dt.Columns.Add("FamilyOther_", typeof(string));               
+            dt.Columns.Add("HaveYouEverBeenPregnant", typeof(bool));
+            dt.Columns.Add("HaveYouEverHadComplications", typeof(bool));
+            dt.Columns.Add("HaveYouEverHadPainful", typeof(bool));
+            dt.Columns.Add("HaveYouEverHadExcessive", typeof(bool));
+            dt.Columns.Add("HaveYouEverHadSpotting", typeof(bool));
+            dt.Columns.Add("AreYouCurrently", typeof(bool));
+            dt.Columns.Add("AreYouPhysician", typeof(bool));
+            dt.Columns.Add("DoYouSmoke", typeof(bool));
+            dt.Columns.Add("DoYouSmoke_PackPerDay", typeof(string)); 
+            dt.Columns.Add("DoYouSmoke_Year", typeof(string)); 
+            dt.Columns.Add("ListAllCurrentMedications", typeof(string));
+            dt.Columns.Add("PerformingCertainMotions", typeof(bool));
+            dt.Columns.Add("AssumingCertainPositions", typeof(bool));
+            dt.Columns.Add("Hearing", typeof(bool));
+            dt.Columns.Add("Seeing", typeof(bool));
+            dt.Columns.Add("Speaking", typeof(bool));
+            dt.Columns.Add("Reading", typeof(bool));
+            dt.Columns.Add("Concentrating", typeof(bool));
+            dt.Columns.Add("Comprehending", typeof(bool));
+            dt.Columns.Add("BeingConfused", typeof(bool));
+            dt.Columns.Add("BeingDisorientated", typeof(bool));
+            dt.Columns.Add("Calculating", typeof(bool));
+            dt.Columns.Add("WritingSentence", typeof(bool));
+            dt.Columns.Add("Walking", typeof(bool));
+            dt.Columns.Add("Planned", typeof(bool));
+            dt.Columns.Add("Unplanned", typeof(bool));
+            dt.Columns.Add("Normal", typeof(bool));
+            dt.Columns.Add("Complications", typeof(bool));
+            dt.Columns.Add("Complications_Explain", typeof(string));
+            dt.Columns.Add("BirthWeight", typeof(string));
+            dt.Columns.Add("Length", typeof(string));
+            dt.Columns.Add("BreastFed", typeof(bool));
+            dt.Columns.Add("BottleFedUntilAge", typeof(string));
+            dt.Columns.Add("AgeWeaned", typeof(string));
+            dt.Columns.Add("FirstYearMedical", typeof(string));
+            dt.Columns.Add("AgeFirstWalked", typeof(string));
+            dt.Columns.Add("AgeFirstTalked", typeof(string));
+            dt.Columns.Add("AgeToiletTrained", typeof(string));
+            dt.Columns.Add("DescriptionOfChild", typeof(string));
+            dt.Columns.Add("ProblemWithBedWetting", typeof(bool));
+            dt.Columns.Add("AndOrSoiling", typeof(bool));
+            dt.Columns.Add("Immunizations", typeof(string));
+            dt.Columns.Add("Documents", typeof(bool));
+            dt.Columns.Add("AgeOfFirstMenstruation", typeof(string));
+            dt.Columns.Add("DateOfLastBreastExam", typeof(DateTime));
+            dt.Columns.Add("DateOfLastPelvic", typeof(DateTime));
+            dt.Columns.Add("DateOfLastPeriod", typeof(DateTime));
+            dt.Columns.Add("UsualDurationOfPeriods", typeof(string));
+            dt.Columns.Add("UsualIntervalBetweenPeriods", typeof(string));
+            dt.Columns.Add("InformationProvided", typeof(bool));
+
+            if (intake != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intake.Id,
+                                            intake.Client_FK,
+                                            intake.DateSignatureLegalGuardian,
+                                            intake.DateSignaturePerson,
+                                            intake.DateSignatureEmployee,
+                                            intake.PrimaryCarePhysician,
+                                            intake.AddressPhysician,
+                                            intake.City,
+                                            intake.State,
+                                            intake.ZipCode,
+                                            intake.Diphtheria,
+                                            intake.Mumps,
+                                            intake.Poliomyelitis,
+                                            intake.RheumaticFever,
+                                            intake.WhoopingCough,
+                                            intake.Tuberculosis,
+                                            intake.ScarletFever,
+                                            intake.Hepatitis,
+                                            intake.HighBloodPressure,
+                                            intake.KidneyTrouble,
+                                            intake.KidneyStones,
+                                            intake.BloodInUrine,
+                                            intake.BurningUrine,
+                                            intake.PainfulUrination,
+                                            intake.EyeTrouble,
+                                            intake.HearingTrouble,
+                                            intake.Fractures,
+                                            intake.EarInfections,
+                                            intake.FrequentNoseBleeds,
+                                            intake.FrequentSoreThroat,
+                                            intake.Hoarseness,
+                                            intake.Allergies,
+                                            intake.Allergies_Describe,
+                                            intake.StomachPain,
+                                            intake.BlackStools,
+                                            intake.NightSweats,
+                                            intake.FrequentVomiting,
+                                            intake.SkinTrouble,
+                                            intake.PainfulMuscles,
+                                            intake.PainfulJoints,
+                                            intake.BackPain,
+                                            intake.SeriousInjury,
+                                            intake.Surgery,
+                                            intake.Arthritis,
+                                            intake.Hemorrhoids,
+                                            intake.WeightLoss,
+                                            intake.FrequentHeadaches,
+                                            intake.Fainting,
+                                            intake.ConvulsionsOrFits,
+                                            intake.LossOfMemory,
+                                            intake.Nervousness,
+                                            intake.ChronicCough,
+                                            intake.CoughingOfBlood,
+                                            intake.VenerealDisease,
+                                            intake.FrequentColds,
+                                            intake.HeartPalpitation,
+                                            intake.ChestPain,
+                                            intake.ShortnessOfBreath,
+                                            intake.SwellingOfFeet,
+                                            intake.SwollenAnkles,
+                                            intake.ChronicIndigestion,
+                                            intake.VomitingOfBlood,
+                                            intake.Jaundice,
+                                            intake.Constipation,
+                                            intake.BloodyStools,
+                                            intake.Cancer,
+                                            intake.Diabetes,
+                                            intake.HayFever,
+                                            intake.Hernia,
+                                            intake.HeadInjury,
+                                            intake.Rheumatism,
+                                            intake.Epilepsy,
+                                            intake.VaricoseVeins,
+                                            intake.Anemia,
+                                            intake.InfectiousDisease,
+                                            intake.FamilyDiabetes,
+                                            intake.FamilyDiabetes_,
+                                            intake.FamilyCancer,
+                                            intake.FamilyCancer_,
+                                            intake.FamilyTuberculosis,
+                                            intake.FamilyTuberculosis_,
+                                            intake.FamilyHeartDisease,
+                                            intake.FamilyHeartDisease_,
+                                            intake.FamilyKidneyDisease,
+                                            intake.FamilyKidneyDisease_,
+                                            intake.FamilyHighBloodPressure,
+                                            intake.FamilyHighBloodPressure_,
+                                            intake.FamilyHayFever,
+                                            intake.FamilyHayFever_,
+                                            intake.FamilyAsthma,
+                                            intake.FamilyAsthma_,
+                                            intake.FamilyEpilepsy,
+                                            intake.FamilyEpilepsy_,
+                                            intake.FamilyGlaucoma,
+                                            intake.FamilyGlaucoma_,
+                                            intake.FamilySyphilis,
+                                            intake.FamilySyphilis_,
+                                            intake.FamilyNervousDisorders,
+                                            intake.FamilyNervousDisorders_,
+                                            intake.FamilyOther,
+                                            intake.FamilyOther_,
+                                            intake.HaveYouEverBeenPregnant,
+                                            intake.HaveYouEverHadComplications,
+                                            intake.HaveYouEverHadPainful,
+                                            intake.HaveYouEverHadExcessive,
+                                            intake.HaveYouEverHadSpotting,
+                                            intake.AreYouCurrently,
+                                            intake.AreYouPhysician,
+                                            intake.DoYouSmoke,
+                                            intake.DoYouSmoke_PackPerDay,
+                                            intake.DoYouSmoke_Year,
+                                            intake.ListAllCurrentMedications,
+                                            intake.PerformingCertainMotions,
+                                            intake.AssumingCertainPositions,
+                                            intake.Hearing,
+                                            intake.Seeing,
+                                            intake.Speaking,
+                                            intake.Reading,
+                                            intake.Concentrating,
+                                            intake.Comprehending,
+                                            intake.BeingConfused,
+                                            intake.BeingDisorientated,
+                                            intake.Calculating,
+                                            intake.WritingSentence,
+                                            intake.Walking,
+                                            intake.Planned,
+                                            intake.Unplanned,
+                                            intake.Normal,
+                                            intake.Complications,
+                                            intake.Complications_Explain,
+                                            intake.BirthWeight,
+                                            intake.Length,
+                                            intake.BreastFed,
+                                            intake.BottleFedUntilAge,
+                                            intake.AgeWeaned,
+                                            intake.FirstYearMedical,
+                                            intake.AgeFirstWalked,
+                                            intake.AgeFirstTalked,
+                                            intake.AgeToiletTrained,
+                                            intake.DescriptionOfChild,
+                                            intake.ProblemWithBedWetting,
+                                            intake.AndOrSoiling,
+                                            intake.Immunizations,
+                                            intake.Documents,
+                                            intake.AgeOfFirstMenstruation,
+                                            intake.DateOfLastBreastExam,
+                                            intake.DateOfLastPelvic,
+                                            intake.DateOfLastPeriod,
+                                            intake.UsualDurationOfPeriods,
+                                            intake.UsualIntervalBetweenPeriods,
+                                            intake.InformationProvided
+            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,                                             
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            false
+                                        });
+            }
 
             return dt;
         }
