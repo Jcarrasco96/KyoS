@@ -17,10 +17,18 @@ namespace KyoS.Web.Data.Entities
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public GenderType Gender { get; set; }
 
+        [Display(Name = "Date of admission")]
+        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public DateTime AdmisionDate { get; set; }
+
         [Display(Name = "Date of birth")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime DateOfBirth { get; set; }
+
+        [Display(Name = "Place of birth")]
+        public string PlaceOfBirth { get; set; }
 
         [Display(Name = "Code")]
         public string Code { get; set; }
@@ -71,6 +79,8 @@ namespace KyoS.Web.Data.Entities
         public string SignPath { get; set; }
 
         public RelationshipType RelationShipOfLegalGuardian { get; set; }
+
+        public RelationshipType RelationShipOfEmergencyContact { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public StatusType Status { get; set; }

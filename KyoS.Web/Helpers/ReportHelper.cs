@@ -2552,6 +2552,9 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Service", typeof(int));
             dt.Columns.Add("IndividualTherapyFacilitatorId", typeof(int));
             dt.Columns.Add("ZipCode", typeof(string));
+            dt.Columns.Add("AdmisionDate", typeof(DateTime));
+            dt.Columns.Add("PlaceOfBirth", typeof(string));
+            dt.Columns.Add("RelationShipOfEmergencyContact", typeof(int));
 
             if (client != null)
             {
@@ -2595,8 +2598,11 @@ namespace KyoS.Web.Helpers
                                             client.RelationShipOfLegalGuardian,
                                             client.Service,
                                             0,
-                                            client.ZipCode
-            });
+                                            client.ZipCode,
+                                            client.AdmisionDate,
+                                            client.PlaceOfBirth,
+                                            client.RelationShipOfEmergencyContact
+            }) ;
             }
             else
             {
@@ -2641,7 +2647,11 @@ namespace KyoS.Web.Helpers
                                             Common.Enums.RelationshipType.Brother,
                                             Common.Enums.ServiceType.Group,
                                             0,
-                                            string.Empty 
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            0,
+                                            Common.Enums.RelationshipType.Brother
                                             });
             }
 

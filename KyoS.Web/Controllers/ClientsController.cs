@@ -101,6 +101,7 @@ namespace KyoS.Web.Controllers
                     model = new ClientViewModel
                     {
                         DateOfBirth = DateTime.Today.AddYears(-60),
+                        AdmisionDate = DateTime.Today,
                         Clinics = list,
                         IdClinic = clinic.Id,
                         IdGender = 1,
@@ -120,6 +121,8 @@ namespace KyoS.Web.Controllers
                         Languages = _combosHelper.GetComboLanguages(),
                         IdRelationship = 0,
                         Relationships = _combosHelper.GetComboRelationships(),
+                        IdRelationshipEC = 0,
+                        RelationshipsEC = _combosHelper.GetComboRelationships(),
                         IdReferred = 0,
                         Referreds = _combosHelper.GetComboReferredsByClinic(user_logged.Id),
                         IdEmergencyContact = 0,
