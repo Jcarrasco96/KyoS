@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220418005249_Update_FarsForm2")]
+    partial class Update_FarsForm2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -786,10 +788,14 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ContID2")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ContID3")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ContractorID")
                         .IsRequired()
@@ -797,7 +803,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("DangerToOtherScale")
                         .HasColumnType("int");
@@ -811,6 +819,7 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("DepressionScale")
+                        .HasMaxLength(1)
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EvaluationDate")
@@ -829,16 +838,22 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("MCOID")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("M_GafScore")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MedicaidProviderID")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("MedicaidRecipientID")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("MedicalScale")
                         .HasColumnType("int");
@@ -852,7 +867,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ProviderLocal")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("RaterEducation")
                         .IsRequired()
@@ -873,8 +890,8 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("SocialScale")
                         .HasColumnType("int");
 
-                    b.Property<int>("SubstanceAbusoHistory")
-                        .HasColumnType("int");
+                    b.Property<bool>("SubstanceAbusoHistory")
+                        .HasColumnType("bit");
 
                     b.Property<int>("SubstanceScale")
                         .HasColumnType("int");
@@ -2765,11 +2782,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Prescriber")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");

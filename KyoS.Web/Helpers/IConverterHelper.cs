@@ -88,6 +88,8 @@ namespace KyoS.Web.Helpers
         DischargeViewModel ToDischargeViewModel(DischargeEntity model);
         Task<MedicationEntity> ToMedicationEntity(MedicationViewModel model, bool isNew);
         MedicationViewModel ToMedicationViewModel(MedicationEntity model);
+        Task<FarsFormEntity> ToFarsFormEntity(FarsFormViewModel model, bool isNew);
+        FarsFormViewModel ToFarsFormViewModel(FarsFormEntity model);
 
     }
 }

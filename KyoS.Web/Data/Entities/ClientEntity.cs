@@ -131,6 +131,8 @@ namespace KyoS.Web.Data.Entities
 
         public DischargeEntity Discharge { get; set; }
 
+        public List<FarsFormEntity> FarsFormList { get; set; }
+
         public string MissingDoc 
         {
             get

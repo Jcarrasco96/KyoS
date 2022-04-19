@@ -1,46 +1,137 @@
 ﻿@model KyoS.Web.Models.DischargeViewModel
 
 <br />
-<div class="container-fluid col-md-9">
-    <pre>
-            Client Name: <strong>@Html.DisplayFor(modelItem => Model.Client.Name)</strong>                      Case Number: <strong>@Html.DisplayFor(modelItem => Model.Client.Code)</strong> 
-            DOB: <strong>@Html.DisplayFor(modelItem => Model.Client.DateOfBirth)</strong>                       Date of Report: <input asp-for="DateReport">
-            Date of Admission:                                                                                  Date of Discharge: <input asp-for="DateDischarge">   
-            Diagnosis at Discharge:                                                                             Diagnosis Text
+<div class="col-md-8">
+    <dl class="dl-horizontal col-md-4">
+        <dt>
+            Client Name:
+        </dt>
+        <dd>
+            @Html.DisplayFor(modelItem => Model.Client.Name)
+        </dd>
+        <dt>
+            Case Number:
+        </dt>
+        <dd>
+            @Html.DisplayFor(modelItem => Model.Client.Code)
+        </dd>
 
-            <input type="checkbox" asp-for="Planned" class="form-check-input"> Planned Discharge <input type="checkbox" asp-for="Planned" class="form-check-input"> Unplanned Discharge        
-    </pre>
-    <pre>
-            Brief History: 
-            <input asp-for="BriefHistory" class="form-control">            
-            Course of Treatment: 
-            <input asp-for="CourseTreatment" class="form-control">
-            Condition on Discharge: 
-            <input asp-for="ConditionalDischarge" class="form-control">
-    </pre>
-    <pre>
-            <input type="checkbox" asp-for="TreatmentPlanObjCumpl" class="form-check-input"> Treatment Plan Objectives Completed  <input type="checkbox" asp-for="TreatmentPlanObjCumpl" class="form-check-input"> Treatment Plan Objectives Not Completed. (other appropriate services not available)
-            <input type="checkbox" asp-for="AgencyDischargeClient" class="form-check-input">Agency Discharged Client Due to Non-cooperation.    <input type="checkbox" asp-for="ClientDischargeAgainst" class="form-check-input">Client Discharged Against Recommendation of Agency
-            <input type="checkbox" asp-for="ClientDeceased" class="form-check-input">Client deceased   <input type="checkbox" asp-for="ClientMoved" class="form-check-input">Client moved  <input type="checkbox" asp-for="PhysicallyUnstable" class="form-check-input">Physically unstable  <input type="checkbox" asp-for="Hospitalization" class="form-check-input">Hospitalization
-    </pre>
-    <pre>
-            Follow Discharge: 
-            <input asp-for="FollowDischarge" class="form-control">
-    </pre>
-             Medications at the time of Discharge: 
-             <table class="table table-hover table-responsive table-striped" id="MyTable">
+        <dt>
+            DOB:
+        </dt>
+        <dd>
+            @Html.DisplayFor(modelItem => Model.Client.DateOfBirth)
+        </dd>
+        <dt>
+            Diagnosis at Discharge:
+        </dt>
+        <dd>
+            @Html.DisplayFor(modelItem => Model.Client.Name)
+        </dd>
+        <dt>
+            Diagnosis Text:
+        </dt>
+        <dd>
+            @Html.DisplayFor(modelItem => Model.Client.Name)
+        </dd>
+        <dt>
+            Employee Signature:
+        </dt>
+        <dd>
+            @Html.DisplayFor(modelItem => Model.AdmissionedFor)
+        </dd>
+
+    </dl>
+    <dl class="dl-horizontal col-md-4">
+        <dt>
+            Date of Admission:
+        </dt>
+        <dd>
+            <input asp-for="DateDischarge" class="form-control">
+        </dd>
+        <dt>
+            Date of Report:
+        </dt>
+        <dd>
+            <input asp-for="DateReport" class="form-control">
+        </dd>
+
+        <dt>
+            Date of Discharge:
+        </dt>
+        <dd>
+            <input asp-for="DateDischarge" class="form-control">
+        </dd>
+
+    </dl>
+</div>
+<div class="container-fluid col-md-12">
+    <div class="container-fluid col-md-2">
+        <input type="checkbox" asp-for="Planned" class="form-check-input" id="check1"> Planned Discharge
+    </div>
+    <div class="container-fluid col-md-2">
+        <input type="checkbox" asp-for="Planned" class="form-check-input" id="check101"> Unplanned Discharge
+    </div>
+</div>
+<br />
+<div class="container-fluid col-md-12">
+    <div class="container-fluid col-md-4">
+        <label asp-for="BriefHistory" class="control-label">Brief History:</label>&nbsp;*
+        <textarea asp-for="BriefHistory" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="BriefHistory" class="text-danger"></span>
+    </div>
+    <div class="container-fluid col-md-4">
+        <label asp-for="CourseTreatment" class="control-label">Course of Treatment:</label>&nbsp;*
+        <textarea asp-for="CourseTreatment" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="CourseTreatment" class="text-danger"></span>
+    </div>
+    <div class="container-fluid col-md-4">
+        <label asp-for="ConditionalDischarge" class="control-label">Condition on Discharge:</label>&nbsp;*
+        <textarea asp-for="ConditionalDischarge" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="ConditionalDischarge" class="text-danger"></span>
+    </div>
+</div>
+<br />
+<br />
+<div class="container-fluid col-md-12">
+    <div class="container-fluid col-md-4">
+        <input type="checkbox" asp-for="TreatmentPlanObjCumpl" class="form-check-input"> Treatment Plan Objectives Completed<br />
+        <input type="checkbox" asp-for="AgencyDischargeClient" class="form-check-input"> Agency Discharged Client Due to Non-cooperation.<br />
+        <input type="checkbox" asp-for="ClientDeceased" class="form-check-input"> Client deceased &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="ClientMoved" class="form-check-input"> Client moved  <br />
+    </div>
+    <div class="container-fluid col-md-4">
+        <input type="checkbox" asp-for="TreatmentPlanObjCumpl" class="form-check-input"> Treatment Plan Objectives Not Completed. (other appropriate services not available)<br />
+        <input type="checkbox" asp-for="ClientDischargeAgainst" class="form-check-input"> Client Discharged Against Recommendation of Agency<br />
+        <input type="checkbox" asp-for="PhysicallyUnstable" class="form-check-input"> Physically unstable  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="Hospitalization" class="form-check-input"> Hospitalization<br />
+    </div>
+    <div class="container-fluid col-md-4">
+        <label asp-for="FollowDischarge" class="control-label">Follow Discharge:</label>&nbsp;*
+        <textarea asp-for="FollowDischarge" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="FollowDischarge" class="text-danger"></span>
+    </div>
+</div>
+<br>
+<div class="col-md-12">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Medication List</h3>
+            </div>
+            <div class="panel-body">
+                Medications at the time of Discharge:
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
                             <th class="col-md-2">
-                               Type
+                                Type
                             </th>
                             <th class="col-md-1">
-                               Dosage
+                                Dosage
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Frequency
                             </th>
-                            
+
                         </tr>
                     </thead>
                     <tbody>
@@ -58,44 +149,92 @@
                                     @Html.DisplayFor(modelItem => item.Frequency)
 
                                 </td>
-                                
-                                
+
+
                             </tr>
                         }
                     </tbody>
                 </table>
-    
-    <pre>
-            <input type="checkbox" asp-for="ClientReferred" class="form-check-input"> Client referred to another agency:                             <input type="checkbox" asp-for="Others" class="form-check-input"> Others:
-            Referral for:       <input asp-for="ReferralFor1">                        Referral for:       <input asp-for="ReferralFor2"> 
-            Agency:             <input asp-for="ReferralAgency1">                        Agency:             <input asp-for="ReferralAgency2"> 
-            Contact Person:     <input asp-for="ReferralContactPersonal1">                        Contact Person:     <input asp-for="ReferralContactPersonal2"> 
-            Phone #:            <input asp-for="ReferralPhone1">                        Phone #:            <input asp-for="ReferralPhone2" />
-            Hours of Operation: <input asp-for="ReferralHoursOperation1">                        Hours of Operation: <input asp-for="ReferralHoursOperation2">
-     </pre>
-</div>
-<div class="form-group col-md-12">
-    <div class="form-group col-md-3">
-        <strong><u>@Html.DisplayFor(modelItem => Model.Client.Name)</u></strong><br />
-        <i>Person Served Signature</i>
+            </div>
+        </div>
     </div>
-    <div class="form-group col-md-2">
-        <input asp-for="DateSignaturePerson" class="form-control">
-        <i>Signature Date</i>
+    <div class="col-md-3">
+
+        <input type="checkbox" asp-for="ClientReferred" class="form-check-input"> Client referred to another agency: <br />
+        &nbsp;&nbsp;<label asp-for="ReferralFor1" class="control-label">Referral For:</label>
+        &nbsp;&nbsp;<input asp-for="ReferralFor1" class="form-control">
+        &nbsp;&nbsp;<span asp-validation-for="ReferralFor1" class="text-danger"></span>
+
+        &nbsp;&nbsp;<label asp-for="ReferralAgency1" class="control-label">Referral Agency:</label>
+        &nbsp;&nbsp;<input asp-for="ReferralAgency1" class="form-control">
+        &nbsp;&nbsp;<span asp-validation-for="ReferralAgency1" class="text-danger"></span>
+
+        &nbsp;&nbsp;<label asp-for="ReferralContactPersonal1" class="control-label">Referral Contact Personal1:</label>
+        &nbsp;&nbsp;<input asp-for="ReferralContactPersonal1" class="form-control">
+        &nbsp;&nbsp;<span asp-validation-for="ReferralContactPersonal1" class="text-danger"></span>
+
+        &nbsp;&nbsp;<label asp-for="ReferralPhone1" class="control-label">Phone #:</label>
+        &nbsp;&nbsp;<input asp-for="ReferralPhone1" class="form-control">
+        &nbsp;&nbsp;<span asp-validation-for="ReferralPhone1" class="text-danger"></span>
+
+        &nbsp;&nbsp;<label asp-for="ReferralHoursOperation1" class="control-label">Hours of Operation:</label>
+        &nbsp;&nbsp;<input asp-for="ReferralHoursOperation1" class="form-control">
+        &nbsp;&nbsp;<span asp-validation-for="ReferralHoursOperation1" class="text-danger"></span>
+
     </div>
-</div>
-<br />
-<div class="form-group col-md-12">
-    <div class="form-group col-md-3">
-        <strong><u>@Html.DisplayFor(modelItem => Model.AdmissionedFor)</u></strong><br />
-        <i>Employee Signature</i>
-    </div>
-    <div class="form-group col-md-2">
-        <input asp-for="DateSignatureEmployee" class="form-control">
-        <i>Signature Date</i>
+    <div class="col-md-3">
+
+        <input type="checkbox" asp-for="Others" class="form-check-input"> Others:<br />
+
+        &nbsp;&nbsp;<label asp-for="ReferralFor1" class="control-label">Referral For:</label>
+        &nbsp;&nbsp;<input asp-for="ReferralFor1" class="form-control">
+        &nbsp;&nbsp;<span asp-validation-for="ReferralFor1" class="text-danger"></span>
+
+        &nbsp;&nbsp;<label asp-for="ReferralAgency1" class="control-label">Referral Agency:</label>
+        &nbsp;&nbsp;<input asp-for="ReferralAgency1" class="form-control">
+        &nbsp;&nbsp;<span asp-validation-for="ReferralAgency1" class="text-danger"></span>
+
+        &nbsp;&nbsp;<label asp-for="ReferralContactPersonal1" class="control-label">Referral Contact Personal1:</label>
+        &nbsp;&nbsp;<input asp-for="ReferralContactPersonal1" class="form-control">
+        &nbsp;&nbsp;<span asp-validation-for="ReferralContactPersonal1" class="text-danger"></span>
+
+        &nbsp;&nbsp;<label asp-for="ReferralPhone1" class="control-label">Phone #:</label>
+        &nbsp;&nbsp;<input asp-for="ReferralPhone1" class="form-control">
+        &nbsp;&nbsp;<span asp-validation-for="ReferralPhone1" class="text-danger"></span>
+
+        &nbsp;&nbsp;<label asp-for="ReferralHoursOperation1" class="control-label">Hours of Operation:</label>
+        &nbsp;&nbsp;<input asp-for="ReferralHoursOperation1" class="form-control">
+        &nbsp;&nbsp;<span asp-validation-for="ReferralHoursOperation1" class="text-danger"></span>
+
+
     </div>
 </div>
 
+
+<script>
+    check1.addEventListener('change', (e) => {
+        if (check1.checked == true) {
+            check101.checked = false;
+        } else {
+            check101.checked = true;
+        }
+
+    })
+    check101.addEventListener('change', (e) => {
+        if (check101.checked == true) {
+            check1.checked = false;
+        } else {
+            check1.checked = true;
+        }
+
+    })
+    if (check1.checked == true) {
+        check101.checked = false;
+    } else {
+        check101.checked = true;
+    }
+
+</script>
 
 
 

@@ -30,11 +30,21 @@ namespace KyoS.Web.Data.Entities
 
         public string ReasonDischarge { get; set; }
 
+        [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string BriefHistory { get; set; }
 
+        [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string CourseTreatment { get; set; }
 
+        [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string ConditionalDischarge { get; set; }
+
+        [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public string FollowDischarge { get; set; }
 
         public string ReferralFor1 { get; set; }
 
@@ -55,8 +65,6 @@ namespace KyoS.Web.Data.Entities
         public string ReferralPhone2 { get; set; }
 
         public string ReferralHoursOperation2 { get; set; }
-
-        public string FollowDischarge { get; set; }
 
         public bool TreatmentPlanObjCumpl { get; set; }
 

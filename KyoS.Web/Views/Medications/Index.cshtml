@@ -52,9 +52,7 @@
                             <th class="col-md-2" style="text-align:center;">
                                 Status
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-
-                            </th>
+                            
                             <th class="col-md-2">
                             </th>
                         </tr>
@@ -75,9 +73,10 @@
                                 <div style="display:none">
                                     <table class="table table-striped table-bordered">
                                         <tr>
-                                            <th class="col-md-4">Drug Name</th>
-                                            <th class="col-md-3">Dosage</th>
-                                            <th class="col-md-3">Frequency</th>
+                                            <th class="col-md-3">Drug Name</th>
+                                            <th class="col-md-2">Dosage</th>
+                                            <th class="col-md-2">Frequency</th>
+                                            <th class="col-md-3">Precriber</th>
                                             <th class="col-md-2"></th>
                                         </tr>
                                         @foreach (var product1 in item.MedicationList)
@@ -86,11 +85,11 @@
                                                 <td>@Html.DisplayFor(modelItem => product1.Name)</td>
                                                 <td>@Html.DisplayFor(modelItem => product1.Dosage)</td>
                                                 <td>@Html.DisplayFor(modelItem => product1.Frequency)</td>
+                                                <td>@Html.DisplayFor(modelItem => product1.Prescriber)</td>
                                                 <td>
-                                                    @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Mannager"))
+                                                   @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Mannager"))
                                                     {
                                                         <a asp-action="Edit" asp-route-id="@product1.Id" class="btn btn-warning" title="Add Medication"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                        <button data-id="@product1.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete Medication"><i class="glyphicon glyphicon-trash"></i></button>
                                                     }
                                                 </td>
                                             </tr>
@@ -128,13 +127,12 @@
                                     </span>
                                 }
                             </td>
-                            <td align="center">
-                            </td>
-
                             <td align="right">
-                                <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-primary" title="Add Medication"><i class="glyphicon glyphicon-plus"></i></a>
-                               
-                            </td>
+                                @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Mannager"))
+                                {
+                                    <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-primary" title="Add Medication"><i class="glyphicon glyphicon-plus"></i></a>
+                                }
+                                </td>
                         </tr>
                         }
                     </tbody>

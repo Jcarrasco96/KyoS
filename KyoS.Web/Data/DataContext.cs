@@ -71,6 +71,7 @@ namespace KyoS.Web.Data
         public DbSet<IntakeMedicalHistoryEntity> IntakeMedicalHistory { get; set; }
         public DbSet<DischargeEntity> Discharge { get; set; }
         public DbSet<MedicationEntity> Medication { get; set; }
+        public DbSet<FarsFormEntity> FarsForm { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -259,6 +260,11 @@ namespace KyoS.Web.Data
                                   .HasMany(c => c.MedicationList)
                                   .WithOne(s => s.Client)
                                   .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ClientEntity>()
+                                 .HasMany(c => c.FarsFormList)
+                                 .WithOne(s => s.Client)
+                                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

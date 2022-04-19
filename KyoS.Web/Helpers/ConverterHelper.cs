@@ -2026,6 +2026,7 @@ namespace KyoS.Web.Helpers
                 Dosage = model.Dosage,
                 Name = model.Name,
                 Frequency = model.Frequency,
+                Prescriber = model.Prescriber,
             };
         }
 
@@ -2039,7 +2040,103 @@ namespace KyoS.Web.Helpers
                 Dosage = model.Dosage,
                 Name = model.Name,
                 Frequency = model.Frequency,
+                Prescriber = model.Prescriber,
+            };
 
+        }
+
+        public async Task<FarsFormEntity> ToFarsFormEntity(FarsFormViewModel model, bool isNew)
+        {
+            return new FarsFormEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient),
+                AbilityScale = model.AbilityScale,
+                ActivitiesScale = model.ActivitiesScale,
+                AdmissionedFor = model.AdmissionedFor,
+                AnxietyScale = model.AnxietyScale,
+                CognitiveScale  = model.CognitiveScale,
+                ContID1 = model.ContID1,
+                ContID2 = model.ContID2,
+                ContID3 = model.ContID3,
+                ContractorID = model.ContractorID,
+                Country = model.Country,
+                DangerToOtherScale = model.DangerToOtherScale,
+                DangerToSelfScale = model.DangerToSelfScale,
+                DcfEvaluation = model.DcfEvaluation,
+                DepressionScale = model.DepressionScale,
+                EvaluationDate = model.EvaluationDate,
+                FamilyEnvironmentScale = model.FamilyEnvironmentScale,
+                FamilyRelationShipsScale = model.FamilyRelationShipsScale,
+                HyperAffectScale = model.HyperAffectScale,
+                InterpersonalScale = model.InterpersonalScale,
+                MCOID = model.MCOID,
+                MedicaidProviderID = model.MedicaidProviderID,
+                MedicaidRecipientID = model.MedicaidRecipientID,
+                MedicalScale = model.MedicalScale,
+                M_GafScore = model.M_GafScore,
+                ProgramEvaluation = model.ProgramEvaluation,
+                ProviderId = model.ProviderId,
+                ProviderLocal = model.ProviderLocal,
+                RaterEducation = model.RaterEducation,
+                RaterFMHI = model.RaterFMHI,
+                SecurityScale = model.SecurityScale,
+                SignatureDate = model.SignatureDate,
+                SocialScale = model.SocialScale,
+                SubstanceAbusoHistory = model.SubstanceAbusoHistory,
+                SubstanceScale = model.SubstanceScale,
+                ThoughtProcessScale = model.ThoughtProcessScale,
+                TraumaticsScale = model.TraumaticsScale,
+                WorkScale = model.WorkScale,
+
+            };
+        }
+
+        public FarsFormViewModel ToFarsFormViewModel(FarsFormEntity model)
+        {
+            return new FarsFormViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                AbilityScale = model.AbilityScale,
+                ActivitiesScale = model.ActivitiesScale,
+                AdmissionedFor = model.AdmissionedFor,
+                AnxietyScale = model.AnxietyScale,
+                CognitiveScale = model.CognitiveScale,
+                ContID1 = model.ContID1,
+                ContID2 = model.ContID2,
+                ContID3 = model.ContID3,
+                ContractorID = model.ContractorID,
+                Country = model.Country,
+                DangerToOtherScale = model.DangerToOtherScale,
+                DangerToSelfScale = model.DangerToSelfScale,
+                DcfEvaluation = model.DcfEvaluation,
+                DepressionScale = model.DepressionScale,
+                EvaluationDate = model.EvaluationDate,
+                FamilyEnvironmentScale = model.FamilyEnvironmentScale,
+                FamilyRelationShipsScale = model.FamilyRelationShipsScale,
+                HyperAffectScale = model.HyperAffectScale,
+                InterpersonalScale = model.InterpersonalScale,
+                MCOID = model.MCOID,
+                MedicaidProviderID = model.MedicaidProviderID,
+                MedicaidRecipientID = model.MedicaidRecipientID,
+                MedicalScale = model.MedicalScale,
+                M_GafScore = model.M_GafScore,
+                ProgramEvaluation = model.ProgramEvaluation,
+                ProviderId = model.ProviderId,
+                ProviderLocal = model.ProviderLocal,
+                RaterEducation = model.RaterEducation,
+                RaterFMHI = model.RaterFMHI,
+                SecurityScale = model.SecurityScale,
+                SignatureDate = model.SignatureDate,
+                SocialScale = model.SocialScale,
+                SubstanceAbusoHistory = model.SubstanceAbusoHistory,
+                SubstanceScale = model.SubstanceScale,
+                ThoughtProcessScale = model.ThoughtProcessScale,
+                TraumaticsScale = model.TraumaticsScale,
+                WorkScale = model.WorkScale,
+                
             };
 
         }

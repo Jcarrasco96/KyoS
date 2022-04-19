@@ -34,6 +34,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -52,7 +53,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Mannager"))
+                if (User.IsInRole("Mannager") || User.IsInRole("Supervisor"))
                     return View(await _context.Clients
                                               .Include(f => f.MedicationList)
                                               .Where(f => f.MedicationList.Count() > 0)
@@ -74,7 +75,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Mannager, Supervisor")]
         public IActionResult Create(int id = 0)
         {
 
@@ -99,6 +100,7 @@ namespace KyoS.Web.Controllers
                         Dosage = "",
                         Frequency = "",
                         Name = "",
+                        Prescriber = user_logged.FullName,
                       
                     };
                     if (model.Client.MedicationList == null)
@@ -115,13 +117,14 @@ namespace KyoS.Web.Controllers
                 Dosage = "",
                 Frequency = "",
                 Name = "",
+                Prescriber = "",
             };
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Mannager, Supervisor")]
         public async Task<IActionResult> Create(MedicationViewModel MedicationViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -148,7 +151,7 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Already exists the Discharge.");
+                    ModelState.AddModelError(string.Empty, "Already exists the Medication.");
 
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", MedicationViewModel) });
                 }
@@ -162,6 +165,7 @@ namespace KyoS.Web.Controllers
                 Dosage = MedicationViewModel.Dosage,
                 Frequency = MedicationViewModel.Frequency,
                 Name = MedicationViewModel.Name,
+                Prescriber = MedicationViewModel.Prescriber,
 
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", MedicationViewModel) });
