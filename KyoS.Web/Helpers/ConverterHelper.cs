@@ -331,8 +331,7 @@ namespace KyoS.Web.Helpers
             return new MTPEntity
             {
                 Id = isNew ? 0 : model.Id,
-                Client = await _context.Clients.FindAsync(model.IdClient),
-                AdmisionDate = model.AdmisionDate,
+                Client = await _context.Clients.FindAsync(model.IdClient),                
                 MTPDevelopedDate = model.MTPDevelopedDate,
                 StartTime = model.StartTime,
                 EndTime = model.EndTime,
@@ -351,8 +350,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = mtpEntity.Id,
                 IdClient = mtpEntity.Client.Id,
-                Clients = _combosHelper.GetComboClients(),
-                AdmisionDate = mtpEntity.AdmisionDate,
+                Clients = _combosHelper.GetComboClients(),               
                 MTPDevelopedDate = mtpEntity.MTPDevelopedDate,
                 StartTime = mtpEntity.StartTime,
                 EndTime = mtpEntity.EndTime,

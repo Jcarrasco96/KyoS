@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="06/13/2021 13:05:56" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/20/2022 16:53:37" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3xHVAw3bMU2nU3d9RPgb0vA==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3xxQf4/qp864dvVjNT+cvfg==">
       <TableDataSource Name="Goals1" Alias="Goals2" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -20,7 +20,7 @@
         <Column Name="GoalId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3dsTgF4+IGCHDtEBjmNmE9g==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3WHt3oE+Yj9UzLcJYYTecgw==">
       <TableDataSource Name="Goals2" Alias="Goals3" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -39,7 +39,7 @@
         <Column Name="GoalId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u38ONMis2RnlDh1R3IdRRT/w==">
+    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3sd6+9XQaqPDZYOTVox0Msw==">
       <TableDataSource Name="Goals3" Alias="Goals4" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -58,7 +58,7 @@
         <Column Name="GoalId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3sraJHbhTdpg0Wuok6mdG6g==">
+    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3Yi7xJ74FuFA8GoSycAK11Q==">
       <TableDataSource Name="Goals4" Alias="Goals5" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -77,7 +77,7 @@
         <Column Name="GoalId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u31OLMuMwPnvntHY0YAMsoxA==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3143bV/6TIOkRJPIWRcOZig==">
       <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -85,9 +85,41 @@
         <Column Name="Code" DataType="System.String"/>
         <Column Name="ClinicId" DataType="System.Int32"/>
         <Column Name="DateOfBirth" DataType="System.DateTime"/>
-        <Column Name="MedicalID" DataType="System.String"/>
         <Column Name="Status" DataType="System.Int32"/>
         <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="ReferredId" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
       </TableDataSource>
       <TableDataSource Name="MTPs" DataType="System.Int32" Enabled="true" TableName="MTPs">
         <Column Name="Id" DataType="System.Int32"/>
@@ -133,7 +165,7 @@
   </Dictionary>
   <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" FirstPageSource="15" OtherPagesSource="15" LastPageSource="15" Watermark.Enabled="true" Watermark.Image="/9j/4AAQSkZJRgABAQEAYABgAAD/4QAiRXhpZgAATU0AKgAAAAgAAQESAAMAAAABAAEAAAAAAAD/2wBDAAIBAQIBAQICAgICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcICQsJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/2wBDAQICAgMDAwYDAwYMCAcIDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAz/wAARCAMqA10DASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9/KKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAoprzLH940K4YdQ30oAdRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRUNzc/Z1H970oAlL7RzwPeqsuof3PzNQSTNIck59qb3oACxarGnk+aw/hqvV6zi2Q+560ATUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFNaRY1yxwPegB1FVJb85+T9afDfK52t8rfpQBYqre25d1bk+wq0DmigDM2N6H8qStTFQ3FqJl/utQBRrQtX3Q5qgRjjHNS2c2xsH7tAF6iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACjNRzXKwiqdxctOeOB6UAWJr5UO1fmb9KqyStIck59qbniigA6UZ4oooAkiuWib1FW4LtZfZvSqFAOKANQnFFUYrxov9qrUVwsw+WgCvew7WDj8arg4rSeMOpHrWfLE0Tlf1oAuWs/mp7r1qas63l8mT/ZPWtFTuGaACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACijPFRNeRr/ABZ+lAEtR3Evkws3pT92RSsu8YNAGY7lzk0lWv7N+b71JJpx2/K1AFainMhj+8uPrTaACiiigAooooAKFYqeOKKKALEN80Y+bketPmQXcYZD8w6VUpVcocigBZIjEfm4+tWLKf8A5Zn8KSO8DLiQflT2tFbDRnGOlAFiigdKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiimySrEmWOKAHZqOa6WHr19KrzXzP93getVyc0ASzXbTf7NRUUKcGgC7p4YQ8+vFT02MgoNvSnUAFFFFADZEVx81VZrDHKnPtVqWPzF2+v6VTE8luxHXFAEJUg8jHtRVg3Edx8si4b1FNms2j5X5loAhoo7+ntRQAUUUUAFFFFABTopWj+634Gm0ZoAuQXwk+9wasVlg4q9aT+bH/ALS9aAJqKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAoopG5FAEFzeeUdq8mqkjtI/wAxyfSlkUg/NndTaACiiigAooooAtWU+RtP4VarLVtpGO3StCCfzo91AElFFFABVa/g3LvH8PX3qzQy7hzQBl1cspvMXa3UfrVe4g8l/amxybHDCgC7NbLKP7tVJrVoT/eq9HIJkDDoadjIoAy6KuTWKv8Ad4NVZIWhOGH49qAG0UUUAFFFFABT7eUwyD+73plFAGoDkUVVsZv4T1HerVABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFBOKrT3+w7U+agCeSVYkyxxVc6iA2AtVpHaR/mOT6UlAGlHKJE3DpTqr2CERMT/EeKsUANaJWbJFR3NuJI/lX5vapqKAMvHNFT30PluGH3TUFABRRRQAVNaTeVJ/s1DRQBqZoqC0n81cHqP1qegAooooAjuovNj4+9Wft+atSqd7DsO7+H1oASxm2PtP8X6VdrLBxV61m81P9pevvQBNQy7hzRRQBWmsf7nX3qs8TR/eGPetKmvGsg+YUAZtFWJrEr8yfN7VXPB/p3oAKKKO/r7UAKjlDxWjHL5ig+tVYLEuMt8vtVqOM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AFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAFdwqjc23kHPVf5Veqqs2JGjk5X1oAq0VLc2/kN/st39KioAKKKKAChWwaKKAL1rdecvP3hU1ZattOavW1z5w560ATUUUUAFQ3dv5ye4qaigDLoqa7g8p/wDZP6VDQAUUUUAFTWc2x8H7pqGgHFAGpUF1a+cMr96ol1Blj6ZalS+YH5uPpQBAUKnkfnTa0XiWYcjNRf2enq1AFMHNSQ2rTH+7VtLONB92pcYFAEcMIhXatSUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUhfA54FVpb7tH+ZoAtUVRS/dX+Y7l+lXqACiiigAooooAKKKKACqN/Htl/3qvVXv0yqt3WgCO1n3fu35XsTUdxB5J9qjBwc+laAUTwD35oAz6KlntjCfaoqACiiigApVcoeKSigC9bXPnDn7w61NWYrFTxV21ufNXnqKAJqKKKAI54vNTb/FVAqYz71p1Vvof4xQBVooooAKKKUIWPHX2oAT37VJb2/myVNFY/xSdfQVZChRgUAKBiiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiio5Z1hHzGgB+6oZr1U+78zfpVea8abpwKioAdNM0/3jz6U3qKKKAJrWIzvnoO9XgMVTsZuWB4BGRVygAooooAKKKKACiiigAqO5TzIStSUUAZdXrB8wbf7vFU5Y9krD0qawlxKV9aALTxh1wao3FuYT7VoU14xKm00AZtFOlj8t8ZzTaACiiigApVYqeKSigC9b3PnjH8Q6ipqzEbY2RVuK/Vh81AFiq99NsTb61JHcpLwrVDewEncMn6UAVaDw3Tn0qSO2aQ8D86tw2qwj1oArw2TOfm+Vf1q3HEsQ+UU6igAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAr3d35PC9apk5OauXlq0hVl7dfeoPscm3pQBFRQaKACiiigAB2n6VoW83nxbqz6ltZvLl/wBk0AX6KAciigAooooAKKKKACiiigCnfDbLnswqGF/LlDVav4t0Q/2ap0AaLzrGuWqpcXZmGF+UU6cebbo/p1queDQAE5o3DNTQ2bOeRhffrVhrNTDt/WgCjRTpImjbDfnTaACiiigAozQBk1NFYtJ975V/WgBtqrGetCmRRLEny9KfQAYooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAo30Gx9w6VDWlIgkXBrPkj8piD2/WgBtFFFABRRRQBcsp964Y8irFZ0MvlODV9H3rmgB1FFFABRRUdxciBc0ASUVWhvtz7WH41ZoAZMu+LFZ3Q/pWpWbOmydvrmgCe0/ewNH+VSwWawj+8feq9pJsmUf3qvUAFFFFAFXUMeWvrVWrOoxsSrY+WoI4jL92gBtSRQNLyo49anhsB1fr7VZAxQBFDbrAPWpaKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKrX8G9dy9V6+9WaCM0AZdFSXEJik9u1R0AFFFFABVqymwuw/hVWhW2EEdulAGpRUdvN50eakoAKq6kMBT74q1Ve/XdD/umgCmOKvW0/mp7r1qjUlvL5Mg9O9AGhVLUFxMPfrV0NkVRvXDzf7ooAhDYNTrfybe1QUUAWU1BtyhlHzVbrPgtmlPT5fWtCgAxkUgUL0A/KlooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigCK6h86P8A2u1UMc1qVSvofLcMvQ/pQBBRRRQAUUUUASWtx5Uv+zWgDmsurtnP5i/N1oAnqG94t2qaqt/LlVX+9QBVooooAsR3W2Bl/Kq5OTmjv6+1Wo7FXUN83PagCvGnmHA61ZhsB1fr7VNHEIxwPxp9AAF20UUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFNlj8xNpp1FAGa6GNsU2rd7BuXcBz3qpQAUUUUAFOikMTZptFAF6W52xbl71SdzI2W61PaSBwY26NUTW7CXbj8aAGVJDatMf7tWILFYzlvmarGMCgCKG1WIetS0dKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAArkVn3EBhf2rQqrqDrt2/wAVAFWiiigAo7+vtUkNq03+yPWrcNqsQ9aAIbayY4Zvlx2q3iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACqF2pScknir9IVDdQKAM6OJpm+WrUFisZy3zNU4UL0GKWgAxijpRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAH//2Q==" Watermark.Font="Arial, 60pt">
     <ReportTitleBand Name="ReportTitle1" Width="778.3"/>
-    <PageHeaderBand Name="PageHeader1" Top="4" Width="778.3" Height="103.95">
+    <PageHeaderBand Name="PageHeader1" Top="4.12" Width="778.3" Height="103.95">
       <TextObject Name="Text39" Left="56.7" Top="63.7" Width="113.4" Height="18.9" Text="CLIENT NAME:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text40" Left="500.85" Top="63.7" Width="75.6" Height="18.9" Text="MR #:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text47" Left="170.1" Top="63.7" Width="321.3" Height="18.9" Text="[Clients.Name]" Font="Arial, 10pt"/>
@@ -146,7 +178,7 @@
       <LineObject Name="Line7" Left="775.9" Top="90.15" Width="-776"/>
       <LineObject Name="Line4" Left="775.52" Top="89.15" Width="-776"/>
     </PageHeaderBand>
-    <DataBand Name="Data7" Top="111.95" Width="778.3" Height="207.9" CanGrow="true" CanShrink="true">
+    <DataBand Name="Data7" Top="112.2" Width="778.3" Height="207.9" CanGrow="true" CanShrink="true">
       <TextObject Name="Text55" Left="18.9" Top="150.65" Width="756" Height="47.25" CanGrow="true" CanShrink="true" Text="[MTPs.InitialDischargeCriteria]" Font="Arial, 10pt"/>
       <TextObject Name="Text46" Left="5" Top="130.3" Width="217.35" Height="18.9" Text="INITIAL DISCHARGE CRITERIA:" HorzAlign="Right" Font="Arial, 10pt, style=Bold, Underline"/>
       <TextObject Name="Text41" Left="5.45" Top="88.05" Width="132.3" Height="18.9" Text="Level of care:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
@@ -168,10 +200,10 @@
       <TextObject Name="Text53" Left="576.45" Top="28.35" Width="198.45" Height="18.9" Text="[MTPs.EndTime]" Format="Time" Format.Format="t" Font="Arial, 10pt"/>
       <TextObject Name="Text16" Left="5.35" Top="10" Width="132.3" Height="18.9" Text="Date of admission:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text36" Left="368.55" Top="9.45" Width="207.9" Height="18.9" Text="Treatment plan developed date:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text49" Left="138.75" Top="9.45" Width="160.65" Height="18.9" Text="[MTPs.AdmisionDate]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
+      <TextObject Name="Text49" Left="138.75" Top="9.45" Width="160.65" Height="18.9" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
       <TextObject Name="Text52" Left="576.45" Top="9.45" Width="198.45" Height="18.9" Text="[MTPs.MTPDevelopedDate]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
     </DataBand>
-    <DataBand Name="Data1" Top="356.2" Width="778.3" Height="18.9" FirstRowStartsNewPage="true" Guides="0,0,0" DataSource="Diagnostics">
+    <DataBand Name="Data1" Top="356.69" Width="778.3" Height="18.9" FirstRowStartsNewPage="true" Guides="0,0,0" DataSource="Diagnostics">
       <TableObject Name="Table1" Left="15.9" Top="-0.1" Width="755.98" Height="18.9">
         <TableColumn Name="Column1" Width="122.83"/>
         <TableColumn Name="Column2" Width="633.15"/>
@@ -180,7 +212,7 @@
           <TableCell Name="Cell2" Border.Lines="All" Text="[Diagnostics.Description]" HorzAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader1" Top="323.85" Width="778.3" Height="28.35">
+      <DataHeaderBand Name="DataHeader1" Top="324.22" Width="778.3" Height="28.35">
         <TableObject Name="Table2" Left="16.45" Top="9.45" Width="755.98" Height="18.9">
           <TableColumn Name="Column3" Width="122.83"/>
           <TableColumn Name="Column4" Width="633.15"/>
@@ -191,7 +223,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data3" Top="379.1" Width="778.3" Height="47.25" DataSource="MTPs">
+    <DataBand Name="Data3" Top="379.72" Width="778.3" Height="47.25" DataSource="MTPs">
       <TableObject Name="Table5" Left="15.9" Top="6.45" Width="756" Height="37.8" Border.Lines="All">
         <TableColumn Name="Column9" Width="185.85"/>
         <TableColumn Name="Column10" Width="299.25"/>
@@ -208,7 +240,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <DataBand Name="Data2" Top="430.35" Width="778.3" Height="81.27" CanGrow="true" CanShrink="true" DataSource="Goals">
+    <DataBand Name="Data2" Top="431.09" Width="778.3" Height="81.27" CanGrow="true" CanShrink="true" DataSource="Goals">
       <TextObject Name="Text56" Left="15.9" Top="5" Width="756" Height="18.9" Border.Lines="All" Text="Treatment Plan Problem Area" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TableObject Name="Table6" Left="15.9" Top="23.8" Width="756" Height="56.7">
         <TableColumn Name="Column12" Width="756"/>
@@ -220,7 +252,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <DataBand Name="Data4" Top="557.42" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives">
+    <DataBand Name="Data4" Top="558.41" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives">
       <TableObject Name="Table8" Left="15.9" Width="756.08" Height="37.8">
         <TableColumn Name="Column18" Width="89.81"/>
         <TableColumn Name="Column19" Width="344.97"/>
@@ -242,7 +274,7 @@
           <TableCell Name="Cell37" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader2" Top="515.62" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
+      <DataHeaderBand Name="DataHeader2" Top="516.49" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
         <TableObject Name="Table7" Left="15.9" Width="756.08" Height="37.8">
           <TableColumn Name="Column13" Width="89.81"/>
           <TableColumn Name="Column14" Width="344.97"/>
@@ -259,7 +291,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data5" Top="599.22" Width="778.3" Height="56.7" CanGrow="true" CanShrink="true" DataSource="Goals1">
+    <DataBand Name="Data5" Top="600.33" Width="778.3" Height="56.7" CanGrow="true" CanShrink="true" DataSource="Goals1">
       <TableObject Name="Table9" Left="16.45" Width="756" Height="56.7">
         <TableColumn Name="Column23" Width="756"/>
         <TableRow Name="Row12" Height="37.8" AutoSize="true">
@@ -270,7 +302,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <DataBand Name="Data6" Top="701.72" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives1">
+    <DataBand Name="Data6" Top="703.08" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives1">
       <TableObject Name="Table11" Left="15.9" Width="756.08" Height="37.8">
         <TableColumn Name="Column29" Width="89.81"/>
         <TableColumn Name="Column30" Width="344.97"/>
@@ -292,7 +324,7 @@
           <TableCell Name="Cell54" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader3" Top="659.92" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
+      <DataHeaderBand Name="DataHeader3" Top="661.16" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
         <TableObject Name="Table10" Left="15.9" Width="756.08" Height="37.8">
           <TableColumn Name="Column24" Width="89.81"/>
           <TableColumn Name="Column25" Width="344.97"/>
@@ -309,7 +341,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data8" Top="743.52" Width="778.3" Height="56.7" CanGrow="true" CanShrink="true" DataSource="Goals2">
+    <DataBand Name="Data8" Top="745" Width="778.3" Height="56.7" CanGrow="true" CanShrink="true" DataSource="Goals2">
       <TableObject Name="Table12" Left="15.9" Width="756" Height="56.7">
         <TableColumn Name="Column34" Width="756"/>
         <TableRow Name="Row17" Height="37.8" AutoSize="true">
@@ -320,7 +352,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <DataBand Name="Data9" Top="846.02" Width="778.3" Height="38.25" CanGrow="true" CanShrink="true" DataSource="Objetives2">
+    <DataBand Name="Data9" Top="847.75" Width="778.3" Height="38.25" CanGrow="true" CanShrink="true" DataSource="Objetives2">
       <TableObject Name="Table14" Left="15.9" Top="0.45" Width="756.08" Height="37.8">
         <TableColumn Name="Column40" Width="89.81"/>
         <TableColumn Name="Column41" Width="344.97"/>
@@ -342,7 +374,7 @@
           <TableCell Name="Cell71" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader4" Top="804.22" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
+      <DataHeaderBand Name="DataHeader4" Top="805.83" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
         <TableObject Name="Table13" Left="16.45" Width="756.08" Height="37.8">
           <TableColumn Name="Column35" Width="89.81"/>
           <TableColumn Name="Column36" Width="344.97"/>
@@ -359,7 +391,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data10" Top="888.27" Width="778.3" Height="56.7" CanGrow="true" CanShrink="true" DataSource="Goals3">
+    <DataBand Name="Data10" Top="890.13" Width="778.3" Height="56.7" CanGrow="true" CanShrink="true" DataSource="Goals3">
       <TableObject Name="Table15" Left="15.9" Width="756" Height="56.7">
         <TableColumn Name="Column45" Width="756"/>
         <TableRow Name="Row22" Height="37.8" AutoSize="true">
@@ -370,7 +402,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <DataBand Name="Data11" Top="990.77" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives3">
+    <DataBand Name="Data11" Top="992.87" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives3">
       <TableObject Name="Table17" Left="15.9" Width="756.08" Height="37.8">
         <TableColumn Name="Column51" Width="89.81"/>
         <TableColumn Name="Column52" Width="344.97"/>
@@ -392,7 +424,7 @@
           <TableCell Name="Cell88" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader5" Top="948.97" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
+      <DataHeaderBand Name="DataHeader5" Top="950.95" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
         <TableObject Name="Table16" Left="16.45" Width="756.08" Height="37.8">
           <TableColumn Name="Column46" Width="89.81"/>
           <TableColumn Name="Column47" Width="344.97"/>
@@ -409,7 +441,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data12" Top="1032.57" Width="778.3" Height="56.7" CanGrow="true" CanShrink="true" DataSource="Goals4">
+    <DataBand Name="Data12" Top="1034.8" Width="778.3" Height="56.7" CanGrow="true" CanShrink="true" DataSource="Goals4">
       <TableObject Name="Table19" Left="16.45" Width="756" Height="56.7">
         <TableColumn Name="Column61" Width="756"/>
         <TableRow Name="Row28" Height="37.8" AutoSize="true">
@@ -420,7 +452,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <DataBand Name="Data13" Top="1135.07" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives4">
+    <DataBand Name="Data13" Top="1137.54" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives4">
       <TableObject Name="Table20" Left="15.9" Width="756.08" Height="37.8">
         <TableColumn Name="Column62" Width="89.81"/>
         <TableColumn Name="Column63" Width="344.97"/>
@@ -442,7 +474,7 @@
           <TableCell Name="Cell105" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader6" Top="1093.27" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
+      <DataHeaderBand Name="DataHeader6" Top="1095.62" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
         <TableObject Name="Table18" Left="15.9" Top="-0.55" Width="756.08" Height="37.8">
           <TableColumn Name="Column56" Width="89.81"/>
           <TableColumn Name="Column57" Width="344.97"/>
@@ -459,7 +491,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data14" Top="1176.87" Width="778.3" Height="472.5">
+    <DataBand Name="Data14" Top="1179.47" Width="778.3" Height="472.5">
       <TextObject Name="Text57" Left="-2.55" Top="28.35" Width="274.05" Height="18.9" Text="ANTICIPATED LENGTH OF TREATMENT:" HorzAlign="Right" Font="Arial, 10pt, style=Bold, Underline"/>
       <CheckBoxObject Name="CheckBox5" Left="277.5" Top="30.35" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" CheckWidthRatio="2"/>
       <TextObject Name="Text59" Left="291.4" Top="29.35" Width="47.25" Height="18.9" Text="1 mo" Font="Arial, 9pt"/>

@@ -4140,8 +4140,7 @@ namespace KyoS.Web.Helpers
 
             // Create columns
             dt.Columns.Add("Id", typeof(int));
-            dt.Columns.Add("ClientId", typeof(int));
-            dt.Columns.Add("AdmisionDate", typeof(DateTime));
+            dt.Columns.Add("ClientId", typeof(int));            
             dt.Columns.Add("MTPDevelopedDate", typeof(DateTime));
             dt.Columns.Add("StartTime", typeof(DateTime));
             dt.Columns.Add("EndTime", typeof(DateTime));            
@@ -4155,8 +4154,7 @@ namespace KyoS.Web.Helpers
             dt.Rows.Add(new object[]
                                         {
                                             mtp.Id,
-                                            mtp.Client.Id,
-                                            mtp.AdmisionDate,
+                                            mtp.Client.Id,                                            
                                             mtp.MTPDevelopedDate,
                                             mtp.StartTime,
                                             mtp.EndTime,

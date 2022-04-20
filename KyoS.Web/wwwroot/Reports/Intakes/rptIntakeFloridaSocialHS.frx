@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/19/2022 17:16:15" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/20/2022 17:37:43" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3OVaT26vEDnaAZJfZr0BNBA==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u369Opj2HFNvlk3kEGzIXM+g==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -441,7 +441,7 @@
         <TableRow Name="Row2" Height="28.35">
           <TableCell Name="Cell6" Border.Lines="All" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell7" Border.Lines="All" Text="[Clients.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell8" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell8" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row3">
           <TableCell Name="Cell11" Fill.Color="WhiteSmoke" Font="Arial, 10pt" ColSpan="3"/>
@@ -466,7 +466,7 @@
         <TableRow Name="Row6">
           <TableCell Name="Cell20" Border.Lines="All" Text="[Clients.MedicaidID]" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell21" Border.Lines="All" Text="[Clients.Name]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell22" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell22" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell24" Border.Lines="All" Text="[IntakeScreenings.DateDischarge]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row7">
@@ -514,8 +514,8 @@
         <TextObject Name="Text2" Left="9.45" Top="9.45" Width="756" Height="113.4" Text="IN CASE OF EMERGENCY AND /OR YOU COULD NOT BE CONTACTED, AND TO IMPROVE THE COORDINATION OF CARE, AND TO EXCHANGE MEDICAL INFORMATION IN ORDER TO AVOID MEDICATION INTERACTION, YOU ALLOW US TO CONTACT THE FOLLOWING PERSON AND IDENTIFY OURSELVES AS &lt;b&gt;[Clinics.Name]&lt;/b&gt;&#13;&#10;&#13;&#10;EN CASO DE EMERGENCIA Y/O USTED NO PUDO SER CONTACTADO, Y PARA MEJO RAR LA COORDINACIÓN DE LA  ATENCIÓN, ASÍ COMO INTERCAMBIAR INFORMACIÓN MÉDICA CON EL FIN DE EVITAR LA INTERACCIÓN MEDICAMENTO, USTED PERMITE QUE NOS PONGAMOS EN CONTACTO CON LA SIGUIENTE PERSONA Y NOS IDENTIFICAMOS COMO &lt;b&gt;[Clinics.Name]&lt;/b&gt;" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
         <TextObject Name="Text3" Left="255.15" Top="120.85" Width="66.15" Height="18.9" Text="YES (SI)" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
         <TextObject Name="Text4" Left="425.25" Top="120.85" Width="66.15" Height="18.9" Text="NO (NO)" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
-        <CheckBoxObject Name="CheckBox1" Left="321.3" Top="122.85" Width="15.12" Height="15.12" Border.Lines="All"/>
-        <CheckBoxObject Name="CheckBox2" Left="491.4" Top="122.85" Width="15.12" Height="15.12" Border.Lines="All" Checked="false"/>
+        <CheckBoxObject Name="CheckBox1" Left="321.3" Top="122.85" Width="15.12" Height="15.12" Border.Lines="All" Expression="IIf([EmergencyContacts.Name] == &quot;&quot;,false,true)"/>
+        <CheckBoxObject Name="CheckBox2" Left="491.4" Top="122.85" Width="15.12" Height="15.12" Border.Lines="All" Checked="false" Expression="IIf([EmergencyContacts.Name] == &quot;&quot;,true,false)"/>
       </ContainerObject>
       <TableObject Name="Table6" Top="420.25" Width="775.72" Height="18.9" Border.Lines="All" Fill.Color="White">
         <TableColumn Name="Column21" Width="188.95"/>
@@ -662,7 +662,7 @@
         <TableRow Name="Row18" Height="28.35">
           <TableCell Name="Cell93" Border.Lines="All" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell94" Border.Lines="All" Text="[Clients.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell95" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell95" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row19">
           <TableCell Name="Cell96" Fill.Color="WhiteSmoke" Font="Arial, 10pt" ColSpan="3"/>
@@ -745,7 +745,7 @@
         <TableRow Name="Row22" Height="28.35">
           <TableCell Name="Cell105" Border.Lines="All" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell106" Border.Lines="All" Text="[Clients.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell107" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell107" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row23">
           <TableCell Name="Cell108" Fill.Color="WhiteSmoke" Font="Arial, 10pt" ColSpan="3"/>
@@ -873,7 +873,7 @@
         <TableRow Name="Row26" Height="28.35">
           <TableCell Name="Cell117" Border.Lines="All" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell118" Border.Lines="All" Text="[Clients.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell119" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell119" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row27">
           <TableCell Name="Cell120" Fill.Color="WhiteSmoke" Font="Arial, 10pt" ColSpan="3"/>
@@ -927,7 +927,7 @@
         <TableRow Name="Row30" Height="28.35">
           <TableCell Name="Cell129" Border.Lines="All" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell130" Border.Lines="All" Text="[Clients.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell131" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell131" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row31">
           <TableCell Name="Cell132" Fill.Color="WhiteSmoke" Font="Arial, 10pt" ColSpan="3"/>
@@ -1000,7 +1000,7 @@
         <TableRow Name="Row34" Height="28.35">
           <TableCell Name="Cell141" Border.Lines="All" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell142" Border.Lines="All" Text="[Clients.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell143" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell143" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row35">
           <TableCell Name="Cell144" Fill.Color="WhiteSmoke" Font="Arial, 10pt" ColSpan="3"/>
@@ -1069,7 +1069,7 @@
         <TableRow Name="Row38" Height="28.35">
           <TableCell Name="Cell153" Border.Lines="All" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell154" Border.Lines="All" Text="[Clients.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell155" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell155" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row39">
           <TableCell Name="Cell156" Fill.Color="WhiteSmoke" Font="Arial, 10pt" ColSpan="3"/>
@@ -1129,7 +1129,7 @@
         <TableRow Name="Row42" Height="28.35">
           <TableCell Name="Cell165" Border.Lines="All" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell166" Border.Lines="All" Text="[Clients.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell167" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell167" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row43">
           <TableCell Name="Cell168" Fill.Color="WhiteSmoke" Font="Arial, 10pt" ColSpan="3"/>
@@ -1234,7 +1234,7 @@
         <TableRow Name="Row46" Height="28.35">
           <TableCell Name="Cell177" Border.Lines="All" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell178" Border.Lines="All" Text="[Clients.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell179" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell179" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row47">
           <TableCell Name="Cell180" Fill.Color="WhiteSmoke" Font="Arial, 10pt" ColSpan="3"/>
@@ -1378,7 +1378,7 @@
         <TableRow Name="Row67" Height="28.35">
           <TableCell Name="Cell248" Border.Lines="All" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell249" Border.Lines="All" Text="[Clients.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell250" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell250" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row68">
           <TableCell Name="Cell251" Fill.Color="WhiteSmoke" Font="Arial, 10pt" ColSpan="3"/>
@@ -1592,7 +1592,7 @@
         <TableRow Name="Row96">
           <TableCell Name="Cell324" Border.Lines="All" Text=" Have you ever been told you had tuberculosis?" Font="Arial, 10pt"/>
           <TableCell Name="Cell325" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox119" Left="58.21" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All"/>
+            <CheckBoxObject Name="CheckBox119" Left="58.21" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeTuberculosis.HaveYoyEverBeenTold"/>
             <TextObject Name="Text315" Left="71.44" Top="1" Width="32.13" Height="17.01" Text="Yes" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt"/>
             <CheckBoxObject Name="CheckBox120" Left="106.22" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([IntakeTuberculosis.HaveYouEverBeen] == true,false,true)"/>
             <TextObject Name="Text316" Left="119.45" Top="1" Width="26.46" Height="17.01" Text="No" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt"/>
@@ -1657,7 +1657,7 @@
         <TableRow Name="Row99" Height="28.35">
           <TableCell Name="Cell331" Border.Lines="All" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell332" Border.Lines="All" Text="[Clients.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell333" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell333" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row100">
           <TableCell Name="Cell334" Fill.Color="WhiteSmoke" Font="Arial, 10pt" ColSpan="3"/>
@@ -1717,7 +1717,7 @@
         <TableRow Name="Row104" Height="28.35">
           <TableCell Name="Cell346" Border.Lines="All" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell347" Border.Lines="All" Text="[Clients.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell348" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell348" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row105">
           <TableCell Name="Cell349" Fill.Color="WhiteSmoke" Font="Arial, 10pt" ColSpan="3"/>
@@ -1804,7 +1804,7 @@
         <TableRow Name="Row108" Height="28.35">
           <TableCell Name="Cell358" Border.Lines="All" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell359" Border.Lines="All" Text="[Clients.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell360" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell360" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row109">
           <TableCell Name="Cell361" Fill.Color="WhiteSmoke" Font="Arial, 10pt" ColSpan="3"/>
@@ -1869,7 +1869,7 @@
         <TableRow Name="Row112" Height="28.35">
           <TableCell Name="Cell370" Border.Lines="All" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell371" Border.Lines="All" Text="[Clients.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell372" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell372" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row113">
           <TableCell Name="Cell373" Fill.Color="WhiteSmoke" Font="Arial, 10pt" ColSpan="3"/>
@@ -2454,7 +2454,7 @@
         <TableRow Name="Row116" Height="28.35">
           <TableCell Name="Cell382" Border.Lines="All" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell383" Border.Lines="All" Text="[Clients.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell384" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell384" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row117">
           <TableCell Name="Cell385" Fill.Color="WhiteSmoke" Font="Arial, 10pt" ColSpan="3"/>
@@ -2754,7 +2754,7 @@
         <TableRow Name="Row120" Height="28.35">
           <TableCell Name="Cell394" Border.Lines="All" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell395" Border.Lines="All" Text="[Clients.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell396" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell396" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row121">
           <TableCell Name="Cell397" Fill.Color="WhiteSmoke" Font="Arial, 10pt" ColSpan="3"/>
@@ -3117,7 +3117,7 @@
         <TableRow Name="Row194" Height="28.35">
           <TableCell Name="Cell949" Border.Lines="All" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell950" Border.Lines="All" Text="[Clients.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell951" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell951" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row195">
           <TableCell Name="Cell952" Fill.Color="WhiteSmoke" Font="Arial, 10pt" ColSpan="3"/>
