@@ -107,7 +107,7 @@ namespace KyoS.Web.Controllers
                     model = new IntakeScreeningViewModel
                     {
                         IdClient = id,
-                        Client = _context.Clients.Find(id),
+                        Client = _context.Clients.Include(n => n.LegalGuardian).Include(n => n.EmergencyContact).FirstOrDefault(n => n.Id == id),
                         InformationGatheredBy = user_logged.FullName,
                         DateAdmision = DateTime.Now,
                         ClientIsStatus = IntakeClientIsStatus.Clean,
@@ -119,15 +119,23 @@ namespace KyoS.Web.Controllers
                         DoesClientKnowTimeOfDay = true,
                         DateSignatureClient = DateTime.Now,
                         DateSignatureWitness = DateTime.Now,
-                        IdClientIs = 1,
+                        DateSignatureEmployee = DateTime.Now,
+                        IdClientIs = 0,
                         ClientIs_Status = _combosHelper.GetComboIntake_ClientIs(),
-                        IdBehaviorIs = 1,
+                        IdBehaviorIs = 0,
                         BehaviorIs_Status = _combosHelper.GetComboIntake_BehaviorIs(),
-                        IdSpeechIs = 1,
+                        IdSpeechIs = 0,
                         SpeechIs_Status = _combosHelper.GetComboIntake_SpeechIs(),
-                        AdmissionedFor = user_logged.FullName
-
+                        EmergencyContact = true,
+                        
                     };
+                    if (model.Client.LegalGuardian == null)
+                        model.Client.LegalGuardian = new LegalGuardianEntity();
+                    if (model.Client.EmergencyContact == null)
+                    {
+                        model.Client.EmergencyContact = new EmergencyContactEntity();
+                        model.EmergencyContact = false;
+                    } 
                     return View(model);
                 }
             }
@@ -135,7 +143,7 @@ namespace KyoS.Web.Controllers
             model = new IntakeScreeningViewModel
             {
                 IdClient = id,
-                Client = _context.Clients.Find(id),
+                Client = _context.Clients.Include(n => n.LegalGuardian).Include(n => n.EmergencyContact).FirstOrDefault(n => n.Id == id),
                 InformationGatheredBy = user_logged.FullName,
                 DateAdmision = DateTime.Now,
                 ClientIsStatus = IntakeClientIsStatus.Clean,
@@ -147,14 +155,22 @@ namespace KyoS.Web.Controllers
                 DoesClientKnowTimeOfDay = true,
                 DateSignatureClient = DateTime.Now,
                 DateSignatureWitness = DateTime.Now,
-                IdClientIs = 1,
+                DateSignatureEmployee = DateTime.Now,
+                IdClientIs = 0,
                 ClientIs_Status = _combosHelper.GetComboIntake_ClientIs(),
-                IdBehaviorIs = 1,
+                IdBehaviorIs = 0,
                 BehaviorIs_Status = _combosHelper.GetComboIntake_BehaviorIs(),
-                IdSpeechIs = 1,
+                IdSpeechIs = 0,
                 SpeechIs_Status = _combosHelper.GetComboIntake_SpeechIs(),
-                AdmissionedFor = user_logged.FullName
+                EmergencyContact = true,
             };
+            if (model.Client.LegalGuardian == null)
+                model.Client.LegalGuardian = new LegalGuardianEntity();
+            if (model.Client.EmergencyContact == null)
+            {
+                model.Client.EmergencyContact = new EmergencyContactEntity();
+                model.EmergencyContact = false;
+            }
             return View(model);
         }
 
@@ -196,7 +212,7 @@ namespace KyoS.Web.Controllers
             model = new IntakeScreeningViewModel
             {
                 IdClient = IntakeViewModel.IdClient,
-                Client = _context.Clients.Find(IntakeViewModel.IdClient),
+                Client = _context.Clients.Include(n => n.LegalGuardian).Include(n => n.EmergencyContact).FirstOrDefault(n => n.Id == IntakeViewModel.IdClient),
                 InformationGatheredBy = user_logged.FullName,
                 DateAdmision = DateTime.Now,
                 ClientIsStatus = IntakeClientIsStatus.Clean,
@@ -208,15 +224,23 @@ namespace KyoS.Web.Controllers
                 DoesClientKnowTimeOfDay = true,
                 DateSignatureClient = DateTime.Now,
                 DateSignatureWitness = DateTime.Now,
+                DateSignatureEmployee = DateTime.Now,
                 IdClientIs = IntakeViewModel.IdClientIs,
                 ClientIs_Status = _combosHelper.GetComboIntake_ClientIs(),
                 IdBehaviorIs = IntakeViewModel.IdBehaviorIs,
                 BehaviorIs_Status = _combosHelper.GetComboIntake_BehaviorIs(),
                 IdSpeechIs = IntakeViewModel.IdSpeechIs,
                 SpeechIs_Status = _combosHelper.GetComboIntake_SpeechIs(),
-                AdmissionedFor = user_logged.FullName
+                EmergencyContact = true,
             };
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", IntakeViewModel) });
+            if (model.Client.LegalGuardian == null)
+                model.Client.LegalGuardian = new LegalGuardianEntity();
+            if (model.Client.EmergencyContact == null)
+            {
+                model.Client.EmergencyContact = new EmergencyContactEntity();
+                model.EmergencyContact = false;
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
         }
 
         [Authorize(Roles = "Mannager")]
@@ -235,6 +259,8 @@ namespace KyoS.Web.Controllers
 
                     IntakeScreeningEntity Intake = _context.IntakeScreenings
                                                                  .Include(m => m.Client)
+                                                                 .ThenInclude(m => m.LegalGuardian)
+                                                                 .Include(n => n.Client.EmergencyContact)
                                                                  .FirstOrDefault(m => m.Id == id);
                     if (Intake == null)
                     {
@@ -242,8 +268,14 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-
                         model = _converterHelper.ToIntakeViewModel(Intake);
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
+                        if (model.Client.EmergencyContact == null)
+                        {
+                            model.Client.EmergencyContact = new EmergencyContactEntity();
+                            model.EmergencyContact = false;
+                        }
 
                         return View(model);
                     }
@@ -368,7 +400,7 @@ namespace KyoS.Web.Controllers
                             Aggre1 = true,
                             AuthorizeRelease = true,
                             AuthorizeStaff = true,
-                            Certify = true,
+                            Certify = false,
                             Certify1 = true,
                             DateSignatureEmployee = DateTime.Now,
                             DateSignatureLegalGuardian = DateTime.Now,
@@ -477,7 +509,7 @@ namespace KyoS.Web.Controllers
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
-                            ToRelease = false,
+                            ToRelease = true,
                             ForPurpose_CaseManagement = false,
                             ForPurpose_Other = false,
                             ForPurpose_OtherExplain = "",
@@ -1213,7 +1245,7 @@ namespace KyoS.Web.Controllers
                             Filmed = true,
                             VideoTaped = true,
                             Interviwed = true,
-                            NoneOfTheForegoing = true,
+                            NoneOfTheForegoing = false,
                             Other = "",
                             Publication = true,
                             Broadcast = true,

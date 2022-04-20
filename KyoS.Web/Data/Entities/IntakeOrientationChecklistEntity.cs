@@ -30,9 +30,9 @@ namespace KyoS.Web.Data.Entities
         [Display(Name = "Date of Employee Signature")]
         [DataType(DataType.Date)]
 
-        public string AdmissionedFor { get; set; }
-
         public DateTime DateSignatureEmployee { get; set; }
+
+        public string AdmissionedFor { get; set; }
 
         public bool TourFacility { get; set; }
         public bool Rights { get; set; }

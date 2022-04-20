@@ -1061,7 +1061,8 @@ namespace KyoS.Web.Helpers
                 ClientIsStatus = IntakeScreeninigType.GetClientIsByIndex(model.IdClientIs),
                 BehaviorIsStatus = IntakeScreeninigType.GetBehaviorIsByIndex(model.IdBehaviorIs),
                 SpeechIsStatus = IntakeScreeninigType.GetSpeechIsByIndex(model.IdSpeechIs),
-                AdmissionedFor = model.AdmissionedFor,
+                EmergencyContact = model.EmergencyContact,
+                DateSignatureEmployee = model.DateSignatureEmployee,
 
             };
         }
@@ -1089,7 +1090,9 @@ namespace KyoS.Web.Helpers
                 BehaviorIs_Status = _combosHelper.GetComboIntake_BehaviorIs(),
                 IdSpeechIs = Convert.ToInt32(model.SpeechIsStatus) + 1,
                 SpeechIs_Status = _combosHelper.GetComboIntake_SpeechIs(),
-                AdmissionedFor = model.AdmissionedFor,
+                EmergencyContact = model.EmergencyContact,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+
             };
            
         }
@@ -1114,6 +1117,7 @@ namespace KyoS.Web.Helpers
                 Documents = model.Documents,
                 Underestand = model.Underestand,
                 AdmissionedFor = model.AdmissionedFor,
+                
 
             };
         }

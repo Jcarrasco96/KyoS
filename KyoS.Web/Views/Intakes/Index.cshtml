@@ -10,12 +10,12 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Intake Screening</li>
+        <li class="active">Intake</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <p>
-    <a asp-action="IntakeCandidates" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Candidate Intake Screening</a>
+    <a asp-action="IntakeCandidates" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Candidate Intake</a>
 </p>
 
 <div class="row">
@@ -231,12 +231,15 @@
                                 <td align="right">
                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Intake Screening"><i class="glyphicon glyphicon-pencil"></i></a>
                                     @if ((item.Client.IntakeConsentForTreatment != null) && (item.Client.IntakeConsentForRelease != null) && (item.Client.IntakeConsumerRights != null) && (item.Client.IntakeAcknowledgementHipa != null) && (item.Client.IntakeAccessToServices != null)
-                                       && (item.Client.IntakeOrientationChecklist != null) && (item.Client.IntakeTransportation != null) && (item.Client.IntakeConsentPhotograph != null) && (item.Client.IntakeFeeAgreement != null) && (item.Client.IntakeTuberculosis != null)
-                                       && (item.Client.IntakeMedicalHistory != null))
+                                     && (item.Client.IntakeOrientationChecklist != null) && (item.Client.IntakeTransportation != null) && (item.Client.IntakeConsentPhotograph != null) && (item.Client.IntakeFeeAgreement != null) && (item.Client.IntakeTuberculosis != null)
+                                     && (item.Client.IntakeMedicalHistory != null))
                                     {
                                         <a asp-action="PrintIntake" asp-route-id="@item.Id" class="btn btn-success" title="Print Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                     }
-
+                                    else
+                                    { 
+                                        <a class="btn btn-success disabled" title="Print Intake"><i class="glyphicon glyphicon-print"></i></a>
+                                    }
                                     @*<button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete Intake Screening"><i class="glyphicon glyphicon-trash"></i></button>*@
                                 </td>
                             </tr>

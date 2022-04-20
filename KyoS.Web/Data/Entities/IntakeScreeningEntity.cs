@@ -39,6 +39,11 @@ namespace KyoS.Web.Data.Entities
 
         public DateTime DateSignatureWitness { get; set; }
 
+        [Display(Name = "Date of Employee Signature")]
+        [DataType(DataType.Date)]
+
+        public DateTime DateSignatureEmployee { get; set; }
+
         [Display(Name = "Client Is Status")]
         public IntakeClientIsStatus ClientIsStatus { get; set; }
 
@@ -56,7 +61,7 @@ namespace KyoS.Web.Data.Entities
 
         public bool DoesClientKnowTimeOfDay { get; set; }
 
-        public string AdmissionedFor { get; set; }
+        public bool EmergencyContact { get; set; }
 
     }
 }

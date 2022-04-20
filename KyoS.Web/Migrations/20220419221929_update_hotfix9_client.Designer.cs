@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220419221929_update_hotfix9_client")]
+    partial class update_hotfix9_client
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2459,6 +2461,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<string>("AdmissionedFor")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("BehaviorIsStatus")
                         .HasColumnType("int");
 
@@ -2477,9 +2482,6 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("DateSignatureClient")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateSignatureEmployee")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("DateSignatureWitness")
                         .HasColumnType("datetime2");
 
@@ -2493,9 +2495,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("DoesClientKnowWhereIs")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("EmergencyContact")
                         .HasColumnType("bit");
 
                     b.Property<string>("InformationGatheredBy")
