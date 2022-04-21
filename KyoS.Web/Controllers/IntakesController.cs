@@ -107,9 +107,9 @@ namespace KyoS.Web.Controllers
                     model = new IntakeScreeningViewModel
                     {
                         IdClient = id,
+                        Client_FK = id,
                         Client = _context.Clients.Include(n => n.LegalGuardian).Include(n => n.EmergencyContact).FirstOrDefault(n => n.Id == id),
                         InformationGatheredBy = user_logged.FullName,
-                        DateAdmision = DateTime.Now,
                         ClientIsStatus = IntakeClientIsStatus.Clean,
                         BehaviorIsStatus = IntakeBehaviorIsStatus.Normal,
                         SpeechIsStatus = IntakeSpeechIsStatus.Normal,
@@ -145,7 +145,6 @@ namespace KyoS.Web.Controllers
                 IdClient = id,
                 Client = _context.Clients.Include(n => n.LegalGuardian).Include(n => n.EmergencyContact).FirstOrDefault(n => n.Id == id),
                 InformationGatheredBy = user_logged.FullName,
-                DateAdmision = DateTime.Now,
                 ClientIsStatus = IntakeClientIsStatus.Clean,
                 BehaviorIsStatus = IntakeBehaviorIsStatus.Normal,
                 SpeechIsStatus = IntakeSpeechIsStatus.Normal,
@@ -214,7 +213,6 @@ namespace KyoS.Web.Controllers
                 IdClient = IntakeViewModel.IdClient,
                 Client = _context.Clients.Include(n => n.LegalGuardian).Include(n => n.EmergencyContact).FirstOrDefault(n => n.Id == IntakeViewModel.IdClient),
                 InformationGatheredBy = user_logged.FullName,
-                DateAdmision = DateTime.Now,
                 ClientIsStatus = IntakeClientIsStatus.Clean,
                 BehaviorIsStatus = IntakeBehaviorIsStatus.Normal,
                 SpeechIsStatus = IntakeSpeechIsStatus.Normal,

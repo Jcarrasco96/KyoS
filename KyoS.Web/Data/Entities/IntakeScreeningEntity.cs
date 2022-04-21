@@ -17,16 +17,6 @@ namespace KyoS.Web.Data.Entities
 
         public string InformationGatheredBy { get; set; }
 
-        //revisar pasar al client
-        [Display(Name = "Date Admision")]
-        [DataType(DataType.Date)]
-
-        public DateTime DateAdmision { get; set; }
-
-        //revisar pasar al client
-        [Display(Name = "Date Discharge")]
-        [DataType(DataType.Date)]
-
         public DateTime DateDischarge { get; set; }
 
         [Display(Name = "Date of Client Signature")]

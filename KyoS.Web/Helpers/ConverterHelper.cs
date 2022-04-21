@@ -1046,7 +1046,6 @@ namespace KyoS.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient),
-                DateAdmision = model.DateAdmision,
                 DateDischarge = model.DateDischarge,
                 DateSignatureClient = model.DateSignatureClient,
                 DateSignatureWitness = model.DateSignatureWitness,
@@ -1054,7 +1053,7 @@ namespace KyoS.Web.Helpers
                 DoesClientKnowTimeOfDay = model.DoesClientKnowTimeOfDay,
                 DoesClientKnowTodayDate = model.DoesClientKnowTodayDate,
                 DoesClientKnowWhereIs = model.DoesClientKnowWhereIs,
-                Client_FK = model.IdClient,
+                Client_FK = model.Client_FK,
                 InformationGatheredBy = model.InformationGatheredBy,
                 ClientIsStatus = IntakeScreeninigType.GetClientIsByIndex(model.IdClientIs),
                 BehaviorIsStatus = IntakeScreeninigType.GetBehaviorIsByIndex(model.IdBehaviorIs),
@@ -1071,7 +1070,6 @@ namespace KyoS.Web.Helpers
             {
                 Id = model.Id,
                 Client = model.Client,
-                DateAdmision = model.DateAdmision,
                 DateDischarge = model.DateDischarge,
                 DateSignatureClient = model.DateSignatureClient,
                 DateSignatureWitness = model.DateSignatureWitness,

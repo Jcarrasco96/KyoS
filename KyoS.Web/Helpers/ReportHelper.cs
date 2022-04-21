@@ -2926,7 +2926,7 @@ namespace KyoS.Web.Helpers
                                             intake.Id,
                                             intake.Client_FK,
                                             intake.InformationGatheredBy,
-                                            intake.DateAdmision,
+                                            intake.Client.AdmisionDate,
                                             intake.DateSignatureClient,
                                             intake.DateSignatureWitness,
                                             intake.ClientIsStatus,
