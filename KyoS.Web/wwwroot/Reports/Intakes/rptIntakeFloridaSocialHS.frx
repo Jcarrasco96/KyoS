@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/20/2022 17:37:43" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/21/2022 09:42:46" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u369Opj2HFNvlk3kEGzIXM+g==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3VMHuwyyE+hwFtBP1zEzNxQ==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -19,7 +19,6 @@
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Client_FK" DataType="System.Int32"/>
         <Column Name="InformationGatheredBy" DataType="System.String"/>
-        <Column Name="DateAdmision" DataType="System.DateTime"/>
         <Column Name="DateSignatureClient" DataType="System.DateTime"/>
         <Column Name="DateSignatureWitness" DataType="System.DateTime"/>
         <Column Name="ClientIsStatus" DataType="System.Int32"/>
@@ -30,6 +29,8 @@
         <Column Name="DoesClientKnowWhereIs" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="DoesClientKnowTimeOfDay" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="DateDischarge" DataType="System.DateTime"/>
+        <Column Name="EmergencyContact" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="DateSignatureEmployee" DataType="System.DateTime"/>
       </TableDataSource>
       <TableDataSource Name="IntakeConsentForTreatment" DataType="System.Int32" Enabled="true" TableName="IntakeConsentForTreatment">
         <Column Name="Id" DataType="System.Int32"/>
@@ -526,7 +527,7 @@
           <TableCell Name="Cell87" Border.Lines="All" Fill.Color="WhiteSmoke" Text="Information gathered by" Font="Arial, 9pt, style=Bold"/>
           <TableCell Name="Cell86" Border.Lines="All" Text="[IntakeScreenings.InformationGatheredBy]" Font="Arial, 9pt"/>
           <TableCell Name="Cell88" Border.Lines="All" Fill.Color="WhiteSmoke" Text="Date" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-          <TableCell Name="Cell89" Border.Lines="All" Text="[IntakeScreenings.DateAdmision]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
+          <TableCell Name="Cell89" Border.Lines="All" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
         </TableRow>
       </TableObject>
       <TextObject Name="Text5" Top="447.15" Width="103.95" Height="26.46" Border.Lines="All" Text="Client is:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>

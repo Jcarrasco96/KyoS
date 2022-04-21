@@ -2906,8 +2906,7 @@ namespace KyoS.Web.Helpers
             // Create columns
             dt.Columns.Add("Id", typeof(int));
             dt.Columns.Add("Client_FK", typeof(int));
-            dt.Columns.Add("InformationGatheredBy", typeof(string));
-            dt.Columns.Add("DateAdmision", typeof(DateTime));
+            dt.Columns.Add("InformationGatheredBy", typeof(string));            
             dt.Columns.Add("DateSignatureClient", typeof(DateTime));
             dt.Columns.Add("DateSignatureWitness", typeof(DateTime));
             dt.Columns.Add("ClientIsStatus", typeof(int));
@@ -2925,8 +2924,7 @@ namespace KyoS.Web.Helpers
                                         {
                                             intake.Id,
                                             intake.Client_FK,
-                                            intake.InformationGatheredBy,
-                                            intake.Client.AdmisionDate,
+                                            intake.InformationGatheredBy,                                            
                                             intake.DateSignatureClient,
                                             intake.DateSignatureWitness,
                                             intake.ClientIsStatus,
@@ -2945,8 +2943,7 @@ namespace KyoS.Web.Helpers
                                         {
                                             0,
                                             0,
-                                            string.Empty,
-                                            new DateTime(),
+                                            string.Empty,                                            
                                             new DateTime(),
                                             new DateTime(),
                                             0,

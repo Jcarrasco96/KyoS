@@ -372,7 +372,8 @@ namespace KyoS.Web.Helpers
                 Number = model.Number,
                 Name = model.Name,
                 AreaOfFocus = model.AreaOfFocus,
-                MTP = await _context.MTPs.FindAsync(model.IdMTP)
+                MTP = await _context.MTPs.FindAsync(model.IdMTP),
+                Service = ServiceUtils.GetServiceByIndex(model.IdService)
             };
         }
 
@@ -385,7 +386,9 @@ namespace KyoS.Web.Helpers
                 MTP = goalEntity.MTP,
                 IdMTP = goalEntity.MTP.Id,
                 Name = goalEntity.Name,
-                AreaOfFocus = goalEntity.AreaOfFocus
+                AreaOfFocus = goalEntity.AreaOfFocus,
+                IdService = Convert.ToInt32(goalEntity.Service),
+                Services = _combosHelper.GetComboServices()
             };
         }
 
@@ -1019,6 +1022,9 @@ namespace KyoS.Web.Helpers
                 Id = isNew ? 0 : model.Id,
                 Clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == model.IdClinic),
                 AvailableCreateNewWorkdays = model.AvailableCreateNewWorkdays,
+                MentalHealthClinic = model.MentalHealthClinic,
+                TCMClinic = model.TCMClinic,
+                MHClassificationOfGoals = model.MHClassificationOfGoals,
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
@@ -1034,12 +1040,16 @@ namespace KyoS.Web.Helpers
                 IdClinic = model.Clinic.Id,
                 Clinics = _combosHelper.GetComboClinics(),
                 AvailableCreateNewWorkdays = model.AvailableCreateNewWorkdays,
+                MentalHealthClinic = model.MentalHealthClinic,
+                TCMClinic = model.TCMClinic,
+                MHClassificationOfGoals = model.MHClassificationOfGoals,
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
             };
         }
+
         public async Task<IntakeScreeningEntity> ToIntakeEntity(IntakeScreeningViewModel model, bool isNew)
         {
             return new IntakeScreeningEntity

@@ -451,7 +451,7 @@ namespace KyoS.Web.Controllers
             }
 
             model.MTP = await _context.MTPs.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdMTP);
-
+            
             if (ModelState.IsValid)
             {
                 string gender_problems = string.Empty;                
@@ -496,6 +496,8 @@ namespace KyoS.Web.Controllers
                     }
                 }
             }
+            
+            model.Services = _combosHelper.GetComboServices();
             return View(model);
         }
 
