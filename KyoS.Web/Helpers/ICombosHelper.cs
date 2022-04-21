@@ -29,6 +29,7 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboClientStatus();
         IEnumerable<SelectListItem> GetComboGroups();
         IEnumerable<SelectListItem> GetComboGoals(int idMTP);
+        IEnumerable<SelectListItem> GetComboGoalsByService(int idMTP, ServiceType service);
         IEnumerable<SelectListItem> GetComboObjetives(int idGoal);
         IEnumerable<SelectListItem> GetComboRelationships();
         IEnumerable<SelectListItem> GetComboRaces();

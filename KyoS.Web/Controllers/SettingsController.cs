@@ -19,20 +19,20 @@ namespace KyoS.Web.Controllers
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
-        private readonly IRenderHelper _renderHelper;        
+        private readonly IRenderHelper _renderHelper;
 
         public SettingsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IImageHelper imageHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
-            _renderHelper = renderHelper;               
+            _renderHelper = renderHelper;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Settings        
-                
+            return View(await _context.Settings
+
                                       .Include(s => s.Clinic)
 
                                       .OrderBy(s => s.Clinic.Name).ToListAsync());
@@ -64,7 +64,7 @@ namespace KyoS.Web.Controllers
 
                     setting = await _converterHelper.ToSettingEntity(model, true, user_logged.Id);
                     _context.Add(setting);
-                    await _context.SaveChangesAsync();             
+                    await _context.SaveChangesAsync();
                 }
 
                 List<SettingEntity> settingList = await _context.Settings
@@ -122,7 +122,7 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
-            
+
             if (ModelState.IsValid)
             {
                 UserEntity user_logged = _context.Users

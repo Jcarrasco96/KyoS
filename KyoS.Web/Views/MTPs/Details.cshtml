@@ -124,11 +124,14 @@
                             <th class="col-md-1">
                                 Goal
                             </th>
-                            <th class="col-md-5">
+                            <th class="col-md-4">
                                 Name
                             </th>
                             <th class="col-md-5">
-                                Focus
+                                Area of Focus
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Therapy
                             </th>
                         </tr>
                     </thead>
@@ -171,6 +174,9 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.AreaOfFocus)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.Service)
                             </td>
                         </tr>
                         }

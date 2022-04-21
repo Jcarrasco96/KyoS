@@ -1,38 +1,62 @@
 ﻿@model KyoS.Web.Models.GoalViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create goal";
 }
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Goals", "UpdateGoals", "MTPs", new { id = Model.MTP.Id })
+        </li>
+        <li class="active">Create goal</li>
+    </ul><!--.breadcrumb-->
+</div>
 
 <h4>Create goal</h4>
 <hr />
-<div class="row">
+<div class="row">    
     <div class="col-md-6">
         <form asp-action="CreateGoal" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="IdMTP" />
 
-            <h5 style="font-weight:bold;"> MTP - @Model.MTP.Client.Name </h5>
-
-            <div class="form-group">
-                <label asp-for="Number" class="control-label"></label>
-                <input asp-for="Number" class="form-control" />
-                <span asp-validation-for="Number" class="text-danger"></span>
+            <div class="container-fluid">
+                <h4 style="font-weight:bold;"> <span class="label label-info"> MTP - @Model.MTP.Client.Name </span></h4>
             </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+            <div class="">
+                <div class="col-md-6 form-group">
+                    <label asp-for="Number" class="control-label"></label> *&nbsp;
+                    <input asp-for="Number" class="form-control" />
+                    <span asp-validation-for="Number" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="IdService" class="control-label">Therapy</label> *&nbsp;
+                    <select asp-for="IdService" asp-items="Model.Services" class="form-control"></select>
+                    <span asp-validation-for="IdService" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="AreaOfFocus" class="control-label"></label>
-                <textarea asp-for="AreaOfFocus" class="form-control" rows="6"></textarea>
-                <span asp-validation-for="AreaOfFocus" class="text-danger"></span>
+            <div class="">
+                <div class=" col-md-12 form-group">
+                    <label asp-for="Name" class="control-label"></label> *&nbsp;
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="UpdateGoals" class="btn btn-success" asp-route-id="@Model.MTP.Id">Back</a>
+            <div class="">
+                <div class=" col-md-12 form-group">
+                    <label asp-for="AreaOfFocus" class="control-label"></label> *&nbsp;
+                    <textarea asp-for="AreaOfFocus" class="form-control" rows="6"></textarea>
+                    <span asp-validation-for="AreaOfFocus" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="">
+                <div class="col-md-12 form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="UpdateGoals" class="btn btn-success" asp-route-id="@Model.MTP.Id">Back</a>
+                </div>
             </div>
         </form>
     </div>
