@@ -603,6 +603,8 @@ namespace KyoS.Web.Controllers
                     }
                 }
             }
+
+            model.Services = _combosHelper.GetComboServices();
             return View(model);
         }
 
