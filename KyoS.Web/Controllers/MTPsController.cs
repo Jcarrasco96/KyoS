@@ -474,6 +474,7 @@ namespace KyoS.Web.Controllers
                 if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
                 {
                     ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
+                    model.Services = _combosHelper.GetComboServices();
                     return View(model);
                 }
 
@@ -581,6 +582,7 @@ namespace KyoS.Web.Controllers
                 if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
                 {
                     ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
+                    model.Services = _combosHelper.GetComboServices();
                     return View(model);
                 }
 
