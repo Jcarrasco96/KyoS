@@ -1268,6 +1268,8 @@ namespace KyoS.Web.Helpers
                 Code = model.Code,
                 Name = model.Name,
                 TcmServicePlan = model.TcmServicePlan
+            };
+        }
         public async Task<IntakeScreeningEntity> ToIntakeEntity(IntakeScreeningViewModel model, bool isNew)
         {
             return new IntakeScreeningEntity

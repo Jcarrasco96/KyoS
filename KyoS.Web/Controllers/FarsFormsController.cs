@@ -52,7 +52,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Mannager"))
+                if (User.IsInRole("Manager"))
                     return View(await _context.Clients
                                               .Include(f => f.FarsFormList)
                                               .Where(f => f.FarsFormList.Count() > 0)
@@ -74,7 +74,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult Create(int id = 0)
         {
 
@@ -84,7 +84,7 @@ namespace KyoS.Web.Controllers
 
             FarsFormViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
 
 
@@ -147,7 +147,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Create(FarsFormViewModel FarsFormViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -227,12 +227,12 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", FarsFormViewModel) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult Edit(int id = 0)
         {
             FarsFormViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -266,7 +266,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Edit(FarsFormViewModel farsFormViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -294,7 +294,7 @@ namespace KyoS.Web.Controllers
         }
 
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> FarsFormCandidates(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -323,7 +323,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

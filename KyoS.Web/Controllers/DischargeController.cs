@@ -34,7 +34,8 @@ namespace KyoS.Web.Controllers
             _converterHelper = converterHelper;
             _reportHelper = reportHelper;
         }
-        [Authorize(Roles = "Mannager")]
+        
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -53,7 +54,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Mannager"))
+                if (User.IsInRole("Manager"))
                     return View(await _context.Discharge
                                               .Include(f => f.Client)
                                               .ThenInclude(f => f.Clients_Diagnostics)
@@ -76,7 +77,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult Create(int id = 0)
         {
 
@@ -86,7 +87,7 @@ namespace KyoS.Web.Controllers
 
             DischargeViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
 
 
@@ -175,7 +176,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Create(DischargeViewModel DischargeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -246,12 +247,12 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", DischargeViewModel) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult Edit(int id = 0)
         {
             DischargeViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -285,7 +286,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Edit(DischargeViewModel dischargeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -312,7 +313,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", dischargeViewModel) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> DischargeCandidates(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -341,7 +342,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

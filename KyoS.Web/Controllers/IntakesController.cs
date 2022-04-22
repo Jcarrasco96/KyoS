@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using KyoS.Common.Enums;
+﻿using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
     public class IntakesController : Controller
     {
         private readonly IUserHelper _userHelper;
@@ -54,7 +51,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Mannager"))
+                if (User.IsInRole("Manager"))
                     return View(await _context.IntakeScreenings
                                               .Include(f => f.Client)
                                               .ThenInclude(f => f.IntakeConsentForTreatment)
@@ -74,7 +71,7 @@ namespace KyoS.Web.Controllers
 
                 if (User.IsInRole("Facilitator"))
                 {
-                    
+
 
 
                     return View(await _context.IntakeScreenings
@@ -87,23 +84,23 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult Create(int id = 0)
         {
-            
+
             UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             IntakeScreeningViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
-                
+
 
                 if (user_logged.Clinic != null)
                 {
-                    
+
                     model = new IntakeScreeningViewModel
                     {
                         IdClient = id,
@@ -127,7 +124,7 @@ namespace KyoS.Web.Controllers
                         IdSpeechIs = 0,
                         SpeechIs_Status = _combosHelper.GetComboIntake_SpeechIs(),
                         EmergencyContact = true,
-                        
+
                     };
                     if (model.Client.LegalGuardian == null)
                         model.Client.LegalGuardian = new LegalGuardianEntity();
@@ -135,7 +132,7 @@ namespace KyoS.Web.Controllers
                     {
                         model.Client.EmergencyContact = new EmergencyContactEntity();
                         model.EmergencyContact = false;
-                    } 
+                    }
                     return View(model);
                 }
             }
@@ -175,7 +172,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Create(IntakeScreeningViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -192,7 +189,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                       
+
                         return RedirectToAction("Index", "Intakes");
                     }
                     catch (System.Exception ex)
@@ -241,12 +238,12 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult Edit(int id = 0)
         {
             IntakeScreeningViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -287,7 +284,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Edit(IntakeScreeningViewModel intakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -314,7 +311,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", intakeViewModel) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> IntakeCandidates(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -343,7 +340,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -370,7 +367,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult CreateConsentForTreatment(int id = 0)
         {
 
@@ -380,7 +377,7 @@ namespace KyoS.Web.Controllers
 
             IntakeConsentForTreatmentViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -388,7 +385,7 @@ namespace KyoS.Web.Controllers
                                                                             .Include(n => n.Client)
                                                                             .ThenInclude(n => n.LegalGuardian)
                                                                             .FirstOrDefault(n => n.Client.Id == id);
-                    
+
                     if (intakeConsent == null)
                     {
                         model = new IntakeConsentForTreatmentViewModel
@@ -423,7 +420,7 @@ namespace KyoS.Web.Controllers
 
                         return View(model);
                     }
-                    
+
                 }
             }
 
@@ -432,7 +429,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> CreateConsentForTreatment(IntakeConsentForTreatmentViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -442,7 +439,7 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 IntakeConsentForTreatmentEntity IntakeConsentEntity = await _converterHelper.ToIntakeConsentForTreatmentEntity(IntakeViewModel, false);
-                
+
                 if (IntakeConsentEntity.Id == 0)
                 {
                     IntakeConsentEntity.Client = null;
@@ -476,12 +473,12 @@ namespace KyoS.Web.Controllers
             }
 
             IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
-            
+
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsentForTreatment", IntakeViewModel) });
         }
 
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult CreateConsentForRelease(int id = 0)
         {
 
@@ -491,7 +488,7 @@ namespace KyoS.Web.Controllers
 
             IntakeConsentForReleaseViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -550,10 +547,10 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("Index", "Intakes");
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> CreateConsentForRelease(IntakeConsentForReleaseViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -597,12 +594,12 @@ namespace KyoS.Web.Controllers
             }
             //Preparing Data
             IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
-            
+
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsentForRelease", IntakeViewModel) });
         }
 
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult CreateConsumerRights(int id = 0)
         {
 
@@ -612,7 +609,7 @@ namespace KyoS.Web.Controllers
 
             IntakeConsumerRightsViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -657,7 +654,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> CreateConsumerRights(IntakeConsumerRightsViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -770,12 +767,12 @@ namespace KyoS.Web.Controllers
             {
                 Stream stream = _reportHelper.FloridaSocialHSIntakeReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }            
+            }
 
             return null;
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult CreateAcknowledgementHippa(int id = 0)
         {
 
@@ -785,7 +782,7 @@ namespace KyoS.Web.Controllers
 
             IntakeAcknoewledgementHippaViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -831,7 +828,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> CreateAcknowledgementHippa(IntakeAcknoewledgementHippaViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -879,7 +876,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateAcknowledgementHippa", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult CreateAccessToServices(int id = 0)
         {
 
@@ -889,7 +886,7 @@ namespace KyoS.Web.Controllers
 
             IntakeAccessToServicesViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -912,14 +909,14 @@ namespace KyoS.Web.Controllers
                             AdmissionedFor = user_logged.FullName,
 
                         };
-                        
+
                         if (model.Client.LegalGuardian == null)
                             model.Client.LegalGuardian = new LegalGuardianEntity();
                         return View(model);
                     }
                     else
                     {
-                        
+
                         if (intakeAccess.Client.LegalGuardian == null)
                             intakeAccess.Client.LegalGuardian = new LegalGuardianEntity();
                         model = _converterHelper.ToIntakeAccessToServicesViewModel(intakeAccess);
@@ -935,7 +932,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> CreateAccessToServices(IntakeAccessToServicesViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -983,7 +980,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateAccessToServices", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult CreateOrientationCheckList(int id = 0)
         {
 
@@ -993,7 +990,7 @@ namespace KyoS.Web.Controllers
 
             IntakeOrientationCheckListViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1059,7 +1056,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> CreateOrientationCheckList(IntakeOrientationCheckListViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1107,7 +1104,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateOrientationCheckList", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult CreateTransportation(int id = 0)
         {
 
@@ -1117,7 +1114,7 @@ namespace KyoS.Web.Controllers
 
             IntakeTransportationViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1161,7 +1158,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> CreateTransportation(IntakeTransportationViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1210,7 +1207,7 @@ namespace KyoS.Web.Controllers
         }
 
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult CreateConsentPhotograph(int id = 0)
         {
 
@@ -1220,7 +1217,7 @@ namespace KyoS.Web.Controllers
 
             IntakeConsentPhotographViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1274,7 +1271,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> CreateConsentPhotograph(IntakeConsentPhotographViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1322,7 +1319,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsentPhotograph", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult CreateFeeAgreement(int id = 0)
         {
 
@@ -1332,7 +1329,7 @@ namespace KyoS.Web.Controllers
 
             IntakeFeeAgreementViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1376,7 +1373,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> CreateFeeAgreement(IntakeFeeAgreementViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1424,7 +1421,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateFeeAgreement", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult CreateTuberculosis(int id = 0)
         {
 
@@ -1434,7 +1431,7 @@ namespace KyoS.Web.Controllers
 
             IntakeTuberculosisViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1454,7 +1451,7 @@ namespace KyoS.Web.Controllers
                             DateSignatureLegalGuardian = DateTime.Now,
                             DateSignaturePerson = DateTime.Now,
 
-                            DoYouCurrently  = false,
+                            DoYouCurrently = false,
                             DoYouBring = false,
                             DoYouCough = false,
                             DoYouSweat = false,
@@ -1462,7 +1459,7 @@ namespace KyoS.Web.Controllers
                             HaveYouLost = false,
                             DoYouHaveChest = false,
                             If2OrMore = false,
-                        
+
                             HaveYouRecently = false,
                             AreYouRecently = false,
                             IfYesWhich = false,
@@ -1505,7 +1502,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> CreateTuberculosis(IntakeTuberculosisViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1553,7 +1550,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTuberculosis", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult CreateMedicalhistory(int id = 0)
         {
 
@@ -1563,7 +1560,7 @@ namespace KyoS.Web.Controllers
 
             IntakeMedicalHistoryViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1752,7 +1749,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> CreateMedicalhistory(IntakeMedicalHistoryViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
