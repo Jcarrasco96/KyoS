@@ -84,5 +84,35 @@ namespace KyoS.Web.Helpers
         TCMServicePlanReviewDomainViewModel ToTCMServicePlanReviewDomainViewModel(TCMServicePlanReviewDomainEntity model);
         Task<TCMDischargeEntity> ToTCMDischargeEntity(TCMDischargeViewModel model, bool isNew);
         TCMDischargeViewModel ToTCMDischargeViewModel(TCMDischargeEntity model);
+        Task<IntakeScreeningEntity> ToIntakeEntity(IntakeScreeningViewModel model, bool isNew);
+        IntakeScreeningViewModel ToIntakeViewModel(IntakeScreeningEntity model);
+        Task<IntakeConsentForTreatmentEntity> ToIntakeConsentForTreatmentEntity(IntakeConsentForTreatmentViewModel model, bool isNew);
+        IntakeConsentForTreatmentViewModel ToIntakeConsentForTreatmentViewModel(IntakeConsentForTreatmentEntity model);
+        Task<IntakeConsentForReleaseEntity> ToIntakeConsentForReleaseEntity(IntakeConsentForReleaseViewModel model, bool isNew);
+        IntakeConsentForReleaseViewModel ToIntakeConsentForReleaseViewModel(IntakeConsentForReleaseEntity model);
+        Task<IntakeConsumerRightsEntity> ToIntakeConsumerRightsEntity(IntakeConsumerRightsViewModel model, bool isNew);
+        IntakeConsumerRightsViewModel ToIntakeConsumerRightsViewModel(IntakeConsumerRightsEntity model);
+        Task<IntakeAcknowledgementHippaEntity> ToIntakeAcknoewledgementHippaEntity(IntakeAcknoewledgementHippaViewModel model, bool isNew);
+        IntakeAcknoewledgementHippaViewModel ToIntakeAcknoewledgementHippaViewModel(IntakeAcknowledgementHippaEntity model);
+        Task<IntakeAccessToServicesEntity> ToIntakeAccessToServicesEntity(IntakeAccessToServicesViewModel model, bool isNew);
+        IntakeAccessToServicesViewModel ToIntakeAccessToServicesViewModel(IntakeAccessToServicesEntity model);
+        Task<IntakeOrientationChecklistEntity> ToIntakeOrientationChecklistEntity(IntakeOrientationCheckListViewModel model, bool isNew);
+        IntakeOrientationCheckListViewModel ToIntakeOrientationChecklistViewModel(IntakeOrientationChecklistEntity model);
+        Task<IntakeTransportationEntity> ToIntakeTransportationEntity(IntakeTransportationViewModel model, bool isNew);
+        IntakeTransportationViewModel ToIntakeTransportationViewModel(IntakeTransportationEntity model);
+        Task<IntakeConsentPhotographEntity> ToIntakeConsentPhotographEntity(IntakeConsentPhotographViewModel model, bool isNew);
+        IntakeConsentPhotographViewModel ToIntakeConsentPhotographViewModel(IntakeConsentPhotographEntity model);
+        Task<IntakeFeeAgreementEntity> ToIntakeFeeAgreementEntity(IntakeFeeAgreementViewModel model, bool isNew);
+        IntakeFeeAgreementViewModel ToIntakeFeeAgreementViewModel(IntakeFeeAgreementEntity model);
+        Task<IntakeTuberculosisEntity> ToIntakeTuberculosisEntity(IntakeTuberculosisViewModel model, bool isNew);
+        IntakeTuberculosisViewModel ToIntakeTuberculosisViewModel(IntakeTuberculosisEntity model);
+        Task<IntakeMedicalHistoryEntity> ToIntakeMedicalHistoryEntity(IntakeMedicalHistoryViewModel model, bool isNew);
+        IntakeMedicalHistoryViewModel ToIntakeMedicalHistoryViewModel(IntakeMedicalHistoryEntity model);
+        Task<DischargeEntity> ToDischargeEntity(DischargeViewModel model, bool isNew);
+        DischargeViewModel ToDischargeViewModel(DischargeEntity model);
+        Task<MedicationEntity> ToMedicationEntity(MedicationViewModel model, bool isNew);
+        MedicationViewModel ToMedicationViewModel(MedicationEntity model);
+        Task<FarsFormEntity> ToFarsFormEntity(FarsFormViewModel model, bool isNew);
+        FarsFormViewModel ToFarsFormViewModel(FarsFormEntity model);
     }
 }

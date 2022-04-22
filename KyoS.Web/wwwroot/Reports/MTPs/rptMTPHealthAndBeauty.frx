@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="06/13/2021 13:42:01" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/20/2022 16:53:11" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3G0Vm50iQ5Blw5yULyEwZQQ==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3C6OsJrElucmluAbkjKMdFw==">
       <TableDataSource Name="Goals1" Alias="Goals2" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -20,7 +20,7 @@
         <Column Name="GoalId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3tyxjXH/JqT3IdSG9l6dd0w==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u361GYKAXBPJNslZSC3ArArQ==">
       <TableDataSource Name="Goals2" Alias="Goals3" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -39,7 +39,7 @@
         <Column Name="GoalId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u39ETVv5BidfsGOKnzFpQRgQ==">
+    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3C8V/FM39EhwICmdNYUPWpQ==">
       <TableDataSource Name="Goals3" Alias="Goals4" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -58,7 +58,7 @@
         <Column Name="GoalId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3o10n2o3kkY8FdE8Hj7HRcA==">
+    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3pzK6wOJdFpsOV3C15eoALQ==">
       <TableDataSource Name="Goals4" Alias="Goals5" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -77,7 +77,7 @@
         <Column Name="GoalId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3jC9xX7QbJR59fGOVvdQk6A==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3g+uaw2PoSSpg8yipqa38UQ==">
       <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -85,9 +85,41 @@
         <Column Name="Code" DataType="System.String"/>
         <Column Name="ClinicId" DataType="System.Int32"/>
         <Column Name="DateOfBirth" DataType="System.DateTime"/>
-        <Column Name="MedicalID" DataType="System.String"/>
         <Column Name="Status" DataType="System.Int32"/>
         <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="ReferredId" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
       </TableDataSource>
       <TableDataSource Name="MTPs" DataType="System.Int32" Enabled="true" TableName="MTPs">
         <Column Name="Id" DataType="System.Int32"/>
@@ -133,7 +165,7 @@
   </Dictionary>
   <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" FirstPageSource="15" OtherPagesSource="15" LastPageSource="15" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
     <ReportTitleBand Name="ReportTitle1" Width="778.3"/>
-    <PageHeaderBand Name="PageHeader1" Top="4" Width="778.3" Height="127.35">
+    <PageHeaderBand Name="PageHeader1" Top="4.12" Width="778.3" Height="127.35">
       <TextObject Name="Text39" Left="56.7" Top="91.6" Width="113.4" Height="18.9" Text="CLIENT NAME:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text40" Left="500.85" Top="91.6" Width="75.6" Height="18.9" Text="MR #:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text47" Left="170.1" Top="91.6" Width="321.3" Height="18.9" Text="[Clients.Name]" Font="Arial, 10pt"/>
@@ -146,7 +178,7 @@
       <LineObject Name="Line7" Left="775.9" Top="117.05" Width="-776"/>
       <LineObject Name="Line4" Left="775.52" Top="116.05" Width="-776"/>
     </PageHeaderBand>
-    <DataBand Name="Data7" Top="135.35" Width="778.3" Height="207.9" CanGrow="true" CanShrink="true">
+    <DataBand Name="Data7" Top="135.6" Width="778.3" Height="207.9" CanGrow="true" CanShrink="true">
       <TextObject Name="Text55" Left="18.9" Top="150.65" Width="756" Height="47.25" CanGrow="true" CanShrink="true" Text="[MTPs.InitialDischargeCriteria]" Font="Arial, 10pt"/>
       <TextObject Name="Text46" Left="5" Top="130.3" Width="217.35" Height="18.9" Text="INITIAL DISCHARGE CRITERIA:" HorzAlign="Right" Font="Arial, 10pt, style=Bold, Underline"/>
       <TextObject Name="Text41" Left="5.45" Top="88.05" Width="132.3" Height="18.9" Text="Level of care:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
@@ -168,10 +200,10 @@
       <TextObject Name="Text53" Left="576.45" Top="28.35" Width="198.45" Height="18.9" Text="[MTPs.EndTime]" Format="Time" Format.Format="t" Font="Arial, 10pt"/>
       <TextObject Name="Text16" Left="5.35" Top="10" Width="132.3" Height="18.9" Text="Date of admission:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text36" Left="368.55" Top="9.45" Width="207.9" Height="18.9" Text="Treatment plan developed date:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text49" Left="138.75" Top="9.45" Width="160.65" Height="18.9" Text="[MTPs.AdmisionDate]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
+      <TextObject Name="Text49" Left="138.75" Top="9.45" Width="160.65" Height="18.9" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
       <TextObject Name="Text52" Left="576.45" Top="9.45" Width="198.45" Height="18.9" Text="[MTPs.MTPDevelopedDate]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
     </DataBand>
-    <DataBand Name="Data1" Top="379.6" Width="778.3" Height="18.9" FirstRowStartsNewPage="true" Guides="0,0,0" DataSource="Diagnostics">
+    <DataBand Name="Data1" Top="380.09" Width="778.3" Height="18.9" FirstRowStartsNewPage="true" Guides="0,0,0" DataSource="Diagnostics">
       <TableObject Name="Table1" Left="15.9" Top="-0.1" Width="755.98" Height="18.9">
         <TableColumn Name="Column1" Width="122.83"/>
         <TableColumn Name="Column2" Width="633.15"/>
@@ -180,7 +212,7 @@
           <TableCell Name="Cell2" Border.Lines="All" Text="[Diagnostics.Description]" HorzAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader1" Top="347.25" Width="778.3" Height="28.35">
+      <DataHeaderBand Name="DataHeader1" Top="347.62" Width="778.3" Height="28.35">
         <TableObject Name="Table2" Left="16.45" Top="9.45" Width="755.98" Height="18.9">
           <TableColumn Name="Column3" Width="122.83"/>
           <TableColumn Name="Column4" Width="633.15"/>
@@ -191,7 +223,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data3" Top="402.5" Width="778.3" Height="47.25" DataSource="MTPs">
+    <DataBand Name="Data3" Top="403.12" Width="778.3" Height="47.25" DataSource="MTPs">
       <TableObject Name="Table5" Left="15.9" Top="6.45" Width="756" Height="37.8" Border.Lines="All">
         <TableColumn Name="Column9" Width="185.85"/>
         <TableColumn Name="Column10" Width="299.25"/>
@@ -208,7 +240,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <DataBand Name="Data2" Top="453.75" Width="778.3" Height="81.27" CanGrow="true" CanShrink="true" DataSource="Goals">
+    <DataBand Name="Data2" Top="454.49" Width="778.3" Height="81.27" CanGrow="true" CanShrink="true" DataSource="Goals">
       <TextObject Name="Text56" Left="15.9" Top="5" Width="756" Height="18.9" Border.Lines="All" Text="Treatment Plan Problem Area" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TableObject Name="Table6" Left="15.9" Top="23.8" Width="756" Height="56.7">
         <TableColumn Name="Column12" Width="756"/>
@@ -220,7 +252,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <DataBand Name="Data4" Top="580.82" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives">
+    <DataBand Name="Data4" Top="581.81" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives">
       <TableObject Name="Table8" Left="15.9" Width="756.08" Height="37.8">
         <TableColumn Name="Column18" Width="89.81"/>
         <TableColumn Name="Column19" Width="344.97"/>
@@ -242,7 +274,7 @@
           <TableCell Name="Cell37" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader2" Top="539.02" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
+      <DataHeaderBand Name="DataHeader2" Top="539.89" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
         <TableObject Name="Table7" Left="15.9" Width="756.08" Height="37.8">
           <TableColumn Name="Column13" Width="89.81"/>
           <TableColumn Name="Column14" Width="344.97"/>
@@ -259,7 +291,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data5" Top="622.62" Width="778.3" Height="56.7" CanGrow="true" CanShrink="true" DataSource="Goals1">
+    <DataBand Name="Data5" Top="623.73" Width="778.3" Height="56.7" CanGrow="true" CanShrink="true" DataSource="Goals1">
       <TableObject Name="Table9" Left="16.45" Width="756" Height="56.7">
         <TableColumn Name="Column23" Width="756"/>
         <TableRow Name="Row12" Height="37.8" AutoSize="true">
@@ -270,7 +302,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <DataBand Name="Data6" Top="725.12" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives1">
+    <DataBand Name="Data6" Top="726.48" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives1">
       <TableObject Name="Table11" Left="15.9" Width="756.08" Height="37.8">
         <TableColumn Name="Column29" Width="89.81"/>
         <TableColumn Name="Column30" Width="344.97"/>
@@ -292,7 +324,7 @@
           <TableCell Name="Cell54" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader3" Top="683.32" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
+      <DataHeaderBand Name="DataHeader3" Top="684.56" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
         <TableObject Name="Table10" Left="15.9" Width="756.08" Height="37.8">
           <TableColumn Name="Column24" Width="89.81"/>
           <TableColumn Name="Column25" Width="344.97"/>
@@ -309,7 +341,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data8" Top="766.92" Width="778.3" Height="56.7" CanGrow="true" CanShrink="true" DataSource="Goals2">
+    <DataBand Name="Data8" Top="768.4" Width="778.3" Height="56.7" CanGrow="true" CanShrink="true" DataSource="Goals2">
       <TableObject Name="Table12" Left="15.9" Width="756" Height="56.7">
         <TableColumn Name="Column34" Width="756"/>
         <TableRow Name="Row17" Height="37.8" AutoSize="true">
@@ -320,7 +352,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <DataBand Name="Data9" Top="869.42" Width="778.3" Height="38.25" CanGrow="true" CanShrink="true" DataSource="Objetives2">
+    <DataBand Name="Data9" Top="871.15" Width="778.3" Height="38.25" CanGrow="true" CanShrink="true" DataSource="Objetives2">
       <TableObject Name="Table14" Left="15.9" Top="0.45" Width="756.08" Height="37.8">
         <TableColumn Name="Column40" Width="89.81"/>
         <TableColumn Name="Column41" Width="344.97"/>
@@ -342,7 +374,7 @@
           <TableCell Name="Cell71" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader4" Top="827.62" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
+      <DataHeaderBand Name="DataHeader4" Top="829.23" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
         <TableObject Name="Table13" Left="16.45" Width="756.08" Height="37.8">
           <TableColumn Name="Column35" Width="89.81"/>
           <TableColumn Name="Column36" Width="344.97"/>
@@ -359,7 +391,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data10" Top="911.67" Width="778.3" Height="56.7" CanGrow="true" CanShrink="true" DataSource="Goals3">
+    <DataBand Name="Data10" Top="913.53" Width="778.3" Height="56.7" CanGrow="true" CanShrink="true" DataSource="Goals3">
       <TableObject Name="Table15" Left="15.9" Width="756" Height="56.7">
         <TableColumn Name="Column45" Width="756"/>
         <TableRow Name="Row22" Height="37.8" AutoSize="true">
@@ -370,7 +402,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <DataBand Name="Data11" Top="1014.17" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives3">
+    <DataBand Name="Data11" Top="1016.27" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives3">
       <TableObject Name="Table17" Left="15.9" Width="756.08" Height="37.8">
         <TableColumn Name="Column51" Width="89.81"/>
         <TableColumn Name="Column52" Width="344.97"/>
@@ -392,7 +424,7 @@
           <TableCell Name="Cell88" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader5" Top="972.37" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
+      <DataHeaderBand Name="DataHeader5" Top="974.35" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
         <TableObject Name="Table16" Left="16.45" Width="756.08" Height="37.8">
           <TableColumn Name="Column46" Width="89.81"/>
           <TableColumn Name="Column47" Width="344.97"/>
@@ -409,7 +441,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data12" Top="1055.97" Width="778.3" Height="56.7" CanGrow="true" CanShrink="true" DataSource="Goals4">
+    <DataBand Name="Data12" Top="1058.2" Width="778.3" Height="56.7" CanGrow="true" CanShrink="true" DataSource="Goals4">
       <TableObject Name="Table19" Left="16.45" Width="756" Height="56.7">
         <TableColumn Name="Column61" Width="756"/>
         <TableRow Name="Row28" Height="37.8" AutoSize="true">
@@ -420,7 +452,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <DataBand Name="Data13" Top="1158.47" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives4">
+    <DataBand Name="Data13" Top="1160.94" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives4">
       <TableObject Name="Table20" Left="15.9" Width="756.08" Height="37.8">
         <TableColumn Name="Column62" Width="89.81"/>
         <TableColumn Name="Column63" Width="344.97"/>
@@ -442,7 +474,7 @@
           <TableCell Name="Cell105" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader6" Top="1116.67" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
+      <DataHeaderBand Name="DataHeader6" Top="1119.02" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true">
         <TableObject Name="Table18" Left="15.9" Top="-0.55" Width="756.08" Height="37.8">
           <TableColumn Name="Column56" Width="89.81"/>
           <TableColumn Name="Column57" Width="344.97"/>
@@ -459,7 +491,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data14" Top="1200.27" Width="778.3" Height="472.5">
+    <DataBand Name="Data14" Top="1202.87" Width="778.3" Height="472.5">
       <TextObject Name="Text57" Left="-2.55" Top="28.35" Width="274.05" Height="18.9" Text="ANTICIPATED LENGTH OF TREATMENT:" HorzAlign="Right" Font="Arial, 10pt, style=Bold, Underline"/>
       <CheckBoxObject Name="CheckBox5" Left="277.5" Top="30.35" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" CheckWidthRatio="2"/>
       <TextObject Name="Text59" Left="291.4" Top="29.35" Width="47.25" Height="18.9" Text="1 mo" Font="Arial, 9pt"/>

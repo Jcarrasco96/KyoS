@@ -57,6 +57,8 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboTCMServices();
         IEnumerable<SelectListItem> GetComboTCMStages();
         IEnumerable<SelectListItem> GetComboObjetiveStatus();
-
+        IEnumerable<SelectListItem> GetComboIntake_ClientIs();
+        IEnumerable<SelectListItem> GetComboIntake_BehaviorIs();
+        IEnumerable<SelectListItem> GetComboIntake_SpeechIs();
     }
 }

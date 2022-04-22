@@ -1,0 +1,79 @@
+﻿@model KyoS.Web.Models.IntakeAccessToServicesViewModel
+
+<br />
+<div class="container-fluid col-md-9">
+    <pre>
+            In the event of an emergency, recipients will request assistance from a 24-hour staff member, all of whom are 
+            trained in evacuation emergency procedures and would help them evacuate the building. 
+
+            The following events would constitute an emergency that would require the recipient to report immediately to a staff        
+            member: 
+
+            1. Smelling or seeing smoke or fire
+            2. Smelling of gas
+            3. Flooding water
+            4. Apparent illness of another person or staff member
+            5. Unlawful entry of a person onto the facility
+            6. Accidents or injuries of another recipient or staff member
+            7. Violence or altercations
+            8. Finding drugs on premises
+
+            Recipient or staff may call 911 in an emergency. In the event of a fire, all staff is trained during bi-annual fire drills 
+            to meet at a pre-designated area (located in the grass area in front of the corporate office building). 
+
+            Recipients who are experiencing an emergency in their home would access immediate services by dialing 911 and 
+            then contacting their case manager for support. 
+
+            The above written policy has been explained to me and I understand what I need to do in the event of an emergency. 
+        </pre>
+</div>
+
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.Client.Name)</u></strong><br />
+        <i>Person Served Signature</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignaturePerson" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Name)</u></strong><br />
+        <i>Parent, (Legal Guardian or Authorized Representative Signature)</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignatureLegalGuardian" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.AdmissionedFor)</u></strong><br />
+        <i>Employee Signature</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignatureEmployee" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+        <label asp-for="Documents" class="forgot">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>
+        </label>
+    </div>
+</div>
+<br />
+
+
+
+
+
+

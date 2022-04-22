@@ -54,6 +54,10 @@ namespace KyoS.Web.Helpers
         Stream PrintIndividualSign(List<Workday_Client> workdayClientList);
         #endregion
 
+        #region Intake reports
+        Stream FloridaSocialHSIntakeReport(IntakeScreeningEntity intake);
+        #endregion
+
         #region Utils functions
         byte[] ConvertStreamToByteArray(Stream stream);        
         #endregion

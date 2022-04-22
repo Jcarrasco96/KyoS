@@ -103,8 +103,7 @@ namespace KyoS.Web.Controllers
                         model = new MTPViewModel
                         {
                             IdClient = idClient,
-                            Clients = list,
-                            AdmisionDate = DateTime.Today.Date,
+                            Clients = list,                           
                             MTPDevelopedDate = DateTime.Today,
                             NumberOfMonths = 6,
                             Modality = "PSR",
@@ -116,8 +115,7 @@ namespace KyoS.Web.Controllers
                     { 
                         model = new MTPViewModel
                         {
-                            Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                            AdmisionDate = DateTime.Today.Date,
+                            Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),                            
                             MTPDevelopedDate = DateTime.Today,
                             NumberOfMonths = 6,
                             Modality = "PSR",
@@ -131,8 +129,7 @@ namespace KyoS.Web.Controllers
 
             model = new MTPViewModel
             {
-                Clients = _combosHelper.GetComboClients(),
-                AdmisionDate = DateTime.Today,
+                Clients = _combosHelper.GetComboClients(),               
                 MTPDevelopedDate = DateTime.Today
             };
             return View(model);
@@ -160,8 +157,7 @@ namespace KyoS.Web.Controllers
                         MTPViewModel model = new MTPViewModel
                         {
                             Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                            IdClient = mtpViewModel.IdClient,
-                            AdmisionDate = mtpViewModel.AdmisionDate,
+                            IdClient = mtpViewModel.IdClient,                            
                             MTPDevelopedDate = mtpViewModel.MTPDevelopedDate,
                             NumberOfMonths = mtpViewModel.NumberOfMonths,
                             StartTime = mtpViewModel.StartTime,
@@ -315,8 +311,7 @@ namespace KyoS.Web.Controllers
                         MTPViewModel model = new MTPViewModel
                         {
                             Clients = list,
-                            IdClient = mtpViewModel.IdClient,
-                            AdmisionDate = mtpViewModel.AdmisionDate,
+                            IdClient = mtpViewModel.IdClient,                            
                             MTPDevelopedDate = mtpViewModel.MTPDevelopedDate,
                             NumberOfMonths = mtpViewModel.NumberOfMonths,
                             StartTime = mtpViewModel.StartTime,
@@ -451,7 +446,7 @@ namespace KyoS.Web.Controllers
             }
 
             model.MTP = await _context.MTPs.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdMTP);
-
+            
             if (ModelState.IsValid)
             {
                 string gender_problems = string.Empty;                
@@ -474,6 +469,7 @@ namespace KyoS.Web.Controllers
                 if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
                 {
                     ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
+                    model.Services = _combosHelper.GetComboServices();
                     return View(model);
                 }
 
@@ -496,6 +492,8 @@ namespace KyoS.Web.Controllers
                     }
                 }
             }
+            
+            model.Services = _combosHelper.GetComboServices();
             return View(model);
         }
 
@@ -579,6 +577,7 @@ namespace KyoS.Web.Controllers
                 if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
                 {
                     ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
+                    model.Services = _combosHelper.GetComboServices();
                     return View(model);
                 }
 
@@ -601,6 +600,8 @@ namespace KyoS.Web.Controllers
                     }
                 }
             }
+
+            model.Services = _combosHelper.GetComboServices();
             return View(model);
         }
 

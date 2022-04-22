@@ -15,6 +15,27 @@ namespace KyoS.Web.Data.Entities
         [Display(Name = "Logo")]
         public string LogoPath { get; set; }
 
+        [Display(Name = "CEO")]
+        public string CEO { get; set; }
+
+        [Display(Name = "Address")]
+        public string Address { get; set; }
+
+        [Display(Name = "City")]
+        public string City { get; set; }
+
+        [Display(Name = "State")]
+        public string State { get; set; }
+
+        [Display(Name = "ZipCode")]
+        public string ZipCode { get; set; }
+
+        [Display(Name = "Phone")]
+        public string Phone { get; set; }
+
+        [Display(Name = "FaxNo")]
+        public string FaxNo { get; set; }
+
         public SchemaType Schema { get; set; }
 
         public ICollection<FacilitatorEntity> Facilitators { get; set; }

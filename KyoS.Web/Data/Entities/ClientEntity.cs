@@ -17,10 +17,18 @@ namespace KyoS.Web.Data.Entities
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public GenderType Gender { get; set; }
 
+        [Display(Name = "Date of admission")]
+        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public DateTime AdmisionDate { get; set; }
+
         [Display(Name = "Date of birth")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime DateOfBirth { get; set; }
+
+        [Display(Name = "Place of birth")]
+        public string PlaceOfBirth { get; set; }
 
         [Display(Name = "Code")]
         public string Code { get; set; }
@@ -72,6 +80,8 @@ namespace KyoS.Web.Data.Entities
 
         public RelationshipType RelationShipOfLegalGuardian { get; set; }
 
+        public RelationshipType RelationShipOfEmergencyContact { get; set; }
+
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public StatusType Status { get; set; }
 
@@ -102,6 +112,36 @@ namespace KyoS.Web.Data.Entities
         public ServiceType Service { get; set; }
 
         public FacilitatorEntity IndividualTherapyFacilitator { get; set; }
+
+        public IntakeScreeningEntity IntakeScreening { get; set; }
+
+        public IntakeConsentForTreatmentEntity IntakeConsentForTreatment { get; set; }
+
+        public IntakeConsentForReleaseEntity IntakeConsentForRelease { get; set; }
+
+        public IntakeConsumerRightsEntity IntakeConsumerRights { get; set; }
+
+        public IntakeAcknowledgementHippaEntity IntakeAcknowledgementHipa { get; set; }
+
+        public IntakeAccessToServicesEntity IntakeAccessToServices { get; set; }
+
+        public IntakeOrientationChecklistEntity IntakeOrientationChecklist { get; set; }
+
+        public IntakeTransportationEntity IntakeTransportation { get; set; }
+
+        public IntakeConsentPhotographEntity IntakeConsentPhotograph{ get; set; }
+
+        public IntakeFeeAgreementEntity IntakeFeeAgreement { get; set; }
+
+        public IntakeTuberculosisEntity IntakeTuberculosis { get; set; }
+
+        public IntakeMedicalHistoryEntity IntakeMedicalHistory { get; set; }
+
+        public List<MedicationEntity> MedicationList { get; set; }
+
+        public DischargeEntity Discharge { get; set; }
+
+        public List<FarsFormEntity> FarsFormList { get; set; }
 
         public string MissingDoc 
         {

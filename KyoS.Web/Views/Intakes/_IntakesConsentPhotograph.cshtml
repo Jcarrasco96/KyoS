@@ -1,0 +1,87 @@
+﻿@model KyoS.Web.Models.IntakeConsentPhotographViewModel
+
+<br />
+<div class="container-fluid col-md-9">
+    <pre>
+    <strong>Patient consents to be:</strong><br />
+    <input type="checkbox" asp-for="Photograph" class="form-check-input"> Photographed   <input type="checkbox" asp-for="Filmed" class="form-check-input"> Filmed    <input type="checkbox" asp-for="VideoTaped" class="form-check-input"> VideoTaped   <input type="checkbox" asp-for="Interviwed" class="form-check-input"> Interviewed   <input type="checkbox" asp-for="NoneOfTheForegoing" class="form-check-input"> None of the foregoing 
+            Other: <input asp-for="Other" class="form-check-input">   
+    </pre>
+</div>
+<div class="container-fluid col-md-9">
+    <pre>
+    <strong>Purpose of Use/Disclosure: </strong><br />
+    <input type="checkbox" asp-for="Publication" class="form-check-input"> Publication in newspaper(s), magazine(s) or other publications.    
+    <input type="checkbox" asp-for="Broadcast" class="form-check-input"> Broadcast by radio or television.     
+    <input type="checkbox" asp-for="Markrting" class="form-check-input"> <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong> marketing and public relations materials/publications.   
+    <input type="checkbox" asp-for="ByTODocument" class="form-check-input"> By <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong> to document the progress of my care.
+    </pre>
+</div>
+<br />
+<div class="container-fluid col-md-9">
+    <pre>
+                I understand that, in the instance of external sources (such as media outlets or law enforcement agents),
+                <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  is acting only as the intermediary, making it possible for the
+                aforementioned source(s) to contact me. 
+
+                As such, I relieve and hereby agree to hold <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  and the facility free
+                and harmless from any and all liability arising out of the use and/or release of 
+                information; interview; photograph/videotape/film; and subsequent publication or broadcast. I understand 
+                that the interview(s) or photo session(s) are being carried out upon my consent and authorization and so 
+                assume full responsibility. I understand that: 
+
+                    1. I may refuse to sign this authorization and that it is strictly voluntary.
+                    2. If I do not sign this form, my health care and the payment for my health care will not be affected.
+                    3. I may revoke this authorization at any time in writing, but if I do, it will not have any effect on any actions
+                        taken prior to receiving the revocation.
+                    4. If the requester or receiver is not a health plan or health care provider, the released information may be
+                        redisclosed by the recipient and may no longer be protected by federal privacy regulations.
+                    5. I understand that I may see and obtain a copy of the information described on this form, for a reasonable
+                        copy fee, if I ask for it.
+                    6. I get a copy of this form after I sign it.
+          </pre>
+</div>
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.Client.Name)</u></strong><br />
+        <i>Person Served Signature</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignaturePerson" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Name)</u></strong><br />
+        <i>Parent, (Legal Guardian or Authorized Representative Signature)</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignatureLegalGuardian" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.AdmissionedFor)</u></strong><br />
+        <i>Employee Signature</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignatureEmployee" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+        <label asp-for="Documents" class="forgot">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>
+        </label>
+    </div>
+</div>
+<br />
+

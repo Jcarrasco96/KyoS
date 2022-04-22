@@ -27,7 +27,14 @@ namespace KyoS.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 LogoPath = path,
-                Name = model.Name
+                Name = model.Name,
+                CEO = model.CEO,
+                Address = model.Address,
+                City = model.City,
+                State = model.State,
+                ZipCode = model.ZipCode,
+                Phone = model.Phone,
+                FaxNo = model.FaxNo
             };
         }
 
@@ -37,7 +44,14 @@ namespace KyoS.Web.Helpers
             {
                 Id = clinicEntity.Id,
                 LogoPath = clinicEntity.LogoPath,
-                Name = clinicEntity.Name
+                Name = clinicEntity.Name,
+                CEO = clinicEntity.CEO,
+                Address = clinicEntity.Address,
+                City = clinicEntity.City,
+                State = clinicEntity.State,
+                ZipCode = clinicEntity.ZipCode,
+                Phone = clinicEntity.Phone,
+                FaxNo = clinicEntity.FaxNo
             };
         }
 
@@ -207,6 +221,8 @@ namespace KyoS.Web.Helpers
                 Name = model.Name,
                 Gender = GenderUtils.GetGenderByIndex(model.IdGender),
                 DateOfBirth = model.DateOfBirth,
+                AdmisionDate = model.AdmisionDate,
+                PlaceOfBirth = model.PlaceOfBirth,
                 Code = model.Code,
                 MedicaidID = model.MedicaidID,
                 Clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == model.IdClinic),
@@ -233,6 +249,7 @@ namespace KyoS.Web.Helpers
                 Referred = await _context.Referreds.FirstOrDefaultAsync(r => r.Id == model.IdReferred),
                 LegalGuardian = await _context.LegalGuardians.FirstOrDefaultAsync(lg => lg.Id == model.IdLegalGuardian),
                 EmergencyContact = await _context.EmergencyContacts.FirstOrDefaultAsync(ec => ec.Id == model.IdEmergencyContact),
+                RelationShipOfEmergencyContact = RelationshipUtils.GetRelationshipByIndex(model.IdRelationshipEC),
                 RelationShipOfLegalGuardian = RelationshipUtils.GetRelationshipByIndex(model.IdRelationship),
                 IndividualTherapyFacilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.Id == model.IdFacilitatorIT),
                 Service = isNew ? ServiceType.PSR : ServiceUtils.GetServiceByIndex(model.IdService),
@@ -256,6 +273,8 @@ namespace KyoS.Web.Helpers
                 Code = clientEntity.Code,
                 MedicaidID = clientEntity.MedicaidID,
                 DateOfBirth = clientEntity.DateOfBirth,
+                AdmisionDate = clientEntity.AdmisionDate,
+                PlaceOfBirth = clientEntity.PlaceOfBirth,
                 IdStatus = (clientEntity.Status == StatusType.Open) ? 1 : 2,
                 StatusList = _combosHelper.GetComboClientStatus(),
                 IdClinic = (clientEntity.Clinic != null) ? clientEntity.Clinic.Id : 0,
@@ -289,6 +308,8 @@ namespace KyoS.Web.Helpers
                 SignPath = clientEntity.SignPath,
                 IdRelationship = Convert.ToInt32(clientEntity.RelationShipOfLegalGuardian),
                 Relationships = _combosHelper.GetComboRelationships(),
+                IdRelationshipEC = Convert.ToInt32(clientEntity.RelationShipOfEmergencyContact),
+                RelationshipsEC = _combosHelper.GetComboRelationships(),
                 IdReferred = (clientEntity.Referred != null) ? clientEntity.Referred.Id : 0,
                 Referreds = _combosHelper.GetComboReferredsByClinic(userId),                
                 IdEmergencyContact = (clientEntity.EmergencyContact != null) ? clientEntity.EmergencyContact.Id : 0,
@@ -373,8 +394,7 @@ namespace KyoS.Web.Helpers
             return new MTPEntity
             {
                 Id = isNew ? 0 : model.Id,
-                Client = await _context.Clients.FindAsync(model.IdClient),
-                AdmisionDate = model.AdmisionDate,
+                Client = await _context.Clients.FindAsync(model.IdClient),                
                 MTPDevelopedDate = model.MTPDevelopedDate,
                 StartTime = model.StartTime,
                 EndTime = model.EndTime,
@@ -393,8 +413,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = mtpEntity.Id,
                 IdClient = mtpEntity.Client.Id,
-                Clients = _combosHelper.GetComboClients(),
-                AdmisionDate = mtpEntity.AdmisionDate,
+                Clients = _combosHelper.GetComboClients(),               
                 MTPDevelopedDate = mtpEntity.MTPDevelopedDate,
                 StartTime = mtpEntity.StartTime,
                 EndTime = mtpEntity.EndTime,
@@ -1249,13 +1268,324 @@ namespace KyoS.Web.Helpers
                 Code = model.Code,
                 Name = model.Name,
                 TcmServicePlan = model.TcmServicePlan
+        public async Task<IntakeScreeningEntity> ToIntakeEntity(IntakeScreeningViewModel model, bool isNew)
+        {
+            return new IntakeScreeningEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient),
+                DateDischarge = model.DateDischarge,
+                DateSignatureClient = model.DateSignatureClient,
+                DateSignatureWitness = model.DateSignatureWitness,
+                DoesClientKnowHisName = model.DoesClientKnowHisName,
+                DoesClientKnowTimeOfDay = model.DoesClientKnowTimeOfDay,
+                DoesClientKnowTodayDate = model.DoesClientKnowTodayDate,
+                DoesClientKnowWhereIs = model.DoesClientKnowWhereIs,
+                Client_FK = model.Client_FK,
+                InformationGatheredBy = model.InformationGatheredBy,
+                ClientIsStatus = IntakeScreeninigType.GetClientIsByIndex(model.IdClientIs),
+                BehaviorIsStatus = IntakeScreeninigType.GetBehaviorIsByIndex(model.IdBehaviorIs),
+                SpeechIsStatus = IntakeScreeninigType.GetSpeechIsByIndex(model.IdSpeechIs),
+                EmergencyContact = model.EmergencyContact,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+
+            };
+        }
+
+        public IntakeScreeningViewModel ToIntakeViewModel(IntakeScreeningEntity model)
+        {
+            return new   IntakeScreeningViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                DateDischarge = model.DateDischarge,
+                DateSignatureClient = model.DateSignatureClient,
+                DateSignatureWitness = model.DateSignatureWitness,
+                DoesClientKnowHisName = model.DoesClientKnowHisName,
+                DoesClientKnowTimeOfDay = model.DoesClientKnowTimeOfDay,
+                DoesClientKnowTodayDate = model.DoesClientKnowTodayDate,
+                DoesClientKnowWhereIs = model.DoesClientKnowWhereIs,
+                Client_FK = model.Client_FK,
+                IdClient = model.Client.Id,
+                InformationGatheredBy = model.InformationGatheredBy,
+                IdClientIs = Convert.ToInt32(model.ClientIsStatus) + 1,
+                ClientIs_Status = _combosHelper.GetComboIntake_ClientIs(),
+                IdBehaviorIs = Convert.ToInt32(model.BehaviorIsStatus) + 1,
+                BehaviorIs_Status = _combosHelper.GetComboIntake_BehaviorIs(),
+                IdSpeechIs = Convert.ToInt32(model.SpeechIsStatus) + 1,
+                SpeechIs_Status = _combosHelper.GetComboIntake_SpeechIs(),
+                EmergencyContact = model.EmergencyContact,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+
+            };
+           
+        }
+
+        public async Task<IntakeConsentForTreatmentEntity> ToIntakeConsentForTreatmentEntity(IntakeConsentForTreatmentViewModel model, bool isNew)
+        {
+            return new IntakeConsentForTreatmentEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                
+                Aggre = model.Aggre,
+                Aggre1 = model.Aggre1,
+                AuthorizeRelease = model.AuthorizeRelease,
+                AuthorizeStaff = model.AuthorizeStaff,
+                Certify = model.Certify,
+                Certify1 = model.Certify1,
+                Client_FK = model.Client_FK,//model.Client.Id,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Underestand = model.Underestand,
+                AdmissionedFor = model.AdmissionedFor,
+                
+
+            };
+        }
+
+        public IntakeConsentForTreatmentViewModel ToIntakeConsentForTreatmentViewModel(IntakeConsentForTreatmentEntity model)
+        {
+            return new IntakeConsentForTreatmentViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Aggre = model.Aggre,
+                Aggre1 = model.Aggre1,
+                AuthorizeRelease = model.AuthorizeRelease,
+                AuthorizeStaff = model.AuthorizeStaff,
+                Certify = model.Certify,
+                Certify1 = model.Certify1,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Underestand = model.Underestand,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+            
+        }
+
+        public async Task<IntakeConsentForReleaseEntity> ToIntakeConsentForReleaseEntity(IntakeConsentForReleaseViewModel model, bool isNew)
+        {
+            return new IntakeConsentForReleaseEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Discaherge = model.Discaherge,
+                ForPurpose_CaseManagement = model.ForPurpose_CaseManagement,
+                ForPurpose_Other = model.ForPurpose_Other,
+                ForPurpose_OtherExplain = model.ForPurpose_OtherExplain,
+                ForPurpose_Treatment = model.ForPurpose_Treatment,
+                InForm_Facsimile = model.InForm_Facsimile,
+                InForm_VerbalInformation = model.InForm_VerbalInformation,
+                InForm_WrittenRecords = model.InForm_WrittenRecords,
+                History = model.History,
+                HospitalRecord = model.HospitalRecord,
+                IncidentReport = model.IncidentReport,
+                
+                LabWork = model.LabWork,
+                Other = model.Other,
+                Other_Explain = model.Other_Explain,
+                ProgressReports = model.ProgressReports,
+                PsychologycalEvaluation = model.PsychologycalEvaluation,
+                SchoolRecord = model.SchoolRecord,
+                ToRelease = model.ToRelease,
+                AdmissionedFor = model.AdmissionedFor,
+            };
+        }
+
+        public IntakeConsentForReleaseViewModel ToIntakeConsentForReleaseViewModel(IntakeConsentForReleaseEntity model)
+        {
+            return new IntakeConsentForReleaseViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                ToRelease = model.ToRelease,
+                SchoolRecord = model.SchoolRecord,
+                PsychologycalEvaluation = model.PsychologycalEvaluation,
+                ProgressReports = model.ProgressReports,
+                Other = model.Other,
+                Other_Explain = model.Other_Explain,
+                Discaherge = model.Discaherge,
+                LabWork = model.LabWork,
+                History = model.History,
+                HospitalRecord = model.HospitalRecord,
+                IncidentReport = model.IncidentReport,
+                ForPurpose_CaseManagement = model.ForPurpose_CaseManagement,
+                ForPurpose_Other = model.ForPurpose_Other,
+                ForPurpose_OtherExplain = model.ForPurpose_OtherExplain,
+                ForPurpose_Treatment = model.ForPurpose_Treatment,
+                InForm_Facsimile = model.InForm_Facsimile,
+                InForm_VerbalInformation = model.InForm_VerbalInformation,
+                InForm_WrittenRecords = model.InForm_WrittenRecords,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+
+        }
+
+        public async Task<IntakeConsumerRightsEntity> ToIntakeConsumerRightsEntity(IntakeConsumerRightsViewModel model, bool isNew)
+        {
+            return new IntakeConsumerRightsEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                ServedOf = model.ServedOf,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+        }
+
+        public IntakeConsumerRightsViewModel ToIntakeConsumerRightsViewModel(IntakeConsumerRightsEntity model)
+        {
+            return new IntakeConsumerRightsViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                ServedOf = model.ServedOf,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+
+        }
+
+        public async Task<IntakeAcknowledgementHippaEntity> ToIntakeAcknoewledgementHippaEntity(IntakeAcknoewledgementHippaViewModel model, bool isNew)
+        {
+            return new IntakeAcknowledgementHippaEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+        }
+
+        public IntakeAcknoewledgementHippaViewModel ToIntakeAcknoewledgementHippaViewModel(IntakeAcknowledgementHippaEntity model)
+        {
+            return new IntakeAcknoewledgementHippaViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+               
+            };
+
+        }
+        
+        public async Task<IntakeAccessToServicesEntity> ToIntakeAccessToServicesEntity(IntakeAccessToServicesViewModel model, bool isNew)
+        {
+            return new IntakeAccessToServicesEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+        }
+
+        public IntakeAccessToServicesViewModel ToIntakeAccessToServicesViewModel(IntakeAccessToServicesEntity model)
+        {
+            return new IntakeAccessToServicesViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+                
+            };
+
+        }
+
+        public async Task<IntakeOrientationChecklistEntity> ToIntakeOrientationChecklistEntity(IntakeOrientationCheckListViewModel model, bool isNew)
+        {
+            return new IntakeOrientationChecklistEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Access = model.Access,
+                AgencyExpectation = model.AgencyExpectation,
+                AgencyPolice = model.AgencyPolice,
+                Code = model.Code,
+                Confidentiality = model.Confidentiality,
+                Discharge = model.Discharge,
+                Education = model.Education,
+                Explanation = model.Explanation,
+                Fire = model.Fire,
+                Identification = model.Identification,
+                IndividualPlan = model.IndividualPlan,
+                Insent = model.Insent,
+                Methods = model.Methods,
+                PoliceGrievancce = model.PoliceGrievancce,
+                PoliceIllicit = model.PoliceIllicit,
+                PoliceTobacco = model.PoliceTobacco,
+                PoliceWeapons = model.PoliceWeapons,
+                Program = model.Program,
+                Purpose = model.Purpose,
+                Rights = model.Rights,
+                Services = model.Services,
+                TheAbove = model.TheAbove,
+                TourFacility = model.TourFacility,
+                AdmissionedFor = model.AdmissionedFor,
 
             };
         }
 
         public async Task<TCMObjetiveEntity> ToTCMObjetiveEntity(TCMObjetiveViewModel model, bool isNew)
-        {
-            
+        {            
             return new TCMObjetiveEntity
             {
                 Id = isNew ? 0 : model.Id,
@@ -1294,6 +1624,106 @@ namespace KyoS.Web.Helpers
                 TcmDomain = TcmObjetiveEntity.TcmDomain,
                 Stages = _combosHelper.GetComboStagesNotUsed(TcmObjetiveEntity.TcmDomain),
                 Responsible = TcmObjetiveEntity.Responsible
+            };
+        }
+
+        public IntakeOrientationCheckListViewModel ToIntakeOrientationChecklistViewModel(IntakeOrientationChecklistEntity model)
+        {
+            return new IntakeOrientationCheckListViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Access = model.Access,
+                AgencyExpectation = model.AgencyExpectation,
+                AgencyPolice = model.AgencyPolice,
+                Code = model.Code,
+                Confidentiality = model.Confidentiality,
+                Discharge = model.Discharge,
+                Education = model.Education,
+                Explanation = model.Explanation,
+                Fire = model.Fire,
+                Identification = model.Identification,
+                IndividualPlan = model.IndividualPlan,
+                Insent = model.Insent,
+                Methods = model.Methods,
+                PoliceGrievancce = model.PoliceGrievancce,
+                PoliceIllicit = model.PoliceIllicit,
+                PoliceTobacco = model.PoliceTobacco,
+                PoliceWeapons = model.PoliceWeapons,
+                Program = model.Program,
+                Purpose = model.Purpose,
+                Rights = model.Rights,
+                Services = model.Services,
+                TheAbove = model.TheAbove,
+                TourFacility = model.TourFacility,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+
+        }
+
+        public async Task<IntakeTransportationEntity> ToIntakeTransportationEntity(IntakeTransportationViewModel model, bool isNew)
+        {
+            return new IntakeTransportationEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+        }
+
+        public IntakeTransportationViewModel ToIntakeTransportationViewModel(IntakeTransportationEntity model)
+        {
+            return new IntakeTransportationViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+
+        }
+
+        public async Task<IntakeConsentPhotographEntity> ToIntakeConsentPhotographEntity(IntakeConsentPhotographViewModel model, bool isNew)
+        {
+            return new IntakeConsentPhotographEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Photograph = model.Photograph,
+                Filmed = model.Filmed,
+                VideoTaped = model.VideoTaped,
+                Interviwed = model.Interviwed,
+                NoneOfTheForegoing = model.NoneOfTheForegoing,
+                Other = model.Other,
+                Publication = model.Publication,
+                Broadcast = model.Broadcast,
+                Markrting = model.Markrting,
+                ByTODocument = model.ByTODocument,
+                AdmissionedFor = model.AdmissionedFor,
 
             };
         }
@@ -1441,6 +1871,693 @@ namespace KyoS.Web.Helpers
                 TcmServicePlan = _context.TCMServicePlans.Find(model.IdServicePlan),
 
             };
+        }
+
+        public IntakeConsentPhotographViewModel ToIntakeConsentPhotographViewModel(IntakeConsentPhotographEntity model)
+        {
+            return new IntakeConsentPhotographViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Photograph = model.Photograph,
+                Filmed = model.Filmed,
+                VideoTaped = model.VideoTaped,
+                Interviwed = model.Interviwed,
+                NoneOfTheForegoing = model.NoneOfTheForegoing,
+                Other = model.Other,
+                Publication = model.Publication,
+                Broadcast = model.Broadcast,
+                Markrting = model.Markrting,
+                ByTODocument = model.ByTODocument,
+                AdmissionedFor = model.AdmissionedFor,
+
+
+            };
+
+        }
+
+        public async Task<IntakeFeeAgreementEntity> ToIntakeFeeAgreementEntity(IntakeFeeAgreementViewModel model, bool isNew)
+        {
+            return new IntakeFeeAgreementEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+        }
+
+        public IntakeFeeAgreementViewModel ToIntakeFeeAgreementViewModel(IntakeFeeAgreementEntity model)
+        {
+            return new IntakeFeeAgreementViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+                
+
+            };
+
+        }
+
+        public async Task<IntakeTuberculosisEntity> ToIntakeTuberculosisEntity(IntakeTuberculosisViewModel model, bool isNew)
+        {
+            return new IntakeTuberculosisEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+
+                DoYouCurrently = model.DoYouCurrently,
+                DoYouBring = model.DoYouBring,
+                DoYouCough = model.DoYouCough,
+                DoYouSweat = model.DoYouSweat,
+                DoYouHaveFever = model.DoYouHaveFever,
+                HaveYouLost = model.HaveYouLost,
+                DoYouHaveChest = model.DoYouHaveChest,
+                If2OrMore = model.If2OrMore,
+
+                HaveYouRecently = model.HaveYouRecently,
+                AreYouRecently = model.AreYouRecently,
+                IfYesWhich = model.IfYesWhich,
+                DoYouOr = model.DoYouOr,
+                HaveYouEverBeen = model.HaveYouEverBeen,
+                HaveYouEverWorked = model.HaveYouEverWorked,
+                HaveYouEverHadOrgan = model.HaveYouEverHadOrgan,
+                HaveYouEverConsidered = model.HaveYouEverConsidered,
+                HaveYouEverHadAbnormal = model.HaveYouEverHadAbnormal,
+                If3OrMore = model.If3OrMore,
+
+                HaveYouEverHadPositive = model.HaveYouEverHadPositive,
+                IfYesWhere = model.IfYesWhere,
+                When = model.When,
+                HaveYoyEverBeenTold = model.HaveYoyEverBeenTold,
+                AgencyExpectation = model.AgencyExpectation,
+                If1OrMore = model.If1OrMore,
+
+                AdmissionedFor = model.AdmissionedFor
+            };
+        }
+
+        public IntakeTuberculosisViewModel ToIntakeTuberculosisViewModel(IntakeTuberculosisEntity model)
+        {
+            return new IntakeTuberculosisViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+
+                DoYouCurrently = model.DoYouCurrently,
+                DoYouBring = model.DoYouBring,
+                DoYouCough = model.DoYouCough,
+                DoYouSweat = model.DoYouSweat,
+                DoYouHaveFever = model.DoYouHaveFever,
+                HaveYouLost = model.HaveYouLost,
+                DoYouHaveChest = model.DoYouHaveChest,
+                If2OrMore = model.If2OrMore,
+
+                HaveYouRecently = model.HaveYouRecently,
+                AreYouRecently = model.AreYouRecently,
+                IfYesWhich = model.IfYesWhich,
+                DoYouOr = model.DoYouOr,
+                HaveYouEverBeen = model.HaveYouEverBeen,
+                HaveYouEverWorked = model.HaveYouEverWorked,
+                HaveYouEverHadOrgan = model.HaveYouEverHadOrgan,
+                HaveYouEverConsidered = model.HaveYouEverConsidered,
+                HaveYouEverHadAbnormal = model.HaveYouEverHadAbnormal,
+                If3OrMore = model.If3OrMore,
+
+                HaveYouEverHadPositive = model.HaveYouEverHadPositive,
+                IfYesWhere = model.IfYesWhere,
+                When = model.When,
+                HaveYoyEverBeenTold = model.HaveYoyEverBeenTold,
+                AgencyExpectation = model.AgencyExpectation,
+                If1OrMore = model.If1OrMore,
+                
+                AdmissionedFor = model.AdmissionedFor
+            };
+
+        }
+
+        public async Task<IntakeMedicalHistoryEntity> ToIntakeMedicalHistoryEntity(IntakeMedicalHistoryViewModel model, bool isNew)
+        {
+            return new IntakeMedicalHistoryEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+
+                AddressPhysician = model.AddressPhysician,
+                AgeFirstTalked = model.AgeFirstTalked,
+                AgeFirstWalked = model.AgeFirstWalked,
+                AgeToiletTrained = model.AgeToiletTrained,
+                AgeWeaned = model.AgeWeaned,
+                Allergies = model.Allergies,
+                Allergies_Describe = model.Allergies_Describe,
+                AndOrSoiling = model.AndOrSoiling,
+                Anemia = model.Anemia,
+                AreYouCurrently = model.AreYouCurrently,
+                AreYouPhysician = model.AreYouPhysician,
+                Arthritis = model.Arthritis,
+                AssumingCertainPositions = model.AssumingCertainPositions,
+                BackPain = model.BackPain,
+                BeingConfused = model.BeingConfused,
+                BeingDisorientated = model.BeingDisorientated,
+                BirthWeight = model.BirthWeight,
+                BlackStools = model.BlackStools,
+                BloodInUrine = model.BloodInUrine,
+                BloodyStools = model.BloodyStools,
+                BottleFedUntilAge = model.BottleFedUntilAge,
+                BreastFed = model.BreastFed,
+                BurningUrine = model.BurningUrine,
+                Calculating = model.Calculating,
+                Cancer = model.Cancer,
+                ChestPain = model.ChestPain,
+                ChronicCough = model.ChronicCough,
+                ChronicIndigestion = model.ChronicIndigestion,
+                City = model.City,
+                Complications = model.Complications,
+                Complications_Explain = model.Complications_Explain,
+                Comprehending = model.Comprehending,
+                Concentrating = model.Concentrating,
+                Constipation = model.Constipation,
+                ConvulsionsOrFits = model.ConvulsionsOrFits,
+                CoughingOfBlood = model.CoughingOfBlood,
+                DescriptionOfChild = model.DescriptionOfChild,
+                Diabetes = model.Diabetes,
+                Diphtheria = model.Diphtheria,
+                DoYouSmoke = model.DoYouSmoke,
+                DoYouSmoke_PackPerDay = model.DoYouSmoke_PackPerDay,
+                DoYouSmoke_Year = model.DoYouSmoke_Year,
+                EarInfections = model.EarInfections,
+                Epilepsy = model.Epilepsy,
+                EyeTrouble = model.EyeTrouble,
+                Fainting = model.Fainting,
+                FamilyAsthma = model.FamilyAsthma,
+                FamilyAsthma_ = model.FamilyAsthma_,
+                FamilyCancer = model.FamilyCancer,
+                FamilyCancer_ = model.FamilyCancer_,
+                FamilyDiabetes = model.FamilyDiabetes,
+                FamilyDiabetes_ = model.FamilyDiabetes_,
+                FamilyEpilepsy = model.FamilyEpilepsy,
+                FamilyEpilepsy_ = model.FamilyEpilepsy_,
+                FamilyGlaucoma = model.FamilyGlaucoma,
+                FamilyGlaucoma_ = model.FamilyGlaucoma_,
+                FamilyHayFever = model.FamilyHayFever,
+                FamilyHayFever_ = model.FamilyHayFever_,
+                FamilyHeartDisease = model.FamilyHeartDisease,
+                FamilyHeartDisease_ = model.FamilyHeartDisease_,
+                FamilyHighBloodPressure = model.FamilyHighBloodPressure,
+                FamilyHighBloodPressure_ = model.FamilyHighBloodPressure_,
+                FamilyKidneyDisease = model.FamilyKidneyDisease,
+                FamilyKidneyDisease_ = model.FamilyKidneyDisease_,
+                FamilyNervousDisorders = model.FamilyNervousDisorders,
+                FamilyNervousDisorders_ = model.FamilyNervousDisorders_,
+                FamilyOther = model.FamilyOther,
+                FamilyOther_ = model.FamilyOther_,
+                FamilySyphilis = model.FamilySyphilis,
+                FamilySyphilis_ = model.FamilySyphilis_,
+                FamilyTuberculosis = model.FamilyTuberculosis,
+                FamilyTuberculosis_ = model.FamilyTuberculosis_,
+                FirstYearMedical = model.FirstYearMedical,
+                Fractures = model.Fractures,
+                FrequentColds = model.FrequentColds,
+                FrequentHeadaches = model.FrequentHeadaches,
+                FrequentNoseBleeds = model.FrequentNoseBleeds,
+                FrequentSoreThroat = model.FrequentSoreThroat,
+                FrequentVomiting = model.FrequentVomiting,
+                HaveYouEverBeenPregnant = model.HaveYouEverBeenPregnant,
+                HaveYouEverHadComplications = model.Complications,
+                HaveYouEverHadExcessive = model.HaveYouEverHadExcessive,
+                HaveYouEverHadPainful = model.HaveYouEverHadPainful,
+                HaveYouEverHadSpotting = model.HaveYouEverHadSpotting,
+                HayFever = model.HayFever,
+                HeadInjury = model.HeadInjury,
+                Hearing = model.Hearing,
+                HearingTrouble = model.HearingTrouble,
+                HeartPalpitation = model.HeartPalpitation,
+                Hemorrhoids = model.Hemorrhoids,
+                Hepatitis = model.Hepatitis,
+                Hernia = model.Hernia,
+                HighBloodPressure = model.HighBloodPressure,
+                Hoarseness = model.Hoarseness,
+                Immunizations = model.Immunizations,
+                InfectiousDisease = model.InfectiousDisease,
+                Jaundice = model.Jaundice,
+                KidneyStones = model.KidneyStones,
+                KidneyTrouble = model.KidneyTrouble,
+                Length = model.Length,
+                ListAllCurrentMedications = model.ListAllCurrentMedications,
+                LossOfMemory = model.LossOfMemory,
+                Mumps = model.Mumps,
+                Nervousness = model.Nervousness,
+                NightSweats = model.NightSweats,
+                Normal = model.Normal,
+                PainfulJoints = model.PainfulJoints,
+                PainfulMuscles = model.PainfulMuscles,
+                PainfulUrination = model.PainfulUrination,
+                PerformingCertainMotions = model.PerformingCertainMotions,
+                Planned = model.Planned,
+                Poliomyelitis = model.Poliomyelitis,
+                PrimaryCarePhysician = model.PrimaryCarePhysician,
+                ProblemWithBedWetting = model.ProblemWithBedWetting,
+                Reading = model.Reading,
+                RheumaticFever = model.RheumaticFever,
+                Rheumatism = model.Rheumatism,
+                ScarletFever = model.ScarletFever,
+                Seeing = model.Seeing,
+                SeriousInjury = model.SeriousInjury,
+                ShortnessOfBreath = model.ShortnessOfBreath,
+                SkinTrouble = model.SkinTrouble,
+                Speaking = model.Speaking,
+                State = model.State,
+                StomachPain = model.StomachPain,
+                Surgery = model.Surgery,
+                SwellingOfFeet = model.SwellingOfFeet,
+                SwollenAnkles = model.SwollenAnkles,
+                Tuberculosis = model.Tuberculosis,
+                Unplanned = model.Unplanned,
+                VaricoseVeins = model.VaricoseVeins,
+                VenerealDisease = model.VenerealDisease,
+                VomitingOfBlood = model.VomitingOfBlood,
+                Walking = model.Walking,
+                WeightLoss = model.WeightLoss,
+                WhoopingCough = model.WhoopingCough,
+                WritingSentence = model.WritingSentence,
+                ZipCode = model.ZipCode,
+
+                AgeOfFirstMenstruation = model.AgeOfFirstMenstruation,
+                DateOfLastBreastExam = model.DateOfLastBreastExam,
+                DateOfLastPelvic = model.DateOfLastPelvic,
+                DateOfLastPeriod = model.DateOfLastPeriod,
+                UsualDurationOfPeriods = model.UsualDurationOfPeriods,
+                UsualIntervalBetweenPeriods = model.UsualIntervalBetweenPeriods,
+
+                AdmissionedFor = model.AdmissionedFor,
+                InformationProvided = model.InformationProvided
+            };
+        }
+
+        public IntakeMedicalHistoryViewModel ToIntakeMedicalHistoryViewModel(IntakeMedicalHistoryEntity model)
+        {
+            return new IntakeMedicalHistoryViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+
+                AddressPhysician = model.AddressPhysician,
+                AgeFirstTalked = model.AgeFirstTalked,
+                AgeFirstWalked = model.AgeFirstWalked,
+                AgeToiletTrained = model.AgeToiletTrained,
+                AgeWeaned = model.AgeWeaned,
+                Allergies = model.Allergies,
+                Allergies_Describe = model.Allergies_Describe,
+                AndOrSoiling = model.AndOrSoiling,
+                Anemia = model.Anemia,
+                AreYouCurrently = model.AreYouCurrently,
+                AreYouPhysician = model.AreYouPhysician,
+                Arthritis = model.Arthritis,
+                AssumingCertainPositions = model.AssumingCertainPositions,
+                BackPain = model.BackPain,
+                BeingConfused = model.BeingConfused,
+                BeingDisorientated = model.BeingDisorientated,
+                BirthWeight = model.BirthWeight,
+                BlackStools = model.BlackStools,
+                BloodInUrine = model.BloodInUrine,
+                BloodyStools = model.BloodyStools,
+                BottleFedUntilAge = model.BottleFedUntilAge,
+                BreastFed = model.BreastFed,
+                BurningUrine = model.BurningUrine,
+                Calculating = model.Calculating,
+                Cancer = model.Cancer,
+                ChestPain = model.ChestPain,
+                ChronicCough = model.ChronicCough,
+                ChronicIndigestion = model.ChronicIndigestion,
+                City = model.City,
+                Complications = model.Complications,
+                Complications_Explain = model.Complications_Explain,
+                Comprehending = model.Comprehending,
+                Concentrating = model.Concentrating,
+                Constipation = model.Constipation,
+                ConvulsionsOrFits = model.ConvulsionsOrFits,
+                CoughingOfBlood = model.CoughingOfBlood,
+                DescriptionOfChild = model.DescriptionOfChild,
+                Diabetes = model.Diabetes,
+                Diphtheria = model.Diphtheria,
+                DoYouSmoke = model.DoYouSmoke,
+                DoYouSmoke_PackPerDay = model.DoYouSmoke_PackPerDay,
+                DoYouSmoke_Year = model.DoYouSmoke_Year,
+                EarInfections = model.EarInfections,
+                Epilepsy = model.Epilepsy,
+                EyeTrouble = model.EyeTrouble,
+                Fainting = model.Fainting,
+                FamilyAsthma = model.FamilyAsthma,
+                FamilyAsthma_ = model.FamilyAsthma_,
+                FamilyCancer = model.FamilyCancer,
+                FamilyCancer_ = model.FamilyCancer_,
+                FamilyDiabetes = model.FamilyDiabetes,
+                FamilyDiabetes_ = model.FamilyDiabetes_,
+                FamilyEpilepsy = model.FamilyEpilepsy,
+                FamilyEpilepsy_ = model.FamilyEpilepsy_,
+                FamilyGlaucoma = model.FamilyGlaucoma,
+                FamilyGlaucoma_ = model.FamilyGlaucoma_,
+                FamilyHayFever = model.FamilyHayFever,
+                FamilyHayFever_ = model.FamilyHayFever_,
+                FamilyHeartDisease = model.FamilyHeartDisease,
+                FamilyHeartDisease_ = model.FamilyHeartDisease_,
+                FamilyHighBloodPressure = model.FamilyHighBloodPressure,
+                FamilyHighBloodPressure_ = model.FamilyHighBloodPressure_,
+                FamilyKidneyDisease = model.FamilyKidneyDisease,
+                FamilyKidneyDisease_ = model.FamilyKidneyDisease_,
+                FamilyNervousDisorders = model.FamilyNervousDisorders,
+                FamilyNervousDisorders_ = model.FamilyNervousDisorders_,
+                FamilyOther = model.FamilyOther,
+                FamilyOther_ = model.FamilyOther_,
+                FamilySyphilis = model.FamilySyphilis,
+                FamilySyphilis_ = model.FamilySyphilis_,
+                FamilyTuberculosis = model.FamilyTuberculosis,
+                FamilyTuberculosis_ = model.FamilyTuberculosis_,
+                FirstYearMedical = model.FirstYearMedical,
+                Fractures = model.Fractures,
+                FrequentColds = model.FrequentColds,
+                FrequentHeadaches = model.FrequentHeadaches,
+                FrequentNoseBleeds = model.FrequentNoseBleeds,
+                FrequentSoreThroat = model.FrequentSoreThroat,
+                FrequentVomiting = model.FrequentVomiting,
+                HaveYouEverBeenPregnant = model.HaveYouEverBeenPregnant,
+                HaveYouEverHadComplications = model.Complications,
+                HaveYouEverHadExcessive = model.HaveYouEverHadExcessive,
+                HaveYouEverHadPainful = model.HaveYouEverHadPainful,
+                HaveYouEverHadSpotting = model.HaveYouEverHadSpotting,
+                HayFever = model.HayFever,
+                HeadInjury = model.HeadInjury,
+                Hearing = model.Hearing,
+                HearingTrouble = model.HearingTrouble,
+                HeartPalpitation = model.HeartPalpitation,
+                Hemorrhoids = model.Hemorrhoids,
+                Hepatitis = model.Hepatitis,
+                Hernia = model.Hernia,
+                HighBloodPressure = model.HighBloodPressure,
+                Hoarseness = model.Hoarseness,
+                Immunizations = model.Immunizations,
+                InfectiousDisease = model.InfectiousDisease,
+                Jaundice = model.Jaundice,
+                KidneyStones = model.KidneyStones,
+                KidneyTrouble = model.KidneyTrouble,
+                Length = model.Length,
+                ListAllCurrentMedications = model.ListAllCurrentMedications,
+                LossOfMemory = model.LossOfMemory,
+                Mumps = model.Mumps,
+                Nervousness = model.Nervousness,
+                NightSweats = model.NightSweats,
+                Normal = model.Normal,
+                PainfulJoints = model.PainfulJoints,
+                PainfulMuscles = model.PainfulMuscles,
+                PainfulUrination = model.PainfulUrination,
+                PerformingCertainMotions = model.PerformingCertainMotions,
+                Planned = model.Planned,
+                Poliomyelitis = model.Poliomyelitis,
+                PrimaryCarePhysician = model.PrimaryCarePhysician,
+                ProblemWithBedWetting = model.ProblemWithBedWetting,
+                Reading = model.Reading,
+                RheumaticFever = model.RheumaticFever,
+                Rheumatism = model.Rheumatism,
+                ScarletFever = model.ScarletFever,
+                Seeing = model.Seeing,
+                SeriousInjury = model.SeriousInjury,
+                ShortnessOfBreath = model.ShortnessOfBreath,
+                SkinTrouble = model.SkinTrouble,
+                Speaking = model.Speaking,
+                State = model.State,
+                StomachPain = model.StomachPain,
+                Surgery = model.Surgery,
+                SwellingOfFeet = model.SwellingOfFeet,
+                SwollenAnkles = model.SwollenAnkles,
+                Tuberculosis = model.Tuberculosis,
+                Unplanned = model.Unplanned,
+                VaricoseVeins = model.VaricoseVeins,
+                VenerealDisease = model.VenerealDisease,
+                VomitingOfBlood = model.VomitingOfBlood,
+                Walking = model.Walking,
+                WeightLoss = model.WeightLoss,
+                WhoopingCough = model.WhoopingCough,
+                WritingSentence = model.WritingSentence,
+                ZipCode = model.ZipCode,
+
+                AgeOfFirstMenstruation = model.AgeOfFirstMenstruation,
+                DateOfLastBreastExam = model.DateOfLastBreastExam,
+                DateOfLastPelvic = model.DateOfLastPelvic,
+                DateOfLastPeriod = model.DateOfLastPeriod,
+                UsualDurationOfPeriods = model.UsualDurationOfPeriods,
+                UsualIntervalBetweenPeriods = model.UsualIntervalBetweenPeriods,
+
+                AdmissionedFor = model.AdmissionedFor,
+                InformationProvided = model.InformationProvided
+            };
+
+        }
+
+        public async Task<DischargeEntity> ToDischargeEntity(DischargeViewModel model, bool isNew)
+        {
+            return new DischargeEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient),
+                // Client_FK = isNew ? model.IdClient : model.Client_FK,
+                Client_FK = model.IdClient,
+                AdmissionedFor = model.AdmissionedFor,
+                AgencyDischargeClient = model.AgencyDischargeClient,
+                BriefHistory = model.BriefHistory,
+                ClientDeceased = model.ClientDeceased,
+                ClientDischargeAgainst = model.ClientDischargeAgainst,
+                ClientMoved = model.ClientMoved,
+                ClientReferred = model.ClientReferred,
+                ConditionalDischarge = model.ConditionalDischarge,
+                CourseTreatment = model.CourseTreatment,
+                DateDischarge = model.DateDischarge,
+                DateReport = model.DateReport,
+                FollowDischarge = model.FollowDischarge,
+                PhysicallyUnstable = model.PhysicallyUnstable,
+                Planned = model.Planned,
+                ReasonDischarge = model.ReasonDischarge,
+                ReferralAgency1 = model.ReferralAgency1,
+                ReferralAgency2 = model.ReferralAgency2,
+                ReferralContactPersonal1 = model.ReferralContactPersonal1,
+                ReferralContactPersonal2 = model.ReferralContactPersonal2,
+                ReferralFor1 = model.ReferralFor1,
+                ReferralFor2 = model.ReferralFor2,
+                ReferralHoursOperation1 = model.ReferralHoursOperation1,
+                ReferralHoursOperation2 = model.ReferralHoursOperation2,
+                ReferralPhone1 = model.ReferralPhone1,
+                ReferralPhone2 = model.ReferralPhone2,
+                TreatmentPlanObjCumpl = model.TreatmentPlanObjCumpl,
+                Others = model.Others,
+                Hospitalization = model.Hospitalization,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignaturePerson = model.DateSignaturePerson,
+            };
+        }
+
+        public DischargeViewModel ToDischargeViewModel(DischargeEntity model)
+        {
+            return new DischargeViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                AgencyDischargeClient = model.AgencyDischargeClient,
+                BriefHistory = model.BriefHistory,
+                ClientDeceased = model.ClientDeceased,
+                ClientDischargeAgainst = model.ClientDischargeAgainst,
+                ClientMoved = model.ClientMoved,
+                ClientReferred = model.ClientReferred,
+                ConditionalDischarge = model.ConditionalDischarge,
+                CourseTreatment = model.CourseTreatment,
+                DateDischarge = model.DateDischarge,
+                DateReport = model.DateReport,
+                FollowDischarge = model.FollowDischarge,
+                PhysicallyUnstable = model.PhysicallyUnstable,
+                Planned = model.Planned,
+                ReasonDischarge = model.ReasonDischarge,
+                ReferralAgency1 = model.ReferralAgency1,
+                ReferralAgency2 = model.ReferralAgency2,
+                ReferralContactPersonal1 = model.ReferralContactPersonal1,
+                ReferralContactPersonal2 = model.ReferralContactPersonal2,
+                ReferralFor1 = model.ReferralFor1,
+                ReferralFor2 = model.ReferralFor2,
+                ReferralHoursOperation1 = model.ReferralHoursOperation1,
+                ReferralHoursOperation2 = model.ReferralHoursOperation2,
+                ReferralPhone1 = model.ReferralPhone1,
+                ReferralPhone2 = model.ReferralPhone2,
+                TreatmentPlanObjCumpl = model.TreatmentPlanObjCumpl,
+                Others = model.Others,
+                Hospitalization = model.Hospitalization,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignaturePerson = model.DateSignaturePerson,
+            };
+
+        }
+
+        public async Task<MedicationEntity> ToMedicationEntity(MedicationViewModel model, bool isNew)
+        {
+            return new MedicationEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient),
+                Dosage = model.Dosage,
+                Name = model.Name,
+                Frequency = model.Frequency,
+                Prescriber = model.Prescriber,
+            };
+        }
+
+        public MedicationViewModel ToMedicationViewModel(MedicationEntity model)
+        {
+            return new MedicationViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Dosage = model.Dosage,
+                Name = model.Name,
+                Frequency = model.Frequency,
+                Prescriber = model.Prescriber,
+            };
+
+        }
+
+        public async Task<FarsFormEntity> ToFarsFormEntity(FarsFormViewModel model, bool isNew)
+        {
+            return new FarsFormEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient),
+                AbilityScale = model.AbilityScale,
+                ActivitiesScale = model.ActivitiesScale,
+                AdmissionedFor = model.AdmissionedFor,
+                AnxietyScale = model.AnxietyScale,
+                CognitiveScale  = model.CognitiveScale,
+                ContID1 = model.ContID1,
+                ContID2 = model.ContID2,
+                ContID3 = model.ContID3,
+                ContractorID = model.ContractorID,
+                Country = model.Country,
+                DangerToOtherScale = model.DangerToOtherScale,
+                DangerToSelfScale = model.DangerToSelfScale,
+                DcfEvaluation = model.DcfEvaluation,
+                DepressionScale = model.DepressionScale,
+                EvaluationDate = model.EvaluationDate,
+                FamilyEnvironmentScale = model.FamilyEnvironmentScale,
+                FamilyRelationShipsScale = model.FamilyRelationShipsScale,
+                HyperAffectScale = model.HyperAffectScale,
+                InterpersonalScale = model.InterpersonalScale,
+                MCOID = model.MCOID,
+                MedicaidProviderID = model.MedicaidProviderID,
+                MedicaidRecipientID = model.MedicaidRecipientID,
+                MedicalScale = model.MedicalScale,
+                M_GafScore = model.M_GafScore,
+                ProgramEvaluation = model.ProgramEvaluation,
+                ProviderId = model.ProviderId,
+                ProviderLocal = model.ProviderLocal,
+                RaterEducation = model.RaterEducation,
+                RaterFMHI = model.RaterFMHI,
+                SecurityScale = model.SecurityScale,
+                SignatureDate = model.SignatureDate,
+                SocialScale = model.SocialScale,
+                SubstanceAbusoHistory = model.SubstanceAbusoHistory,
+                SubstanceScale = model.SubstanceScale,
+                ThoughtProcessScale = model.ThoughtProcessScale,
+                TraumaticsScale = model.TraumaticsScale,
+                WorkScale = model.WorkScale,
+
+            };
+        }
+
+        public FarsFormViewModel ToFarsFormViewModel(FarsFormEntity model)
+        {
+            return new FarsFormViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                AbilityScale = model.AbilityScale,
+                ActivitiesScale = model.ActivitiesScale,
+                AdmissionedFor = model.AdmissionedFor,
+                AnxietyScale = model.AnxietyScale,
+                CognitiveScale = model.CognitiveScale,
+                ContID1 = model.ContID1,
+                ContID2 = model.ContID2,
+                ContID3 = model.ContID3,
+                ContractorID = model.ContractorID,
+                Country = model.Country,
+                DangerToOtherScale = model.DangerToOtherScale,
+                DangerToSelfScale = model.DangerToSelfScale,
+                DcfEvaluation = model.DcfEvaluation,
+                DepressionScale = model.DepressionScale,
+                EvaluationDate = model.EvaluationDate,
+                FamilyEnvironmentScale = model.FamilyEnvironmentScale,
+                FamilyRelationShipsScale = model.FamilyRelationShipsScale,
+                HyperAffectScale = model.HyperAffectScale,
+                InterpersonalScale = model.InterpersonalScale,
+                MCOID = model.MCOID,
+                MedicaidProviderID = model.MedicaidProviderID,
+                MedicaidRecipientID = model.MedicaidRecipientID,
+                MedicalScale = model.MedicalScale,
+                M_GafScore = model.M_GafScore,
+                ProgramEvaluation = model.ProgramEvaluation,
+                ProviderId = model.ProviderId,
+                ProviderLocal = model.ProviderLocal,
+                RaterEducation = model.RaterEducation,
+                RaterFMHI = model.RaterFMHI,
+                SecurityScale = model.SecurityScale,
+                SignatureDate = model.SignatureDate,
+                SocialScale = model.SocialScale,
+                SubstanceAbusoHistory = model.SubstanceAbusoHistory,
+                SubstanceScale = model.SubstanceScale,
+                ThoughtProcessScale = model.ThoughtProcessScale,
+                TraumaticsScale = model.TraumaticsScale,
+                WorkScale = model.WorkScale,
+                
+            };
+
         }
     }
 }
