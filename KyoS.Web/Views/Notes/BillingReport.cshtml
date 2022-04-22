@@ -112,7 +112,10 @@
                                                                     @Html.DisplayFor(modelItem => workdayClient.Session)
                                                                 </td>
                                                                 <td align="center">
-                                                                    @Html.DisplayFor(modelItem => workdayClient.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code)
+                                                                    @if (workdayClient.Client.Clients_Diagnostics.Count() > 0)
+                                                                    {
+                                                                        @Html.DisplayFor(modelItem => workdayClient.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code)
+                                                                    }
                                                                 </td>
                                                                 <td align="center">
                                                                     @if (workdayClient.BilledDate == null)
