@@ -882,6 +882,51 @@ namespace KyoS.Web.Helpers
             };
 
             return list;
-        }        
+        }
+
+        public IEnumerable<SelectListItem> GetComboIntake_ClientIs()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "[Select Client is...]", Value = "0"},
+                new SelectListItem { Text = IntakeClientIsStatus.Clean.ToString(), Value = "1"},
+                new SelectListItem { Text = "Poorly dressed", Value = "2"},
+                new SelectListItem { Text = IntakeClientIsStatus.Flamboyant.ToString(), Value = "3"},
+                new SelectListItem { Text = "Poor ADL's", Value = "4"},
+                new SelectListItem { Text = IntakeClientIsStatus.Disheveled.ToString(), Value = "5"},
+                new SelectListItem { Text = "Neatly dressed", Value = "6"}
+            };
+
+            return list;
+        }
+        public IEnumerable<SelectListItem> GetComboIntake_BehaviorIs()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "[Select Behavior is...]", Value = "0"},
+                new SelectListItem { Text = IntakeBehaviorIsStatus.Normal.ToString(), Value = "1"},
+                new SelectListItem { Text = IntakeBehaviorIsStatus.Hyperactive.ToString(), Value = "2"},
+                new SelectListItem { Text = IntakeBehaviorIsStatus.WithDrawn.ToString(), Value = "3"},
+                new SelectListItem { Text = "Resistant or Aggressive", Value = "4"}
+                
+            };
+
+            return list;
+        }
+        public IEnumerable<SelectListItem> GetComboIntake_SpeechIs()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "[Select Speech is...]", Value = "0"},
+                new SelectListItem { Text = IntakeSpeechIsStatus.Normal.ToString(), Value = "1"},
+                new SelectListItem { Text = IntakeSpeechIsStatus.Rapid.ToString(), Value = "2"},
+                new SelectListItem { Text = IntakeSpeechIsStatus.Slow.ToString(), Value = "3"},
+                new SelectListItem { Text = "Slurred or Incoherent", Value = "4"}
+
+            };
+
+            return list;
+        }
+        
     }
 }

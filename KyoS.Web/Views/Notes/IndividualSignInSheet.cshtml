@@ -72,7 +72,7 @@
                                                         @Html.DisplayFor(modelItem => client.MedicaidID)
                                                     </td>
                                                     <td align="right">
-                                                        <a asp-action="PrintIndividualSign" asp-route-id="@client.Id" asp-route-idWeek="@item.Id" class="btn btn-success" title="Print" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                        <a asp-action="PrintIndividualSign" asp-route-id="@client.Id" asp-route-idWeek="@item.Id" asp-route-service="@KyoS.Common.Enums.ServiceType.PSR" class="btn btn-success" title="Print" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                     </td>
                                                 </tr>
 

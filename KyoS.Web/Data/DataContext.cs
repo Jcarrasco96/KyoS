@@ -56,7 +56,22 @@ namespace KyoS.Web.Data
         public DbSet<IndividualNoteEntity> IndividualNotes { get; set; }
         public DbSet<GroupNoteEntity> GroupNotes { get; set; }
         public DbSet<GroupNote_Activity> GroupNotes_Activities { get; set; }
-        public DbSet<SettingEntity> Settings { get; set; }        
+        public DbSet<SettingEntity> Settings { get; set; }
+        public DbSet<IntakeScreeningEntity> IntakeScreenings { get; set; }
+        public DbSet<IntakeConsentForTreatmentEntity> IntakeConsentForTreatment { get; set; }
+        public DbSet<IntakeConsentForReleaseEntity> IntakeConsentForRelease { get; set; }
+        public DbSet<IntakeConsumerRightsEntity> IntakeConsumerRights { get; set; }
+        public DbSet<IntakeAcknowledgementHippaEntity> IntakeAcknowledgement { get; set; }
+        public DbSet<IntakeAccessToServicesEntity> IntakeAccessToServices { get; set; }
+        public DbSet<IntakeOrientationChecklistEntity> IntakeOrientationCheckList { get; set; }
+        public DbSet<IntakeTransportationEntity> IntakeTransportation { get; set; }
+        public DbSet<IntakeConsentPhotographEntity> IntakeConsentPhotograph { get; set; }
+        public DbSet<IntakeFeeAgreementEntity> IntakeFeeAgreement { get; set; }
+        public DbSet<IntakeTuberculosisEntity> IntakeTuberculosis { get; set; }
+        public DbSet<IntakeMedicalHistoryEntity> IntakeMedicalHistory { get; set; }
+        public DbSet<DischargeEntity> Discharge { get; set; }
+        public DbSet<MedicationEntity> Medication { get; set; }
+        public DbSet<FarsFormEntity> FarsForm { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -162,6 +177,94 @@ namespace KyoS.Web.Data
                         .HasOne(c => c.Setting)
                         .WithOne(s => s.Clinic)
                         .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ClientEntity>()
+                        .HasOne(c => c.IntakeScreening)
+                        .WithOne(s => s.Client)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<IntakeScreeningEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                        .HasOne(c => c.IntakeConsentForTreatment)
+                        .WithOne(s => s.Client)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<IntakeConsentForTreatmentEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                       .HasOne(c => c.IntakeConsentForRelease)
+                       .WithOne(s => s.Client)
+                       .OnDelete(DeleteBehavior.Cascade)
+                       .HasForeignKey<IntakeConsentForReleaseEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                       .HasOne(c => c.IntakeConsumerRights)
+                       .WithOne(s => s.Client)
+                       .OnDelete(DeleteBehavior.Cascade)
+                       .HasForeignKey<IntakeConsumerRightsEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                      .HasOne(c => c.IntakeAcknowledgementHipa)
+                      .WithOne(s => s.Client)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasForeignKey<IntakeAcknowledgementHippaEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                     .HasOne(c => c.IntakeAccessToServices)
+                     .WithOne(s => s.Client)
+                     .OnDelete(DeleteBehavior.Cascade)
+                     .HasForeignKey<IntakeAccessToServicesEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                     .HasOne(c => c.IntakeOrientationChecklist)
+                     .WithOne(s => s.Client)
+                     .OnDelete(DeleteBehavior.Cascade)
+                     .HasForeignKey<IntakeOrientationChecklistEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                     .HasOne(c => c.IntakeTransportation)
+                     .WithOne(s => s.Client)
+                     .OnDelete(DeleteBehavior.Cascade)
+                     .HasForeignKey<IntakeTransportationEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                    .HasOne(c => c.IntakeConsentPhotograph)
+                    .WithOne(s => s.Client)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasForeignKey<IntakeConsentPhotographEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                   .HasOne(c => c.IntakeFeeAgreement)
+                   .WithOne(s => s.Client)
+                   .OnDelete(DeleteBehavior.Cascade)
+                   .HasForeignKey<IntakeFeeAgreementEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                  .HasOne(c => c.IntakeTuberculosis)
+                  .WithOne(s => s.Client)
+                  .OnDelete(DeleteBehavior.Cascade)
+                  .HasForeignKey<IntakeTuberculosisEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                 .HasOne(c => c.IntakeMedicalHistory)
+                 .WithOne(s => s.Client)
+                 .OnDelete(DeleteBehavior.Cascade)
+                 .HasForeignKey<IntakeMedicalHistoryEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                .HasOne(c => c.Discharge)
+                .WithOne(s => s.Client)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasForeignKey<DischargeEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                                  .HasMany(c => c.MedicationList)
+                                  .WithOne(s => s.Client)
+                                  .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ClientEntity>()
+                                 .HasMany(c => c.FarsFormList)
+                                 .WithOne(s => s.Client)
+                                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -9760,7 +9760,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> PrintIndividualSign(int id, int idWeek)
+        public async Task<IActionResult> PrintIndividualSign(int id, int idWeek, ServiceType service)
         {
             List<Workday_Client> workdayClientList = await _context.Workdays_Clients
 
@@ -9771,7 +9771,7 @@ namespace KyoS.Web.Controllers
 
                                                             .Include(wc => wc.Workday)
 
-                                                            .Where(wc => (wc.Client.Id == id && wc.Workday.Week.Id == idWeek)).ToListAsync();
+                                                            .Where(wc => (wc.Client.Id == id && wc.Workday.Week.Id == idWeek && wc.Workday.Service == service)).ToListAsync();
             if (workdayClientList.Count() == 0)
             {
                 return RedirectToAction("Home/Error404");

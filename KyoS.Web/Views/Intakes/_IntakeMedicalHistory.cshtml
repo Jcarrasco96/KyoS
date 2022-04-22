@@ -1,0 +1,165 @@
+﻿@model KyoS.Web.Models.IntakeMedicalHistoryViewModel
+
+<br />
+<div class="container-fluid col-md-9">
+    <pre>
+    <strong>MEDICAL HISTORY</strong><br />
+            Recipient: <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>                                    Case No:<strong>@Html.DisplayFor(modelItem => Model.Client.Code)</strong>
+            Primary Care Physician: <input asp-for="PrimaryCarePhysician">
+            Address Physician:      <input asp-for="AddressPhysician">
+            City:                   <input asp-for="City">                           State: <input asp-for="State">                Zip:  <input asp-for="ZipCode">
+    </pre>
+</div>
+<div class="container-fluid col-md-9">
+    <pre>
+    <strong>SECTION I.</strong> Select YES or No next to any medical problem that you currently have or have had in the past. If you do not 
+        understand an item, please ask for assistance.
+    <strong>YES</strong>                                        <strong>YES</strong>                                          <strong>YES</strong>                                            
+    <input type="checkbox" asp-for="Diphtheria" class="form-check-input"> Diphtheria                               <input type="checkbox" asp-for="StomachPain" class="form-check-input"> Stomach Pain                              <input type="checkbox" asp-for="FrequentColds" class="form-check-input"> Frequent Colds
+    <input type="checkbox" asp-for="Mumps" class="form-check-input"> Mumps                                    <input type="checkbox" asp-for="BlackStools" class="form-check-input"> Black Stools                              <input type="checkbox" asp-for="HeartPalpitation" class="form-check-input"> Heart Palpitation
+    <input type="checkbox" asp-for="Poliomyelitis" class="form-check-input"> Poliomyelitis                            <input type="checkbox" asp-for="NightSweats" class="form-check-input"> Night Sweats                              <input type="checkbox" asp-for="ChestPain" class="form-check-input"> Chest Pain
+    <input type="checkbox" asp-for="RheumaticFever" class="form-check-input"> Rheumatic Fever                          <input type="checkbox" asp-for="FrequentVomiting" class="form-check-input"> Frequent Vomiting                         <input type="checkbox" asp-for="ShortnessOfBreath" class="form-check-input"> Shortness Of Breath
+    <input type="checkbox" asp-for="WhoopingCough" class="form-check-input"> WhoopingCough                            <input type="checkbox" asp-for="SkinTrouble" class="form-check-input"> Skin Trouble                              <input type="checkbox" asp-for="SwellingOfFeet" class="form-check-input"> Swelling Of Feet
+    <input type="checkbox" asp-for="Tuberculosis" class="form-check-input"> Tuberculosis                             <input type="checkbox" asp-for="PainfulMuscles" class="form-check-input"> Painful Muscles                           <input type="checkbox" asp-for="SwollenAnkles" class="form-check-input"> Swollen Ankles
+    <input type="checkbox" asp-for="ScarletFever" class="form-check-input"> Scarlet Fever                            <input type="checkbox" asp-for="PainfulJoints" class="form-check-input"> Painful Joints                            <input type="checkbox" asp-for="ChronicIndigestion" class="form-check-input"> Chronic Indigestion
+    <input type="checkbox" asp-for="Hepatitis" class="form-check-input"> Hepatitis                                <input type="checkbox" asp-for="BackPain" class="form-check-input"> Back Pain                                 <input type="checkbox" asp-for="VomitingOfBlood" class="form-check-input"> Vomiting Of Blood
+    <input type="checkbox" asp-for="HighBloodPressure" class="form-check-input"> High Blood Pressure                      <input type="checkbox" asp-for="SeriousInjury" class="form-check-input">Serious Injury                             <input type="checkbox" asp-for="Jaundice" class="form-check-input"> Jaundice (Yellowing of Skin)                        
+    <input type="checkbox" asp-for="KidneyTrouble" class="form-check-input"> Kidney Trouble                           <input type="checkbox" asp-for="Surgery" class="form-check-input"> Surgery                                   <input type="checkbox" asp-for="Constipation" class="form-check-input"> Constipation
+    <input type="checkbox" asp-for="KidneyStones" class="form-check-input"> KidneyStones                             <input type="checkbox" asp-for="Arthritis" class="form-check-input"> Arthritis                                 <input type="checkbox" asp-for="BloodyStools" class="form-check-input"> Bloody Stools
+    <input type="checkbox" asp-for="BloodInUrine" class="form-check-input"> Blood in Urine                           <input type="checkbox" asp-for="Hemorrhoids" class="form-check-input"> Hemorrhoids                               <input type="checkbox" asp-for="Cancer" class="form-check-input"> Cancer
+    <input type="checkbox" asp-for="BurningUrine" class="form-check-input"> Burning Urine                            <input type="checkbox" asp-for="WeightLoss" class="form-check-input"> WeightLoss                                <input type="checkbox" asp-for="Diabetes" class="form-check-input"> Diabetes
+    <input type="checkbox" asp-for="PainfulUrination" class="form-check-input"> Painful Urination                        <input type="checkbox" asp-for="FrequentHeadaches" class="form-check-input"> Frequent Headaches                        <input type="checkbox" asp-for="HayFever" class="form-check-input"> HayFever
+    <input type="checkbox" asp-for="EyeTrouble" class="form-check-input"> Eye Trouble                              <input type="checkbox" asp-for="Fainting" class="form-check-input"> Fainting                                  <input type="checkbox" asp-for="Hernia" class="form-check-input"> Hernia
+    <input type="checkbox" asp-for="HearingTrouble" class="form-check-input"> Hearing Trouble                          <input type="checkbox" asp-for="ConvulsionsOrFits" class="form-check-input"> Convulsions Or Fits                       <input type="checkbox" asp-for="HeadInjury" class="form-check-input"> Head Injury
+    <input type="checkbox" asp-for="Fractures" class="form-check-input"> Fractures                                <input type="checkbox" asp-for="LossOfMemory" class="form-check-input"> Loss Of Memory                            <input type="checkbox" asp-for="Rheumatism" class="form-check-input"> Rheumatism
+    <input type="checkbox" asp-for="EarInfections" class="form-check-input"> Ear Infections                           <input type="checkbox" asp-for="Nervousness" class="form-check-input"> Nervousness                               <input type="checkbox" asp-for="Epilepsy" class="form-check-input"> Epilepsy
+    <input type="checkbox" asp-for="FrequentNoseBleeds" class="form-check-input"> Frequent Nose Bleeds                     <input type="checkbox" asp-for="ChronicCough" class="form-check-input"> Chronic Cough                             <input type="checkbox" asp-for="VaricoseVeins" class="form-check-input"> VaricoseVeins
+    <input type="checkbox" asp-for="FrequentSoreThroat" class="form-check-input"> Frequent Sore Throat                     <input type="checkbox" asp-for="CoughingOfBlood" class="form-check-input"> Coughing Of Blood                         <input type="checkbox" asp-for="Anemia" class="form-check-input"> Anemia
+    <input type="checkbox" asp-for="Hoarseness" class="form-check-input"> Hoarseness                               <input type="checkbox" asp-for="VenerealDisease" class="form-check-input"> VenerealDisease                           <input type="checkbox" asp-for="InfectiousDisease" class="form-check-input"> Infectious Disease
+    <input type="checkbox" asp-for="Allergies" class="form-check-input"> Allergies  (including medications) If Yes, describe:                   
+    <input asp-for="PrimaryCarePhysician" class="form-control">
+        </pre>
+</div>
+<div class="container-fluid col-md-9">
+    <pre>
+    <strong>SECTION II.</strong> Has anyone in your family had or been treated for:
+
+    <strong>YES</strong>                                        <strong>Who? (Father, mother, sibling, grandparent, etc.)</strong>                                                                                    
+    <input type="checkbox" asp-for="FamilyDiabetes" class="form-check-input"> Diabetes                               <input asp-for="FamilyDiabetes_"> 
+    <input type="checkbox" asp-for="FamilyCancer" class="form-check-input"> Cancer                                 <input asp-for="FamilyCancer_" class="form-check-input"> 
+    <input type="checkbox" asp-for="FamilyTuberculosis" class="form-check-input"> Tuberculosis                           <input asp-for="FamilyTuberculosis_" class="form-check-input">                              
+    <input type="checkbox" asp-for="FamilyHeartDisease" class="form-check-input"> Heart Disease                          <input asp-for="FamilyHeartDisease_" class="form-check-input">                 
+    <input type="checkbox" asp-for="FamilyKidneyDisease" class="form-check-input"> Kidney Disease                         <input asp-for="FamilyKidneyDisease_" class="form-check-input">                      
+    <input type="checkbox" asp-for="FamilyHighBloodPressure" class="form-check-input"> HighBloodPressure                      <input asp-for="FamilyHighBloodPressure_" class="form-check-input">                    
+    <input type="checkbox" asp-for="FamilyHayFever" class="form-check-input"> Hay Fever                              <input asp-for="FamilyHayFever_" class="form-check-input">                       
+    <input type="checkbox" asp-for="FamilyAsthma" class="form-check-input"> Asthma                                 <input asp-for="FamilyAsthma_" class="form-check-input">                    
+    <input type="checkbox" asp-for="FamilyEpilepsy" class="form-check-input"> Epilepsy                               <input asp-for="FamilyEpilepsy_" class="form-check-input">            
+    <input type="checkbox" asp-for="FamilyGlaucoma" class="form-check-input"> Glaucoma                               <input asp-for="FamilyGlaucoma_" class="form-check-input">                          
+    <input type="checkbox" asp-for="FamilySyphilis" class="form-check-input"> Syphilis                               <input asp-for="FamilySyphilis_" class="form-check-input">                       
+    <input type="checkbox" asp-for="FamilyNervousDisorders" class="form-check-input"> Nervous Disorders                      <input asp-for="FamilyNervousDisorders_" class="form-check-input">                       
+    <input type="checkbox" asp-for="FamilyOther" class="form-check-input"> Other                                  <input asp-for="FamilyOther_" class="form-check-input">                     
+    </pre>
+</div>
+<div class="container-fluid col-md-9">
+    <pre>
+    <strong>SECTION III.</strong> FEMALES ONLY:
+
+    <strong>YES</strong>                                                                                                               
+    <input type="checkbox" asp-for="HaveYouEverBeenPregnant" class="form-check-input"> Have you ever been pregnant?                           
+    <input type="checkbox" asp-for="HaveYouEverHadComplications" class="form-check-input"> Have you ever had complications during a pregnancy?
+    <input type="checkbox" asp-for="HaveYouEverHadPainful" class="form-check-input"> Have you ever had painful menstruation?                     
+    <input type="checkbox" asp-for="HaveYouEverHadExcessive" class="form-check-input"> Have you ever had excessive menstrual bleeding?
+    <input type="checkbox" asp-for="HaveYouEverHadSpotting" class="form-check-input"> Have you ever had spotting or bleeding between periods?
+    <input type="checkbox" asp-for="AreYouCurrently" class="form-check-input"> Are you currently on a form of contraceptive? <br />  
+    Age of first menstruation               <input asp-for="AgeFirstTalked">                      Usual interval between periods     <input asp-for="AgeFirstTalked"> 
+    Usual duration of periods               <input asp-for="UsualDurationOfPeriods">                      Date of last period                <input asp-for="DateOfLastPeriod"> 
+    Date of last pelvic exam (PAP)          <input asp-for="DateOfLastPelvic">                            Date of last breast exam           <input asp-for="DateOfLastBreastExam"> 
+    </pre>
+</div>
+<div class="container-fluid col-md-9">
+    <pre>
+    <strong>SECTION IV.</strong> 
+
+    <strong>YES</strong>                                                                                                               
+    <input type="checkbox" asp-for="AreYouPhysician" class="form-check-input"> Are you on a physician ordered special diet? If YES, type:                           
+    <input type="checkbox" asp-for="DoYouSmoke" class="form-check-input"> Do you smoke? If Yes,     <input asp-for="DoYouSmoke_PackPerDay"> packs per day for  <input asp-for="DoYouSmoke_Year"> years
+    </pre>
+</div>
+<div class="container-fluid col-md-9">
+    <pre>
+    <strong>SECTION V.</strong> 
+    <label asp-for="ListAllCurrentMedications" class="control-label">List all current medications (include prescription and non-prescription): </label>
+    <input asp-for="ListAllCurrentMedications" class="form-control">            
+    </pre>
+</div>
+<div class="container-fluid col-md-9">
+    <pre>
+    <strong>SECTION VI.</strong> Have you ever had difficulty:
+
+    <strong>YES</strong>                                             <strong>YES</strong>                                          <strong>YES</strong>                                            
+    <input type="checkbox" asp-for="PerformingCertainMotions" class="form-check-input"> performing certain motions?                  <input type="checkbox" asp-for="Reading" class="form-check-input"> reading?                                  <input type="checkbox" asp-for="BeingDisorientated" class="form-check-input"> being disorientated?
+    <input type="checkbox" asp-for="AssumingCertainPositions" class="form-check-input"> assuming certain positions?                  <input type="checkbox" asp-for="Concentrating" class="form-check-input"> Black Stools                              <input type="checkbox" asp-for="Calculating" class="form-check-input"> calculating?
+    <input type="checkbox" asp-for="Hearing" class="form-check-input"> hearing?                                     <input type="checkbox" asp-for="Comprehending" class="form-check-input"> Night Sweats                              <input type="checkbox" asp-for="WritingSentence" class="form-check-input"> writing a sentence?
+    <input type="checkbox" asp-for="Seeing" class="form-check-input"> seeing?                                      <input type="checkbox" asp-for="BeingConfused" class="form-check-input"> Frequent Vomiting                         <input type="checkbox" asp-for="Walking" class="form-check-input"> walking?
+    <input type="checkbox" asp-for="Speaking" class="form-check-input"> speaking?                                    
+   
+    </pre>
+</div>
+<div class="container-fluid col-md-9">
+    <pre>
+    <strong>SECTION VII.</strong> Information provided by mothers concerning child/adolescent recipient.  <input asp-for="InformationProvided"> 
+
+    Pregnancy: <input type="checkbox" asp-for="Planned" class="form-check-input"> Planned  <input type="checkbox" asp-for="Unplanned" class="form-check-input"> Unplanned     Delivery:<input type="checkbox" asp-for="Normal" /> Normal <input type="checkbox" asp-for="Complications" /> Complications If complications, explain: <input asp-for="Complications_Explain"> 
+    Birth Weight: <input asp-for="BirthWeight">     Length: <input asp-for="Length">       Breast Fed: <input type="checkbox" asp-for="BreastFed" class="form-check-input"> Yes       Bottle fed until age: <input asp-for="BottleFedUntilAge">      Age Weaned:  <input asp-for="AgeWeaned">
+    First year medical complications:
+    <input asp-for="BirthWeight" class="form-control">
+    Age first walked:  <input asp-for="AgeFirstWalked">             Age first talked: <input asp-for="AgeFirstTalked">          Age toilet trained: <input asp-for="AgeToiletTrained">
+    Description of child as an infant:  <input asp-for="DescriptionOfChild" class="form-control">
+    Problem with bed wetting <input type="checkbox" asp-for="ProblemWithBedWetting" class="form-check-input"> Yes                   and/or soiling <input type="checkbox" asp-for="AndOrSoiling" class="form-check-input">Yes
+    Immunizations: 
+    <input asp-for="Immunizations" class="form-control">
+    </pre>
+</div>
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.Client.Name)</u></strong><br />
+        <i>Person Served Signature</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignaturePerson" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Name)</u></strong><br />
+        <i>Parent, (Legal Guardian or Authorized Representative Signature)</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignatureLegalGuardian" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.AdmissionedFor)</u></strong><br />
+        <i>Employee Signature</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignatureEmployee" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+        <label asp-for="Documents" class="forgot">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>
+        </label>
+    </div>
+</div>
+<br />
+
+

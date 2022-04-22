@@ -1,0 +1,143 @@
+﻿@model KyoS.Web.Models.IntakeConsumerRightsViewModel
+
+<br />
+<div class="container-fluid col-md-9">
+    <pre>
+            The purpose of this pamphlet is to remind and inform you of your RIGHTS as a consumer of services.
+            I. Right to Voluntary Services
+                If you are 18 years of age or older, you have the right to request voluntary (by your own choice) services.
+                If you are 17 years of age or younger, you usually must have permission of a parent or guardian to receive services.
+                You do not need parental consent; however, to receive treatment for alcohol or drug abuse, nor, if you are 12 or over, to
+                admit yourself for residential or day treatment.
+                
+                YOU HAVE A RIGHT TO:
+                1. Have a staff person assigned specifically to you to work with you in resolving your problems.
+                2. A personal assessment of your needs.
+                3. An individualized service plan developed with your Input and permission which will be reviewed on a regular basis.
+                4. Services to begin within a reasonable time.
+                5. Services even if you are unable to pay. Ability to pay is determined by certain standard criteria.
+                6. Another opinion regarding services provided. However, if you see someone outside of, it is at your own expense.<br />
+            II. Right to Refuse Services
+                YOU HAVE A RIGHT TO:
+                1. Refuse any form of service unless the service has been ordered by the court, or in emergency situations when
+                    necessary to prevent harm to yourself or others.
+                2. Be informed that without services, your situation may get worse.
+                3. Refuse to be filmed or taped without written permission.
+                4. Refuse to take part in experimental studies without your written permission.
+
+            III. Right to Confidentiality (Privacy)
+                All information about you is confidential to protect your privacy. This includes the fact that you have or have not received
+                services. (Exception: the law requires all treatment facilities to notify the Health Department when communicable diseases
+                are uncovered).
+                YOU HAVE A RIGHT TO:
+                1. <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  determine the amount of information to be released either to or
+                    from anyone outside by signing a permission form.
+                2. <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  determine the length of time that Information may be released
+                    and cancel your permission at any time. (However, Information may be released without your permission in a medical
+                    emergency to save lives, to prevent injury to yourself or others, or when court ordered).
+                3. See your record and/or obtain a copy of it after your written request has been approved by the Executive Director of
+                    <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  or designee.
+
+            IV. Right to Humane Mental and Physical Environment
+                YOU HAVE A RIGHT TO:
+                1. Center facilities which are comfortable and safe, promote dignity, ensure privacy, and contribute to a positive outcome.
+                    TO REPORT ABUSE, NEGLECT OR EXPLOITATION CONTACT: FLORIDA ABUSE HOTLINE; 1-800-96-ABUSE (1-800-
+                    962-2873)
+
+            V. Right to Information
+                YOU HAVE A RIGHT TO:
+                1. Be informed, verbally and/or in writing, of your rights.
+                2. Be informed, verbally and/or in writing, if any rights are being taken away and you have the right to a review of this
+                action by requesting a Grievance Procedure.
+                3. Be informed of any actions, procedures or decision which might affect you.
+
+            VI. Rights Pertaining to Medication
+                YOU HAVE A RIGHT TO: 
+                1. The administration of medication only with the written order of a physician.
+                2. A complete explanation of the purpose of any medication, the possible side effects it may have on you, and possible
+                    results of long-term use, in a language you can understand.
+                3. Full consideration of your opinion and reactions to medication.
+                4. A regular review of your medication for the purpose of adjustment, as a check for possible side effects, and for possible
+                    reduction or elimination of the medication.
+                5. Have accurate records kept, noting your medication history, which includes any adverse medication reactions or drug
+                    allergies.
+                6. Have medication prescribed for you only when necessary and not as a convenience for others.
+                7. Refuse medication, except when it is court ordered, or when it is necessary to prevent serious physical harm to yourself
+                    or others.
+
+            VII. Right to Grievance Procedure
+                Any consumer or legal representative of a consumer may file a grievance as a formal notice of dissatisfaction regarding
+                Center operations and/or staff actions.
+                Whenever you wish to lodge a formal complaint you must proceed in the following manner:
+
+                STEP 1: Bring your grievance to the attention of your therapist/therapist supervisor - this may be done verbally or in
+                        writing. An answer the agency’s management will be presented to you within 5 days. If your grievance involves 
+                        your therapist/psychiatrist and you feel that you do not want to confront him/her directly with this matter, you may 
+                        proceed to Step 2. 
+                STEP 2 If therapist cannot resolve the problem satisfactorily, you may seek out the clinical director and present your 
+                        complaint verbally or in writing. An answer from the supervisor will be presented to you within 5 working days. 
+                STEP 3: If you are not satisfied with the decision of the supervisor, you may send the grievance, in writing, to 
+                        <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  Program Administrator. 
+                        <strong>
+                        Phone number: @Html.DisplayFor(modelItem => Model.Client.Clinic.Phone)   Fax Number: @Html.DisplayFor(modelItem => Model.Client.Clinic.FaxNo)
+                        Address: @Html.DisplayFor(modelItem => Model.Client.Clinic.Address) @Html.DisplayFor(modelItem => Model.Client.Clinic.City) @Html.DisplayFor(modelItem => Model.Client.Clinic.State) @Html.DisplayFor(modelItem => Model.Client.Clinic.ZipCode) 
+                        </strong>
+            Your grievance will be reviewed by the Executive Director and he/she may seek a hearing with you and/or the parties Involved. 
+            If necessary, the Executive Director will make a decision and will respond to you within thirty (30) days, sending a copy of the 
+            response to the supervisor of your targeted case manager. The decision of the Executive Director will be final. 
+
+            It is the sincere desire of the staff of <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>  to address your grievances with an 
+            attitude of open mindedness and without prejudice. Every effort will be made to resolve your grievance at the lowest 
+            possible step in the procedure so as not to prolong any difficulty or problem. 
+
+            I have read and understood my rights as a Person Served of <strong>___@Html.DisplayFor(modelItem => Model.ServedOf)____</strong>
+        </pre>
+</div>
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.Client.Name)</u></strong><br />
+        <i>Person Served Signature</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignaturePerson" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Name)</u></strong><br />
+        <i>Parent, (Legal Guardian or Authorized Representative Signature)</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignatureLegalGuardian" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.AdmissionedFor)</u></strong><br />
+        <i>Employee Signature</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignatureEmployee" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents">
+        <label asp-for="Documents" class="forgot">
+            Documents were verbally translated to me in my native language.
+            FLORIDA SOCIAL HEALTH SOLUTIONS. (FSHS)
+        </label>
+    </div>
+</div>
+<br />
+
+
+
+

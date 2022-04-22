@@ -1,0 +1,251 @@
+﻿@model KyoS.Web.Models.IntakeConsentForReleaseViewModel
+
+<div class="container-fluid">
+    <div class="form-group col-md-3">
+        <label asp-for="Client.Name" class="control-label">Person Served Name:  </label>&nbsp;*
+        <input asp-for="Client.Name" class="form-control" readonly>
+        <span asp-validation-for="Client.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Client.Code" class="control-label">Case No:  </label>&nbsp;*
+        <input asp-for="Client.Code" class="form-control" readonly>
+        <span asp-validation-for="Client.Code" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Client.DateOfBirth" class="control-label">DOB:  </label>&nbsp;*
+        <input asp-for="Client.DateOfBirth" class="form-control" readonly>
+        <span asp-validation-for="Client.DateOfBirth" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Client.SSN" class="control-label">SSN:  </label>&nbsp;*
+        <input asp-for="Client.SSN" class="form-control" readonly>
+        <span asp-validation-for="Client.SSN" class="text-danger"></span>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="form-group col-md-6">
+        <label asp-for="Client.FullAddress" class="control-label">Address:  </label>&nbsp;*
+        <input asp-for="Client.FullAddress" class="form-control" readonly>
+        <span asp-validation-for="Client.FullAddress" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.City" class="control-label">City:  </label>&nbsp;*
+        <input asp-for="Client.City" class="form-control" readonly>
+        <span asp-validation-for="Client.City" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.State" class="control-label">State:  </label>&nbsp;*
+        <input asp-for="Client.State" class="form-control" readonly>
+        <span asp-validation-for="Client.State" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.ZipCode" class="control-label">Zip Code:  </label>&nbsp;*
+        <input asp-for="Client.ZipCode" class="form-control" readonly>
+        <span asp-validation-for="Client.ZipCode" class="text-danger"></span>
+    </div>
+</div>
+<div class="container-fluid">
+    <h4>This will authorize: </h4>
+</div>
+<div class="container-fluid">
+    <div class="form-group col-md-6">
+        <label asp-for="Client.Clinic.Name" class="control-label">Clinics Name:  </label>&nbsp;*
+        <input asp-for="Client.Clinic.Name" class="form-control" readonly>
+        <span asp-validation-for="Client.Clinic.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Client.Clinic.Phone" class="control-label">Phone No: </label>&nbsp;*
+        <input asp-for="Client.Clinic.Phone" class="form-control" readonly>
+        <span asp-validation-for="Client.Clinic.Phone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Client.Clinic.FaxNo" class="control-label">Fax No:  </label>&nbsp;*
+        <input asp-for="Client.Clinic.FaxNo" class="form-control" readonly>
+        <span asp-validation-for="Client.Clinic.FaxNo" class="text-danger"></span>
+    </div>
+
+</div>
+<div class="container-fluid">
+    <div class="form-group col-md-6">
+        <label asp-for="Client.Clinic.Address" class="control-label">Address:  </label>&nbsp;*
+        <input asp-for="Client.Clinic.Address" class="form-control" readonly>
+        <span asp-validation-for="Client.Clinic.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.Clinic.City" class="control-label">City:  </label>&nbsp;*
+        <input asp-for="Client.Clinic.City" class="form-control" readonly>
+        <span asp-validation-for="Client.Clinic.City" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.Clinic.State" class="control-label">State:  </label>&nbsp;*
+        <input asp-for="Client.Clinic.State" class="form-control" readonly>
+        <span asp-validation-for="Client.Clinic.State" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.Clinic.ZipCode" class="control-label">Zip Code:  </label>&nbsp;*
+        <input asp-for="Client.Clinic.ZipCode" class="form-control" readonly>
+        <span asp-validation-for="Client.Clinic.ZipCode" class="text-danger"></span>
+    </div>
+</div>
+<div class="form-group col-md-12">
+    <div>
+        <input type="checkbox" asp-for="ToRelease" class="form-check-input" id="ToRelease">
+        <label asp-for="ToRelease" class="forgot">
+            to release/request general medical, psychiatric/psychological, alcohol and drug abuse information and/or records
+            in accordance with Florida Statues 394, 459, 396, 11, 297, 053, 90.50 and 458.21 to/ from:
+        </label>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="form-group col-md-2">
+        <label class="control-label">In the form of:  </label>&nbsp;
+    </div>
+    <div class="form-group col-md-2">
+        <input type="checkbox" asp-for="InForm_VerbalInformation" class="form-check-input" id="InForm_VerbalInformation">
+        <label asp-for="InForm_VerbalInformation" class="forgot">Verbal Information</label>
+    </div>
+    <div class="form-group col-md-2">
+        <input type="checkbox" asp-for="InForm_Facsimile" class="form-check-input" id="InForm_Facsimile">
+        <label asp-for="InForm_Facsimile" class="forgot">Facsimile</label>
+    </div>
+    <div class="form-group col-md-2">
+        <input type="checkbox" asp-for="InForm_WrittenRecords" class="form-check-input" id="InForm_WrittenRecords">
+        <label asp-for="InForm_WrittenRecords" class="forgot">Written Records</label>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="form-group col-md-2">
+        <label class="control-label">For the purpose of:</label>&nbsp;
+    </div>
+    <div class="form-group col-md-2">
+        <input type="checkbox" asp-for="ForPurpose_Treatment" class="form-check-input" id="ForPurpose_Treatment">
+        <label asp-for="ForPurpose_Treatment" class="forgot">Treatment/Treatment Planning</label>
+    </div>
+    <div class="form-group col-md-2">
+        <input type="checkbox" asp-for="ForPurpose_CaseManagement" class="form-check-input" id="ForPurpose_CaseManagement">
+        <label asp-for="ForPurpose_CaseManagement" class="forgot">Case Management</label>
+    </div>
+    <div class="form-group col-md-2">
+        <input type="checkbox" asp-for="ForPurpose_Other" class="form-check-input" id="ForPurpose_Other">
+        <label asp-for="ForPurpose_Other" class="forgot">Other:</label>
+    </div>
+    <div class="form-group col-md-4">
+        <input asp-for="ForPurpose_OtherExplain" class="form-control">
+        <span asp-validation-for="ForPurpose_OtherExplain" class="text-danger"></span>
+    </div>
+</div>
+<br />
+<div class="container-fluid">
+    <div class="form-group col-md-3">
+        <input type="checkbox" asp-for="Discaherge" class="form-check-input" id="Discaherge">
+        <label asp-for="Discaherge" class="forgot">Discharge/Termination summary</label>
+    </div>
+    <div class="form-group col-md-3">
+        <input type="checkbox" asp-for="SchoolRecord" class="form-check-input" id="SchoolRecord">
+        <label asp-for="SchoolRecord" class="forgot">School records</label>
+    </div>
+    <div class="form-group col-md-3">
+        <input type="checkbox" asp-for="ProgressReports" class="form-check-input" id="ProgressReports">
+        <label asp-for="ProgressReports" class="forgot">Progress reports</label>
+    </div>
+    <div class="form-group col-md-3">
+        <input type="checkbox" asp-for="IncidentReport" class="form-check-input" id="IncidentReport">
+        <label asp-for="IncidentReport" class="forgot">Incident Reports</label>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="form-group col-md-3">
+        <input type="checkbox" asp-for="PsychologycalEvaluation" class="form-check-input" id="PsychologycalEvaluation">
+        <label asp-for="PsychologycalEvaluation" class="forgot">Psychiatric/Psychological Evaluations </label>
+    </div>
+    <div class="form-group col-md-3">
+        <input type="checkbox" asp-for="History" class="form-check-input" id="History">
+        <label asp-for="History" class="forgot">History, Physical</label>
+    </div>
+    <div class="form-group col-md-3">
+        <input type="checkbox" asp-for="LabWork" class="form-check-input" id="LabWork">
+        <label asp-for="LabWork" class="forgot">Lab Work</label>
+    </div>
+    <div class="form-group col-md-3">
+        <input type="checkbox" asp-for="HospitalRecord" class="form-check-input" id="HospitalRecord">
+        <label asp-for="HospitalRecord" class="forgot">Hospital Records</label>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="form-group col-md-2">
+        <input type="checkbox" asp-for="Other" class="form-check-input" id="Other">
+        <label asp-for="Other" class="forgot">Other (explain)</label>
+    </div>
+    <div class="form-group col-md-10">
+        <input asp-for="Other_Explain" class="form-control">
+        <span asp-validation-for="Other_Explain" class="text-danger"></span>
+    </div>
+
+</div>
+<br />
+<div class="container-fluid">
+    <div class="form-group col-md-8">
+        <pre>
+            I understand this consent is revocable upon written notice to <strong>__@Html.DisplayFor(modelItem => Model.Client.Name)__ </strong> except to the extent
+            that action by <strong>__@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)__</strong>. has been taken in reliance on this authorization and that this authorization shall
+            remain in force for a twelve-month period in order to effect the purpose for which it is given, unless resolved by person served or legal
+            representative, as above.
+        </pre>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="form-group col-md-8">
+        <pre>
+            Alcohol and drug abuse information if present may be disclosed from records whose confidentiality is protected by Federal regulations (42
+            CFR, Part II) prohibit making any further disclosure of records without the specific written authorization of the person served or legal
+            representative, or as otherwise permitted by such regulations. This information may not be used to criminally prosecute the person served.
+        </pre>
+    </div>
+</div>
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.Client.Name)</u></strong><br />
+        <i>Person Served Signature</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignaturePerson" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Name)</u></strong><br />
+        <i>Parent, (Legal Guardian or Authorized Representative Signature)</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignatureLegalGuardian" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+<div class="form-group col-md-12">
+    <div class="form-group col-md-3">
+        <strong><u>@Html.DisplayFor(modelItem => Model.AdmissionedFor)</u></strong><br />
+        <i>Employee Signature</i>
+    </div>
+    <div class="form-group col-md-2">
+        <input asp-for="DateSignatureEmployee" class="form-control">
+        <i>Signature Date</i>
+    </div>
+</div>
+<br />
+
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+        <label asp-for="Documents" class="forgot">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>
+        </label>
+    </div>
+</div>
+<br />
+
+
+

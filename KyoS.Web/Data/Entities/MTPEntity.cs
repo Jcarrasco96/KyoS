@@ -10,12 +10,7 @@ namespace KyoS.Web.Data.Entities
     {
         public int Id { get; set; }
 
-        public ClientEntity Client { get; set; }
-
-        [Display(Name = "Date of admission")]
-        [DataType(DataType.Date)]
-        
-        public DateTime AdmisionDate { get; set; }
+        public ClientEntity Client { get; set; }        
 
         [Display(Name = "Treatment plan developed date")]
         [DataType(DataType.Date)]
