@@ -1,0 +1,221 @@
+﻿@model KyoS.Web.Data.Entities.ClientEntity
+
+@{
+    ViewData["Title"] = "Intake";
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Intakes", "Index", "Intakes")
+        </li>
+        <li class="active">Intake of @Model.Name</li>
+    </ul><!--.breadcrumb-->
+</div>
+<div>
+
+<div class="row">             
+        <div class="container-fluid">
+            <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default"> Intake - @Model.Name </span></h4>
+        </div>       
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeScreening == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Intake<br>Screening</h4>
+                    <p style="text-align:right"><a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Intake<br>Screening</h4>
+                    <p style="text-align:right"><a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeConsentForTreatment == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Consent for<br>Treatment</h4>
+                    <p style="text-align:right"><a asp-action="CreateConsentForTreatment" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Consent for<br>Treatment</h4>
+                    <p style="text-align:right"><a asp-action="CreateConsentForTreatment" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeConsentForRelease == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Consent for<br>Release</h4>
+                    <p style="text-align:right"><a asp-action="CreateConsentForRelease" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Consent for<br>Release</h4>
+                    <p style="text-align:right"><a asp-action="CreateConsentForRelease" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeConsumerRights == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Consumer<br>Rights</h4>
+                    <p style="text-align:right"><a asp-action="CreateConsumerRights" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Consumer<br>Rights</h4>
+                    <p style="text-align:right"><a asp-action="CreateConsumerRights" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeAcknowledgementHipa == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Acknowledgement<br>Hippa</h4>
+                    <p style="text-align:right"><a asp-action="CreateAcknowledgementHippa" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Acknowledgement<br>Hippa</h4>
+                    <p style="text-align:right"><a asp-action="CreateAcknowledgementHippa" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeAccessToServices == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Access<br>To Services</h4>
+                    <p style="text-align:right"><a asp-action="CreateAccessToServices" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Access<br>To Services</h4>
+                    <p style="text-align:right"><a asp-action="CreateAccessToServices" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-md-12">
+            &nbsp;
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeOrientationChecklist == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Orientation<br>Checklist</h4>
+                    <p style="text-align:right"><a asp-action="CreateOrientationCheckList" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Orientation<br>Checklist</h4>
+                    <p style="text-align:right"><a asp-action="CreateOrientationCheckList" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeTransportation == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Transportation & <br>Food</h4>
+                    <p style="text-align:right"><a asp-action="CreateTransportation" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Transportation & <br>Food</h4>
+                    <p style="text-align:right"><a asp-action="CreateTransportation" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeConsentPhotograph == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Consent for<br>Photograph</h4>
+                    <p style="text-align:right"><a asp-action="CreateConsentPhotograph" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Consent for<br>Photograph</h4>
+                    <p style="text-align:right"><a asp-action="CreateConsentPhotograph" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeFeeAgreement == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Fee<br>Agreement</h4>
+                    <p style="text-align:right"><a asp-action="CreateFeeAgreement" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Fee<br>Agreement</h4>
+                    <p style="text-align:right"><a asp-action="CreateFeeAgreement" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeTuberculosis == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Tuberculosis (TB)<br>Screening Tool</h4>
+                    <p style="text-align:right"><a asp-action="CreateTuberculosis" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Tuberculosis (TB)<br>Screening Tool</h4>
+                    <p style="text-align:right"><a asp-action="CreateTuberculosis" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeMedicalHistory == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Medical<br>History</h4>
+                    <p style="text-align:right"><a asp-action="CreateMedicalhistory" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Medical<br>History</h4>
+                    <p style="text-align:right"><a asp-action="CreateMedicalhistory" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
