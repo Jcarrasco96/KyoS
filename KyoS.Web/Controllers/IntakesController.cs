@@ -44,45 +44,34 @@ namespace KyoS.Web.Controllers
             }
 
             UserEntity user_logged = await _context.Users
-                                                           .Include(u => u.Clinic)
-                                                           .ThenInclude(c => c.Setting)
-                                                           .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
-            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null)
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
                 return RedirectToAction("NotAuthorized", "Account");
             }
             else
             {
                 if (User.IsInRole("Mannager"))
-                    return View(await _context.IntakeScreenings
-                                              .Include(f => f.Client)
-                                              .ThenInclude(f => f.IntakeConsentForTreatment)
-                                              .Include(f => f.Client.IntakeAccessToServices)
-                                              .Include(f => f.Client.IntakeAcknowledgementHipa)
-                                              .Include(f => f.Client.IntakeConsentForRelease)
-                                              .Include(f => f.Client.IntakeConsentPhotograph)
-                                              .Include(f => f.Client.IntakeConsumerRights)
-                                              .Include(f => f.Client.IntakeFeeAgreement)
-                                              .Include(f => f.Client.IntakeOrientationChecklist)
-                                              .Include(f => f.Client.IntakeScreening)
-                                              .Include(f => f.Client.IntakeTransportation)
-                                              .Include(f => f.Client.IntakeTuberculosis)
-                                              .Include(f => f.Client.IntakeMedicalHistory)
-                                              .OrderBy(f => f.Client.Name)
-                                              .ToListAsync());
+                    return View(await _context.Clients
 
-                if (User.IsInRole("Facilitator"))
-                {
-                    
+                                              .Include(n => n.IntakeScreening)
+                                              .Include(n => n.IntakeConsentForTreatment)
+                                              .Include(n => n.IntakeConsentForRelease)
+                                              .Include(n => n.IntakeConsumerRights)
+                                              .Include(n => n.IntakeAcknowledgementHipa)
+                                              .Include(n => n.IntakeAccessToServices)
+                                              .Include(n => n.IntakeOrientationChecklist)
+                                              .Include(n => n.IntakeTransportation)
+                                              .Include(n => n.IntakeConsentPhotograph)
+                                              .Include(n => n.IntakeFeeAgreement)
+                                              .Include(n => n.IntakeTuberculosis)
+                                              .Include(n => n.IntakeMedicalHistory)
 
-
-                    return View(await _context.IntakeScreenings
-                                              .Include(f => f.Client)
-                                              //.Where(f => )
-                                              .OrderBy(f => f.Client.Name)
-                                              .ToListAsync());
-                }
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                              .ToListAsync());                
             }
             return RedirectToAction("NotAuthorized", "Account");
         }
@@ -92,15 +81,13 @@ namespace KyoS.Web.Controllers
         {
             
             UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             IntakeScreeningViewModel model;
 
             if (User.IsInRole("Mannager"))
             {
-                
-
                 if (user_logged.Clinic != null)
                 {
                     
@@ -163,6 +150,7 @@ namespace KyoS.Web.Controllers
                 SpeechIs_Status = _combosHelper.GetComboIntake_SpeechIs(),
                 EmergencyContact = true,
             };
+
             if (model.Client.LegalGuardian == null)
                 model.Client.LegalGuardian = new LegalGuardianEntity();
             if (model.Client.EmergencyContact == null)
@@ -191,9 +179,8 @@ namespace KyoS.Web.Controllers
                     _context.IntakeScreenings.Add(IntakeEntity);
                     try
                     {
-                        await _context.SaveChangesAsync();
-                       
-                        return RedirectToAction("Index", "Intakes");
+                        await _context.SaveChangesAsync();                       
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient});
                     }
                     catch (System.Exception ex)
                     {
@@ -244,6 +231,18 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Mannager")]
         public IActionResult Edit(int id = 0)
         {
+            IntakeScreeningEntity entity = _context.IntakeScreenings
+
+                                                   .Include(m => m.Client)
+                                                   .ThenInclude(m => m.LegalGuardian)
+                                                   .Include(n => n.Client.EmergencyContact)
+
+                                                   .FirstOrDefault(i => i.Client.Id == id);
+            if (entity == null)
+            {
+                return RedirectToAction("Create", new {id = id});
+            }
+
             IntakeScreeningViewModel model;
 
             if (User.IsInRole("Mannager"))
@@ -254,19 +253,7 @@ namespace KyoS.Web.Controllers
 
                 if (user_logged.Clinic != null)
                 {
-
-                    IntakeScreeningEntity Intake = _context.IntakeScreenings
-                                                                 .Include(m => m.Client)
-                                                                 .ThenInclude(m => m.LegalGuardian)
-                                                                 .Include(n => n.Client.EmergencyContact)
-                                                                 .FirstOrDefault(m => m.Id == id);
-                    if (Intake == null)
-                    {
-                        return RedirectToAction("NotAuthorized", "Account");
-                    }
-                    else
-                    {
-                        model = _converterHelper.ToIntakeViewModel(Intake);
+                        model = _converterHelper.ToIntakeViewModel(entity);
                         if (model.Client.LegalGuardian == null)
                             model.Client.LegalGuardian = new LegalGuardianEntity();
                         if (model.Client.EmergencyContact == null)
@@ -275,9 +262,7 @@ namespace KyoS.Web.Controllers
                             model.EmergencyContact = false;
                         }
 
-                        return View(model);
-                    }
-
+                        return View(model);   
                 }
             }
 
@@ -301,8 +286,7 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-
-                    return RedirectToAction("Index", "Intakes");
+                    return RedirectToAction("IntakeDashboard", new { id = intakeViewModel.IdClient });
                 }
                 catch (System.Exception ex)
                 {
@@ -312,35 +296,6 @@ namespace KyoS.Web.Controllers
             }
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", intakeViewModel) });
-        }
-
-        [Authorize(Roles = "Mannager")]
-        public async Task<IActionResult> IntakeCandidates(int idError = 0)
-        {
-            UserEntity user_logged = await _context.Users
-
-                                                   .Include(u => u.Clinic)
-                                                   .ThenInclude(c => c.Setting)
-
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-
-            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null /*|| !user_logged.Clinic.Setting.TCMClinic*/)
-            {
-                return RedirectToAction("NotAuthorized", "Account");
-            }
-
-            if (idError == 1) //Imposible to delete
-            {
-                ViewBag.Delete = "N";
-            }
-
-            List<ClientEntity> ClientList = await _context.Clients
-                                                          .Include(n => n.IntakeScreening)
-                                                          .Where(n => n.IntakeScreening == null && n.Clinic.Id == user_logged.Clinic.Id)
-                                                          .ToListAsync();
-
-            return View(ClientList);
-
         }
 
         [Authorize(Roles = "Mannager")]
@@ -450,8 +405,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -466,7 +420,7 @@ namespace KyoS.Web.Controllers
                     {
                         await _context.SaveChangesAsync();
 
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -571,8 +525,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -585,9 +538,8 @@ namespace KyoS.Web.Controllers
                     _context.IntakeConsentForRelease.Update(IntakeConsentEntity);
                     try
                     {
-                        await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        await _context.SaveChangesAsync(); 
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -675,8 +627,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -690,8 +641,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -849,8 +799,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -864,8 +813,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -953,8 +901,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -968,8 +915,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -1077,8 +1023,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -1092,8 +1037,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -1179,8 +1123,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -1194,8 +1137,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -1292,8 +1234,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -1307,8 +1248,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -1394,8 +1334,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -1409,8 +1348,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -1523,8 +1461,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -1538,8 +1475,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -1770,8 +1706,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -1785,8 +1720,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Intakes");
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -1800,5 +1734,36 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMedicalhistory", IntakeViewModel) });
         }
 
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> IntakeDashboard(int id = 0)
+        {
+            if (id == 0)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ClientEntity clientEntity = await _context.Clients
+
+                                                      .Include(c => c.IntakeConsentForTreatment)
+                                                      .Include(c => c.IntakeAccessToServices)
+                                                      .Include(c => c.IntakeAcknowledgementHipa)
+                                                      .Include(c => c.IntakeConsentForRelease)
+                                                      .Include(c => c.IntakeConsentPhotograph)
+                                                      .Include(c => c.IntakeConsumerRights)
+                                                      .Include(c => c.IntakeFeeAgreement)
+                                                      .Include(c => c.IntakeOrientationChecklist)
+                                                      .Include(c => c.IntakeScreening)
+                                                      .Include(c => c.IntakeTransportation)
+                                                      .Include(c => c.IntakeTuberculosis)
+                                                      .Include(c => c.IntakeMedicalHistory)
+
+                                                      .FirstOrDefaultAsync(c => c.Id == id);
+            if (clientEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+            
+            return View(clientEntity);                    
+        }
     }
 }
