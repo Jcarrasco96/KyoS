@@ -1,14 +1,13 @@
 ﻿@model KyoS.Web.Models.IntakeConsentForTreatmentViewModel
 @{
-    ViewData["Title"] = "Create Intake Consent For Treatment";
+    ViewData["Title"] = "Consent For Treatment";
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>CREATE CONSENT FOR TREATMENT AND RECEIVE MEDICATION</title>
+    <meta name="viewport" content="width=device-width" />    
 </head>
 <body>
 
@@ -18,27 +17,24 @@
                 <i class="icon-home"></i>
                 @Html.ActionLink("Intakes", "Index", "Intakes")
             </li>
-            <li class="active">Create Intake Consent for Treatment and Receive Medication</li>
+            <li class="active">Consent for Treatment and Receive Medication</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Create Intake Consent for Treatment and Receive Medication</h4>
+    <h4>Consent for Treatment and Receive Medication</h4>
     <hr />
-    <div class="row">
-
-        <div>
-            <form asp-action="CreateConsentForTreatment" asp-route-id="@Model.Id" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="IdClient" />
-                <input type="hidden" asp-for="Client_FK" />
-                <input type="hidden" asp-for="AdmissionedFor" />
-                <partial name="_IntakesConsentForTreatment" />
-                <div class="form-group col-md-12">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                    <a asp-action="IntakeDashboard" asp-route-id="@Model.Client.Id" class="btn btn-success">Back</a>
-                </div>
-            </form>
-        </div>
+    <div class="row">       
+        <form asp-action="CreateConsentForTreatment" asp-route-id="@Model.Id" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdClient" />
+            <input type="hidden" asp-for="Client_FK" />
+            <input type="hidden" asp-for="AdmissionedFor" />
+            <partial name="_IntakesConsentForTreatment" />
+            <div class="form-group col-md-12">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="IntakeDashboard" asp-route-id="@Model.Client.Id" class="btn btn-success">Back</a>
+            </div>
+        </form>        
     </div>
 </body>
 </html>
