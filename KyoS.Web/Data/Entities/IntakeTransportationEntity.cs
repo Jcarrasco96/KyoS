@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
-using KyoS.Common.Enums;
 
 
 namespace KyoS.Web.Data.Entities
@@ -28,10 +24,9 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Date of Employee Signature")]
         [DataType(DataType.Date)]
+        public DateTime DateSignatureEmployee { get; set; }
 
         public string AdmissionedFor { get; set; }
-
-        public DateTime DateSignatureEmployee { get; set; }
 
         public bool Documents { get; set; }
     }

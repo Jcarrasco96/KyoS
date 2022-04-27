@@ -1,14 +1,13 @@
 ﻿@model KyoS.Web.Models.IntakeTuberculosisViewModel
 @{
-    ViewData["Title"] = "Create TUBERCULOSIS (TB) SCREENING TOOL";
+    ViewData["Title"] = "Tuberculosis (TB) Screening Tool";
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>CREATE TUBERCULOSIS (TB) SCREENING TOOL</title>
+    <meta name="viewport" content="width=device-width" />    
 </head>
 <body>
 
@@ -18,27 +17,24 @@
                 <i class="icon-home"></i>
                 @Html.ActionLink("Intakes", "Index", "Intakes")
             </li>
-            <li class="active">Create Intake TUBERCULOSIS (TB) SCREENING TOOL</li>
+            <li class="active">Tuberculosis (TB) Screening Tool</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Create TUBERCULOSIS (TB) SCREENING TOOL</h4>
+    <h4>Tuberculosis (TB) Screening Tool</h4>
     <hr />
     <div class="row">
-
-        <div>
-            <form asp-action="CreateTuberculosis" asp-route-id="@Model.Id" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="IdClient" />
-                <input type="hidden" asp-for="Client_FK" />
-                <input type="hidden" asp-for="AdmissionedFor" />
-                <partial name="_IntakesTuberculosis" />
-                <div class="form-group col-md-12">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                    <a asp-action="IntakeDashboard" asp-route-id="@Model.Client.Id" class="btn btn-success">Back</a>
-                </div>
-            </form>
-        </div>
+        <form asp-action="CreateTuberculosis" asp-route-id="@Model.Id" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdClient" />
+            <input type="hidden" asp-for="Client_FK" />
+            <input type="hidden" asp-for="AdmissionedFor" />
+            <partial name="_IntakesTuberculosis" />
+            <div class="form-group col-md-12">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="IntakeDashboard" asp-route-id="@Model.Client.Id" class="btn btn-success">Back</a>
+            </div>
+        </form>        
     </div>
 </body>
 </html>

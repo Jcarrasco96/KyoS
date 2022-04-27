@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.IntakeOrientationCheckListViewModel
 @{
-    ViewData["Title"] = "Create ORIENTATION CHECKLIST";
+    ViewData["Title"] = "Orientation checklist";
 }
 
 <!DOCTYPE html>
@@ -8,7 +8,6 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>CREATE ORIENTATION CHECKLIST</title>
 </head>
 <body>
 
@@ -18,27 +17,24 @@
                 <i class="icon-home"></i>
                 @Html.ActionLink("Intakes", "Index", "Intakes")
             </li>
-            <li class="active">Create Intake ORIENTATION CHECKLIST</li>
+            <li class="active">Orientation checklist</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Create ORIENTATION CHECKLIST</h4>
+    <h4>Orientation checklist</h4>
     <hr />
-    <div class="row">
-
-        <div>
-            <form asp-action="CreateOrientationCheckList" asp-route-id="@Model.Id" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="IdClient" />
-                <input type="hidden" asp-for="Client_FK" />
-                <input type="hidden" asp-for="AdmissionedFor" />
-                <partial name="_IntakesOrientationCheckList" />
-                <div class="form-group col-md-12">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                    <a asp-action="IntakeDashboard" asp-route-id="@Model.Client.Id" class="btn btn-success">Back</a>
-                </div>
-            </form>
-        </div>
+    <div class="row">        
+        <form asp-action="CreateOrientationCheckList" asp-route-id="@Model.Id" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdClient" />
+            <input type="hidden" asp-for="Client_FK" />
+            <input type="hidden" asp-for="AdmissionedFor" />
+            <partial name="_IntakesOrientationCheckList" />
+            <div class="form-group col-md-12">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="IntakeDashboard" asp-route-id="@Model.Client.Id" class="btn btn-success">Back</a>
+            </div>
+        </form>       
     </div>
 </body>
 </html>
