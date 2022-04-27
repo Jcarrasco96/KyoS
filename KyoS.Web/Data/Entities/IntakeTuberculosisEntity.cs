@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using KyoS.Common.Enums;
 using System.ComponentModel.DataAnnotations;
-using KyoS.Web.Data.Contracts;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -29,10 +24,9 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Date of Employee Signature")]
         [DataType(DataType.Date)]
+        public DateTime DateSignatureEmployee { get; set; }
 
         public string AdmissionedFor { get; set; }
-
-        public DateTime DateSignatureEmployee { get; set; }
 
         public bool DoYouCurrently { get; set; }
         public bool DoYouBring { get; set; }
@@ -42,7 +36,6 @@ namespace KyoS.Web.Data.Entities
         public bool HaveYouLost { get; set; }
         public bool DoYouHaveChest { get; set; }
         public bool If2OrMore { get; set; }
-
         public bool HaveYouRecently { get; set; }
         public bool AreYouRecently { get; set; }
         public bool IfYesWhich { get; set; }
@@ -53,14 +46,12 @@ namespace KyoS.Web.Data.Entities
         public bool HaveYouEverConsidered { get; set; }
         public bool HaveYouEverHadAbnormal { get; set; }
         public bool If3OrMore { get; set; }
-
         public bool HaveYouEverHadPositive { get; set; }
         public string IfYesWhere { get; set; }
         public string When { get; set; }
         public bool HaveYoyEverBeenTold { get; set; }
         public bool AgencyExpectation { get; set; }
         public bool If1OrMore { get; set; }
-
         public bool Documents { get; set; }
     }
 }
