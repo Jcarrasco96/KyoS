@@ -927,6 +927,63 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
-        
+        public IEnumerable<SelectListItem> GetComboBio_Appetite()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "[Select Appetite...]", Value = "0"},
+                new SelectListItem { Text = Bio_Appetite.Diminished.ToString(), Value = "1"},
+                new SelectListItem { Text = Bio_Appetite.Increased.ToString(), Value = "2"},
+                new SelectListItem { Text = Bio_Appetite.WNL.ToString(), Value = "3"},
+                new SelectListItem { Text = Bio_Appetite.Anorexia.ToString(), Value = "4"}
+
+            };
+
+            return list;
+        }
+        public IEnumerable<SelectListItem> GetComboBio_Hydration()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "[Select Hydration...]", Value = "0"},
+                new SelectListItem { Text = Bio_Hydration.Diminished.ToString(), Value = "1"},
+                new SelectListItem { Text = Bio_Hydration.IncreaseFluids.ToString(), Value = "2"},
+                new SelectListItem { Text = Bio_Hydration.RestrictFluids.ToString(), Value = "3"},
+                new SelectListItem { Text = Bio_Hydration.WNL.ToString(), Value = "4"},
+                new SelectListItem { Text = Bio_Hydration.Inadequate.ToString(), Value = "5"}
+
+            };
+
+            return list;
+        }
+        public IEnumerable<SelectListItem> GetComboBio_RecentWeight()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "[Select Appetite...]", Value = "0"},
+                new SelectListItem { Text = Bio_RecentWeightChange.Intended.ToString(), Value = "1"},
+                new SelectListItem { Text = Bio_RecentWeightChange.Unintended.ToString(), Value = "2"},
+                new SelectListItem { Text = Bio_RecentWeightChange.Gained.ToString(), Value = "3"},
+                new SelectListItem { Text = Bio_RecentWeightChange.Lost.ToString(), Value = "4"},
+                new SelectListItem { Text = Bio_RecentWeightChange.N_A.ToString(), Value = "5"}
+
+
+            };
+
+            return list;
+        }
+        public IEnumerable<SelectListItem> GetComboBio_IfSexuallyActive()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "[Select Appetite...]", Value = "0"},
+                new SelectListItem { Text = Bio_IfSexuallyActive.YES.ToString(), Value = "1"},
+                new SelectListItem { Text = Bio_IfSexuallyActive.NO.ToString(), Value = "2"},
+                new SelectListItem { Text = Bio_IfSexuallyActive.N_A.ToString(), Value = "3"}
+
+            };
+
+            return list;
+        }
     }
 }

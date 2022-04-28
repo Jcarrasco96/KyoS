@@ -1,0 +1,241 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
+@{
+    ViewData["Title"] = "BEHAVIORAL HEALTH HISTORY";
+}
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">BEHAVIORAL HEALTH HISTORY</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @*<div class="alert alert-warning" role="alert">
+        <span class="sr-only"></span>*@
+        <strong>Note: </strong> All clients will be displayed, orange color means the client has not BEHAVIORAL HEALTH HISTORY documents
+        @*</div>*@
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">BEHAVIORAL HEALTH HISTORY</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1">
+                                
+                            </th>
+                            <th class="col-md-2">
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.Code)
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Date Of Admission
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                MH Therapy
+                            </th>
+                            <th class="col-md-2" align="right">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            @if ((item.List_BehavioralHistory.Count == 0))
+                            {
+                                <tr style="color:orange">
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-warning"></i>
+                                        }
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-warning"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-warning">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-danger">
+                                                Close
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Service)
+                                    </td>
+                                    <td align="right">
+                                        <a asp-action="CreateBehavioral" asp-route-id="@item.Id" class="btn btn-warning" title="Create BEHAVIORAL HEALTH HISTORY"><i class="glyphicon glyphicon-plus"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td align="center">
+                                        @if (item.List_BehavioralHistory.Count() != 0)
+                                        {
+                                            <a class="icon-plus-sign-alt"></a>
+                                        }
+                                        else
+                                        {
+
+                                        }
+                                        <div style="display:none">
+                                            <table class="table table-striped table-bordered">
+                                                <tr>
+                                                    <th class="col-md-3">Problem</th>
+                                                    <th class="col-md-2">Date</th>
+                                                    <th class="col-md-2"></th>
+                                                </tr>
+                                                @foreach (var product1 in item.List_BehavioralHistory)
+                                                {
+                                                    <tr>
+                                                        <td>@Html.DisplayFor(modelItem => product1.Problem)</td>
+                                                        <td>@Html.DisplayFor(modelItem => product1.Date)</td>
+                                                        <td>
+                                                           @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Mannager"))
+                                                            {
+                                                                <a asp-action="EditBehavioral" asp-route-id="@product1.Id" class="btn btn-warning" title="Add Behavioral Health History"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="btn btn-warning disabled" title="Add Behavioral Health History"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                   
+                                                }
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-success">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Service)
+                                    </td>
+                                    <td align="right">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Mannager"))
+                                        {
+                                            <a asp-action="CreateBehavioral" asp-route-id="@item.Id" class="btn btn-success" title="Create BEHAVIORAL HEALTH HISTORY"><i class="glyphicon glyphicon-plus"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-success disabled" title="Create BEHAVIORAL HEALTH HISTORY"><i class="glyphicon glyphicon-plus"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+                        $(document).ready(function () {
+                            $('#MyTable').DataTable({
+                                "order": [[0, "asc"]],
+                                "pageLength": 100
+                            });
+
+                            // Delete item
+                            var item_to_delete;
+
+                            $('.deleteItem').click((e) => {
+                                item_to_delete = e.currentTarget.dataset.id;
+                            });
+
+                            $("#btnYesDelete").click(function () {
+                                var url = "@Url.Action("Delete", "Bio")";
+                                window.location.href = url + '/' + item_to_delete;
+                            });
+                        });
+                        $(function () {
+
+                            //Assign Click event to Plus Image.
+                            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                                $(this).attr("class", "icon-minus-sign-alt");
+                            });
+                            //Assign Click event to Minus Image.
+                            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                                $(this).attr("class", "icon-plus-sign-alt");
+                                $(this).closest("tr").next().remove();
+                            });
+                        });
+    </script>
+}

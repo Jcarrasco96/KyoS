@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220425222334_AddBio")]
+    partial class AddBio
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,6 +144,9 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("BioH0031HN")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("BioH0031HO")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("CMH")
                         .HasColumnType("bit");
 
@@ -153,9 +158,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<string>("ClientAssessmentSituation")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("ClientDenied")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("ClientFamilyAbusoTrauma")
                         .HasColumnType("bit");
@@ -229,17 +231,11 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("EastFewer")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("FamilyAssessmentSituation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FamilyEmotional")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ForHowLong")
-                        .HasColumnType("int");
 
                     b.Property<string>("GeneralDescription")
                         .HasColumnType("nvarchar(max)");
@@ -301,11 +297,8 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("IConcurWhitDiagnistic")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IDAH0031HO")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("If6_Date")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("If6_Date")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("If6_ReferredTo")
                         .HasColumnType("nvarchar(max)");
@@ -325,8 +318,8 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("IfSeparated")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IfSexuallyActive")
-                        .HasColumnType("int");
+                    b.Property<bool>("IfSexuallyActive")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("Insight_Fair")
                         .HasColumnType("bit");
@@ -529,9 +522,6 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Speech_Stutters")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("SubstanceAbuse")
                         .HasColumnType("nvarchar(max)");
 
@@ -637,7 +627,7 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("ClientId")
+                    b.Property<int?>("BioId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
@@ -648,9 +638,9 @@ namespace KyoS.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("BioId");
 
-                    b.ToTable("Bio_BehavioralHistory");
+                    b.ToTable("Bio_BehavioralHistoryEntity");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClassificationEntity", b =>
@@ -4590,12 +4580,11 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.Bio_BehavioralHistoryEntity", b =>
                 {
-                    b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
+                    b.HasOne("KyoS.Web.Data.Entities.BioEntity", "Bio")
                         .WithMany("List_BehavioralHistory")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("BioId");
 
-                    b.Navigation("Client");
+                    b.Navigation("Bio");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClientEntity", b =>
@@ -5339,6 +5328,11 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Workdays_Activities_Facilitators");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.BioEntity", b =>
+                {
+                    b.Navigation("List_BehavioralHistory");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClassificationEntity", b =>
                 {
                     b.Navigation("NotesClassification");
@@ -5385,8 +5379,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("IntakeTransportation");
 
                     b.Navigation("IntakeTuberculosis");
-
-                    b.Navigation("List_BehavioralHistory");
 
                     b.Navigation("MedicationList");
 
