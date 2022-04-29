@@ -16,17 +16,13 @@
 
 <div class="row">
     <div class="col-md-12">
-        @if (ViewBag.Delete == "N")
-        {
-            <div class="alert alert-block alert-danger">
-                <button type="button" class="close" data-dismiss="alert">
-                    <i class="icon-remove"></i>
-                </button>
-                <strong class="red">
-                    Error. It is not posible delete the Intake Screening
-                </strong>
-            </div>
-        }
+        @*<div class="alert alert-warning" role="alert">
+            <span class="sr-only"></span>*@
+        <strong>Note: </strong> All clients will be displayed, orange color means the client has not Discharge documents
+        @*</div>*@
+    </div>
+    <div class="col-md-12">
+        &nbsp;
     </div>
     <div class="col-md-12">
         <div class="panel panel-default">
@@ -54,9 +50,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                       @foreach (var item in Model)
+                        @foreach (var item in Model)
                         {
-                           @if (item.Discharge == null)
+                            @if (item.Discharge == null)
                             {
                                 <tr style="color:orange">
                                     <td>
@@ -93,7 +89,7 @@
                                     </td>
                                     <td align="right">
                                         <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="New Discharge"><i class="glyphicon glyphicon-plus"></i></a>
-                                        @if ((item.Discharge != null) )
+                                        @if ((item.Discharge != null))
                                         {
                                             <a asp-action="PrintDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
