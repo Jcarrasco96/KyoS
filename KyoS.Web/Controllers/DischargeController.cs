@@ -43,9 +43,9 @@ namespace KyoS.Web.Controllers
             }
 
             UserEntity user_logged = await _context.Users
-                                                           .Include(u => u.Clinic)
-                                                           .ThenInclude(c => c.Setting)
-                                                           .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
@@ -54,22 +54,19 @@ namespace KyoS.Web.Controllers
             else
             {
                 if (User.IsInRole("Mannager"))
-                    return View(await _context.Discharge
-                                              .Include(f => f.Client)
-                                              .ThenInclude(f => f.Clients_Diagnostics)
-                                              .OrderBy(f => f.Client.Name)
+                    return View(await _context.Clients
+                                              .Include(f => f.Discharge)
+                                              .Include(f => f.Clients_Diagnostics)
+                                              .OrderBy(f => f.Name)
                                               .ToListAsync());
 
                 if (User.IsInRole("Facilitator"))
                 {
-
-
-
-                    return View(await _context.Discharge
-                                              .Include(f => f.Client)
-                                              .ThenInclude(f => f.Clients_Diagnostics)
+                    return View(await _context.Clients
+                                              .Include(f => f.Discharge)
+                                              .Include(f => f.Clients_Diagnostics)
                                               //.Where(f => )
-                                              .OrderBy(f => f.Client.Name)
+                                              .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
             }
@@ -128,7 +125,7 @@ namespace KyoS.Web.Controllers
                         Others = false,
                         Hospitalization = false,
                         DateSignatureEmployee = DateTime.Now,
-                        DateSignaturePerson = DateTime.Now,
+                        DateSignaturePerson = DateTime.Now
 
                     };
                     if (model.Client.MedicationList == null)
@@ -168,7 +165,7 @@ namespace KyoS.Web.Controllers
                 ReferralHoursOperation2 = "",
                 ReferralPhone1 = "",
                 ReferralPhone2 = "",
-                TreatmentPlanObjCumpl = true,
+                TreatmentPlanObjCumpl = true
             };
             return View(model);
         }
@@ -239,7 +236,7 @@ namespace KyoS.Web.Controllers
                 ReferralHoursOperation2 = DischargeViewModel.ReferralHoursOperation2,
                 ReferralPhone1 = DischargeViewModel.ReferralPhone1,
                 ReferralPhone2 = DischargeViewModel.ReferralPhone2,
-                TreatmentPlanObjCumpl = DischargeViewModel.TreatmentPlanObjCumpl,
+                TreatmentPlanObjCumpl = DischargeViewModel.TreatmentPlanObjCumpl
                 
 
             };
@@ -310,35 +307,6 @@ namespace KyoS.Web.Controllers
             }
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", dischargeViewModel) });
-        }
-
-        [Authorize(Roles = "Mannager")]
-        public async Task<IActionResult> DischargeCandidates(int idError = 0)
-        {
-            UserEntity user_logged = await _context.Users
-
-                                                   .Include(u => u.Clinic)
-                                                   .ThenInclude(c => c.Setting)
-
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-
-            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null /*|| !user_logged.Clinic.Setting.TCMClinic*/)
-            {
-                return RedirectToAction("NotAuthorized", "Account");
-            }
-
-            if (idError == 1) //Imposible to delete
-            {
-                ViewBag.Delete = "N";
-            }
-
-            List<ClientEntity> ClientList = await _context.Clients
-                                                          .Include(n => n.Discharge)
-                                                          .Where(n => n.Discharge == null && n.Status == StatusType.Close)
-                                                          .ToListAsync();
-
-            return View(ClientList);
-
         }
 
         [Authorize(Roles = "Mannager")]
