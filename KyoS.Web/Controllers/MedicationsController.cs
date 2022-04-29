@@ -56,7 +56,6 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Mannager") || User.IsInRole("Supervisor"))
                     return View(await _context.Clients
                                               .Include(f => f.MedicationList)
-                                              .Where(f => f.MedicationList.Count() > 0)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
 
@@ -67,7 +66,6 @@ namespace KyoS.Web.Controllers
 
                     return View(await _context.Clients
                                               .Include(f => f.MedicationList)
-                                              .Where(f => f.MedicationList.Count() > 0)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -100,7 +98,7 @@ namespace KyoS.Web.Controllers
                         Dosage = "",
                         Frequency = "",
                         Name = "",
-                        Prescriber = user_logged.FullName,
+                        Prescriber = user_logged.FullName
                       
                     };
                     if (model.Client.MedicationList == null)
@@ -117,8 +115,10 @@ namespace KyoS.Web.Controllers
                 Dosage = "",
                 Frequency = "",
                 Name = "",
-                Prescriber = "",
+                Prescriber = ""
             };
+            if (model.Client.MedicationList == null)
+                model.Client.MedicationList = new List<MedicationEntity>();
             return View(model);
         }
 
@@ -142,7 +142,7 @@ namespace KyoS.Web.Controllers
                     {
                         await _context.SaveChangesAsync();
 
-                        return RedirectToAction(nameof(Index));
+                        return RedirectToAction("Create", new { id = MedicationViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -165,7 +165,7 @@ namespace KyoS.Web.Controllers
                 Dosage = MedicationViewModel.Dosage,
                 Frequency = MedicationViewModel.Frequency,
                 Name = MedicationViewModel.Name,
-                Prescriber = MedicationViewModel.Prescriber,
+                Prescriber = MedicationViewModel.Prescriber
 
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", MedicationViewModel) });
@@ -187,6 +187,7 @@ namespace KyoS.Web.Controllers
 
                     MedicationEntity Medication = _context.Medication
                                                          .Include(m => m.Client)
+                                                         .ThenInclude(m => m.MedicationList)
                                                          .FirstOrDefault(m => m.Id == id);
                     if (Medication == null)
                     {
@@ -224,7 +225,7 @@ namespace KyoS.Web.Controllers
                 {
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Create", new { id = medicationViewModel.IdClient });
                 }
                 catch (System.Exception ex)
                 {
@@ -237,35 +238,6 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Mannager")]
-        public async Task<IActionResult> MedicationCandidates(int idError = 0)
-        {
-            UserEntity user_logged = await _context.Users
-
-                                                   .Include(u => u.Clinic)
-                                                   .ThenInclude(c => c.Setting)
-
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-
-            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null /*|| !user_logged.Clinic.Setting.TCMClinic*/)
-            {
-                return RedirectToAction("NotAuthorized", "Account");
-            }
-
-            if (idError == 1) //Imposible to delete
-            {
-                ViewBag.Delete = "N";
-            }
-
-            List<ClientEntity> ClientList = await _context.Clients
-                                                          .Include(n => n.MedicationList)
-                                                          .Where(f => f.MedicationList.Count() == 0)
-                                                          .ToListAsync();
-
-            return View(ClientList);
-
-        }
-
-        [Authorize(Roles = "Mannager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -273,7 +245,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            MedicationEntity medicationEntity = await _context.Medication.FirstOrDefaultAsync(s => s.Id == id);
+            MedicationEntity medicationEntity = await _context.Medication.Include(n => n.Client).FirstOrDefaultAsync(s => s.Id == id);
             if (medicationEntity == null)
             {
                 return RedirectToAction("Home/Error404");
@@ -289,7 +261,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Index", new { idError = 1 });
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Create", new { id = medicationEntity.Client.Id });
         }
 
     }
