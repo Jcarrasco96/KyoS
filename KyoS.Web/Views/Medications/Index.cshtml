@@ -16,7 +16,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        @if (ViewBag.Delete == "N")
+       @if (ViewBag.Delete == "N")
         {
         <div class="alert alert-block alert-danger">
             <button type="button" class="close" data-dismiss="alert">
@@ -45,20 +45,23 @@
                             <th class="col-md-2">
                                 @Html.DisplayNameFor(model => model.Code)
                             </th>
+                            <th class="col-md-1">
+                                @Html.DisplayNameFor(model => model.AdmisionDate)
+                            </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Status
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 MH Therapy
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-1">
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                       @foreach (var item in Model)
                         {
-                            @if(item.MedicationList.Count() != 0)
+                           @if(item.MedicationList.Count() != 0)
                             {
                                 <tr>
                                     <td align="center">
@@ -107,6 +110,9 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Code)
                                     </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
                                         {
@@ -151,6 +157,9 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Code)
                                     </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
                                         {
@@ -172,6 +181,11 @@
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Mannager"))
                                         {
                                             <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="Add Medication"><i class="glyphicon glyphicon-plus"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-warning disabled" title="Add Medication"><i class="glyphicon glyphicon-plus"></i></a>
+                                            
                                         }
                                     </td>
                                 </tr>

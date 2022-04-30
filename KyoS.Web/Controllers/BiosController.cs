@@ -58,6 +58,7 @@ namespace KyoS.Web.Controllers
                     return View(await _context.Clients
                                               .Include(f => f.Clients_Diagnostics)
                                               .Include(g => g.Bio)
+                                              .Include(g => g.List_BehavioralHistory)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
 
@@ -907,7 +908,8 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("IndexBehavioralHealthHistory", "Bios");
+                        
+                        return RedirectToAction("CreateBehavioral", new { id = bioViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -942,9 +944,9 @@ namespace KyoS.Web.Controllers
             }
 
             UserEntity user_logged = await _context.Users
-                                                           .Include(u => u.Clinic)
-                                                           .ThenInclude(c => c.Setting)
-                                                           .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
@@ -990,6 +992,7 @@ namespace KyoS.Web.Controllers
 
                     Bio_BehavioralHistoryEntity Behavioral = _context.Bio_BehavioralHistory
                                                                      .Include(m => m.Client)
+                                                                     .ThenInclude(m => m.List_BehavioralHistory)
                                                                      .FirstOrDefault(m => m.Id == id);
                     if (Behavioral == null)
                     {
@@ -1026,8 +1029,8 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-
-                    return RedirectToAction(nameof(IndexBehavioralHealthHistory));
+                    return RedirectToAction("CreateBehavioral", new { id = behavioralViewModel.IdClient });
+                    
                 }
                 catch (System.Exception ex)
                 {
@@ -1037,6 +1040,33 @@ namespace KyoS.Web.Controllers
             }
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditBehavioral", behavioralViewModel) });
+        }
+
+        [Authorize(Roles = "Mannager")]
+        public async Task<IActionResult> DeleteBio(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Bio_BehavioralHistoryEntity Bio_BehavioralEntity = await _context.Bio_BehavioralHistory.Include(n => n.Client).FirstOrDefaultAsync(s => s.Id == id);
+            if (Bio_BehavioralEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.Bio_BehavioralHistory.Remove(Bio_BehavioralEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("CreateBehavioral", new { id = Bio_BehavioralEntity.Client.Id });
         }
     }
 }
