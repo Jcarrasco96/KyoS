@@ -36,8 +36,11 @@
                             <th class="col-md-4">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-2">
                                 @Html.DisplayNameFor(model => model.Code)
+                            </th>
+                            <th class="col-md-1">
+                                @Html.DisplayNameFor(model => model.AdmisionDate)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Status
@@ -45,7 +48,7 @@
                             <th class="col-md-2" style="text-align:center;">
                                 MH Therapy
                             </th>
-                            <th class="col-md-2" align="right">
+                            <th class="col-md-1" align="right">
                             </th>
                         </tr>
                     </thead>
@@ -69,6 +72,9 @@
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
                                     </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -118,6 +124,9 @@
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
                                     </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
