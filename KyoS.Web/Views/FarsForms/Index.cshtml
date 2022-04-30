@@ -47,11 +47,14 @@
                             <tr>
                                 <th class="col-md-1">
                                 </th>
-                                <th class="col-md-4">
+                                <th class="col-md-2">
                                     @Html.DisplayNameFor(model => model.Name)
                                 </th>
                                 <th class="col-md-2" style="text-align:center;">
                                     @Html.DisplayNameFor(model => model.Code)
+                                </th>
+                                <th class="col-md-2" style="text-align:center;">
+                                    @Html.DisplayNameFor(model => model.AdmisionDate)
                                 </th>
                                 <th class="col-md-2" style="text-align:center;">
                                     Status
@@ -59,7 +62,7 @@
                                 <th class="col-md-2" style="text-align:center;">
                                     MH Therapy
                                 </th>
-                                <th class="col-md-2" align="right">
+                                <th class="col-md-1" align="right">
                                 </th>
                             </tr>
                         </thead>
@@ -120,6 +123,9 @@
                                             @Html.DisplayFor(modelItem => item.Code)
                                         </td>
                                         <td align="center">
+                                            @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                        </td>
+                                        <td align="center">
                                             @if (item.Status == KyoS.Common.Enums.StatusType.Open)
                                             {
                                                 <span class="label label-success">
@@ -139,7 +145,7 @@
                                         <td align="right">
                                             @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Mannager"))
                                             {
-                                                <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-primary" title="Create Fars Form"><i class="glyphicon glyphicon-plus"></i></a>
+                                                <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-success" title="Create Fars Form"><i class="glyphicon glyphicon-plus"></i></a>
                                             }
                                         </td>
                                     </tr>
@@ -164,6 +170,9 @@
                                         </td>
                                         <td align="center">
                                             @Html.DisplayFor(modelItem => item.Code)
+                                        </td>
+                                        <td align="center">
+                                            @Html.DisplayFor(modelItem => item.AdmisionDate)
                                         </td>
                                         <td align="center">
                                             @if (item.Status == KyoS.Common.Enums.StatusType.Open)

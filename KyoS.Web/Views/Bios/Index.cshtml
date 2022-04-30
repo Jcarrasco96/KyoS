@@ -36,14 +36,14 @@
                             <th class="col-md-1">
 
                             </th>
-                            <th class="col-md-3">
+                            <th class="col-md-2">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-2" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Code)
                             </th>
-                            <th class="col-md-1">
-                                Date Of Admission
+                            <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.AdmisionDate)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Status
@@ -110,7 +110,7 @@
                                         &nbsp;
                                         @Html.DisplayFor(modelItem => item.Name)
                                     </td>
-                                    <td>
+                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.Code)
                                     </td>
                                     <td align="center">
@@ -198,7 +198,7 @@
                                         &nbsp;
                                         @Html.DisplayFor(modelItem => item.Name)
                                     </td>
-                                    <td>
+                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.Code)
                                     </td>
                                     <td align="center">
