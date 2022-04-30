@@ -42,9 +42,11 @@ namespace KyoS.Web.Controllers
             }
 
             UserEntity user_logged = await _context.Users
-                                                           .Include(u => u.Clinic)
-                                                           .ThenInclude(c => c.Setting)
-                                                           .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
@@ -54,19 +56,20 @@ namespace KyoS.Web.Controllers
             {
                 if (User.IsInRole("Mannager"))
                     return View(await _context.Clients
+
                                               .Include(f => f.FarsFormList)
-                                              .Where(f => f.FarsFormList.Count() > 0)
+
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
 
                 if (User.IsInRole("Facilitator"))
                 {
-
-
-
                     return View(await _context.Clients
+
                                               .Include(f => f.FarsFormList)
-                                              .Where(f => f.FarsFormList.Count() > 0)
+
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -293,36 +296,6 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", farsFormViewModel) });
         }
 
-
-        [Authorize(Roles = "Mannager")]
-        public async Task<IActionResult> FarsFormCandidates(int idError = 0)
-        {
-            UserEntity user_logged = await _context.Users
-
-                                                   .Include(u => u.Clinic)
-                                                   .ThenInclude(c => c.Setting)
-
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-
-            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null /*|| !user_logged.Clinic.Setting.TCMClinic*/)
-            {
-                return RedirectToAction("NotAuthorized", "Account");
-            }
-
-            if (idError == 1) //Imposible to delete
-            {
-                ViewBag.Delete = "N";
-            }
-
-            List<ClientEntity> ClientList = await _context.Clients
-                                                          .Include(n => n.FarsFormList)
-                                                          .Where(f => f.FarsFormList.Count() == 0)
-                                                          .ToListAsync();
-
-            return View(ClientList);
-
-        }
-
         [Authorize(Roles = "Mannager")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -348,6 +321,41 @@ namespace KyoS.Web.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "Mannager")]
+        public IActionResult PrintFarsForm(int id)
+        {
+            FarsFormEntity entity = _context.FarsForm
+
+                                            .Include(f => f.Client)
+                                            .ThenInclude(c => c.Clinic)
+
+                                            .Include(i => i.Client)
+                                            .ThenInclude(c => c.EmergencyContact)
+
+                                            .Include(i => i.Client)
+                                            .ThenInclude(c => c.LegalGuardian)
+
+                                            .FirstOrDefault(f => (f.Id == id));
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            //if (entity.Client.Clinic.Name == "DAVILA")
+            //{
+            //    Stream stream = _reportHelper.FloridaSocialHSIntakeReport(entity);
+            //    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            //}
+
+            if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            {
+                Stream stream = _reportHelper.FloridaSocialHSFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
+            return null;
         }
     }
 }
