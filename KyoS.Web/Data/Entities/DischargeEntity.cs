@@ -84,6 +84,8 @@ namespace KyoS.Web.Data.Entities
 
         public bool Others { get; set; }
 
+        public string Others_Explain { get; set; }
+
         public string AdmissionedFor { get; set; }
 
         [Display(Name = "Date of Client Signature")]
@@ -95,5 +97,12 @@ namespace KyoS.Web.Data.Entities
         [DataType(DataType.Date)]
 
         public DateTime DateSignatureEmployee { get; set; }
+
+        public bool GivingToClient { get; set; }
+
+        [Display(Name = "Time")]
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:hh:mm}", ApplyFormatInEditMode = false)]
+        public DateTime Time { get; set; }
     }
 }

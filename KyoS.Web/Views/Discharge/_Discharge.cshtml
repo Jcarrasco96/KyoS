@@ -98,11 +98,14 @@
         <input type="checkbox" asp-for="TreatmentPlanObjCumpl" class="form-check-input"> Treatment Plan Objectives Completed<br />
         <input type="checkbox" asp-for="AgencyDischargeClient" class="form-check-input"> Agency Discharged Client Due to Non-cooperation.<br />
         <input type="checkbox" asp-for="ClientDeceased" class="form-check-input"> Client deceased &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="ClientMoved" class="form-check-input"> Client moved  <br />
+        <input type="checkbox" asp-for="Others" class="form-check-input"> Others:
+        <input asp-for="Others_Explain" style="width:80%" />
     </div>
     <div class="container-fluid col-md-4">
         <input type="checkbox" asp-for="TreatmentPlanObjCumpl" class="form-check-input"> Treatment Plan Objectives Not Completed. (other appropriate services not available)<br />
         <input type="checkbox" asp-for="ClientDischargeAgainst" class="form-check-input"> Client Discharged Against Recommendation of Agency<br />
         <input type="checkbox" asp-for="PhysicallyUnstable" class="form-check-input"> Physically unstable  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="Hospitalization" class="form-check-input"> Hospitalization<br />
+
     </div>
     <div class="container-fluid col-md-4">
         <label asp-for="FollowDischarge" class="control-label">Follow Discharge:</label>&nbsp;*
@@ -184,7 +187,7 @@
     </div>
     <div class="col-md-3">
 
-        <input type="checkbox" asp-for="Others" class="form-check-input"> Others:<br />
+        <br />
 
         &nbsp;&nbsp;<label asp-for="ReferralFor2" class="control-label">Referral For:</label>
         &nbsp;&nbsp;<input asp-for="ReferralFor2" class="form-control">
@@ -209,7 +212,15 @@
 
     </div>
 </div>
+<div class="col-md-12">
+    <div class="col-md-12">
+        <pre>
+        <input type="checkbox" asp-for="GivingToClient" class="form-check-input"> Giving to client               Time: <input asp-for="Time">
+        </pre>
+    </div>
+</div>
 
+<br />
 
 <script>
     check1.addEventListener('change', (e) => {

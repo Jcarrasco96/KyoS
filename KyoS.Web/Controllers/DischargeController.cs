@@ -123,9 +123,12 @@ namespace KyoS.Web.Controllers
                         ReferralPhone2 = "",
                         TreatmentPlanObjCumpl = true,
                         Others = false,
+                        Others_Explain = "",
                         Hospitalization = false,
                         DateSignatureEmployee = DateTime.Now,
-                        DateSignaturePerson = DateTime.Now
+                        DateSignaturePerson = DateTime.Now,
+                        GivingToClient = false,
+                        Time = DateTime.Now
 
                     };
                     if (model.Client.MedicationList == null)
@@ -165,7 +168,14 @@ namespace KyoS.Web.Controllers
                 ReferralHoursOperation2 = "",
                 ReferralPhone1 = "",
                 ReferralPhone2 = "",
-                TreatmentPlanObjCumpl = true
+                TreatmentPlanObjCumpl = true,
+                Others = false,
+                Others_Explain = "",
+                Hospitalization = false,
+                DateSignatureEmployee = DateTime.Now,
+                DateSignaturePerson = DateTime.Now,
+                GivingToClient = false,
+                Time = DateTime.Now
             };
             return View(model);
         }
@@ -236,8 +246,14 @@ namespace KyoS.Web.Controllers
                 ReferralHoursOperation2 = DischargeViewModel.ReferralHoursOperation2,
                 ReferralPhone1 = DischargeViewModel.ReferralPhone1,
                 ReferralPhone2 = DischargeViewModel.ReferralPhone2,
-                TreatmentPlanObjCumpl = DischargeViewModel.TreatmentPlanObjCumpl
-                
+                TreatmentPlanObjCumpl = DischargeViewModel.TreatmentPlanObjCumpl,
+                Others = DischargeViewModel.Others,
+                Others_Explain = DischargeViewModel.Others_Explain,
+                DateSignatureEmployee = DischargeViewModel.DateSignatureEmployee,
+                DateSignaturePerson = DischargeViewModel.DateSignaturePerson,
+                Hospitalization = DischargeViewModel.Hospitalization,
+                GivingToClient = DischargeViewModel.GivingToClient,
+                Time = DischargeViewModel.Time
 
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", DischargeViewModel) });
