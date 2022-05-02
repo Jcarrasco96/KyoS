@@ -95,14 +95,7 @@
                                     </td>
                                     <td align="right">
                                         <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="New Discharge"><i class="glyphicon glyphicon-plus"></i></a>
-                                        @if ((item.Discharge != null))
-                                        {
-                                            <a asp-action="PrintDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                        }
-                                        else
-                                        {
-                                            <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>
-                                        }
+                                        <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>                                        
                                     </td>
                                 </tr>
 
@@ -147,15 +140,7 @@
                                     </td>
                                     <td align="right">
                                         <a asp-action="Edit" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        @if (item.Discharge != null)
-                                        {
-                                            <a asp-action="PrintDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                        }
-                                        else
-                                        {
-                                            <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>
-                                        }
-                                        @*<button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete Discharge"><i class="glyphicon glyphicon-trash"></i></button>*@
+                                        <a asp-action="PrintDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>                                        
                                     </td>
                                 </tr>
 

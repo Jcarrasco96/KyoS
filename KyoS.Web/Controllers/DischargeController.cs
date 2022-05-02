@@ -368,5 +368,44 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize(Roles = "Mannager")]
+        public IActionResult PrintDischarge(int id)
+        {
+            DischargeEntity entity = _context.Discharge
+
+                                             .Include(f => f.Client)
+                                             .ThenInclude(c => c.Clinic)
+
+                                             .Include(i => i.Client)
+                                             .ThenInclude(c => c.EmergencyContact)
+
+                                             .Include(i => i.Client)
+                                             .ThenInclude(c => c.LegalGuardian)
+
+                                             .Include(i => i.Client)
+                                             .ThenInclude(c => c.Clients_Diagnostics)
+                                             .ThenInclude(cd => cd.Diagnostic)
+
+                                             .FirstOrDefault(f => (f.Id == id));
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            //if (entity.Client.Clinic.Name == "DAVILA")
+            //{
+            //    Stream stream = _reportHelper.FloridaSocialHSIntakeReport(entity);
+            //    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            //}
+
+            if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            {
+                Stream stream = _reportHelper.FloridaSocialHSDischargeReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
+            return null;
+        }
     }
 }

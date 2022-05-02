@@ -63,17 +63,17 @@
 <div class="col-md-push-12">
     <div class="form-group col-md-4">
         <label asp-for="BriefHistory" class="control-label">Brief History:</label>&nbsp;*
-        <textarea asp-for="BriefHistory" class="form-control" rows="3"></textarea>
+        <textarea asp-for="BriefHistory" class="form-control" rows="4"></textarea>
         <span asp-validation-for="BriefHistory" class="text-danger"></span>
     </div>
     <div class="form-group col-md-4">
         <label asp-for="CourseTreatment" class="control-label">Course of Treatment:</label>&nbsp;*
-        <textarea asp-for="CourseTreatment" class="form-control" rows="3"></textarea>
+        <textarea asp-for="CourseTreatment" class="form-control" rows="4"></textarea>
         <span asp-validation-for="CourseTreatment" class="text-danger"></span>
     </div>
     <div class="form-group col-md-4">
         <label asp-for="ConditionalDischarge" class="control-label">Condition on Discharge:</label>&nbsp;*
-        <textarea asp-for="ConditionalDischarge" class="form-control" rows="3"></textarea>
+        <textarea asp-for="ConditionalDischarge" class="form-control" rows="4"></textarea>
         <span asp-validation-for="ConditionalDischarge" class="text-danger"></span>
     </div>
 </div>
@@ -85,7 +85,6 @@
         <input type="checkbox" asp-for="Others" class="form-check-input"> Others <input asp-for="Others_Explain" class="form-control" />
     </div>
     <div class="form-group col-md-8">
-        <input type="checkbox" asp-for="TreatmentPlanObjCumpl" class="form-check-input"> Treatment Plan Objectives Not Completed. (other appropriate services not available)<br />
         <input type="checkbox" asp-for="ClientDischargeAgainst" class="form-check-input"> Client Discharged Against Recommendation of Agency<br />
         <input type="checkbox" asp-for="PhysicallyUnstable" class="form-check-input"> Physically unstable  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="Hospitalization" class="form-check-input"> Hospitalization<br />
         <input type="checkbox" asp-for="ClientReferred" class="form-check-input"> Client referred to another agency

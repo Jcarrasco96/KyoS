@@ -23,20 +23,16 @@ namespace KyoS.Web.Data.Entities
         public bool Planned { get; set; }
 
         public string ReasonDischarge { get; set; }
-
-        [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
+        
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string BriefHistory { get; set; }
-
-        [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
+                
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string CourseTreatment { get; set; }
-
-        [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
+        
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string ConditionalDischarge { get; set; }
 
-        [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string FollowDischarge { get; set; }
 

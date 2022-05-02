@@ -62,6 +62,10 @@ namespace KyoS.Web.Helpers
         Stream FloridaSocialHSFarsReport(FarsFormEntity intake);
         #endregion
 
+        #region Discharge reports
+        Stream FloridaSocialHSDischargeReport(DischargeEntity intake);
+        #endregion
+
         #region Utils functions
         byte[] ConvertStreamToByteArray(Stream stream);        
         #endregion

@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
 @{
-    ViewData["Title"] = "BEHAVIORAL HEALTH HISTORY";
+    ViewData["Title"] = "Behavioral Health History";
 }
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
@@ -10,16 +10,13 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">BEHAVIORAL HEALTH HISTORY</li>
+        <li class="active">Behavioral Health History</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <div class="row">
-    <div class="col-md-12">
-        @*<div class="alert alert-warning" role="alert">
-        <span class="sr-only"></span>*@
-        <strong>Note: </strong> All clients will be displayed, orange color means the client has not BEHAVIORAL HEALTH HISTORY documents
-        @*</div>*@
+    <div class="col-md-12">        
+        <strong>Note: </strong> All clients will be displayed, orange color means the client has not Behavioral Health History elements        
     </div>
     <div class="col-md-12">
         &nbsp;
@@ -27,7 +24,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">BEHAVIORAL HEALTH HISTORY</h3>
+                <h3 class="panel-title">Behavioral Health History</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -36,16 +33,16 @@
                             <th class="col-md-1">
                                 
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-4">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Code)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Date Of Admission
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
                             <th class="col-md-2" style="text-align:center;">
@@ -206,7 +203,23 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
-                       
+                        $(document).ready(function () {
+                              $('#MyTable').DataTable({
+                                  "order": [[1, "asc"]],
+                                   "pageLength": 100
+                              });
+
+                             // Delete item
+                             var item_to_delete;
+                             $('.deleteItem').click((e) => {
+                                 item_to_delete = e.currentTarget.dataset.dataset.id;
+                             });
+
+                             $("#btnYesDelete").click(function () {
+                             var url = "@Url.Action("Delete", "FarsForms")";
+                                 window.location.href = url + '/' + item_to_delete;
+                             });
+                         });
                         $(function () {
 
                             //Assign Click event to Plus Image.
