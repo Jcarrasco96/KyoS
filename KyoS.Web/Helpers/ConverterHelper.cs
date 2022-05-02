@@ -1988,9 +1988,8 @@ namespace KyoS.Web.Helpers
                 Hospitalization = model.Hospitalization,
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignaturePerson = model.DateSignaturePerson,
-                Others_Explain = model.Others_Explain,
-                GivingToClient = model.GivingToClient,
-                Time = model.Time
+                DateSignatureSupervisor = model.DateSignatureSupervisor,
+                Others_Explain = model.Others_Explain                
             };
         }
 
@@ -2032,9 +2031,8 @@ namespace KyoS.Web.Helpers
                 Hospitalization = model.Hospitalization,
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignaturePerson = model.DateSignaturePerson,
-                Others_Explain = model.Others_Explain,
-                GivingToClient = model.GivingToClient,
-                Time = model.Time
+                DateSignatureSupervisor = model.DateSignatureSupervisor,
+                Others_Explain = model.Others_Explain                
             };
 
         }

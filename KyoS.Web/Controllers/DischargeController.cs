@@ -34,6 +34,7 @@ namespace KyoS.Web.Controllers
             _converterHelper = converterHelper;
             _reportHelper = reportHelper;
         }
+        
         [Authorize(Roles = "Mannager")]
         public async Task<IActionResult> Index(int idError = 0)
         {
@@ -55,17 +56,22 @@ namespace KyoS.Web.Controllers
             {
                 if (User.IsInRole("Mannager"))
                     return View(await _context.Clients
+
                                               .Include(f => f.Discharge)
                                               .Include(f => f.Clients_Diagnostics)
+
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
 
                 if (User.IsInRole("Facilitator"))
                 {
                     return View(await _context.Clients
+
                                               .Include(f => f.Discharge)
                                               .Include(f => f.Clients_Diagnostics)
-                                              //.Where(f => )
+
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -78,22 +84,26 @@ namespace KyoS.Web.Controllers
         {
 
             UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             DischargeViewModel model;
 
             if (User.IsInRole("Mannager"))
             {
-
-
                 if (user_logged.Clinic != null)
                 {
-
                     model = new DischargeViewModel
                     {
                         IdClient = id,
-                        Client = _context.Clients.Include(n => n.MedicationList).FirstOrDefault(n => n.Id == id),
+                        Client = _context.Clients
+
+                                         .Include(n => n.MedicationList)
+
+                                         .Include(c => c.Clients_Diagnostics)
+                                         .ThenInclude(cd => cd.Diagnostic)
+
+                                         .FirstOrDefault(n => n.Id == id),
                         AdmissionedFor = user_logged.FullName,
                         AgencyDischargeClient = true,
                         BriefHistory = "",
@@ -127,8 +137,7 @@ namespace KyoS.Web.Controllers
                         Hospitalization = false,
                         DateSignatureEmployee = DateTime.Now,
                         DateSignaturePerson = DateTime.Now,
-                        GivingToClient = false,
-                        Time = DateTime.Now
+                        DateSignatureSupervisor = DateTime.Now
 
                     };
                     if (model.Client.MedicationList == null)
@@ -140,7 +149,13 @@ namespace KyoS.Web.Controllers
             model = new DischargeViewModel
             {
                 IdClient = id,
-                Client = _context.Clients.Include(n => n.MedicationList).FirstOrDefault(n => n.Id == id),
+                Client = _context.Clients
+                                 .Include(n => n.MedicationList)
+                                         
+                                 .Include(c => c.Clients_Diagnostics)
+                                 .ThenInclude(cd => cd.Diagnostic)
+
+                                 .FirstOrDefault(n => n.Id == id),
                 AdmissionedFor = user_logged.FullName,
                 AgencyDischargeClient = true,
                 BriefHistory = "",
@@ -174,8 +189,7 @@ namespace KyoS.Web.Controllers
                 Hospitalization = false,
                 DateSignatureEmployee = DateTime.Now,
                 DateSignaturePerson = DateTime.Now,
-                GivingToClient = false,
-                Time = DateTime.Now
+                DateSignatureSupervisor = DateTime.Now
             };
             return View(model);
         }
@@ -251,10 +265,8 @@ namespace KyoS.Web.Controllers
                 Others_Explain = DischargeViewModel.Others_Explain,
                 DateSignatureEmployee = DischargeViewModel.DateSignatureEmployee,
                 DateSignaturePerson = DischargeViewModel.DateSignaturePerson,
-                Hospitalization = DischargeViewModel.Hospitalization,
-                GivingToClient = DischargeViewModel.GivingToClient,
-                Time = DischargeViewModel.Time
-
+                DateSignatureSupervisor = DischargeViewModel.DateSignatureSupervisor,
+                Hospitalization = DischargeViewModel.Hospitalization
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", DischargeViewModel) });
         }
@@ -274,9 +286,14 @@ namespace KyoS.Web.Controllers
                 {
 
                     DischargeEntity Discharge = _context.Discharge
-                                                                 .Include(m => m.Client)
-                                                                 .ThenInclude(m => m.MedicationList)
-                                                                 .FirstOrDefault(m => m.Id == id);
+                                                        .Include(m => m.Client)
+                                                        .ThenInclude(m => m.MedicationList)
+
+                                                        .Include(d => d.Client)
+                                                        .ThenInclude(c => c.Clients_Diagnostics)                                                        
+                                                        .ThenInclude(cd => cd.Diagnostic)
+
+                                                        .FirstOrDefault(m => m.Id == id);
                     if (Discharge == null)
                     {
                         return RedirectToAction("NotAuthorized", "Account");

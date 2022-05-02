@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
-using KyoS.Common.Enums;
 
 
 namespace KyoS.Web.Data.Entities
@@ -18,12 +14,10 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Date of Report")]
         [DataType(DataType.Date)]
-
         public DateTime DateReport { get; set; }
 
         [Display(Name = "Date of Discharge")]
         [DataType(DataType.Date)]
-
         public DateTime DateDischarge { get; set; }
 
         public bool Planned { get; set; }
@@ -90,19 +84,14 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Date of Client Signature")]
         [DataType(DataType.Date)]
-
         public DateTime DateSignaturePerson { get; set; }
 
         [Display(Name = "Date of Staff Signature")]
         [DataType(DataType.Date)]
-
         public DateTime DateSignatureEmployee { get; set; }
 
-        public bool GivingToClient { get; set; }
-
-        [Display(Name = "Time")]
-        [DataType(DataType.Time)]
-        [DisplayFormat(DataFormatString = "{0:hh:mm}", ApplyFormatInEditMode = false)]
-        public DateTime Time { get; set; }
+        [Display(Name = "Date of Supervisor Signature")]
+        [DataType(DataType.Date)]
+        public DateTime DateSignatureSupervisor { get; set; }
     }
 }

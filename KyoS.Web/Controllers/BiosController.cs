@@ -56,18 +56,23 @@ namespace KyoS.Web.Controllers
             {
                 if (User.IsInRole("Mannager"))
                     return View(await _context.Clients
+
                                               .Include(f => f.Clients_Diagnostics)
                                               .Include(g => g.Bio)
                                               .Include(g => g.List_BehavioralHistory)
+
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
 
                 if (User.IsInRole("Facilitator"))
                 {
                     return View(await _context.Clients
+
                                               .Include(f => f.Clients_Diagnostics)
                                               .Include(g => g.Bio)
-                                              //.Where(f => )
+
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
