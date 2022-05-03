@@ -705,6 +705,9 @@ namespace KyoS.Web.Controllers
                                                    .Include(i => i.Client)
                                                    .ThenInclude(c => c.IntakeMedicalHistory)
 
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.Discharge)
+
                                                    .FirstOrDefault(i => (i.Id == id));
             if (entity == null)
             {

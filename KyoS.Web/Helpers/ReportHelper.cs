@@ -2391,6 +2391,10 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetIntakeMedicalHistoryDS(intake.Client.IntakeMedicalHistory));
             WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeMedicalHistory");
 
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDischargeDS(intake.Client.Discharge));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
             WebReport.Report.Prepare();
 
             Stream stream = new MemoryStream();
@@ -5296,7 +5300,6 @@ namespace KyoS.Web.Helpers
 
             return dt;
         }
-
         #endregion        
     }
 }
