@@ -4301,7 +4301,7 @@ namespace KyoS.Web.Helpers
                                             fars.Country,
                                             fars.SignatureDate,
                                             fars.MCOID,
-                                            fars.Country,
+                                            fars.ProgramEvaluation,
                                         });
             }
             else
@@ -4345,6 +4345,7 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             string.Empty,
                                             new DateTime(),
+                                            string.Empty,
                                             string.Empty
                                         });
             }
