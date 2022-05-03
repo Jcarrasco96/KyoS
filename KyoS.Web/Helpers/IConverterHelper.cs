@@ -90,6 +90,9 @@ namespace KyoS.Web.Helpers
         MedicationViewModel ToMedicationViewModel(MedicationEntity model);
         Task<FarsFormEntity> ToFarsFormEntity(FarsFormViewModel model, bool isNew);
         FarsFormViewModel ToFarsFormViewModel(FarsFormEntity model);
-
+        Task<BioEntity> ToBioEntity(BioViewModel model, bool isNew);
+        BioViewModel ToBioViewModel(BioEntity model);
+        Task<Bio_BehavioralHistoryEntity> ToBio_BehaviorEntity(Bio_BehavioralHistoryViewModel model, bool isNew);
+        Bio_BehavioralHistoryViewModel ToBio_BehaviorViewModel(Bio_BehavioralHistoryEntity model);
     }
 }

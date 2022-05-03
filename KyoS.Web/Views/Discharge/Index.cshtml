@@ -1,6 +1,6 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.DischargeEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
 @{
-    ViewData["Title"] = "Discahrge";
+    ViewData["Title"] = "Discharges";
 }
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
@@ -10,96 +10,142 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Discharge</li>
+        <li class="active">Discharges</li>
     </ul><!--.breadcrumb-->
 </div>
 
-<p>
-    <a asp-action="DischargeCandidates" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Candidate Discharge</a>
-</p>
-
 <div class="row">
     <div class="col-md-12">
-        @if (ViewBag.Delete == "N")
-        {
-            <div class="alert alert-block alert-danger">
-                <button type="button" class="close" data-dismiss="alert">
-                    <i class="icon-remove"></i>
-                </button>
-                <strong class="red">
-                    Error. It is not posible delete the Intake Screening
-                </strong>
-            </div>
-        }
+        @*<div class="alert alert-warning" role="alert">
+            <span class="sr-only"></span>*@
+        <strong>Note: </strong> All clients will be displayed, orange color means the client has not discharge documents
+        @*</div>*@
+    </div>
+    <div class="col-md-12">
+        &nbsp;
     </div>
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Discharge</h3>
+                <h3 class="panel-title">Discharges</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-4">
-                               @Html.DisplayNameFor(model => model.Client.Name)
+                            <th class="col-md-3">
+                                @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            <th class="col-md-2">
-                               @Html.DisplayNameFor(model => model.Client.Code)
+                            <th class="col-md-2"  style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.Code)
+                            </th>
+                            <th class="col-md-2"  style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.AdmisionDate)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Status
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                
+                                MH Therapy
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-1" align="right">
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
-                                    {
-                                        <i class="glyphicon glyphicon-user btn-danger"></i>
-                                    }
-                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
-                                    {
-                                        <i class="glyphicon glyphicon-user btn-primary"></i>
-                                    }
-                                    &nbsp;
-                                    @Html.DisplayFor(modelItem => item.Client.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Client.Code)
-                                </td>
-                                <td align="center">
-                                   @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                            @if (item.Discharge == null)
+                            {
+                                <tr style="color:orange">
+                                    <td>
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
-                                            <span class="label label-success">
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-warning">
                                                 Open
                                             </span>
                                         }
-                                   @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
                                         {
                                             <span class="label label-default">
                                                 Close
                                             </span>
                                         }
-                                </td>
-                                <td align="center">
-                                                                        
-                                </td>
-                                
-                                <td align="right">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <a asp-action="PrintIntake" asp-route-id="@item.Id" class="btn btn-success" title="Print Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete Discharge"><i class="glyphicon glyphicon-trash"></i></button>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Service)
+                                    </td>
+                                    <td align="right">
+                                        <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="New Discharge"><i class="glyphicon glyphicon-plus"></i></a>
+                                        <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>                                        
+                                    </td>
+                                </tr>
+
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-success">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Service)
+                                    </td>
+                                    <td align="right">
+                                        <a asp-action="Edit" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="PrintDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>                                        
+                                    </td>
+                                </tr>
+
+                            }
+
                         }
                     </tbody>
                 </table>

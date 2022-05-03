@@ -60,6 +60,601 @@ namespace KyoS.Web.Migrations
                     b.ToTable("Activities");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.BioEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<bool>("AReferral")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("AReferral_Services")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AReferral_When")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AReferral_Where")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AdultCurrentExperience")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Affect_Angry")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_Anxious")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_Appropriate")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_Blunted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_Constricted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_Expansive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_Flat")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_Other")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_Tearful_Sad")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_labile")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("AlternativeDiagnosis")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Appearance_Bizarre")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Appearance_Cleaned")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Appearance_Disheveled")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Appearance_FairHygiene")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Appearance_WellGroomed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Appetite")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ApproximateDateReport")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ApproximateDateReport_Where")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("BioH0031HN")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CMH")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanClientFollow")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Children")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientAssessmentSituation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ClientDenied")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ClientFamilyAbusoTrauma")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Client_FK")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateAbuse")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateBio")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureLicensedPractitioner")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignaturePerson")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureSupervisor")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureUnlicensedTherapist")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Details")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("DoYouHaveAnyPhysical")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoYouHaveAnyReligious")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoYouHaveAnyVisual")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoYouOwn")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DoYouOwn_Explain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("DoesClient")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesClientRequired")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DoesClientRequired_Where")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("DoesNotAlways")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesTheClientExperience")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DoesTheClientExperience_Where")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EastAlone")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EastFew")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EastFewer")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FamilyAssessmentSituation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FamilyEmotional")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ForHowLong")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GeneralDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Has3OrMore")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasAnIllnes")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasClientBeenTreatedPain")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("HasClientBeenTreatedPain_Ifnot")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HasClientBeenTreatedPain_PleaseIncludeService")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HasClientBeenTreatedPain_Where")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HasTheClient")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasTheClientVisitedPhysician")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("HasTheClientVisitedPhysician_Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("HasTheClientVisitedPhysician_Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HasTheClient_Explain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HasTooth")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HaveYouEverBeen")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("HaveYouEverBeen_Explain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HaveYouEverThought")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("HaveYouEverThought_Explain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HigHestEducation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Hydration")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IConcurWhitDiagnistic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IDAH0031HO")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("If6_Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("If6_ReferredTo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IfForeing_AgeArrival")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IfForeing_Born")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("IfForeing_YearArrival")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IfMarried")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IfSeparated")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IfSexuallyActive")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Insight_Fair")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Insight_Good")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Insight_Other")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Insight_Poor")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Judgment_Fair")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Judgment_Good")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Judgment_Other")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Judgment_Poor")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Lacking_Location")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Lacking_Person")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Lacking_Place")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Lacking_Time")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LegalAssessment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LegalHistory")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LicensedPractitioner")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MaritalStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Mood_Angry")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Mood_Anxious")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Mood_Depressed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Mood_Euphoric")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Mood_Euthymic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Mood_Maniac")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Mood_Other")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Motor_Agitated")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Motor_Akathisia")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Motor_Normal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Motor_Other")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Motor_RestLess")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Motor_Retardation")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Motor_Tremor")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("NotAlwaysPhysically")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ObtainRelease")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ObtainReleaseInformation")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ObtainReleaseInformation7")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Oriented_FullOriented")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Outcome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PersonInvolved")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PersonalFamilyPsychiatric")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PleaseProvideGoal")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PleaseRatePain")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PresentingProblem")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PrimaryLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Priv")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProvideIntegratedSummary")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RecentWeight")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RelationShips")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RelationshipWithFamily")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("RiskToOther_Chronic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RiskToOther_High")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RiskToOther_Low")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RiskToOther_Medium")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RiskToSelf_Chronic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RiskToSelf_High")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RiskToSelf_Low")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RiskToSelf_Medium")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SafetyPlan")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Setting")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Speech_Impoverished")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Loud")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Mumbled")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Normal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Other")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Pressured")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Rapid")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Slow")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Slurred")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Stutters")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SubstanceAbuse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Takes3OrMore")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtContent_Delusions")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ThoughtContent_Delusions_Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ThoughtContent_Hallucinations")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ThoughtContent_Hallucinations_Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ThoughtContent_RealityBased")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtContent_Relevant")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Blocking")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Circumstantial")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Disorganized")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_FightIdeas")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_GoalDirected")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Irrational")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_LooseAssociations")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Obsessive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Organized")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Other")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Preoccupied")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Rigid")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Tangential")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("TreatmentNeeds")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Treatmentrecomendations")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UnlicensedTherapist")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WhatIsTheClient")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WhatIsYourLanguage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("WhereRecord")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("WhereRecord_When")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WhereRecord_Where")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("WithoutWanting")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Client_FK")
+                        .IsUnique();
+
+                    b.ToTable("Bio");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.Bio_BehavioralHistoryEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Problem")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("Bio_BehavioralHistory");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClassificationEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -435,8 +1030,7 @@ namespace KyoS.Web.Migrations
 
                     b.Property<string>("BriefHistory")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("ClientDeceased")
                         .HasColumnType("bit");
@@ -455,13 +1049,11 @@ namespace KyoS.Web.Migrations
 
                     b.Property<string>("ConditionalDischarge")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CourseTreatment")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateDischarge")
                         .HasColumnType("datetime2");
@@ -475,16 +1067,21 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("DateSignaturePerson")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DateSignatureSupervisor")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FollowDischarge")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Hospitalization")
                         .HasColumnType("bit");
 
                     b.Property<bool>("Others")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Others_Explain")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhysicallyUnstable")
                         .HasColumnType("bit");
@@ -3984,6 +4581,27 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Theme");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.BioEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
+                        .WithOne("Bio")
+                        .HasForeignKey("KyoS.Web.Data.Entities.BioEntity", "Client_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.Bio_BehavioralHistoryEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
+                        .WithMany("List_BehavioralHistory")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Client");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClientEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
@@ -4118,8 +4736,7 @@ namespace KyoS.Web.Migrations
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
                         .WithMany("FarsFormList")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ClientId");
 
                     b.Navigation("Client");
                 });
@@ -4737,6 +5354,8 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClientEntity", b =>
                 {
+                    b.Navigation("Bio");
+
                     b.Navigation("Clients_Diagnostics");
 
                     b.Navigation("Clients_HealthInsurances");
@@ -4770,6 +5389,8 @@ namespace KyoS.Web.Migrations
                     b.Navigation("IntakeTransportation");
 
                     b.Navigation("IntakeTuberculosis");
+
+                    b.Navigation("List_BehavioralHistory");
 
                     b.Navigation("MedicationList");
 

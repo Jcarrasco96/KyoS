@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
-using KyoS.Common.Enums;
 
 
 namespace KyoS.Web.Data.Entities
@@ -18,31 +14,25 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Date of Report")]
         [DataType(DataType.Date)]
-
         public DateTime DateReport { get; set; }
 
         [Display(Name = "Date of Discharge")]
         [DataType(DataType.Date)]
-
         public DateTime DateDischarge { get; set; }
 
         public bool Planned { get; set; }
 
         public string ReasonDischarge { get; set; }
-
-        [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
+        
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string BriefHistory { get; set; }
-
-        [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
+                
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string CourseTreatment { get; set; }
-
-        [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
+        
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string ConditionalDischarge { get; set; }
 
-        [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string FollowDischarge { get; set; }
 
@@ -84,16 +74,20 @@ namespace KyoS.Web.Data.Entities
 
         public bool Others { get; set; }
 
+        public string Others_Explain { get; set; }
+
         public string AdmissionedFor { get; set; }
 
         [Display(Name = "Date of Client Signature")]
         [DataType(DataType.Date)]
-
         public DateTime DateSignaturePerson { get; set; }
 
         [Display(Name = "Date of Staff Signature")]
         [DataType(DataType.Date)]
-
         public DateTime DateSignatureEmployee { get; set; }
+
+        [Display(Name = "Date of Supervisor Signature")]
+        [DataType(DataType.Date)]
+        public DateTime DateSignatureSupervisor { get; set; }
     }
 }

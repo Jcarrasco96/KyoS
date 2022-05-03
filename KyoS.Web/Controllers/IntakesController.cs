@@ -655,6 +655,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsumerRights", IntakeViewModel) });
         }
 
+        [Authorize(Roles = "Mannager")]
         public IActionResult PrintIntake(int id)
         {
             IntakeScreeningEntity entity = _context.IntakeScreenings

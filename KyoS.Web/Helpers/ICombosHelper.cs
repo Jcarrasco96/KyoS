@@ -49,5 +49,9 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboIntake_ClientIs();
         IEnumerable<SelectListItem> GetComboIntake_BehaviorIs();
         IEnumerable<SelectListItem> GetComboIntake_SpeechIs();
+        IEnumerable<SelectListItem> GetComboBio_Appetite();
+        IEnumerable<SelectListItem> GetComboBio_Hydration();
+        IEnumerable<SelectListItem> GetComboBio_RecentWeight();
+        IEnumerable<SelectListItem> GetComboBio_IfSexuallyActive();
     }
 }

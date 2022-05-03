@@ -34,6 +34,7 @@ namespace KyoS.Web.Controllers
             _converterHelper = converterHelper;
             _reportHelper = reportHelper;
         }
+        
         [Authorize(Roles = "Mannager")]
         public async Task<IActionResult> Index(int idError = 0)
         {
@@ -43,9 +44,9 @@ namespace KyoS.Web.Controllers
             }
 
             UserEntity user_logged = await _context.Users
-                                                           .Include(u => u.Clinic)
-                                                           .ThenInclude(c => c.Setting)
-                                                           .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
@@ -54,22 +55,24 @@ namespace KyoS.Web.Controllers
             else
             {
                 if (User.IsInRole("Mannager"))
-                    return View(await _context.Discharge
-                                              .Include(f => f.Client)
-                                              .ThenInclude(f => f.Clients_Diagnostics)
-                                              .OrderBy(f => f.Client.Name)
+                    return View(await _context.Clients
+
+                                              .Include(f => f.Discharge)
+                                              .Include(f => f.Clients_Diagnostics)
+
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                              .OrderBy(f => f.Name)
                                               .ToListAsync());
 
                 if (User.IsInRole("Facilitator"))
                 {
+                    return View(await _context.Clients
 
+                                              .Include(f => f.Discharge)
+                                              .Include(f => f.Clients_Diagnostics)
 
-
-                    return View(await _context.Discharge
-                                              .Include(f => f.Client)
-                                              .ThenInclude(f => f.Clients_Diagnostics)
-                                              //.Where(f => )
-                                              .OrderBy(f => f.Client.Name)
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                              .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
             }
@@ -81,22 +84,26 @@ namespace KyoS.Web.Controllers
         {
 
             UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             DischargeViewModel model;
 
             if (User.IsInRole("Mannager"))
             {
-
-
                 if (user_logged.Clinic != null)
                 {
-
                     model = new DischargeViewModel
                     {
                         IdClient = id,
-                        Client = _context.Clients.Include(n => n.MedicationList).FirstOrDefault(n => n.Id == id),
+                        Client = _context.Clients
+
+                                         .Include(n => n.MedicationList)
+
+                                         .Include(c => c.Clients_Diagnostics)
+                                         .ThenInclude(cd => cd.Diagnostic)
+
+                                         .FirstOrDefault(n => n.Id == id),
                         AdmissionedFor = user_logged.FullName,
                         AgencyDischargeClient = true,
                         BriefHistory = "",
@@ -126,9 +133,11 @@ namespace KyoS.Web.Controllers
                         ReferralPhone2 = "",
                         TreatmentPlanObjCumpl = true,
                         Others = false,
+                        Others_Explain = "",
                         Hospitalization = false,
                         DateSignatureEmployee = DateTime.Now,
                         DateSignaturePerson = DateTime.Now,
+                        DateSignatureSupervisor = DateTime.Now
 
                     };
                     if (model.Client.MedicationList == null)
@@ -140,7 +149,13 @@ namespace KyoS.Web.Controllers
             model = new DischargeViewModel
             {
                 IdClient = id,
-                Client = _context.Clients.Include(n => n.MedicationList).FirstOrDefault(n => n.Id == id),
+                Client = _context.Clients
+                                 .Include(n => n.MedicationList)
+                                         
+                                 .Include(c => c.Clients_Diagnostics)
+                                 .ThenInclude(cd => cd.Diagnostic)
+
+                                 .FirstOrDefault(n => n.Id == id),
                 AdmissionedFor = user_logged.FullName,
                 AgencyDischargeClient = true,
                 BriefHistory = "",
@@ -169,6 +184,12 @@ namespace KyoS.Web.Controllers
                 ReferralPhone1 = "",
                 ReferralPhone2 = "",
                 TreatmentPlanObjCumpl = true,
+                Others = false,
+                Others_Explain = "",
+                Hospitalization = false,
+                DateSignatureEmployee = DateTime.Now,
+                DateSignaturePerson = DateTime.Now,
+                DateSignatureSupervisor = DateTime.Now
             };
             return View(model);
         }
@@ -240,8 +261,12 @@ namespace KyoS.Web.Controllers
                 ReferralPhone1 = DischargeViewModel.ReferralPhone1,
                 ReferralPhone2 = DischargeViewModel.ReferralPhone2,
                 TreatmentPlanObjCumpl = DischargeViewModel.TreatmentPlanObjCumpl,
-                
-
+                Others = DischargeViewModel.Others,
+                Others_Explain = DischargeViewModel.Others_Explain,
+                DateSignatureEmployee = DischargeViewModel.DateSignatureEmployee,
+                DateSignaturePerson = DischargeViewModel.DateSignaturePerson,
+                DateSignatureSupervisor = DischargeViewModel.DateSignatureSupervisor,
+                Hospitalization = DischargeViewModel.Hospitalization
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", DischargeViewModel) });
         }
@@ -261,9 +286,14 @@ namespace KyoS.Web.Controllers
                 {
 
                     DischargeEntity Discharge = _context.Discharge
-                                                                 .Include(m => m.Client)
-                                                                 .ThenInclude(m => m.MedicationList)
-                                                                 .FirstOrDefault(m => m.Id == id);
+                                                        .Include(m => m.Client)
+                                                        .ThenInclude(m => m.MedicationList)
+
+                                                        .Include(d => d.Client)
+                                                        .ThenInclude(c => c.Clients_Diagnostics)                                                        
+                                                        .ThenInclude(cd => cd.Diagnostic)
+
+                                                        .FirstOrDefault(m => m.Id == id);
                     if (Discharge == null)
                     {
                         return RedirectToAction("NotAuthorized", "Account");
@@ -313,35 +343,6 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Mannager")]
-        public async Task<IActionResult> DischargeCandidates(int idError = 0)
-        {
-            UserEntity user_logged = await _context.Users
-
-                                                   .Include(u => u.Clinic)
-                                                   .ThenInclude(c => c.Setting)
-
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-
-            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null /*|| !user_logged.Clinic.Setting.TCMClinic*/)
-            {
-                return RedirectToAction("NotAuthorized", "Account");
-            }
-
-            if (idError == 1) //Imposible to delete
-            {
-                ViewBag.Delete = "N";
-            }
-
-            List<ClientEntity> ClientList = await _context.Clients
-                                                          .Include(n => n.Discharge)
-                                                          .Where(n => n.Discharge == null && n.Status == StatusType.Close)
-                                                          .ToListAsync();
-
-            return View(ClientList);
-
-        }
-
-        [Authorize(Roles = "Mannager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -366,6 +367,45 @@ namespace KyoS.Web.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "Mannager")]
+        public IActionResult PrintDischarge(int id)
+        {
+            DischargeEntity entity = _context.Discharge
+
+                                             .Include(f => f.Client)
+                                             .ThenInclude(c => c.Clinic)
+
+                                             .Include(i => i.Client)
+                                             .ThenInclude(c => c.EmergencyContact)
+
+                                             .Include(i => i.Client)
+                                             .ThenInclude(c => c.LegalGuardian)
+
+                                             .Include(i => i.Client)
+                                             .ThenInclude(c => c.Clients_Diagnostics)
+                                             .ThenInclude(cd => cd.Diagnostic)
+
+                                             .FirstOrDefault(f => (f.Id == id));
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            //if (entity.Client.Clinic.Name == "DAVILA")
+            //{
+            //    Stream stream = _reportHelper.FloridaSocialHSIntakeReport(entity);
+            //    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            //}
+
+            if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            {
+                Stream stream = _reportHelper.FloridaSocialHSDischargeReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
+            return null;
         }
     }
 }

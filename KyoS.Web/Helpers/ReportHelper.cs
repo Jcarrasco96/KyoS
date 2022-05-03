@@ -2401,6 +2401,90 @@ namespace KyoS.Web.Helpers
         }
         #endregion
 
+        #region Fars Form reports
+        public Stream FloridaSocialHSFarsReport(FarsFormEntity fars)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Fars\\rptFarsFloridaSocialHS.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(fars.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(fars.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(fars.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(fars.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFarsDS(fars));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "FarsForm");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
+
+        #region Discharge reports
+        public Stream FloridaSocialHSDischargeReport(DischargeEntity discharge)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Discharges\\rptDischargeFloridaSocialHS.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(discharge.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(discharge.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(discharge.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(discharge.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(discharge.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDischargeDS(discharge));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
+
         #region Utils functions
         public byte[] ConvertStreamToByteArray(Stream stream)
         {
@@ -3648,7 +3732,6 @@ namespace KyoS.Web.Helpers
 
             return dt;
         }
-
         
         private DataTable GetIntakeMedicalHistoryDS(IntakeMedicalHistoryEntity intake)
         {
@@ -4122,6 +4205,275 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             string.Empty,
                                             false
+                                        });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetFarsDS(FarsFormEntity fars)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "FarsForm"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("ClientId", typeof(int));
+            dt.Columns.Add("ContractorID", typeof(string));
+            dt.Columns.Add("DcfEvaluation", typeof(string));
+            dt.Columns.Add("EvaluationDate", typeof(DateTime));
+            dt.Columns.Add("ProviderId", typeof(string));
+            dt.Columns.Add("M_GafScore", typeof(string));
+            dt.Columns.Add("RaterEducation", typeof(string));
+            dt.Columns.Add("RaterFMHI", typeof(string));
+            dt.Columns.Add("SubstanceAbusoHistory", typeof(int));
+            dt.Columns.Add("DepressionScale", typeof(int));
+            dt.Columns.Add("AnxietyScale", typeof(int));
+            dt.Columns.Add("HyperAffectScale", typeof(int));
+            dt.Columns.Add("ThoughtProcessScale", typeof(int));
+            dt.Columns.Add("CognitiveScale", typeof(int));
+            dt.Columns.Add("MedicalScale", typeof(int));
+            dt.Columns.Add("TraumaticsScale", typeof(int));
+            dt.Columns.Add("SubstanceScale", typeof(int));
+            dt.Columns.Add("InterpersonalScale", typeof(int));
+            dt.Columns.Add("FamilyRelationShipsScale", typeof(int));
+            dt.Columns.Add("FamilyEnvironmentScale", typeof(int));
+            dt.Columns.Add("SocialScale", typeof(int));
+            dt.Columns.Add("WorkScale", typeof(int));
+            dt.Columns.Add("ActivitiesScale", typeof(int));
+            dt.Columns.Add("AbilityScale", typeof(int));
+            dt.Columns.Add("DangerToSelfScale", typeof(int));
+            dt.Columns.Add("DangerToOtherScale", typeof(int));
+            dt.Columns.Add("SecurityScale", typeof(int));
+            dt.Columns.Add("ContID1", typeof(string));
+            dt.Columns.Add("ContID2", typeof(string));
+            dt.Columns.Add("ContID3", typeof(string));
+            dt.Columns.Add("ProviderLocal", typeof(string));
+            dt.Columns.Add("MedicaidRecipientID", typeof(string));
+            dt.Columns.Add("MedicaidProviderID", typeof(string));
+            dt.Columns.Add("MCOID", typeof(string));
+            dt.Columns.Add("Country", typeof(string));
+            dt.Columns.Add("SignatureDate", typeof(DateTime));
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("ProgramEvaluation", typeof(string));            
+
+            if (fars != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            fars.Id,
+                                            fars.Client.Id,
+                                            fars.ContractorID,
+                                            fars.DcfEvaluation,
+                                            fars.EvaluationDate,
+                                            fars.ProviderId,
+                                            fars.M_GafScore,
+                                            fars.RaterEducation,
+                                            fars.RaterFMHI,
+                                            fars.SubstanceAbusoHistory,
+                                            fars.DepressionScale,
+                                            fars.AnxietyScale,
+                                            fars.HyperAffectScale,
+                                            fars.ThoughtProcessScale,
+                                            fars.CognitiveScale,
+                                            fars.MedicalScale,
+                                            fars.TraumaticsScale,
+                                            fars.SubstanceScale,
+                                            fars.InterpersonalScale,
+                                            fars.FamilyRelationShipsScale,
+                                            fars.FamilyEnvironmentScale,
+                                            fars.SocialScale,
+                                            fars.WorkScale,
+                                            fars.ActivitiesScale,
+                                            fars.AbilityScale,
+                                            fars.DangerToSelfScale,
+                                            fars.DangerToOtherScale,
+                                            fars.SecurityScale,
+                                            fars.ContID1,
+                                            fars.ContID2,
+                                            fars.ContID3,
+                                            fars.ProviderLocal,
+                                            fars.MedicaidRecipientID,
+                                            fars.MedicaidProviderID,
+                                            fars.MCOID,
+                                            fars.Country,
+                                            fars.SignatureDate,
+                                            fars.AdmissionedFor,
+                                            fars.ProgramEvaluation,
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty
+                                        });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetDischargeDS(DischargeEntity discharge)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "Discharge"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+            dt.Columns.Add("DateReport", typeof(DateTime));
+            dt.Columns.Add("DateDischarge", typeof(DateTime));            
+            dt.Columns.Add("Planned", typeof(bool));            
+            dt.Columns.Add("ReasonDischarge", typeof(string));
+            dt.Columns.Add("BriefHistory", typeof(string));
+            dt.Columns.Add("CourseTreatment", typeof(string));
+            dt.Columns.Add("ConditionalDischarge", typeof(string));
+            dt.Columns.Add("ReferralFor1", typeof(string));
+            dt.Columns.Add("ReferralAgency1", typeof(string));
+            dt.Columns.Add("ReferralContactPersonal1", typeof(string));
+            dt.Columns.Add("ReferralPhone1", typeof(string));
+            dt.Columns.Add("ReferralHoursOperation1", typeof(string));
+            dt.Columns.Add("ReferralFor2", typeof(string));
+            dt.Columns.Add("ReferralAgency2", typeof(string));
+            dt.Columns.Add("ReferralContactPersonal2", typeof(string));
+            dt.Columns.Add("ReferralPhone2", typeof(string));
+            dt.Columns.Add("ReferralHoursOperation2", typeof(string));
+            dt.Columns.Add("FollowDischarge", typeof(string));
+            dt.Columns.Add("TreatmentPlanObjCumpl", typeof(bool));
+            dt.Columns.Add("AgencyDischargeClient", typeof(bool));
+            dt.Columns.Add("ClientDischargeAgainst", typeof(bool));
+            dt.Columns.Add("ClientDeceased", typeof(bool));
+            dt.Columns.Add("ClientMoved", typeof(bool));
+            dt.Columns.Add("PhysicallyUnstable", typeof(bool));
+            dt.Columns.Add("ClientReferred", typeof(bool));            
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("Hospitalization", typeof(bool));
+            dt.Columns.Add("Others", typeof(bool));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("Others_Explain", typeof(string));
+            dt.Columns.Add("DateSignatureSupervisor", typeof(DateTime));
+
+            if (discharge != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            discharge.Id,
+                                            discharge.Client_FK,
+                                            discharge.DateReport,
+                                            discharge.DateDischarge,
+                                            discharge.Planned,
+                                            discharge.ReasonDischarge,
+                                            discharge.BriefHistory,
+                                            discharge.CourseTreatment,
+                                            discharge.ConditionalDischarge,
+                                            discharge.ReferralFor1,
+                                            discharge.ReferralAgency1,
+                                            discharge.ReferralContactPersonal1,
+                                            discharge.ReferralPhone1,
+                                            discharge.ReferralHoursOperation1,
+                                            discharge.ReferralFor2,
+                                            discharge.ReferralAgency2,
+                                            discharge.ReferralContactPersonal2,
+                                            discharge.ReferralPhone2,
+                                            discharge.ReferralHoursOperation2,
+                                            discharge.FollowDischarge,
+                                            discharge.TreatmentPlanObjCumpl,
+                                            discharge.AgencyDischargeClient,
+                                            discharge.ClientDischargeAgainst,
+                                            discharge.ClientDeceased,
+                                            discharge.ClientMoved,
+                                            discharge.PhysicallyUnstable,
+                                            discharge.ClientReferred,
+                                            discharge.AdmissionedFor,
+                                            discharge.Hospitalization,
+                                            discharge.Others,
+                                            discharge.DateSignatureEmployee,
+                                            discharge.DateSignaturePerson,
+                                            discharge.Others_Explain,
+                                            discharge.DateSignatureSupervisor,
+            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()                                  
                                         });
             }
 
