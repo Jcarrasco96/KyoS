@@ -2479,6 +2479,10 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetDischargeDS(discharge));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
 
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMedicationsListDS(discharge.Client.MedicationList.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Medication");
+
             WebReport.Report.Prepare();
 
             Stream stream = new MemoryStream();
@@ -5207,6 +5211,38 @@ namespace KyoS.Web.Helpers
                                             item.Diagnostic.CreatedOn,
                                             item.Diagnostic.LastModifiedBy,
                                             item.Diagnostic.LastModifiedOn,
+                                        });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetMedicationsListDS(List<MedicationEntity> medicationList)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "Medication"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("ClientId", typeof(int));
+            dt.Columns.Add("Dosage", typeof(string));
+            dt.Columns.Add("Frequency", typeof(string));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Prescriber", typeof(string));
+
+            foreach (MedicationEntity item in medicationList)
+            {
+
+                dt.Rows.Add(new object[]
+                                        {
+                                            item.Id,
+                                            0,
+                                            item.Dosage,
+                                            item.Frequency,
+                                            item.Name,
+                                            item.Prescriber
                                         });
             }
 

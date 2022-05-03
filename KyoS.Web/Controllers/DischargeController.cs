@@ -60,7 +60,7 @@ namespace KyoS.Web.Controllers
                                               .Include(f => f.Discharge)
                                               .Include(f => f.Clients_Diagnostics)
 
-                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                              .Where(n => (n.Clinic.Id == user_logged.Clinic.Id && n.Status == StatusType.Close))
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
 
@@ -71,7 +71,7 @@ namespace KyoS.Web.Controllers
                                               .Include(f => f.Discharge)
                                               .Include(f => f.Clients_Diagnostics)
 
-                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                              .Where(n => (n.Clinic.Id == user_logged.Clinic.Id && n.Status == StatusType.Close))
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -374,18 +374,21 @@ namespace KyoS.Web.Controllers
         {
             DischargeEntity entity = _context.Discharge
 
-                                             .Include(f => f.Client)
+                                             .Include(d => d.Client)
                                              .ThenInclude(c => c.Clinic)
 
-                                             .Include(i => i.Client)
+                                             .Include(d => d.Client)
                                              .ThenInclude(c => c.EmergencyContact)
 
-                                             .Include(i => i.Client)
+                                             .Include(d => d.Client)
                                              .ThenInclude(c => c.LegalGuardian)
 
-                                             .Include(i => i.Client)
+                                             .Include(d => d.Client)
                                              .ThenInclude(c => c.Clients_Diagnostics)
                                              .ThenInclude(cd => cd.Diagnostic)
+
+                                             .Include(d => d.Client)
+                                             .ThenInclude(c => c.MedicationList)
 
                                              .FirstOrDefault(f => (f.Id == id));
             if (entity == null)
