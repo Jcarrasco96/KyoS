@@ -4300,7 +4300,7 @@ namespace KyoS.Web.Helpers
                                             fars.MCOID,
                                             fars.Country,
                                             fars.SignatureDate,
-                                            fars.MCOID,
+                                            fars.AdmissionedFor,
                                             fars.ProgramEvaluation,
                                         });
             }
