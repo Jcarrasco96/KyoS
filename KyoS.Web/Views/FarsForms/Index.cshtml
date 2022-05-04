@@ -147,6 +147,10 @@
                                             {
                                                 <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-success" title="Create Fars Form"><i class="glyphicon glyphicon-plus"></i></a>
                                             }
+                                            @if (item.Status == KyoS.Common.Enums.StatusType.Close && User.IsInRole("Mannager"))
+                                            {
+                                                <a class="btn btn-warning disabled" title="New Fars Form"><i class="glyphicon glyphicon-plus"></i></a>
+                                            }
                                         </td>
                                     </tr>
                                 }

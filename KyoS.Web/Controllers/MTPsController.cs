@@ -934,9 +934,9 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.SolAndVidaMTPReport(mtpEntity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }            
-            if (mtpEntity.Client.Clinic.Name == "HEALTH & BEAUTY NGB, INC")
+            if (mtpEntity.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
-                Stream stream = _reportHelper.HealthAndBeautyMTPReport(mtpEntity);
+                Stream stream = _reportHelper.DreamsMentalHealthMTPReport(mtpEntity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             if (mtpEntity.Client.Clinic.Name == "ADVANCED GROUP MEDICAL CENTER")
