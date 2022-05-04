@@ -87,7 +87,7 @@
                                         }
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Close)
                                         {
-                                            <span class="label label-danger">
+                                            <span class="label label-default">
                                                 Close
                                             </span>
                                         }
@@ -96,7 +96,14 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="right">
-                                        <a asp-action="IntakeDashboard" asp-route-id="@item.Id" class="btn btn-warning" title="New Intake"><i class="glyphicon glyphicon-plus"></i></a>
+                                        @if (User.IsInRole("Mannager"))
+                                        {
+                                            <a asp-action="IntakeDashboard" asp-route-id="@item.Id" class="btn btn-warning" title="New Intake"><i class="glyphicon glyphicon-plus"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-warning disabled" title="New Intake"><i class="glyphicon glyphicon-plus"></i></a>
+                                        }
                                         @if ((item.IntakeScreening != null) && (item.IntakeConsentForTreatment != null) && (item.IntakeConsentForRelease != null) && (item.IntakeConsumerRights != null) && (item.IntakeAcknowledgementHipa != null) && (item.IntakeAccessToServices != null)
                                             && (item.IntakeOrientationChecklist != null) && (item.IntakeTransportation != null) && (item.IntakeConsentPhotograph != null) && (item.IntakeFeeAgreement != null) && (item.IntakeTuberculosis != null)
                                               && (item.IntakeMedicalHistory != null))
@@ -149,10 +156,17 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="right">
-                                        <a asp-action="IntakeDashboard" asp-route-id="@item.Id" class="btn btn-success" title="Edit Intake"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        @if (User.IsInRole("Mannager"))
+                                        {
+                                            <a asp-action="IntakeDashboard" asp-route-id="@item.Id" class="btn btn-success" title="Edit Intake"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        }
+                                        else
+                                        { 
+                                            <a class="btn btn-success disabled" title="Edit Intake"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        }
                                         @if ((item.IntakeScreening != null) && (item.IntakeConsentForTreatment != null) && (item.IntakeConsentForRelease != null) && (item.IntakeConsumerRights != null) && (item.IntakeAcknowledgementHipa != null) && (item.IntakeAccessToServices != null)
-                               && (item.IntakeOrientationChecklist != null) && (item.IntakeTransportation != null) && (item.IntakeConsentPhotograph != null) && (item.IntakeFeeAgreement != null) && (item.IntakeTuberculosis != null)
-                                   && (item.IntakeMedicalHistory != null))
+                                           && (item.IntakeOrientationChecklist != null) && (item.IntakeTransportation != null) && (item.IntakeConsentPhotograph != null) && (item.IntakeFeeAgreement != null) && (item.IntakeTuberculosis != null)
+                                            && (item.IntakeMedicalHistory != null))
                                         {
                                             <a asp-action="PrintIntake" asp-route-id="@item.IntakeScreening.Id" class="btn btn-success" title="Print Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
