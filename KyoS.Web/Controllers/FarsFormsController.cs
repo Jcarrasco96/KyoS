@@ -34,6 +34,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -54,7 +55,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Mannager"))
+                if (User.IsInRole("Mannager")|| User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
                                               .Include(f => f.FarsFormList)
@@ -77,7 +78,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Supervisor")]
         public IActionResult Create(int id = 0)
         {
 
@@ -87,7 +88,7 @@ namespace KyoS.Web.Controllers
 
             FarsFormViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Supervisor"))
             {
 
 
@@ -136,7 +137,7 @@ namespace KyoS.Web.Controllers
                         ContID1 = "",
                         ContID2 = "",
                         ContID3 = "",
-
+                        ProgramEvaluation = ""
                     };
                     if (model.Client.FarsFormList == null)
                         model.Client.FarsFormList = new List<FarsFormEntity>();
@@ -150,7 +151,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Create(FarsFormViewModel FarsFormViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -224,18 +225,19 @@ namespace KyoS.Web.Controllers
                 SubstanceScale = FarsFormViewModel.SubstanceScale,
                 ThoughtProcessScale = FarsFormViewModel.ThoughtProcessScale,
                 TraumaticsScale = FarsFormViewModel.TraumaticsScale,
-                WorkScale = FarsFormViewModel.WorkScale,
+                WorkScale = FarsFormViewModel.WorkScale
+                
 
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", FarsFormViewModel) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Supervisor")]
         public IActionResult Edit(int id = 0)
         {
             FarsFormViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Supervisor"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -269,7 +271,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Edit(FarsFormViewModel farsFormViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -296,7 +298,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", farsFormViewModel) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -323,7 +325,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
         public IActionResult PrintFarsForm(int id)
         {
             FarsFormEntity entity = _context.FarsForm
