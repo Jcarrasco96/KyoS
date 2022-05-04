@@ -55,7 +55,7 @@ namespace KyoS.Web.Controllers
                 }
             }
             
-            return View();
+            return View(new ClinicViewModel {Id = 0 });
         }
 
         [HttpPost]

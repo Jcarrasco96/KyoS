@@ -194,7 +194,7 @@
                         <li><a asp-area="" asp-controller="Settings" asp-action="Index">Settings</a></li>
                     }
                     else
-                if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
+              if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -251,14 +251,14 @@
                                         <li>@Html.ActionLink("Behavioral Health History", "IndexBehavioralHealthHistory", "Bios")</li>
                                         <li>@Html.ActionLink("BIOs", "Index", "Bios")</li>
                                     </ul>
-                                </li>                                
+                                </li>
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">Discharges</a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Medications", "Index", "Medications")</li>
                                         <li>@Html.ActionLink("Discharges", "Index", "Discharge")</li>
                                     </ul>
-                                </li>                                
+                                </li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Diagnostics", "Index", "Diagnostics")</li>
                             </ul>
@@ -267,7 +267,7 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
+              if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -288,6 +288,29 @@
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Documentation <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
+                                <li>@Html.ActionLink("FARS Forms", "Index", "FarsForms")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">BIOs</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Behavioral Health History", "IndexBehavioralHealthHistory", "Bios")</li>
+                                        <li>@Html.ActionLink("BIOs", "Index", "Bios")</li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Discharges</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Medications", "Index", "Medications")</li>
+                                        <li>@Html.ActionLink("Discharges", "Index", "Discharge")</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Notes" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 Notes <span class="caret"></span>
                             </a>
@@ -300,7 +323,7 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                    if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
+                  if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -324,6 +347,29 @@
                                 <li>@Html.ActionLink("PSR Therapy", "Index", "Notes")</li>
                                 <li>@Html.ActionLink("Individual Therapy", "IndividualNotes", "Notes")</li>
                                 <li>@Html.ActionLink("Group Therapy", "GroupNotes", "Notes")</li>
+                            </ul>
+                        </li>
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Documentation <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
+                                <li>@Html.ActionLink("FARS Forms", "Index", "FarsForms")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">BIOs</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Behavioral Health History", "IndexBehavioralHealthHistory", "Bios")</li>
+                                        <li>@Html.ActionLink("BIOs", "Index", "Bios")</li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Discharges</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Medications", "Index", "Medications")</li>
+                                        <li>@Html.ActionLink("Discharges", "Index", "Discharge")</li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">

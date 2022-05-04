@@ -35,7 +35,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
         
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -60,10 +60,21 @@ namespace KyoS.Web.Controllers
                                               .Include(f => f.Discharge)
                                               .Include(f => f.Clients_Diagnostics)
 
-                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                              .Where(n => (n.Clinic.Id == user_logged.Clinic.Id && n.Status == StatusType.Close))
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
 
+                if (User.IsInRole("Supervisor"))
+                {
+                    return View(await _context.Clients
+
+                                              .Include(f => f.Discharge)
+                                              .Include(f => f.Clients_Diagnostics)
+
+                                              .Where(n => (n.Clinic.Id == user_logged.Clinic.Id && n.Status == StatusType.Close))
+                                              .OrderBy(f => f.Name)
+                                              .ToListAsync());
+                }
                 if (User.IsInRole("Facilitator"))
                 {
                     return View(await _context.Clients
@@ -71,7 +82,7 @@ namespace KyoS.Web.Controllers
                                               .Include(f => f.Discharge)
                                               .Include(f => f.Clients_Diagnostics)
 
-                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                              .Where(n => (n.Clinic.Id == user_logged.Clinic.Id && n.Status == StatusType.Close))
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -79,7 +90,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Supervisor")]
         public IActionResult Create(int id = 0)
         {
 
@@ -89,7 +100,7 @@ namespace KyoS.Web.Controllers
 
             DischargeViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Supervisor"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -105,12 +116,12 @@ namespace KyoS.Web.Controllers
 
                                          .FirstOrDefault(n => n.Id == id),
                         AdmissionedFor = user_logged.FullName,
-                        AgencyDischargeClient = true,
+                        AgencyDischargeClient = false,
                         BriefHistory = "",
-                        ClientDeceased = true,
-                        ClientDischargeAgainst = true,
-                        ClientMoved = true,
-                        ClientReferred = true,
+                        ClientDeceased = false,
+                        ClientDischargeAgainst = false,
+                        ClientMoved = false,
+                        ClientReferred = false,
                         Client_FK = id,
                         ConditionalDischarge = "",
                         CourseTreatment = "",
@@ -118,8 +129,8 @@ namespace KyoS.Web.Controllers
                         DateReport = DateTime.Now,
                         FollowDischarge = "",
                         Id = 0,
-                        PhysicallyUnstable = true,
-                        Planned = true,
+                        PhysicallyUnstable = false,
+                        Planned = false,
                         ReasonDischarge = "",
                         ReferralAgency1 = "",
                         ReferralAgency2 = "",
@@ -131,7 +142,7 @@ namespace KyoS.Web.Controllers
                         ReferralHoursOperation2 = "",
                         ReferralPhone1 = "",
                         ReferralPhone2 = "",
-                        TreatmentPlanObjCumpl = true,
+                        TreatmentPlanObjCumpl = false,
                         Others = false,
                         Others_Explain = "",
                         Hospitalization = false,
@@ -157,12 +168,12 @@ namespace KyoS.Web.Controllers
 
                                  .FirstOrDefault(n => n.Id == id),
                 AdmissionedFor = user_logged.FullName,
-                AgencyDischargeClient = true,
+                AgencyDischargeClient = false,
                 BriefHistory = "",
-                ClientDeceased = true,
-                ClientDischargeAgainst = true,
-                ClientMoved = true,
-                ClientReferred = true,
+                ClientDeceased = false,
+                ClientDischargeAgainst = false,
+                ClientMoved = false,
+                ClientReferred = false,
                 Client_FK = id,
                 ConditionalDischarge = "",
                 CourseTreatment = "",
@@ -170,8 +181,8 @@ namespace KyoS.Web.Controllers
                 DateReport = DateTime.Now,
                 FollowDischarge = "",
                 Id = 0,
-                PhysicallyUnstable = true,
-                Planned = true,
+                PhysicallyUnstable = false,
+                Planned = false,
                 ReasonDischarge = "",
                 ReferralAgency1 = "",
                 ReferralAgency2 = "",
@@ -183,7 +194,7 @@ namespace KyoS.Web.Controllers
                 ReferralHoursOperation2 = "",
                 ReferralPhone1 = "",
                 ReferralPhone2 = "",
-                TreatmentPlanObjCumpl = true,
+                TreatmentPlanObjCumpl = false,
                 Others = false,
                 Others_Explain = "",
                 Hospitalization = false,
@@ -196,7 +207,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Create(DischargeViewModel DischargeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -271,12 +282,12 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", DischargeViewModel) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Supervisor")]
         public IActionResult Edit(int id = 0)
         {
             DischargeViewModel model;
 
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Supervisor"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -315,7 +326,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Edit(DischargeViewModel dischargeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -342,7 +353,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", dischargeViewModel) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -369,23 +380,26 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
         public IActionResult PrintDischarge(int id)
         {
             DischargeEntity entity = _context.Discharge
 
-                                             .Include(f => f.Client)
+                                             .Include(d => d.Client)
                                              .ThenInclude(c => c.Clinic)
 
-                                             .Include(i => i.Client)
+                                             .Include(d => d.Client)
                                              .ThenInclude(c => c.EmergencyContact)
 
-                                             .Include(i => i.Client)
+                                             .Include(d => d.Client)
                                              .ThenInclude(c => c.LegalGuardian)
 
-                                             .Include(i => i.Client)
+                                             .Include(d => d.Client)
                                              .ThenInclude(c => c.Clients_Diagnostics)
                                              .ThenInclude(cd => cd.Diagnostic)
+
+                                             .Include(d => d.Client)
+                                             .ThenInclude(c => c.MedicationList)
 
                                              .FirstOrDefault(f => (f.Id == id));
             if (entity == null)

@@ -18,7 +18,7 @@
     <div class="col-md-12">
         @*<div class="alert alert-warning" role="alert">
             <span class="sr-only"></span>*@
-        <strong>Note: </strong> All clients will be displayed, orange color means the client has not discharge documents
+        <strong>Note: </strong> Only closed clients will be displayed, orange color means the client has not discharge documents
         @*</div>*@
     </div>
     <div class="col-md-12">
@@ -94,8 +94,16 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="right">
-                                        <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="New Discharge"><i class="glyphicon glyphicon-plus"></i></a>
-                                        <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>                                        
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close && User.IsInRole("Supervisor"))
+                                        {
+                                            <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="New Discharge"><i class="glyphicon glyphicon-plus"></i></a>
+                                            <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        { 
+                                            <a class="btn btn-warning disabled" title="New Discharge"><i class="glyphicon glyphicon-plus"></i></a>
+                                            <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
                                     </td>
                                 </tr>
 
@@ -139,8 +147,16 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="right">
-                                        <a asp-action="Edit" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a asp-action="PrintDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>                                        
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close && User.IsInRole("Supervisor"))
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="PrintDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-warning disabled" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="PrintDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
                                     </td>
                                 </tr>
 

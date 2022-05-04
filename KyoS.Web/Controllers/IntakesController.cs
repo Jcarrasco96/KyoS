@@ -15,8 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using System.IO;
 
 namespace KyoS.Web.Controllers
-{
-    [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+{    
     public class IntakesController : Controller
     {
         private readonly IUserHelper _userHelper;
@@ -36,6 +35,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -54,26 +54,24 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Mannager"))
-                    return View(await _context.Clients
+                return View(await _context.Clients
 
-                                              .Include(n => n.IntakeScreening)
-                                              .Include(n => n.IntakeConsentForTreatment)
-                                              .Include(n => n.IntakeConsentForRelease)
-                                              .Include(n => n.IntakeConsumerRights)
-                                              .Include(n => n.IntakeAcknowledgementHipa)
-                                              .Include(n => n.IntakeAccessToServices)
-                                              .Include(n => n.IntakeOrientationChecklist)
-                                              .Include(n => n.IntakeTransportation)
-                                              .Include(n => n.IntakeConsentPhotograph)
-                                              .Include(n => n.IntakeFeeAgreement)
-                                              .Include(n => n.IntakeTuberculosis)
-                                              .Include(n => n.IntakeMedicalHistory)
+                                           .Include(n => n.IntakeScreening)
+                                           .Include(n => n.IntakeConsentForTreatment)
+                                           .Include(n => n.IntakeConsentForRelease)
+                                           .Include(n => n.IntakeConsumerRights)
+                                           .Include(n => n.IntakeAcknowledgementHipa)
+                                           .Include(n => n.IntakeAccessToServices)
+                                           .Include(n => n.IntakeOrientationChecklist)
+                                           .Include(n => n.IntakeTransportation)
+                                           .Include(n => n.IntakeConsentPhotograph)
+                                           .Include(n => n.IntakeFeeAgreement)
+                                           .Include(n => n.IntakeTuberculosis)
+                                           .Include(n => n.IntakeMedicalHistory)
 
-                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
-                                              .ToListAsync());                
-            }
-            return RedirectToAction("NotAuthorized", "Account");
+                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                           .ToListAsync());                
+            }            
         }
 
         [Authorize(Roles = "Mannager")]
@@ -655,7 +653,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsumerRights", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
         public IActionResult PrintIntake(int id)
         {
             IntakeScreeningEntity entity = _context.IntakeScreenings
@@ -704,6 +702,9 @@ namespace KyoS.Web.Controllers
 
                                                    .Include(i => i.Client)
                                                    .ThenInclude(c => c.IntakeMedicalHistory)
+
+                                                   .Include(i => i.Client)
+                                                   .ThenInclude(c => c.Discharge)
 
                                                    .FirstOrDefault(i => (i.Id == id));
             if (entity == null)

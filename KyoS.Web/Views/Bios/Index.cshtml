@@ -83,7 +83,7 @@
                                                         <td>@Html.DisplayFor(modelItem => product1.Problem)</td>
                                                         <td>@Html.DisplayFor(modelItem => product1.Date)</td>
                                                         <td>
-                                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Mannager"))
+                                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Supervisor"))
                                                             {
                                                                 <a asp-action="EditBehavioral" asp-route-id="@product1.Id" class="btn btn-warning" title="Add Behavioral Health History"><i class="glyphicon glyphicon-pencil"></i></a>
                                                             }
@@ -134,16 +134,23 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="right">
-                                        <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="Create BIO"><i class="glyphicon glyphicon-plus"></i></a>
-                                        @if ((item.Bio != null))
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Supervisor"))
                                         {
-                                            <a asp-action="PrintBio" asp-route-id="@item.Bio.Id" class="btn btn-success" title="Print BIO" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="Create BIO"><i class="glyphicon glyphicon-plus"></i></a>
+                                        }
+                                        else
+                                        { 
+                                            <a class="btn btn-warning disabled" title="Create BIO"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        }
+                                       @if ((item.Bio != null))
+                                        {
+                                           <a asp-action="PrintBio" asp-route-id="@item.Bio.Id" class="btn btn-success" title="Print BIO" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
-                                            <a class="btn btn-success disabled" title="Print BIO"><i class="glyphicon glyphicon-print"></i></a>
+                                           <a class="btn btn-success disabled" title="Print BIO"><i class="glyphicon glyphicon-print"></i></a>
                                         }
-                                    </td>
+                                        </td>
                                 </tr>
                             }
                             else
@@ -171,7 +178,7 @@
                                                         <td>@Html.DisplayFor(modelItem => product1.Problem)</td>
                                                         <td>@Html.DisplayFor(modelItem => product1.Date)</td>
                                                         <td>
-                                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Mannager"))
+                                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Supervisor"))
                                                             {
                                                                 <a asp-action="EditBehavioral" asp-route-id="@product1.Id" class="btn btn-warning" title="Add Behavioral Health History"><i class="glyphicon glyphicon-pencil"></i></a>
                                                             }
@@ -222,16 +229,23 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="right">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Supervisor"))
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        }
+                                        else
+                                        { 
+                                            <a class="btn btn-success disabled" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a> 
+                                        }
                                        @if ((item.Bio != null))
                                         {
-                                            <a asp-action="PrintBio" asp-route-id="@item.Bio.Id" class="btn btn-success" title="Print BIO" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                           <a asp-action="PrintBio" asp-route-id="@item.Bio.Id" class="btn btn-success" title="Print BIO" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
-                                            <a class="btn btn-success disabled" title="Print BIO"><i class="glyphicon glyphicon-print"></i></a>
+                                           <a class="btn btn-success disabled" title="Print BIO"><i class="glyphicon glyphicon-print"></i></a>
                                         }
-                                    </td>
+                                        </td>
                                 </tr>
                             }
                         }
