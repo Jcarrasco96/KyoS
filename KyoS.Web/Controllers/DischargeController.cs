@@ -418,6 +418,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.FloridaSocialHSDischargeReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (entity.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+            {
+                Stream stream = _reportHelper.DreamsMentalHealthDischargeReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }
