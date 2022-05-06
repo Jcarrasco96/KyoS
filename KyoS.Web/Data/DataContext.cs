@@ -74,6 +74,7 @@ namespace KyoS.Web.Data
         public DbSet<FarsFormEntity> FarsForm { get; set; }
         public DbSet<BioEntity> Bio { get; set; }
         public DbSet<Bio_BehavioralHistoryEntity> Bio_BehavioralHistory { get; set; }
+        public DbSet<AdendumEntity> Adendums { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -193,75 +194,75 @@ namespace KyoS.Web.Data
                         .HasForeignKey<IntakeConsentForTreatmentEntity>(s => s.Client_FK);
 
             modelBuilder.Entity<ClientEntity>()
-                       .HasOne(c => c.IntakeConsentForRelease)
+                        .HasOne(c => c.IntakeConsentForRelease)
+                        .WithOne(s => s.Client)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<IntakeConsentForReleaseEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                        .HasOne(c => c.IntakeConsumerRights)
+                        .WithOne(s => s.Client)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<IntakeConsumerRightsEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                       .HasOne(c => c.IntakeAcknowledgementHipa)
                        .WithOne(s => s.Client)
                        .OnDelete(DeleteBehavior.Cascade)
-                       .HasForeignKey<IntakeConsentForReleaseEntity>(s => s.Client_FK);
+                       .HasForeignKey<IntakeAcknowledgementHippaEntity>(s => s.Client_FK);
 
             modelBuilder.Entity<ClientEntity>()
-                       .HasOne(c => c.IntakeConsumerRights)
-                       .WithOne(s => s.Client)
-                       .OnDelete(DeleteBehavior.Cascade)
-                       .HasForeignKey<IntakeConsumerRightsEntity>(s => s.Client_FK);
+                        .HasOne(c => c.IntakeAccessToServices)
+                        .WithOne(s => s.Client)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<IntakeAccessToServicesEntity>(s => s.Client_FK);
 
             modelBuilder.Entity<ClientEntity>()
-                      .HasOne(c => c.IntakeAcknowledgementHipa)
-                      .WithOne(s => s.Client)
-                      .OnDelete(DeleteBehavior.Cascade)
-                      .HasForeignKey<IntakeAcknowledgementHippaEntity>(s => s.Client_FK);
+                        .HasOne(c => c.IntakeOrientationChecklist)
+                        .WithOne(s => s.Client)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<IntakeOrientationChecklistEntity>(s => s.Client_FK);
 
             modelBuilder.Entity<ClientEntity>()
-                     .HasOne(c => c.IntakeAccessToServices)
-                     .WithOne(s => s.Client)
-                     .OnDelete(DeleteBehavior.Cascade)
-                     .HasForeignKey<IntakeAccessToServicesEntity>(s => s.Client_FK);
+                        .HasOne(c => c.IntakeTransportation)
+                        .WithOne(s => s.Client)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<IntakeTransportationEntity>(s => s.Client_FK);
 
             modelBuilder.Entity<ClientEntity>()
-                     .HasOne(c => c.IntakeOrientationChecklist)
-                     .WithOne(s => s.Client)
-                     .OnDelete(DeleteBehavior.Cascade)
-                     .HasForeignKey<IntakeOrientationChecklistEntity>(s => s.Client_FK);
+                        .HasOne(c => c.IntakeConsentPhotograph)
+                        .WithOne(s => s.Client)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<IntakeConsentPhotographEntity>(s => s.Client_FK);
 
             modelBuilder.Entity<ClientEntity>()
-                     .HasOne(c => c.IntakeTransportation)
-                     .WithOne(s => s.Client)
-                     .OnDelete(DeleteBehavior.Cascade)
-                     .HasForeignKey<IntakeTransportationEntity>(s => s.Client_FK);
+                        .HasOne(c => c.IntakeFeeAgreement)
+                        .WithOne(s => s.Client)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<IntakeFeeAgreementEntity>(s => s.Client_FK);
 
             modelBuilder.Entity<ClientEntity>()
-                    .HasOne(c => c.IntakeConsentPhotograph)
-                    .WithOne(s => s.Client)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasForeignKey<IntakeConsentPhotographEntity>(s => s.Client_FK);
+                        .HasOne(c => c.IntakeTuberculosis)
+                        .WithOne(s => s.Client)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<IntakeTuberculosisEntity>(s => s.Client_FK);
 
             modelBuilder.Entity<ClientEntity>()
-                   .HasOne(c => c.IntakeFeeAgreement)
-                   .WithOne(s => s.Client)
-                   .OnDelete(DeleteBehavior.Cascade)
-                   .HasForeignKey<IntakeFeeAgreementEntity>(s => s.Client_FK);
+                        .HasOne(c => c.IntakeMedicalHistory)
+                        .WithOne(s => s.Client)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<IntakeMedicalHistoryEntity>(s => s.Client_FK);
 
             modelBuilder.Entity<ClientEntity>()
-                  .HasOne(c => c.IntakeTuberculosis)
-                  .WithOne(s => s.Client)
-                  .OnDelete(DeleteBehavior.Cascade)
-                  .HasForeignKey<IntakeTuberculosisEntity>(s => s.Client_FK);
+                        .HasOne(c => c.Discharge)
+                        .WithOne(s => s.Client)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<DischargeEntity>(s => s.Client_FK);
 
             modelBuilder.Entity<ClientEntity>()
-                 .HasOne(c => c.IntakeMedicalHistory)
-                 .WithOne(s => s.Client)
-                 .OnDelete(DeleteBehavior.Cascade)
-                 .HasForeignKey<IntakeMedicalHistoryEntity>(s => s.Client_FK);
-
-            modelBuilder.Entity<ClientEntity>()
-                .HasOne(c => c.Discharge)
-                .WithOne(s => s.Client)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasForeignKey<DischargeEntity>(s => s.Client_FK);
-
-            modelBuilder.Entity<ClientEntity>()
-                                  .HasMany(c => c.MedicationList)
-                                  .WithOne(s => s.Client)
-                                  .OnDelete(DeleteBehavior.Cascade);
+                        .HasMany(c => c.MedicationList)
+                        .WithOne(s => s.Client)
+                        .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ClientEntity>()
                         .HasOne(c => c.Bio)
@@ -272,6 +273,11 @@ namespace KyoS.Web.Data
             modelBuilder.Entity<Bio_BehavioralHistoryEntity>()
                         .HasOne(o => o.Client)
                         .WithMany(g => g.List_BehavioralHistory)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<MTPEntity>()
+                        .HasMany(c => c.AdendumList)
+                        .WithOne(s => s.Mtp)
                         .OnDelete(DeleteBehavior.Cascade);
         }
     }

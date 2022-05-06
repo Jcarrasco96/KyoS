@@ -276,6 +276,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
                                 <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
+                                <li>@Html.ActionLink("Adendums", "IndexAdendum", "MTPs")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
@@ -356,6 +357,13 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
                                 <li>@Html.ActionLink("FARS Forms", "Index", "FarsForms")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">MTPs</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("MTP", "Index", "MTPs")</li>
+                                        <li>@Html.ActionLink("Adendum", "IndexAdendum", "MTPs")</li>
+                                    </ul>
+                                </li>
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">BIOs</a>
                                     <ul class="dropdown-menu">

@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220504185258_update_adendum")]
+    partial class update_adendum
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4640,9 +4642,8 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("FacilitatorId");
 
                     b.HasOne("KyoS.Web.Data.Entities.MTPEntity", "Mtp")
-                        .WithMany("AdendumList")
-                        .HasForeignKey("MtpId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany()
+                        .HasForeignKey("MtpId");
 
                     b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
                         .WithMany()
@@ -5544,8 +5545,6 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.MTPEntity", b =>
                 {
-                    b.Navigation("AdendumList");
-
                     b.Navigation("Goals");
                 });
 

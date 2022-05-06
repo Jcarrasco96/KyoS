@@ -40,5 +40,10 @@
         Solved,
         NotValid
     }
-   
+    public enum AdendumStatus
+    {
+        Edition,
+        Pending,
+        Approved
+    }
 }

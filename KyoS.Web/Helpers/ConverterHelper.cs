@@ -2584,5 +2584,59 @@ namespace KyoS.Web.Helpers
             };
 
         }
+
+        public async Task<AdendumEntity> ToAdendumEntity(AdendumViewModel model, bool isNew)
+        {
+            return new AdendumEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Dateidentified = model.Dateidentified,
+                Duration = model.Duration,
+                Frecuency = model.Frecuency,
+                ProblemStatement = model.ProblemStatement,
+                Status = model.Status,
+                Unit = model.Unit,
+                Mtp = await _context.MTPs
+                                    .Include(m => m.Client)
+                                    .ThenInclude(c => c.Clients_Diagnostics)
+                                    .ThenInclude(cd => cd.Diagnostic)
+                                    .FirstOrDefaultAsync(c => c.Id == model.IdMTP),
+                
+                Goals = model.Goals,
+                Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == model.IdSupervisor),
+                Facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.Id == model.IdFacilitator)
+
+            };
+        }
+
+        public AdendumViewModel ToAdendumViewModel(AdendumEntity model)
+        {
+            AdendumViewModel salida;
+            salida = new AdendumViewModel
+            {
+                Id = model.Id,
+                Dateidentified = model.Dateidentified,
+                Duration = model.Duration,
+                Frecuency = model.Frecuency,
+                ProblemStatement = model.ProblemStatement,
+                Status = model.Status,
+                Unit = model.Unit,
+                IdMTP = model.Mtp.Id,
+                Facilitator = model.Facilitator,
+                Goals = model.Goals,
+                Mtp = model.Mtp,
+                IdSupervisor = model.Supervisor.Id
+                
+            };
+            if (model.Facilitator != null)
+                salida.IdFacilitator = model.Facilitator.Id;
+            else
+                salida.IdFacilitator = 0;
+            if (model.Supervisor != null)
+                salida.IdSupervisor = model.Supervisor.Id;
+            else
+                salida.IdSupervisor = 0;
+            return salida;
+        }
     }
 }
