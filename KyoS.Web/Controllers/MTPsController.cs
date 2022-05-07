@@ -32,7 +32,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -70,7 +70,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
         public IActionResult Create(int id = 0, int idClient = 0)
         {
             if (id == 1)
@@ -142,7 +142,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
         public async Task<IActionResult> Create(MTPViewModel mtpViewModel, IFormCollection form)
         {
             if (ModelState.IsValid)
@@ -209,7 +209,7 @@ namespace KyoS.Web.Controllers
             return View(mtpViewModel);
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Mannager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -246,7 +246,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Mannager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -281,7 +281,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Mannager")]
         public async Task<IActionResult> Edit(int id, MTPViewModel mtpViewModel, IFormCollection form)
         {
             if (id != mtpViewModel.Id)
@@ -353,7 +353,7 @@ namespace KyoS.Web.Controllers
             return View(mtpViewModel);
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Mannager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -381,7 +381,7 @@ namespace KyoS.Web.Controllers
             return View(mtpEntity);
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
         public async Task<IActionResult> UpdateGoals(int? id, int idError = 0)
         {
             if (id == null)
@@ -411,8 +411,8 @@ namespace KyoS.Web.Controllers
             return View(mtpEntity);
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
-        public async Task<IActionResult> CreateGoal(int? id)
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
+        public async Task<IActionResult> CreateGoal(int? id, int idAdendum)
         {
             if (id == null)
             {
@@ -434,7 +434,8 @@ namespace KyoS.Web.Controllers
                 IdMTP = mtpEntity.Id,
                 Number = mtpEntity.Goals.Count() + 1,
                 IdService = 0,
-                Services = _combosHelper.GetComboServices()
+                Services = _combosHelper.GetComboServices(), 
+                IdAdendum = idAdendum
             };
 
             return View(model);
@@ -442,7 +443,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
         public async Task<IActionResult> CreateGoal(int id, GoalViewModel model)
         {
             if (id != model.Id)
@@ -483,7 +484,10 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("UpdateGoals", new { id = model.IdMTP });
+                    if(model.IdAdendum == 0)
+                        return RedirectToAction("UpdateGoals", new { id = model.IdMTP });
+                    else
+                        return RedirectToAction("EditAdendum", new { id = model.IdAdendum });
                 }
                 catch (System.Exception ex)
                 {
@@ -529,8 +533,8 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("UpdateGoals", new { id = goalEntity.MTP.Id });
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
-        public async Task<IActionResult> EditGoal(int? id)
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
+        public async Task<IActionResult> EditGoal(int? id, int idAdendum)
         {
             if (id == null)
             {
@@ -538,7 +542,10 @@ namespace KyoS.Web.Controllers
             }
 
             GoalEntity goalEntity = await _context.Goals.Include(g => g.MTP)
-                                                                       .ThenInclude(m => m.Client).FirstOrDefaultAsync(d => d.Id == id);
+                                                        .ThenInclude(m => m.Client)
+                                                        .Include(g => g.Adendum)
+                                                        .FirstOrDefaultAsync(d => d.Id == id);
+
             GoalViewModel model = _converterHelper.ToGoalViewModel(goalEntity);
             if (model == null)
             {
@@ -550,7 +557,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
         public async Task<IActionResult> EditGoal(int id, GoalViewModel model)
         {
             if (id != model.Id)
@@ -591,7 +598,10 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("UpdateGoals", new { id = model.IdMTP });
+                    if(model.IdAdendum == 0)
+                        return RedirectToAction("UpdateGoals", new { id = model.IdMTP });
+                    else
+                        return RedirectToAction("EditAdendum", new { id = model.IdAdendum });
                 }
                 catch (System.Exception ex)
                 {
@@ -610,7 +620,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
         public async Task<IActionResult> UpdateObjectives(int? id, int idError = 0)
         {
             if (id == null)
@@ -635,7 +645,7 @@ namespace KyoS.Web.Controllers
             return View(goalEntity);
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
         public async Task<IActionResult> CreateObjective(int? id)
         {
             if (id == null)
@@ -671,7 +681,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
         public async Task<IActionResult> CreateObjective(ObjectiveViewModel model, IFormCollection form)
         {
             if (ModelState.IsValid)
@@ -760,7 +770,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Mannager")]
         public async Task<IActionResult> DeleteObjective(int? id)
         {
             if (id == null)
@@ -787,7 +797,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("UpdateObjectives", new { objectiveEntity.Goal.Id });
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
         public async Task<IActionResult> EditObjective(int? id)
         {
             if (id == null)
@@ -822,7 +832,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
         public async Task<IActionResult> EditObjective(ObjectiveViewModel model, IFormCollection form)
         {
             GoalEntity goal = await _context.Goals
@@ -1053,6 +1063,7 @@ namespace KyoS.Web.Controllers
                 {
                     return View(await _context.MTPs
                                               .Include(m => m.AdendumList)
+                                              .ThenInclude(c => c.Facilitator)
                                               .Include(c => c.Client)
                                               .ThenInclude(c => c.Clinic)
                                               .Where(m => m.Client.Clinic.Id == clinic.Id)
@@ -1092,7 +1103,8 @@ namespace KyoS.Web.Controllers
                     Unit = 4,
                     Facilitator = new FacilitatorEntity(),
                     IdSupervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Id,
-                    IdFacilitator = 0
+                    IdFacilitator = 0,
+                    Goals = new List<GoalEntity>()
                 };
             }
             if (User.IsInRole("Facilitator"))
@@ -1113,7 +1125,8 @@ namespace KyoS.Web.Controllers
                     Unit = 4,
                     Supervisor = new SupervisorEntity(),
                     IdFacilitator = _context.Facilitators.FirstOrDefault(n => n.Name == user_logged.FullName).Id,
-                    IdSupervisor = 0
+                    IdSupervisor = 0,
+                    Goals = new List<GoalEntity>()
                 };
 
                 return View(model);
@@ -1137,7 +1150,8 @@ namespace KyoS.Web.Controllers
                 AdendumEntity adendumEntity = _context.Adendums.Find(adendumViewModel.Id);
                 if (adendumEntity == null)
                 {
-                    adendumEntity = await _converterHelper.ToAdendumEntity(adendumViewModel, true);
+                    
+                    adendumEntity = await _converterHelper.ToAdendumEntity(adendumViewModel, true, user_logged.UserName);
                                        
                     _context.Adendums.Add(adendumEntity);
                     try
@@ -1199,6 +1213,8 @@ namespace KyoS.Web.Controllers
                                                       .ThenInclude(m => m.Client)
                                                       .ThenInclude(c => c.Clients_Diagnostics)
                                                       .ThenInclude(cd => cd.Diagnostic)
+                                                      .Include(m => m.Goals)
+                                                      .ThenInclude(cd => cd.Objetives)
                                                       .Include(m => m.Supervisor)
                                                       .Include(m => m.Facilitator)
                                                       .FirstOrDefault(m => m.Id == id);
@@ -1232,7 +1248,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                AdendumEntity adendumEntity = await _converterHelper.ToAdendumEntity(adendumViewModel, false);
+                AdendumEntity adendumEntity = await _converterHelper.ToAdendumEntity(adendumViewModel, false, user_logged.Id);
                 _context.Adendums.Update(adendumEntity);
                 try
                 {
@@ -1250,5 +1266,80 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditAdendum", adendumViewModel) });
         }
 
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public async Task<IActionResult> FinishEditingAdendum(int id)
+        {
+            AdendumEntity adendum = await _context.Adendums.FirstOrDefaultAsync(n => n.Id == id);
+            if (User.IsInRole("Supervisor"))
+            {
+                adendum.Status = AdendumStatus.Approved;
+            }
+            else
+            {
+                adendum.Status = AdendumStatus.Pending;
+            }
+
+            _context.Update(adendum);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(IndexAdendum));
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ApproveAdendum(int id)
+        {
+            AdendumEntity adendum = await _context.Adendums.FirstOrDefaultAsync(n => n.Id == id);
+            adendum.Status = AdendumStatus.Approved;
+            _context.Update(adendum);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(PendingAdendum));
+        }
+
+        [Authorize(Roles = "Supervisor, Mannager")]
+        public async Task<IActionResult> PendingAdendum(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                  .Include(u => u.Clinic)
+                                                  .ThenInclude(c => c.Setting)
+                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if (clinic != null)
+                {
+                    return View(await _context.Adendums
+                                              .Include(c => c.Mtp)
+                                              .ThenInclude(c => c.Client)
+                                              .ThenInclude(c => c.Clinic)
+                                              .Include(c => c.Goals)
+                                              .ThenInclude(c => c.Objetives)
+                                              .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
+                                                    && m.Status == AdendumStatus.Pending)
+                                              .OrderBy(m => m.Mtp.Client.Clinic.Name).ToListAsync());
+
+                }
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ReviewAdendum(int id)
+        {
+            AdendumEntity adendum = await _context.Adendums.FirstOrDefaultAsync(n => n.Id == id);
+            adendum.Status = AdendumStatus.Edition;
+            _context.Update(adendum);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(PendingAdendum));
+        }
     }
 }

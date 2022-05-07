@@ -25,5 +25,7 @@ namespace KyoS.Web.Data.Entities
 
         public MTPEntity MTP { get; set; }
         public IEnumerable<ObjetiveEntity> Objetives { get; set; }
+
+        public AdendumEntity Adendum { get; set; }
     }
 }

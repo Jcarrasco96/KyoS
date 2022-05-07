@@ -32,7 +32,7 @@
                     <thead>
                         <tr>
                             <th class="col-md-1">
-                                Client with MTP
+                               
                             </th>
                             <th class="col-md-2">
                                 Client with MTP
@@ -75,6 +75,7 @@
                                                     <th class="col-md-2" style="text-align:center">Unit</th>
                                                     <th class="col-md-2" style="text-align:center"> Frecuency</th>
                                                     <th class="col-md-2" style="text-align:center">Duration (month)</th>
+                                                    <th class="col-md-2" style="text-align:center">Create by</th>
                                                     <th class="col-md-2"></th>
                                                 </tr>
                                                 @foreach (var element in item.AdendumList)
@@ -84,18 +85,19 @@
                                                             <td align="center">@Html.DisplayFor(modelItem => element.Unit)</td>
                                                             <td align="center">@Html.DisplayFor(modelItem => element.Frecuency)</td>
                                                             <td align="center">@Html.DisplayFor(modelItem => element.Duration)</td>
+                                                            <td align="center">@Html.DisplayFor(modelItem => element.CreatedBy)</td>
                                                             <td align="center">
-                                                                @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.AdendumStatus.Edition && (User.IsInRole("Supervisor") || User.IsInRole("Facilitator")))
+                                                                @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.AdendumStatus.Edition && (element.Status == KyoS.Common.Enums.AdendumStatus.Pending || element.CreatedBy == User.Identity.Name))
                                                                 {
                                                                     <a asp-action="EditAdendum" asp-route-id="@element.Id" class="btn btn-warning" title="Edit Adendum"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                    <a asp-action="CreateGoal" asp-route-id="@item.Id" class="btn btn-info" title="Create Goal"><i class="glyphicon glyphicon-list"></i></a>
+                                                                    <a asp-action="FinishEditingAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Finish edition of Adendum"><i class="glyphicon glyphicon-ok"></i></a>
                                                                     <a asp-action="PrintAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Print Adendum" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                                     @*<button data-id="@element.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete Fars Form"><i class="glyphicon glyphicon-trash"></i></button>*@
                                                                 }
                                                                 else
                                                                 {
                                                                     <a class="btn btn-warning disabled" title="Edit Adendum"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                    <a class="btn btn-info disabled" title="Create Goal"><i class="glyphicon glyphicon-list"></i></a>
+                                                                    <a class="btn btn-success disabled" title="Finish edition of Adendum"><i class="glyphicon glyphicon-ok"></i></a>
                                                                     <a asp-action="PrintAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Print Adendum" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                                     @*<a class="btn btn-warning disabled" title="Delete Fars Form"><i class="glyphicon glyphicon-pencil"></i></a>*@
                                                                 }

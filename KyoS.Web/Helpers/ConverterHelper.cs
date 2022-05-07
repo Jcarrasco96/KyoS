@@ -373,13 +373,16 @@ namespace KyoS.Web.Helpers
                 Name = model.Name,
                 AreaOfFocus = model.AreaOfFocus,
                 MTP = await _context.MTPs.FindAsync(model.IdMTP),
-                Service = ServiceUtils.GetServiceByIndex(model.IdService)
+                Service = ServiceUtils.GetServiceByIndex(model.IdService),
+                Adendum = await _context.Adendums.FindAsync(model.IdAdendum)
+
             };
         }
 
         public GoalViewModel ToGoalViewModel(GoalEntity goalEntity)
         {
-            return new GoalViewModel
+            GoalViewModel model;
+            model = new GoalViewModel
             {
                 Id = goalEntity.Id,
                 Number = goalEntity.Number,
@@ -389,7 +392,15 @@ namespace KyoS.Web.Helpers
                 AreaOfFocus = goalEntity.AreaOfFocus,
                 IdService = Convert.ToInt32(goalEntity.Service),
                 Services = _combosHelper.GetComboServices()
+                
             };
+            if (goalEntity.Adendum != null)
+            {
+                model.IdAdendum = goalEntity.Adendum.Id;
+               
+            }
+
+            return model;
         }
 
         public async Task<ObjetiveEntity> ToObjectiveEntity(ObjectiveViewModel model, bool isNew)
@@ -2585,7 +2596,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<AdendumEntity> ToAdendumEntity(AdendumViewModel model, bool isNew)
+        public async Task<AdendumEntity> ToAdendumEntity(AdendumViewModel model, bool isNew, string userId)
         {
             return new AdendumEntity
             {
@@ -2604,7 +2615,11 @@ namespace KyoS.Web.Helpers
                 
                 Goals = model.Goals,
                 Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == model.IdSupervisor),
-                Facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.Id == model.IdFacilitator)
+                Facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.Id == model.IdFacilitator),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
 
             };
         }
@@ -2625,8 +2640,11 @@ namespace KyoS.Web.Helpers
                 Facilitator = model.Facilitator,
                 Goals = model.Goals,
                 Mtp = model.Mtp,
-                IdSupervisor = model.Supervisor.Id
-                
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+
             };
             if (model.Facilitator != null)
                 salida.IdFacilitator = model.Facilitator.Id;
