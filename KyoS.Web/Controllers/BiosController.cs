@@ -44,9 +44,11 @@ namespace KyoS.Web.Controllers
             }
 
             UserEntity user_logged = await _context.Users
-                                                           .Include(u => u.Clinic)
-                                                           .ThenInclude(c => c.Setting)
-                                                           .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
@@ -1072,6 +1074,59 @@ namespace KyoS.Web.Controllers
             }
 
             return RedirectToAction("CreateBehavioral", new { id = Bio_BehavioralEntity.Client.Id });
+        }
+
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        public IActionResult PrintBio(int id)
+        {
+            BioEntity entity = _context.Bio
+
+                                       .Include(b => b.Client)
+                                       .ThenInclude(c => c.Clinic)
+
+                                       .Include(b => b.Client)
+                                       .ThenInclude(c => c.EmergencyContact)
+
+                                       .Include(b => b.Client)
+                                       .ThenInclude(c => c.LegalGuardian)
+
+                                       .Include(b => b.Client)
+                                       .ThenInclude(c => c.List_BehavioralHistory)
+
+                                       .Include(b => b.Client)
+                                       .ThenInclude(c => c.MedicationList)
+
+                                       .Include(b => b.Client)
+                                       .ThenInclude(c => c.Clients_Diagnostics)
+                                       .ThenInclude(cd => cd.Diagnostic)
+
+                                       .Include(b => b.Client)
+                                       .ThenInclude(c => c.Doctor)
+
+                                       .FirstOrDefault(i => (i.Id == id));
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            //if (entity.Client.Clinic.Name == "DAVILA")
+            //{
+            //    Stream stream = _reportHelper.FloridaSocialHSIntakeReport(entity);
+            //    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            //}
+
+            if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            {
+                Stream stream = _reportHelper.FloridaSocialHSBioReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+            {
+                Stream stream = _reportHelper.DreamsMentalHealthBioReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
+            return null;
         }
     }
 }

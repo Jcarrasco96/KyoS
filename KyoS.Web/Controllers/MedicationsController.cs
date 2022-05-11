@@ -1,18 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using KyoS.Common.Enums;
-using KyoS.Web.Data;
+﻿using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.IO;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 namespace KyoS.Web.Controllers
 {
     public class MedicationsController : Controller
@@ -43,9 +39,9 @@ namespace KyoS.Web.Controllers
             }
 
             UserEntity user_logged = await _context.Users
-                                                           .Include(u => u.Clinic)
-                                                           .ThenInclude(c => c.Setting)
-                                                           .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
@@ -55,17 +51,20 @@ namespace KyoS.Web.Controllers
             {
                 if (User.IsInRole("Mannager") || User.IsInRole("Supervisor"))
                     return View(await _context.Clients
+
                                               .Include(f => f.MedicationList)
+
+                                              .Where(n => (n.Clinic.Id == user_logged.Clinic.Id))
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
 
                 if (User.IsInRole("Facilitator"))
                 {
-
-
-
                     return View(await _context.Clients
+
                                               .Include(f => f.MedicationList)
+                                              
+                                              .Where(n => (n.Clinic.Id == user_logged.Clinic.Id))
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -83,7 +82,7 @@ namespace KyoS.Web.Controllers
 
             MedicationViewModel model;
 
-            if (User.IsInRole("Mannager")|| User.IsInRole("Supervisor"))
+            if (User.IsInRole("Mannager") || User.IsInRole("Supervisor"))
             {
 
 
@@ -99,7 +98,7 @@ namespace KyoS.Web.Controllers
                         Frequency = "",
                         Name = "",
                         Prescriber = user_logged.FullName
-                      
+
                     };
                     if (model.Client.MedicationList == null)
                         model.Client.MedicationList = new List<MedicationEntity>();
@@ -176,7 +175,7 @@ namespace KyoS.Web.Controllers
         {
             MedicationViewModel model;
 
-            if (User.IsInRole("Mannager")|| User.IsInRole("Supervisor"))
+            if (User.IsInRole("Mannager") || User.IsInRole("Supervisor"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -225,20 +224,19 @@ namespace KyoS.Web.Controllers
                 {
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Create", new { id = medicationViewModel.IdClient });
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (System.Exception ex)
                 {
                     ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                 }
-
             }
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", medicationViewModel) });
         }
 
         [Authorize(Roles = "Mannager, Supervisor")]
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, int origin = 0)
         {
             if (id == null)
             {
@@ -261,8 +259,10 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Index", new { idError = 1 });
             }
 
-            return RedirectToAction("Create", new { id = medicationEntity.Client.Id });
+            if(origin == 1)
+                return RedirectToAction(nameof(Index));
+            else
+                return RedirectToAction(nameof(Create), new { id = medicationEntity.Client.Id});
         }
-
     }
 }

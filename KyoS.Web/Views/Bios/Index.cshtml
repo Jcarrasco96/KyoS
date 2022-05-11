@@ -58,7 +58,7 @@
                     <tbody>
                        @foreach (var item in Model)
                         {
-                           @if ((item.Bio == null))
+                            @if ((item.Bio == null))
                             {
                                 <tr style="color:orange">
                                     <td align="center">
@@ -141,15 +141,8 @@
                                         else
                                         { 
                                             <a class="btn btn-warning disabled" title="Create BIO"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        }
-                                       @if ((item.Bio != null))
-                                        {
-                                           <a asp-action="PrintBio" asp-route-id="@item.Bio.Id" class="btn btn-success" title="Print BIO" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                        }
-                                        else
-                                        {
-                                           <a class="btn btn-success disabled" title="Print BIO"><i class="glyphicon glyphicon-print"></i></a>
-                                        }
+                                        }                                       
+                                        <a class="btn btn-success disabled" title="Print BIO"><i class="glyphicon glyphicon-print"></i></a>                                        
                                         </td>
                                 </tr>
                             }
