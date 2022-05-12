@@ -777,12 +777,14 @@ namespace KyoS.Web.Controllers
         public IActionResult Edit(int id = 0)
         {
             BioEntity entity = _context.Bio
+
                                        .Include(m => m.Client)
                                        .Include(n => n.Client.LegalGuardian)
                                        .Include(n => n.Client.EmergencyContact)
                                        .Include(n => n.Client.MedicationList)
                                        .Include(n => n.Client.Referred)
                                        .Include(n => n.Client.List_BehavioralHistory)
+
                                        .FirstOrDefault(i => i.Client.Id == id);
 
             if (entity == null)
@@ -795,7 +797,9 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("Supervisor"))
             {
                 UserEntity user_logged = _context.Users
+
                                                  .Include(u => u.Clinic)
+
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 if (user_logged.Clinic != null)
@@ -819,7 +823,6 @@ namespace KyoS.Web.Controllers
                         model.Client.List_BehavioralHistory = new List<Bio_BehavioralHistoryEntity>();
 
                     return View(model);
-
                 }
             }
 
@@ -951,8 +954,10 @@ namespace KyoS.Web.Controllers
             }
 
             UserEntity user_logged = await _context.Users
+
                                                    .Include(u => u.Clinic)
                                                    .ThenInclude(c => c.Setting)
+
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
@@ -961,11 +966,14 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Mannager")|| User.IsInRole("Supervisor"))
+                if (User.IsInRole("Mannager") || User.IsInRole("Supervisor"))
                     return View(await _context.Clients
+
                                               .Include(f => f.Clients_Diagnostics)
                                               .Include(g => g.Bio)
                                               .Include(g => g.List_BehavioralHistory)
+
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
 
@@ -975,7 +983,8 @@ namespace KyoS.Web.Controllers
                                               .Include(f => f.Clients_Diagnostics)
                                               .Include(g => g.Bio)
                                               .Include(g => g.List_BehavioralHistory)
-                                              //.Where(f => )
+
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -1036,8 +1045,8 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("CreateBehavioral", new { id = behavioralViewModel.IdClient });
-                    
+                    return RedirectToAction("IndexBehavioralHealthHistory", "Bios");
+
                 }
                 catch (System.Exception ex)
                 {
@@ -1050,7 +1059,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> DeleteBio(int? id)
+        public async Task<IActionResult> DeleteBehavioral(int? id, int origin = 0)
         {
             if (id == null)
             {
@@ -1073,7 +1082,10 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Index", new { idError = 1 });
             }
 
-            return RedirectToAction("CreateBehavioral", new { id = Bio_BehavioralEntity.Client.Id });
+            if (origin == 1)
+                return RedirectToAction(nameof(Index));
+            else
+                return RedirectToAction(nameof(CreateBehavioral), new { id = Bio_BehavioralEntity.Client.Id });
         }
 
         [Authorize(Roles = "Mannager, Supervisor, Facilitator")]

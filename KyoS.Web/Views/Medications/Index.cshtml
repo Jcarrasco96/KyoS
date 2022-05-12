@@ -92,7 +92,7 @@
                                                             @if (item.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Mannager") || User.IsInRole("Supervisor")))
                                                             {
                                                                 <a asp-action="Edit" asp-route-id="@product1.Id" class="btn btn-warning" title="Edit Medication"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                <a asp-action="Delete" asp-route-origin="1" asp-route-id="@product1.Id" class="btn btn-danger" title="Delete Medication"><i class="glyphicon glyphicon-trash"></i></a>                                                                
+                                                                <a asp-action="DeleteBehavioral" asp-route-origin="1" asp-route-id="@product1.Id" class="btn btn-danger" title="Delete Medication"><i class="glyphicon glyphicon-trash"></i></a>                                                                
                                                             }
                                                             else
                                                             {

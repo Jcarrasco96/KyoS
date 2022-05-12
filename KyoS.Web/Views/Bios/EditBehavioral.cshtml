@@ -7,8 +7,7 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Edit Behavioral Health History List</title>
+    <meta name="viewport" content="width=device-width" />    
 </head>
 <body>
 
@@ -18,11 +17,11 @@
                 <i class="icon-home"></i>
                 @Html.ActionLink("Dashboard", "Index", "Desktop")
             </li>
-            <li class="active">Edit Behavioral Health History list </li>
+            <li class="active">Edit Behavioral Health History</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Edit Behavioral Health History list</h4>
+    <h4>Edit Behavioral Health History</h4>
     <hr />
     <div class="row">
 
@@ -33,7 +32,7 @@
                 <partial name="_BehavioralHealth" />
                 <div class="form-group col-md-12">
                     <input type="submit" value="Save" class="btn btn-primary" />
-                    <a asp-action="Index" class="btn btn-success">Back</a>
+                    <a asp-action="IndexBehavioralHealthHistory" class="btn btn-success">Back</a>
                 </div>
             </form>
         </div>

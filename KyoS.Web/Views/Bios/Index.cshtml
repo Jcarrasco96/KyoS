@@ -85,7 +85,7 @@
                                                         <td align="center">
                                                             @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Supervisor"))
                                                             {
-                                                                <a asp-action="EditBehavioral" asp-route-id="@product1.Id" class="btn btn-warning" title="Add Behavioral Health History"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a asp-action="EditBehavioral" asp-route-id="@product1.Id" class="btn btn-warning" title="Edit Behavioral Health History"><i class="glyphicon glyphicon-pencil"></i></a>
                                                             }
                                                             else
                                                             {
