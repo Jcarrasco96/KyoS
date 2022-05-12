@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220512015223_update_MTPRewiew")]
+    partial class update_MTPRewiew
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3424,9 +3426,6 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("ACopy")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ClinicalDirector")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -3451,9 +3450,6 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("DescribeClient")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Documents")
-                        .HasColumnType("bit");
-
                     b.Property<string>("IfCurrent")
                         .HasColumnType("nvarchar(max)");
 
@@ -3462,9 +3458,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("LicensedPractitioner")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MTP_FK")
                         .HasColumnType("int");
@@ -3492,9 +3485,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<bool>("TheTreatmentPlan")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Therapist")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

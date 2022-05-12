@@ -45,6 +45,7 @@ namespace KyoS.Web.Controllers
                 return View(await _context.MTPs
                                           .Include(m => m.Client)
                                           .ThenInclude(c => c.Clinic)
+                                          .Include(m => m.MtpReview)
                                           .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
             }
             else
@@ -62,6 +63,7 @@ namespace KyoS.Web.Controllers
                     return View(await _context.MTPs
                                               .Include(m => m.Client)
                                               .ThenInclude(c => c.Clinic)
+                                              .Include(m => m.MtpReview)
                                               .Where(m => m.Client.Clinic.Id == clinic.Id)
                                               .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
                 }
@@ -71,7 +73,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
-        public IActionResult Create(int id = 0, int idClient = 0)
+        public IActionResult Create(int id = 0, int idClient = 0, bool review = false)
         {
             if (id == 1)
             {
@@ -113,7 +115,8 @@ namespace KyoS.Web.Controllers
                             NumberOfMonths = 6,
                             Modality = "PSR",
                             Frecuency = "Four times per week",
-                            Setting = "53"
+                            Setting = "53",
+                            Review = review
                         };
                     }
                     else
@@ -125,9 +128,11 @@ namespace KyoS.Web.Controllers
                             NumberOfMonths = 6,
                             Modality = "PSR",
                             Frecuency = "Four times per week",
-                            Setting = "53"
+                            Setting = "53",
+                            Review = review
                         };
                     }
+                    
                     return View(model);
                 }
             }
@@ -171,7 +176,8 @@ namespace KyoS.Web.Controllers
                             Frecuency = mtpViewModel.Frecuency,
                             LevelCare = mtpViewModel.LevelCare,
                             InitialDischargeCriteria = mtpViewModel.InitialDischargeCriteria,
-                            Setting = form["Setting"].ToString()
+                            Setting = form["Setting"].ToString(),
+                            Review = mtpViewModel.Review
                         };
                         return View(model);
                     }
@@ -188,6 +194,13 @@ namespace KyoS.Web.Controllers
                     _context.Update(item);
                 }
 
+                if(mtpViewModel.Review == true)
+                {
+                    mtpEntity.MtpReview = new MTPReviewEntity();
+                    mtpEntity.MtpReview.CreatedBy = user_logged.Id;
+                    mtpEntity.MtpReview.CreatedOn = DateTime.Now;
+                }
+                
                 _context.Add(mtpEntity);
                 try
                 {
@@ -1340,6 +1353,76 @@ namespace KyoS.Web.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(PendingAdendum));
+        }
+
+        [Authorize(Roles = "Supervisor, Mannager")]
+        public async Task<IActionResult> EditMTPReview(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            MTPReviewEntity mtpReviewEntity = await _context.MTPReviews.Include(m => m.Mtp.Client)
+                                                                       .ThenInclude(m => m.Clinic)
+                                                                       .FirstOrDefaultAsync(m => m.Id == id);
+            if (mtpReviewEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            MTPReviewViewModel mtpReviewViewModel = _converterHelper.ToMTPReviewViewModel(mtpReviewEntity);
+
+            return View(mtpReviewViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Mannager")]
+        public async Task<IActionResult> EditMTPReview(int id, MTPReviewViewModel mtpReviewViewModel, IFormCollection form)
+        {
+            if (id != mtpReviewViewModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (ModelState.IsValid)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                MTPReviewEntity mtpReviewEntity = await _converterHelper.ToMTPReviewEntity(mtpReviewViewModel, false, user_logged.Id);
+                if (mtpReviewEntity != null)
+                {
+                    mtpReviewEntity.Mtp.StartTime = mtpReviewViewModel.Mtp.StartTime;
+                    mtpReviewEntity.Mtp.EndTime = mtpReviewViewModel.Mtp.EndTime;
+                    mtpReviewEntity.Mtp.Setting = mtpReviewViewModel.Mtp.Setting;
+                    mtpReviewEntity.Mtp.MTPDevelopedDate = mtpReviewViewModel.Mtp.MTPDevelopedDate;
+                }
+                
+
+                string gender_problems = string.Empty;
+               
+                _context.Update(mtpReviewEntity);
+                
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the facilitator: {mtpReviewEntity.Mtp.Client.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            return View(mtpReviewViewModel);
         }
     }
 }

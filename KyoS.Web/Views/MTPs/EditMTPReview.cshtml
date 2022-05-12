@@ -1,0 +1,37 @@
+﻿@model KyoS.Web.Models.MTPReviewViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("MTPs", "Index", "MTPs")
+        </li>
+        <li class="active">Edit MTP Review</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<h4>Edit master treament plan review</h4>
+<hr />
+<div>
+    <form asp-action="EditMTPReview" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="IdMTP" />
+        <input type="hidden" asp-for="MTP_FK" />
+        <partial name="_MTPReviews" />
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-success">Back</a>
+            <a asp-action="UpdateGoals" asp-route-id="@Model.Mtp.Id" class="btn btn-info">Update goals - objetives</a>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

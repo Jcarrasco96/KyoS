@@ -2656,5 +2656,82 @@ namespace KyoS.Web.Helpers
                 salida.IdSupervisor = 0;
             return salida;
         }
+
+        public async Task<MTPReviewEntity> ToMTPReviewEntity(MTPReviewViewModel model, bool isNew, string userId)
+        {
+            return new MTPReviewEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Mtp = await _context.MTPs
+                                    .Include(m => m.Client)
+                                    .ThenInclude(c => c.Clients_Diagnostics)
+                                    .ThenInclude(cd => cd.Diagnostic)
+                                    .FirstOrDefaultAsync(c => c.Id == model.IdMTP),
+                ACopy = model.ACopy,
+                DateClinicalDirector = model.DateClinicalDirector,
+                DateLicensedPractitioner = model.DateLicensedPractitioner,
+                DateSignaturePerson = model.DateSignaturePerson,
+                DateTherapist = model.DateTherapist,
+                DescribeAnyGoals = model.DescribeAnyGoals,
+                DescribeClient = model.DescribeClient,
+                IfCurrent = model.IfCurrent,
+                TheTreatmentPlan = model.TheTreatmentPlan,
+                MTP_FK = model.MTP_FK,
+                NumberUnit = model.NumberUnit,
+                ProviderNumber = model.ProviderNumber,
+                ReviewedOn = model.ReviewedOn,
+                ServiceCode = model.ServiceCode,
+                SpecifyChanges = model.SpecifyChanges,
+                SummaryOfServices = model.SummaryOfServices,
+                TheConsumer = model.TheConsumer,
+                ClinicalDirector = model.ClinicalDirector,
+                Documents = model.Documents,
+                LicensedPractitioner = model.LicensedPractitioner,
+                Therapist = model.Therapist
+
+            };
+        }
+
+        public MTPReviewViewModel ToMTPReviewViewModel(MTPReviewEntity model)
+        {
+            return new MTPReviewViewModel
+            {
+                Id = model.Id,
+                Mtp = model.Mtp,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                IdMTP = model.MTP_FK,
+                MTP_FK = model.MTP_FK,
+
+                ACopy = model.ACopy,
+                DateClinicalDirector = model.DateClinicalDirector,
+                DateLicensedPractitioner = model.DateLicensedPractitioner,
+                DateSignaturePerson = model.DateSignaturePerson,
+                DateTherapist = model.DateTherapist,
+                DescribeAnyGoals = model.DescribeAnyGoals,
+                DescribeClient = model.DescribeClient,
+                IfCurrent = model.IfCurrent,
+                TheTreatmentPlan = model.TheTreatmentPlan,
+                NumberUnit = model.NumberUnit,
+                ProviderNumber = model.ProviderNumber,
+                ReviewedOn = model.ReviewedOn,
+                ServiceCode = model.ServiceCode,
+                SpecifyChanges = model.SpecifyChanges,
+                SummaryOfServices = model.SummaryOfServices,
+                TheConsumer = model.TheConsumer,
+                ClinicalDirector = model.ClinicalDirector,
+                Documents = model.Documents,
+                LicensedPractitioner = model.LicensedPractitioner,
+                Therapist = model.Therapist
+
+            };
+           
+        }
     }
 }

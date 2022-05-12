@@ -58,8 +58,9 @@
     <div>
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <partial name="_MTPs" />            
-            <div class="form-group">                
+            <input type="hidden" asp-for="Review" />
+            <partial name="_MTPs" />
+            <div class="form-group">
                 <input type="submit" value="Create MTP" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-success">Back</a>
             </div>

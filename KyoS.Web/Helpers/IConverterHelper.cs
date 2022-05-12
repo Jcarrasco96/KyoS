@@ -96,5 +96,7 @@ namespace KyoS.Web.Helpers
         Bio_BehavioralHistoryViewModel ToBio_BehaviorViewModel(Bio_BehavioralHistoryEntity model);
         Task<AdendumEntity> ToAdendumEntity(AdendumViewModel model, bool isNew, string userId);
         AdendumViewModel ToAdendumViewModel(AdendumEntity model);
+        Task<MTPReviewEntity> ToMTPReviewEntity(MTPReviewViewModel model, bool isNew, string userId);
+        MTPReviewViewModel ToMTPReviewViewModel(MTPReviewEntity model);
     }
 }

@@ -75,6 +75,7 @@ namespace KyoS.Web.Data
         public DbSet<BioEntity> Bio { get; set; }
         public DbSet<Bio_BehavioralHistoryEntity> Bio_BehavioralHistory { get; set; }
         public DbSet<AdendumEntity> Adendums { get; set; }
+        public DbSet<MTPReviewEntity> MTPReviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -279,6 +280,12 @@ namespace KyoS.Web.Data
                         .HasMany(c => c.AdendumList)
                         .WithOne(s => s.Mtp)
                         .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<MTPEntity>()
+                       .HasOne(c => c.MtpReview)
+                       .WithOne(s => s.Mtp)
+                       .OnDelete(DeleteBehavior.Cascade)
+                       .HasForeignKey<MTPReviewEntity>(s => s.MTP_FK);
         }
     }
 }
