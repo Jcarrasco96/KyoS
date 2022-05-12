@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
 @{
-    ViewData["Title"] = "BIO";
+    ViewData["Title"] = "BIOs";
 }
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
@@ -10,7 +10,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">BIO</li>
+        <li class="active">BIOs</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -73,16 +73,16 @@
                                         <div style="display:none">
                                             <table class="table table-striped table-bordered">
                                                 <tr>
-                                                    <th class="col-md-8">Problem</th>
-                                                    <th class="col-md-2">Date</th>
-                                                    <th class="col-md-2"></th>
+                                                    <th class="col-md-9">Problem</th>
+                                                    <th class="col-md-2" style="text-align:center;">Date</th>
+                                                    <th class="col-md-1" style="text-align:center;"></th>
                                                 </tr>
                                                @foreach (var product1 in item.List_BehavioralHistory)
                                                 {
                                                     <tr>
                                                         <td>@Html.DisplayFor(modelItem => product1.Problem)</td>
-                                                        <td>@Html.DisplayFor(modelItem => product1.Date)</td>
-                                                        <td>
+                                                        <td align="center">@Html.DisplayFor(modelItem => product1.Date)</td>
+                                                        <td align="center">
                                                             @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Supervisor"))
                                                             {
                                                                 <a asp-action="EditBehavioral" asp-route-id="@product1.Id" class="btn btn-warning" title="Add Behavioral Health History"><i class="glyphicon glyphicon-pencil"></i></a>
@@ -125,7 +125,7 @@
                                         }
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Close)
                                         {
-                                            <span class="label label-danger">
+                                            <span class="label label-default">
                                                 Close
                                             </span>
                                         }

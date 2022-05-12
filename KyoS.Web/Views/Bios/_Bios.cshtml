@@ -1,93 +1,129 @@
 ﻿@model KyoS.Web.Models.BioViewModel
-
-<div class="container-fluid col-md-12">
-    <div class="container-fluid col-md-12">
-        <pre>
-                                                                                                                                            Client Name: <strong><u>@Html.DisplayFor(modelItem => Model.Client.Name)</u></strong>
-                                                                                                                                            Medical Record: <strong><u>@Html.DisplayFor(modelItem => Model.Client.Code)</u></strong>
-    <strong>1. DEMOGRAPHIC DATA:</strong>
-        The purpose of mental health programs/services is to assist clients in gaining more stable mental health and reduce 
-        behavioral symptoms and health risks.
-        <strong>Program:</strong>               Date: <input asp-for="DateBio">                           Setting: <strong><u><input asp-for="Setting"></u></strong>                Select: 
-        <input type="checkbox" asp-for="CMH" class="form-check-input"> CMH <input type="checkbox" asp-for="Priv" class="form-check-input"> PRIV         Time: <input asp-for="StartTime"> - <input asp-for="EndTime">                                                            <input type="checkbox" asp-for="BioH0031HN" class="form-check-input"> BIO H0031 HN   <input type="checkbox" asp-for="IDAH0031HO" class="form-check-input"> IDA H0031 HO
-        </pre>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="Client.Name" class="control-label">Client Name</label>
+        <input asp-for="Client.Name" class="form-control" readonly>
+        <span asp-validation-for="Client.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.Code" class="control-label">Medical Record</label>
+        <input asp-for="Client.Code" class="form-control" readonly>
+        <span asp-validation-for="Client.Code" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.DateOfBirth" class="control-label">DOB</label>
+        <input asp-for="Client.DateOfBirth" class="form-control" readonly>
+        <span asp-validation-for="Client.DateOfBirth" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.Referred.Name" class="control-label">Referral Source</label>
+        <input asp-for="Client.Referred.Name" class="form-control" readonly>
+        <span asp-validation-for="Client.Referred.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.LegalGuardian.Name" class="control-label">Legal Guardian</label>
+        <input asp-for="Client.LegalGuardian.Name" class="form-control" readonly>
+        <span asp-validation-for="Client.LegalGuardian.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.LegalGuardian.Telephone" class="control-label">Legal Guardian Phone</label>
+        <input asp-for="Client.LegalGuardian.Telephone" class="form-control" readonly>
+        <span asp-validation-for="Client.LegalGuardian.Telephone" class="text-danger"></span>
     </div>
 </div>
-
-<div class="container-fluid col-md-12">
-    <div class="container-fluid col-md-12">
-        <pre>
-        Name: <strong><u>@Html.DisplayFor(modelItem => Model.Client.Name)</u></strong>                                      Client Number: <strong><u>@Html.DisplayFor(modelItem => Model.Client.Code)</u></strong>                          DOB: <strong><u>@Html.DisplayFor(modelItem => Model.Client.DateOfBirth)</u></strong>
-        Referral Source: <strong><u>@Html.DisplayFor(modelItem => Model.Client.Referred.Name)</u></strong>                                    Legal Guardian: <strong><u>@Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Name)</u></strong>                                 Legal Guardian Phone#: <strong><u>@Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Telephone)</u></strong>
-        Emergency Contact: : <strong><u>@Html.DisplayFor(modelItem => Model.Client.EmergencyContact.Name)</u></strong>                Relationship: <strong><u>@Html.DisplayFor(modelItem => Model.Client.RelationShipOfEmergencyContact)</u></strong>                       Emergency  Contact Phone#: <strong><u>@Html.DisplayFor(modelItem => Model.Client.EmergencyContact.Telephone)</u></strong>
-    </pre>
-
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="Client.EmergencyContact.Name" class="control-label">Emergency Contact</label>
+        <input asp-for="Client.EmergencyContact.Name" class="form-control" readonly>
+        <span asp-validation-for="Client.EmergencyContact.Name" class="text-danger"></span>
     </div>
-</div>
-<div class="container-fluid col-md-12">
-    <div class="container-fluid col-md-12">
-        <pre>
-    <strong>2. CLIENT’S PRESENTING PROBLEM (S): </strong>(list specific symptoms, onset history, criteria for diagnosis and justification  of  treatment recommendations)
-        <textarea asp-for="PresentingProblem" rows="10" style="width:80%"></textarea> 
-        <strong>CLIENT’S ASSESSMENT OF SITUATION: </strong>(list how the client’s symptoms are affecting clients emotional functioning and use their own words)
-        <textarea asp-for="ClientAssessmentSituation" style="width:80%" rows="2"></textarea> 
-        <strong>FAMILY'S ASSESSMENT OF SITUATION: </strong>(if applicable, list how the client’s symptoms are affecting clients emotional functioning and use family’s own words)
-        <textarea asp-for="FamilyAssessmentSituation" style="width:80%" rows="2"></textarea> 
-        <strong>FAMILY'S   E MOTIONAL   FUNCTIONING: </strong> (describe any emotional issues, difficulties functioning, substance abuse and/or abuse history affecting family members)
-        <textarea asp-for="FamilyEmotional" style="width:80%" rows="2"></textarea> 
-        <strong>LEGAL REPRESENTATIVE’S ASSESSMENT OF SITUATION: </strong> (if applicable, in their own words)
-        <textarea asp-for="LegalAssessment" style="width:80%" rows="2"></textarea> 
-        </pre>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.RelationShipOfEmergencyContact" class="control-label">Relationship</label>
+        <input asp-for="Client.RelationShipOfEmergencyContact" class="form-control" readonly>
+        <span asp-validation-for="Client.RelationShipOfEmergencyContact" class="text-danger"></span>
     </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.EmergencyContact.Telephone" class="control-label">Emergency Contact Phone</label>
+        <input asp-for="Client.EmergencyContact.Telephone" class="form-control" readonly>
+        <span asp-validation-for="Client.EmergencyContact.Telephone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        &nbsp;
+    </div>    
 </div>
+<div class="col-md-12">    
+    <pre>    
+<strong>1. DEMOGRAPHIC DATA:</strong>
+        
+        The purpose of mental health programs/services is to assist clients in gaining more stable mental health and reduce behavioral symptoms and health risks.\
 
-<div class="col-md-12">
-    <div class="col-md-6">
+        Program: <input type="checkbox" asp-for="CMH" class="form-check-input"> CMH <input type="checkbox" asp-for="Priv" class="form-check-input"> PRIV               Setting: <strong><u><input asp-for="Setting"></u></strong>                         Select: <input type="checkbox" asp-for="BioH0031HN" class="form-check-input"> BIO H0031 HN  <input type="checkbox" asp-for="IDAH0031HO" class="form-check-input"> IDA H0031 HO 
+    
+           Date: <input asp-for="DateBio">                Time: <input asp-for="StartTime"> - <input asp-for="EndTime">                                      
+    </pre>    
+</div>
+<div class="col-md-12">    
+    <pre>
+    <strong>2. CLIENT’S PRESENTING PROBLEM (S):</strong> (list specific symptoms, onset history, criteria for diagnosis and justification  of  treatment recommendations)
+    <textarea asp-for="PresentingProblem" rows="10" style="width:90%"></textarea> 
+
+    <strong>CLIENT’S ASSESSMENT OF SITUATION: </strong>(list how the client’s symptoms are affecting clients emotional functioning and use their own words)
+    <textarea asp-for="ClientAssessmentSituation" style="width:90%" rows="2"></textarea> 
+
+    <strong>FAMILY'S ASSESSMENT OF SITUATION: </strong>(if applicable, list how the client’s symptoms are affecting clients emotional functioning and use family’s own words)
+    <textarea asp-for="FamilyAssessmentSituation" style="width:90%" rows="2"></textarea> 
+
+    <strong>FAMILY'S   E MOTIONAL   FUNCTIONING: </strong> (describe any emotional issues, difficulties functioning, substance abuse and/or abuse history affecting family members)
+    <textarea asp-for="FamilyEmotional" style="width:90%" rows="2"></textarea> 
+
+    <strong>LEGAL REPRESENTATIVE’S ASSESSMENT OF SITUATION: </strong> (if applicable, in their own words)
+    <textarea asp-for="LegalAssessment" style="width:90%" rows="2"></textarea> 
+    </pre>    
+</div>
+<div class="col-push-12">
+    <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-            
-    <strong>3. BEHAVIORAL HEALTH HISTORY (DATE OF ONSENT OF MENTAL ILLNESS) : </strong>Document any serious behavior or physical illness, <br />
-        injures, operations or hospitalizations and indicate the year these occurred (give special attention to previous behavioral health<br />
-        treatment and document contact information for coordination of care.<br />
-               
+                @*<h3 class="panel-title">*@
+                <strong>3. BEHAVIORAL HEALTH HISTORY (DATE OF ONSENT OF MENTAL ILLNESS) : </strong>Document any serious behavior or physical illness, injures, operations or hospitalizations and indicate the year these occurred (give special attention to previous behavioral health treatment and document contact information for coordination of care.
+                @*</h3>*@
             </div>
             <div class="panel-body">
-
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-4">
+                            <th class="col-md-8">
                                 Problems
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-4" style="text-align:center;">
                                 Date
                             </th>
-                            
                         </tr>
                     </thead>
                     <tbody>
-                       @foreach (var item in Model.Client.List_BehavioralHistory)
+                        @foreach (var item in Model.Client.List_BehavioralHistory)
                         {
                             <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Problem)
                                 </td>
-                                <td>
+                                <td align="center">
                                     @Html.DisplayFor(modelItem => item.Date)
                                 </td>
-                                
+
                             </tr>
                         }
-                        
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    <div class="col-md-6">
+</div>
+<div class="col-push-12">
+    <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <strong>4. CURRENT MEDICATIONS (PSYCHOTROPIC, MEDICAL AND OVER THE COUNTER):</strong>
+                4. CURRENT MEDICATIONS (PSYCHOTROPIC, MEDICAL AND OVER THE COUNTER)
             </div>
             <div class="panel-body">
 
@@ -132,57 +168,57 @@
         </div>
     </div>
 </div>
-<div class="container-fluid col-md-12">
-<div class="container-fluid col-md-12">
+
+<div class="col-md-12">
     <pre>
-    <strong>5. MENTAL HEALTH STATUS:</strong><br />
-        <strong>A. Mental Status Examination:  (check all that apply)</strong>
-            <strong>Appearance</strong>             <input type="checkbox" asp-for="Appearance_Disheveled" class="form-check-input"> Disheveled             <input type="checkbox" asp-for="Appearance_FairHygiene" class="form-check-input"> Fair Hygiene             <input type="checkbox" asp-for="Appearance_Cleaned" class="form-check-input"> Cleaned                  <input type="checkbox" asp-for="Appearance_WellGroomed" class="form-check-input"> Well groomed           <input type="checkbox" asp-for="Appearance_Bizarre" class="form-check-input"> Bizarre
-            <strong>Motor</strong>                  <input type="checkbox" asp-for="Motor_Normal" class="form-check-input"> Normal       <input type="checkbox" asp-for="Motor_Agitated" class="form-check-input"> Agitated        <input type="checkbox" asp-for="Motor_Retardation" class="form-check-input"> Retardation       <input type="checkbox" asp-for="Motor_RestLess" class="form-check-input"> Restless         <input type="checkbox" asp-for="Motor_Akathisia" class="form-check-input"> Akathisia          <input type="checkbox" asp-for="Motor_Tremor" class="form-check-input"> Tremor        <input type="checkbox" asp-for="Motor_Other" class="form-check-input"> Other
-            <strong>Speech</strong>                 <input type="checkbox" asp-for="Speech_Normal" class="form-check-input"> Normal                 <input type="checkbox" asp-for="Speech_Loud" class="form-check-input"> Loud                     <input type="checkbox" asp-for="Speech_Pressured" class="form-check-input"> Pressured                <input type="checkbox" asp-for="Speech_Impoverished" class="form-check-input"> Impoverished           <input type="checkbox" asp-for="Speech_Slurred" class="form-check-input"> Slurred       
-                                   <input type="checkbox" asp-for="Speech_Mumbled" class="form-check-input"> Mumbled                <input type="checkbox" asp-for="Speech_Stutters" class="form-check-input"> Stutters                 <input type="checkbox" asp-for="Speech_Rapid" class="form-check-input"> Rapid                    <input type="checkbox" asp-for="Speech_Slow" class="form-check-input"> Slow                   <input type="checkbox" asp-for="Speech_Other" class="form-check-input"> Other       
-            <strong>Affect</strong>                 <input type="checkbox" asp-for="Affect_Appropriate" class="form-check-input"> Appropriate            <input type="checkbox" asp-for="Affect_labile" class="form-check-input"> Labile                   <input type="checkbox" asp-for="Affect_Expansive" class="form-check-input"> Expansive                <input type="checkbox" asp-for="Affect_Blunted" class="form-check-input"> Blunted                <input type="checkbox" asp-for="Affect_Constricted" class="form-check-input"> Constricted       
-                                   <input type="checkbox" asp-for="Affect_Flat" class="form-check-input"> Flat                   <input type="checkbox" asp-for="Affect_Tearful_Sad" class="form-check-input"> Tearful/Sad              <input type="checkbox" asp-for="Affect_Anxious" class="form-check-input"> Anxious                  <input type="checkbox" asp-for="Affect_Angry" class="form-check-input"> Angry                  <input type="checkbox" asp-for="Affect_Other" class="form-check-input"> Other       
-            <strong>Thought Process</strong>        <input type="checkbox" asp-for="ThoughtProcess_Organized" class="form-check-input"> Organized              <input type="checkbox" asp-for="ThoughtProcess_Disorganized" class="form-check-input"> Disorganized             <input type="checkbox" asp-for="ThoughtProcess_GoalDirected" class="form-check-input"> Goal directed            <input type="checkbox" asp-for="ThoughtProcess_Irrational" class="form-check-input"> Irrational             <input type="checkbox" asp-for="ThoughtProcess_Rigid" class="form-check-input"> Rigid       
-                                   <input type="checkbox" asp-for="ThoughtProcess_Obsessive" class="form-check-input"> Obsessive              <input type="checkbox" asp-for="ThoughtProcess_Tangential" class="form-check-input"> Tangential               <input type="checkbox" asp-for="ThoughtProcess_Circumstantial" class="form-check-input"> Circumstantial           <input type="checkbox" asp-for="ThoughtProcess_Preoccupied" class="form-check-input"> Preoccupied            <input type="checkbox" asp-for="ThoughtProcess_Blocking" class="form-check-input"> Blocking       
-                                   <input type="checkbox" asp-for="ThoughtProcess_FightIdeas" class="form-check-input"> Fight of ideas         <input type="checkbox" asp-for="ThoughtProcess_LooseAssociations" class="form-check-input"> Loose Associations       <input type="checkbox" asp-for="ThoughtProcess_Other" class="form-check-input"> Other  
-            <strong>Mood</strong>                   <input type="checkbox" asp-for="Mood_Euthymic" class="form-check-input"> Euthymic           <input type="checkbox" asp-for="Mood_Depressed" class="form-check-input">  Depressed              <input type="checkbox" asp-for="Mood_Euphoric" class="form-check-input"> Euphoric           <input type="checkbox" asp-for="Mood_Angry" class="form-check-input"> Angry           <input type="checkbox" asp-for="Mood_Maniac" class="form-check-input"> Maniac           <input type="checkbox" asp-for="Mood_Other" class="form-check-input"> Other
-            <strong>Judgment</strong>               <input type="checkbox" asp-for="Judgment_Good" class="form-check-input"> Good                       <input type="checkbox" asp-for="Judgment_Fair" class="form-check-input">  Fair                          <input type="checkbox" asp-for="Judgment_Poor" class="form-check-input"> Poor                       <input type="checkbox" asp-for="Judgment_Other" class="form-check-input"> Other
-            <strong>Insight</strong>                <input type="checkbox" asp-for="Insight_Good" class="form-check-input"> Good                       <input type="checkbox" asp-for="Insight_Fair" class="form-check-input">  Fair                          <input type="checkbox" asp-for="Insight_Poor" class="form-check-input"> Poor                       <input type="checkbox" asp-for="Insight_Other" class="form-check-input"> Other
-            <strong>Thought content</strong>        <input type="checkbox" asp-for="ThoughtContent_Relevant" class="form-check-input"> Relevant           Hallucinations <input type="checkbox" asp-for="ThoughtContent_Hallucinations" class="form-check-input" id="check1"> Yes   <input type="checkbox" class="form-check-input" id="check101"> No                   Type:  <input asp-for="ThoughtContent_Hallucinations_Type"  style="width:25%">                                 
-                                   <input type="checkbox" asp-for="ThoughtContent_RealityBased" class="form-check-input"> Reality based          Delusions  <input type="checkbox" asp-for="ThoughtContent_Delusions" class="form-check-input" id="check2"> Yes   <input type="checkbox" class="form-check-input" id="check102"> No                   Type:  <input asp-for="ThoughtContent_Delusions_Type"  style="width:25%">                                 
-            <strong>Oriented</strong>               <input type="checkbox" asp-for="Oriented_FullOriented" class="form-check-input"> Fully oriented                 <strong>Lacking</strong>  <input type="checkbox" asp-for="Lacking_Time" class="form-check-input"> Time       <input type="checkbox" asp-for="Lacking_Place" class="form-check-input"> Place      <input type="checkbox" asp-for="Lacking_Person" class="form-check-input"> Person     <input type="checkbox" asp-for="Lacking_Location" class="form-check-input"> Location 
-            <strong>Risk To Self</strong>           <input type="checkbox" asp-for="RiskToSelf_Low" class="form-check-input"> Low                  <input type="checkbox" asp-for="RiskToSelf_Medium" class="form-check-input"> Medium                 <input type="checkbox" asp-for="RiskToSelf_High" class="form-check-input"> High                 <input type="checkbox" asp-for="RiskToSelf_Chronic" class="form-check-input"> Chronic
-            <strong>Risk To others</strong>         <input type="checkbox" asp-for="RiskToOther_Low" class="form-check-input"> Low                  <input type="checkbox" asp-for="RiskToOther_Medium" class="form-check-input"> Medium                 <input type="checkbox" asp-for="RiskToOther_High" class="form-check-input"> High                 <input type="checkbox" asp-for="RiskToOther_Chronic" class="form-check-input"> Chronic
-            <strong>Safety plan reviewed</strong>   <input type="checkbox" asp-for="SafetyPlan" class="form-check-input" id="check3"> Yes   <input type="checkbox" class="form-check-input" id="check103"> No             
-            <strong>Comments</strong>   <input asp-for="Comments"  style="width:60%"><br />
-        <strong>B. Suicide/Homicide Risk Mini Screening: </strong>(if any of the following question are answered “yes”, please complete the SBQ-R with client and follow precautionary procedures)
-            <input type="checkbox" asp-for="ClientDenied" class="form-check-input"> <strong>Client denied any current suicidal/homicidal ideations (if denied, skip this section)</strong>
-                Have you ever thought about killing yourself or others?                                 <input type="checkbox" asp-for="HaveYouEverThought" class="form-check-input" id="check4"> Yes   <input type="checkbox" class="form-check-input" id="check104"> No     If yes, explain:  <input asp-for="HaveYouEverThought_Explain"  style="width:15%">
-                Do you own a weapon?                                                                    <input type="checkbox" asp-for="DoYouOwn" class="form-check-input" id="check5"> Yes   <input type="checkbox" class="form-check-input" id="check105"> No     If yes, explain:  <input asp-for="DoYouOwn_Explain"  style="width:15%">
-                Does Client have a plan or access to plan or individual?                                <input type="checkbox" asp-for="DoesClient" class="form-check-input" id="check6"> Yes   <input type="checkbox" class="form-check-input" id="check106"> No
-                Have you ever been hospitalized for depressive symptoms?                                <input type="checkbox" asp-for="HaveYouEverBeen" class="form-check-input" id="check7"> Yes   <input type="checkbox" class="form-check-input" id="check107"> No     If yes, detail:   <input asp-for="HaveYouEverBeen_Explain"  style="width:15%">
-                Has the client received behavioral health service in the last 2 years due to suicide?   <input type="checkbox" asp-for="HasTheClient" class="form-check-input" id="check8"> Yes   <input type="checkbox" class="form-check-input" id="check108"> No     If yes, specify:  <input asp-for="HasTheClient_Explain"  style="width:15%">
+<strong>5. MENTAL HEALTH STATUS:</strong><br />
+    <strong>A. Mental Status Examination:  (check all that apply)</strong>
+        <strong>Appearance</strong>             <input type="checkbox" asp-for="Appearance_Disheveled" class="form-check-input"> Disheveled             <input type="checkbox" asp-for="Appearance_FairHygiene" class="form-check-input"> Fair Hygiene             <input type="checkbox" asp-for="Appearance_Cleaned" class="form-check-input"> Cleaned                  <input type="checkbox" asp-for="Appearance_WellGroomed" class="form-check-input"> Well groomed           <input type="checkbox" asp-for="Appearance_Bizarre" class="form-check-input"> Bizarre
+        <strong>Motor</strong>                  <input type="checkbox" asp-for="Motor_Normal" class="form-check-input"> Normal       <input type="checkbox" asp-for="Motor_Agitated" class="form-check-input"> Agitated        <input type="checkbox" asp-for="Motor_Retardation" class="form-check-input"> Retardation       <input type="checkbox" asp-for="Motor_RestLess" class="form-check-input"> Restless         <input type="checkbox" asp-for="Motor_Akathisia" class="form-check-input"> Akathisia          <input type="checkbox" asp-for="Motor_Tremor" class="form-check-input"> Tremor        <input type="checkbox" asp-for="Motor_Other" class="form-check-input"> Other
+        <strong>Speech</strong>                 <input type="checkbox" asp-for="Speech_Normal" class="form-check-input"> Normal                 <input type="checkbox" asp-for="Speech_Loud" class="form-check-input"> Loud                     <input type="checkbox" asp-for="Speech_Pressured" class="form-check-input"> Pressured                <input type="checkbox" asp-for="Speech_Impoverished" class="form-check-input"> Impoverished           <input type="checkbox" asp-for="Speech_Slurred" class="form-check-input"> Slurred       
+                                <input type="checkbox" asp-for="Speech_Mumbled" class="form-check-input"> Mumbled                <input type="checkbox" asp-for="Speech_Stutters" class="form-check-input"> Stutters                 <input type="checkbox" asp-for="Speech_Rapid" class="form-check-input"> Rapid                    <input type="checkbox" asp-for="Speech_Slow" class="form-check-input"> Slow                   <input type="checkbox" asp-for="Speech_Other" class="form-check-input"> Other       
+        <strong>Affect</strong>                 <input type="checkbox" asp-for="Affect_Appropriate" class="form-check-input"> Appropriate            <input type="checkbox" asp-for="Affect_labile" class="form-check-input"> Labile                   <input type="checkbox" asp-for="Affect_Expansive" class="form-check-input"> Expansive                <input type="checkbox" asp-for="Affect_Blunted" class="form-check-input"> Blunted                <input type="checkbox" asp-for="Affect_Constricted" class="form-check-input"> Constricted       
+                                <input type="checkbox" asp-for="Affect_Flat" class="form-check-input"> Flat                   <input type="checkbox" asp-for="Affect_Tearful_Sad" class="form-check-input"> Tearful/Sad              <input type="checkbox" asp-for="Affect_Anxious" class="form-check-input"> Anxious                  <input type="checkbox" asp-for="Affect_Angry" class="form-check-input"> Angry                  <input type="checkbox" asp-for="Affect_Other" class="form-check-input"> Other       
+        <strong>Thought Process</strong>        <input type="checkbox" asp-for="ThoughtProcess_Organized" class="form-check-input"> Organized              <input type="checkbox" asp-for="ThoughtProcess_Disorganized" class="form-check-input"> Disorganized             <input type="checkbox" asp-for="ThoughtProcess_GoalDirected" class="form-check-input"> Goal directed            <input type="checkbox" asp-for="ThoughtProcess_Irrational" class="form-check-input"> Irrational             <input type="checkbox" asp-for="ThoughtProcess_Rigid" class="form-check-input"> Rigid       
+                                <input type="checkbox" asp-for="ThoughtProcess_Obsessive" class="form-check-input"> Obsessive              <input type="checkbox" asp-for="ThoughtProcess_Tangential" class="form-check-input"> Tangential               <input type="checkbox" asp-for="ThoughtProcess_Circumstantial" class="form-check-input"> Circumstantial           <input type="checkbox" asp-for="ThoughtProcess_Preoccupied" class="form-check-input"> Preoccupied            <input type="checkbox" asp-for="ThoughtProcess_Blocking" class="form-check-input"> Blocking       
+                                <input type="checkbox" asp-for="ThoughtProcess_FightIdeas" class="form-check-input"> Fight of ideas         <input type="checkbox" asp-for="ThoughtProcess_LooseAssociations" class="form-check-input"> Loose Associations       <input type="checkbox" asp-for="ThoughtProcess_Other" class="form-check-input"> Other  
+        <strong>Mood</strong>                   <input type="checkbox" asp-for="Mood_Euthymic" class="form-check-input"> Euthymic           <input type="checkbox" asp-for="Mood_Depressed" class="form-check-input">  Depressed              <input type="checkbox" asp-for="Mood_Euphoric" class="form-check-input"> Euphoric           <input type="checkbox" asp-for="Mood_Angry" class="form-check-input"> Angry           <input type="checkbox" asp-for="Mood_Maniac" class="form-check-input"> Maniac           <input type="checkbox" asp-for="Mood_Other" class="form-check-input"> Other
+        <strong>Judgment</strong>               <input type="checkbox" asp-for="Judgment_Good" class="form-check-input"> Good                       <input type="checkbox" asp-for="Judgment_Fair" class="form-check-input">  Fair                          <input type="checkbox" asp-for="Judgment_Poor" class="form-check-input"> Poor                       <input type="checkbox" asp-for="Judgment_Other" class="form-check-input"> Other
+        <strong>Insight</strong>                <input type="checkbox" asp-for="Insight_Good" class="form-check-input"> Good                       <input type="checkbox" asp-for="Insight_Fair" class="form-check-input">  Fair                          <input type="checkbox" asp-for="Insight_Poor" class="form-check-input"> Poor                       <input type="checkbox" asp-for="Insight_Other" class="form-check-input"> Other
+        <strong>Thought content</strong>        <input type="checkbox" asp-for="ThoughtContent_Relevant" class="form-check-input"> Relevant           Hallucinations <input type="checkbox" asp-for="ThoughtContent_Hallucinations" class="form-check-input" id="check1"> Yes   <input type="checkbox" class="form-check-input" id="check101"> No                   Type:  <input asp-for="ThoughtContent_Hallucinations_Type"  style="width:25%">                                 
+                                <input type="checkbox" asp-for="ThoughtContent_RealityBased" class="form-check-input"> Reality based          Delusions  <input type="checkbox" asp-for="ThoughtContent_Delusions" class="form-check-input" id="check2"> Yes   <input type="checkbox" class="form-check-input" id="check102"> No                   Type:  <input asp-for="ThoughtContent_Delusions_Type"  style="width:25%">                                 
+        <strong>Oriented</strong>               <input type="checkbox" asp-for="Oriented_FullOriented" class="form-check-input"> Fully oriented                 <strong>Lacking</strong>  <input type="checkbox" asp-for="Lacking_Time" class="form-check-input"> Time       <input type="checkbox" asp-for="Lacking_Place" class="form-check-input"> Place      <input type="checkbox" asp-for="Lacking_Person" class="form-check-input"> Person     <input type="checkbox" asp-for="Lacking_Location" class="form-check-input"> Location 
+        <strong>Risk To Self</strong>           <input type="checkbox" asp-for="RiskToSelf_Low" class="form-check-input"> Low                  <input type="checkbox" asp-for="RiskToSelf_Medium" class="form-check-input"> Medium                 <input type="checkbox" asp-for="RiskToSelf_High" class="form-check-input"> High                 <input type="checkbox" asp-for="RiskToSelf_Chronic" class="form-check-input"> Chronic
+        <strong>Risk To others</strong>         <input type="checkbox" asp-for="RiskToOther_Low" class="form-check-input"> Low                  <input type="checkbox" asp-for="RiskToOther_Medium" class="form-check-input"> Medium                 <input type="checkbox" asp-for="RiskToOther_High" class="form-check-input"> High                 <input type="checkbox" asp-for="RiskToOther_Chronic" class="form-check-input"> Chronic
+        <strong>Safety plan reviewed</strong>   <input type="checkbox" asp-for="SafetyPlan" class="form-check-input" id="check3"> Yes   <input type="checkbox" class="form-check-input" id="check103"> No             
+        <strong>Comments</strong>   <input asp-for="Comments"  style="width:60%"><br />
+    <strong>B. Suicide/Homicide Risk Mini Screening: </strong>(if any of the following question are answered “yes”, please complete the SBQ-R with client and follow precautionary procedures)
+        <input type="checkbox" asp-for="ClientDenied" class="form-check-input"> <strong>Client denied any current suicidal/homicidal ideations (if denied, skip this section)</strong>
+            Have you ever thought about killing yourself or others?                                 <input type="checkbox" asp-for="HaveYouEverThought" class="form-check-input" id="check4"> Yes   <input type="checkbox" class="form-check-input" id="check104"> No     If yes, explain:  <input asp-for="HaveYouEverThought_Explain"  style="width:15%">
+            Do you own a weapon?                                                                    <input type="checkbox" asp-for="DoYouOwn" class="form-check-input" id="check5"> Yes   <input type="checkbox" class="form-check-input" id="check105"> No     If yes, explain:  <input asp-for="DoYouOwn_Explain"  style="width:15%">
+            Does Client have a plan or access to plan or individual?                                <input type="checkbox" asp-for="DoesClient" class="form-check-input" id="check6"> Yes   <input type="checkbox" class="form-check-input" id="check106"> No
+            Have you ever been hospitalized for depressive symptoms?                                <input type="checkbox" asp-for="HaveYouEverBeen" class="form-check-input" id="check7"> Yes   <input type="checkbox" class="form-check-input" id="check107"> No     If yes, detail:   <input asp-for="HaveYouEverBeen_Explain"  style="width:15%">
+            Has the client received behavioral health service in the last 2 years due to suicide?   <input type="checkbox" asp-for="HasTheClient" class="form-check-input" id="check8"> Yes   <input type="checkbox" class="form-check-input" id="check108"> No     If yes, specify:  <input asp-for="HasTheClient_Explain"  style="width:15%">
 
-        <strong>C. Physical/Sexual/Emotional Abuse: </strong> (current and history – if indicated, record the name of perpetrator, times, dates, and whether reported)
+    <strong>C. Physical/Sexual/Emotional Abuse: </strong> (current and history – if indicated, record the name of perpetrator, times, dates, and whether reported)
 
-            If any abuse is indicated in the process, you must do the following: 1. Call the abuse hotline 1-800-962-2873 or 1-800-96- Abuse in all cases, 
-            if not previously reported ( you don’t have to file a duplicable report of the abuse if the client/family can provide written proof that it was 
-            reported, DCF documentation, DCF Case Worker information, Termination of parental rights). 2. Discuss the client with your supervisor 
+        If any abuse is indicated in the process, you must do the following: 1. Call the abuse hotline 1-800-962-2873 or 1-800-96- Abuse in all cases, 
+        if not previously reported ( you don’t have to file a duplicable report of the abuse if the client/family can provide written proof that it was 
+        reported, DCF documentation, DCF Case Worker information, Termination of parental rights). 2. Discuss the client with your supervisor 
 
-            <input type="checkbox" asp-for="ClientFamilyAbusoTrauma"> <strong>Client and/or family denied any abuse or trauma history (physical, sexual, emotional abuse or financial explotation)</strong>
-            <strong>If any type of abused have occurred, please complete the following information:</strong>
-            <strong>Date of abuse                           </strong> <input asp-for="DateAbuse">           <strong>Person(s) involved: </strong> <input asp-for="PersonInvolved"  style="width:25%">       
-            <strong>Approximate date report was filed:      </strong> <input asp-for="ApproximateDateReport">           <strong>Where: </strong>              <input asp-for="ApproximateDateReport_Where"  style="width:25%">       
-            <strong>Relationship of the abuser to client:   </strong> <input asp-for="RelationShips" style="width:20%">                     
-            <strong>Details of the incident:                </strong> <input asp-for="Details" style="width:20%">
-            <strong>Outcome of the abuse report:            </strong> <input asp-for="Outcome" style="width:20%">
-            <input type="checkbox" asp-for="AReferral" class="form-check-input"> A referral for assessment     services is indicated <input asp-for="AReferral_Services" style="width:10%">       When <input asp-for="AReferral_When" style="width:10%">       Where <input asp-for="AReferral_Where" style="width:10%">
-            <input type="checkbox" asp-for="ObtainRelease" class="form-check-input"> Obtain release of information for coordination of care
-            <input type="checkbox" asp-for="WhereRecord" class="form-check-input"> Where records of previous treatment requested? If requested, when: <input asp-for="WhereRecord_When" style="width:15%">     Where <input asp-for="WhereRecord_Where" style="width:15%">
+        <input type="checkbox" asp-for="ClientFamilyAbusoTrauma"> <strong>Client and/or family denied any abuse or trauma history (physical, sexual, emotional abuse or financial explotation)</strong>
+        <strong>If any type of abused have occurred, please complete the following information:</strong>
+        <strong>Date of abuse                           </strong> <input asp-for="DateAbuse">           <strong>Person(s) involved: </strong> <input asp-for="PersonInvolved"  style="width:25%">       
+        <strong>Approximate date report was filed:      </strong> <input asp-for="ApproximateDateReport">           <strong>Where: </strong>              <input asp-for="ApproximateDateReport_Where"  style="width:25%">       
+        <strong>Relationship of the abuser to client:   </strong> <input asp-for="RelationShips" style="width:20%">                     
+        <strong>Details of the incident:                </strong> <input asp-for="Details" style="width:20%">
+        <strong>Outcome of the abuse report:            </strong> <input asp-for="Outcome" style="width:20%">
+        <input type="checkbox" asp-for="AReferral" class="form-check-input"> A referral for assessment     services is indicated <input asp-for="AReferral_Services" style="width:10%">       When <input asp-for="AReferral_When" style="width:10%">       Where <input asp-for="AReferral_Where" style="width:10%">
+        <input type="checkbox" asp-for="ObtainRelease" class="form-check-input"> Obtain release of information for coordination of care
+        <input type="checkbox" asp-for="WhereRecord" class="form-check-input"> Where records of previous treatment requested? If requested, when: <input asp-for="WhereRecord_When" style="width:15%">     Where <input asp-for="WhereRecord_Where" style="width:15%">
     </pre>
 </div>
-</div>
+
 <div class="container-fluid col-md-12">
     <div class="container-fluid col-md-12">
         <pre>

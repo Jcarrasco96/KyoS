@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="05/11/2022 11:02:12" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="05/11/2022 13:08:25" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3U5j4evvENupRGbwH2s0uIg==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3/9Xfo+i1D72gKo9UwJh9ww==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -325,11 +325,11 @@
       <ContainerObject Name="Container1" Left="161.65" Top="3.45" Width="614.25" Height="66.53" Border.Lines="All"/>
     </PageHeaderBand>
     <DataBand Name="Data7" Top="79.72" Width="778.3" Height="808.92" CanGrow="true" CanShrink="true" CanBreak="true" DataSource="Bio">
-      <TextObject Name="Text454" Left="28.35" Top="18.9" Width="103.95" Height="18.9" Text="Client name:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text455" Left="132.3" Top="18.9" Width="302.4" Height="18.9" Text="[Clients.Name]" Font="Arial, 10pt"/>
-      <TextObject Name="Text456" Left="444.15" Top="18.9" Width="56.7" Height="18.9" Text="MR#:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text457" Left="500.3" Top="18.9" Width="217.35" Height="18.9" Text="[Clients.MedicaidID]" Font="Arial, 10pt"/>
-      <TableObject Name="Table49" Top="56.7" Width="774.91" Height="47.25" Border.Lines="All">
+      <TextObject Name="Text454" Left="28.35" Top="9.45" Width="103.95" Height="18.9" Text="Client name:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text455" Left="132.3" Top="9.45" Width="302.4" Height="18.9" Text="[Clients.Name]" Font="Arial, 10pt"/>
+      <TextObject Name="Text456" Left="444.15" Top="9.45" Width="56.7" Height="18.9" Text="MR#:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text457" Left="500.3" Top="9.45" Width="217.35" Height="18.9" Text="[Clients.MedicaidID]" Font="Arial, 10pt"/>
+      <TableObject Name="Table49" Top="75.6" Width="774.91" Height="47.25" Border.Lines="All">
         <TableColumn Name="Column171" Width="158.29"/>
         <TableColumn Name="Column172" Width="177.19"/>
         <TableColumn Name="Column173" Width="139.39"/>
@@ -362,8 +362,8 @@
           </TableCell>
         </TableRow>
       </TableObject>
-      <TextObject Name="Text467" Top="125.85" Width="270.5" Height="24.57" CanGrow="true" Text="1.   DEMOGRAPHIC DATA:" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold"/>
-      <TableObject Name="Table50" Top="151.2" Width="774.9" Height="56.7">
+      <TextObject Name="Text467" Top="135.3" Width="270.5" Height="24.57" CanGrow="true" Text="1.   DEMOGRAPHIC DATA:" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold"/>
+      <TableObject Name="Table50" Top="160.65" Width="774.9" Height="56.7">
         <TableColumn Name="Column175" Width="296.1"/>
         <TableColumn Name="Column176" Width="277.2"/>
         <TableColumn Name="Column177" Width="201.6"/>
@@ -396,6 +396,7 @@
       <TextObject Name="Text481" Top="626.15" Width="771.35" Height="24.57" CanGrow="true" Text="&lt;b&gt;LEGAL REPRESENTATIVE’S ASSESSMENT OF SITUATION:&lt;/b&gt; (if applicable, in their own words)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text482" Top="654.5" Width="774.9" Height="94.5" CanGrow="true" CanShrink="true" CanBreak="false" Text="[Bio.LegalAssessment]" HorzAlign="Justify" Font="Arial, 10pt"/>
       <TextObject Name="Text483" Top="756" Width="771.35" Height="52.92" CanGrow="true" Text="&lt;b&gt;3. BEHAVIORAL HEALTH HISTORY (DATE OF ONSENT OF MENTAL ILLNESS)&lt;/b&gt; Document any serious behavior or physical illness, injures, operations or hospitalizations and indicate the year these occurred (give special attention to previous behavioral health treatment and document contact information for coordination of care." Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text774" Top="37.8" Width="771.35" Height="34.02" CanGrow="true" Text="The purpose of mental health programs/services is to assist clients in gaining more stable mental health and reduce behavioral symptoms and health risks." Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
     </DataBand>
     <DataBand Name="Data1" Top="934.69" Width="778.3" Height="18.9" DataSource="Bio_BehavioralHistory">
       <TableObject Name="Table52" Width="774.53" Height="18.9" Border.Lines="All">
