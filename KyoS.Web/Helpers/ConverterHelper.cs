@@ -34,7 +34,8 @@ namespace KyoS.Web.Helpers
                 State = model.State,
                 ZipCode = model.ZipCode,
                 Phone = model.Phone,
-                FaxNo = model.FaxNo
+                FaxNo = model.FaxNo,
+                ClinicalDirector = model.ClinicalDirector
             };
         }
 
@@ -51,7 +52,8 @@ namespace KyoS.Web.Helpers
                 State = clinicEntity.State,
                 ZipCode = clinicEntity.ZipCode,
                 Phone = clinicEntity.Phone,
-                FaxNo = clinicEntity.FaxNo
+                FaxNo = clinicEntity.FaxNo,
+                ClinicalDirector = clinicEntity.ClinicalDirector
             };
         }
 
@@ -340,8 +342,9 @@ namespace KyoS.Web.Helpers
                 Modality = model.Modality,
                 Frecuency = model.Frecuency,
                 NumberOfMonths = model.NumberOfMonths,
-                Active = isNew ? true : model.Active
-            };
+                Active = isNew ? true : model.Active,
+                MtpReview = model.MtpReview
+        };
         }
 
         public MTPViewModel ToMTPViewModel(MTPEntity mtpEntity)
@@ -360,7 +363,8 @@ namespace KyoS.Web.Helpers
                 Frecuency = mtpEntity.Frecuency,
                 NumberOfMonths = mtpEntity.NumberOfMonths,                
                 Setting = mtpEntity.Setting,
-                Active = mtpEntity.Active
+                Active = mtpEntity.Active,
+                MtpReview = mtpEntity.MtpReview
             };
         }        
 
@@ -2691,7 +2695,8 @@ namespace KyoS.Web.Helpers
                 ClinicalDirector = model.ClinicalDirector,
                 Documents = model.Documents,
                 LicensedPractitioner = model.LicensedPractitioner,
-                Therapist = model.Therapist
+                Therapist = model.Therapist,
+                Status = model.Status
 
             };
         }
@@ -2728,7 +2733,8 @@ namespace KyoS.Web.Helpers
                 ClinicalDirector = model.ClinicalDirector,
                 Documents = model.Documents,
                 LicensedPractitioner = model.LicensedPractitioner,
-                Therapist = model.Therapist
+                Therapist = model.Therapist,
+                Status = model.Status
 
             };
            

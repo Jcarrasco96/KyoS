@@ -32,8 +32,6 @@ namespace KyoS.Web.Data.Entities
 
         public string IfCurrent { get; set; }
 
-        public DateTime ReviewedOn { get; set; }
-
         public bool TheConsumer { get; set; }
 
         public bool ACopy{ get; set; }
@@ -60,6 +58,11 @@ namespace KyoS.Web.Data.Entities
 
         public DateTime DateLicensedPractitioner { get; set; }
 
+        [Display(Name = "Date of Reviwed On")]
+        [DataType(DataType.Date)]
+
+        public DateTime ReviewedOn { get; set; }
+
         public string Therapist { get; set; }
 
         public string LicensedPractitioner { get; set; }
@@ -67,5 +70,7 @@ namespace KyoS.Web.Data.Entities
         public string ClinicalDirector { get; set; }
 
         public bool Documents { get; set; }
+
+        public AdendumStatus Status { get; set; }
     }
 }

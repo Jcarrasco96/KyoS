@@ -102,14 +102,22 @@
    </pre>
 </div>
 
-<div class="col-md-12">
+<div>
     <pre>
     
-    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Legal Guardian signature date</strong>   
+    <strong>Person served signature date</strong>                         
     <strong>(@Html.DisplayFor(modelItem => Model.Mtp.Client.Name))</strong>     
-    
-    <strong>Therapist signature date</strong>         <input asp-for="Therapist">
-    @*<strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>*@
+    <strong>Legal Guardian signature date</strong>                  <input asp-for="DateSignaturePerson">
+    <strong>(@Html.DisplayFor(modelItem => Model.Mtp.Client.LegalGuardian.Name))</strong>
+
+    <strong>Therapist Name/ Signature </strong>                     <input asp-for="DateTherapist">
+    <strong>(@Html.DisplayFor(modelItem => Model.Therapist))</strong> 
+
+    <strong>Licensed Practitioner Name/ Signature </strong>         <input asp-for="DateLicensedPractitioner">
+    <strong>(@Html.DisplayFor(modelItem => Model.LicensedPractitioner))</strong>
+
+    <strong>Clinical Director/Reviewer Name/Signature </strong>     <input asp-for="DateClinicalDirector">
+    <strong>(@Html.DisplayFor(modelItem => Model.Mtp.Client.Clinic.ClinicalDirector))</strong>
     </pre>
 </div>
 <div class="col-md-12">
