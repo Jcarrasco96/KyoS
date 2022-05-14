@@ -72,7 +72,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public IActionResult Create(int id = 0, int idClient = 0, bool review = false)
         {
             if (id == 1)
@@ -147,7 +147,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> Create(MTPViewModel mtpViewModel, IFormCollection form)
         {
             if (ModelState.IsValid)
@@ -432,7 +432,7 @@ namespace KyoS.Web.Controllers
             return View(mtpEntity);
         }
 
-        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> UpdateGoals(int? id, int idError = 0)
         {
             if (id == null)
@@ -462,7 +462,7 @@ namespace KyoS.Web.Controllers
             return View(mtpEntity);
         }
 
-        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> CreateGoal(int? id, int idAdendum)
         {
             if (id == null)
@@ -494,7 +494,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> CreateGoal(int id, GoalViewModel model)
         {
             if (id != model.Id)
@@ -557,7 +557,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin, Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> DeleteGoal(int? id)
         {
             if (id == null)
@@ -584,7 +584,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("UpdateGoals", new { id = goalEntity.MTP.Id });
         }
 
-        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> EditGoal(int? id, int idAdendum)
         {
             if (id == null)
@@ -608,7 +608,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> EditGoal(int id, GoalViewModel model)
         {
             if (id != model.Id)
@@ -671,7 +671,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> UpdateObjectives(int? id, int idError = 0)
         {
             if (id == null)
@@ -696,7 +696,7 @@ namespace KyoS.Web.Controllers
             return View(goalEntity);
         }
 
-        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> CreateObjective(int? id)
         {
             if (id == null)
@@ -732,7 +732,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> CreateObjective(ObjectiveViewModel model, IFormCollection form)
         {
             if (ModelState.IsValid)
@@ -821,7 +821,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> DeleteObjective(int? id)
         {
             if (id == null)
@@ -848,7 +848,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("UpdateObjectives", new { objectiveEntity.Goal.Id });
         }
 
-        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> EditObjective(int? id)
         {
             if (id == null)
@@ -883,7 +883,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> EditObjective(ObjectiveViewModel model, IFormCollection form)
         {
             GoalEntity goal = await _context.Goals

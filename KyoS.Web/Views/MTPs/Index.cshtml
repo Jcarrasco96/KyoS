@@ -176,10 +176,26 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        <a asp-action="Create" asp-route-id="@item.Id" asp-route-review="true" asp-route-idClient="@item.Client.Id" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
+                                      @if (User.IsInRole("Facilitator"))
+                                       {
+                                            <a asp-action="Create" asp-route-id="@item.Id" asp-route-review="true" asp-route-idClient="@item.Client.Id" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
+                                       }
+                                       else 
+                                       {
+                                            <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a> 
+                                       }
+
                                     </td>
                                     <td align="right">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                       @if (User.IsInRole("Mannager"))
+                                        {
+                                            <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        }
+
                                         <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
                                         <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
@@ -223,7 +239,14 @@
                                     <a class="btn btn-success disabled" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
                                 </td>
                                 <td align="right">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    @if (User.IsInRole("Mannager"))
+                                    {
+                                        <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    }
                                     <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
                                     <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
