@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220507121944_update_adendum3")]
+    partial class update_adendum3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -965,9 +967,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClinicalDirector")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FaxNo")
@@ -3417,99 +3416,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("MTPs");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.MTPReviewEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<bool>("ACopy")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ClinicalDirector")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateClinicalDirector")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateLicensedPractitioner")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignaturePerson")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateTherapist")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DescribeAnyGoals")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DescribeClient")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Documents")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("IfCurrent")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LicensedPractitioner")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MTP_FK")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberUnit")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProviderNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ReviewedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ServiceCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SpecifyChanges")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SummaryOfServices")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TheConsumer")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("TheTreatmentPlan")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Therapist")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MTP_FK")
-                        .IsUnique();
-
-                    b.ToTable("MTPReviews");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.MedicationEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -5204,17 +5110,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.MTPReviewEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.MTPEntity", "Mtp")
-                        .WithOne("MtpReview")
-                        .HasForeignKey("KyoS.Web.Data.Entities.MTPReviewEntity", "MTP_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Mtp");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.MedicationEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
@@ -5668,8 +5563,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("AdendumList");
 
                     b.Navigation("Goals");
-
-                    b.Navigation("MtpReview");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.NoteEntity", b =>

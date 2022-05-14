@@ -1,0 +1,266 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.MTPEntity>
+@{
+    ViewData["Title"] = "Adendums";
+}
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Adendums</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @*<strong>Note: </strong> Only closed clients will be displayed, orange color means the client has not discharge documents*@
+        
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Adendums</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1">
+                               
+                            </th>
+                            <th class="col-md-2">
+                                Client with MTP
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.Client.Code)
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.Client.AdmisionDate)
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                MH Therapy
+                            </th>
+                            <th class="col-md-1" align="right">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            @if (item.AdendumList.Count() > 0)
+                            {
+                                <tr>
+                                    <td align="center">
+                                       @if (item.AdendumList.Count() != 0)
+                                        {
+                                           <a class="icon-plus-sign-alt"></a>
+                                        }
+                                        else
+                                        {
+
+                                        }
+                                        <div style="display:none">
+                                            <table class="table table-striped table-bordered">
+                                                <tr>
+                                                    <th class="col-md-2" style="text-align:center">Identified Date</th>
+                                                    <th class="col-md-2" style="text-align:center">Unit</th>
+                                                    <th class="col-md-2" style="text-align:center"> Frecuency</th>
+                                                    <th class="col-md-2" style="text-align:center">Duration (month)</th>
+                                                    <th class="col-md-2" style="text-align:center">Create by</th>
+                                                    <th class="col-md-2"></th>
+                                                </tr>
+                                                @foreach (var element in item.AdendumList)
+                                                    {
+                                                        <tr>
+                                                            <td align="center">@Html.DisplayFor(modelItem => element.Dateidentified)</td>
+                                                            <td align="center">@Html.DisplayFor(modelItem => element.Unit)</td>
+                                                            <td align="center">@Html.DisplayFor(modelItem => element.Frecuency)</td>
+                                                            <td align="center">@Html.DisplayFor(modelItem => element.Duration)</td>
+                                                            <td align="center">@Html.DisplayFor(modelItem => element.CreatedBy)</td>
+                                                            <td align="center">
+                                                                @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.AdendumStatus.Edition && (element.Status == KyoS.Common.Enums.AdendumStatus.Pending || element.CreatedBy == User.Identity.Name))
+                                                                {
+                                                                    <a asp-action="EditAdendum" asp-route-id="@element.Id" class="btn btn-warning" title="Edit Adendum"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                    <a asp-action="FinishEditingAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Finish edition of Adendum"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                    <a asp-action="PrintAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Print Adendum" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                                    @*<button data-id="@element.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete Fars Form"><i class="glyphicon glyphicon-trash"></i></button>*@
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a class="btn btn-warning disabled" title="Edit Adendum"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                    <a class="btn btn-success disabled" title="Finish edition of Adendum"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                    <a asp-action="PrintAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Print Adendum" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                                    @*<a class="btn btn-warning disabled" title="Delete Fars Form"><i class="glyphicon glyphicon-pencil"></i></a>*@
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                       
+                                                    }
+                                            </table>
+                                        </div>
+                                        </td>
+                                    <td>
+                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Client.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Client.Code)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Client.AdmisionDate)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-success">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Client.Service)
+                                    </td>
+                                    <td align="right">
+                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Supervisor") || User.IsInRole("Facilitator")))
+                                        {
+                                            <a asp-action="CreateAdendum" asp-route-id="@item.Id" class="btn btn-warning" title="New Adendum"><i class="glyphicon glyphicon-plus"></i></a>
+                                            <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-warning disabled" title="New Adendum"><i class="glyphicon glyphicon-plus"></i></a>
+                                            <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+
+                            }
+                            else
+                            {
+                                <tr style="color:orange">
+                                    <td align="center">
+                                            &nbsp;
+                                        </td>
+                                    <td>
+                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Client.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Client.Code)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Client.AdmisionDate)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-warning">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Client.Service)
+                                    </td>
+                                    <td align="right">
+                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Facilitator") || User.IsInRole("Supervisor")))
+                                        {
+                                            <a asp-action="CreateAdendum" asp-route-id="@item.Id" class="btn btn-warning" title="New Adendum"><i class="glyphicon glyphicon-plus"></i></a>
+                                            <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-warning disabled" title="New Adendum"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+
+                            }
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                                "order": [[0, "asc"]],
+                                "pageLength": 100
+                            });
+
+            // Delete item
+            var item_to_delete;
+
+            $('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                var url = "@Url.Action("Delete", "Adendums")";
+                window.location.href = url + '/' + item_to_delete;
+            });
+        });
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+    </script>
+}
+
