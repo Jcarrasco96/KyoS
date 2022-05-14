@@ -43,5 +43,17 @@ namespace KyoS.Web.Models
         public int IdIfSexuallyActive { get; set; }
 
         public IEnumerable<SelectListItem> IfSexuallyActive_Status { get; set; }
+
+        public string ReferralName { get; set; }
+
+        public string LegalGuardianName { get; set; }
+
+        public string LegalGuardianTelephone { get; set; }
+
+        public string EmergencyContactName { get; set; }
+
+        public string EmergencyContactTelephone { get; set; }
+
+        public string RelationShipOfEmergencyContact { get; set; }
     }
 }
