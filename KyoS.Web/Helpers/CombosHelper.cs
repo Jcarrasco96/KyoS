@@ -976,11 +976,10 @@ namespace KyoS.Web.Helpers
         {
             List<SelectListItem> list = new List<SelectListItem>
             {
-                new SelectListItem { Text = "[Select Appetite...]", Value = "0"},
+                new SelectListItem { Text = "[Select...]", Value = "0"},
                 new SelectListItem { Text = Bio_IfSexuallyActive.YES.ToString(), Value = "1"},
                 new SelectListItem { Text = Bio_IfSexuallyActive.NO.ToString(), Value = "2"},
                 new SelectListItem { Text = Bio_IfSexuallyActive.N_A.ToString(), Value = "3"}
-
             };
 
             return list;

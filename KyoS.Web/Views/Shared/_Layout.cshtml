@@ -294,9 +294,11 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
                                 <li>@Html.ActionLink("FARS Forms", "Index", "FarsForms")</li>
+                                <li>@Html.ActionLink("Clients without FARS", "ClientswithoutFARS", "FarsForms")</li>
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">BIOs</a>
                                     <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Clients without BIO", "ClientswithoutBIO", "Bios")</li>
                                         <li>@Html.ActionLink("Behavioral Health History", "IndexBehavioralHealthHistory", "Bios")</li>
                                         <li>@Html.ActionLink("BIOs", "Index", "Bios")</li>
                                     </ul>
