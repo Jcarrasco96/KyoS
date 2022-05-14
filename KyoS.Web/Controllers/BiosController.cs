@@ -300,7 +300,6 @@ namespace KyoS.Web.Controllers
                         StartTime = DateTime.Now,
                         EndTime = DateTime.Now,
                         ForHowLong = 0
-
                     };
                     if (model.Client.LegalGuardian == null)
                         model.Client.LegalGuardian = new LegalGuardianEntity();
@@ -312,6 +311,14 @@ namespace KyoS.Web.Controllers
                         model.Client.Doctor = new DoctorEntity();
                     if (model.Client.Referred == null)
                         model.Client.Referred = new ReferredEntity();
+
+                    model.ReferralName = model.Client.Referred.Name;
+                    model.LegalGuardianName = model.Client.LegalGuardian.Name;
+                    model.LegalGuardianTelephone = model.Client.LegalGuardian.Telephone;
+                    model.EmergencyContactName = model.Client.EmergencyContact.Name;
+                    model.EmergencyContactTelephone = model.Client.EmergencyContact.Telephone;
+                    model.RelationShipOfEmergencyContact = model.Client.RelationShipOfEmergencyContact.ToString();
+
                     return View(model);
                 }
             }
@@ -821,6 +828,13 @@ namespace KyoS.Web.Controllers
                         model.Client.MedicationList = new List<MedicationEntity>();
                     if (model.Client.List_BehavioralHistory == null)
                         model.Client.List_BehavioralHistory = new List<Bio_BehavioralHistoryEntity>();
+
+                    model.ReferralName = model.Client.Referred.Name;
+                    model.LegalGuardianName = model.Client.LegalGuardian.Name;
+                    model.LegalGuardianTelephone = model.Client.LegalGuardian.Telephone;
+                    model.EmergencyContactName = model.Client.EmergencyContact.Name;
+                    model.EmergencyContactTelephone = model.Client.EmergencyContact.Telephone;
+                    model.RelationShipOfEmergencyContact = model.Client.RelationShipOfEmergencyContact.ToString();
 
                     return View(model);
                 }
