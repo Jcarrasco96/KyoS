@@ -368,6 +368,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
         public async Task<IActionResult> ClientswithoutFARS(int idError = 0)
         {
             UserEntity user_logged = await _context.Users

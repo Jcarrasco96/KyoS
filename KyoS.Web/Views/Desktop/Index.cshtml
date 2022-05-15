@@ -429,6 +429,22 @@
                     <div class="col-sm-3 col-md-2">
                         <div class="thumbnail list-group-item list-group-item-info">
                             <div class="caption">
+                                <h4 style="align-content:end;">Pending <br>Discharge</h4>
+                                <h3 style="text-align:right">@ViewBag.PendingDischarge</h3>
+                                @if (ViewBag.PendingDischarge == "0")
+                                {
+                                    <p><a class="btn btn-info disabled">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="Discharge" asp-action="PendingDischarge" asp-route-pending="1" class="btn btn-info">Go</a></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <div class="caption">
                                 <h4 style="align-content:end;">Pending <br>Activities</h4>
                                 <h3 style="text-align:right">@ViewBag.PendingActivities</h3>
                                 @if (ViewBag.PendingActivities == "0")

@@ -32,7 +32,7 @@
                     <thead>
                         <tr>
                             <th class="col-md-3">
-                                Client with MTP
+                                Client with Discharge
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Client.Code)
@@ -127,23 +127,11 @@
             });
 
             $("#btnYesDelete").click(function () {
-                var url = "@Url.Action("Delete", "Adendums")";
+                var url = "@Url.Action("Delete", "Fars")";
                 window.location.href = url + '/' + item_to_delete;
             });
         });
-        $(function () {
-
-            //Assign Click event to Plus Image.
-            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
-                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
-                $(this).attr("class", "icon-minus-sign-alt");
-            });
-            //Assign Click event to Minus Image.
-            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
-                $(this).attr("class", "icon-plus-sign-alt");
-                $(this).closest("tr").next().remove();
-            });
-        });
+       
     </script>
 }
 

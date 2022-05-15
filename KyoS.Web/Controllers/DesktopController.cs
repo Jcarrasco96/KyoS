@@ -189,6 +189,10 @@ namespace KyoS.Web.Controllers
                                                   .Count(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
                                                     && m.Status == AdendumStatus.Pending)).ToString();
 
+                ViewBag.PendingDischarge = _context.Discharge
+                                                  .Count(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && m.Status == DischargeStatus.Pending)).ToString();
+
                 List<ClientEntity> client = await _context.Clients
                                                           .Include(c => c.MTPs)
                                                           .Where(c => c.Clinic.Id == user_logged.Clinic.Id).ToListAsync();

@@ -1966,7 +1966,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<DischargeEntity> ToDischargeEntity(DischargeViewModel model, bool isNew)
+        public async Task<DischargeEntity> ToDischargeEntity(DischargeViewModel model, bool isNew, string userId)
         {
             return new DischargeEntity
             {
@@ -2004,13 +2004,20 @@ namespace KyoS.Web.Helpers
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignaturePerson = model.DateSignaturePerson,
                 DateSignatureSupervisor = model.DateSignatureSupervisor,
-                Others_Explain = model.Others_Explain                
+                Others_Explain = model.Others_Explain,
+                Status = model.Status,
+                Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == model.IdSupervisor),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
             };
         }
 
         public DischargeViewModel ToDischargeViewModel(DischargeEntity model)
         {
-            return new DischargeViewModel
+            DischargeViewModel salida;
+            salida = new DischargeViewModel
             {
                 Id = model.Id,
                 Client = model.Client,
@@ -2047,9 +2054,20 @@ namespace KyoS.Web.Helpers
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignaturePerson = model.DateSignaturePerson,
                 DateSignatureSupervisor = model.DateSignatureSupervisor,
-                Others_Explain = model.Others_Explain                
+                Others_Explain = model.Others_Explain,
+                Status = model.Status,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+
             };
 
+            if (model.Supervisor != null)
+                salida.IdSupervisor = model.Supervisor.Id;
+            else
+                salida.IdSupervisor = 0;
+            return salida;
         }
 
         public async Task<MedicationEntity> ToMedicationEntity(MedicationViewModel model, bool isNew)

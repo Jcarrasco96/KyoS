@@ -96,7 +96,7 @@
                                                             <td align="center">
                                                                 @if (User.IsInRole("Supervisor"))
                                                                 {
-                                                                    @if (item.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.FarsStatus.Edition && element.CreatedBy == User.Identity.Name || element.Status == KyoS.Common.Enums.FarsStatus.Pending)
+                                                                    @if (@item.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.FarsStatus.Edition && @element.CreatedBy == User.Identity.Name || @element.Status == KyoS.Common.Enums.FarsStatus.Pending)
                                                                     {
                                                                         <a asp-action="Edit" asp-route-id="@element.Id" class="btn btn-warning" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>
                                                                         <a asp-action="ApproveFars" asp-route-id="@element.Id" class="btn btn-success" title="Approve FARS"><i class="glyphicon glyphicon-ok"></i></a>

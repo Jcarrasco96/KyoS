@@ -94,7 +94,7 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="right">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close && User.IsInRole("Supervisor"))
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close && User.IsInRole("Facilitator"))
                                         {
                                             <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="New Discharge"><i class="glyphicon glyphicon-plus"></i></a>
                                             <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>
@@ -147,15 +147,49 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="right">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close && User.IsInRole("Supervisor"))
+                                        @if (User.IsInRole("Supervisor"))
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="PrintDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            @if (@item.Discharge.Status == KyoS.Common.Enums.DischargeStatus.Pending)
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Discharge.Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="ApproveDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Approve of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-warning disabled" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a class="btn btn-success disabled" title="Approve of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                                @if (item.Discharge.Status == KyoS.Common.Enums.DischargeStatus.Approved)
+                                                {
+                                                    <a asp-action="PrintDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
+                                            }
                                         }
                                         else
                                         {
-                                            <a class="btn btn-warning disabled" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="PrintDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            @if (item.Status == KyoS.Common.Enums.StatusType.Close && @item.Discharge.Status == KyoS.Common.Enums.DischargeStatus.Edition && item.Discharge.CreatedBy == User.Identity.Name)
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Discharge.Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="FinishEditingDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Finish edition of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-warning disabled" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a class="btn btn-success disabled" title="Finish edition of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                                @if (item.Discharge.Status == KyoS.Common.Enums.DischargeStatus.Approved)
+                                                {
+                                                    <a asp-action="PrintDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
+                                            }
                                         }
                                     </td>
                                 </tr>

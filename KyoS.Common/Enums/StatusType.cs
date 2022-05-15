@@ -52,4 +52,10 @@
         Pending,
         Approved
     }
+    public enum DischargeStatus
+    {
+        Edition,
+        Pending,
+        Approved
+    }
 }

@@ -84,7 +84,7 @@ namespace KyoS.Web.Helpers
         IntakeTuberculosisViewModel ToIntakeTuberculosisViewModel(IntakeTuberculosisEntity model);
         Task<IntakeMedicalHistoryEntity> ToIntakeMedicalHistoryEntity(IntakeMedicalHistoryViewModel model, bool isNew);
         IntakeMedicalHistoryViewModel ToIntakeMedicalHistoryViewModel(IntakeMedicalHistoryEntity model);
-        Task<DischargeEntity> ToDischargeEntity(DischargeViewModel model, bool isNew);
+        Task<DischargeEntity> ToDischargeEntity(DischargeViewModel model, bool isNew, string userId);
         DischargeViewModel ToDischargeViewModel(DischargeEntity model);
         Task<MedicationEntity> ToMedicationEntity(MedicationViewModel model, bool isNew);
         MedicationViewModel ToMedicationViewModel(MedicationEntity model);
