@@ -46,4 +46,10 @@
         Pending,
         Approved
     }
+    public enum FarsStatus
+    {
+        Edition,
+        Pending,
+        Approved
+    }
 }

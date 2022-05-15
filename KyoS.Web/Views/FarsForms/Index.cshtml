@@ -94,17 +94,53 @@
                                                             <td align="center">@Html.DisplayFor(modelItem => element.EvaluationDate)</td>
                                                             <td>@Html.DisplayFor(modelItem => element.AdmissionedFor)</td>
                                                             <td align="center">
-                                                                @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Supervisor"))
+                                                                @if (User.IsInRole("Supervisor"))
                                                                 {
-                                                                    <a asp-action="Edit" asp-route-id="@element.Id" class="btn btn-success" title="New Fars Form"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                    <a asp-action="PrintFarsForm" asp-route-id="@element.Id" class="btn btn-success" title="Print Fars Form" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                                    @*<button data-id="@element.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete Fars Form"><i class="glyphicon glyphicon-trash"></i></button>*@
+                                                                    @if (item.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.FarsStatus.Edition && element.CreatedBy == User.Identity.Name || element.Status == KyoS.Common.Enums.FarsStatus.Pending)
+                                                                    {
+                                                                        <a asp-action="Edit" asp-route-id="@element.Id" class="btn btn-warning" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                        <a asp-action="ApproveFars" asp-route-id="@element.Id" class="btn btn-success" title="Approve FARS"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        <a class="btn btn-success disabled" title="Print FARS"><i class="glyphicon glyphicon-print"></i></a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a class="btn btn-warning disabled" title="New FARS"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                        <a class="btn btn-success disabled" title="Approve FARS"><i class="glyphicon glyphicon-ok"></i></a>
+
+                                                                        @if (@element.Status == KyoS.Common.Enums.FarsStatus.Approved)
+                                                                        {
+                                                                            <a asp-action="PrintFarsForm" asp-route-id="@element.Id" class="btn btn-success" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="btn btn-success disabled" title="Print FARS"><i class="glyphicon glyphicon-print"></i></a>
+                                                                        }
+                                                                    }
                                                                 }
                                                                 else
                                                                 {
-                                                                    <a class="btn btn-warning disabled" title="New Fars Form"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                    <a asp-action="PrintFarsForm" asp-route-id="@element.Id" class="btn btn-success" title="Print Fars Form" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                                    @*<a class="btn btn-warning disabled" title="Delete Fars Form"><i class="glyphicon glyphicon-pencil"></i></a>*@
+                                                                    @if (item.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.FarsStatus.Edition && element.CreatedBy == User.Identity.Name)
+                                                                    {
+                                                                        <a asp-action="Edit" asp-route-id="@element.Id" class="btn btn-warning" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                        <a asp-action="FinishEditingFars" asp-route-id="@element.Id" class="btn btn-success" title="Finish edition of FARS"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        <a class="btn btn-success disabled" title="Print FARS"><i class="glyphicon glyphicon-print"></i></a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a class="btn btn-warning disabled" title="New FARS"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                        <a class="btn btn-success disabled" title="Finish edition of FARS"><i class="glyphicon glyphicon-ok"></i></a>
+
+                                                                        @if (@element.Status == KyoS.Common.Enums.FarsStatus.Approved)
+                                                                        {
+                                                                            <a asp-action="PrintFarsForm" asp-route-id="@element.Id" class="btn btn-success" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="btn btn-success disabled" title="Print FARS"><i class="glyphicon glyphicon-print"></i></a>
+                                                                        }
+
+                                                                    }
+
                                                                 }
                                                             </td>
                                                         </tr>
@@ -149,9 +185,9 @@
                                             @Html.DisplayFor(modelItem => item.Service)
                                         </td>
                                         <td align="right">
-                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Supervisor"))
+                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Supervisor") || User.IsInRole("Facilitator")))
                                             {
-                                                <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-success" title="Create Fars Form"><i class="glyphicon glyphicon-plus"></i></a>
+                                                <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="Create Fars Form"><i class="glyphicon glyphicon-plus"></i></a>
                                             }
                                             @if (item.Status == KyoS.Common.Enums.StatusType.Close)
                                             {

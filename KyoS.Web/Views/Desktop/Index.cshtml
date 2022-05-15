@@ -322,9 +322,6 @@
                 }
                 @if (User.IsInRole("Supervisor"))
                 {
-                    <div class="col-sm-3 col-md-1">
-                        &nbsp;
-                    </div>
                     <div class="col-sm-3 col-md-2">
                         <div class="thumbnail list-group-item list-group-item-danger">
                             <div class="caption">
@@ -340,6 +337,94 @@
                                 }
                             </div>
                         </div>
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-danger">
+                            <div class="caption">
+                                <h4 style="align-content:end;">Clients <br>Without BIO</h4>
+                                <h3 style="text-align:right">@ViewBag.PendingBIO</h3>
+                                @if (ViewBag.PendingBIO == "0")
+                                {
+                                    <p><a class="btn btn-danger disabled">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="Bios" asp-action="ClientswithoutBIO" asp-route-pending="1" class="btn btn-danger">Go</a></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-danger">
+                            <div class="caption">
+                                <h4 style="align-content:end;">Clients <br>Without Initial FARS</h4>
+                                <h3 style="text-align:right">@ViewBag.PendingInitialFars</h3>
+                                @if (ViewBag.PendingInitialFars == "0")
+                                {
+                                    <p><a class="btn btn-danger disabled">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="FarsForms" asp-action="ClientswithoutFARS" asp-route-pending="1" class="btn btn-danger">Go</a></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-danger">
+                            <div class="caption">
+                                <h4 style="align-content:end;">Pending <br>FARS</h4>
+                                <h3 style="text-align:right">@ViewBag.PendingFars</h3>
+                                @if (ViewBag.PendingFars == "0")
+                                {
+                                    <p><a class="btn btn-danger disabled">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="FarsForms" asp-action="PendingFARS" asp-route-pending="1" class="btn btn-danger">Go</a></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-danger">
+                            <div class="caption">
+                                <h4 style="align-content:end;">Pending <br>Addendum</h4>
+                                <h3 style="text-align:right">@ViewBag.PendingAddendum</h3>
+                                @if (ViewBag.PendingAddendum == "0")
+                                {
+                                    <p><a class="btn btn-danger disabled">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="MTPs" asp-action="PendingAdendum" asp-route-pending="1" class="btn btn-danger">Go</a></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-danger">
+                            <div class="caption">
+                                <h4 style="align-content:end;">Pending <br>MTP Review</h4>
+                                <h3 style="text-align:right">@ViewBag.PendingMTPReview</h3>
+                                @if (ViewBag.PendingMTPReview == "0")
+                                {
+                                    <p><a class="btn btn-danger disabled">Go</a></p>
+                                }
+                                else
+                                {
+                                    <p><a asp-controller="MTPs" asp-action="PendingAdendum" asp-route-pending="1" class="btn btn-danger">Go</a></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    
+                    //New line
+                    <div class="col-md-12">
+                        &nbsp;
+                    </div>
+                    <div class="col-sm-3 col-md-1">
+                        &nbsp;
                     </div>
                     <div class="col-sm-3 col-md-2">
                         <div class="thumbnail list-group-item list-group-item-info">

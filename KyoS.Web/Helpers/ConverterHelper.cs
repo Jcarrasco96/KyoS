@@ -2081,7 +2081,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<FarsFormEntity> ToFarsFormEntity(FarsFormViewModel model, bool isNew)
+        public async Task<FarsFormEntity> ToFarsFormEntity(FarsFormViewModel model, bool isNew, string userId)
         {
             return new FarsFormEntity
             {
@@ -2124,13 +2124,19 @@ namespace KyoS.Web.Helpers
                 ThoughtProcessScale = model.ThoughtProcessScale,
                 TraumaticsScale = model.TraumaticsScale,
                 WorkScale = model.WorkScale,
-
+                Status = model.Status,
+                Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == model.IdSupervisor),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
             };
         }
 
         public FarsFormViewModel ToFarsFormViewModel(FarsFormEntity model)
         {
-            return new FarsFormViewModel
+            FarsFormViewModel salida;
+            salida = new FarsFormViewModel
             {
                 Id = model.Id,
                 Client = model.Client,
@@ -2171,9 +2177,20 @@ namespace KyoS.Web.Helpers
                 SubstanceScale = model.SubstanceScale,
                 ThoughtProcessScale = model.ThoughtProcessScale,
                 TraumaticsScale = model.TraumaticsScale,
-                WorkScale = model.WorkScale
-                
+                WorkScale = model.WorkScale,
+                Status = model.Status,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+
             };
+            
+            if (model.Supervisor != null)
+                salida.IdSupervisor = model.Supervisor.Id;
+            else
+                salida.IdSupervisor = 0;
+            return salida;
 
         }
 

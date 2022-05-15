@@ -1177,7 +1177,7 @@ namespace KyoS.Web.Controllers
                     Supervisor = new SupervisorEntity(),
                     IdFacilitator = _context.Facilitators.FirstOrDefault(n => n.Name == user_logged.FullName).Id,
                     IdSupervisor = 0,
-                    Goals = new List<GoalEntity>()
+                    Goals = new List<GoalEntity>()                    
                 };
 
                 return View(model);

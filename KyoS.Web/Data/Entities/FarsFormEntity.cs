@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using KyoS.Common.Enums;
+using KyoS.Web.Data.Contracts;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class FarsFormEntity
+    public class FarsFormEntity : AuditableEntity
     {
         public int Id { get; set; }
 
@@ -141,5 +142,8 @@ namespace KyoS.Web.Data.Entities
 
         public string ProgramEvaluation { get; set; }
 
+        public SupervisorEntity Supervisor { get; set; }
+
+        public FarsStatus Status { get; set; }
     }
 }
