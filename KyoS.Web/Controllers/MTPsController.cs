@@ -1175,7 +1175,7 @@ namespace KyoS.Web.Controllers
                     Status = AdendumStatus.Edition,
                     Unit = 4,
                     Supervisor = new SupervisorEntity(),
-                    IdFacilitator = _context.Facilitators.FirstOrDefault(n => n.Name == user_logged.FullName).Id,
+                    IdFacilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Id,
                     IdSupervisor = 0,
                     Goals = new List<GoalEntity>()                    
                 };
