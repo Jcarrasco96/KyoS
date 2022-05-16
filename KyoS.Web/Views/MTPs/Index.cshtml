@@ -98,28 +98,30 @@
                                                         <td align="center">@Html.DisplayFor(modelItem => item.MtpReview.Id)</td>
                                                         <td align="center">@Html.DisplayFor(modelItem => item.MtpReview.MTP_FK)</td>
                                                         <td align="center">
-                                                            @if(@item.MtpReview.Status == KyoS.Common.Enums.AdendumStatus.Edition)
+                                                           @if (User.IsInRole("Supervisor"))
                                                             {
-                                                                <a asp-action="EditMTPReview" asp-route-id="@item.MtpReview.Id" class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                <a asp-action="FinishEditingMtpReview" asp-route-id="@item.MtpReview.Id" class="btn btn-success" title="Finish edition of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
-                                                                <a class="btn btn-success disabled" title="Print MTP Review"><i class="glyphicon glyphicon-print"></i></a>
-                                                            }
-                                                            else
-                                                            {
-                                                                @if(@item.MtpReview.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                                                @if (@item.MtpReview.Status == KyoS.Common.Enums.AdendumStatus.Edition)
                                                                 {
-                                                                    <a class="btn btn-warning disabled" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                    <a class="btn btn-success disabled" title="Finish edition of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                    <a asp-action="EditMTPReview" asp-route-id="@item.MtpReview.Id" class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                    <a asp-action="FinishEditingMtpReview" asp-route-id="@item.MtpReview.Id" class="btn btn-success" title="Finish edition of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
                                                                     <a class="btn btn-success disabled" title="Print MTP Review"><i class="glyphicon glyphicon-print"></i></a>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <a class="btn btn-warning disabled" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                    <a class="btn btn-success disabled" title="Finish edition of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
-                                                                    <a asp-action="PrintMTPReview" asp-route-id="@item.MtpReview.Id" class="btn btn-success" title="Print MTP Review" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                                }                                                           
+                                                                    @if (@item.MtpReview.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                                                    {
+                                                                        <a class="btn btn-warning disabled" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                        <a class="btn btn-success disabled" title="Finish edition of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        <a class="btn btn-success disabled" title="Print MTP Review"><i class="glyphicon glyphicon-print"></i></a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a class="btn btn-warning disabled" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                        <a class="btn btn-success disabled" title="Finish edition of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        <a asp-action="PrintMTPReview" asp-route-id="@item.MtpReview.Id" class="btn btn-success" title="Print MTP Review" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                                    }
+                                                                }
                                                             }
-                                                            
                                                         </td>
                                                     </tr>
                                                 </table>

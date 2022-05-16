@@ -47,7 +47,7 @@
                                 Status
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                MH Therapy
+                                MTP Active
                             </th>
                             <th class="col-md-1" align="right">
                             </th>
@@ -87,19 +87,50 @@
                                                             <td align="center">@Html.DisplayFor(modelItem => element.Duration)</td>
                                                             <td align="center">@Html.DisplayFor(modelItem => element.CreatedBy)</td>
                                                             <td align="center">
-                                                                @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.AdendumStatus.Edition && (element.Status == KyoS.Common.Enums.AdendumStatus.Pending || element.CreatedBy == User.Identity.Name))
+                                                                @if (User.IsInRole("Supervisor"))
                                                                 {
-                                                                    <a asp-action="EditAdendum" asp-route-id="@element.Id" class="btn btn-warning" title="Edit Adendum"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                    <a asp-action="FinishEditingAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Finish edition of Adendum"><i class="glyphicon glyphicon-ok"></i></a>
-                                                                    <a asp-action="PrintAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Print Adendum" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                                    @*<button data-id="@element.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete Fars Form"><i class="glyphicon glyphicon-trash"></i></button>*@
+                                                                    @if ((item.Client.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.AdendumStatus.Edition && element.CreatedBy == User.Identity.Name) || (element.Status == KyoS.Common.Enums.AdendumStatus.Pending))
+                                                                    {
+                                                                        <a asp-action="EditAdendum" asp-route-id="@element.Id" class="btn btn-warning" title="Edit Adendum"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                        <a asp-action="ApproveAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Approve Adendum"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        <a class="btn btn-success disabled" title="Print Addendum"><i class="glyphicon glyphicon-print"></i></a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a class="btn btn-warning disabled" title="Edit Adendum"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                        <a class="btn btn-success disabled" title="Finish edition of Adendum"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        @if (@element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                                        {
+                                                                            <a asp-action="PrintAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Print Adendum" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="btn btn-success disabled" title="Print FARS"><i class="glyphicon glyphicon-print"></i></a>
+                                                                        }
+                                                                    }
                                                                 }
                                                                 else
                                                                 {
-                                                                    <a class="btn btn-warning disabled" title="Edit Adendum"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                    <a class="btn btn-success disabled" title="Finish edition of Adendum"><i class="glyphicon glyphicon-ok"></i></a>
-                                                                    <a asp-action="PrintAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Print Adendum" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                                    @*<a class="btn btn-warning disabled" title="Delete Fars Form"><i class="glyphicon glyphicon-pencil"></i></a>*@
+                                                                    @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.AdendumStatus.Edition && element.CreatedBy == User.Identity.Name)
+                                                                    {
+                                                                        <a asp-action="EditAdendum" asp-route-id="@element.Id" class="btn btn-warning" title="Edit Adendum"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                        <a asp-action="FinishEditingAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Finish edition of Adendum"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        <a class="btn btn-success disabled" title="Print Addendum"><i class="glyphicon glyphicon-print"></i></a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a class="btn btn-warning disabled" title="Edit Addendum"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                        <a class="btn btn-success disabled" title="Finish edition of Addendum"><i class="glyphicon glyphicon-ok"></i></a>
+
+                                                                        @if (@element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                                        {
+                                                                            <a asp-action="PrintAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Print Adendum" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="btn btn-success disabled" title="Print FARS"><i class="glyphicon glyphicon-print"></i></a>
+                                                                        }
+                                                                    }
                                                                 }
                                                             </td>
                                                         </tr>
@@ -141,10 +172,10 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Client.Service)
+                                        @Html.DisplayFor(modelItem => item.Active)
                                     </td>
                                     <td align="right">
-                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Supervisor") || User.IsInRole("Facilitator")))
+                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open && item.Active == true && (User.IsInRole("Supervisor") || User.IsInRole("Facilitator")))
                                         {
                                             <a asp-action="CreateAdendum" asp-route-id="@item.Id" class="btn btn-warning" title="New Adendum"><i class="glyphicon glyphicon-plus"></i></a>
                                             <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
@@ -197,10 +228,10 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Client.Service)
+                                        @Html.DisplayFor(modelItem => item.Active)
                                     </td>
                                     <td align="right">
-                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Facilitator") || User.IsInRole("Supervisor")))
+                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open && item.Active == true && (User.IsInRole("Facilitator") || User.IsInRole("Supervisor")))
                                         {
                                             <a asp-action="CreateAdendum" asp-route-id="@item.Id" class="btn btn-warning" title="New Adendum"><i class="glyphicon glyphicon-plus"></i></a>
                                             <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
