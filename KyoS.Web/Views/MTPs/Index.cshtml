@@ -62,8 +62,8 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Client Therapy
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Clinic
+                            <th class="col-md-1" style="text-align:center;">
+                                Status
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Active
@@ -98,7 +98,7 @@
                                                         <td align="center">@Html.DisplayFor(modelItem => item.MtpReview.Id)</td>
                                                         <td align="center">@Html.DisplayFor(modelItem => item.MtpReview.MTP_FK)</td>
                                                         <td align="center">
-                                                           @if (User.IsInRole("Supervisor"))
+                                                            @if (User.IsInRole("Supervisor"))
                                                             {
                                                                 @if (@item.MtpReview.Status == KyoS.Common.Enums.AdendumStatus.Edition)
                                                                 {
@@ -110,14 +110,34 @@
                                                                 {
                                                                     @if (@item.MtpReview.Status == KyoS.Common.Enums.AdendumStatus.Pending)
                                                                     {
-                                                                        <a class="btn btn-warning disabled" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                        <a class="btn btn-success disabled" title="Finish edition of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        <a asp-action="EditMTPReview" asp-route-id="@item.MtpReview.Id" class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                        <a asp-action="ApproveMTPReview" asp-route-id="@item.MtpReview.Id" class="btn btn-success" title="Approve of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
                                                                         <a class="btn btn-success disabled" title="Print MTP Review"><i class="glyphicon glyphicon-print"></i></a>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <a class="btn btn-warning disabled" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                        <a class="btn btn-success disabled" title="Finish edition of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        <a asp-action="PrintMTPReview" asp-route-id="@item.MtpReview.Id" class="btn btn-success" title="Print MTP Review" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                                    }
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                @if (@item.MtpReview.Status == KyoS.Common.Enums.AdendumStatus.Edition && @item.MtpReview.CreatedBy == User.Identity.Name)
+                                                                {
+                                                                    <a asp-action="EditMTPReview" asp-route-id="@item.MtpReview.Id" class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                    <a asp-action="FinishEditingMtpReview" asp-route-id="@item.MtpReview.Id" class="btn btn-success" title="Finish edition of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                    <a class="btn btn-success disabled" title="Print MTP Review"><i class="glyphicon glyphicon-print"></i></a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    @if (@item.MtpReview.Status == KyoS.Common.Enums.AdendumStatus.Pending && @item.MtpReview.CreatedBy == User.Identity.Name)
+                                                                    {
+                                                                        <a asp-action="EditMTPReview" asp-route-id="@item.MtpReview.Id" class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                        <a asp-action="ApproveMTPReview" asp-route-id="@item.MtpReview.Id" class="btn btn-success" title="Approve of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        <a class="btn btn-success disabled" title="Print MTP Review"><i class="glyphicon glyphicon-print"></i></a>
+                                                                    }
+                                                                    else
+                                                                    {
                                                                         <a asp-action="PrintMTPReview" asp-route-id="@item.MtpReview.Id" class="btn btn-success" title="Print MTP Review" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                                     }
                                                                 }
@@ -155,7 +175,18 @@
                                         @Html.DisplayFor(modelItem => item.Client.Service)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Client.Clinic.Name)
+                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-success">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                        }
                                     </td>                                    
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Active)                                        
@@ -188,8 +219,8 @@
                                        }
 
                                     </td>
-                                    <td align="right">
-                                       @if (User.IsInRole("Mannager"))
+                                    <td align="center">
+                                        @if (!User.IsInRole("Supervisor"))
                                         {
                                             <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
@@ -197,10 +228,16 @@
                                         {
                                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
-
                                         <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                        <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                        @if (User.IsInRole("Supervisor"))
+                                        {
+                                            <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-danger disabled" title="Edit MTP"><i class="glyphicon glyphicon-trash"></i></a>
+                                        }
                                     </td>
                                 </tr>
                             }
@@ -229,7 +266,18 @@
                                     @Html.DisplayFor(modelItem => item.Client.Service)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Client.Clinic.Name)
+                                    @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                    {
+                                        <span class="label label-success">
+                                            Open
+                                        </span>
+                                    }
+                                    @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
+                                    {
+                                        <span class="label label-default">
+                                            Close
+                                        </span>
+                                    }
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Active)
@@ -240,8 +288,8 @@
                                 <td align="center">
                                     <a class="btn btn-success disabled" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
                                 </td>
-                                <td align="right">
-                                    @if (User.IsInRole("Mannager"))
+                                <td align="center">
+                                    @if (!User.IsInRole("Supervisor"))
                                     {
                                         <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
                                     }
@@ -251,7 +299,14 @@
                                     }
                                     <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                    @if (User.IsInRole("Supervisor"))
+                                    {
+                                        <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                    }
+                                    else
+                                    { 
+                                        <a class="btn btn-danger disabled" title="Edit MTP"><i class="glyphicon glyphicon-trash"></i></a>
+                                    }
                                 </td>
                             </tr>
                             }

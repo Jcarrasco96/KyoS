@@ -197,7 +197,7 @@ namespace KyoS.Web.Controllers
                 if(mtpViewModel.Review == true)
                 {
                     mtpEntity.MtpReview = new MTPReviewEntity();
-                    mtpEntity.MtpReview.CreatedBy = user_logged.Id;
+                    mtpEntity.MtpReview.CreatedBy = user_logged.UserName;
                     mtpEntity.MtpReview.CreatedOn = DateTime.Now;
                     mtpEntity.MtpReview.Therapist = user_logged.FullName;
                     mtpEntity.MtpReview.DateClinicalDirector = DateTime.Now;
@@ -206,6 +206,7 @@ namespace KyoS.Web.Controllers
                     mtpEntity.MtpReview.DateTherapist = DateTime.Now;
                     mtpEntity.MtpReview.ReviewedOn = DateTime.Now;
                     mtpEntity.MtpReview.Status = AdendumStatus.Edition;
+
                 }
                 
                 _context.Add(mtpEntity);
