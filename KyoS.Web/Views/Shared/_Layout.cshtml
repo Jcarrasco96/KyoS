@@ -247,9 +247,14 @@
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">MTPs</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("MTPs/Reviews", "Index", "MTPs")</li>
-                                        <li>@Html.ActionLink("Approval Adendum", "PendingAdendum", "MTPs")</li>
-                                        <li>@Html.ActionLink("Adendums", "IndexAdendum", "MTPs")</li>
+                                        <li>@Html.ActionLink("MTPs / Reviews", "Index", "MTPs")</li>
+                                        <li class="dropdown-submenu">
+                                            <a class="test" tabindex="-1" href="#">Addendums</a>
+                                            <ul class="dropdown-menu">
+                                                <li>@Html.ActionLink("Pending Addendums", "PendingAdendum", "MTPs")</li>
+                                                <li>@Html.ActionLink("All Addendums", "IndexAdendum", "MTPs")</li>
+                                            </ul>
+                                        </li>                                        
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
@@ -303,10 +308,20 @@
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">MTPs</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("MTPs / Reviews", "Index", "MTPs")</li>
-                                        <li>@Html.ActionLink("Approval MTP Review", "PendingMTPReview", "MTPs")</li>
-                                        <li>@Html.ActionLink("Approval Adendum", "PendingAdendum", "MTPs")</li>
-                                        <li>@Html.ActionLink("Adendums", "IndexAdendum", "MTPs")</li>
+                                        <li class="dropdown-submenu">
+                                            <a class="test" tabindex="-1" href="#">MTPs</a>
+                                            <ul class="dropdown-menu">
+                                                <li>@Html.ActionLink("MTPs / Reviews", "Index", "MTPs")</li>
+                                                <li>@Html.ActionLink("Pending MTP Review", "PendingMTPReview", "MTPs")</li>
+                                            </ul>
+                                        </li>                                        
+                                        <li class="dropdown-submenu">
+                                            <a class="test" tabindex="-1" href="#">Addendums</a>
+                                            <ul class="dropdown-menu">
+                                                <li>@Html.ActionLink("Pending Addendums", "PendingAdendum", "MTPs")</li>
+                                                <li>@Html.ActionLink("All Addendums", "IndexAdendum", "MTPs")</li>
+                                            </ul>
+                                        </li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
@@ -376,7 +391,7 @@
                                     <a class="test" tabindex="-1" href="#">MTPs</a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("MTPs / Reviews", "Index", "MTPs")</li>
-                                        <li>@Html.ActionLink("Adendum", "IndexAdendum", "MTPs")</li>
+                                        <li>@Html.ActionLink("Addendums", "IndexAdendum", "MTPs")</li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">

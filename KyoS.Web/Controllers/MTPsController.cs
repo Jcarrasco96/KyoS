@@ -1113,17 +1113,19 @@ namespace KyoS.Web.Controllers
                 if (clinic != null)
                 {
                     return View(await _context.MTPs
+
                                               .Include(m => m.AdendumList)
                                               .ThenInclude(c => c.Facilitator)
+
                                               .Include(c => c.Client)
                                               .ThenInclude(c => c.Clinic)
-                                              .Where(m => m.Client.Clinic.Id == clinic.Id)
+
+                                              .Where(m => (m.Client.Clinic.Id == clinic.Id && m.Active == true && m.Client.Status == StatusType.Open))
                                               .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
 
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");
-
         }
 
         [Authorize(Roles = "Supervisor, Facilitator")]
@@ -1391,6 +1393,52 @@ namespace KyoS.Web.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(PendingAdendum));
+        }
+        
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        public IActionResult PrintAdendum(int id)
+        {
+            AdendumEntity entity = _context.Adendums
+
+                                           .Include(a => a.Mtp)
+                                           .ThenInclude(m => m.Client)
+                                           .ThenInclude(c => c.Clinic)
+
+                                           .Include(a => a.Goals)
+                                           .ThenInclude(g => g.Objetives)
+
+                                           .Include(a => a.Facilitator)
+
+                                           .Include(a => a.Supervisor)
+
+                                           .Include(a => a.Mtp)
+                                           .ThenInclude(m => m.Client)
+                                           .ThenInclude(c => c.LegalGuardian)
+
+                                           .Include(wc => wc.Mtp)
+                                           .ThenInclude(m => m.Client)
+                                           .ThenInclude(c => c.Clients_Diagnostics)
+                                           .ThenInclude(cd => cd.Diagnostic)
+
+                                           .FirstOrDefault(a => (a.Id == id));
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+            
+            if (entity.Mtp.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            {
+                Stream stream = _reportHelper.FloridaSocialHSAddendumReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Mtp.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+            {
+                Stream stream = _reportHelper.DreamsMentalHealthAddendumReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
+            return null;
         }
 
         [Authorize(Roles = "Facilitator, Supervisor")]

@@ -78,6 +78,11 @@ namespace KyoS.Web.Helpers
         Stream DreamsMentalHealthBioReport(BioEntity bio);
         #endregion
 
+        #region Addendum reports
+        Stream FloridaSocialHSAddendumReport(AdendumEntity addendum);
+        Stream DreamsMentalHealthAddendumReport(AdendumEntity addendum);
+        #endregion
+
         #region Utils functions
         byte[] ConvertStreamToByteArray(Stream stream);        
         #endregion
