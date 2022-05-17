@@ -3426,6 +3426,10 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetSupervisorDS(addendum.Supervisor));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
 
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetAddendumDS(addendum));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Adendums");
+
             List<GoalEntity> goals1 = new List<GoalEntity>();
             List<ObjetiveEntity> objetives1 = new List<ObjetiveEntity>();
             List<GoalEntity> goals2 = new List<GoalEntity>();
@@ -3532,6 +3536,10 @@ namespace KyoS.Web.Helpers
             dataSet = new DataSet();
             dataSet.Tables.Add(GetSupervisorDS(addendum.Supervisor));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetAddendumDS(addendum));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Adendums");
 
             List<GoalEntity> goals1 = new List<GoalEntity>();
             List<ObjetiveEntity> objetives1 = new List<ObjetiveEntity>();
@@ -4140,6 +4148,73 @@ namespace KyoS.Web.Helpers
                                             string.Empty
                                         });
             }           
+
+            return dt;
+        }
+
+        private DataTable GetAddendumDS(AdendumEntity addendum)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "Adendum"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("MtpId", typeof(int));
+            dt.Columns.Add("Dateidentified", typeof(DateTime));
+            dt.Columns.Add("ProblemStatement", typeof(string));
+            dt.Columns.Add("Unit", typeof(int));
+            dt.Columns.Add("Duration", typeof(int));
+            dt.Columns.Add("Frecuency", typeof(string));
+            dt.Columns.Add("FacilitatorId", typeof(int));
+            dt.Columns.Add("SupervisorId", typeof(int));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));            
+
+            if (addendum != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            addendum.Id,
+                                            0,
+                                            addendum.Dateidentified,
+                                            addendum.ProblemStatement,
+                                            addendum.Unit,
+                                            addendum.Duration,
+                                            addendum.Frecuency,
+                                            0,
+                                            0,
+                                            addendum.Status,
+                                            addendum.CreatedBy,
+                                            addendum.CreatedOn,
+                                            addendum.LastModifiedBy,
+                                            addendum.LastModifiedOn
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            string.Empty,
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            0,
+                                            0,
+                                            Common.Enums.AdendumStatus.Edition,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()
+                                        });
+            }
 
             return dt;
         }
