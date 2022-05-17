@@ -1441,6 +1441,39 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public async Task<IActionResult> DeleteGoalOfAddendum(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            GoalEntity goalEntity = await _context.Goals
+
+                                                  .Include(g => g.MTP)
+                                                  
+                                                  .Include(g => g.Adendum)
+                                                  
+                                                  .FirstOrDefaultAsync(g => g.Id == id);
+            if (goalEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.Goals.Remove(goalEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("EditAdendum", new { id = goalEntity.Adendum.Id });
+            }
+
+            return RedirectToAction("EditAdendum", new { id = goalEntity.Adendum.Id });
+        }
+
         [Authorize(Roles = "Facilitator, Supervisor")]
         public async Task<IActionResult> EditMTPReview(int? id)
         {
