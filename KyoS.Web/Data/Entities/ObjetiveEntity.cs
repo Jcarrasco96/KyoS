@@ -8,7 +8,7 @@ namespace KyoS.Web.Data.Entities
     {
         public int Id { get; set; }
 
-        [Display(Name = "Objetive")]
+        [Display(Name = "Objective")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string Objetive { get; set; }
 
