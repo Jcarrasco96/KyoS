@@ -50,6 +50,6 @@ namespace KyoS.Web.Data.Entities
 
         public List<AdendumEntity> AdendumList { get; set; }
 
-        public MTPReviewEntity MtpReview { get; set; }
+        public List<MTPReviewEntity> MtpReviewList { get; set; }
     }
 }

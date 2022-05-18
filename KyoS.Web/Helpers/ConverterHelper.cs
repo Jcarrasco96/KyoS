@@ -342,8 +342,8 @@ namespace KyoS.Web.Helpers
                 Modality = model.Modality,
                 Frecuency = model.Frecuency,
                 NumberOfMonths = model.NumberOfMonths,
-                Active = isNew ? true : model.Active,
-                MtpReview = model.MtpReview
+                Active = isNew ? true : model.Active
+               
         };
         }
 
@@ -363,8 +363,7 @@ namespace KyoS.Web.Helpers
                 Frecuency = mtpEntity.Frecuency,
                 NumberOfMonths = mtpEntity.NumberOfMonths,                
                 Setting = mtpEntity.Setting,
-                Active = mtpEntity.Active,
-                MtpReview = mtpEntity.MtpReview
+                Active = mtpEntity.Active
             };
         }        
 
@@ -2698,18 +2697,15 @@ namespace KyoS.Web.Helpers
 
         public async Task<MTPReviewEntity> ToMTPReviewEntity(MTPReviewViewModel model, bool isNew, string userId)
         {
-            return new MTPReviewEntity
+            MTPReviewEntity salida;
+            salida = new MTPReviewEntity
             {
                 Id = isNew ? 0 : model.Id,
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                Mtp = await _context.MTPs
-                                    .Include(m => m.Client)
-                                    .ThenInclude(c => c.Clients_Diagnostics)
-                                    .ThenInclude(cd => cd.Diagnostic)
-                                    .FirstOrDefaultAsync(c => c.Id == model.IdMTP),
+             
                 ACopy = model.ACopy,
                 DateClinicalDirector = model.DateClinicalDirector,
                 DateLicensedPractitioner = model.DateLicensedPractitioner,
@@ -2731,9 +2727,22 @@ namespace KyoS.Web.Helpers
                 Documents = model.Documents,
                 LicensedPractitioner = model.LicensedPractitioner,
                 Therapist = model.Therapist,
-                Status = model.Status
+                Status = model.Status,
+                Mtp = await _context.MTPs
+                                    .Include(m => m.Client)
+                                    .ThenInclude(c => c.Clients_Diagnostics)
+                                    .ThenInclude(cd => cd.Diagnostic)
+                                    .FirstOrDefaultAsync(c => c.Id == model.IdMTP),
+                EndTime = model.EndTime,
+                Frecuency = model.Frecuency,
+                MonthOfTreatment = model.MonthOfTreatment,
+                Setting = model.Setting,
+                StartTime = model.StartTime,
+                DataOfService = model.DataOfService
 
             };
+            
+            return salida;
         }
 
         public MTPReviewViewModel ToMTPReviewViewModel(MTPReviewEntity model)
@@ -2769,7 +2778,13 @@ namespace KyoS.Web.Helpers
                 Documents = model.Documents,
                 LicensedPractitioner = model.LicensedPractitioner,
                 Therapist = model.Therapist,
-                Status = model.Status
+                Status = model.Status,
+                EndTime = model.EndTime,
+                Frecuency = model.Frecuency,
+                MonthOfTreatment = model.MonthOfTreatment,
+                Setting = model.Setting,
+                StartTime = model.StartTime,
+                DataOfService = model.DataOfService
 
             };
            

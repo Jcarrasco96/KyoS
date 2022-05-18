@@ -27,5 +27,18 @@ namespace KyoS.Web.Data.Entities
         public IEnumerable<ObjetiveEntity> Objetives { get; set; }
 
         public AdendumEntity Adendum { get; set; }
+
+        public bool Compliment { get; set; }
+        
+        [Display(Name = "Date of compliment")]
+        [DataType(DataType.Date)]
+
+        public DateTime Compliment_Date { get; set; }
+        
+        public string Compliment_Explain { get; set; }
+        
+        public int Compliment_IdMTPReview { get; set; }
+
+        public int IdMTPReview { get; set; }
     }
 }

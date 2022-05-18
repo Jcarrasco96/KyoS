@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220517215803_update-MTPReview")]
+    partial class updateMTPReview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3491,9 +3493,6 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DataOfService")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("DateClinicalDirector")
                         .HasColumnType("datetime2");
 
@@ -3515,12 +3514,6 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Documents")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Frecuency")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("IfCurrent")
                         .HasColumnType("nvarchar(max)");
 
@@ -3534,9 +3527,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MTP_FK")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MonthOfTreatment")
                         .HasColumnType("int");
 
                     b.Property<int?>("MtpId")
@@ -3554,14 +3544,8 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("ServiceCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Setting")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SpecifyChanges")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -4104,18 +4088,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<bool>("Compliment")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("Compliment_Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Compliment_Explain")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Compliment_IdMTPReview")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateOpened")
                         .HasColumnType("datetime2");
 
@@ -4130,9 +4102,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("GoalId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdMTPReview")
                         .HasColumnType("int");
 
                     b.Property<string>("Intervention")

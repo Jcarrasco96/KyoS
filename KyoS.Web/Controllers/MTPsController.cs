@@ -45,7 +45,7 @@ namespace KyoS.Web.Controllers
                 return View(await _context.MTPs
                                           .Include(m => m.Client)
                                           .ThenInclude(c => c.Clinic)
-                                          .Include(m => m.MtpReview)
+                                          .Include(m => m.MtpReviewList)
                                           .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
             }
             else
@@ -63,7 +63,7 @@ namespace KyoS.Web.Controllers
                     return View(await _context.MTPs
                                               .Include(m => m.Client)
                                               .ThenInclude(c => c.Clinic)
-                                              .Include(m => m.MtpReview)
+                                              .Include(m => m.MtpReviewList)
                                               .Where(m => m.Client.Clinic.Id == clinic.Id)
                                               .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
                 }
@@ -72,7 +72,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor")]
         public IActionResult Create(int id = 0, int idClient = 0, bool review = false)
         {
             if (id == 1)
@@ -147,7 +147,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Create(MTPViewModel mtpViewModel, IFormCollection form)
         {
             if (ModelState.IsValid)
@@ -193,22 +193,7 @@ namespace KyoS.Web.Controllers
                     item.Active = false;
                     _context.Update(item);
                 }
-                //Create MTPReview
-                if(mtpViewModel.Review == true)
-                {
-                    mtpEntity.MtpReview = new MTPReviewEntity();
-                    mtpEntity.MtpReview.CreatedBy = user_logged.UserName;
-                    mtpEntity.MtpReview.CreatedOn = DateTime.Now;
-                    mtpEntity.MtpReview.Therapist = user_logged.FullName;
-                    mtpEntity.MtpReview.DateClinicalDirector = DateTime.Now;
-                    mtpEntity.MtpReview.DateLicensedPractitioner = DateTime.Now;
-                    mtpEntity.MtpReview.DateSignaturePerson = DateTime.Now;
-                    mtpEntity.MtpReview.DateTherapist = DateTime.Now;
-                    mtpEntity.MtpReview.ReviewedOn = DateTime.Now;
-                    mtpEntity.MtpReview.Status = AdendumStatus.Edition;
-
-                }
-                
+                               
                 _context.Add(mtpEntity);
                 try
                 {
@@ -267,7 +252,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -281,7 +266,7 @@ namespace KyoS.Web.Controllers
                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             MTPEntity mtpEntity = await _context.MTPs.Include(m => m.Client)
-                                                     .Include(m => m.MtpReview)
+                                                     .Include(m => m.MtpReviewList)
                                                      .FirstOrDefaultAsync(m => m.Id == id);
             if (mtpEntity == null)
             {
@@ -290,26 +275,7 @@ namespace KyoS.Web.Controllers
 
             MTPViewModel mtpViewModel = _converterHelper.ToMTPViewModel(mtpEntity);
 
-            if (mtpEntity.MtpReview != null)
-            {
-                if ((mtpEntity.MtpReview.CreatedBy == user_logged.Id) || (User.IsInRole("Supervisor")))
-                {
-                    List<SelectListItem> list = new List<SelectListItem>();
-                    list.Insert(0, new SelectListItem
-                    {
-                        Text = mtpEntity.Client.Name,
-                        Value = $"{mtpEntity.Client.Id}"
-                    });
-                    mtpViewModel.Clients = list;
-
-                    return View(mtpViewModel);
-                }
-
-                return RedirectToAction(nameof(Index));
-            }
-            else
-            {
-                if (User.IsInRole("Supervisor"))
+               if (User.IsInRole("Supervisor"))
                 {
 
                     List<SelectListItem> list = new List<SelectListItem>();
@@ -324,13 +290,12 @@ namespace KyoS.Web.Controllers
                 }
 
                 return RedirectToAction(nameof(Index));
-            }
            
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Edit(int id, MTPViewModel mtpViewModel, IFormCollection form)
         {
             if (id != mtpViewModel.Id)
@@ -379,8 +344,8 @@ namespace KyoS.Web.Controllers
                         return View(model);
                     }
                 }
-                mtpEntity.MtpReview = await _context.MTPReviews.FirstOrDefaultAsync(u => u.MTP_FK == mtpViewModel.Id);
-                if ((User.IsInRole("Supervisor")) || ((mtpEntity.MtpReview != null) && (mtpEntity.MtpReview.CreatedBy == user_logged.Id)))
+               // mtpEntity.MtpReview = await _context.MTPReviews.FirstOrDefaultAsync(u => u.MTP_FK == mtpViewModel.Id);
+                if ((User.IsInRole("Supervisor"))) //|| ((mtpEntity.MtpReview != null) && (mtpEntity.MtpReview.CreatedBy == user_logged.Id)))
                 {
                     mtpEntity.Setting = form["Setting"].ToString();
                     _context.Update(mtpEntity);
@@ -1452,6 +1417,8 @@ namespace KyoS.Web.Controllers
 
             MTPReviewEntity mtpReviewEntity = await _context.MTPReviews.Include(m => m.Mtp.Client)
                                                                        .ThenInclude(m => m.Clinic)
+                                                                       .Include(m => m.Mtp.Goals)
+                                                                       .ThenInclude(m => m.Objetives)
                                                                        .FirstOrDefaultAsync(m => m.Id == id);
             if (mtpReviewEntity == null)
             {
@@ -1466,7 +1433,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Facilitator")]
+        [Authorize(Roles = "Facilitator, Supervisor")]
         public async Task<IActionResult> EditMTPReview(int id, MTPReviewViewModel mtpReviewViewModel, IFormCollection form)
         {
             if (id != mtpReviewViewModel.Id)
@@ -1480,17 +1447,7 @@ namespace KyoS.Web.Controllers
                                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 MTPReviewEntity mtpReviewEntity = await _converterHelper.ToMTPReviewEntity(mtpReviewViewModel, false, user_logged.Id);
-                if (mtpReviewEntity != null)
-                {
-                    mtpReviewEntity.Mtp.StartTime = mtpReviewViewModel.Mtp.StartTime;
-                    mtpReviewEntity.Mtp.EndTime = mtpReviewViewModel.Mtp.EndTime;
-                    mtpReviewEntity.Mtp.Setting = mtpReviewViewModel.Mtp.Setting;
-                    mtpReviewEntity.Mtp.MTPDevelopedDate = mtpReviewViewModel.Mtp.MTPDevelopedDate;
-                }
-                
-
-                string gender_problems = string.Empty;
-               
+                                
                 _context.Update(mtpReviewEntity);
                 
                 try
@@ -1595,5 +1552,148 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(PendingMtpReview));
         }
 
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public IActionResult CreateMTPReview(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                   .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            MTPReviewViewModel model = new MTPReviewViewModel();
+
+            if (User.IsInRole("Supervisor"))
+            {
+                model = new MTPReviewViewModel
+                {
+                    CreatedOn = DateTime.Now,
+                    Therapist = user_logged.FullName,
+                    DateClinicalDirector = DateTime.Now,
+                    DateLicensedPractitioner = DateTime.Now,
+                    DateSignaturePerson = DateTime.Now,
+                    DateTherapist = DateTime.Now,
+                    ReviewedOn = DateTime.Now,
+                    Status = AdendumStatus.Edition,
+                    ACopy = false,
+                    ClinicalDirector = "",
+                    CreatedBy = user_logged.UserName,
+                    DescribeAnyGoals = "",
+                    DescribeClient = "",
+                    Documents = true,
+                    Id = 0,
+                    IdMTP = id,
+                    IfCurrent = "",
+                    LicensedPractitioner = "",
+                    Mtp = _context.MTPs
+                                  .Include(n => n.Client)
+                                  .ThenInclude(n => n.LegalGuardian)
+                                  .Include(n => n.Client.Clinic)
+                                  .Include(n => n.Goals)
+                                  .ThenInclude(n => n.Objetives)
+                                  .FirstOrDefault(m => m.Id == id),
+                    MTP_FK = id,
+                    NumberUnit = 4,
+                    ServiceCode = "H0032TS",
+                    ProviderNumber = "",
+                    SpecifyChanges = "",
+                    SummaryOfServices = "",
+                    TheConsumer = false,
+                    TheTreatmentPlan = false,
+                    Frecuency = "Four times per week",
+                    MonthOfTreatment = 3,
+                    Setting = "02",
+                    DataOfService = DateTime.Now
+
+                };
+            }
+            if (User.IsInRole("Facilitator"))
+            {
+                model = new MTPReviewViewModel
+                {
+                    CreatedOn = DateTime.Now,
+                    Therapist = user_logged.FullName,
+                    DateClinicalDirector = DateTime.Now,
+                    DateLicensedPractitioner = DateTime.Now,
+                    DateSignaturePerson = DateTime.Now,
+                    DateTherapist = DateTime.Now,
+                    ReviewedOn = DateTime.Now,
+                    Status = AdendumStatus.Edition,
+                    ACopy = false,
+                    ClinicalDirector = "",
+                    CreatedBy = user_logged.UserName,
+                    DescribeAnyGoals = "",
+                    DescribeClient = "",
+                    Documents = true,
+                    Id = 0,
+                    IdMTP = id,
+                    IfCurrent = "",
+                    LicensedPractitioner = "",
+                    Mtp = _context.MTPs
+                                  .Include(n => n.Client)
+                                  .ThenInclude(n => n.LegalGuardian)
+                                  .Include(n => n.Client.Clinic)
+                                  .Include(n => n.Goals)
+                                  .ThenInclude(n => n.Objetives)
+                                  .FirstOrDefault(m => m.Id == id),
+                    MTP_FK = id,
+                    NumberUnit = 4,
+                    ServiceCode = "H0032TS",
+                    ProviderNumber = "",
+                    SpecifyChanges = "",
+                    SummaryOfServices = "",
+                    TheConsumer = false,
+                    TheTreatmentPlan = false,
+                    Frecuency = "Four times per week",
+                    MonthOfTreatment = 3,
+                    Setting = "02",
+                    DataOfService = DateTime.Now
+                };
+               
+            }
+
+            if (model.Mtp.Client.LegalGuardian == null)
+                model.Mtp.Client.LegalGuardian = new LegalGuardianEntity();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public async Task<IActionResult> CreateMTPReview(MTPReviewViewModel reviewViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                MTPReviewEntity reviewEntity = _context.MTPReviews.Find(reviewViewModel.Id);
+                if (reviewEntity == null)
+                {
+
+                    reviewEntity = await _converterHelper.ToMTPReviewEntity(reviewViewModel, true, reviewViewModel.CreatedBy);
+
+                    _context.MTPReviews.Add(reviewEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "MTPs");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Already exists the MTP Review.");
+
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMTPReview", reviewViewModel) });
+                }
+            }
+          
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMTPReview", reviewViewModel.Id) });
+        }
     }
 }

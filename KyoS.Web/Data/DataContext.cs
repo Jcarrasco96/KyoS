@@ -282,10 +282,10 @@ namespace KyoS.Web.Data
                         .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<MTPEntity>()
-                       .HasOne(c => c.MtpReview)
+                       .HasMany(c => c.MtpReviewList)
                        .WithOne(s => s.Mtp)
                        .OnDelete(DeleteBehavior.Cascade)
-                       .HasForeignKey<MTPReviewEntity>(s => s.MTP_FK);
+                       .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
