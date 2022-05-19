@@ -72,5 +72,26 @@ namespace KyoS.Web.Data.Entities
         public bool Documents { get; set; }
 
         public AdendumStatus Status { get; set; }
+
+        public string Setting { get; set; }
+
+        public int MonthOfTreatment { get; set; }
+
+        public string Frecuency { get; set; }
+
+        [Display(Name = "Start Time")]
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:hh:mm tt}", ApplyFormatInEditMode = false)]
+        public DateTime StartTime { get; set; }
+
+        [Display(Name = "End Time")]
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:hh:mm tt}", ApplyFormatInEditMode = false)]
+        public DateTime EndTime { get; set; }
+
+        [Display(Name = "Date of Service")]
+        [DataType(DataType.Date)]
+
+        public DateTime DataOfService { get; set; }
     }
 }

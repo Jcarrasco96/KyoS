@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220518014608_update-MTPReview1")]
+    partial class updateMTPReview1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3491,9 +3493,6 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DataOfService")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("DateClinicalDirector")
                         .HasColumnType("datetime2");
 
@@ -4104,18 +4103,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<bool>("Compliment")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("Compliment_Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Compliment_Explain")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Compliment_IdMTPReview")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateOpened")
                         .HasColumnType("datetime2");
 
@@ -4130,9 +4117,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("GoalId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdMTPReview")
                         .HasColumnType("int");
 
                     b.Property<string>("Intervention")
