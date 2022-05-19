@@ -47,5 +47,9 @@ namespace KyoS.Web.Data.Entities
         public string Setting { get; set; }
 
         public bool Active { get; set; }
+
+        public List<AdendumEntity> AdendumList { get; set; }
+
+        public MTPReviewEntity MtpReview { get; set; }
     }
 }

@@ -1,0 +1,56 @@
+﻿@model KyoS.Web.Models.AdendumViewModel
+<div class="col-md-push-12">
+    <div class="form-group col-md-4">
+        <label asp-for="Mtp.Client.Name" class="control-label"> Client Name</label>
+        <input asp-for="Mtp.Client.Name" class="form-control" readonly>
+        <span asp-validation-for="Mtp.Client.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Mtp.Client.Code" class="control-label">Client ID</label>
+        <input asp-for="Mtp.Client.Code" class="form-control" readonly>
+        <span asp-validation-for="Mtp.Client.Code" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        <label class="control-label">Diagnosis</label>
+        @if (Model.Mtp.Client.Clients_Diagnostics.Count() > 0)
+        {
+            <input class="form-control" value="@Model.Mtp.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code @Model.Mtp.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Description" readonly>
+        }
+        else
+        {
+            <input class="form-control" readonly>
+        }
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="Dateidentified" class="control-label"></label>
+        <input asp-for="Dateidentified" class="form-control" />
+        <span asp-validation-for="Dateidentified" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        &nbsp;
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Unit" class="control-label"></label>
+        <input asp-for="Unit" class="form-control" />
+        <span asp-validation-for="Unit" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="Frecuency" class="control-label"></label>
+        <input asp-for="Frecuency" class="form-control" />
+        <span asp-validation-for="Frecuency" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Duration" class="control-label">Duration (months)</label>
+        <input asp-for="Duration" class="form-control" />
+        <span asp-validation-for="Duration" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <label asp-for="ProblemStatement" class="control-label">Problem Statement</label>
+        <textarea asp-for="ProblemStatement" class="form-control" rows="7"></textarea>
+        <span asp-validation-for="ProblemStatement" class="text-danger"></span>
+    </div>
+</div>

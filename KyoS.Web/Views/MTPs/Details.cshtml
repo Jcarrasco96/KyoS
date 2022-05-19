@@ -96,13 +96,22 @@
             </dl>
         </div>
         <div class="col-md-12">   
-            @if(User.IsInRole("Admin") || User.IsInRole("Mannager") || User.IsInRole("Supervisor"))
-            { 
+            @if (User.IsInRole("Admin") || User.IsInRole("Supervisor"))
+            {
                 <p>
                     <a asp-action="PrintMTP" asp-route-id="@Model.Id" class="btn btn-success" target="_blank"><i class="glyphicon glyphicon-print"></i> Print MTP</a> |
                     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update MTP</a> |
                     <a asp-action="UpdateGoals" asp-route-id="@Model.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update goals - objetives</a>
                 </p>
+            }
+            else 
+            {
+                <p>
+                    <a asp-action="PrintMTP" asp-route-id="@Model.Id" class="btn btn-success" target="_blank"><i class="glyphicon glyphicon-print"></i> Print MTP</a> |
+                    <a class="btn btn-warning disabled" ><i class="glyphicon glyphicon-pencil"></i> Update MTP</a>
+                    <a class="btn btn-warning disabled" ><i class="glyphicon glyphicon-pencil"></i> Update goals - objetives</a>
+                </p>
+        
             }
         </div>
 

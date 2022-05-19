@@ -60,6 +60,65 @@ namespace KyoS.Web.Migrations
                     b.ToTable("Activities");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.AdendumEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Dateidentified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FacilitatorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Frecuency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("MtpId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProblemStatement")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SupervisorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Unit")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FacilitatorId");
+
+                    b.HasIndex("MtpId");
+
+                    b.HasIndex("SupervisorId");
+
+                    b.ToTable("Adendums");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.BioEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -908,6 +967,9 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ClinicalDirector")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FaxNo")
                         .HasColumnType("nvarchar(max)");
 
@@ -1055,6 +1117,12 @@ namespace KyoS.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("DateDischarge")
                         .HasColumnType("datetime2");
 
@@ -1076,6 +1144,12 @@ namespace KyoS.Web.Migrations
 
                     b.Property<bool>("Hospitalization")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("Others")
                         .HasColumnType("bit");
@@ -1122,6 +1196,12 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("ReferralPhone2")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SupervisorId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("TreatmentPlanObjCumpl")
                         .HasColumnType("bit");
 
@@ -1129,6 +1209,8 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("Client_FK")
                         .IsUnique();
+
+                    b.HasIndex("SupervisorId");
 
                     b.ToTable("Discharge");
                 });
@@ -1405,6 +1487,12 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("DangerToOtherScale")
                         .HasColumnType("int");
 
@@ -1433,6 +1521,12 @@ namespace KyoS.Web.Migrations
 
                     b.Property<int>("InterpersonalScale")
                         .HasColumnType("int");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("MCOID")
                         .HasColumnType("nvarchar(max)");
@@ -1479,10 +1573,16 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("SocialScale")
                         .HasColumnType("int");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<int>("SubstanceAbusoHistory")
                         .HasColumnType("int");
 
                     b.Property<int>("SubstanceScale")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SupervisorId")
                         .HasColumnType("int");
 
                     b.Property<int>("ThoughtProcessScale")
@@ -1497,6 +1597,8 @@ namespace KyoS.Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
+
+                    b.HasIndex("SupervisorId");
 
                     b.ToTable("FarsForm");
                 });
@@ -1653,6 +1755,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<int?>("AdendumId")
+                        .HasColumnType("int");
+
                     b.Property<string>("AreaOfFocus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1671,6 +1776,8 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AdendumId");
 
                     b.HasIndex("MTPId");
 
@@ -3350,6 +3457,99 @@ namespace KyoS.Web.Migrations
                     b.ToTable("MTPs");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.MTPReviewEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<bool>("ACopy")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ClinicalDirector")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateClinicalDirector")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateLicensedPractitioner")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignaturePerson")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateTherapist")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DescribeAnyGoals")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescribeClient")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Documents")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IfCurrent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LicensedPractitioner")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MTP_FK")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberUnit")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProviderNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ReviewedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ServiceCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SpecifyChanges")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SummaryOfServices")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TheConsumer")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TheTreatmentPlan")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Therapist")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MTP_FK")
+                        .IsUnique();
+
+                    b.ToTable("MTPReviews");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.MedicationEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -4581,6 +4781,28 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Theme");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.AdendumEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.FacilitatorEntity", "Facilitator")
+                        .WithMany()
+                        .HasForeignKey("FacilitatorId");
+
+                    b.HasOne("KyoS.Web.Data.Entities.MTPEntity", "Mtp")
+                        .WithMany("AdendumList")
+                        .HasForeignKey("MtpId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
+                        .WithMany()
+                        .HasForeignKey("SupervisorId");
+
+                    b.Navigation("Facilitator");
+
+                    b.Navigation("Mtp");
+
+                    b.Navigation("Supervisor");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.BioEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
@@ -4701,7 +4923,13 @@ namespace KyoS.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
+                        .WithMany()
+                        .HasForeignKey("SupervisorId");
+
                     b.Navigation("Client");
+
+                    b.Navigation("Supervisor");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.DocumentDiagnosticEntity", b =>
@@ -4738,7 +4966,13 @@ namespace KyoS.Web.Migrations
                         .WithMany("FarsFormList")
                         .HasForeignKey("ClientId");
 
+                    b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
+                        .WithMany()
+                        .HasForeignKey("SupervisorId");
+
                     b.Navigation("Client");
+
+                    b.Navigation("Supervisor");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.GeneratedNoteEntity", b =>
@@ -4779,10 +5013,16 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.GoalEntity", b =>
                 {
+                    b.HasOne("KyoS.Web.Data.Entities.AdendumEntity", "Adendum")
+                        .WithMany("Goals")
+                        .HasForeignKey("AdendumId");
+
                     b.HasOne("KyoS.Web.Data.Entities.MTPEntity", "MTP")
                         .WithMany("Goals")
                         .HasForeignKey("MTPId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Adendum");
 
                     b.Navigation("MTP");
                 });
@@ -5014,6 +5254,17 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("ClientId");
 
                     b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.MTPReviewEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.MTPEntity", "Mtp")
+                        .WithOne("MtpReview")
+                        .HasForeignKey("KyoS.Web.Data.Entities.MTPReviewEntity", "MTP_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Mtp");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.MedicationEntity", b =>
@@ -5343,6 +5594,11 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Workdays_Activities_Facilitators");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.AdendumEntity", b =>
+                {
+                    b.Navigation("Goals");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClassificationEntity", b =>
                 {
                     b.Navigation("NotesClassification");
@@ -5461,7 +5717,11 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.MTPEntity", b =>
                 {
+                    b.Navigation("AdendumList");
+
                     b.Navigation("Goals");
+
+                    b.Navigation("MtpReview");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.NoteEntity", b =>

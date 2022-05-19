@@ -15,5 +15,6 @@ namespace KyoS.Web.Models
         [Range(1, int.MaxValue, ErrorMessage = "You must select a Client.")]
 
         public int IdClient { get; set; }
+        public int IdSupervisor { get; set; }
     }
 }

@@ -40,5 +40,22 @@
         Solved,
         NotValid
     }
-   
+    public enum AdendumStatus
+    {
+        Edition,
+        Pending,
+        Approved
+    }
+    public enum FarsStatus
+    {
+        Edition,
+        Pending,
+        Approved
+    }
+    public enum DischargeStatus
+    {
+        Edition,
+        Pending,
+        Approved
+    }
 }

@@ -84,15 +84,19 @@ namespace KyoS.Web.Helpers
         IntakeTuberculosisViewModel ToIntakeTuberculosisViewModel(IntakeTuberculosisEntity model);
         Task<IntakeMedicalHistoryEntity> ToIntakeMedicalHistoryEntity(IntakeMedicalHistoryViewModel model, bool isNew);
         IntakeMedicalHistoryViewModel ToIntakeMedicalHistoryViewModel(IntakeMedicalHistoryEntity model);
-        Task<DischargeEntity> ToDischargeEntity(DischargeViewModel model, bool isNew);
+        Task<DischargeEntity> ToDischargeEntity(DischargeViewModel model, bool isNew, string userId);
         DischargeViewModel ToDischargeViewModel(DischargeEntity model);
         Task<MedicationEntity> ToMedicationEntity(MedicationViewModel model, bool isNew);
         MedicationViewModel ToMedicationViewModel(MedicationEntity model);
-        Task<FarsFormEntity> ToFarsFormEntity(FarsFormViewModel model, bool isNew);
+        Task<FarsFormEntity> ToFarsFormEntity(FarsFormViewModel model, bool isNew, string userId);
         FarsFormViewModel ToFarsFormViewModel(FarsFormEntity model);
         Task<BioEntity> ToBioEntity(BioViewModel model, bool isNew);
         BioViewModel ToBioViewModel(BioEntity model);
         Task<Bio_BehavioralHistoryEntity> ToBio_BehaviorEntity(Bio_BehavioralHistoryViewModel model, bool isNew);
         Bio_BehavioralHistoryViewModel ToBio_BehaviorViewModel(Bio_BehavioralHistoryEntity model);
+        Task<AdendumEntity> ToAdendumEntity(AdendumViewModel model, bool isNew, string userId);
+        AdendumViewModel ToAdendumViewModel(AdendumEntity model);
+        Task<MTPReviewEntity> ToMTPReviewEntity(MTPReviewViewModel model, bool isNew, string userId);
+        MTPReviewViewModel ToMTPReviewViewModel(MTPReviewEntity model);
     }
 }

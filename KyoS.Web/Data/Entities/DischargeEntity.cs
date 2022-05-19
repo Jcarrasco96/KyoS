@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-
+using KyoS.Web.Data.Contracts;
+using KyoS.Common.Enums;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class DischargeEntity
+    public class DischargeEntity : AuditableEntity
     {
         public int Id { get; set; }
 
@@ -89,5 +90,9 @@ namespace KyoS.Web.Data.Entities
         [Display(Name = "Date of Supervisor Signature")]
         [DataType(DataType.Date)]
         public DateTime DateSignatureSupervisor { get; set; }
+
+        public SupervisorEntity Supervisor { get; set; }
+
+        public DischargeStatus Status { get; set; }
     }
 }

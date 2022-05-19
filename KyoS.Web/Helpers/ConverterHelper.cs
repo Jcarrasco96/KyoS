@@ -34,7 +34,8 @@ namespace KyoS.Web.Helpers
                 State = model.State,
                 ZipCode = model.ZipCode,
                 Phone = model.Phone,
-                FaxNo = model.FaxNo
+                FaxNo = model.FaxNo,
+                ClinicalDirector = model.ClinicalDirector
             };
         }
 
@@ -51,7 +52,8 @@ namespace KyoS.Web.Helpers
                 State = clinicEntity.State,
                 ZipCode = clinicEntity.ZipCode,
                 Phone = clinicEntity.Phone,
-                FaxNo = clinicEntity.FaxNo
+                FaxNo = clinicEntity.FaxNo,
+                ClinicalDirector = clinicEntity.ClinicalDirector
             };
         }
 
@@ -340,8 +342,9 @@ namespace KyoS.Web.Helpers
                 Modality = model.Modality,
                 Frecuency = model.Frecuency,
                 NumberOfMonths = model.NumberOfMonths,
-                Active = isNew ? true : model.Active
-            };
+                Active = isNew ? true : model.Active,
+                MtpReview = model.MtpReview
+        };
         }
 
         public MTPViewModel ToMTPViewModel(MTPEntity mtpEntity)
@@ -360,7 +363,8 @@ namespace KyoS.Web.Helpers
                 Frecuency = mtpEntity.Frecuency,
                 NumberOfMonths = mtpEntity.NumberOfMonths,                
                 Setting = mtpEntity.Setting,
-                Active = mtpEntity.Active
+                Active = mtpEntity.Active,
+                MtpReview = mtpEntity.MtpReview
             };
         }        
 
@@ -373,13 +377,16 @@ namespace KyoS.Web.Helpers
                 Name = model.Name,
                 AreaOfFocus = model.AreaOfFocus,
                 MTP = await _context.MTPs.FindAsync(model.IdMTP),
-                Service = ServiceUtils.GetServiceByIndex(model.IdService)
+                Service = ServiceUtils.GetServiceByIndex(model.IdService),
+                Adendum = await _context.Adendums.FindAsync(model.IdAdendum)
+
             };
         }
 
         public GoalViewModel ToGoalViewModel(GoalEntity goalEntity)
         {
-            return new GoalViewModel
+            GoalViewModel model;
+            model = new GoalViewModel
             {
                 Id = goalEntity.Id,
                 Number = goalEntity.Number,
@@ -389,7 +396,15 @@ namespace KyoS.Web.Helpers
                 AreaOfFocus = goalEntity.AreaOfFocus,
                 IdService = Convert.ToInt32(goalEntity.Service),
                 Services = _combosHelper.GetComboServices()
+                
             };
+            if (goalEntity.Adendum != null)
+            {
+                model.IdAdendum = goalEntity.Adendum.Id;
+               
+            }
+
+            return model;
         }
 
         public async Task<ObjetiveEntity> ToObjectiveEntity(ObjectiveViewModel model, bool isNew)
@@ -1951,7 +1966,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<DischargeEntity> ToDischargeEntity(DischargeViewModel model, bool isNew)
+        public async Task<DischargeEntity> ToDischargeEntity(DischargeViewModel model, bool isNew, string userId)
         {
             return new DischargeEntity
             {
@@ -1989,13 +2004,20 @@ namespace KyoS.Web.Helpers
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignaturePerson = model.DateSignaturePerson,
                 DateSignatureSupervisor = model.DateSignatureSupervisor,
-                Others_Explain = model.Others_Explain                
+                Others_Explain = model.Others_Explain,
+                Status = model.Status,
+                Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == model.IdSupervisor),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
             };
         }
 
         public DischargeViewModel ToDischargeViewModel(DischargeEntity model)
         {
-            return new DischargeViewModel
+            DischargeViewModel salida;
+            salida = new DischargeViewModel
             {
                 Id = model.Id,
                 Client = model.Client,
@@ -2032,9 +2054,20 @@ namespace KyoS.Web.Helpers
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignaturePerson = model.DateSignaturePerson,
                 DateSignatureSupervisor = model.DateSignatureSupervisor,
-                Others_Explain = model.Others_Explain                
+                Others_Explain = model.Others_Explain,
+                Status = model.Status,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+
             };
 
+            if (model.Supervisor != null)
+                salida.IdSupervisor = model.Supervisor.Id;
+            else
+                salida.IdSupervisor = 0;
+            return salida;
         }
 
         public async Task<MedicationEntity> ToMedicationEntity(MedicationViewModel model, bool isNew)
@@ -2066,7 +2099,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<FarsFormEntity> ToFarsFormEntity(FarsFormViewModel model, bool isNew)
+        public async Task<FarsFormEntity> ToFarsFormEntity(FarsFormViewModel model, bool isNew, string userId)
         {
             return new FarsFormEntity
             {
@@ -2109,13 +2142,19 @@ namespace KyoS.Web.Helpers
                 ThoughtProcessScale = model.ThoughtProcessScale,
                 TraumaticsScale = model.TraumaticsScale,
                 WorkScale = model.WorkScale,
-
+                Status = model.Status,
+                Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == model.IdSupervisor),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
             };
         }
 
         public FarsFormViewModel ToFarsFormViewModel(FarsFormEntity model)
         {
-            return new FarsFormViewModel
+            FarsFormViewModel salida;
+            salida = new FarsFormViewModel
             {
                 Id = model.Id,
                 Client = model.Client,
@@ -2156,9 +2195,20 @@ namespace KyoS.Web.Helpers
                 SubstanceScale = model.SubstanceScale,
                 ThoughtProcessScale = model.ThoughtProcessScale,
                 TraumaticsScale = model.TraumaticsScale,
-                WorkScale = model.WorkScale
-                
+                WorkScale = model.WorkScale,
+                Status = model.Status,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+
             };
+            
+            if (model.Supervisor != null)
+                salida.IdSupervisor = model.Supervisor.Id;
+            else
+                salida.IdSupervisor = 0;
+            return salida;
 
         }
 
@@ -2583,6 +2633,146 @@ namespace KyoS.Web.Helpers
                 Problem = model.Problem
             };
 
+        }
+
+        public async Task<AdendumEntity> ToAdendumEntity(AdendumViewModel model, bool isNew, string userId)
+        {
+            return new AdendumEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Dateidentified = model.Dateidentified,
+                Duration = model.Duration,
+                Frecuency = model.Frecuency,
+                ProblemStatement = model.ProblemStatement,
+                Status = model.Status,
+                Unit = model.Unit,
+                Mtp = await _context.MTPs
+                                    .Include(m => m.Client)
+                                    .ThenInclude(c => c.Clients_Diagnostics)
+                                    .ThenInclude(cd => cd.Diagnostic)
+                                    .FirstOrDefaultAsync(c => c.Id == model.IdMTP),
+                
+                Goals = model.Goals,
+                Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == model.IdSupervisor),
+                Facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.Id == model.IdFacilitator),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+
+            };
+        }
+
+        public AdendumViewModel ToAdendumViewModel(AdendumEntity model)
+        {
+            AdendumViewModel salida;
+            salida = new AdendumViewModel
+            {
+                Id = model.Id,
+                Dateidentified = model.Dateidentified,
+                Duration = model.Duration,
+                Frecuency = model.Frecuency,
+                ProblemStatement = model.ProblemStatement,
+                Status = model.Status,
+                Unit = model.Unit,
+                IdMTP = model.Mtp.Id,
+                Facilitator = model.Facilitator,
+                Goals = model.Goals,
+                Mtp = model.Mtp,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+
+            };
+            if (model.Facilitator != null)
+                salida.IdFacilitator = model.Facilitator.Id;
+            else
+                salida.IdFacilitator = 0;
+            if (model.Supervisor != null)
+                salida.IdSupervisor = model.Supervisor.Id;
+            else
+                salida.IdSupervisor = 0;
+            return salida;
+        }
+
+        public async Task<MTPReviewEntity> ToMTPReviewEntity(MTPReviewViewModel model, bool isNew, string userId)
+        {
+            return new MTPReviewEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Mtp = await _context.MTPs
+                                    .Include(m => m.Client)
+                                    .ThenInclude(c => c.Clients_Diagnostics)
+                                    .ThenInclude(cd => cd.Diagnostic)
+                                    .FirstOrDefaultAsync(c => c.Id == model.IdMTP),
+                ACopy = model.ACopy,
+                DateClinicalDirector = model.DateClinicalDirector,
+                DateLicensedPractitioner = model.DateLicensedPractitioner,
+                DateSignaturePerson = model.DateSignaturePerson,
+                DateTherapist = model.DateTherapist,
+                DescribeAnyGoals = model.DescribeAnyGoals,
+                DescribeClient = model.DescribeClient,
+                IfCurrent = model.IfCurrent,
+                TheTreatmentPlan = model.TheTreatmentPlan,
+                MTP_FK = model.MTP_FK,
+                NumberUnit = model.NumberUnit,
+                ProviderNumber = model.ProviderNumber,
+                ReviewedOn = model.ReviewedOn,
+                ServiceCode = model.ServiceCode,
+                SpecifyChanges = model.SpecifyChanges,
+                SummaryOfServices = model.SummaryOfServices,
+                TheConsumer = model.TheConsumer,
+                ClinicalDirector = model.ClinicalDirector,
+                Documents = model.Documents,
+                LicensedPractitioner = model.LicensedPractitioner,
+                Therapist = model.Therapist,
+                Status = model.Status
+
+            };
+        }
+
+        public MTPReviewViewModel ToMTPReviewViewModel(MTPReviewEntity model)
+        {
+            return new MTPReviewViewModel
+            {
+                Id = model.Id,
+                Mtp = model.Mtp,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                IdMTP = model.MTP_FK,
+                MTP_FK = model.MTP_FK,
+
+                ACopy = model.ACopy,
+                DateClinicalDirector = model.DateClinicalDirector,
+                DateLicensedPractitioner = model.DateLicensedPractitioner,
+                DateSignaturePerson = model.DateSignaturePerson,
+                DateTherapist = model.DateTherapist,
+                DescribeAnyGoals = model.DescribeAnyGoals,
+                DescribeClient = model.DescribeClient,
+                IfCurrent = model.IfCurrent,
+                TheTreatmentPlan = model.TheTreatmentPlan,
+                NumberUnit = model.NumberUnit,
+                ProviderNumber = model.ProviderNumber,
+                ReviewedOn = model.ReviewedOn,
+                ServiceCode = model.ServiceCode,
+                SpecifyChanges = model.SpecifyChanges,
+                SummaryOfServices = model.SummaryOfServices,
+                TheConsumer = model.TheConsumer,
+                ClinicalDirector = model.ClinicalDirector,
+                Documents = model.Documents,
+                LicensedPractitioner = model.LicensedPractitioner,
+                Therapist = model.Therapist,
+                Status = model.Status
+
+            };
+           
         }
     }
 }
