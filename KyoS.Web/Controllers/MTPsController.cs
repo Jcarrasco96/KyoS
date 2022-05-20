@@ -2182,5 +2182,44 @@ namespace KyoS.Web.Controllers
           
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMTPReview", reviewViewModel.Id) });
         }
+
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        public IActionResult PrintMTPReview(int id)
+        {
+            MTPReviewEntity entity = _context.MTPReviews
+
+                                             .Include(a => a.Mtp)
+                                             .ThenInclude(m => m.Client)
+                                             .ThenInclude(c => c.Clinic)
+
+                                             .Include(a => a.Mtp)
+                                             .ThenInclude(m => m.Client)
+                                             .ThenInclude(c => c.LegalGuardian)
+
+                                             .Include(wc => wc.Mtp)
+                                             .ThenInclude(m => m.Client)
+                                             .ThenInclude(c => c.Clients_Diagnostics)
+                                             .ThenInclude(cd => cd.Diagnostic)
+
+                                             .FirstOrDefault(a => (a.Id == id));
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (entity.Mtp.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            {
+                Stream stream = _reportHelper.FloridaSocialHSMTPReviewReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Mtp.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+            {
+                Stream stream = _reportHelper.DreamsMentalHealthMTPReviewReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
+            return null;
+        }
     }
 }
