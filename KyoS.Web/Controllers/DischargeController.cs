@@ -444,7 +444,8 @@ namespace KyoS.Web.Controllers
 
             List<ClientEntity> ClientList = await _context.Clients
                                                           .Include(n => n.Discharge)
-                                                          .Where(n => n.Discharge == null && n.Clinic.Id == user_logged.Clinic.Id)
+                                                          .Where(n => n.Discharge == null && n.Clinic.Id == user_logged.Clinic.Id
+                                                                  && n.Status == StatusType.Close)
                                                           .ToListAsync();
 
             return View(ClientList);
@@ -483,7 +484,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(PendingDischarge));
         }
 
-        [Authorize(Roles = "Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
         public async Task<IActionResult> PendingDischarge(int idError = 0)
         {
             UserEntity user_logged = await _context.Users

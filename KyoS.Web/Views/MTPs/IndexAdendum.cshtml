@@ -110,11 +110,18 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                    @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.AdendumStatus.Edition && element.CreatedBy == User.Identity.Name)
+                                                                   @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open && @element.Status != KyoS.Common.Enums.AdendumStatus.Approved && element.CreatedBy == User.Identity.Name)
                                                                     {
                                                                         <a asp-action="EditAdendum" asp-route-id="@element.Id" class="btn btn-warning" title="Edit Addendum"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                        <a asp-action="FinishEditingAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Finish edition of Addendum"><i class="glyphicon glyphicon-ok"></i></a>
-                                                                        <a class="btn btn-success disabled" title="Print Addendum"><i class="glyphicon glyphicon-print"></i></a>
+                                                                        @if (@element.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                                                        {
+                                                                            <a class="btn btn-success disabled" title="Finish edition of Addendum"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a asp-action="FinishEditingAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Finish edition of Addendum"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        }
+                                                                            <a class="btn btn-success disabled" title="Print Addendum"><i class="glyphicon glyphicon-print"></i></a>
                                                                     }
                                                                     else
                                                                     {
@@ -131,7 +138,7 @@
                                                                         }
                                                                     }
                                                                 }
-                                                            </td>
+                                                                </td>
                                                         </tr>
                                                        
                                                     }
