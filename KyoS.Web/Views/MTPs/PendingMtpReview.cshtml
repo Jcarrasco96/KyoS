@@ -92,8 +92,17 @@
                                         @Html.DisplayFor(modelItem => item.Mtp.Client.Service)
                                     </td>
                                     <td align="right">
-                                        <a asp-action="EditMTPReview" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a asp-action="ApproveMTPReview" asp-route-id="@item.Id" class="btn btn-success" title="Approval MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                        @if (User.IsInRole("Supervisor"))
+                                        {
+                                            <a asp-action="EditMTPReview" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="ApproveMTPReview" asp-route-id="@item.Id" class="btn btn-success" title="Approval MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-warning disabled" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a class="btn btn-success disabled" title="Approval MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                        }
+
                                     </td>
                                 </tr>
 

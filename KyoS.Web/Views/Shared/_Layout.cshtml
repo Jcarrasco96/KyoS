@@ -243,24 +243,38 @@
                                 <li>@Html.ActionLink("Referreds", "Index", "Referreds")</li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
-                                <li>@Html.ActionLink("Fars Forms", "Index", "FarsForms")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Fars Forms</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Clients without FARS", "ClientswithoutFARS", "FarsForms")</li>
+                                        <li>@Html.ActionLink("FARS FORMS", "Index", "FarsForms")</li>
+                                    </ul>
+                                </li>
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">MTPs</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("MTPs / Reviews", "Index", "MTPs")</li>
+                                        <li class="dropdown-submenu">
+                                            <a class="test" tabindex="-1" href="#">MTPs / Reviews</a>
+                                            <ul class="dropdown-menu">
+                                                <li>@Html.ActionLink("Client Without MTP", "PendingMTP", "MTPs")</li>
+                                                <li>@Html.ActionLink("Pending MTP Reviews", "PendingMtpReview", "MTPs")</li>
+                                                <li>@Html.ActionLink("All MTPs", "Index", "MTPs")</li>
+                                            </ul>
+                                        </li>
                                         <li class="dropdown-submenu">
                                             <a class="test" tabindex="-1" href="#">Addendums</a>
                                             <ul class="dropdown-menu">
                                                 <li>@Html.ActionLink("Pending Addendums", "PendingAdendum", "MTPs")</li>
                                                 <li>@Html.ActionLink("All Addendums", "IndexAdendum", "MTPs")</li>
                                             </ul>
-                                        </li>                                        
+                                        </li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">BIOs</a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Behavioral Health History", "IndexBehavioralHealthHistory", "Bios")</li>
+                                        <li>@Html.ActionLink("Clients Without BIO", "ClientswithoutBIO", "Bios")</li>
                                         <li>@Html.ActionLink("BIOs", "Index", "Bios")</li>
                                     </ul>
                                 </li>
@@ -268,6 +282,8 @@
                                     <a class="test" tabindex="-1" href="#">Discharges</a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Medications", "Index", "Medications")</li>
+                                        <li>@Html.ActionLink("Clients Without Discharge", "ClientswithoutDischarge", "Discharge")</li>
+                                        <li>@Html.ActionLink("Pending Discharge", "PendingDischarge", "Discharge")</li>
                                         <li>@Html.ActionLink("Discharges", "Index", "Discharge")</li>
                                     </ul>
                                 </li>
@@ -309,12 +325,13 @@
                                     <a class="test" tabindex="-1" href="#">MTPs</a>
                                     <ul class="dropdown-menu">
                                         <li class="dropdown-submenu">
-                                            <a class="test" tabindex="-1" href="#">MTPs</a>
+                                            <a class="test" tabindex="-1" href="#">MTPs / Reviews</a>
                                             <ul class="dropdown-menu">
-                                                <li>@Html.ActionLink("MTPs / Reviews", "Index", "MTPs")</li>
-                                                <li>@Html.ActionLink("Pending MTP Review", "PendingMTPReview", "MTPs")</li>
+                                                <li>@Html.ActionLink("Client Without MTP", "PendingMTP", "MTPs")</li>
+                                                <li>@Html.ActionLink("Pending MTP Reviews", "PendingMtpReview", "MTPs")</li>
+                                                <li>@Html.ActionLink("All MTPs", "Index", "MTPs")</li>
                                             </ul>
-                                        </li>                                        
+                                        </li>                                       
                                         <li class="dropdown-submenu">
                                             <a class="test" tabindex="-1" href="#">Addendums</a>
                                             <ul class="dropdown-menu">
@@ -386,18 +403,38 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
-                                <li>@Html.ActionLink("FARS Forms", "Index", "FarsForms")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Fars Forms</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Clients without FARS", "ClientswithoutFARS", "FarsForms")</li>
+                                        <li>@Html.ActionLink("FARS FORMS", "Index", "FarsForms")</li>
+                                    </ul>
+                                </li>
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">MTPs</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("MTPs / Reviews", "Index", "MTPs")</li>
-                                        <li>@Html.ActionLink("Addendums", "IndexAdendum", "MTPs")</li>
+                                        <li class="dropdown-submenu">
+                                            <a class="test" tabindex="-1" href="#">MTPs / Reviews</a>
+                                            <ul class="dropdown-menu">
+                                                <li>@Html.ActionLink("Client Without MTP", "PendingMTP", "MTPs")</li>
+                                                <li>@Html.ActionLink("Pending MTP Reviews", "PendingMtpReview", "MTPs")</li>
+                                                <li>@Html.ActionLink("All MTPs", "Index", "MTPs")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown-submenu">
+                                            <a class="test" tabindex="-1" href="#">Addendums</a>
+                                            <ul class="dropdown-menu">
+                                                <li>@Html.ActionLink("Pending Addendums", "PendingAdendum", "MTPs")</li>
+                                                <li>@Html.ActionLink("All Addendums", "IndexAdendum", "MTPs")</li>
+                                            </ul>
+                                        </li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">BIOs</a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Behavioral Health History", "IndexBehavioralHealthHistory", "Bios")</li>
+                                        <li>@Html.ActionLink("Clients Without BIO", "ClientswithoutBIO", "Bios")</li>
                                         <li>@Html.ActionLink("BIOs", "Index", "Bios")</li>
                                     </ul>
                                 </li>
@@ -405,6 +442,8 @@
                                     <a class="test" tabindex="-1" href="#">Discharges</a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Medications", "Index", "Medications")</li>
+                                        <li>@Html.ActionLink("Clients Without Discharge", "ClientswithoutDischarge", "Discharge")</li>
+                                        <li>@Html.ActionLink("Pending Discharge", "PendingDischarge", "Discharge")</li>
                                         <li>@Html.ActionLink("Discharges", "Index", "Discharge")</li>
                                     </ul>
                                 </li>

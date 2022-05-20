@@ -93,9 +93,16 @@
                                     @Html.DisplayFor(modelItem => item.Client.Service)
                                 </td>
                                 <td align="center">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <a asp-action="ApproveDischarge" asp-route-id="@item.Id" class="btn btn-success" title="Approve Discharge"><i class="glyphicon glyphicon-ok"></i></a>
-
+                                    @if (User.IsInRole("Supervisor"))
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="ApproveDischarge" asp-route-id="@item.Id" class="btn btn-success" title="Approve Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-warning disabled" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a class="btn btn-success disabled" title="Approve FARS"><i class="glyphicon glyphicon-ok"></i></a>
+                                    }
                                 </td>
                             </tr>
                         }
