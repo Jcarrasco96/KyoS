@@ -3613,6 +3613,91 @@ namespace KyoS.Web.Helpers
         }
         #endregion
 
+        #region MTP Review reports
+        public Stream FloridaSocialHSMTPReviewReport(MTPReviewEntity review)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\MTPReviews\\rptMTPReviewFloridaSocialHS.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetMtpDS(review.Mtp));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(review.Mtp.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(review.Mtp.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(review.Mtp.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(review.Mtp.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMTPReviewDS(review));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPReviews");
+            
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        public Stream DreamsMentalHealthMTPReviewReport(MTPReviewEntity review)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\MTPReviews\\rptMTPReviewDreamsMentalHealth.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetMtpDS(review.Mtp));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(review.Mtp.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(review.Mtp.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(review.Mtp.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(review.Mtp.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMTPReviewDS(review));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPReviews");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion 
+
         #region Utils functions
         public byte[] ConvertStreamToByteArray(Stream stream)
         {
@@ -4212,6 +4297,133 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             new DateTime(),
                                             string.Empty,
+                                            new DateTime()
+                                        });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetMTPReviewDS(MTPReviewEntity review)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "MTPReview"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("MTP_FK", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("ACopy", typeof(bool));            
+            dt.Columns.Add("DateClinicalDirector", typeof(DateTime)); 
+            dt.Columns.Add("DateLicensedPractitioner", typeof(DateTime)); 
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime)); 
+            dt.Columns.Add("DateTherapist", typeof(DateTime));
+            dt.Columns.Add("DescribeAnyGoals", typeof(string));
+            dt.Columns.Add("DescribeClient", typeof(string));
+            dt.Columns.Add("IfCurrent", typeof(string));
+            dt.Columns.Add("NumberUnit", typeof(int));
+            dt.Columns.Add("ProviderNumber", typeof(string));
+            dt.Columns.Add("ReviewedOn", typeof(DateTime));
+            dt.Columns.Add("ServiceCode", typeof(string));
+            dt.Columns.Add("SpecifyChanges", typeof(string));
+            dt.Columns.Add("SummaryOfServices", typeof(string));
+            dt.Columns.Add("TheConsumer", typeof(bool));
+            dt.Columns.Add("TheTreatmentPlan", typeof(bool));
+            dt.Columns.Add("ClinicalDirector", typeof(string));
+            dt.Columns.Add("Documents", typeof(bool));
+            dt.Columns.Add("LicensedPractitioner", typeof(string));
+            dt.Columns.Add("Therapist", typeof(string));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("MtpId", typeof(int));
+            dt.Columns.Add("EndTime", typeof(DateTime));
+            dt.Columns.Add("Frecuency", typeof(string));
+            dt.Columns.Add("MonthOfTreatment", typeof(int));
+            dt.Columns.Add("Setting", typeof(string));
+            dt.Columns.Add("StartTime", typeof(DateTime));
+            dt.Columns.Add("DataOfService", typeof(DateTime));
+
+            if (review != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            review.Id,
+                                            review.MTP_FK,
+                                            review.CreatedBy,
+                                            review.CreatedOn,
+                                            review.LastModifiedBy,
+                                            review.LastModifiedOn,
+                                            review.ACopy,
+                                            review.DateClinicalDirector,
+                                            review.DateLicensedPractitioner,
+                                            review.DateSignaturePerson,
+                                            review.DateTherapist,
+                                            review.DescribeAnyGoals,
+                                            review.DescribeClient,
+                                            review.IfCurrent,
+                                            review.NumberUnit,
+                                            review.ProviderNumber,
+                                            review.ReviewedOn,
+                                            review.ServiceCode,
+                                            review.SpecifyChanges,
+                                            review.SummaryOfServices,
+                                            review.TheConsumer,
+                                            review.TheTreatmentPlan,
+                                            review.ClinicalDirector,
+                                            review.Documents,
+                                            review.LicensedPractitioner,
+                                            review.Therapist,
+                                            review.Status,
+                                            0,
+                                            review.EndTime,
+                                            review.Frecuency,
+                                            review.MonthOfTreatment,
+                                            review.Setting,
+                                            review.StartTime,
+                                            review.DataOfService,
+            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            false,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            string.Empty,
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
                                             new DateTime()
                                         });
             }

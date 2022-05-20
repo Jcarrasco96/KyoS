@@ -83,6 +83,11 @@ namespace KyoS.Web.Helpers
         Stream DreamsMentalHealthAddendumReport(AdendumEntity addendum);
         #endregion
 
+        #region MTP Review reports
+        Stream FloridaSocialHSMTPReviewReport(MTPReviewEntity review);
+        Stream DreamsMentalHealthMTPReviewReport(MTPReviewEntity review);
+        #endregion
+
         #region Utils functions
         byte[] ConvertStreamToByteArray(Stream stream);        
         #endregion
