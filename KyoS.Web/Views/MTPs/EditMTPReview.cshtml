@@ -52,7 +52,7 @@
             <br />
             <div class="form-group col-md-12">
                 <input type="submit" value="Save All" class="btn btn-primary" />
-                <a asp-action="IndexAdendum" class="btn btn-success">Back</a>
+                <a asp-action="Index" class="btn btn-success">Back</a>
             </div>
         </form>
     </div>
@@ -80,7 +80,7 @@
             });
 
             $("#btnYesDelete").click(function () {
-                var url = "@Url.Action("DeleteGoalOfAddendum", "MTPs")";
+                var url = "@Url.Action("DeleteGoalOfMTPreview", "MTPs")";
                 window.location.href = url + '/' + item_to_delete;
             });
         });

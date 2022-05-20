@@ -61,7 +61,7 @@
                                             <td align="left">@Html.DisplayFor(modelItem => value.Compliment)</td>
                                             <td align="center">
                                                 <a onclick="showInPopup('@Url.Action("EditObjectiveMTPReviewModal", "MTPs", new {id =  value.Id}, Context.Request.Scheme)','Edit Objective')" class="btn btn-warning" title="Edit objective"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                <a asp-action="DeleteObjective" asp-route-id="@value.Id" asp-route-origin="1" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete objective"></i></a>
+                                                <a asp-action="DeleteObjectiveMTPReview" asp-route-id="@value.Id" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete objective"></i></a>
                                             </td>
                                         </tr>
                                     }
@@ -84,18 +84,18 @@
                             @Html.DisplayFor(modelItem => item.Compliment)
                         </td>
                         <td align="center">
-                          
-                           @if (item.Compliment && item.Compliment_IdMTPReview != item.IdMTPReview)
-                           {
+
+                            @if (item.Compliment && item.Compliment_IdMTPReview != item.IdMTPReview)
+                            {
                                 <a class="btn btn-warning disabled" title="Edit goal"><i class="glyphicon glyphicon-pencil"></i></a>
-                                <a onclick="showInPopup('@Url.Action("CreateObjectiveModal", "MTPs", new { id = @item.Id, idReview = 0}, Context.Request.Scheme)','Create Objective')" class="btn btn-info" title="Create objective"><i class="glyphicon glyphicon-plus"></i></a>
-                                <button type="button" data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete goal"><i class="glyphicon glyphicon-trash"></i></button>
+                                <a class="btn btn-info disabled" title="Edit goal"><i class="glyphicon glyphicon-plus"></i></a>
+                                <a class="btn btn-danger disabled" title="Edit goal"><i class="glyphicon glyphicon-trash"></i></a>
                             }
-                            else 
-                            { 
-                               <a onclick="showInPopup('@Url.Action("EditGoalMTPReviewModal", "MTPs", new {id =  @item.Id}, Context.Request.Scheme)','Edit Goal')" class="btn btn-warning" title="Edit goal"><i class="glyphicon glyphicon-pencil"></i></a>
-                               <a onclick="showInPopup('@Url.Action("CreateObjectiveMTPReviewModal", "MTPs", new {id =  @item.Id}, Context.Request.Scheme)','Create Objective')" class="btn btn-info" title="Create objective"><i class="glyphicon glyphicon-plus"></i></a>
-                               <button type="button" data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete goal"><i class="glyphicon glyphicon-trash"></i></button>
+                            else
+                            {
+                                <a onclick="showInPopup('@Url.Action("EditGoalMTPReviewModal", "MTPs", new {id =  @item.Id}, Context.Request.Scheme)','Edit Goal')" class="btn btn-warning" title="Edit goal"><i class="glyphicon glyphicon-pencil"></i></a>
+                                <a onclick="showInPopup('@Url.Action("CreateObjectiveMTPReviewModal", "MTPs", new {id =  @item.Id, idReview = 0}, Context.Request.Scheme)','Create Objective')" class="btn btn-info" title="Create objective"><i class="glyphicon glyphicon-plus"></i></a>
+                                <button type="button" data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete goal"><i class="glyphicon glyphicon-trash"></i></button>
                             }
                         </td>
                     </tr>

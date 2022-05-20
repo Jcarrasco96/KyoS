@@ -1413,7 +1413,6 @@ namespace KyoS.Web.Controllers
                     List<GoalEntity> goals = await _context.Goals
                                                            .Include(g => g.Objetives)
                                                            .Include(g => g.MTP)
-                                                           .Include(g => g.Adendum)
                                                            .Where(g => g.MTP.Id == goal.MTP.Id)
                                                            .ToListAsync();
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsMTPReview", goals) });
@@ -1475,6 +1474,36 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("EditAdendum", new { id = objectiveEntity.Goal.Adendum.Id });
             }            
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public async Task<IActionResult> DeleteObjectiveMTPReview(int? id, int origin = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ObjetiveEntity objectiveEntity = await _context.Objetives
+                                                           .Include(o => o.Goal)
+                                                           .FirstOrDefaultAsync(o => o.Id == id);
+            if (objectiveEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.Objetives.Remove(objectiveEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("EditMTPReview", new { id = objectiveEntity.Goal.Id, idError = 1 });
+            }
+
+                return RedirectToAction("EditMTPReview", new { id = objectiveEntity.Goal.IdMTPReview });
+            
         }
 
         [Authorize(Roles = "Supervisor, Facilitator")]
@@ -2358,6 +2387,38 @@ namespace KyoS.Web.Controllers
             }
 
             return RedirectToAction("EditAdendum", new { id = goalEntity.Adendum.Id });
+        }
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public async Task<IActionResult> DeleteGoalOfMTPreview(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            GoalEntity goalEntity = await _context.Goals
+
+                                                  .Include(g => g.MTP)
+
+                                                  .ThenInclude(g => g.MtpReviewList)
+
+                                                  .FirstOrDefaultAsync(g => g.Id == id);
+            if (goalEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.Goals.Remove(goalEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("EditMTPReview", new { id = goalEntity.IdMTPReview });
+            }
+
+            return RedirectToAction("EditMTPReview", new { id = goalEntity.IdMTPReview });
         }
 
         [Authorize(Roles = "Facilitator, Supervisor")]
