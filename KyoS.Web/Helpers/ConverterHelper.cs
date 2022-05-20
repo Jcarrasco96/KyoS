@@ -377,7 +377,12 @@ namespace KyoS.Web.Helpers
                 AreaOfFocus = model.AreaOfFocus,
                 MTP = await _context.MTPs.FindAsync(model.IdMTP),
                 Service = ServiceUtils.GetServiceByIndex(model.IdService),
-                Adendum = await _context.Adendums.FindAsync(model.IdAdendum)
+                Adendum = await _context.Adendums.FindAsync(model.IdAdendum),
+                Compliment = model.Compliment,
+                Compliment_Date = model.Compliment_Date,
+                Compliment_Explain = model.Compliment_Explain,
+                Compliment_IdMTPReview = model.Compliment_IdMTPReview,
+                IdMTPReview = model.IdMTPReview
 
             };
         }
@@ -394,7 +399,13 @@ namespace KyoS.Web.Helpers
                 Name = goalEntity.Name,
                 AreaOfFocus = goalEntity.AreaOfFocus,
                 IdService = Convert.ToInt32(goalEntity.Service),
-                Services = _combosHelper.GetComboServices()
+                Services = _combosHelper.GetComboServices(),
+                Compliment = goalEntity.Compliment,
+                Compliment_Date = goalEntity.Compliment_Date,
+                Compliment_Explain = goalEntity.Compliment_Explain,
+                Compliment_IdMTPReview = goalEntity.Compliment_IdMTPReview,
+                IdMTPReview = goalEntity.IdMTPReview,
+
                 
             };
             if (goalEntity.Adendum != null)
@@ -417,7 +428,12 @@ namespace KyoS.Web.Helpers
                 DateResolved = model.DateResolved,
                 Description = model.Description,
                 Intervention = model.Intervention,
-                Goal = await _context.Goals.FindAsync(model.IdGoal)
+                Goal = await _context.Goals.FindAsync(model.IdGoal),
+                Compliment = model.Compliment,
+                Compliment_Date = model.Compliment_Date,
+                Compliment_Explain = model.Compliment_Explain,
+                Compliment_IdMTPReview = model.Compliment_IdMTPReview,
+                IdMTPReview = model.IdMTPReview
             };
         }
 
@@ -434,7 +450,12 @@ namespace KyoS.Web.Helpers
                 DateTarget = objectiveEntity.DateTarget,
                 Description = objectiveEntity.Description,
                 Classifications = objectiveEntity.Classifications,
-                Intervention = objectiveEntity.Intervention
+                Intervention = objectiveEntity.Intervention,
+                Compliment = objectiveEntity.Compliment,
+                Compliment_Date = objectiveEntity.Compliment_Date,
+                Compliment_Explain = objectiveEntity.Compliment_Explain,
+                Compliment_IdMTPReview = objectiveEntity.Compliment_IdMTPReview,
+                IdMTPReview = objectiveEntity.IdMTPReview
             };
         }
 
