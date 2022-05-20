@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="05/20/2022 11:26:51" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3ZdF6/kppValn3mrwP6kd5g==">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="ReferredId" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="LegalGuardians" DataType="System.Int32" Enabled="true" TableName="LegalGuardians">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="AdressLine2" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Diagnostics" DataType="System.Int32" Enabled="true" TableName="Diagnostics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="Description" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+      <TableDataSource Name="MTPs" DataType="System.Int32" Enabled="true" TableName="MTPs">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="MTPDevelopedDate" DataType="System.DateTime"/>
+        <Column Name="StartTime" DataType="System.DateTime"/>
+        <Column Name="EndTime" DataType="System.DateTime"/>
+        <Column Name="LevelCare" DataType="System.String"/>
+        <Column Name="InitialDischargeCriteria" DataType="System.String"/>
+        <Column Name="Modality" DataType="System.String"/>
+        <Column Name="Frecuency" DataType="System.String"/>
+        <Column Name="NumberOfMonths" DataType="System.Int32"/>
+        <Column Name="Setting" DataType="System.String"/>
+        <Column Name="Active" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="MTPReviews" DataType="System.Int32" Enabled="true" TableName="MTPReviews">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="MTP_FK" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="ACopy" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="DateClinicalDirector" DataType="System.DateTime"/>
+        <Column Name="DateLicensedPractitioner" DataType="System.DateTime"/>
+        <Column Name="DateSignaturePerson" DataType="System.DateTime"/>
+        <Column Name="DateTherapist" DataType="System.DateTime"/>
+        <Column Name="DescribeAnyGoals" DataType="System.String"/>
+        <Column Name="DescribeClient" DataType="System.String"/>
+        <Column Name="IfCurrent" DataType="System.String"/>
+        <Column Name="NumberUnit" DataType="System.Int32"/>
+        <Column Name="ProviderNumber" DataType="System.String"/>
+        <Column Name="ReviewedOn" DataType="System.DateTime"/>
+        <Column Name="ServiceCode" DataType="System.String"/>
+        <Column Name="SpecifyChanges" DataType="System.String"/>
+        <Column Name="SummaryOfServices" DataType="System.String"/>
+        <Column Name="TheConsumer" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="TheTreatmentPlan" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClinicalDirector" DataType="System.String"/>
+        <Column Name="Documents" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="LicensedPractitioner" DataType="System.String"/>
+        <Column Name="Therapist" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="MtpId" DataType="System.Int32"/>
+        <Column Name="EndTime" DataType="System.DateTime"/>
+        <Column Name="Frecuency" DataType="System.String"/>
+        <Column Name="MonthOfTreatment" DataType="System.Int32"/>
+        <Column Name="Setting" DataType="System.String"/>
+        <Column Name="StartTime" DataType="System.DateTime"/>
+        <Column Name="DataOfService" DataType="System.DateTime"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="nutritionScoreTotal" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Image="/9j/4AAQSkZJRgABAQEAAAAAAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAMqA10DASIAAhEBAxEB/8QAGwABAQEBAQEBAQAAAAAAAAAAAAUEAwIBBgn/xAAzEAEAAgECBAUDAgUFAQEAAAAAAQIDBBEFEiExEyJBUWEycaFCgUNSkZLRFBVTscEzcv/EABcBAQEBAQAAAAAAAAAAAAAAAAABAgP/xAAdEQEBAQEAAwEBAQAAAAAAAAAAARECEiExQVEy/9oADAMBAAIRAxEAPwD+qYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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" Watermark.Font="Arial, 60pt">
+    <PageHeaderBand Name="PageHeader1" Width="778.3" Height="75.6">
+      <PictureObject Name="Picture1" Left="1.17" Top="3.45" Width="160.65" Height="66.53" Border.Lines="All" ImageFormat="Jpeg" Image="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"/>
+      <TextObject Name="Text452" Left="160.65" Top="37.25" Width="459.5" Height="22" CanGrow="true" Text="Treatment Plan Review" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
+      <TextObject Name="Text453" Left="160.65" Top="15.9" Width="459.5" Height="22" CanGrow="true" Text="Florida Social Health Solutions" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <ContainerObject Name="Container1" Left="161.65" Top="3.45" Width="614.25" Height="66.53" Border.Lines="All"/>
+    </PageHeaderBand>
+    <DataBand Name="Data9" Top="79.72" Width="778.3" Height="699.65" CanGrow="true" CanShrink="true" DataSource="MTPReviews">
+      <TableObject Name="Table64" Top="47.25" Width="774.9" Height="43.47">
+        <TableColumn Name="Column215" Width="151.2"/>
+        <TableColumn Name="Column216" Width="132.3"/>
+        <TableColumn Name="Column217" Width="103.95"/>
+        <TableColumn Name="Column218" Width="122.85"/>
+        <TableColumn Name="Column219" Width="113.4"/>
+        <TableColumn Name="Column220" Width="151.2"/>
+        <TableRow Name="Row289" Height="24.57">
+          <TableCell Name="Cell1275" Border.Lines="All" Fill.Color="WhiteSmoke" Text="Provider #" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell1276" Border.Lines="All" Fill.Color="WhiteSmoke" Text="Date of Service" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell1277" Border.Lines="All" Fill.Color="WhiteSmoke" Text="Setting #" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell1278" Border.Lines="All" Fill.Color="WhiteSmoke" Text="Start Time" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell1279" Border.Lines="All" Fill.Color="WhiteSmoke" Text="End Time" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell1280" Border.Lines="All" Fill.Color="WhiteSmoke" Text="Number of Units" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row290">
+          <TableCell Name="Cell1281" Border.Lines="All" Text="[MTPReviews.ProviderNumber]" HorzAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell1282" Border.Lines="All" Text="[MTPReviews.DataOfService]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell1283" Border.Lines="All" Text="[MTPReviews.Setting]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell1284" Border.Lines="All" Text="[MTPReviews.StartTime]" Format="Time" Format.Format="t" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell1285" Border.Lines="All" Text="[MTPReviews.EndTime]" Format="Time" Format.Format="t" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell1286" Border.Lines="All" Text="[MTPReviews.NumberUnit]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+      <TextObject Name="Text454" Left="9.45" Top="9.45" Width="103.95" Height="18.9" Text="Client name:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text455" Left="113.4" Top="9.45" Width="321.3" Height="18.9" Text="[Clients.Name]" Font="Arial, 10pt"/>
+      <TextObject Name="Text456" Left="434.7" Top="9.45" Width="75.6" Height="18.9" Text="Client ID:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text457" Left="509.75" Top="9.45" Width="207.9" Height="18.9" Text="[Clients.Code]" Font="Arial, 10pt"/>
+      <TextObject Name="Text798" Top="103.95" Width="774.9" Height="18.9" Text="Summary of services received (also address compliance/non-compliance in this section):" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text799" Top="122.85" Width="774.9" Height="18.9" CanGrow="true" Text="[MTPReviews.SummaryOfServices]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text800" Top="151.2" Width="774.9" Height="18.9" Text="Describe client’s progress in treatment (or explanation of lack of progress):" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text801" Top="170.1" Width="774.9" Height="18.9" CanGrow="true" Text="[MTPReviews.DescribeClient]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text802" Top="198.45" Width="774.9" Height="28.35" Text="Describe any goals or objectives that have not been met and update target dates. If all goals and objectives have been met, please justify continuation in treatment (Continue on additional pages if needed.): " Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text803" Top="230.8" Width="774.9" Height="18.9" CanGrow="true" Text="[MTPReviews.DescribeAnyGoals]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text804" Top="261.15" Width="774.9" Height="18.9" Text="Specify changes in treatment or in diagnosis and explain:" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text805" Top="280.05" Width="774.9" Height="18.9" CanGrow="true" Text="[MTPReviews.SpecifyChanges]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text806" Top="307.4" Width="774.9" Height="30.24" Text="If current treatment goals and objectives have not changed and there is a need for continued therapeutic services, please justify the continuation of these goals: " Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text807" Top="338.75" Width="774.9" Height="18.9" CanGrow="true" Text="[MTPReviews.IfCurrent]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text808" Top="366.1" Width="774.9" Height="68.04" CanGrow="true" CanBreak="false" Text="The members of the treatment team have reviewed the services outlined in this Treatment Plan and certify that the recommended services are medically necessary and appropriate to the client’s diagnosis and treatment needs. The treatment team has discussed the plan based on the problems, goals, and expected outcomes. This Treatment Plan will be reviewed on &lt;u&gt;[Month([MTPReviews.ReviewedOn])]/[Day([MTPReviews.ReviewedOn])]/[Year([MTPReviews.ReviewedOn])]&lt;/u&gt; in order to assess the progress of the person served and determine need for appropriate discharge." HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox3" Left="5" Top="441.7" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="MTPReviews.TheConsumer"/>
+      <TextObject Name="Text8" Left="19.45" Top="437.7" Width="463.05" Height="18.9" Text="The Consumer Rights has been reviewed and discussed with me/us. " VertAlign="Center" Font="Arial, 10pt"/>
+      <CheckBoxObject Name="CheckBox4" Left="5" Top="463.6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="MTPReviews.ACopy"/>
+      <TextObject Name="Text809" Left="19.45" Top="460.6" Width="463.05" Height="18.9" Text="A copy of the Consumer Rights has been provided to me/us." VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text810" Left="2.45" Top="480.95" Width="774.9" Height="37.8" Text="The treatment plan has been explained to me in terms I can understand and it reflects my input/suggestions. A copy of this plan has been offered to me:&#13;&#10;" HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text811" Left="214.9" Top="498.4" Width="30.24" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text812" Left="271.6" Top="498.4" Width="30.24" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox5" Left="199" Top="501.4" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="MTPReviews.TheTreatmentPlan"/>
+      <CheckBoxObject Name="CheckBox6" Left="255.7" Top="501.4" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([MTPReviews.TheTreatmentPlan] == true,false,true)"/>
+      <TextObject Name="Text67" Left="245.7" Top="580.96" Width="132.3" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text69" Left="-5" Top="580.9" Width="236.25" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text783" Left="636.7" Top="580.96" Width="141.75" Height="18.9" Text="_______________________" Padding="1, 0, 1, 0" Font="Arial, 9pt"/>
+      <TextObject Name="Text785" Left="392.45" Top="580.9" Width="236.25" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text68" Left="244.25" Top="594.7" Width="132.3" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text70" Left="3" Top="595.15" Width="226.8" Height="18.9" Text="Client / Guardian Signature" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text784" Left="624.35" Top="594.7" Width="160.65" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text786" Left="392" Top="595.15" Width="236.25" Height="18.9" Text="Therapist Name / Signature" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text788" Left="245.7" Top="647.66" Width="132.3" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text790" Left="-3" Top="647.6" Width="236.25" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text793" Left="636.93" Top="647.66" Width="141.75" Height="18.9" Text="_______________________" Padding="1, 0, 1, 0" Font="Arial, 9pt"/>
+      <TextObject Name="Text795" Left="392.74" Top="647.6" Width="236.25" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text789" Left="246.25" Top="661.4" Width="132.3" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text791" Left="3" Top="661.85" Width="226.8" Height="32.13" Text="Clinical Director / Reviewer Name / Signature" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text794" Left="624.9" Top="661.4" Width="160.65" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text796" Left="393" Top="661.85" Width="236.25" Height="37.8" Text="Licensed Practitioner Name / Signature" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text813" Left="244.7" Top="575" Width="132.3" Height="18.9" Text="[MTPReviews.DateSignaturePerson]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text814" Left="633.15" Top="575" Width="141.75" Height="18.9" Text="[MTPReviews.DateTherapist]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text815" Left="245.7" Top="642.15" Width="132.3" Height="18.9" Text="[MTPReviews.DateClinicalDirector]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text816" Left="633.15" Top="641.7" Width="141.75" Height="18.9" Text="[MTPReviews.DateLicensedPractitioner]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
+    </DataBand>
+  </ReportPage>
+</Report>
