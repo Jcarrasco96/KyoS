@@ -7,56 +7,42 @@
             <span asp-validation-for="IdClient" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-1">
         <div class="form-group">
-            <label asp-for="MTPDevelopedDate" class="control-label"></label>
-            <input asp-for="MTPDevelopedDate" class="form-control" />
-            <span asp-validation-for="MTPDevelopedDate" class="text-danger"></span>
+            <label asp-for="Client.Code" class="control-label"></label>
+            <input asp-for="Client.Code" class="form-control" readonly />
+            <span asp-validation-for="Client.Code" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         <div class="form-group">
-            <label asp-for="NumberOfMonths" class="control-label"></label>
-            <input asp-for="NumberOfMonths" class="form-control" />
-            <span asp-validation-for="NumberOfMonths" class="text-danger"></span>
+            <label asp-for="AdmissionDateMTP" class="control-label"></label>
+            <input asp-for="AdmissionDateMTP" class="form-control" />
+            <span asp-validation-for="AdmissionDateMTP" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label asp-for="Frecuency" class="control-label"></label>
-            <input asp-for="Frecuency" class="form-control" />
-            <span asp-validation-for="Frecuency" class="text-danger"></span>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-3">
+    <div class="col-md-1">
         <div class="form-group">
             <label asp-for="StartTime" class="control-label"></label>
             <input asp-for="StartTime" class="form-control" />
             <span asp-validation-for="StartTime" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-1">
         <div class="form-group">
             <label asp-for="EndTime" class="control-label"></label>
             <input asp-for="EndTime" class="form-control" />
             <span asp-validation-for="EndTime" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         <div class="form-group">
-            <label asp-for="Modality" class="control-label"></label>
-            <input asp-for="Modality" class="form-control" />
-            <span asp-validation-for="Modality" class="text-danger"></span>
+            <label asp-for="MTPDevelopedDate" class="control-label">Initial Therapy</label>
+            <input asp-for="MTPDevelopedDate" class="form-control" />
+            <span asp-validation-for="MTPDevelopedDate" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-3">
-        &nbsp;
-    </div>
-</div>
-<div class="row">        
-    <div class="col-md-3">
+    <div class="col-md-2">
         <div class="form-group">
             <label asp-for="Setting" class="control-label"></label>
             <br />
@@ -80,27 +66,239 @@
             }
             <strong>02</strong>&nbsp;Remote
         </div>
-    </div>    
-    <div class="col-md-9">       
-            &nbsp;      
     </div>
+</div>
+<div class="row">
+    <div class="form-group col-md-4">
+        <label class="control-label">Diagnosis</label>
+        @if (Model.Client.Clients_Diagnostics.Count() > 0)
+        {
+            <input class="form-control" value="@Model.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code @Model.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Description" readonly>
+        }
+        else
+        {
+            <input class="form-control" readonly>
+        }
     </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="LevelCare" class="control-label"></label>
+            <input asp-for="LevelCare" class="form-control" readonly />
+            <span asp-validation-for="LevelCare" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="Modality" class="control-label"></label>
+            <input asp-for="Modality" class="form-control" readonly />
+            <span asp-validation-for="Modality" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="Frecuency" class="control-label"></label>
+            <input asp-for="Frecuency" class="form-control" readonly />
+            <span asp-validation-for="Frecuency" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="NumberOfMonths" class="control-label"></label>
+            <input asp-for="NumberOfMonths" class="form-control" readonly />
+            <span asp-validation-for="NumberOfMonths" class="text-danger"></span>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            <label asp-for="LevelCare" class="control-label"></label>
-            <textarea asp-for="LevelCare" class="form-control" rows="5"></textarea>
-            <span asp-validation-for="LevelCare" class="text-danger"></span>
+            <label asp-for="ClientStrengths" class="control-label"></label>
+            <textarea asp-for="ClientStrengths" class="form-control" rows="2"></textarea>
+            <span asp-validation-for="ClientStrengths" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-6">
         <div class="form-group">
-            <label asp-for="InitialDischargeCriteria" class="control-label"></label>
-            <textarea asp-for="InitialDischargeCriteria" class="form-control" rows="5"></textarea>
-            <span asp-validation-for="InitialDischargeCriteria" class="text-danger"></span>
+            <label asp-for="ClientLimitation" class="control-label"></label>
+            <textarea asp-for="ClientLimitation" class="form-control" rows="2"></textarea>
+            <span asp-validation-for="ClientLimitation" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-10">
+        <div class="form-group">
+            <label asp-for="RationaleForUpdate" class="control-label"></label>
+            <textarea asp-for="RationaleForUpdate" class="form-control" rows="2"></textarea>
+            <span asp-validation-for="RationaleForUpdate" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="DateOfUpdate" class="control-label"></label>
+            <input asp-for="DateOfUpdate" class="form-control" />
+            <span asp-validation-for="DateOfUpdate" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <pre>
+    <strong><u>TYPE</u>                                         <u>CODE</u>              <u>UNITS</u>              <u>FRECUENCY</u>         <u>DURATION(months)</u></strong>
+    <input type="checkbox" asp-for="Medication" class="form-check-input"> Medication Management                 <input asp-for="MedicationCode" type="text" style="width:10%" />      <input asp-for="MedicationUnits" type="number" style="width:10%" />     <input asp-for="MedicationFrecuency" type="text" style="width:15%" />      <input asp-for="MedicationDuration" type="number" style="width:10%" />
+    <input type="checkbox" asp-for="Individual" class="form-check-input"> Individual Therapy                    <input asp-for="IndividualCode" type="text" style="width:10%" />      <input asp-for="IndividualUnits" type="number" style="width:10%" />     <input asp-for="IndividualFrecuency" type="text" style="width:15%" />      <input asp-for="IndividualDuration" type="number" style="width:10%" />
+    <input type="checkbox" asp-for="Family" class="form-check-input"> Family Therapy                        <input asp-for="FamilyCode" type="text" style="width:10%" />      <input asp-for="FamilyUnits" type="number" style="width:10%" />     <input asp-for="FamilyFrecuency" type="text" style="width:15%" />      <input asp-for="FamilyDuration" type="number" style="width:10%" />
+    <input type="checkbox" asp-for="Psychosocial" class="form-check-input"> Psychosocial Rehabilitation Services  <input asp-for="PsychosocialCode" type="text" style="width:10%" />      <input asp-for="PsychosocialUnits" type="number" style="width:10%" />     <input asp-for="PsychosocialFrecuency" type="text" style="width:15%" />      <input asp-for="PsychosocialDuration" type="number" style="width:10%" />
+    <input type="checkbox" asp-for="Group" class="form-check-input"> Family Therapy                        <input asp-for="GroupCode" type="text" style="width:10%" />      <input asp-for="GroupUnits" type="number" style="width:10%" />     <input asp-for="GroupFrecuency" type="text" style="width:15%" />      <input asp-for="GroupDuration" type="number" style="width:10%" />
+            </pre>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <pre>
+    <strong></strong>
+    Substance Abuse:    <input type="checkbox" class="form-check-input" id="check101"> No   <input type="checkbox" asp-for="Substance" class="form-check-input" readonly id="check1"> Yes       <input asp-for="SubstanceWhere" type="text" style="width:60%" /> 
+    Legal:              <input type="checkbox" class="form-check-input" id="check102"> No   <input type="checkbox" asp-for="Legal" class="form-check-input" readonly id="check2"> Yes       <input asp-for="LegalWhere" type="text" style="width:60%" /> 
+    Health:             <input type="checkbox" class="form-check-input" id="check103"> No   <input type="checkbox" asp-for="Health" class="form-check-input" readonly id="check3"> Yes       <input asp-for="HealthWhere" type="text" style="width:60%" /> 
+    Pain:               <input type="checkbox" class="form-check-input" id="check104"> No   <input type="checkbox" asp-for="Paint" class="form-check-input" readonly id="check4"> Yes       <input asp-for="PaintWhere" type="text" style="width:60%" /> 
+    Other:              <input type="checkbox" class="form-check-input" id="check105"> No   <input type="checkbox" asp-for="Other" class="form-check-input" readonly id="check5"> Yes       <input asp-for="OtherWhere" type="text" style="width:60%" /> 
+            </pre>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label asp-for="AdditionalRecommended" class="control-label">Additional recommended services outside of clinic: (indicate the service and referrals necessary and where client was referred to. Please have client sign a release of information for each service) </label>
+            <textarea asp-for="AdditionalRecommended" class="form-control" rows="2"></textarea>
+            <span asp-validation-for="AdditionalRecommended" class="text-danger"></span>
         </div>
     </div>
 </div>
 
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label asp-for="InitialDischargeCriteria" class="control-label">TRANSITION OR DISCONTINUATION OF SERVICES CRITERIA AND PLAN:</label>
+            <textarea asp-for="InitialDischargeCriteria" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="InitialDischargeCriteria" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<script>
+
+    check1.addEventListener('change', (e) => {
+        if (check1.checked == true) {
+            check101.checked = false;
+        } else {
+            check101.checked = true;
+        }
+
+    })
+    check101.addEventListener('change', (e) => {
+        if (check101.checked == true) {
+            check1.checked = false;
+        } else {
+            check1.checked = true;
+        }
+
+    })
+    if (check1.checked == true) {
+        check101.checked = false;
+    } else {
+        check101.checked = true;
+    }
+    //-------------------------------
+    check2.addEventListener('change', (e) => {
+        if (check2.checked == true) {
+            check102.checked = false;
+        } else {
+            check102.checked = true;
+        }
+
+    })
+    check102.addEventListener('change', (e) => {
+        if (check102.checked == true) {
+            check2.checked = false;
+        } else {
+            check2.checked = true;
+        }
+
+    })
+    if (check2.checked == true) {
+        check102.checked = false;
+    } else {
+        check102.checked = true;
+    }
+    //--------------------------------
+    check3.addEventListener('change', (e) => {
+        if (check3.checked == true) {
+            check103.checked = false;
+        } else {
+            check103.checked = true;
+        }
+
+    })
+    check103.addEventListener('change', (e) => {
+        if (check103.checked == true) {
+            check3.checked = false;
+        } else {
+            check3.checked = true;
+        }
+
+    })
+    if (check3.checked == true) {
+        check103.checked = false;
+    } else {
+        check103.checked = true;
+    }
+    //----------------------------
+    check4.addEventListener('change', (e) => {
+        if (check4.checked == true) {
+            check104.checked = false;
+        } else {
+            check104.checked = true;
+        }
+
+    })
+    check104.addEventListener('change', (e) => {
+        if (check104.checked == true) {
+            check4.checked = false;
+        } else {
+            check4.checked = true;
+        }
+
+    })
+    if (check4.checked == true) {
+        check104.checked = false;
+    } else {
+        check104.checked = true;
+    }
+    //--------------------------------
+    check5.addEventListener('change', (e) => {
+        if (check5.checked == true) {
+            check105.checked = false;
+        } else {
+            check105.checked = true;
+        }
+
+    })
+    check105.addEventListener('change', (e) => {
+        if (check105.checked == true) {
+            check5.checked = false;
+        } else {
+            check5.checked = true;
+        }
+
+    })
+    if (check5.checked == true) {
+        check105.checked = false;
+    } else {
+        check105.checked = true;
+    }
+</script>
 
 

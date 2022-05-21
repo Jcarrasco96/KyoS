@@ -51,8 +51,18 @@
             </div>
             <br />
             <div class="form-group col-md-12">
-                <input type="submit" value="Save All" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-success">Back</a>
+               @* @if (User.IsInRole("Supervisor"))
+                {
+                    <a asp-action="ReviewMTPReview" class="btn btn-primary">Approve</a>
+                    <a asp-action="ApproveMTPReview" class="btn btn-warning">Review</a>
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                }
+                else
+                {*@
+                    <input type="submit" value="Save All" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                @*}*@
+
             </div>
         </form>
     </div>
