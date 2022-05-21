@@ -116,7 +116,27 @@ namespace KyoS.Web.Controllers
                             Modality = "PSR",
                             Frecuency = "Four times per week",
                             Setting = "53",
-                            Review = review
+                            Review = review,
+
+                            AdmissionDateMTP = DateTime.Now,
+                            DateOfUpdate = DateTime.Now,
+                            Psychosocial = true,
+                            MedicationCode = "T1015",
+                            IndividualCode = "H2019 HR",
+                            FamilyCode = "H2019 HR",
+                            PsychosocialCode = "H2017",
+                            PsychosocialUnits = 16,
+                            PsychosocialFrecuency = "4 times for week",
+                            PsychosocialDuration = 6,
+                            Substance = false,
+                            Legal = false,
+                            Health = false,
+                            Paint = false,
+                            Other = false,
+                            Client = _context.Clients
+                                             .Include(c => c.Clients_Diagnostics)
+                                             .ThenInclude(cd => cd.Diagnostic)
+                                             .First(n => n.Id == idClient)
                         };
                     }
                     else
@@ -129,8 +149,28 @@ namespace KyoS.Web.Controllers
                             Modality = "PSR",
                             Frecuency = "Four times per week",
                             Setting = "53",
-                            Review = review
+                            Review = review,
+
+                            AdmissionDateMTP = DateTime.Now,
+                            DateOfUpdate = DateTime.Now,
+                            Psychosocial = true,
+                            MedicationCode = "T1015",
+                            IndividualCode = "H2019 HR",
+                            FamilyCode = "H2019 HR",
+                            PsychosocialCode = "H2017",
+                            PsychosocialUnits = 16,
+                            PsychosocialFrecuency = "4 times for week",
+                            PsychosocialDuration = 6,
+                            Substance = false,
+                            Legal = false,
+                            Health = false,
+                            Paint = false,
+                            Other = false,
+                            Client = new ClientEntity()
+                            
                         };
+                        model.Client.Clients_Diagnostics = new List<Client_Diagnostic>();
+                        model.Client.Name = "canel singao";
                     }
                     
                     return View(model);
@@ -266,6 +306,8 @@ namespace KyoS.Web.Controllers
                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             MTPEntity mtpEntity = await _context.MTPs.Include(m => m.Client)
+                                                     .ThenInclude(c => c.Clients_Diagnostics)
+                                                     .ThenInclude(c => c.Diagnostic)
                                                      .Include(m => m.MtpReviewList)
                                                      .FirstOrDefaultAsync(m => m.Id == id);
             if (mtpEntity == null)
