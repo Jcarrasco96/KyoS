@@ -4,13 +4,13 @@
 }
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="EditObjectiveMTPReviewModal" onsubmit="return jQueryAjaxPostGoal(this);">
+        <form asp-action="EditObjectiveMTPReviewModal" onsubmit="return jQueryAjaxPostGoalMTPReview(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="IdGoal" />
             <input type="hidden" asp-for="IdMTPReview" />
             <input type="hidden" asp-for="Compliment_IdMTPReview" />
-            <input type="hidden" asp-for="IdMTPReviewActive" />
+            <input type="hidden" asp-for="IdMTPReviewOfView" />
 
             <div>
                 <div class="col-md-12">
@@ -30,7 +30,7 @@
                     &nbsp;
                 </div>
             </div>
-            @if (Model.IdMTPReviewActive != Model.IdMTPReview || Model.IdMTPReview == 0)
+            @if (Model.IdMTPReviewOfView != Model.IdMTPReview || Model.IdMTPReview == 0)
             {
                 <div class="col-md-push-12">
                     <div class="form-group col-md-4">
@@ -59,7 +59,7 @@
                 <div class="col-md-push-12">
                     <div class="form-group col-md-12">
                         <label asp-for="Intervention" class="control-label"></label>
-                        <textarea asp-for="Intervention" class="form-control" rows="3" readonly></textarea>
+                        <textarea asp-for="Intervention" class="form-control" rows="2" readonly></textarea>
                         <span asp-validation-for="Intervention" class="text-danger"></span>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
                 <div class="col-md-push-12">
                     <div class="form-group col-md-12">
                         <label asp-for="Intervention" class="control-label"></label>
-                        <textarea asp-for="Intervention" class="form-control" rows="3" ></textarea>
+                        <textarea asp-for="Intervention" class="form-control" rows="2" ></textarea>
                         <span asp-validation-for="Intervention" class="text-danger"></span>
                     </div>
                 </div>
@@ -101,19 +101,19 @@
 
             <div>
                 <div class=" col-md-6 form-group">
-                    <label asp-for="Compliment" class="control-label"></label> &nbsp;<br />
+                    <label asp-for="Compliment" class="control-label">Accomplished</label> <br />
                     <input type="checkbox" asp-for="Compliment" class="form-check-input">
                     <span asp-validation-for="Compliment" class="text-danger"></span>
                 </div>
                 <div class=" col-md-6 form-group">
-                    <label asp-for="Compliment_Date" class="control-label"></label>
+                    <label asp-for="Compliment_Date" class="control-label">Date of Accomplished</label>
                     <input asp-for="Compliment_Date" class="form-control">
                     <span asp-validation-for="Compliment_Date" class="text-danger"></span>
                 </div>
             </div>
             <div>
                 <div class=" col-md-12 form-group">
-                    <label asp-for="Compliment_Explain" class="control-label"></label>Explain *&nbsp;
+                    <label asp-for="Compliment_Explain" class="control-label">Explain of accomplished objective</label>&nbsp;
                     <textarea asp-for="Compliment_Explain" class="form-control" rows="3"></textarea>
                     <span asp-validation-for="Compliment_Explain" class="text-danger"></span>
                 </div>

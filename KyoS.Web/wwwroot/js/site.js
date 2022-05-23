@@ -120,7 +120,7 @@ jQueryAjaxPostGoal = form => {
                     $('#form-modal').modal('hide');
 
                     $('#MyTable').DataTable({
-                        "order": [[0, "asc"]],
+                        "order": [[1, "asc"]],
                         "pageLength": 100
                     });
                     var item_to_delete;                    
@@ -149,6 +149,7 @@ jQueryAjaxPostGoal = form => {
         console.log(ex)
     }
 }
+
 jQueryAjaxPostGoalMTPReview = form => {
     try {
         $.ajax({
@@ -165,7 +166,7 @@ jQueryAjaxPostGoalMTPReview = form => {
                     $('#form-modal').modal('hide');
 
                     $('#MyTable').DataTable({
-                        "order": [[0, "asc"]],
+                        "order": [[1, "asc"]],
                         "pageLength": 100
                     });
                     var item_to_delete;

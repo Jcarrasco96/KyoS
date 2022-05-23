@@ -9,6 +9,7 @@
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="IdMTP" />
             <input type="hidden" asp-for="IdMTPReview" />
+            <input type="hidden" asp-for="IdMTPReviewOfView" />
             <div class="container-fluid">
                 <h4 style="font-weight:bold;"> <span class="label label-info"> MTP - @Model.MTP.Client.Name </span></h4>
             </div>
@@ -34,25 +35,25 @@
             <div>
                 <div class=" col-md-12 form-group">
                     <label asp-for="AreaOfFocus" class="control-label"></label> &nbsp;
-                    <textarea asp-for="AreaOfFocus" class="form-control" rows="6" readonly></textarea>
+                    <textarea asp-for="AreaOfFocus" class="form-control" rows="5" readonly></textarea>
                     <span asp-validation-for="AreaOfFocus" class="text-danger"></span>
                 </div>
             </div>
             <div>
                 <div class=" col-md-6 form-group">
-                    <label asp-for="Compliment" class="control-label"></label> &nbsp;<br />
+                    <label asp-for="Compliment" class="control-label">Accomplished</label> &nbsp;<br />
                     <input type="checkbox" asp-for="Compliment" class="form-check-input">
                     <span asp-validation-for="Compliment" class="text-danger"></span>
                 </div>
                 <div class=" col-md-6 form-group">
-                    <label asp-for="Compliment_Date" class="control-label"></label>
+                    <label asp-for="Compliment_Date" class="control-label">Date of Accomplished</label>
                     <input asp-for="Compliment_Date" class="form-control">
                     <span asp-validation-for="Compliment_Date" class="text-danger"></span>
                 </div>
             </div>
             <div>
                 <div class=" col-md-12 form-group">
-                    <label asp-for="Compliment_Explain" class="control-label"></label>Explain *&nbsp;
+                    <label asp-for="Compliment_Explain" class="control-label"> Explain of accomplished goal</label>
                     <textarea asp-for="Compliment_Explain" class="form-control" rows="3"></textarea>
                     <span asp-validation-for="Compliment_Explain" class="text-danger"></span>
                 </div>
