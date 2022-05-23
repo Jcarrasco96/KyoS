@@ -41,11 +41,11 @@
             <partial name="_MTPReviews" />
             <div class="col-md-push-12">
                 <div class="col-md-12 form-group">
-                    <a onclick="showInPopup('@Url.Action("CreateGoalMTPReviewModal", "MTPs", new {id =  @Model.IdMTP, idReview = @Model.Id}, Context.Request.Scheme)','Create goal of MTP Review')" class="btn btn-success" title="Create Goal of this MTP Review"><i class="glyphicon glyphicon-plus"></i> Add Goal</a>
+                    <a onclick="showInPopup('@Url.Action("CreateGoalMTPReviewModal", "MTPs", new { id = @Model.IdMTP, idReview = @Model.Id }, Context.Request.Scheme)','Create goal of MTP Review')" class="btn btn-success" title="Create Goal of this MTP Review"><i class="glyphicon glyphicon-plus"></i> Add Goal</a>
                 </div>
                 <div class="col-md-12">
                     <div id="view-goals">
-                        @await Html.PartialAsync("_ViewGoalsMTPReview", Model.Mtp.Goals.ToList())
+                        @await Html.PartialAsync("_ViewGoalsMTPReview", Model.Mtp.Goals.ToList(), new ViewDataDictionary(ViewData) { { "Id", @Model.Id } })
                     </div>
                 </div>
             </div>
@@ -79,7 +79,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#MyTable').DataTable({
-                                "order": [[0, "asc"]],
+                                "order": [[1, "asc"]],
                                 "pageLength": 100
                             });
 

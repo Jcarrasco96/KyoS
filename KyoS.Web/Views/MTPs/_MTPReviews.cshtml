@@ -17,22 +17,21 @@
         <span asp-validation-for="DataOfService" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="ReviewedOn" class="control-label">Date of MTP Review</label>
+        <label asp-for="ReviewedOn" class="control-label">Reviewed On</label>
         <input asp-for="ReviewedOn" class="form-control" />
         <span asp-validation-for="ReviewedOn" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="ProviderNumber" class="control-label"></label>
+        <label asp-for="ProviderNumber" class="control-label">Provider Number</label>
         <input asp-for="ProviderNumber" class="form-control" />
         <span asp-validation-for="ProviderNumber" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="ServiceCode" class="control-label"></label>
+        <label asp-for="ServiceCode" class="control-label">Service Code</label>
         <input asp-for="ServiceCode" class="form-control" />
         <span asp-validation-for="ServiceCode" class="text-danger"></span>
     </div>
 </div>
-
 <div class="col-md-push-12">
     <div class="form-group col-md-2">
         <label asp-for="StartTime" class="control-label"></label>
@@ -45,7 +44,7 @@
         <span asp-validation-for="EndTime" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="MonthOfTreatment" class="control-label"></label>
+        <label asp-for="MonthOfTreatment" class="control-label">Month of treatment</label>
         <input asp-for="MonthOfTreatment" class="form-control" />
         <span asp-validation-for="MonthOfTreatment" class="text-danger"></span>
     </div>
@@ -55,7 +54,7 @@
         <span asp-validation-for="Frecuency" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="NumberUnit" class="control-label"></label>
+        <label asp-for="NumberUnit" class="control-label">Number of Unit</label>
         <input asp-for="NumberUnit" class="form-control" />
         <span asp-validation-for="NumberUnit" class="text-danger"></span>
     </div>
@@ -67,26 +66,26 @@
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-6">
-        <label asp-for="SummaryOfServices" class="control-label">Summary of services received (also address compliance/non-compliance in this section):</label>
+        <label asp-for="SummaryOfServices" class="control-label">Summary of services received (also address compliance/non-compliance in this section)</label>
         <textarea asp-for="SummaryOfServices" class="form-control" rows="6"></textarea>
         <span asp-validation-for="SummaryOfServices" class="text-danger"></span>
     </div>
     <div class="form-group col-md-6">
-        <label asp-for="DescribeClient" class="control-label">Describe client’s progress in treatment (or explanation of lack of progress):</label>
+        <label asp-for="DescribeClient" class="control-label">Describe client’s progress in treatment (or explanation of lack of progress)</label>
         <textarea asp-for="DescribeClient" class="form-control" rows="6"></textarea>
         <span asp-validation-for="DescribeClient" class="text-danger"></span>
     </div>
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-12">
-        <label asp-for="DescribeAnyGoals" class="control-label">Describe any goals or objectives that have not been met and update target dates. If all goals and objectives have been met, please justify continuation in treatment (Continue on additional pages if needed.):</label>
+        <label asp-for="DescribeAnyGoals" class="control-label">Describe any goals or objectives that have not been met and update target dates. If all goals and objectives have been met, please justify continuation in treatment (Continue on additional pages if needed)</label>
         <textarea asp-for="DescribeAnyGoals" class="form-control" rows="6"></textarea>
         <span asp-validation-for="DescribeAnyGoals" class="text-danger"></span>
     </div>
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-6">
-        <label asp-for="SpecifyChanges" class="control-label"><br />Specify changes in treatment or in diagnosis and explain:</label>
+        <label asp-for="SpecifyChanges" class="control-label"><br />Specify changes in treatment or in diagnosis and explain</label>
         <textarea asp-for="SpecifyChanges" class="form-control" rows="6"></textarea>
         <span asp-validation-for="SpecifyChanges" class="text-danger"></span>
     </div>
@@ -99,39 +98,31 @@
         <span asp-validation-for="IfCurrent" class="text-danger"></span>
     </div>
 </div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-8">
-        <pre>
-    The members of the treatment team have reviewed the services outlined in this Treatment Plan and certify that the recommended services are 
-    medically necessary and appropriate to the client’s diagnosis and treatment needs. The treatment team has discussed the plan based on the 
-    problems, goals, and expected outcomes. This Treatment Plan will be reviewed on <input asp-for="ReviewedOn" style="width:10%" /> in order to assess the progress
-    of the person served and determine need for appropriate discharge.<br />
+<div class="form-group col-md-12">
+    <pre>
+    The members of the treatment team have reviewed the services outlined in this Treatment Plan and certify that the recommended services are medically necessary and appropriate 
+    to the client’s diagnosis and treatment needs. The treatment team has discussed the plan based on the problems, goals, and expected outcomes. 
+    This Treatment Plan will be reviewed on <input asp-for="ReviewedOn" style="width:10%" /> in order to assess the progress of the person served and determine need for appropriate discharge.
         <input type="checkbox" asp-for="TheConsumer" class="form-check-input"> The Consumer Rights has been reviewed and discussed with me/us. 
         <input type="checkbox" asp-for="ACopy" class="form-check-input"> A copy of the Consumer Rights has been provided to me/us. 
     The treatment plan has been explained to me in terms I can understand and it reflects my 
     input/suggestions. A copy of this plan has been offered to  <input type="checkbox" asp-for="TheTreatmentPlan" class="form-check-input" id="check1"> YES  <input type="checkbox" class="form-check-input" id="check101"> NO
-    <br /><br /><br />
     </pre>
-    </div>
-    <div class="form-group col-md-4">
-        <pre>
-        <strong>Person served signature date</strong>                         
-        <strong>(@Html.DisplayFor(modelItem => Model.Mtp.Client.Name))</strong>     
-        <strong>Legal Guardian signature date</strong>                  <input asp-for="DateSignaturePerson">
-        <strong>(@Html.DisplayFor(modelItem => Model.Mtp.Client.LegalGuardian.Name))</strong>
-
-        <strong>Therapist Name/ Signature </strong>                     <input asp-for="DateTherapist">
-        <strong>(@Html.DisplayFor(modelItem => Model.Therapist))</strong> 
-
-        <strong>Licensed Practitioner Name/ Signature </strong>         <input asp-for="DateLicensedPractitioner">
-        <strong>(@Html.DisplayFor(modelItem => Model.LicensedPractitioner))</strong>
-
-        <strong>Clinical Director/Reviewer Name/Signature </strong>     <input asp-for="DateClinicalDirector">
-        <strong>(@Html.DisplayFor(modelItem => Model.Mtp.Client.Clinic.ClinicalDirector))</strong>
-    </div>
 </div>
-<div class="col-md-push-12">
-    
+<div class="form-group col-md-12">
+    <pre>
+    <strong>Person served signature date</strong>                               <input asp-for="DateSignaturePerson">                         
+    <strong>(@Html.DisplayFor(modelItem => Model.Mtp.Client.Name))</strong>     
+        
+    <strong>Therapist Name / Signature </strong>                                <input asp-for="DateTherapist">
+    <strong>(@Html.DisplayFor(modelItem => Model.Therapist))</strong> 
+
+    <strong>Licensed Practitioner Name / Signature </strong>                    <input asp-for="DateLicensedPractitioner">
+    <strong>(@Html.DisplayFor(modelItem => Model.LicensedPractitioner))</strong>
+
+    <strong>Clinical Director / Reviewer Name / Signature </strong>             <input asp-for="DateClinicalDirector">
+    <strong>(@Html.DisplayFor(modelItem => Model.Mtp.Client.Clinic.ClinicalDirector))</strong>
+    </pre>
 </div>
 
 <script>

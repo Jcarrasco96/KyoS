@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -729,13 +730,15 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
+                    
                     List<GoalEntity> goals = await _context.Goals
                                                            .Include(g => g.Objetives)
                                                            .Include(g => g.MTP)
                                                            
                                                            .Where(g => g.MTP.Id == model.MTP.Id)
                                                            .ToListAsync();
-                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsMTPReview", goals) });
+                    
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsMTPReview", goals, new Dictionary<string, object>() { {"Id", model.IdMTPReview } }) });
                 }
                 catch (System.Exception ex)
                 {
@@ -746,8 +749,7 @@ namespace KyoS.Web.Controllers
             model.Services = _combosHelper.GetComboServices();
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalMTPReviewModal", model) });
         }
-
-
+        
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> DeleteGoal(int? id)
         {
@@ -953,17 +955,21 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Facilitator")]
-        public async Task<IActionResult> EditGoalMTPReviewModal(int? id)
+        public async Task<IActionResult> EditGoalMTPReviewModal(int? id, int idMTPReviewOfView)
         {
             if (id == null)
             {
                 return RedirectToAction("Home/Error404");
             }
 
-            GoalEntity goalEntity = await _context.Goals.Include(g => g.MTP)
-                                                        .ThenInclude(m => m.Client)
-                                                        .Include(g => g.Adendum)
-                                                        .FirstOrDefaultAsync(d => d.Id == id);
+            GoalEntity goalEntity = await _context.Goals
+
+                                                  .Include(g => g.MTP)
+                                                  .ThenInclude(m => m.Client)
+
+                                                  .Include(g => g.Adendum)
+
+                                                  .FirstOrDefaultAsync(d => d.Id == id);
 
             GoalViewModel model = _converterHelper.ToGoalViewModel(goalEntity);
             if (model == null)
@@ -971,6 +977,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
+            model.IdMTPReviewOfView = idMTPReviewOfView;
             return View(model);
         }
 
@@ -1016,7 +1023,7 @@ namespace KyoS.Web.Controllers
 
                 if (model.Compliment_IdMTPReview == 0 && model.Compliment == true)
                 {
-                    goalEntity.Compliment_IdMTPReview = model.IdMTPReview;
+                    goalEntity.Compliment_IdMTPReview = model.IdMTPReviewOfView;
                 }
                 else
                 {
@@ -1028,12 +1035,16 @@ namespace KyoS.Web.Controllers
                 {
                     await _context.SaveChangesAsync();
                     List<GoalEntity> goals = await _context.Goals
+
                                                            .Include(g => g.Objetives)
+
                                                            .Include(g => g.MTP)
-                                                           //.ThenInclude(g => g.MtpReviewList)
+                                                           
                                                            .Where(g => g.MTP.Id == model.IdMTP)
+                                                           .OrderBy(g => g.Number)
                                                            .ToListAsync();
-                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsMTPReview", goals) });
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsMTPReview", goals, new Dictionary<string, object>() { { "Id", model.IdMTPReviewOfView } }) });
                 }
                 catch (System.Exception ex)
                 {
@@ -1452,12 +1463,18 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
+
                     List<GoalEntity> goals = await _context.Goals
+
                                                            .Include(g => g.Objetives)
+
                                                            .Include(g => g.MTP)
+
                                                            .Where(g => g.MTP.Id == goal.MTP.Id)
+                                                           .OrderBy(g => g.Number)
                                                            .ToListAsync();
-                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsMTPReview", goals) });
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsMTPReview", goals, new Dictionary<string, object>() { { "Id", model.IdMTPReview } }) });
                 }
                 catch (System.Exception ex)
                 {
@@ -1479,8 +1496,7 @@ namespace KyoS.Web.Controllers
             model.IdGoal = goalEntity.Id;
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjectiveMTPReviewModal", model) });
         }
-
-
+        
         [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> DeleteObjective(int? id, int origin = 0)
         {
@@ -1782,7 +1798,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Facilitator")]
-        public async Task<IActionResult> EditObjectiveMTPReviewModal(int? id, int IdMTPReviewActive)
+        public async Task<IActionResult> EditObjectiveMTPReviewModal(int? id, int idMTPReviewOfView)
         {
             if (id == null)
             {
@@ -1798,7 +1814,7 @@ namespace KyoS.Web.Controllers
                                                            .FirstOrDefaultAsync(d => d.Id == id);
 
             ObjectiveViewModel model = _converterHelper.ToObjectiveViewModel(objectiveEntity);
-            model.IdMTPReviewActive = IdMTPReviewActive;
+            model.IdMTPReviewOfView = idMTPReviewOfView;
             if (model == null)
             {
                 return RedirectToAction("Home/Error404");
@@ -1849,7 +1865,7 @@ namespace KyoS.Web.Controllers
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, false);
                 if (model.Compliment_IdMTPReview == 0 && model.Compliment == true)
                 {
-                    objective.Compliment_IdMTPReview = model.IdMTPReview;
+                    objective.Compliment_IdMTPReview = model.IdMTPReviewOfView;
                 }
                 else
                 {
@@ -1886,12 +1902,16 @@ namespace KyoS.Web.Controllers
                     await _context.SaveChangesAsync();
 
                     List<GoalEntity> goals = await _context.Goals
+
                                                            .Include(g => g.Objetives)
+
                                                            .Include(g => g.MTP)
-                                                           .Include(g => g.Adendum)
+
                                                            .Where(g => g.MTP.Id == goal.MTP.Id)
+                                                           .OrderBy(g => g.Number)
                                                            .ToListAsync();
-                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsMTPReview", goals) });
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsMTPReview", goals, new Dictionary<string, object>() { { "Id", model.IdMTPReview } }) });
                 }
                 catch (System.Exception ex)
                 {
@@ -2430,6 +2450,7 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("EditAdendum", new { id = goalEntity.Adendum.Id });
         }
+
         [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> DeleteGoalOfMTPreview(int? id)
         {

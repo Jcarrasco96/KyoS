@@ -224,7 +224,7 @@
                                         <td align="center">
                                             @if (User.IsInRole("Facilitator") || User.IsInRole("Supervisor"))
                                             {
-                                                <a asp-action="CreateMTPReview" asp-route-id="@item.Id" asp-route-review="true" asp-route-idClient="@item.Client.Id" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
+                                                <a asp-action="CreateMTPReview" asp-route-id="@item.Id" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
                                             }
                                             else
                                             {
@@ -315,7 +315,7 @@
                                         <td align="center">
                                             @if (User.IsInRole("Facilitator") || User.IsInRole("Supervisor"))
                                             {
-                                                <a asp-action="CreateMTPReview" asp-route-id="@item.Id" asp-route-review="true" asp-route-idClient="@item.Client.Id" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
+                                                <a asp-action="CreateMTPReview" asp-route-id="@item.Id" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
                                             }
                                             else
                                             {

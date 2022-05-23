@@ -485,17 +485,14 @@ namespace KyoS.Web.Helpers
                 IdService = Convert.ToInt32(goalEntity.Service),
                 Services = _combosHelper.GetComboServices(),
                 Compliment = goalEntity.Compliment,
-                Compliment_Date = goalEntity.Compliment_Date,
+                Compliment_Date = goalEntity.Compliment_Date != null ? goalEntity.Compliment_Date : DateTime.Now,
                 Compliment_Explain = goalEntity.Compliment_Explain,
                 Compliment_IdMTPReview = goalEntity.Compliment_IdMTPReview,
-                IdMTPReview = goalEntity.IdMTPReview,
-
-                
+                IdMTPReview = goalEntity.IdMTPReview                
             };
             if (goalEntity.Adendum != null)
             {
-                model.IdAdendum = goalEntity.Adendum.Id;
-               
+                model.IdAdendum = goalEntity.Adendum.Id;               
             }
 
             return model;
