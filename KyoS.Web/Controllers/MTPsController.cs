@@ -2839,5 +2839,38 @@ namespace KyoS.Web.Controllers
             }
             return RedirectToAction("NotAuthorized", "Account");
         }
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public JsonResult GetCodeByClient(int idClient)
+        {
+            ClientEntity client = _context.Clients.FirstOrDefault(c => c.Id == idClient);
+            string text = string.Empty;
+            if (client != null)
+            {
+                text = client.Code;
+            }
+            return Json(text);
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public JsonResult GetDiagnosisByClient(int idClient)
+        {
+            ClientEntity client = _context.Clients
+
+                                          .Include(c => c.Clients_Diagnostics)
+                                          .ThenInclude(cd => cd.Diagnostic)
+
+                                          .FirstOrDefault(c => c.Id == idClient);
+            string text = string.Empty;
+            if (client != null)
+            {
+                foreach (var item in client.Clients_Diagnostics)
+                {
+                    text += $"{item.Diagnostic.Code} - {item.Diagnostic.Description} ";
+                }
+            }
+               
+            return Json(text);
+        }
     }
 }
