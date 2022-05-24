@@ -1560,7 +1560,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("EditMTPReview", new { id = objectiveEntity.Goal.Id, idError = 1 });
             }
 
-                return RedirectToAction("EditMTPReview", new { id = objectiveEntity.Goal.IdMTPReview });
+                return RedirectToAction("EditMTPReview", new { id = objectiveEntity.IdMTPReview });
             
         }
 
@@ -1911,7 +1911,8 @@ namespace KyoS.Web.Controllers
                                                            .OrderBy(g => g.Number)
                                                            .ToListAsync();
 
-                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsMTPReview", goals, new Dictionary<string, object>() { { "Id", model.IdMTPReview } }) });
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsMTPReview", goals, new Dictionary<string, object>() { { "Id", model.IdMTPReviewOfView } }) });
+                    
                 }
                 catch (System.Exception ex)
                 {
