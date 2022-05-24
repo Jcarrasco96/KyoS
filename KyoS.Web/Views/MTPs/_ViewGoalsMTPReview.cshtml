@@ -55,7 +55,18 @@
                                     @foreach (var value in item.Objetives)
                                     {
                                         <tr>
-                                            <td align="center">@Html.DisplayFor(modelItem => value.Objetive)</td>
+                                            <td align="center">
+                                                @if (value.IdMTPReview.ToString() != ViewData["Id"].ToString())
+                                                {
+                                                    <i class="glyphicon glyphicon-star btn-default"></i>
+                                                }
+                                                @if (value.IdMTPReview.ToString() == ViewData["Id"].ToString())
+                                                {
+                                                    <i class="glyphicon glyphicon-star btn-success"></i>
+                                                }
+                                                &nbsp;
+                                                @Html.DisplayFor(modelItem => value.Objetive)
+                                            </td>
                                             <td align="left">@Html.DisplayFor(modelItem => value.Description)</td>
                                             <td align="left">@Html.DisplayFor(modelItem => value.Intervention)</td>
                                             <td align="center">@Html.DisplayFor(modelItem => value.Compliment)</td>
@@ -105,6 +116,16 @@
                             </div>
                         </td>
                         <td align="center">
+                            
+                            @if (item.IdMTPReview.ToString() != ViewData["Id"].ToString())
+                            {
+                                <i class="glyphicon glyphicon-star btn-default"></i>
+                            }
+                            @if (item.IdMTPReview.ToString() == ViewData["Id"].ToString())
+                            {
+                                <i class="glyphicon glyphicon-star btn-success"></i>
+                            }
+                            &nbsp;
                             @Html.DisplayFor(modelItem => item.Number)
                         </td>
                         <td align="left">
