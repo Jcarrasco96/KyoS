@@ -2167,13 +2167,53 @@ namespace KyoS.Web.Controllers
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
+            
             if (ModelState.IsValid)
             {
                 AdendumEntity adendumEntity = _context.Adendums.Find(adendumViewModel.Id);
+                MTPEntity mtp = _context.MTPs
+                                              .Include(n => n.Client)
+                                              .FirstOrDefault(n => n.Id == adendumViewModel.IdMTP);
                 if (adendumEntity == null)
                 {
-                    
+                    string gender_problems = string.Empty;
+                    if (!string.IsNullOrEmpty(adendumViewModel.ProblemStatement))
+                    {
+                        if (this.GenderEvaluation(mtp.Client.Gender, adendumViewModel.ProblemStatement))
+                        {
+                            ModelState.AddModelError(string.Empty, "Error.There are gender issues in: Problem Statement");
+                            AdendumViewModel model1 = new AdendumViewModel
+                            {
+                                CreatedBy = adendumViewModel.CreatedBy,
+                                CreatedOn = adendumViewModel.CreatedOn,
+                                Dateidentified = adendumViewModel.Dateidentified,
+                                Duration = adendumViewModel.Duration,
+                                Facilitator = adendumViewModel.Facilitator,
+                                Frecuency = adendumViewModel.Frecuency,
+                                Goals = adendumViewModel.Goals,
+                                Id = adendumViewModel.Id,
+                                LastModifiedBy = adendumViewModel.LastModifiedBy,
+                                LastModifiedOn = adendumViewModel.LastModifiedOn,
+                                
+                                ProblemStatement = adendumViewModel.ProblemStatement,
+                                Status = adendumViewModel.Status,
+                                Supervisor = adendumViewModel.Supervisor,
+                                Unit = adendumViewModel.Unit,
+                                IdFacilitator = adendumViewModel.IdFacilitator,
+                                IdMTP = adendumViewModel.IdMTP,
+                                IdSupervisor = adendumViewModel.IdSupervisor,
+                                
+                                Mtp = _context.MTPs
+                                              .Include(c => c.Client.Clients_Diagnostics)
+                                              .ThenInclude(cd => cd.Diagnostic)
+                                              .FirstOrDefault(n => n.Id == adendumViewModel.IdMTP)
+                                
+
+                            };
+                            return View(model1);
+                           
+                        }
+                    }
                     adendumEntity = await _converterHelper.ToAdendumEntity(adendumViewModel, true, user_logged.UserName);
                                        
                     _context.Adendums.Add(adendumEntity);
@@ -2279,7 +2319,69 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
+
                 AdendumEntity adendumEntity = await _converterHelper.ToAdendumEntity(adendumViewModel, false, user_logged.Id);
+
+                MTPEntity mtp = _context.MTPs
+                                              .Include(n => n.Client)
+                                              .FirstOrDefault(n => n.Id == adendumViewModel.IdMTP);
+
+                string gender_problems = string.Empty;
+                if (!string.IsNullOrEmpty(adendumViewModel.ProblemStatement))
+                {
+                    if (this.GenderEvaluation(mtp.Client.Gender, adendumViewModel.ProblemStatement))
+                    {
+                        ModelState.AddModelError(string.Empty, "Error.There are gender issues in: Problem Statement");
+                        AdendumViewModel model1 = new AdendumViewModel
+                        {
+                            CreatedBy = adendumViewModel.CreatedBy,
+                            CreatedOn = adendumViewModel.CreatedOn,
+                            Dateidentified = adendumViewModel.Dateidentified,
+                            Duration = adendumViewModel.Duration,
+                            Facilitator = adendumViewModel.Facilitator,
+                            Frecuency = adendumViewModel.Frecuency,
+                            Goals = _context.Adendums
+
+                                                    .Include(a => a.Mtp)
+                                                    .ThenInclude(m => m.Client)
+                                                    .ThenInclude(c => c.Clients_Diagnostics)
+                                                    .ThenInclude(cd => cd.Diagnostic)
+
+                                                    .Include(a => a.Goals)
+                                                    .ThenInclude(g => g.Objetives)
+
+                                                    .Include(a => a.Goals)
+                                                    .ThenInclude(g => g.MTP)
+
+                                                    .Include(a => a.Supervisor)
+
+                                                    .Include(a => a.Facilitator)
+
+                                                    .FirstOrDefault(a => a.Id == adendumViewModel.Id).Goals,
+                            Id = adendumViewModel.Id,
+                            LastModifiedBy = adendumViewModel.LastModifiedBy,
+                            LastModifiedOn = adendumViewModel.LastModifiedOn,
+
+                            ProblemStatement = adendumViewModel.ProblemStatement,
+                            Status = adendumViewModel.Status,
+                            Supervisor = adendumViewModel.Supervisor,
+                            Unit = adendumViewModel.Unit,
+                            IdFacilitator = adendumViewModel.IdFacilitator,
+                            IdMTP = adendumViewModel.IdMTP,
+                            IdSupervisor = adendumViewModel.IdSupervisor,
+
+                            Mtp = _context.MTPs
+                                          .Include(c => c.Client.Clients_Diagnostics)
+                                          .ThenInclude(cd => cd.Diagnostic)
+                                          .FirstOrDefault(n => n.Id == adendumViewModel.IdMTP)
+
+
+                        };
+                        return View(model1);
+
+                    }
+                }
+
                 _context.Adendums.Update(adendumEntity);
                 try
                 {
@@ -2320,12 +2422,18 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> ApproveAdendum(int id)
         {
+
             AdendumEntity adendum = await _context.Adendums.FirstOrDefaultAsync(n => n.Id == id);
+
+
             adendum.Status = AdendumStatus.Approved;
+           // adendum.DateOfApprove = DateTime.Now;
+            adendum.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
             _context.Update(adendum);
 
             await _context.SaveChangesAsync();
 
+           
             return RedirectToAction(nameof(PendingAdendum));
         }
 
