@@ -754,6 +754,58 @@ namespace KyoS.Web.Controllers
                 _context.DocumentsTemp.Remove(item);
             }
             _context.SaveChanges();
-        }        
+        }
+
+        [Authorize(Roles = "Mannager, Supervisor")]
+        public async Task<IActionResult> DocumentForClient()
+        {
+            if (User.IsInRole("Admin"))
+                return View(await _context.Clients
+                                          .Include(c => c.Clinic)
+                                          .Where(c => c.MTPs.Count == 0)
+                                          .OrderBy(c => c.Clinic.Name)
+                                          .ToListAsync());
+            else
+            {
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic == null)
+                    return View(null);
+
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if (clinic != null)
+                {
+                    List<ClientEntity> client = await _context.Clients
+                                                              .Include(c => c.Clinic)
+                                                              .Include(c => c.MTPs)
+                                                              .ThenInclude(cd => cd.AdendumList)
+                                                              .Include(c => c.MTPs)
+                                                              .ThenInclude(c => c.MtpReviewList)
+                                                              .Include(c => c.FarsFormList)
+                                                              .Include(c => c.Bio)
+                                                              .Include(c => c.Discharge)
+                                                              .Include(c => c.IntakeAccessToServices)
+                                                              .Include(c => c.IntakeAcknowledgementHipa)
+                                                              .Include(c => c.IntakeConsentForRelease)
+                                                              .Include(c => c.IntakeConsentForTreatment)
+                                                              .Include(c => c.IntakeConsentPhotograph)
+                                                              .Include(c => c.IntakeConsumerRights)
+                                                              .Include(c => c.IntakeFeeAgreement)
+                                                              .Include(c => c.IntakeMedicalHistory)
+                                                              .Include(c => c.IntakeOrientationChecklist)
+                                                              .Include(c => c.IntakeScreening)
+                                                              .Include(c => c.IntakeTransportation)
+                                                              .Include(c => c.IntakeTuberculosis)
+                                                              .Where(c => (c.Clinic.Id == clinic.Id))
+                                                              .OrderBy(c => c.Name)
+                                                              .ToListAsync();
+                    //client = client.Where(c => c.MissingDoc != string.Empty).ToList();
+                    return View(client);
+                }
+                else
+                    return View(null);
+            }
+        }
     }
 }

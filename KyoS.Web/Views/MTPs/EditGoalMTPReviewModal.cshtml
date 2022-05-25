@@ -13,32 +13,64 @@
             <div class="container-fluid">
                 <h4 style="font-weight:bold;"> <span class="label label-info"> MTP - @Model.MTP.Client.Name </span></h4>
             </div>
-            <div>
-                <div class="col-md-6 form-group">
-                    <label asp-for="Number" class="control-label"></label> &nbsp;
-                    <input asp-for="Number" class="form-control" readonly />
-                    <span asp-validation-for="Number" class="text-danger"></span>
+            @if (Model.IdMTPReview != Model.IdMTPReviewOfView || Model.IdMTPReview == 0)
+            {
+                <div>
+                    <div class="col-md-6 form-group">
+                        <label asp-for="Number" class="control-label"></label> &nbsp;
+                        <input asp-for="Number" class="form-control" readonly />
+                        <span asp-validation-for="Number" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label asp-for="IdService" class="control-label">Therapy</label> &nbsp;
+                        <select asp-for="IdService" asp-items="Model.Services" class="form-control" readonly></select>
+                        <span asp-validation-for="IdService" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="col-md-6 form-group">
-                    <label asp-for="IdService" class="control-label">Therapy</label> &nbsp;
-                    <select asp-for="IdService" asp-items="Model.Services" class="form-control" readonly></select>
-                    <span asp-validation-for="IdService" class="text-danger"></span>
+                <div>
+                    <div class=" col-md-12 form-group">
+                        <label asp-for="Name" class="control-label"></label> &nbsp;
+                        <input asp-for="Name" class="form-control" readonly />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <div class=" col-md-12 form-group">
-                    <label asp-for="Name" class="control-label"></label> &nbsp;
-                    <input asp-for="Name" class="form-control" readonly />
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                <div>
+                    <div class=" col-md-12 form-group">
+                        <label asp-for="AreaOfFocus" class="control-label"></label> &nbsp;
+                        <textarea asp-for="AreaOfFocus" class="form-control" rows="5" readonly></textarea>
+                        <span asp-validation-for="AreaOfFocus" class="text-danger"></span>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <div class=" col-md-12 form-group">
-                    <label asp-for="AreaOfFocus" class="control-label"></label> &nbsp;
-                    <textarea asp-for="AreaOfFocus" class="form-control" rows="5" readonly></textarea>
-                    <span asp-validation-for="AreaOfFocus" class="text-danger"></span>
+            }
+            else
+            {
+                <div>
+                    <div class="col-md-6 form-group">
+                        <label asp-for="Number" class="control-label"></label> &nbsp;
+                        <input asp-for="Number" class="form-control" />
+                        <span asp-validation-for="Number" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label asp-for="IdService" class="control-label">Therapy</label> &nbsp;
+                        <select asp-for="IdService" asp-items="Model.Services" class="form-control" readonly></select>
+                        <span asp-validation-for="IdService" class="text-danger"></span>
+                    </div>
                 </div>
-            </div>
+                <div>
+                    <div class=" col-md-12 form-group">
+                        <label asp-for="Name" class="control-label"></label> &nbsp;
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div>
+                    <div class=" col-md-12 form-group">
+                        <label asp-for="AreaOfFocus" class="control-label"></label> &nbsp;
+                        <textarea asp-for="AreaOfFocus" class="form-control" rows="5" ></textarea>
+                        <span asp-validation-for="AreaOfFocus" class="text-danger"></span>
+                    </div>
+                </div>
+            }
             <div>
                 <div class=" col-md-6 form-group">
                     <label asp-for="Compliment" class="control-label">Accomplished</label> &nbsp;<br />
