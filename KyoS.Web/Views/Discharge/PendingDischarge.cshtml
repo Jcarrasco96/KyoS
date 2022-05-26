@@ -100,8 +100,16 @@
                                     }
                                     else
                                     {
-                                        <a class="btn btn-warning disabled" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a class="btn btn-success disabled" title="Approve FARS"><i class="glyphicon glyphicon-ok"></i></a>
+                                        @if (User.IsInRole("Facilitator"))
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a class="btn btn-success disabled" title="Approve FARS"><i class="glyphicon glyphicon-ok"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-warning disabled" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a class="btn btn-success disabled" title="Approve FARS"><i class="glyphicon glyphicon-ok"></i></a>
+                                        }
                                     }
                                 </td>
                             </tr>

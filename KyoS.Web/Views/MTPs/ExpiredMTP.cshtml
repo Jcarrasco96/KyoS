@@ -25,27 +25,36 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-4">
+                            <th class="col-md-3">
                                 Client
                             </th>
-                            <th class="col-md-1" style="text-align:center;"> 
+                            <th class="col-md-1" style="text-align:center;">
+                                Code
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Admission Date
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
                                 Therapy
                             </th>
-                            <th class="col-md-3" style="text-align:center;">
-                                Clinic
+                            <th class="col-md-1" style="text-align:center;">
+                                Status
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Active
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 Expired days
                             </th>
-                            <th class="col-md-1">
+                            <th class="col-md-1" style="text-align:center;">
+                                Month
+                            </th>
+                            <th class="col-md-2">
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                       @foreach (var item in Model)
                         {                          
                         <tr>
                             <td>
@@ -61,10 +70,27 @@
                                 @Html.DisplayFor(modelItem => item.Client.Name)
                             </td>
                             <td align="center">
+                                @Html.DisplayFor(modelItem => item.Client.Code)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.Client.AdmisionDate)
+                            </td>
+                            <td align="center">
                                 @Html.DisplayFor(modelItem => item.Client.Service)
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Client.Clinic.Name)
+                            <td align="center">
+                                @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                {
+                                    <span class="label label-success">
+                                        Open
+                                    </span>
+                                }
+                                @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
+                                {
+                                    <span class="label label-default">
+                                        Close
+                                    </span>
+                                }
                             </td>
                             <td align="center">
                                 @Html.DisplayFor(modelItem => item.Active)
@@ -77,8 +103,32 @@
                                     </span>
                                 }
                             </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.NumberOfMonths)
+                            </td>
                             <td align="right">
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                @if (User.IsInRole("Facilitator"))
+                                {
+                                    <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <a asp-action="CreateMTPReview" asp-route-id="@item.Id" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
+                                    <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                }
+                                else
+                                {
+                                    @if (User.IsInRole("Supervisor"))
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
+                                        <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
+                                        <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                    }
+
+                                }
                             </td>
                         </tr>
                         }

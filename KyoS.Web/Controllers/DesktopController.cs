@@ -107,7 +107,7 @@ namespace KyoS.Web.Controllers
                                                               && wc.Workday.Service == ServiceType.Individual)).ToString();
 
                 //-----------------------------------------------------------------------------------------------------------------//
-
+                /*
                 ViewBag.ApprovedGroupNotes = _context.Workdays_Clients                                                     
                                                      .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                 && wc.GroupNote.Status == NoteStatus.Approved
@@ -143,6 +143,95 @@ namespace KyoS.Web.Controllers
                                                        .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                   && wc.Present == false
                                                                   && wc.Workday.Service == ServiceType.Group)).ToString();
+                */
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                List<MTPEntity> mtps = await _context.MTPs
+                                                     .Include(n => n.MtpReviewList)                                                       
+                                                     .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                              && m.Active == true && m.Client.Status == StatusType.Open
+                                                              && m.Client.Group.Facilitator.Id == facilitator.Id)).ToListAsync();
+                int count = 0;
+                int month = 0;
+                foreach (var item in mtps)
+                {
+                    foreach (var value in item.MtpReviewList)
+                    {
+                        month = month + value.MonthOfTreatment;
+                    
+                    }
+                    if (item.NumberOfMonths != null)
+                    {
+                        if (DateTime.Now > item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths+month)))
+                        {
+                            count++;
+                        }
+                    }
+                    month = 0;
+                }
+
+                ViewBag.ExpiredMTPsFacilitator = count.ToString();
+
+                List<ClientEntity> clientList = await _context.Clients
+                                                              .Include(m => m.Discharge)
+                                                              .Include(m => m.Workdays_Clients)
+                                                              .ThenInclude(mf => mf.Facilitator)
+
+                                                              .Where(m => (m.Discharge == null && m.Clinic.Id == user_logged.Clinic.Id
+                                                                    && m.Status == StatusType.Close)).ToListAsync();
+                List<ClientEntity> ClientOutput = new List<ClientEntity>();
+                foreach (var item in clientList)
+                {
+                    for(int i = item.Workdays_Clients.Count()-1; i > 0; i--)
+                    {
+                        if (item.Workdays_Clients.ElementAtOrDefault(i).Facilitator.Id == facilitator.Id)
+                        {
+                            ClientOutput.Add(item);
+                            i = 0;
+                        }
+                        
+                    }
+                    
+                }
+
+                    ViewBag.ClientDischarge = ClientOutput.Count().ToString();
+
+                List<DischargeEntity> DischargeEdit = await _context.Discharge
+                                                               .Include(n => n.Client)
+                                                               .ThenInclude(n => n.Clinic)
+                                                               .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                  && m.Status == DischargeStatus.Edition
+                                                                  && m.Client.Group.Facilitator.Id == facilitator.Id)).ToListAsync();
+                ViewBag.DischargeEdition = DischargeEdit.Count().ToString();
+
+                List<DischargeEntity> DischargePending = await _context.Discharge
+                                                               .Include(n => n.Client)
+                                                               .ThenInclude(n => n.Clinic)
+                                                               .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                  && m.Status == DischargeStatus.Pending
+                                                                  && m.Client.Group.Facilitator.Id == facilitator.Id)).ToListAsync();
+                ViewBag.DischargePending = DischargePending.Count().ToString();
+
+                List<MTPReviewEntity> MTPReviewEdit = await _context.MTPReviews
+                                                                .Include(n => n.Mtp)
+                                                                .ThenInclude(n => n.Client)
+                                                                .ThenInclude(n => n.Clinic)
+                                                                .Where(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                   && m.Status == AdendumStatus.Edition
+                                                                   && m.Mtp.Client.Group.Facilitator.Id == facilitator.Id)).ToListAsync();
+                ViewBag.MTPReviewEdition = MTPReviewEdit.Count().ToString();
+
+                List<MTPReviewEntity> MTPReviewPending = await _context.MTPReviews
+                                                                .Include(n => n.Mtp)
+                                                                .ThenInclude(n => n.Client)
+                                                                .ThenInclude(n => n.Clinic)
+                                                                .Where(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                   && m.Status == AdendumStatus.Pending
+                                                                   && m.Mtp.Client.Group.Facilitator.Id == facilitator.Id)).ToListAsync();
+                ViewBag.MTPReviewPending = MTPReviewPending.Count().ToString();
+
             }
             if (User.IsInRole("Supervisor"))
             {
