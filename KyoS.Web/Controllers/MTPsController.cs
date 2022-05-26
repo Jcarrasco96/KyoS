@@ -60,13 +60,29 @@ namespace KyoS.Web.Controllers
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
                 if (clinic != null)
                 {
-
-                    return View(await _context.MTPs
+                    FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    if (User.IsInRole("Facilitator"))
+                    {
+                        return View(await _context.MTPs
+                                                  .Include(m => m.MtpReviewList)
+                                                
+                                                  .Include(c => c.Client)
+                                                  .ThenInclude(c => c.Clinic)
+                                                  .Include(c => c.Client.Group)
+                                                  .Where(m => (m.Client.Clinic.Id == clinic.Id 
+                                                        && m.Client.Group.Facilitator.Id == facilitator.Id))
+                                                  .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+                    }
+                    if (User.IsInRole("Mannager") || User.IsInRole("Supervisor"))
+                    {
+                        return View(await _context.MTPs
                                               .Include(m => m.Client)
                                               .ThenInclude(c => c.Clinic)
                                               .Include(m => m.MtpReviewList)
                                               .Where(m => m.Client.Clinic.Id == clinic.Id)
                                               .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+                    }
+                    return RedirectToAction("Home/Error404");
                 }
                 else
                     return View(null);
@@ -2013,7 +2029,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
         public async Task<IActionResult> ExpiredMTP()
         {
             UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
@@ -2024,21 +2040,52 @@ namespace KyoS.Web.Controllers
             ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
             if (clinic != null)
             {
-                List<MTPEntity> mtps = await _context.MTPs
-                                                     .Include(m => m.Client)
-                                                     .ThenInclude(c => c.Clinic)
-                                                     .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                && m.Active == true && m.Client.Status == StatusType.Open)).ToListAsync();
+                List<MTPEntity> mtps = new List<MTPEntity>();
+                if (User.IsInRole("Facilitator"))
+                {
+                    FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    mtps = await _context.MTPs
+                                         .Include(m => m.MtpReviewList)
+                                         .Include(m => m.Client)
+                                         .ThenInclude(c => c.Clinic)
+                                         .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                && m.Active == true && m.Client.Status == StatusType.Open
+                                                && m.Client.Group.Facilitator.Id == facilitator.Id)).ToListAsync();
+                }
+                else
+                {
+                    mtps = await _context.MTPs
+                                         .Include(m => m.MtpReviewList)
+                                         .Include(m => m.Client)
+                                         .ThenInclude(c => c.Clinic)
+                                         .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                              && m.Active == true && m.Client.Status == StatusType.Open)).ToListAsync();
+                }
                 List<MTPEntity> expiredMTPs = new List<MTPEntity>();
+                int month = 0;
                 foreach (var item in mtps)
                 {
+                    if (item.MtpReviewList != null)
+                    {
+                        foreach (var value in item.MtpReviewList)
+                        {
+                            month = month + value.MonthOfTreatment;
+
+                        }
+                    }
+                    else
+                    {
+                        month = 0;
+                    }
+                    
                     if (item.NumberOfMonths != null)
                     {
-                        if (DateTime.Now > item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths)))
+                        if (DateTime.Now > item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)))
                         {
                             expiredMTPs.Add(item);
                         }
                     }
+                    month = 0;
                 }
                 return View(expiredMTPs);
             }
@@ -2082,17 +2129,17 @@ namespace KyoS.Web.Controllers
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
                 if (clinic != null)
                 {
-                    return View(await _context.MTPs
+                   return View(await _context.MTPs
 
-                                              .Include(m => m.AdendumList)
-                                              .ThenInclude(c => c.Facilitator)
+                                             .Include(m => m.AdendumList)
+                                             .ThenInclude(c => c.Facilitator)
 
-                                              .Include(c => c.Client)
-                                              .ThenInclude(c => c.Clinic)
+                                             .Include(c => c.Client)
+                                             .ThenInclude(c => c.Clinic)
 
-                                              .Where(m => (m.Client.Clinic.Id == clinic.Id && m.Active == true && m.Client.Status == StatusType.Open))
-                                              .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
-
+                                             .Where(m => (m.Client.Clinic.Id == clinic.Id && m.Active == true && m.Client.Status == StatusType.Open))
+                                             .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+               
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");
@@ -2639,7 +2686,8 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("MTPRinEdit", "MTPs");
+                    
                 }
                 catch (System.Exception ex)
                 {
@@ -2673,7 +2721,7 @@ namespace KyoS.Web.Controllers
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("MTPRinEdit", "MTPs");
         }
 
         [Authorize(Roles = "Supervisor")]
@@ -2864,7 +2912,8 @@ namespace KyoS.Web.Controllers
                     {
                         await _context.SaveChangesAsync();
 
-                        return RedirectToAction("Index", "MTPs");
+                        return RedirectToAction("ExpiredMTP", "MTPs");
+                       
                     }
                     catch (System.Exception ex)
                     {
@@ -2947,6 +2996,67 @@ namespace KyoS.Web.Controllers
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> MTPRinEdit(int idError = 0)
+        {
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+
+            if (User.IsInRole("Admin"))
+            {
+                return View(await _context.MTPs
+                                          .Include(m => m.Client)
+                                          .ThenInclude(c => c.Clinic)
+                                          .Include(m => m.MtpReviewList)
+                                          .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+            }
+            else
+            {
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic == null)
+                    return View(null);
+
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if (clinic != null)
+                {
+                    FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    if (User.IsInRole("Facilitator"))
+                    {
+                        List<MTPEntity> mtp = await _context.MTPs
+                                                  .Include(m => m.MtpReviewList)
+
+                                                  .Include(c => c.Client)
+                                                  .ThenInclude(c => c.Clinic)
+                                                  .Include(c => c.Client.Group)
+                                                  .Where(m => (m.Client.Clinic.Id == clinic.Id
+                                                        && m.Client.Group.Facilitator.Id == facilitator.Id
+                                                        ))
+                                                  .OrderBy(m => m.Client.Clinic.Name).ToListAsync();
+
+                        List<MTPEntity> mtp1 = new List<MTPEntity>();
+                        foreach (var item in mtp)
+                        {
+                            foreach (var value in item.MtpReviewList)
+                            {
+                                if (value.Status == AdendumStatus.Edition && item.Client.Group.Facilitator.Id == facilitator.Id)
+                                    mtp1.Add(item);
+                            
+                            }
+                        }
+                        return View(mtp1);
+                    }
+                   
+                    return RedirectToAction("Home/Error404");
+                }
+                else
+                    return View(null);
+            }
         }
     }
 }
