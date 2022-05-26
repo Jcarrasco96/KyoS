@@ -187,7 +187,7 @@ namespace KyoS.Web.Controllers
                             
                         };
                         model.Client.Clients_Diagnostics = new List<Client_Diagnostic>();
-                        model.Client.Name = "canel singao";
+                        model.Client.Name = "null";
                     }
                     
                     return View(model);
@@ -2968,36 +2968,41 @@ namespace KyoS.Web.Controllers
             }
 
             return null;
+        }        
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public JsonResult GetCodeByClient(int idClient)
+        {
+            ClientEntity client = _context.Clients.FirstOrDefault(c => c.Id == idClient);
+            string text = string.Empty;
+            if (client != null)
+            {
+                text = client.Code;
+            }
+            return Json(text);
         }
 
-        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
-        public async Task<IActionResult> PendingMtp(int idError = 0)
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public JsonResult GetDiagnosisByClient(int idClient)
         {
-            UserEntity user_logged = await _context.Users
-                                                  .Include(u => u.Clinic)
-                                                  .ThenInclude(c => c.Setting)
-                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            ClientEntity client = _context.Clients
 
-            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                                          .Include(c => c.Clients_Diagnostics)
+                                          .ThenInclude(cd => cd.Diagnostic)
+
+                                          .FirstOrDefault(c => c.Id == idClient);
+            string text = string.Empty;
+            if (client != null)
             {
-                return RedirectToAction("NotAuthorized", "Account");
-            }
-            else
-            {
-                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
-                if (clinic != null)
+                foreach (var item in client.Clients_Diagnostics)
                 {
-                    return View(await _context.Clients
-                                              .Include(c => c.MTPs)
-                                              .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
-                                                     && c.MTPs.Count == 0))
-                                              .ToListAsync());
-
+                    text += $"{item.Diagnostic.Code} - {item.Diagnostic.Description} ";
                 }
             }
-            return RedirectToAction("NotAuthorized", "Account");
+               
+            return Json(text);
         }
-
+        
         [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> MTPRinEdit(int idError = 0)
         {

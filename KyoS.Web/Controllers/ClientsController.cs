@@ -466,31 +466,32 @@ namespace KyoS.Web.Controllers
             return View(clientViewModel);
         }
 
-        [Authorize(Roles = "Mannager, Supervisor")]
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
         public async Task<IActionResult> ClientsWithoutMTP()
         {
-            if (User.IsInRole("Admin"))
-                return View(await _context.Clients
-                                          .Include(c => c.Clinic)
-                                          .Where(c => c.MTPs.Count == 0)
-                                          .OrderBy(c => c.Clinic.Name)
-                                          .ToListAsync());
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
             else
             {
-                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-                if (user_logged.Clinic == null)
-                    return View(null);
-
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
                 if (clinic != null)
-                    return View(await _context.Clients.Include(c => c.Clinic)
-                                                      .Where(c => (c.Clinic.Id == clinic.Id && c.MTPs.Count == 0))
-                                                      .OrderBy(c => c.Name)
-                                                      .ToListAsync());
-                else
-                    return View(null);
+                {
+                    return View(await _context.Clients
+                                              .Include(c => c.MTPs)
+                                              .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                        && c.MTPs.Count == 0))
+                                              .ToListAsync());
+
+                }
             }
+            return RedirectToAction("NotAuthorized", "Account");
         }
 
         [Authorize(Roles = "Mannager, Supervisor")]

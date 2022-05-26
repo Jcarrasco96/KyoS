@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.DischargeEntity>
 @{
-    ViewData["Title"] = "Discharge";
+    ViewData["Title"] = "Pending Discharges";
 }
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
@@ -10,31 +10,27 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Discharge Pending</li>
+        <li class="active">Pending Discharges</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <div class="row">
     <div class="col-md-12">
         @*<strong>Note: </strong> Only closed clients will be displayed, orange color means the client has not discharge documents*@
-
-    </div>
-    <div class="col-md-12">
-        &nbsp;
-    </div>
+    </div>    
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Discharge Pending</h3>
+                <h3 class="panel-title">Pending Discharges</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
                             <th class="col-md-3">
-                                Client with Discharge
+                                Client
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Client.Code)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
