@@ -171,7 +171,7 @@ namespace KyoS.Web.Controllers
                             
                         };
                         model.Client.Clients_Diagnostics = new List<Client_Diagnostic>();
-                        model.Client.Name = "canel singao";
+                        model.Client.Name = "null";
                     }
                     
                     return View(model);

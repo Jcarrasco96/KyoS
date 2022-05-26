@@ -16,9 +16,16 @@
     </div>
     <div class="form-group col-md-6">
         <label class="control-label">Diagnosis</label>
-        @if (Model.Client.Clients_Diagnostics.Count() > 0)
+        @if(Model.Client != null)
         {
-            <input class="form-control" value="@Model.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code @Model.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Description" readonly id="txtDiagnosis">
+            @if (Model.Client.Clients_Diagnostics.Count() > 0)
+            {
+                <input class="form-control" value="@Model.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code @Model.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Description" readonly id="txtDiagnosis">
+            }
+            else
+            {
+                <input class="form-control" readonly id="txtDiagnosis">
+            }
         }
         else
         {
