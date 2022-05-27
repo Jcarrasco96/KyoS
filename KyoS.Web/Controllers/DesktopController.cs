@@ -143,7 +143,7 @@ namespace KyoS.Web.Controllers
                                                        .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                   && wc.Present == false
                                                                   && wc.Workday.Service == ServiceType.Group)).ToString();
-                */
+                
                 
                 UserEntity user_logged = await _context.Users
                                                        .Include(u => u.Clinic)
