@@ -357,8 +357,14 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-
-                    return RedirectToAction("DischargeInEdit", "Discharge");
+                    if (User.IsInRole("Facilitator"))
+                    {
+                        return RedirectToAction("DischargeInEdit", "Discharge");
+                    }
+                    else
+                    {
+                        return RedirectToAction("PendingDischarge", "Discharge");
+                    }
                 }
                 catch (System.Exception ex)
                 {
@@ -461,42 +467,55 @@ namespace KyoS.Web.Controllers
 
             if (User.IsInRole("Facilitator"))
             {
-                List<ClientEntity> ClientList = await _context.Clients
-                                                              .Include(n => n.Discharge)
-                                                              .Include(n => n.Workdays_Clients)
-                                                              .ThenInclude(mf => mf.Facilitator)
-                                                              .Where(n => n.Discharge == null && n.Clinic.Id == user_logged.Clinic.Id
-                                                                    && n.Status == StatusType.Close).ToListAsync();
+               FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
 
-                List<ClientEntity> ClientOutput = new List<ClientEntity>();
-                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                foreach (var item in ClientList)
+                List<ClientEntity> clientListPSR = await _context.Clients
+                                                               .Include(m => m.Discharge)
+
+                                                               .Where(m => ((m.Discharge == null || m.Discharge.TypeService != ServiceType.PSR)
+                                                                     && m.Clinic.Id == user_logged.Clinic.Id
+                                                                     && m.Status == StatusType.Close && m.IdFacilitatorPSR == facilitator.Id)).ToListAsync();
+                List<ClientEntity> clientListIND = await _context.Clients
+                                                              .Include(m => m.Discharge)
+
+                                                              .Where(m => ((m.Discharge == null || m.Discharge.TypeService != ServiceType.Individual)
+                                                                    && m.Clinic.Id == user_logged.Clinic.Id
+                                                                    && m.Status == StatusType.Close && m.IndividualTherapyFacilitator.Id == facilitator.Id)).ToListAsync();
+                foreach (var item in clientListIND)
                 {
-                    for (int i = item.Workdays_Clients.Count() - 1; i > 0; i--)
-                    {
-                        if (item.Workdays_Clients.ElementAtOrDefault(i).Facilitator.Id == facilitator.Id)
-                        {
-                            ClientOutput.Add(item);
-                            i = 0;
-                        }
-
-                    }
-
+                    item.Service = ServiceType.Individual;
+                    clientListPSR.Add(item);
                 }
 
-                return View(ClientOutput);
+                return View(clientListPSR);
             }
             else
-            { 
-                List<ClientEntity> ClientList = await _context.Clients
-                                                          .Include(n => n.Discharge)
-                                                          .Where(n => n.Discharge == null && n.Clinic.Id == user_logged.Clinic.Id
-                                                                  && n.Status == StatusType.Close)
-                                                          .ToListAsync();
+            {
+                List<ClientEntity> clientListPSR = await _context.Clients
+                                                                .Include(m => m.Discharge)
 
-            return View(ClientList);
+                                                                .Where(m => ((m.Discharge == null || m.Discharge.TypeService != ServiceType.PSR)
+                                                                      && m.Clinic.Id == user_logged.Clinic.Id
+                                                                      && m.Status == StatusType.Close)).ToListAsync();
+                List<ClientEntity> clientListIND = await _context.Clients
+                                                              .Include(m => m.Discharge)
+
+                                                              .Where(m => ((m.Discharge == null || m.Discharge.TypeService != ServiceType.Individual)
+                                                                    && m.Clinic.Id == user_logged.Clinic.Id
+                                                                    && m.Status == StatusType.Close)).ToListAsync();
+                
+                
+                foreach (var item in clientListIND)
+                {
+                    item.Service = ServiceType.Individual;
+                    clientListPSR.Add(item);
+                }
+               
+                return View(clientListPSR);
             }
         }
+
+       
 
         [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> FinishEditingDischarge(int id)
@@ -603,31 +622,26 @@ namespace KyoS.Web.Controllers
                 }
                 if (User.IsInRole("Facilitator"))
                 {
-                    List<ClientEntity> ClientList = await _context.Clients
-                                                             .Include(n => n.Discharge)
-                                                             .Include(f => f.Clients_Diagnostics)
-                                                             .Include(n => n.Workdays_Clients)
-                                                             .ThenInclude(mf => mf.Facilitator)
-                                                             .Where(n => n.Discharge.Status == DischargeStatus.Edition  && n.Clinic.Id == user_logged.Clinic.Id
-                                                                   && n.Status == StatusType.Close).ToListAsync();
-
-                    List<ClientEntity> ClientOutput = new List<ClientEntity>();
                     FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                    foreach (var item in ClientList)
+
+                    List<ClientEntity> clientListPSR = await _context.Clients
+                                                               .Include(m => m.Discharge)
+
+                                                               .Where(m => ((m.Discharge == null || m.Discharge.TypeService != ServiceType.PSR)
+                                                                     && m.Clinic.Id == user_logged.Clinic.Id
+                                                                     && m.Status == StatusType.Close && m.IdFacilitatorPSR == facilitator.Id)).ToListAsync();
+                    List<ClientEntity> clientListIND = await _context.Clients
+                                                                  .Include(m => m.Discharge)
+
+                                                                  .Where(m => ((m.Discharge == null || m.Discharge.TypeService != ServiceType.Individual)
+                                                                        && m.Clinic.Id == user_logged.Clinic.Id
+                                                                        && m.Status == StatusType.Close && m.IndividualTherapyFacilitator.Id == facilitator.Id)).ToListAsync();
+                    foreach (var item in clientListIND)
                     {
-                        for (int i = item.Workdays_Clients.Count() - 1; i > 0; i--)
-                        {
-                            if (item.Workdays_Clients.ElementAtOrDefault(i).Facilitator.Id == facilitator.Id)
-                            {
-                                ClientOutput.Add(item);
-                                i = 0;
-                            }
-
-                        }
-
+                        clientListPSR.Add(item);
                     }
 
-                    return View(ClientOutput);
+                    return View(clientListPSR);
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");

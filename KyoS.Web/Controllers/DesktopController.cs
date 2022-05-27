@@ -107,7 +107,7 @@ namespace KyoS.Web.Controllers
                                                               && wc.Workday.Service == ServiceType.Individual)).ToString();
 
                 //-----------------------------------------------------------------------------------------------------------------//
-                /*
+                
                 ViewBag.ApprovedGroupNotes = _context.Workdays_Clients                                                     
                                                      .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                 && wc.GroupNote.Status == NoteStatus.Approved
@@ -143,7 +143,7 @@ namespace KyoS.Web.Controllers
                                                        .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                   && wc.Present == false
                                                                   && wc.Workday.Service == ServiceType.Group)).ToString();
-                */
+                //----------------------------------------------------------------------------------------------------------//
                 UserEntity user_logged = await _context.Users
                                                        .Include(u => u.Clinic)
                                                        .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
@@ -174,29 +174,24 @@ namespace KyoS.Web.Controllers
 
                 ViewBag.ExpiredMTPsFacilitator = count.ToString();
 
-                List<ClientEntity> clientList = await _context.Clients
+                List<ClientEntity> clientListPSR = await _context.Clients
                                                               .Include(m => m.Discharge)
-                                                              .Include(m => m.Workdays_Clients)
-                                                              .ThenInclude(mf => mf.Facilitator)
+                                                              
+                                                              .Where(m => ((m.Discharge == null || m.Discharge.TypeService != ServiceType.PSR) 
+                                                                    && m.Clinic.Id == user_logged.Clinic.Id
+                                                                    && m.Status == StatusType.Close && m.IdFacilitatorPSR == facilitator.Id)).ToListAsync();
+                List<ClientEntity> clientListIND = await _context.Clients
+                                                              .Include(m => m.Discharge)
 
-                                                              .Where(m => (m.Discharge == null && m.Clinic.Id == user_logged.Clinic.Id
-                                                                    && m.Status == StatusType.Close)).ToListAsync();
-                List<ClientEntity> ClientOutput = new List<ClientEntity>();
-                foreach (var item in clientList)
+                                                              .Where(m => ((m.Discharge == null || m.Discharge.TypeService != ServiceType.Individual) 
+                                                                    && m.Clinic.Id == user_logged.Clinic.Id
+                                                                    && m.Status == StatusType.Close && m.IndividualTherapyFacilitator.Id == facilitator.Id)).ToListAsync();
+                foreach (var item in clientListIND)
                 {
-                    for(int i = item.Workdays_Clients.Count()-1; i > 0; i--)
-                    {
-                        if (item.Workdays_Clients.ElementAtOrDefault(i).Facilitator.Id == facilitator.Id)
-                        {
-                            ClientOutput.Add(item);
-                            i = 0;
-                        }
-                        
-                    }
-                    
+                    clientListPSR.Add(item);
                 }
 
-                    ViewBag.ClientDischarge = ClientOutput.Count().ToString();
+                ViewBag.ClientDischarge = clientListPSR.Count().ToString();
 
                 List<DischargeEntity> DischargeEdit = await _context.Discharge
                                                                .Include(n => n.Client)
