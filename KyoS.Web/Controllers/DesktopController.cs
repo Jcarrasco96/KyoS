@@ -143,11 +143,14 @@ namespace KyoS.Web.Controllers
                                                        .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                   && wc.Present == false
                                                                   && wc.Workday.Service == ServiceType.Group)).ToString();
-                //----------------------------------------------------------------------------------------------------------//
+                */
+                
                 UserEntity user_logged = await _context.Users
                                                        .Include(u => u.Clinic)
                                                        .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
                 FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+
                 List<MTPEntity> mtps = await _context.MTPs
                                                      .Include(n => n.MtpReviewList)                                                       
                                                      .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id

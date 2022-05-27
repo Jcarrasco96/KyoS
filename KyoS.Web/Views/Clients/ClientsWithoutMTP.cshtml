@@ -29,15 +29,18 @@
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                Birth's date
+                                @Html.DisplayNameFor(model => model.Code)
                             </th>
-                            <th class="col-md-2">
-                                Clinic
+                            <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.AdmisionDate)
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
+                            <th class="col-md-2" style="text-align:center;">
                                 Status
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-2" style="text-align:center;">
+                                MH Therapy
+                            </th>
+                            <th class="col-md-1">
                             </th>
                         </tr>
                     </thead>
@@ -46,31 +49,50 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.DateOfBirth)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Clinic.Name)
-                                </td>
-                                <td align="center">
-                                    @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                                    {
-                                        <span class="label label-success">
-                                            Open
-                                        </span>
-                                    }
-                                    @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                                    {
-                                        <span class="label label-default">
-                                            Close
-                                        </span>
-                                    }
-                                </td>
-                                <td align="right">
-                                    <a asp-action="Create" asp-controller="MTPs" asp-route-idClient="@item.Id" class="btn btn-primary" title="Create MTP"><i class="glyphicon glyphicon-plus"></i></a>                                    
-                                </td>
+                                      @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                       {
+                                           <i class="glyphicon glyphicon-user btn-danger"></i>
+                                       }
+                                      @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                       {
+                                           <i class="glyphicon glyphicon-user btn-primary"></i>
+                                       }
+                                       &nbsp;
+                                       @Html.DisplayFor(modelItem => item.Name)
+                                  </td>
+                                  <td align="center">
+                                      @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                  <td align="center">
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    </td>
+                                  <td align="center">
+                                      @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                       {
+                                            <span class="label label-success">
+                                                Open
+                                            </span>
+                                       }
+                                      @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                       {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                       }
+                                  </td>
+                                  <td align="center">
+                                      @Html.DisplayFor(modelItem => item.Service)
+                                  </td>
+                                  <td align="right">
+                                      @if (User.IsInRole("Supervisor"))
+                                      {
+                                          <a asp-action="Create" asp-route-idClient="@item.Id" class="btn btn-primary" title="Create MTP"><i class="glyphicon glyphicon-plus"></i></a>
+                                      }
+                                      else
+                                      {
+                                          <a class="btn btn-primary disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
+                                      }
+                                  </td>
                             </tr>
                         }
                     </tbody>
