@@ -178,15 +178,15 @@ namespace KyoS.Web.Controllers
                 ViewBag.ExpiredMTPsFacilitator = count.ToString();
 
                 List<ClientEntity> clientListPSR = await _context.Clients
-                                                              .Include(m => m.Discharge)
+                                                              .Include(m => m.DischargeList)
                                                               
-                                                              .Where(m => ((m.Discharge == null || m.Discharge.TypeService != ServiceType.PSR) 
+                                                              .Where(m => ((m.DischargeList.Count() == 0 /*|| m.DischargeList.ElementAt(0).TypeService != ServiceType.PSR*/) 
                                                                     && m.Clinic.Id == user_logged.Clinic.Id
                                                                     && m.Status == StatusType.Close && m.IdFacilitatorPSR == facilitator.Id)).ToListAsync();
                 List<ClientEntity> clientListIND = await _context.Clients
-                                                              .Include(m => m.Discharge)
+                                                              .Include(m => m.DischargeList)
 
-                                                              .Where(m => ((m.Discharge == null || m.Discharge.TypeService != ServiceType.Individual) 
+                                                              .Where(m => ((m.DischargeList.Count() == 0 /*|| m.DischargeList.ElementAt(0).TypeService != ServiceType.Individual*/) 
                                                                     && m.Clinic.Id == user_logged.Clinic.Id
                                                                     && m.Status == StatusType.Close && m.IndividualTherapyFacilitator.Id == facilitator.Id)).ToListAsync();
                 foreach (var item in clientListIND)

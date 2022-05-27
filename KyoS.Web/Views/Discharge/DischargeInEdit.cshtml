@@ -55,7 +55,7 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            @if (item.Discharge == null)
+                            @if (item.DischargeList == null)
                             {
                                 <tr style="color:orange">
                                     <td>
@@ -149,19 +149,19 @@
                                     <td align="right">
                                         @if (User.IsInRole("Supervisor"))
                                         {
-                                            @if (@item.Discharge.Status == KyoS.Common.Enums.DischargeStatus.Pending)
+                                            @if (@item.DischargeList.ElementAt(0).Status == KyoS.Common.Enums.DischargeStatus.Pending)
                                             {
-                                                <a asp-action="Edit" asp-route-id="@item.Discharge.Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                <a asp-action="ApproveDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Approve of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="Edit" asp-route-id="@item.DischargeList.ElementAt(0).Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="ApproveDischarge" asp-route-id="@item.DischargeList.ElementAt(0).Id" class="btn btn-success" title="Approve of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
                                                 <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                             else
                                             {
                                                 <a class="btn btn-warning disabled" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
                                                 <a class="btn btn-success disabled" title="Approve of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
-                                                @if (item.Discharge.Status == KyoS.Common.Enums.DischargeStatus.Approved)
+                                                @if (item.DischargeList.ElementAt(0).Status == KyoS.Common.Enums.DischargeStatus.Approved)
                                                 {
-                                                    <a asp-action="PrintDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                    <a asp-action="PrintDischarge" asp-route-id="@item.DischargeList.ElementAt(0).Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
                                                 else
                                                 {
@@ -171,16 +171,16 @@
                                         }
                                         else
                                         {
-                                            @if (item.Status == KyoS.Common.Enums.StatusType.Close && @item.Discharge.Status != KyoS.Common.Enums.DischargeStatus.Approved && item.Discharge.CreatedBy == User.Identity.Name)
+                                            @if (item.Status == KyoS.Common.Enums.StatusType.Close && @item.DischargeList.ElementAt(0).Status != KyoS.Common.Enums.DischargeStatus.Approved && item.DischargeList.ElementAt(0).CreatedBy == User.Identity.Name)
                                             {
-                                                <a asp-action="Edit" asp-route-id="@item.Discharge.Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                @if (item.Discharge.Status == KyoS.Common.Enums.DischargeStatus.Pending)
+                                                <a asp-action="Edit" asp-route-id="@item.DischargeList.ElementAt(0).Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                @if (item.DischargeList.ElementAt(0).Status == KyoS.Common.Enums.DischargeStatus.Pending)
                                                 {
                                                     <a class="btn btn-success disabled" title="Finish edition of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
                                                 }
                                                 else
                                                 {
-                                                    <a asp-action="FinishEditingDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Finish edition of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    <a asp-action="FinishEditingDischarge" asp-route-id="@item.DischargeList.ElementAt(0).Id" class="btn btn-success" title="Finish edition of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
                                                 }
                                                 <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>
                                             }
@@ -188,9 +188,9 @@
                                             {
                                                 <a class="btn btn-warning disabled" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
                                                 <a class="btn btn-success disabled" title="Finish edition of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
-                                                @if (item.Discharge.Status == KyoS.Common.Enums.DischargeStatus.Approved)
+                                                @if (item.DischargeList.ElementAt(0).Status == KyoS.Common.Enums.DischargeStatus.Approved)
                                                 {
-                                                    <a asp-action="PrintDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                    <a asp-action="PrintDischarge" asp-route-id="@item.DischargeList.ElementAt(0).Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
                                                 else
                                                 {
