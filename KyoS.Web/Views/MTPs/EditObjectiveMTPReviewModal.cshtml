@@ -1,0 +1,130 @@
+﻿@model KyoS.Web.Models.ObjectiveViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="EditObjectiveMTPReviewModal" onsubmit="return jQueryAjaxPostGoalMTPReview(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IdGoal" />
+            <input type="hidden" asp-for="IdMTPReview" />
+            <input type="hidden" asp-for="Compliment_IdMTPReview" />
+            <input type="hidden" asp-for="IdMTPReviewOfView" />
+
+            <div>
+                <div class="col-md-12">
+                    <h5 style="font-weight:bold;">Objective of Goal # @Model.Goal.Number - @Model.Goal.Name</h5>
+                </div>
+            </div>
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+            <div class="col-md-push-12">
+                <div class="form-group col-md-4">
+                    <label asp-for="Objetive" class="control-label"></label>
+                    <input asp-for="Objetive" class="form-control" readonly />
+                    <span asp-validation-for="Objetive" class="text-danger"></span>
+                </div>
+                <div class="container-fluid">
+                    &nbsp;
+                </div>
+            </div>
+            @if (Model.IdMTPReviewOfView != Model.IdMTPReview || Model.IdMTPReview == 0)
+            {
+                <div class="col-md-push-12">
+                    <div class="form-group col-md-4">
+                        <label asp-for="DateOpened" class="control-label"></label>
+                        <input asp-for="DateOpened" class="form-control" readonly />
+                        <span asp-validation-for="DateOpened" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="DateTarget" class="control-label"></label>
+                        <input asp-for="DateTarget" class="form-control" readonly />
+                        <span asp-validation-for="DateTarget" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="DateResolved" class="control-label"></label>
+                        <input asp-for="DateResolved" class="form-control" readonly />
+                        <span asp-validation-for="DateResolved" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-push-12">
+                    <div class="form-group col-md-12">
+                        <label asp-for="Description" class="control-label"></label>
+                        <textarea asp-for="Description" class="form-control" rows="3" readonly></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-push-12">
+                    <div class="form-group col-md-12">
+                        <label asp-for="Intervention" class="control-label"></label>
+                        <textarea asp-for="Intervention" class="form-control" rows="2" readonly></textarea>
+                        <span asp-validation-for="Intervention" class="text-danger"></span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-push-12">
+                    <div class="form-group col-md-4">
+                        <label asp-for="DateOpened" class="control-label"></label>
+                        <input asp-for="DateOpened" class="form-control"  />
+                        <span asp-validation-for="DateOpened" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="DateTarget" class="control-label"></label>
+                        <input asp-for="DateTarget" class="form-control"  />
+                        <span asp-validation-for="DateTarget" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="DateResolved" class="control-label"></label>
+                        <input asp-for="DateResolved" class="form-control"  />
+                        <span asp-validation-for="DateResolved" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-push-12">
+                    <div class="form-group col-md-12">
+                        <label asp-for="Description" class="control-label"></label>
+                        <textarea asp-for="Description" class="form-control" rows="3" ></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-push-12">
+                    <div class="form-group col-md-12">
+                        <label asp-for="Intervention" class="control-label"></label>
+                        <textarea asp-for="Intervention" class="form-control" rows="2" ></textarea>
+                        <span asp-validation-for="Intervention" class="text-danger"></span>
+                    </div>
+                </div>
+            }
+
+            <div>
+                <div class=" col-md-6 form-group">
+                    <label asp-for="Compliment" class="control-label">Accomplished</label> <br />
+                    <input type="checkbox" asp-for="Compliment" class="form-check-input">
+                    <span asp-validation-for="Compliment" class="text-danger"></span>
+                </div>
+                <div class=" col-md-6 form-group">
+                    <label asp-for="Compliment_Date" class="control-label">Date of Accomplished</label>
+                    <input asp-for="Compliment_Date" class="form-control">
+                    <span asp-validation-for="Compliment_Date" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-12 form-group">
+                    <label asp-for="Compliment_Explain" class="control-label">Explain of accomplished objective</label>&nbsp;
+                    <textarea asp-for="Compliment_Explain" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Compliment_Explain" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -171,12 +171,19 @@
                                         }
                                         else
                                         {
-                                            @if (item.Status == KyoS.Common.Enums.StatusType.Close && @item.Discharge.Status == KyoS.Common.Enums.DischargeStatus.Edition && item.Discharge.CreatedBy == User.Identity.Name)
+                                            @if (item.Status == KyoS.Common.Enums.StatusType.Close && @item.Discharge.Status != KyoS.Common.Enums.DischargeStatus.Approved && item.Discharge.CreatedBy == User.Identity.Name)
                                             {
                                                 <a asp-action="Edit" asp-route-id="@item.Discharge.Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                <a asp-action="FinishEditingDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Finish edition of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
-                                                <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>
-                                            }
+                                                @if (item.Discharge.Status == KyoS.Common.Enums.DischargeStatus.Pending)
+                                                {
+                                                    <a class="btn btn-success disabled" title="Finish edition of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="FinishEditingDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Finish edition of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                                }
+                                                    <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
                                             else
                                             {
                                                 <a class="btn btn-warning disabled" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
@@ -191,7 +198,7 @@
                                                 }
                                             }
                                         }
-                                    </td>
+                                        </td>
                                 </tr>
 
                             }

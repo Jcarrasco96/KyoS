@@ -50,6 +50,72 @@ namespace KyoS.Web.Data.Entities
 
         public List<AdendumEntity> AdendumList { get; set; }
 
-        public MTPReviewEntity MtpReview { get; set; }
+        public List<MTPReviewEntity> MtpReviewList { get; set; }
+
+
+        public string ClientStrengths { get; set; }
+
+        public string ClientLimitation { get; set; }
+
+        public string RationaleForUpdate { get; set; }
+
+        [Display(Name = "MTP Admission date")]
+        [DataType(DataType.Date)]
+
+        public DateTime AdmissionDateMTP { get; set; }
+
+        [Display(Name = "MTP update date")]
+        [DataType(DataType.Date)]
+
+        public DateTime DateOfUpdate { get; set; }
+
+        public bool Medication { get; set; }
+        public string MedicationCode { get; set; }
+        public int MedicationUnits { get; set; }
+        public string MedicationFrecuency { get; set; }
+        public int MedicationDuration { get; set; }
+
+        public bool Individual { get; set; }
+        public string IndividualCode { get; set; }
+        public int IndividualUnits { get; set; }
+        public string IndividualFrecuency { get; set; }
+        public int IndividualDuration { get; set; }
+
+        public bool Family { get; set; }
+        public string FamilyCode { get; set; }
+        public int FamilyUnits { get; set; }
+        public string FamilyFrecuency { get; set; }
+        public int FamilyDuration { get; set; }
+
+        public bool Psychosocial { get; set; }
+        public string PsychosocialCode { get; set; }
+        public int PsychosocialUnits { get; set; }
+        public string PsychosocialFrecuency { get; set; }
+        public int PsychosocialDuration { get; set; }
+
+        public bool Group { get; set; }
+        public string GroupCode { get; set; }
+        public int GroupUnits { get; set; }
+        public string GroupFrecuency { get; set; }
+        public int GroupDuration { get; set; }
+
+        public string AdditionalRecommended { get; set; }
+
+        public bool Substance { get; set; }
+        public string SubstanceWhere { get; set; }
+
+        public bool Legal { get; set; }
+        public string LegalWhere { get; set; }
+
+        public bool Health { get; set; }
+        public string HealthWhere { get; set; }
+
+        public bool Paint { get; set; }
+        public string PaintWhere { get; set; }
+
+        public bool Other { get; set; }
+        public string OtherWhere { get; set; }
+
+
     }
 }

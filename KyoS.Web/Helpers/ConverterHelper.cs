@@ -227,7 +227,8 @@ namespace KyoS.Web.Helpers
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
-                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                IdFacilitatorPSR = model.IdFacilitatorPSR
             };
         }
 
@@ -296,7 +297,8 @@ namespace KyoS.Web.Helpers
                 IdService = Convert.ToInt32(clientEntity.Service),
                 Services = _combosHelper.GetComboServices(),
                 IdFacilitatorIT = (clientEntity.IndividualTherapyFacilitator != null) ? clientEntity.IndividualTherapyFacilitator.Id : 0,
-                ITFacilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, true)
+                ITFacilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, true),
+                IdFacilitatorPSR = clientEntity.IdFacilitatorPSR
             };
         }
 
@@ -339,11 +341,53 @@ namespace KyoS.Web.Helpers
                 EndTime = model.EndTime,
                 LevelCare = model.LevelCare,
                 InitialDischargeCriteria = model.InitialDischargeCriteria,
-                Modality = model.Modality,
-                Frecuency = model.Frecuency,
-                NumberOfMonths = model.NumberOfMonths,
+                Modality = "PSR",
+                Frecuency = model.PsychosocialFrecuency,
+                NumberOfMonths = model.PsychosocialDuration,
                 Active = isNew ? true : model.Active,
-                MtpReview = model.MtpReview
+                AdditionalRecommended = model.AdditionalRecommended,
+                AdmissionDateMTP = model.AdmissionDateMTP,
+                ClientLimitation = model.ClientLimitation,
+                ClientStrengths = model.ClientStrengths,
+                DateOfUpdate = model.DateOfUpdate,
+                Family = model.Family,
+                FamilyCode = model.FamilyCode,
+                FamilyDuration = model.FamilyDuration,
+                FamilyFrecuency = model.FamilyFrecuency,
+                FamilyUnits = model.FamilyUnits,
+                Group = model.Group,
+                GroupCode = model.GroupCode,
+                GroupDuration = model.GroupDuration,
+                GroupFrecuency = model.GroupFrecuency,
+                GroupUnits = model.GroupUnits,
+                Health = model.Health,
+                HealthWhere = model.HealthWhere,
+                Individual = model.Individual,
+                IndividualCode = model.IndividualCode,
+                IndividualDuration = model.IndividualDuration,
+                IndividualFrecuency = model.IndividualFrecuency,
+                IndividualUnits = model.IndividualUnits,
+                Legal = model.Legal,
+                LegalWhere = model.LegalWhere,
+                Medication = model.Medication,
+                MedicationCode = model.MedicationCode,
+                MedicationDuration = model.MedicationDuration,
+                MedicationFrecuency = model.MedicationFrecuency,
+                MedicationUnits = model.MedicationUnits,
+                Other = model.Other,
+                OtherWhere = model.OtherWhere,
+                Paint = model.Paint,
+                PaintWhere = model.PaintWhere,
+                Psychosocial = model.Psychosocial,
+                PsychosocialCode = model.PsychosocialCode,
+                PsychosocialDuration = model.PsychosocialDuration,
+                PsychosocialFrecuency = model.PsychosocialFrecuency,
+                PsychosocialUnits = model.PsychosocialUnits,
+                RationaleForUpdate = model.RationaleForUpdate,
+                Setting = model.Setting,
+                Substance = model.Substance,
+                SubstanceWhere = model.SubstanceWhere
+
         };
         }
 
@@ -364,7 +408,48 @@ namespace KyoS.Web.Helpers
                 NumberOfMonths = mtpEntity.NumberOfMonths,                
                 Setting = mtpEntity.Setting,
                 Active = mtpEntity.Active,
-                MtpReview = mtpEntity.MtpReview
+                AdditionalRecommended = mtpEntity.AdditionalRecommended,
+                AdmissionDateMTP = mtpEntity.AdmissionDateMTP,
+                ClientLimitation = mtpEntity.ClientLimitation,
+                ClientStrengths = mtpEntity.ClientStrengths,
+                DateOfUpdate = mtpEntity.DateOfUpdate,
+                Family = mtpEntity.Family,
+                FamilyCode = mtpEntity.FamilyCode,
+                FamilyDuration = mtpEntity.FamilyDuration,
+                FamilyFrecuency = mtpEntity.FamilyFrecuency,
+                FamilyUnits = mtpEntity.FamilyUnits,
+                Group = mtpEntity.Group,
+                GroupCode = mtpEntity.GroupCode,
+                GroupDuration = mtpEntity.GroupDuration,
+                GroupFrecuency = mtpEntity.GroupFrecuency,
+                GroupUnits = mtpEntity.GroupUnits,
+                Health = mtpEntity.Health,
+                HealthWhere = mtpEntity.HealthWhere,
+                Individual = mtpEntity.Individual,
+                IndividualCode = mtpEntity.IndividualCode,
+                IndividualDuration = mtpEntity.IndividualDuration,
+                IndividualFrecuency = mtpEntity.IndividualFrecuency,
+                IndividualUnits = mtpEntity.IndividualUnits,
+                Legal = mtpEntity.Legal,
+                LegalWhere = mtpEntity.LegalWhere,
+                Medication = mtpEntity.Medication,
+                MedicationCode = mtpEntity.MedicationCode,
+                MedicationDuration = mtpEntity.MedicationDuration,
+                MedicationFrecuency = mtpEntity.MedicationFrecuency,
+                MedicationUnits = mtpEntity.MedicationUnits,
+                Other = mtpEntity.Other,
+                OtherWhere = mtpEntity.OtherWhere,
+                Paint = mtpEntity.Paint,
+                PaintWhere = mtpEntity.PaintWhere,
+                Psychosocial = mtpEntity.Psychosocial,
+                PsychosocialCode = mtpEntity.PsychosocialCode,
+                PsychosocialDuration = mtpEntity.PsychosocialDuration,
+                PsychosocialFrecuency = mtpEntity.PsychosocialFrecuency,
+                PsychosocialUnits = mtpEntity.PsychosocialUnits,
+                RationaleForUpdate = mtpEntity.RationaleForUpdate,
+                Substance = mtpEntity.Substance,
+                SubstanceWhere = mtpEntity.SubstanceWhere,
+                Client = mtpEntity.Client
             };
         }        
 
@@ -378,7 +463,12 @@ namespace KyoS.Web.Helpers
                 AreaOfFocus = model.AreaOfFocus,
                 MTP = await _context.MTPs.FindAsync(model.IdMTP),
                 Service = ServiceUtils.GetServiceByIndex(model.IdService),
-                Adendum = await _context.Adendums.FindAsync(model.IdAdendum)
+                Adendum = await _context.Adendums.FindAsync(model.IdAdendum),
+                Compliment = model.Compliment,
+                Compliment_Date = model.Compliment_Date,
+                Compliment_Explain = model.Compliment_Explain,
+                Compliment_IdMTPReview = model.Compliment_IdMTPReview,
+                IdMTPReview = model.IdMTPReview
 
             };
         }
@@ -395,13 +485,16 @@ namespace KyoS.Web.Helpers
                 Name = goalEntity.Name,
                 AreaOfFocus = goalEntity.AreaOfFocus,
                 IdService = Convert.ToInt32(goalEntity.Service),
-                Services = _combosHelper.GetComboServices()
-                
+                Services = _combosHelper.GetComboServices(),
+                Compliment = goalEntity.Compliment,
+                Compliment_Date = goalEntity.Compliment_Date != null ? goalEntity.Compliment_Date : DateTime.Now,
+                Compliment_Explain = goalEntity.Compliment_Explain,
+                Compliment_IdMTPReview = goalEntity.Compliment_IdMTPReview,
+                IdMTPReview = goalEntity.IdMTPReview                
             };
             if (goalEntity.Adendum != null)
             {
-                model.IdAdendum = goalEntity.Adendum.Id;
-               
+                model.IdAdendum = goalEntity.Adendum.Id;               
             }
 
             return model;
@@ -418,7 +511,12 @@ namespace KyoS.Web.Helpers
                 DateResolved = model.DateResolved,
                 Description = model.Description,
                 Intervention = model.Intervention,
-                Goal = await _context.Goals.FindAsync(model.IdGoal)
+                Goal = await _context.Goals.FindAsync(model.IdGoal),
+                Compliment = model.Compliment,
+                Compliment_Date = model.Compliment_Date,
+                Compliment_Explain = model.Compliment_Explain,
+                Compliment_IdMTPReview = model.Compliment_IdMTPReview,
+                IdMTPReview = model.IdMTPReview
             };
         }
 
@@ -435,7 +533,12 @@ namespace KyoS.Web.Helpers
                 DateTarget = objectiveEntity.DateTarget,
                 Description = objectiveEntity.Description,
                 Classifications = objectiveEntity.Classifications,
-                Intervention = objectiveEntity.Intervention
+                Intervention = objectiveEntity.Intervention,
+                Compliment = objectiveEntity.Compliment,
+                Compliment_Date = objectiveEntity.Compliment_Date,
+                Compliment_Explain = objectiveEntity.Compliment_Explain,
+                Compliment_IdMTPReview = objectiveEntity.Compliment_IdMTPReview,
+                IdMTPReview = objectiveEntity.IdMTPReview
             };
         }
 
@@ -2010,7 +2113,8 @@ namespace KyoS.Web.Helpers
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
-                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TypeService = model.TypeService
             };
         }
 
@@ -2059,7 +2163,8 @@ namespace KyoS.Web.Helpers
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
-                LastModifiedOn = model.LastModifiedOn
+                LastModifiedOn = model.LastModifiedOn,
+                TypeService = model.TypeService
 
             };
 
@@ -2698,18 +2803,15 @@ namespace KyoS.Web.Helpers
 
         public async Task<MTPReviewEntity> ToMTPReviewEntity(MTPReviewViewModel model, bool isNew, string userId)
         {
-            return new MTPReviewEntity
+            MTPReviewEntity salida;
+            salida = new MTPReviewEntity
             {
                 Id = isNew ? 0 : model.Id,
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                Mtp = await _context.MTPs
-                                    .Include(m => m.Client)
-                                    .ThenInclude(c => c.Clients_Diagnostics)
-                                    .ThenInclude(cd => cd.Diagnostic)
-                                    .FirstOrDefaultAsync(c => c.Id == model.IdMTP),
+             
                 ACopy = model.ACopy,
                 DateClinicalDirector = model.DateClinicalDirector,
                 DateLicensedPractitioner = model.DateLicensedPractitioner,
@@ -2731,9 +2833,22 @@ namespace KyoS.Web.Helpers
                 Documents = model.Documents,
                 LicensedPractitioner = model.LicensedPractitioner,
                 Therapist = model.Therapist,
-                Status = model.Status
+                Status = model.Status,
+                Mtp = await _context.MTPs
+                                    .Include(m => m.Client)
+                                    .ThenInclude(c => c.Clients_Diagnostics)
+                                    .ThenInclude(cd => cd.Diagnostic)
+                                    .FirstOrDefaultAsync(c => c.Id == model.IdMTP),
+                EndTime = model.EndTime,
+                Frecuency = model.Frecuency,
+                MonthOfTreatment = model.MonthOfTreatment,
+                Setting = model.Setting,
+                StartTime = model.StartTime,
+                DataOfService = model.DataOfService
 
             };
+            
+            return salida;
         }
 
         public MTPReviewViewModel ToMTPReviewViewModel(MTPReviewEntity model)
@@ -2769,7 +2884,13 @@ namespace KyoS.Web.Helpers
                 Documents = model.Documents,
                 LicensedPractitioner = model.LicensedPractitioner,
                 Therapist = model.Therapist,
-                Status = model.Status
+                Status = model.Status,
+                EndTime = model.EndTime,
+                Frecuency = model.Frecuency,
+                MonthOfTreatment = model.MonthOfTreatment,
+                Setting = model.Setting,
+                StartTime = model.StartTime,
+                DataOfService = model.DataOfService
 
             };
            

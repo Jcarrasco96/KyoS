@@ -47,16 +47,16 @@
                             <tr>
                                 <th class="col-md-1">
                                 </th>
-                                <th class="col-md-2">
+                                <th class="col-md-4">
                                     @Html.DisplayNameFor(model => model.Name)
                                 </th>
-                                <th class="col-md-2" style="text-align:center;">
+                                <th class="col-md-1" style="text-align:center;">
                                     @Html.DisplayNameFor(model => model.Code)
                                 </th>
                                 <th class="col-md-2" style="text-align:center;">
                                     @Html.DisplayNameFor(model => model.AdmisionDate)
                                 </th>
-                                <th class="col-md-2" style="text-align:center;">
+                                <th class="col-md-1" style="text-align:center;">
                                     Status
                                 </th>
                                 <th class="col-md-2" style="text-align:center;">
@@ -119,12 +119,19 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                    @if (item.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.FarsStatus.Edition && element.CreatedBy == User.Identity.Name)
+                                                                    @if (item.Status == KyoS.Common.Enums.StatusType.Open && @element.Status != KyoS.Common.Enums.FarsStatus.Approved && element.CreatedBy == User.Identity.Name)
                                                                     {
                                                                         <a asp-action="Edit" asp-route-id="@element.Id" class="btn btn-warning" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                        <a asp-action="FinishEditingFars" asp-route-id="@element.Id" class="btn btn-success" title="Finish edition of FARS"><i class="glyphicon glyphicon-ok"></i></a>
-                                                                        <a class="btn btn-success disabled" title="Print FARS"><i class="glyphicon glyphicon-print"></i></a>
-                                                                    }
+                                                                        @if (@element.Status == KyoS.Common.Enums.FarsStatus.Pending)
+                                                                        {
+                                                                            <a class="btn btn-success disabled" title="Finish edition of FARS"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a asp-action="FinishEditingFars" asp-route-id="@element.Id" class="btn btn-success" title="Finish edition of FARS"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        }
+                                                                            <a class="btn btn-success disabled" title="Print FARS"><i class="glyphicon glyphicon-print"></i></a>
+                                                                        }
                                                                     else
                                                                     {
                                                                         <a class="btn btn-warning disabled" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>
@@ -142,7 +149,7 @@
                                                                     }
 
                                                                 }
-                                                            </td>
+                                                                </td>
                                                         </tr>
                                                        
                                                     }
@@ -189,7 +196,7 @@
                                             {
                                                 <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="Create Fars Form"><i class="glyphicon glyphicon-plus"></i></a>
                                             }
-                                            @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                            else
                                             {
                                                 <a class="btn btn-warning disabled" title="New Fars Form"><i class="glyphicon glyphicon-plus"></i></a>
                                             }

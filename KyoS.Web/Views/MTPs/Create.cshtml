@@ -59,6 +59,7 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Review" />
+            <input type="hidden" asp-for="Client.Name" />
             <partial name="_MTPs" />
             <div class="form-group">
                 <input type="submit" value="Create MTP" class="btn btn-primary" />
@@ -71,6 +72,21 @@
 <partial name="_ModalPopup" />
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}    
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">    
+        $(document).ready(function () {
+            $("#cbClient").change(function () {
+                var url = "@Url.Action("GetCodeByClient", "MTPs")";
+                $.get(url, { idClient: $("#cbClient").val() }, function (data) {
+                $("#txtCode").val(data);
+                });
+
+                var url = "@Url.Action("GetDiagnosisByClient", "MTPs")";
+                $.get(url, { idClient: $("#cbClient").val() }, function (data) {
+                $("#txtDiagnosis").val(data);
+                });               
+            })
+        });
+    </script>
 }
 

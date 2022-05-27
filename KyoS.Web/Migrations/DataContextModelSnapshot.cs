@@ -785,6 +785,9 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("GroupId")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdFacilitatorPSR")
+                        .HasColumnType("int");
+
                     b.Property<int?>("IndividualTherapyFacilitatorId")
                         .HasColumnType("int");
 
@@ -1204,6 +1207,9 @@ namespace KyoS.Web.Migrations
 
                     b.Property<bool>("TreatmentPlanObjCumpl")
                         .HasColumnType("bit");
+
+                    b.Property<int>("TypeService")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1761,6 +1767,21 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("AreaOfFocus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Compliment")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("Compliment_Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Compliment_Explain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Compliment_IdMTPReview")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdMTPReview")
+                        .HasColumnType("int");
 
                     b.Property<int?>("MTPId")
                         .HasColumnType("int");
@@ -3420,16 +3441,88 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
+                    b.Property<string>("AdditionalRecommended")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("AdmissionDateMTP")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("ClientId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ClientLimitation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientStrengths")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfUpdate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("Family")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FamilyCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("FamilyDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FamilyFrecuency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("FamilyUnits")
+                        .HasColumnType("int");
+
                     b.Property<string>("Frecuency")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Group")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("GroupCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GroupDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GroupFrecuency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GroupUnits")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Health")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("HealthWhere")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Individual")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IndividualCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IndividualDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IndividualFrecuency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IndividualUnits")
+                        .HasColumnType("int");
+
                     b.Property<string>("InitialDischargeCriteria")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Legal")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LegalWhere")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LevelCare")
@@ -3438,17 +3531,68 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("MTPDevelopedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("Medication")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MedicationCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MedicationDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MedicationFrecuency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MedicationUnits")
+                        .HasColumnType("int");
+
                     b.Property<string>("Modality")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("NumberOfMonths")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Other")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OtherWhere")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Paint")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PaintWhere")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Psychosocial")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PsychosocialCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PsychosocialDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PsychosocialFrecuency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PsychosocialUnits")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RationaleForUpdate")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Setting")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("Substance")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SubstanceWhere")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -3476,6 +3620,9 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DataOfService")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("DateClinicalDirector")
                         .HasColumnType("datetime2");
 
@@ -3497,6 +3644,12 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Documents")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Frecuency")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("IfCurrent")
                         .HasColumnType("nvarchar(max)");
 
@@ -3512,6 +3665,12 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("MTP_FK")
                         .HasColumnType("int");
 
+                    b.Property<int>("MonthOfTreatment")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MtpId")
+                        .HasColumnType("int");
+
                     b.Property<int>("NumberUnit")
                         .HasColumnType("int");
 
@@ -3524,8 +3683,14 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("ServiceCode")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Setting")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SpecifyChanges")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -3544,8 +3709,7 @@ namespace KyoS.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MTP_FK")
-                        .IsUnique();
+                    b.HasIndex("MtpId");
 
                     b.ToTable("MTPReviews");
                 });
@@ -4069,6 +4233,18 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<bool>("Compliment")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("Compliment_Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Compliment_Explain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Compliment_IdMTPReview")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateOpened")
                         .HasColumnType("datetime2");
 
@@ -4083,6 +4259,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("GoalId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdMTPReview")
                         .HasColumnType("int");
 
                     b.Property<string>("Intervention")
@@ -5259,10 +5438,9 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.MTPReviewEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.MTPEntity", "Mtp")
-                        .WithOne("MtpReview")
-                        .HasForeignKey("KyoS.Web.Data.Entities.MTPReviewEntity", "MTP_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("MtpReviewList")
+                        .HasForeignKey("MtpId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Mtp");
                 });
@@ -5721,7 +5899,7 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("Goals");
 
-                    b.Navigation("MtpReview");
+                    b.Navigation("MtpReviewList");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.NoteEntity", b =>

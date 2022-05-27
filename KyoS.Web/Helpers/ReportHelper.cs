@@ -3613,6 +3613,91 @@ namespace KyoS.Web.Helpers
         }
         #endregion
 
+        #region MTP Review reports
+        public Stream FloridaSocialHSMTPReviewReport(MTPReviewEntity review)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\MTPReviews\\rptMTPReviewFloridaSocialHS.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetMtpDS(review.Mtp));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(review.Mtp.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(review.Mtp.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(review.Mtp.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(review.Mtp.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMTPReviewDS(review));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPReviews");
+            
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        public Stream DreamsMentalHealthMTPReviewReport(MTPReviewEntity review)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\MTPReviews\\rptMTPReviewDreamsMentalHealth.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetMtpDS(review.Mtp));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(review.Mtp.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(review.Mtp.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(review.Mtp.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(review.Mtp.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMTPReviewDS(review));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPReviews");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion 
+
         #region Utils functions
         public byte[] ConvertStreamToByteArray(Stream stream)
         {
@@ -4212,6 +4297,133 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             new DateTime(),
                                             string.Empty,
+                                            new DateTime()
+                                        });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetMTPReviewDS(MTPReviewEntity review)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "MTPReview"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("MTP_FK", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("ACopy", typeof(bool));            
+            dt.Columns.Add("DateClinicalDirector", typeof(DateTime)); 
+            dt.Columns.Add("DateLicensedPractitioner", typeof(DateTime)); 
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime)); 
+            dt.Columns.Add("DateTherapist", typeof(DateTime));
+            dt.Columns.Add("DescribeAnyGoals", typeof(string));
+            dt.Columns.Add("DescribeClient", typeof(string));
+            dt.Columns.Add("IfCurrent", typeof(string));
+            dt.Columns.Add("NumberUnit", typeof(int));
+            dt.Columns.Add("ProviderNumber", typeof(string));
+            dt.Columns.Add("ReviewedOn", typeof(DateTime));
+            dt.Columns.Add("ServiceCode", typeof(string));
+            dt.Columns.Add("SpecifyChanges", typeof(string));
+            dt.Columns.Add("SummaryOfServices", typeof(string));
+            dt.Columns.Add("TheConsumer", typeof(bool));
+            dt.Columns.Add("TheTreatmentPlan", typeof(bool));
+            dt.Columns.Add("ClinicalDirector", typeof(string));
+            dt.Columns.Add("Documents", typeof(bool));
+            dt.Columns.Add("LicensedPractitioner", typeof(string));
+            dt.Columns.Add("Therapist", typeof(string));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("MtpId", typeof(int));
+            dt.Columns.Add("EndTime", typeof(DateTime));
+            dt.Columns.Add("Frecuency", typeof(string));
+            dt.Columns.Add("MonthOfTreatment", typeof(int));
+            dt.Columns.Add("Setting", typeof(string));
+            dt.Columns.Add("StartTime", typeof(DateTime));
+            dt.Columns.Add("DataOfService", typeof(DateTime));
+
+            if (review != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            review.Id,
+                                            review.MTP_FK,
+                                            review.CreatedBy,
+                                            review.CreatedOn,
+                                            review.LastModifiedBy,
+                                            review.LastModifiedOn,
+                                            review.ACopy,
+                                            review.DateClinicalDirector,
+                                            review.DateLicensedPractitioner,
+                                            review.DateSignaturePerson,
+                                            review.DateTherapist,
+                                            review.DescribeAnyGoals,
+                                            review.DescribeClient,
+                                            review.IfCurrent,
+                                            review.NumberUnit,
+                                            review.ProviderNumber,
+                                            review.ReviewedOn,
+                                            review.ServiceCode,
+                                            review.SpecifyChanges,
+                                            review.SummaryOfServices,
+                                            review.TheConsumer,
+                                            review.TheTreatmentPlan,
+                                            review.ClinicalDirector,
+                                            review.Documents,
+                                            review.LicensedPractitioner,
+                                            review.Therapist,
+                                            review.Status,
+                                            0,
+                                            review.EndTime,
+                                            review.Frecuency,
+                                            review.MonthOfTreatment,
+                                            review.Setting,
+                                            review.StartTime,
+                                            review.DataOfService,
+            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            false,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            string.Empty,
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
                                             new DateTime()
                                         });
             }
@@ -5776,6 +5988,48 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Frecuency", typeof(string));
             dt.Columns.Add("NumberOfMonths", typeof(string));
             dt.Columns.Add("Setting", typeof(string));
+            dt.Columns.Add("Active", typeof(bool));
+            dt.Columns.Add("AdditionalRecommended", typeof(string));
+            dt.Columns.Add("AdmissionDateMTP", typeof(DateTime));
+            dt.Columns.Add("ClientLimitation", typeof(string));
+            dt.Columns.Add("ClientStrengths", typeof(string));
+            dt.Columns.Add("DateOfUpdate", typeof(DateTime));
+            dt.Columns.Add("Family", typeof(bool));
+            dt.Columns.Add("FamilyCode", typeof(string));
+            dt.Columns.Add("FamilyDuration", typeof(int));
+            dt.Columns.Add("FamilyFrecuency", typeof(string));
+            dt.Columns.Add("FamilyUnits", typeof(int));
+            dt.Columns.Add("Group", typeof(bool));
+            dt.Columns.Add("GroupCode", typeof(string));
+            dt.Columns.Add("GroupDuration", typeof(int));
+            dt.Columns.Add("GroupFrecuency", typeof(string));
+            dt.Columns.Add("GroupUnits", typeof(int));
+            dt.Columns.Add("Health", typeof(bool));
+            dt.Columns.Add("HealthWhere", typeof(string));
+            dt.Columns.Add("Individual", typeof(bool));
+            dt.Columns.Add("IndividualCode", typeof(string));
+            dt.Columns.Add("IndividualDuration", typeof(int));
+            dt.Columns.Add("IndividualFrecuency", typeof(string));
+            dt.Columns.Add("IndividualUnits", typeof(int));
+            dt.Columns.Add("Legal", typeof(bool));
+            dt.Columns.Add("LegalWhere", typeof(string));
+            dt.Columns.Add("Medication", typeof(bool));
+            dt.Columns.Add("MedicationCode", typeof(string));
+            dt.Columns.Add("MedicationDuration", typeof(int));
+            dt.Columns.Add("MedicationFrecuency", typeof(string));
+            dt.Columns.Add("MedicationUnits", typeof(int));         
+            dt.Columns.Add("Other", typeof(bool));
+            dt.Columns.Add("OtherWhere", typeof(string));
+            dt.Columns.Add("Paint", typeof(bool));
+            dt.Columns.Add("PaintWhere", typeof(string));
+            dt.Columns.Add("Psychosocial", typeof(bool));
+            dt.Columns.Add("PsychosocialCode", typeof(string));
+            dt.Columns.Add("PsychosocialDuration", typeof(int));
+            dt.Columns.Add("PsychosocialFrecuency", typeof(string));
+            dt.Columns.Add("PsychosocialUnits", typeof(int));
+            dt.Columns.Add("RationaleForUpdate", typeof(string));
+            dt.Columns.Add("Substance", typeof(bool));
+            dt.Columns.Add("SubstanceWhere", typeof(string));
 
             dt.Rows.Add(new object[]
                                         {
@@ -5789,8 +6043,50 @@ namespace KyoS.Web.Helpers
                                             mtp.Modality,
                                             mtp.Frecuency,
                                             mtp.NumberOfMonths,
-                                            mtp.Setting
-                                        });
+                                            mtp.Setting,
+                                            mtp.Active,
+                                            mtp.AdditionalRecommended,
+                                            mtp.AdmissionDateMTP,
+                                            mtp.ClientLimitation,
+                                            mtp.ClientStrengths,
+                                            mtp.DateOfUpdate,
+                                            mtp.Family,
+                                            mtp.FamilyCode,
+                                            mtp.FamilyDuration,
+                                            mtp.FamilyFrecuency,
+                                            mtp.FamilyUnits,
+                                            mtp.Group,
+                                            mtp.GroupCode,
+                                            mtp.GroupDuration,
+                                            mtp.GroupFrecuency,
+                                            mtp.GroupUnits,
+                                            mtp.Health,
+                                            mtp.HealthWhere,
+                                            mtp.Individual,
+                                            mtp.IndividualCode,
+                                            mtp.IndividualDuration,
+                                            mtp.IndividualFrecuency,
+                                            mtp.IndividualUnits,
+                                            mtp.Legal,
+                                            mtp.LegalWhere,
+                                            mtp.Medication,
+                                            mtp.MedicationCode,
+                                            mtp.MedicationDuration,
+                                            mtp.MedicationFrecuency,
+                                            mtp.MedicationUnits,
+                                            mtp.Other,
+                                            mtp.OtherWhere,
+                                            mtp.Paint,
+                                            mtp.PaintWhere,
+                                            mtp.Psychosocial,
+                                            mtp.PsychosocialCode,
+                                            mtp.PsychosocialDuration,
+                                            mtp.PsychosocialFrecuency,
+                                            mtp.PsychosocialUnits,
+                                            mtp.RationaleForUpdate,
+                                            mtp.Substance,
+                                            mtp.SubstanceWhere
+        });
 
             return dt;
         }
@@ -7206,6 +7502,11 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Number", typeof(int));
             dt.Columns.Add("Service", typeof(int));
             dt.Columns.Add("AdendumId", typeof(int));
+            dt.Columns.Add("Compliment", typeof(bool));
+            dt.Columns.Add("Compliment_Date", typeof(DateTime));
+            dt.Columns.Add("Compliment_Explain", typeof(string));
+            dt.Columns.Add("Compliment_IdMTPReview", typeof(int));
+            dt.Columns.Add("IdMTPReview", typeof(int));
 
             foreach (GoalEntity item in goalsList)
             {
@@ -7218,7 +7519,12 @@ namespace KyoS.Web.Helpers
                                             item.MTP.Id,
                                             item.Number,
                                             item.Service,
-                                            0
+                                            0,                                           
+                                            item.Compliment,
+                                            item.Compliment_Date,
+                                            item.Compliment_Explain,
+                                            item.Compliment_IdMTPReview,
+                                            item.IdMTPReview
                                         });
             }
 
@@ -7241,6 +7547,11 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("DateResolved", typeof(DateTime));
             dt.Columns.Add("Intervention", typeof(string));
             dt.Columns.Add("GoalId", typeof(int));
+            dt.Columns.Add("Compliment", typeof(bool));
+            dt.Columns.Add("Compliment_Date", typeof(DateTime));
+            dt.Columns.Add("Compliment_Explain", typeof(string));
+            dt.Columns.Add("Compliment_IdMTPReview", typeof(int));
+            dt.Columns.Add("IdMTPReview", typeof(int));
 
             foreach (ObjetiveEntity item in objetivesList)
             {
@@ -7254,7 +7565,12 @@ namespace KyoS.Web.Helpers
                                             item.DateTarget,
                                             item.DateResolved,
                                             item.Intervention,
-                                            0
+                                            0,
+                                            item.Compliment,
+                                            item.Compliment_Date,
+                                            item.Compliment_Explain,
+                                            item.Compliment_IdMTPReview,
+                                            item.IdMTPReview
                                         });
             }
 

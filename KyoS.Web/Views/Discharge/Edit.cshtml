@@ -36,7 +36,15 @@
             <partial name="_Discharge" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-success">Back</a>
+                @if (User.IsInRole("Facilitator"))
+                {
+                    <a asp-action="DischargeInEdit" class="btn btn-success">Back</a>
+                }
+                @if (User.IsInRole("Supervisor"))
+                {
+                    <a asp-action="PendingDischarge" class="btn btn-success">Back</a>
+                }
+
             </div>
         </form>       
     </div>
