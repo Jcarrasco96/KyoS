@@ -147,6 +147,8 @@ namespace KyoS.Web.Data.Entities
 
         public List<Bio_BehavioralHistoryEntity> List_BehavioralHistory { get; set; }
 
+        public int IdFacilitatorPSR { get; set; }
+
         public string MissingDoc 
         {
             get

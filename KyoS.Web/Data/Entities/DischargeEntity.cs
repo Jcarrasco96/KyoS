@@ -94,5 +94,7 @@ namespace KyoS.Web.Data.Entities
         public SupervisorEntity Supervisor { get; set; }
 
         public DischargeStatus Status { get; set; }
+
+        public ServiceType TypeService { get; set; }
     }
 }

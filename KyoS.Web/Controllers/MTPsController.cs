@@ -3002,8 +3002,8 @@ namespace KyoS.Web.Controllers
                
             return Json(text);
         }
-        
-        [Authorize(Roles = "Facilitator")]
+
+        [Authorize(Roles = "Facilitator, Supervisor")]
         public async Task<IActionResult> MTPRinEdit(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -3011,13 +3011,9 @@ namespace KyoS.Web.Controllers
                 ViewBag.Delete = "N";
             }
 
-            if (User.IsInRole("Admin"))
+            if (User.IsInRole("Supervisor"))
             {
-                return View(await _context.MTPs
-                                          .Include(m => m.Client)
-                                          .ThenInclude(c => c.Clinic)
-                                          .Include(m => m.MtpReviewList)
-                                          .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+                return RedirectToAction("PendingMtpReview", "MTPs");
             }
             else
             {
