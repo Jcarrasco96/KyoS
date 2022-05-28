@@ -2811,7 +2811,7 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Facilitator")]
         public JsonResult GetObjetiveList(int idGoal)
         {
-            List<ObjetiveEntity> objetives = _context.Objetives.Where(o => o.Goal.Id == idGoal).ToList();
+            List<ObjetiveEntity> objetives = _context.Objetives.Where(o => (o.Goal.Id == idGoal && o.Compliment == false)).ToList();
             if (objetives.Count == 0)
             {
                 objetives.Insert(0, new ObjetiveEntity
@@ -2845,7 +2845,7 @@ namespace KyoS.Web.Controllers
 
             if (mtp != null)
             {
-                list = _context.Goals.Where(g => (g.MTP.Id == mtp.Id && g.Service == ServiceType.PSR)).Select(g => new SelectListItem
+                list = _context.Goals.Where(g => (g.MTP.Id == mtp.Id && g.Service == ServiceType.PSR && g.Compliment == false)).Select(g => new SelectListItem
                 {
                     Text = $"{g.Number}",
                     Value = $"{g.Id}"
@@ -2889,7 +2889,7 @@ namespace KyoS.Web.Controllers
                 {
                     if (setting.MHClassificationOfGoals)
                     {
-                        list = _context.Goals.Where(g => (g.MTP.Id == mtp.Id && g.Service == ServiceType.Individual)).Select(g => new SelectListItem
+                        list = _context.Goals.Where(g => (g.MTP.Id == mtp.Id && g.Service == ServiceType.Individual && g.Compliment == false)).Select(g => new SelectListItem
                         {
                             Text = $"{g.Number}",
                             Value = $"{g.Id}"
@@ -2897,7 +2897,7 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-                        list = _context.Goals.Where(g => (g.MTP.Id == mtp.Id)).Select(g => new SelectListItem
+                        list = _context.Goals.Where(g => (g.MTP.Id == mtp.Id && g.Compliment == false)).Select(g => new SelectListItem
                         {
                             Text = $"{g.Number}",
                             Value = $"{g.Id}"
@@ -2933,7 +2933,7 @@ namespace KyoS.Web.Controllers
 
             if (mtp != null)
             {
-                list = _context.Goals.Where(g => (g.MTP.Id == mtp.Id && g.Service == ServiceType.Group)).Select(g => new SelectListItem
+                list = _context.Goals.Where(g => (g.MTP.Id == mtp.Id && g.Service == ServiceType.Group && g.Compliment == false)).Select(g => new SelectListItem
                 {
                     Text = $"{g.Number}",
                     Value = $"{g.Id}"
