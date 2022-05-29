@@ -139,7 +139,7 @@ namespace KyoS.Web.Data.Entities
 
         public List<MedicationEntity> MedicationList { get; set; }
 
-        public DischargeEntity Discharge { get; set; }
+        public List<DischargeEntity> DischargeList { get; set; }
 
         public List<FarsFormEntity> FarsFormList { get; set; }
 
