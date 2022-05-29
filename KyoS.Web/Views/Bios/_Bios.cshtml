@@ -1,0 +1,937 @@
+﻿@model KyoS.Web.Models.BioViewModel
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="Client.Name" class="control-label">Client Name</label>
+        <input asp-for="Client.Name" class="form-control" readonly>
+        <span asp-validation-for="Client.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.Code" class="control-label">Medical Record</label>
+        <input asp-for="Client.Code" class="form-control" readonly>
+        <span asp-validation-for="Client.Code" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.DateOfBirth" class="control-label">DOB</label>
+        <input asp-for="Client.DateOfBirth" class="form-control" readonly>
+        <span asp-validation-for="Client.DateOfBirth" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="ReferralName" class="control-label">Referral Source</label>
+        <input asp-for="ReferralName" class="form-control" readonly>        
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="LegalGuardianName" class="control-label">Legal Guardian</label>
+        <input asp-for="LegalGuardianName" class="form-control" readonly>        
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="LegalGuardianTelephone" class="control-label">Legal Guardian Phone</label>
+        <input asp-for="LegalGuardianTelephone" class="form-control" readonly>        
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="EmergencyContactName" class="control-label">Emergency Contact</label>
+        <input asp-for="EmergencyContactName" class="form-control" readonly>        
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="RelationShipOfEmergencyContact" class="control-label">Relationship</label>
+        <input asp-for="RelationShipOfEmergencyContact" class="form-control" readonly>        
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="EmergencyContactTelephone" class="control-label">Emergency Contact Phone</label>
+        <input asp-for="EmergencyContactTelephone" class="form-control" readonly>        
+    </div>
+    <div class="container-fluid">
+        &nbsp;
+    </div>    
+</div>
+<div class="container-fluid">
+    <hr />
+</div>
+<div class="col-md-12">    
+    <pre>
+<strong>1. DEMOGRAPHIC DATA:</strong>
+        
+        The purpose of mental health programs/services is to assist clients in gaining more stable mental health and reduce behavioral symptoms and health risks.\
+
+        Program: <input type="checkbox" asp-for="CMH" class="form-check-input"> CMH <input type="checkbox" asp-for="Priv" class="form-check-input"> PRIV               Setting: <strong><u><input asp-for="Setting"></u></strong>                         Select: <input type="checkbox" asp-for="BioH0031HN" class="form-check-input"> BIO H0031 HN  <input type="checkbox" asp-for="IDAH0031HO" class="form-check-input"> IDA H0031 HO 
+    
+           Date: <input asp-for="DateBio">                Time: <input asp-for="StartTime"> - <input asp-for="EndTime">                                      
+    </pre>    
+</div>
+<div class="col-md-12">    
+    <pre>
+<strong>2. CLIENT’S PRESENTING PROBLEM (S):</strong> (list specific symptoms, onset history, criteria for diagnosis and justification  of  treatment recommendations)
+
+    <textarea asp-for="PresentingProblem" rows="10" style="width:90%"></textarea> 
+
+    <strong>CLIENT’S ASSESSMENT OF SITUATION: </strong>(list how the client’s symptoms are affecting clients emotional functioning and use their own words)
+    <textarea asp-for="ClientAssessmentSituation" style="width:90%" rows="2"></textarea> 
+
+    <strong>FAMILY'S ASSESSMENT OF SITUATION: </strong>(if applicable, list how the client’s symptoms are affecting clients emotional functioning and use family’s own words)
+    <textarea asp-for="FamilyAssessmentSituation" style="width:90%" rows="2"></textarea> 
+
+    <strong>FAMILY'S EMOTIONAL FUNCTIONING: </strong> (describe any emotional issues, difficulties functioning, substance abuse and/or abuse history affecting family members)
+    <textarea asp-for="FamilyEmotional" style="width:90%" rows="2"></textarea> 
+
+    <strong>LEGAL REPRESENTATIVE’S ASSESSMENT OF SITUATION: </strong> (if applicable, in their own words)
+    <textarea asp-for="LegalAssessment" style="width:90%" rows="2"></textarea> 
+    </pre>    
+</div>
+<div class="col-push-12">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @*<h3 class="panel-title">*@
+                <strong>3. BEHAVIORAL HEALTH HISTORY (DATE OF ONSENT OF MENTAL ILLNESS) : </strong>Document any serious behavior or physical illness, injures, operations or hospitalizations and indicate the year these occurred (give special attention to previous behavioral health treatment and document contact information for coordination of care.
+                @*</h3>*@
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-8">
+                                Problems
+                            </th>
+                            <th class="col-md-4" style="text-align:center;">
+                                Date
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Client.List_BehavioralHistory)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Problem)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Date)
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-push-12">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                4. CURRENT MEDICATIONS (PSYCHOTROPIC, MEDICAL AND OVER THE COUNTER)
+            </div>
+            <div class="panel-body">
+
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-4">
+                                Medication
+                            </th>
+                            <th class="col-md-2">
+                                Dose
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Frequency
+                            </th>
+                            <th class="col-md-4" style="text-align:center;">
+                                Prescriber
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Client.MedicationList)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Dosage)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Frequency)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Prescriber)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12">
+    <pre>
+<strong>5. MENTAL HEALTH STATUS:</strong>
+
+  <strong>A. Mental Status Examination:  (check all that apply)</strong>
+
+    <strong>Appearance</strong>             <input type="checkbox" asp-for="Appearance_Disheveled" class="form-check-input"> Disheveled             <input type="checkbox" asp-for="Appearance_FairHygiene" class="form-check-input"> Fair Hygiene                  <input type="checkbox" asp-for="Appearance_Cleaned" class="form-check-input"> Cleaned                  <input type="checkbox" asp-for="Appearance_WellGroomed" class="form-check-input"> Well groomed           <input type="checkbox" asp-for="Appearance_Bizarre" class="form-check-input"> Bizarre
+    
+    <strong>Motor</strong>                  <input type="checkbox" asp-for="Motor_Normal" class="form-check-input"> Normal                 <input type="checkbox" asp-for="Motor_Agitated" class="form-check-input"> Agitated <input type="checkbox" asp-for="Motor_Retardation" class="form-check-input"> Retardation       <input type="checkbox" asp-for="Motor_RestLess" class="form-check-input"> Restless                 <input type="checkbox" asp-for="Motor_Akathisia" class="form-check-input"> Akathisia              <input type="checkbox" asp-for="Motor_Tremor" class="form-check-input"> Tremor  <input type="checkbox" asp-for="Motor_Other" class="form-check-input"> Other
+    
+    <strong>Speech</strong>                 <input type="checkbox" asp-for="Speech_Normal" class="form-check-input"> Normal                 <input type="checkbox" asp-for="Speech_Loud" class="form-check-input"> Loud                          <input type="checkbox" asp-for="Speech_Pressured" class="form-check-input"> Pressured                <input type="checkbox" asp-for="Speech_Impoverished" class="form-check-input"> Impoverished           <input type="checkbox" asp-for="Speech_Slurred" class="form-check-input"> Slurred       
+                           <input type="checkbox" asp-for="Speech_Mumbled" class="form-check-input"> Mumbled                <input type="checkbox" asp-for="Speech_Stutters" class="form-check-input"> Stutters                      <input type="checkbox" asp-for="Speech_Rapid" class="form-check-input"> Rapid                    <input type="checkbox" asp-for="Speech_Slow" class="form-check-input"> Slow                   <input type="checkbox" asp-for="Speech_Other" class="form-check-input"> Other       
+
+    <strong>Affect</strong>                 <input type="checkbox" asp-for="Affect_Appropriate" class="form-check-input"> Appropriate            <input type="checkbox" asp-for="Affect_labile" class="form-check-input"> Labile                        <input type="checkbox" asp-for="Affect_Expansive" class="form-check-input"> Expansive                <input type="checkbox" asp-for="Affect_Blunted" class="form-check-input"> Blunted                <input type="checkbox" asp-for="Affect_Constricted" class="form-check-input"> Constricted       
+                           <input type="checkbox" asp-for="Affect_Flat" class="form-check-input"> Flat                   <input type="checkbox" asp-for="Affect_Tearful_Sad" class="form-check-input"> Tearful/Sad                   <input type="checkbox" asp-for="Affect_Anxious" class="form-check-input"> Anxious                  <input type="checkbox" asp-for="Affect_Angry" class="form-check-input"> Angry                  <input type="checkbox" asp-for="Affect_Other" class="form-check-input"> Other       
+    
+    <strong>Thought Process</strong>        <input type="checkbox" asp-for="ThoughtProcess_Organized" class="form-check-input"> Organized              <input type="checkbox" asp-for="ThoughtProcess_Disorganized" class="form-check-input"> Disorganized                  <input type="checkbox" asp-for="ThoughtProcess_GoalDirected" class="form-check-input"> Goal directed            <input type="checkbox" asp-for="ThoughtProcess_Irrational" class="form-check-input"> Irrational             <input type="checkbox" asp-for="ThoughtProcess_Rigid" class="form-check-input"> Rigid       
+                           <input type="checkbox" asp-for="ThoughtProcess_Obsessive" class="form-check-input"> Obsessive              <input type="checkbox" asp-for="ThoughtProcess_Tangential" class="form-check-input"> Tangential                    <input type="checkbox" asp-for="ThoughtProcess_Circumstantial" class="form-check-input"> Circumstantial           <input type="checkbox" asp-for="ThoughtProcess_Preoccupied" class="form-check-input"> Preoccupied            <input type="checkbox" asp-for="ThoughtProcess_Blocking" class="form-check-input"> Blocking       
+                           <input type="checkbox" asp-for="ThoughtProcess_FightIdeas" class="form-check-input"> Fight of ideas         <input type="checkbox" asp-for="ThoughtProcess_LooseAssociations" class="form-check-input"> Loose Associations            <input type="checkbox" asp-for="ThoughtProcess_Other" class="form-check-input"> Other  
+    
+    <strong>Mood</strong>                   <input type="checkbox" asp-for="Mood_Euthymic" class="form-check-input"> Euthymic               <input type="checkbox" asp-for="Mood_Depressed" class="form-check-input">  Depressed                    <input type="checkbox" asp-for="Mood_Euphoric" class="form-check-input"> Euphoric                 <input type="checkbox" asp-for="Mood_Angry" class="form-check-input"> Angry                  <input type="checkbox" asp-for="Mood_Maniac" class="form-check-input"> Maniac  <input type="checkbox" asp-for="Mood_Other" class="form-check-input"> Other
+    
+    <strong>Judgment</strong>               <input type="checkbox" asp-for="Judgment_Good" class="form-check-input"> Good                   <input type="checkbox" asp-for="Judgment_Fair" class="form-check-input">  Fair                         <input type="checkbox" asp-for="Judgment_Poor" class="form-check-input"> Poor                     <input type="checkbox" asp-for="Judgment_Other" class="form-check-input"> Other
+    
+    <strong>Insight</strong>                <input type="checkbox" asp-for="Insight_Good" class="form-check-input"> Good                   <input type="checkbox" asp-for="Insight_Fair" class="form-check-input">  Fair                         <input type="checkbox" asp-for="Insight_Poor" class="form-check-input"> Poor                     <input type="checkbox" asp-for="Insight_Other" class="form-check-input"> Other
+    
+    <strong>Thought content</strong>        <input type="checkbox" asp-for="ThoughtContent_Relevant" class="form-check-input"> Relevant           Hallucinations <input type="checkbox" asp-for="ThoughtContent_Hallucinations" class="form-check-input" id="check1"> Yes   <input type="checkbox" class="form-check-input" id="check101"> No                   Type:  <input asp-for="ThoughtContent_Hallucinations_Type" style="width:25%">
+                           <input type="checkbox" asp-for="ThoughtContent_RealityBased" class="form-check-input"> Reality based          Delusions  <input type="checkbox" asp-for="ThoughtContent_Delusions" class="form-check-input" id="check2"> Yes   <input type="checkbox" class="form-check-input" id="check102"> No                   Type:  <input asp-for="ThoughtContent_Delusions_Type" style="width:25%">
+                                 
+    <strong>Oriented</strong>               <input type="checkbox" asp-for="Oriented_FullOriented" class="form-check-input"> Fully oriented                             <strong>Lacking</strong>      <input type="checkbox" asp-for="Lacking_Time" class="form-check-input"> Time <input type="checkbox" asp-for="Lacking_Place" class="form-check-input"> Place <input type="checkbox" asp-for="Lacking_Person" class="form-check-input"> Person <input type="checkbox" asp-for="Lacking_Location" class="form-check-input"> Location 
+    
+    <strong>Risk To Self</strong>           <input type="checkbox" asp-for="RiskToSelf_Low" class="form-check-input"> Low                    <input type="checkbox" asp-for="RiskToSelf_Medium" class="form-check-input"> Medium                        <input type="checkbox" asp-for="RiskToSelf_High" class="form-check-input"> High                    <input type="checkbox" asp-for="RiskToSelf_Chronic" class="form-check-input"> Chronic
+    
+    <strong>Risk To others</strong>         <input type="checkbox" asp-for="RiskToOther_Low" class="form-check-input"> Low                    <input type="checkbox" asp-for="RiskToOther_Medium" class="form-check-input"> Medium                        <input type="checkbox" asp-for="RiskToOther_High" class="form-check-input"> High                    <input type="checkbox" asp-for="RiskToOther_Chronic" class="form-check-input"> Chronic
+    
+    <strong>Safety plan reviewed</strong>   <input type="checkbox" asp-for="SafetyPlan" class="form-check-input" id="check3"> Yes   <input type="checkbox" class="form-check-input" id="check103"> No             
+    
+    <strong>Comments</strong>               <input asp-for="Comments" style="width:60%"><br />
+
+  <strong>B. Suicide/Homicide Risk Mini Screening: </strong>(if any of the following question are answered “yes”, please complete the SBQ-R with client and follow precautionary procedures)
+    
+    <input type="checkbox" asp-for="ClientDenied" class="form-check-input"> <strong>Client denied any current suicidal/homicidal ideations (if denied, skip this section)</strong>
+            
+            Have you ever thought about killing yourself or others?                                 <input type="checkbox" asp-for="HaveYouEverThought" class="form-check-input" id="check4"> Yes   <input type="checkbox" class="form-check-input" id="check104"> No     If yes, explain:  <input asp-for="HaveYouEverThought_Explain" style="width:15%">
+
+            Do you own a weapon?                                                                    <input type="checkbox" asp-for="DoYouOwn" class="form-check-input" id="check5"> Yes   <input type="checkbox" class="form-check-input" id="check105"> No     If yes, explain:  <input asp-for="DoYouOwn_Explain" style="width:15%">
+
+            Does Client have a plan or access to plan or individual?                                <input type="checkbox" asp-for="DoesClient" class="form-check-input" id="check6"> Yes   <input type="checkbox" class="form-check-input" id="check106"> No
+            Have you ever been hospitalized for depressive symptoms?                                <input type="checkbox" asp-for="HaveYouEverBeen" class="form-check-input" id="check7"> Yes   <input type="checkbox" class="form-check-input" id="check107"> No     If yes, detail:   <input asp-for="HaveYouEverBeen_Explain" style="width:15%">
+
+            Has the client received behavioral health service in the last 2 years due to suicide?   <input type="checkbox" asp-for="HasTheClient" class="form-check-input" id="check8"> Yes   <input type="checkbox" class="form-check-input" id="check108"> No     If yes, specify:  <input asp-for="HasTheClient_Explain" style="width:15%">
+
+
+  <strong>C. Physical/Sexual/Emotional Abuse:</strong> (current and history – if indicated, record the name of perpetrator, times, dates, and whether reported)
+      If any abuse is indicated in the process, you must do the following: 1. Call the abuse hotline 1-800-962-2873 or 1-800-96- Abuse in all cases, 
+      if not previously reported ( you don’t have to file a duplicable report of the abuse if the client/family can provide written proof that it was 
+      reported, DCF documentation, DCF Case Worker information, Termination of parental rights). 2. Discuss the client with your supervisor 
+
+      <input type="checkbox" asp-for="ClientFamilyAbusoTrauma"> <strong>Client and/or family denied any abuse or trauma history (physical, sexual, emotional abuse or financial explotation)</strong>
+      
+      <strong>If any type of abused have occurred, please complete the following information:</strong>
+      <strong>Date of abuse                           </strong> <input asp-for="DateAbuse">           <strong>Person(s) involved: </strong> <input asp-for="PersonInvolved" style="width:25%">
+       
+      <strong>Approximate date report was filed:      </strong> <input asp-for="ApproximateDateReport">           <strong>Where: </strong>              <input asp-for="ApproximateDateReport_Where" style="width:25%">
+       
+      <strong>Relationship of the abuser to client:   </strong> <input asp-for="RelationShips" style="width:20%">
+                     
+      <strong>Details of the incident:                </strong> <input asp-for="Details" style="width:20%">
+
+      <strong>Outcome of the abuse report:            </strong> <input asp-for="Outcome" style="width:20%">
+
+      <input type="checkbox" asp-for="AReferral" class="form-check-input"> A referral for assessment     services is indicated <input asp-for="AReferral_Services" style="width:10%">       When <input asp-for="AReferral_When" style="width:10%">       Where <input asp-for="AReferral_Where" style="width:10%">
+      <input type="checkbox" asp-for="ObtainRelease" class="form-check-input"> Obtain release of information for coordination of care
+      <input type="checkbox" asp-for="WhereRecord" class="form-check-input"> Where records of previous treatment requested? If requested, when: <input asp-for="WhereRecord_When" style="width:15%">     Where <input asp-for="WhereRecord_Where" style="width:15%">
+    </pre>
+</div>
+<div class="col-md-12">    
+    <pre>
+<strong>6. PHYSICAL HEALTH ASSESSMENT </strong>
+
+    Has the client visited a physician in the last two years?
+    <input type="checkbox" asp-for="HasTheClientVisitedPhysician" class="form-check-input" id="check9"> Yes   <input type="checkbox" class="form-check-input" id="check109"> No  (if no, provide client with education on preventive health measures and offer to refer to a physician) 
+    If yes, give reason and date:  <input asp-for="HasTheClientVisitedPhysician_Reason" style="width:20%">      <input asp-for="HasTheClientVisitedPhysician_Date" style="width:10%"><br />
+    <strong>Name of Primary Care physician:</strong>  <strong><u>@Html.DisplayFor(modelItem => Model.Client.Doctor.Name)</u></strong>      <strong>Phone</strong>  <strong><u>@Html.DisplayFor(modelItem => Model.Client.Doctor.Telephone)</u></strong>
+    <strong>Address</strong>  <strong><u>@Html.DisplayFor(modelItem => Model.Client.Doctor.Address)</u></strong> <br />
+    Does the client experience any pain?  <input type="checkbox" asp-for="DoesTheClientExperience" class="form-check-input" id="check10"> Yes  <input type="checkbox" class="form-check-input" id="check110"> No    If yes, specify where? <input asp-for="DoesTheClientExperience_Where" style="width:30%">
+    For how long (including frequency of pain)?              <input asp-for="ForHowLong" style="width:10%">
+    Please rate pain from 1 (no pain) to 10 (intense pain)   <input asp-for="PleaseRatePain" style="width:10%">
+    Has a client been treated for pain? <input type="checkbox" asp-for="HasClientBeenTreatedPain" class="form-check-input" id="check11"> Yes  <input type="checkbox" class="form-check-input" id="check111"> No 
+    Please include services that client is receiving for pain (if any): <input asp-for="HasClientBeenTreatedPain_PleaseIncludeService" style="width:30%">
+    If not, describe referral to Primary Care Physician/ Specialist or case manager for follow up: <input asp-for="HasClientBeenTreatedPain_Ifnot" style="width:20%">
+    Where: <input asp-for="HasClientBeenTreatedPain_Where" style="width:60%">
+    <input type="checkbox" asp-for="ObtainReleaseInformation" class="form-check-input"> Obtain release of information so care can be coordinated <br />
+    <strong>A. Nutritional Risk Assessment: </strong>(Directions: Indicate with Yes to Assessment, then total SCORE to determine addition risk) <br />
+                                        <strong>NUTRITONIAL SCORE</strong>
+    Has an illness or condition that changed the kind and/or amount of food eaten? 
+    Eats fewer than 2 meals per day?                                                <input type="checkbox" asp-for="EastFewer" class="form-check-input" id="check12"> YES  <input type="checkbox" class="form-check-input" id="check112"> NO
+    Eats few fruit, vegetables or milk products.                                    <input type="checkbox" asp-for="EastFew" class="form-check-input" id="check13"> YES  <input type="checkbox" class="form-check-input" id="check113"> NO
+    Has 3 or more drinks of beer, liquor or vine almost every day.                  <input type="checkbox" asp-for="Has3OrMore" class="form-check-input" id="check14"> YES  <input type="checkbox" class="form-check-input" id="check114"> NO
+    Has tooth or mouth problems that make it hard to eat.                           <input type="checkbox" asp-for="HasTooth" class="form-check-input" id="check15"> YES  <input type="checkbox" class="form-check-input" id="check115"> NO
+    Does not always have enough money to buy the food needed                        <input type="checkbox" asp-for="DoesNotAlways" class="form-check-input" id="check16"> YES  <input type="checkbox" class="form-check-input" id="check116"> NO
+    Eats alone most of the time                                                     <input type="checkbox" asp-for="EastAlone" class="form-check-input" id="check17"> YES  <input type="checkbox" class="form-check-input" id="check117"> NO
+    Takes 3 or more different prescribed or over-the-counter drugs a day.           <input type="checkbox" asp-for="Takes3OrMore" class="form-check-input" id="check18"> YES  <input type="checkbox" class="form-check-input" id="check118"> NO
+    Without wanting to. Has lost or gained 10 pounds in the last 6 months.          <input type="checkbox" asp-for="WithoutWanting" class="form-check-input" id="check19"> YES  <input type="checkbox" class="form-check-input" id="check119"> NO
+    Not always physically able to shop, cook and/or feed self.                      <input type="checkbox" asp-for="NotAlwaysPhysically" class="form-check-input" id="check20"> YES  <input type="checkbox" class="form-check-input" id="check120"> NO
+        
+    <strong>0-2 GOOD. </strong>As appropriate reassess and/or provide information based on situation.
+    <strong>3-5 Moderate risk. </strong>Educate, refer, monitor and reevaluate based on patient situation and organization policy.
+    <strong>6> High risk. Coordinate. </strong>with physician, dietitian, social service professional or RN about how to improve nutritional health 
+                
+    IF 6 OR HIGHER, REFERRED TO <input asp-for="If6_ReferredTo" style="width:30%">   DATE: <input asp-for="If6_Date" style="width:10%">
+                
+                                                        <strong>NUTRITONIAL STATUS</strong>               
+    APPETITE <select asp-for="IdAppetite" asp-items="Model.Appetite_Status"></select>     HYDRATATION <select asp-for="IdHydratation" asp-items="Model.Hydratation_Status"></select>     RECENT WEIGHT CHANGE <select asp-for="IdRecentWeight" asp-items="Model.RecentWeight_Status"></select>
+</pre>
+</div>
+<div class="col-md-12">    
+    <pre>
+<strong>7. PSYCHOSOCIAL HISTORY</strong>
+
+    Substance Abuse (for client and family members, list types of substances, duration of use and any treatment receive):
+    <textarea asp-for="SubstanceAbuse" style="width:90%" rows="2"></textarea>   
+    Legal History (specifying changes, date, convictions and incarcerations):
+    <textarea asp-for="LegalHistory" style="width:90%" rows="2"></textarea>  
+    Personal and family Psychiatric History (for client and family members, list types of diagnoses, type of services,  duration of use and any treatment received):
+    <textarea asp-for="PersonalFamilyPsychiatric" style="width:90%" rows="2"></textarea>  
+        
+    <input type="checkbox" asp-for="DoesClientRequired" class="form-check-input"> Does client require a referral? If referred, where?   <input asp-for="DoesClientRequired_Where" style="width:55%">
+    <input type="checkbox" asp-for="ObtainRelease" class="form-check-input"> Obtain release of information so care can be coordinated.
+    </pre>    
+</div>
+<div class="col-md-12">    
+    <pre>
+<strong>8. BACKGROUND, SOCIAL AND EDUCATIONAL </strong>
+
+    Place of Birth: <strong><u>@Html.DisplayFor(modelItem => Model.Client.PlaceOfBirth)</u></strong>                    <input type="checkbox" asp-for="IfForeing_Born" class="form-check-input"> if foreign-Born, age/date of arrival to US: <input asp-for="IfForeing_AgeArrival" style="width:10%"> / <input asp-for="IfForeing_YearArrival" style="width:10%">
+    Primary location where client was raised: <input asp-for="PrimaryLocation" style="width:10%">
+    General description of childhood/adolescence:
+    <textarea asp-for="GeneralDescription" style="width:90%" rows="2"></textarea>   
+    Adult and current experience: (include work history/ leisure activities and interest)  
+    <textarea asp-for="AdultCurrentExperience" style="width:90%" rows="2"></textarea>   
+    What is the client`s/family beliefs and important spiritual practices? (Include how these beliefs assist client in dealing with stressor)
+    <textarea asp-for="WhatIsTheClient" style="width:90%" rows="2"></textarea> 
+    </pre>    
+</div>
+<div class="col-md-12">    
+    <pre>
+<strong>9. FAMILY EXPERIENCE: </strong> (if child is under 16, skip to 10)
+
+    Relationship with family, friends, romantic interests:
+    <textarea asp-for="RelationshipWithFamily" style="width:90%" rows="2"></textarea>   
+    Number of children (specify name or gender and current age)
+    <textarea asp-for="Children" style="width:90%" rows="2"></textarea> 
+        Marital Status:  <strong><u>@Html.DisplayFor(modelItem => Model.Client.MaritalStatus)</u></strong> 
+        •	If Married or Cohabitating, how long:               <input asp-for="IfMarried" style="width:10%">
+        •	If Separated, Divorce, or Widowed, how long:        <input asp-for="IfSeparated" style="width:10%">
+        •	If sexually active, is client aware of risk regarding Sexual Transmitted Diseases:    <select asp-for="IdIfSexuallyActive" asp-items="Model.IfSexuallyActive_Status"></select>
+        •	If “No” please educate client as to risk of sexually transmitted diseases.
+    </pre>    
+</div>
+<div class="col-md-12">    
+    <pre>
+<strong>10. EDUCATIONAL ASSESSMENT: </strong> is geared towards indicating whether a client needs educational services in addition to therapeutic interventions.
+    (Please provide goal for educational services if applicable and/or if unviable at the clinic, refer client to a community provider): 
+
+    <textarea asp-for="PleaseProvideGoal" style="width:90%" rows="2"></textarea>   
+        1.  Do you have any religious/cultural practice that may hinder your educational goals?                  <input type="checkbox" asp-for="DoYouHaveAnyReligious" class="form-check-input" id="check21"> YES  <input type="checkbox" class="form-check-input" id="check121"> NO
+        2.  What is your language of preference: <strong><u>@Html.DisplayFor(modelItem => Model.Client.PreferredLanguage)</u></strong> 
+        3.  Do you have any visual, hearing or other sensory impairment that may affect your ability to learn?   <input type="checkbox" asp-for="DoYouHaveAnyVisual" class="form-check-input" id="check22"> YES  <input type="checkbox" class="form-check-input" id="check122"> NO 
+        4.  Highest educational level:  
+        5.  Do you have any physical limitations that may hinder your ability to learn?                          <input type="checkbox" asp-for="DoYouHaveAnyPhysical" class="form-check-input" id="check23"> YES  <input type="checkbox" class="form-check-input" id="check123"> NO
+        6.  Can client follow/understand directions (ask client to print name and sign on Treatment Plan)?       <input type="checkbox" asp-for="CanClientFollow" class="form-check-input" id="check24"> YES  <input type="checkbox" class="form-check-input" id="check124"> NO
+    </pre>    
+</div>
+<div class="col-md-12">    
+    <pre>
+<strong>11. PROVIDE INTEGRATED SUMMARY BELOW: </strong> 
+
+    <textarea asp-for="ProvideIntegratedSummary" style="width:90%" rows="8"></textarea>   
+    </pre>    
+</div>
+<div class="col-md-12">   
+    <pre>
+<strong>12. TREATMENT NEEDS:</strong> (use client’s own words)
+
+    The client stated: 
+    <textarea asp-for="TreatmentNeeds" style="width:90%" rows="8"></textarea>   
+    </pre>    
+</div>
+<div class="col-md-12">    
+    <pre>
+<strong>13. DIAGNOSTIC IMPRESSION:</strong> (use client’s own words)
+
+    <strong>TREATMENT RECOMMENDATIOS:</strong>
+    <textarea asp-for="Treatmentrecomendations" style="width:90%" rows="8"></textarea>   
+    </pre>    
+</div>
+<div class="col-md-12">   
+    <pre>
+    <input type="checkbox" asp-for="IConcurWhitDiagnistic" class="form-check-input" id="check25"> I concur with the diagnosis and treatment recommendations
+    <input type="checkbox" class="form-check-input" id="check125"> I do not concur with the diagnosis and treatment recommendations
+    
+    Alternative diagnosis and/or recommendations 
+    <textarea asp-for="AlternativeDiagnosis" style="width:90%" rows="4"></textarea>
+    </pre>
+</div>
+<div class="col-md-12">    
+    <pre>
+    <strong>Date Signature Licensed Practitioner</strong> <input asp-for="DateSignatureLicensedPractitioner">                                                   
+    </pre>    
+</div>
+<br />
+<script>
+
+        check1.addEventListener('change', (e) => {
+            if (check1.checked == true) {
+                check101.checked = false;
+            } else {
+                check101.checked = true;
+            }
+
+        })
+        check101.addEventListener('change', (e) => {
+            if (check101.checked == true) {
+                check1.checked = false;
+            } else {
+                check1.checked = true;
+            }
+
+        })
+        if (check1.checked == true) {
+            check101.checked = false;
+        } else {
+            check101.checked = true;
+        }
+        //---------------------------------
+        check2.addEventListener('change', (e) => {
+            if (check2.checked == true) {
+                check102.checked = false;
+            } else {
+                check102.checked = true;
+            }
+
+        })
+        check102.addEventListener('change', (e) => {
+            if (check102.checked == true) {
+                check2.checked = false;
+            } else {
+                check2.checked = true;
+            }
+
+        })
+        if (check2.checked == true) {
+            check102.checked = false;
+        } else {
+            check102.checked = true;
+        }
+        //---------------------------------
+        check3.addEventListener('change', (e) => {
+            if (check3.checked == true) {
+                check103.checked = false;
+            } else {
+                check103.checked = true;
+            }
+
+        })
+        check103.addEventListener('change', (e) => {
+            if (check103.checked == true) {
+                check3.checked = false;
+            } else {
+                check3.checked = true;
+            }
+
+        })
+        if (check3.checked == true) {
+            check103.checked = false;
+        } else {
+            check103.checked = true;
+        }
+        //---------------------------------
+        check4.addEventListener('change', (e) => {
+            if (check4.checked == true) {
+                check104.checked = false;
+            } else {
+                check104.checked = true;
+            }
+
+        })
+        check104.addEventListener('change', (e) => {
+            if (check104.checked == true) {
+                check4.checked = false;
+            } else {
+                check4.checked = true;
+            }
+
+        })
+        if (check4.checked == true) {
+            check104.checked = false;
+        } else {
+            check104.checked = true;
+        }
+        //---------------------------------
+        check5.addEventListener('change', (e) => {
+            if (check5.checked == true) {
+                check105.checked = false;
+            } else {
+                check105.checked = true;
+            }
+
+        })
+        check105.addEventListener('change', (e) => {
+            if (check105.checked == true) {
+                check5.checked = false;
+            } else {
+                check5.checked = true;
+            }
+
+        })
+        if (check5.checked == true) {
+            check105.checked = false;
+        } else {
+            check105.checked = true;
+        }
+        //---------------------------------
+        check6.addEventListener('change', (e) => {
+            if (check6.checked == true) {
+                check106.checked = false;
+            } else {
+                check106.checked = true;
+            }
+
+        })
+        check106.addEventListener('change', (e) => {
+            if (check106.checked == true) {
+                check6.checked = false;
+            } else {
+                check6.checked = true;
+            }
+
+        })
+        if (check6.checked == true) {
+            check106.checked = false;
+        } else {
+            check106.checked = true;
+        }
+        //---------------------------------
+        check7.addEventListener('change', (e) => {
+            if (check7.checked == true) {
+                check107.checked = false;
+            } else {
+                check107.checked = true;
+            }
+
+        })
+        check107.addEventListener('change', (e) => {
+            if (check107.checked == true) {
+                check7.checked = false;
+            } else {
+                check7.checked = true;
+            }
+
+        })
+        if (check7.checked == true) {
+            check107.checked = false;
+        } else {
+            check107.checked = true;
+        }
+        //---------------------------------
+        check8.addEventListener('change', (e) => {
+            if (check8.checked == true) {
+                check108.checked = false;
+            } else {
+                check108.checked = true;
+            }
+
+        })
+        check108.addEventListener('change', (e) => {
+            if (check108.checked == true) {
+                check8.checked = false;
+            } else {
+                check8.checked = true;
+            }
+
+        })
+        if (check8.checked == true) {
+            check108.checked = false;
+        } else {
+            check108.checked = true;
+        }
+        //---------------------------------
+        check9.addEventListener('change', (e) => {
+            if (check9.checked == true) {
+                check109.checked = false;
+            } else {
+                check109.checked = true;
+            }
+
+        })
+        check109.addEventListener('change', (e) => {
+            if (check109.checked == true) {
+                check9.checked = false;
+            } else {
+                check9.checked = true;
+            }
+
+        })
+        if (check9.checked == true) {
+            check109.checked = false;
+        } else {
+            check109.checked = true;
+        }
+        //---------------------------------
+        check10.addEventListener('change', (e) => {
+            if (check10.checked == true) {
+                check110.checked = false;
+            } else {
+                check110.checked = true;
+            }
+
+        })
+        check110.addEventListener('change', (e) => {
+            if (check110.checked == true) {
+                check10.checked = false;
+            } else {
+                check10.checked = true;
+            }
+
+        })
+        if (check10.checked == true) {
+            check110.checked = false;
+        } else {
+            check110.checked = true;
+        }
+        //---------------------------------
+        check11.addEventListener('change', (e) => {
+            if (check11.checked == true) {
+                check111.checked = false;
+            } else {
+                check111.checked = true;
+            }
+
+        })
+        check111.addEventListener('change', (e) => {
+            if (check111.checked == true) {
+                check11.checked = false;
+            } else {
+                check11.checked = true;
+            }
+
+        })
+        if (check11.checked == true) {
+            check111.checked = false;
+        } else {
+            check111.checked = true;
+        }
+        //---------------------------------
+        check12.addEventListener('change', (e) => {
+            if (check12.checked == true) {
+                check112.checked = false;
+            } else {
+                check112.checked = true;
+            }
+
+        })
+        check112.addEventListener('change', (e) => {
+            if (check112.checked == true) {
+                check12.checked = false;
+            } else {
+                check12.checked = true;
+            }
+
+        })
+        if (check12.checked == true) {
+            check112.checked = false;
+        } else {
+            check112.checked = true;
+        }
+        //---------------------------------
+        check13.addEventListener('change', (e) => {
+            if (check13.checked == true) {
+                check113.checked = false;
+            } else {
+                check113.checked = true;
+            }
+
+        })
+        check113.addEventListener('change', (e) => {
+            if (check113.checked == true) {
+                check13.checked = false;
+            } else {
+                check13.checked = true;
+            }
+
+        })
+        if (check13.checked == true) {
+            check113.checked = false;
+        } else {
+            check113.checked = true;
+        }
+        //---------------------------------
+        check14.addEventListener('change', (e) => {
+            if (check14.checked == true) {
+                check114.checked = false;
+            } else {
+                check114.checked = true;
+            }
+
+        })
+        check114.addEventListener('change', (e) => {
+            if (check114.checked == true) {
+                check14.checked = false;
+            } else {
+                check14.checked = true;
+            }
+
+        })
+        if (check14.checked == true) {
+            check114.checked = false;
+        } else {
+            check114.checked = true;
+        }
+        //---------------------------------
+        check15.addEventListener('change', (e) => {
+            if (check15.checked == true) {
+                check115.checked = false;
+            } else {
+                check115.checked = true;
+            }
+
+        })
+        check115.addEventListener('change', (e) => {
+            if (check115.checked == true) {
+                check15.checked = false;
+            } else {
+                check15.checked = true;
+            }
+
+        })
+        if (check15.checked == true) {
+            check115.checked = false;
+        } else {
+            check115.checked = true;
+        }
+        //---------------------------------
+        check16.addEventListener('change', (e) => {
+            if (check16.checked == true) {
+                check116.checked = false;
+            } else {
+                check116.checked = true;
+            }
+
+        })
+        check116.addEventListener('change', (e) => {
+            if (check116.checked == true) {
+                check16.checked = false;
+            } else {
+                check16.checked = true;
+            }
+
+        })
+        if (check16.checked == true) {
+            check116.checked = false;
+        } else {
+            check116.checked = true;
+        }
+        //---------------------------------
+        check17.addEventListener('change', (e) => {
+            if (check17.checked == true) {
+                check117.checked = false;
+            } else {
+                check117.checked = true;
+            }
+
+        })
+        check117.addEventListener('change', (e) => {
+            if (check117.checked == true) {
+                check17.checked = false;
+            } else {
+                check17.checked = true;
+            }
+
+        })
+        if (check17.checked == true) {
+            check117.checked = false;
+        } else {
+            check117.checked = true;
+        }
+        //---------------------------------
+        check18.addEventListener('change', (e) => {
+            if (check18.checked == true) {
+                check118.checked = false;
+            } else {
+                check118.checked = true;
+            }
+
+        })
+        check118.addEventListener('change', (e) => {
+            if (check118.checked == true) {
+                check18.checked = false;
+            } else {
+                check18.checked = true;
+            }
+
+        })
+        if (check18.checked == true) {
+            check118.checked = false;
+        } else {
+            check118.checked = true;
+        }
+        //---------------------------------
+        check19.addEventListener('change', (e) => {
+            if (check19.checked == true) {
+                check119.checked = false;
+            } else {
+                check119.checked = true;
+            }
+
+        })
+        check119.addEventListener('change', (e) => {
+            if (check119.checked == true) {
+                check19.checked = false;
+            } else {
+                check19.checked = true;
+            }
+
+        })
+        if (check19.checked == true) {
+            check119.checked = false;
+        } else {
+            check119.checked = true;
+        }
+        //---------------------------------
+        check20.addEventListener('change', (e) => {
+            if (check20.checked == true) {
+                check120.checked = false;
+            } else {
+                check120.checked = true;
+            }
+
+        })
+        check120.addEventListener('change', (e) => {
+            if (check120.checked == true) {
+                check20.checked = false;
+            } else {
+                check20.checked = true;
+            }
+
+        })
+        if (check20.checked == true) {
+            check120.checked = false;
+        } else {
+            check120.checked = true;
+        }
+        //---------------------------------
+        check21.addEventListener('change', (e) => {
+            if (check21.checked == true) {
+                check121.checked = false;
+            } else {
+                check121.checked = true;
+            }
+
+        })
+        check121.addEventListener('change', (e) => {
+            if (check121.checked == true) {
+                check21.checked = false;
+            } else {
+                check21.checked = true;
+            }
+
+        })
+        if (check21.checked == true) {
+            check121.checked = false;
+        } else {
+            check121.checked = true;
+        }
+        //---------------------------------
+        check22.addEventListener('change', (e) => {
+            if (check22.checked == true) {
+                check122.checked = false;
+            } else {
+                check122.checked = true;
+            }
+
+        })
+        check122.addEventListener('change', (e) => {
+            if (check122.checked == true) {
+                check22.checked = false;
+            } else {
+                check22.checked = true;
+            }
+
+        })
+        if (check22.checked == true) {
+            check122.checked = false;
+        } else {
+            check122.checked = true;
+        }
+        //---------------------------------
+        check23.addEventListener('change', (e) => {
+            if (check23.checked == true) {
+                check123.checked = false;
+            } else {
+                check123.checked = true;
+            }
+
+        })
+        check123.addEventListener('change', (e) => {
+            if (check123.checked == true) {
+                check23.checked = false;
+            } else {
+                check23.checked = true;
+            }
+
+        })
+        if (check23.checked == true) {
+            check123.checked = false;
+        } else {
+            check123.checked = true;
+        }
+        //---------------------------------
+        check24.addEventListener('change', (e) => {
+            if (check24.checked == true) {
+                check124.checked = false;
+            } else {
+                check124.checked = true;
+            }
+
+        })
+        check124.addEventListener('change', (e) => {
+            if (check124.checked == true) {
+                check24.checked = false;
+            } else {
+                check24.checked = true;
+            }
+
+        })
+        if (check24.checked == true) {
+            check124.checked = false;
+        } else {
+            check124.checked = true;
+        }
+        //---------------------------------
+        check25.addEventListener('change', (e) => {
+            if (check25.checked == true) {
+                check125.checked = false;
+            } else {
+                check125.checked = true;
+            }
+
+        })
+        check125.addEventListener('change', (e) => {
+            if (check125.checked == true) {
+                check25.checked = false;
+            } else {
+                check25.checked = true;
+            }
+
+        })
+        if (check25.checked == true) {
+            check125.checked = false;
+        } else {
+            check125.checked = true;
+        }
+    </script>
+
+
+
+
+

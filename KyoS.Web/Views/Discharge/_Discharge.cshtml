@@ -1,137 +1,121 @@
 ﻿@model KyoS.Web.Models.DischargeViewModel
-
-<br />
-<div class="col-md-8">
-    <dl class="dl-horizontal col-md-4">
-        <dt>
-            Client Name:
-        </dt>
-        <dd>
-            @Html.DisplayFor(modelItem => Model.Client.Name)
-        </dd>
-        <dt>
-            Case Number:
-        </dt>
-        <dd>
-            @Html.DisplayFor(modelItem => Model.Client.Code)
-        </dd>
-
-        <dt>
-            DOB:
-        </dt>
-        <dd>
-            @Html.DisplayFor(modelItem => Model.Client.DateOfBirth)
-        </dd>
-        <dt>
-            Diagnosis at Discharge:
-        </dt>
-        <dd>
-            @Html.DisplayFor(modelItem => Model.Client.Name)
-        </dd>
-        <dt>
-            Diagnosis Text:
-        </dt>
-        <dd>
-            @Html.DisplayFor(modelItem => Model.Client.Name)
-        </dd>
-        <dt>
-            Employee Signature:
-        </dt>
-        <dd>
-            @Html.DisplayFor(modelItem => Model.AdmissionedFor)
-        </dd>
-
-    </dl>
-    <dl class="dl-horizontal col-md-4">
-        <dt>
-            Date of Admission:
-        </dt>
-        <dd>
-            <input asp-for="DateDischarge" class="form-control">
-        </dd>
-        <dt>
-            Date of Report:
-        </dt>
-        <dd>
-            <input asp-for="DateReport" class="form-control">
-        </dd>
-
-        <dt>
-            Date of Discharge:
-        </dt>
-        <dd>
-            <input asp-for="DateDischarge" class="form-control">
-        </dd>
-
-    </dl>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="Client.Name" class="control-label">Client Name</label>
+        <input asp-for="Client.Name" class="form-control" readonly>
+        <span asp-validation-for="Client.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.Code" class="control-label">Case No.</label>
+        <input asp-for="Client.Code" class="form-control" readonly>
+        <span asp-validation-for="Client.Code" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.DateOfBirth" class="control-label">DOB</label>
+        <input asp-for="Client.DateOfBirth" class="form-control" readonly>
+        <span asp-validation-for="Client.DateOfBirth" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.AdmisionDate" class="control-label"></label>
+        <input asp-for="Client.AdmisionDate" class="form-control" readonly>
+        <span asp-validation-for="Client.AdmisionDate" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label class="control-label">Employee Signature</label>
+        <input asp-for="AdmissionedFor" class="form-control" readonly>
+        <span asp-validation-for="AdmissionedFor" class="text-danger"></span>
+    </div>
 </div>
-<div class="container-fluid col-md-12">
-    <div class="container-fluid col-md-2">
+<div class="col-md-push-12">
+    <div class="form-group col-md-5">
+        <label class="control-label">Diagnosis</label>
+        @if (Model.Client.Clients_Diagnostics.Count() > 0)
+        {
+            <input class="form-control" value="@Model.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code @Model.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Description" readonly>
+        }
+        else
+        {
+            <input class="form-control" readonly>
+        }
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="DateReport" class="control-label">Date Report</label>&nbsp;*
+        <input asp-for="DateReport" class="form-control">
+        <span asp-validation-for="DateReport" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="DateDischarge" class="control-label">Date Discharge</label>&nbsp;*
+        <input asp-for="DateDischarge" class="form-control">
+        <span asp-validation-for="DateDischarge" class="text-danger"></span>
+    </div>
+    <div class="container-fluid">
+        &nbsp;
+    </div>
+</div>
+<div class="container-fluid">
+    <hr />
+</div>
+<div class="col-md-push-12">    
+    <div class="form-group col-md-12">
         <input type="checkbox" asp-for="Planned" class="form-check-input" id="check1"> Planned Discharge
     </div>
-    <div class="container-fluid col-md-2">
-        <input type="checkbox" asp-for="Planned" class="form-check-input" id="check101"> Unplanned Discharge
-    </div>
 </div>
-<br />
-<div class="container-fluid col-md-12">
-    <div class="container-fluid col-md-4">
+<div class="col-md-push-12">
+    <div class="form-group col-md-4">
         <label asp-for="BriefHistory" class="control-label">Brief History:</label>&nbsp;*
-        <textarea asp-for="BriefHistory" class="form-control" rows="3"></textarea>
+        <textarea asp-for="BriefHistory" class="form-control" rows="4"></textarea>
         <span asp-validation-for="BriefHistory" class="text-danger"></span>
     </div>
-    <div class="container-fluid col-md-4">
+    <div class="form-group col-md-4">
         <label asp-for="CourseTreatment" class="control-label">Course of Treatment:</label>&nbsp;*
-        <textarea asp-for="CourseTreatment" class="form-control" rows="3"></textarea>
+        <textarea asp-for="CourseTreatment" class="form-control" rows="4"></textarea>
         <span asp-validation-for="CourseTreatment" class="text-danger"></span>
     </div>
-    <div class="container-fluid col-md-4">
+    <div class="form-group col-md-4">
         <label asp-for="ConditionalDischarge" class="control-label">Condition on Discharge:</label>&nbsp;*
-        <textarea asp-for="ConditionalDischarge" class="form-control" rows="3"></textarea>
+        <textarea asp-for="ConditionalDischarge" class="form-control" rows="4"></textarea>
         <span asp-validation-for="ConditionalDischarge" class="text-danger"></span>
     </div>
 </div>
-<br />
-<br />
-<div class="container-fluid col-md-12">
-    <div class="container-fluid col-md-4">
+<div class="col-md-push-12">
+    <div class="form-group col-md-4">
         <input type="checkbox" asp-for="TreatmentPlanObjCumpl" class="form-check-input"> Treatment Plan Objectives Completed<br />
-        <input type="checkbox" asp-for="AgencyDischargeClient" class="form-check-input"> Agency Discharged Client Due to Non-cooperation.<br />
+        <input type="checkbox" asp-for="AgencyDischargeClient" class="form-check-input"> Agency Discharged Client Due to Non-cooperation<br />
         <input type="checkbox" asp-for="ClientDeceased" class="form-check-input"> Client deceased &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="ClientMoved" class="form-check-input"> Client moved  <br />
+        <input type="checkbox" asp-for="Others" class="form-check-input"> Others <input asp-for="Others_Explain" class="form-control" />
     </div>
-    <div class="container-fluid col-md-4">
-        <input type="checkbox" asp-for="TreatmentPlanObjCumpl" class="form-check-input"> Treatment Plan Objectives Not Completed. (other appropriate services not available)<br />
+    <div class="form-group col-md-8">
         <input type="checkbox" asp-for="ClientDischargeAgainst" class="form-check-input"> Client Discharged Against Recommendation of Agency<br />
         <input type="checkbox" asp-for="PhysicallyUnstable" class="form-check-input"> Physically unstable  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="Hospitalization" class="form-check-input"> Hospitalization<br />
-    </div>
-    <div class="container-fluid col-md-4">
+        <input type="checkbox" asp-for="ClientReferred" class="form-check-input"> Client referred to another agency
+    </div>    
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
         <label asp-for="FollowDischarge" class="control-label">Follow Discharge:</label>&nbsp;*
         <textarea asp-for="FollowDischarge" class="form-control" rows="3"></textarea>
         <span asp-validation-for="FollowDischarge" class="text-danger"></span>
     </div>
 </div>
-<br>
-<div class="col-md-12">
-    <div class="col-md-6">
+<div class="col-md-push-12">
+    <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Medication List</h3>
+                <h3 class="panel-title">Medications at the time of discharge</h3>
             </div>
-            <div class="panel-body">
-                Medications at the time of Discharge:
+            <div class="panel-body">                
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-2">
+                            <th class="col-md-8">
                                 Type
                             </th>
-                            <th class="col-md-1">
+                            <th class="col-md-2" style="text-align:center;">
                                 Dosage
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
+                            <th class="col-md-2" style="text-align:center;">
                                 Frequency
                             </th>
-
                         </tr>
                     </thead>
                     <tbody>
@@ -141,7 +125,7 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
-                                <td>
+                                <td align="center">
                                     @Html.DisplayFor(modelItem => item.Dosage)
                                 </td>
                                 <td align="center">
@@ -149,67 +133,74 @@
                                     @Html.DisplayFor(modelItem => item.Frequency)
 
                                 </td>
-
-
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
         </div>
+    </div>    
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-6">
+        <label asp-for="ReferralFor1" class="control-label">Referral 1</label>
+        <input asp-for="ReferralFor1" class="form-control">
+        <span asp-validation-for="ReferralFor1" class="text-danger"></span>
+        <br />
+        <label asp-for="ReferralAgency1" class="control-label">Referral Agency 1</label>
+        <input asp-for="ReferralAgency1" class="form-control">
+        <span asp-validation-for="ReferralAgency1" class="text-danger"></span>
+        <br />
+        <label asp-for="ReferralContactPersonal1" class="control-label">Referral Contact Personal 1</label>
+        <input asp-for="ReferralContactPersonal1" class="form-control">
+        <span asp-validation-for="ReferralContactPersonal1" class="text-danger"></span>
+        <br />
+        <label asp-for="ReferralPhone1" class="control-label">Phone # 1</label>
+        <input asp-for="ReferralPhone1" class="form-control">
+        <span asp-validation-for="ReferralPhone1" class="text-danger"></span>
+        <br />
+        <label asp-for="ReferralHoursOperation1" class="control-label">Hours of Operation 1</label>
+        <input asp-for="ReferralHoursOperation1" class="form-control">
+        <span asp-validation-for="ReferralHoursOperation1" class="text-danger"></span>
     </div>
-    <div class="col-md-3">
-
-        <input type="checkbox" asp-for="ClientReferred" class="form-check-input"> Client referred to another agency: <br />
-        &nbsp;&nbsp;<label asp-for="ReferralFor1" class="control-label">Referral For:</label>
-        &nbsp;&nbsp;<input asp-for="ReferralFor1" class="form-control">
-        &nbsp;&nbsp;<span asp-validation-for="ReferralFor1" class="text-danger"></span>
-
-        &nbsp;&nbsp;<label asp-for="ReferralAgency1" class="control-label">Referral Agency:</label>
-        &nbsp;&nbsp;<input asp-for="ReferralAgency1" class="form-control">
-        &nbsp;&nbsp;<span asp-validation-for="ReferralAgency1" class="text-danger"></span>
-
-        &nbsp;&nbsp;<label asp-for="ReferralContactPersonal1" class="control-label">Referral Contact Personal1:</label>
-        &nbsp;&nbsp;<input asp-for="ReferralContactPersonal1" class="form-control">
-        &nbsp;&nbsp;<span asp-validation-for="ReferralContactPersonal1" class="text-danger"></span>
-
-        &nbsp;&nbsp;<label asp-for="ReferralPhone1" class="control-label">Phone #:</label>
-        &nbsp;&nbsp;<input asp-for="ReferralPhone1" class="form-control">
-        &nbsp;&nbsp;<span asp-validation-for="ReferralPhone1" class="text-danger"></span>
-
-        &nbsp;&nbsp;<label asp-for="ReferralHoursOperation1" class="control-label">Hours of Operation:</label>
-        &nbsp;&nbsp;<input asp-for="ReferralHoursOperation1" class="form-control">
-        &nbsp;&nbsp;<span asp-validation-for="ReferralHoursOperation1" class="text-danger"></span>
-
-    </div>
-    <div class="col-md-3">
-
-        <input type="checkbox" asp-for="Others" class="form-check-input"> Others:<br />
-
-        &nbsp;&nbsp;<label asp-for="ReferralFor1" class="control-label">Referral For:</label>
-        &nbsp;&nbsp;<input asp-for="ReferralFor1" class="form-control">
-        &nbsp;&nbsp;<span asp-validation-for="ReferralFor1" class="text-danger"></span>
-
-        &nbsp;&nbsp;<label asp-for="ReferralAgency1" class="control-label">Referral Agency:</label>
-        &nbsp;&nbsp;<input asp-for="ReferralAgency1" class="form-control">
-        &nbsp;&nbsp;<span asp-validation-for="ReferralAgency1" class="text-danger"></span>
-
-        &nbsp;&nbsp;<label asp-for="ReferralContactPersonal1" class="control-label">Referral Contact Personal1:</label>
-        &nbsp;&nbsp;<input asp-for="ReferralContactPersonal1" class="form-control">
-        &nbsp;&nbsp;<span asp-validation-for="ReferralContactPersonal1" class="text-danger"></span>
-
-        &nbsp;&nbsp;<label asp-for="ReferralPhone1" class="control-label">Phone #:</label>
-        &nbsp;&nbsp;<input asp-for="ReferralPhone1" class="form-control">
-        &nbsp;&nbsp;<span asp-validation-for="ReferralPhone1" class="text-danger"></span>
-
-        &nbsp;&nbsp;<label asp-for="ReferralHoursOperation1" class="control-label">Hours of Operation:</label>
-        &nbsp;&nbsp;<input asp-for="ReferralHoursOperation1" class="form-control">
-        &nbsp;&nbsp;<span asp-validation-for="ReferralHoursOperation1" class="text-danger"></span>
-
-
+    <div class="col-md-6">
+        <label asp-for="ReferralFor2" class="control-label">Referral 2</label>
+        <input asp-for="ReferralFor2" class="form-control">
+        <span asp-validation-for="ReferralFor2" class="text-danger"></span>
+        <br />
+        <label asp-for="ReferralAgency2" class="control-label">Referral Agency 2</label>
+        <input asp-for="ReferralAgency2" class="form-control">
+        <span asp-validation-for="ReferralAgency2" class="text-danger"></span>
+        <br />
+        <label asp-for="ReferralContactPersonal2" class="control-label">Referral Contact Personal 2</label>
+        <input asp-for="ReferralContactPersonal2" class="form-control">
+        <span asp-validation-for="ReferralContactPersonal2" class="text-danger"></span>
+        <br />
+        <label asp-for="ReferralPhone2" class="control-label">Phone # 2</label>
+        <input asp-for="ReferralPhone2" class="form-control">
+        <span asp-validation-for="ReferralPhone2" class="text-danger"></span>
+        <br />
+        <label asp-for="ReferralHoursOperation2" class="control-label">Hours of Operation 2</label>
+        <input asp-for="ReferralHoursOperation2" class="form-control">
+        <span asp-validation-for="ReferralHoursOperation2" class="text-danger"></span>
     </div>
 </div>
-
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-12">
+    <pre>
+    
+    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Supervisor signature date</strong>    <input asp-for="DateSignatureSupervisor">
+    <strong>(@Html.DisplayFor(modelItem => Model.Client.Name))</strong>     
+    
+    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">      
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+    </pre>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
 
 <script>
     check1.addEventListener('change', (e) => {

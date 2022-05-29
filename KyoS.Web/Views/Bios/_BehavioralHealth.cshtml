@@ -1,0 +1,32 @@
+﻿@model KyoS.Web.Models.Bio_BehavioralHistoryViewModel
+<div class="col-md-push-12">
+    <div class="col-md-3">
+        <label asp-for="Client.Name" class="control-label">Client Name</label>
+        <input asp-for="Client.Name" class="form-control" readonly />
+        <span asp-validation-for="Client.Name" class="text-danger"></span>
+    </div>
+    <div class="col-md-2">
+        <label asp-for="Client.AdmisionDate" class="control-label"></label>
+        <input asp-for="Client.AdmisionDate" class="form-control" readonly />
+        <span asp-validation-for="Client.AdmisionDate" class="text-danger"></span>
+    </div>
+    <div class="col-md-2">
+        <label asp-for="Client.Code" class="control-label"></label>
+        <input asp-for="Client.Code" class="form-control" readonly />
+        <span asp-validation-for="Client.Code" class="text-danger"></span>
+    </div>
+    <div class="col-md-3">
+        <label asp-for="Problem" class="control-label">Problem</label>&nbsp;*
+        <input asp-for="Problem" class="form-control" />
+        <span asp-validation-for="Problem" class="text-danger"></span>
+    </div>
+    <div class="col-md-2">
+        <label asp-for="Date" class="control-label"></label>&nbsp;*
+        <input asp-for="Date" class="form-control" />
+        <span asp-validation-for="Date" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+

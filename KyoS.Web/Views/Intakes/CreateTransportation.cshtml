@@ -1,16 +1,13 @@
 ﻿@model KyoS.Web.Models.IntakeTransportationViewModel
 @{
-    ViewData["Title"] = "Create TRANSPORTATION SAFETY POLICY STATEMENT";
+    ViewData["Title"] = "Transportation safety policy statement";
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>
-        CREATE TRANSPORTATION SAFETY POLICY STATEMENT FOOD SAFETY POLICY STATEMENT
-    </title>
+    <meta name="viewport" content="width=device-width" />    
 </head>
 <body>
 
@@ -20,27 +17,24 @@
                 <i class="icon-home"></i>
                 @Html.ActionLink("Intakes", "Index", "Intakes")
             </li>
-            <li class="active">Create Intake TRANSPORTATION SAFETY POLICY STATEMENT FOOD SAFETY POLICY STATEMENT</li>
+            <li class="active">Transportation safety policy statement</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Create Intake TRANSPORTATION SAFETY POLICY STATEMENT FOOD SAFETY POLICY STATEMENT</h4>
+    <h4>Transportation Safety Policy Statement</h4>
     <hr />
-    <div class="row">
-
-        <div>
-            <form asp-action="CreateTransportation" asp-route-id="@Model.Id" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="IdClient" />
-                <input type="hidden" asp-for="Client_FK" />
-                <input type="hidden" asp-for="AdmissionedFor" />
-                <partial name="_IntakesTransportation" />
-                <div class="form-group col-md-12">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                    <a asp-action="Index" class="btn btn-success">Back</a>
-                </div>
-            </form>
-        </div>
+    <div class="row">        
+        <form asp-action="CreateTransportation" asp-route-id="@Model.Id" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdClient" />
+            <input type="hidden" asp-for="Client_FK" />
+            <input type="hidden" asp-for="AdmissionedFor" />
+            <partial name="_IntakesTransportation" />
+            <div class="form-group col-md-12">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="IntakeDashboard" asp-route-id="@Model.Client.Id" class="btn btn-success">Back</a>
+            </div>
+        </form>        
     </div>
 </body>
 </html>

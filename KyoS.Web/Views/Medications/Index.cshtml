@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
 @{
-    ViewData["Title"] = "Medication";
+    ViewData["Title"] = "Medications";
 }
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
@@ -10,13 +10,9 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Medication List</li>
+        <li class="active">Medications</li>
     </ul><!--.breadcrumb-->
 </div>
-
-<p>
-    <a asp-action="MedicationCandidates" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Candidate Medication</a>
-</p>
 
 <div class="row">
     <div class="col-md-12">
@@ -27,15 +23,21 @@
                     <i class="icon-remove"></i>
                 </button>
                 <strong class="red">
-                    Error. It is not posible delete the Medication List
+                    Error. It is not possible to delete the selected medication
                 </strong>
             </div>
         }
     </div>
     <div class="col-md-12">
+        <strong>Note: </strong> All clients will be displayed, orange color means the client has not medications
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Medication List</h3>
+                <h3 class="panel-title">Medications</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -43,97 +45,165 @@
                         <tr>
                             <th class="col-md-1">
                             </th>
-                            <th class="col-md-3">
+                            <th class="col-md-4">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-1" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Code)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.AdmisionDate)
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
-                            
-                            <th class="col-md-2">
+                            <th class="col-md-2" style="text-align:center;">
+                                MH Therapy
+                            </th>
+                            <th class="col-md-1">
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                       @foreach (var item in Model)
+                        @foreach (var item in Model)
                         {
-                        <tr>
-                            <td align="center">
-                                @if (item.MedicationList.Count() != 0)
-                                {
-                                    <a class="icon-plus-sign-alt"></a>
-                                }
-                                else
-                                {
-
-                                }
-                                <div style="display:none">
-                                    <table class="table table-striped table-bordered">
-                                        <tr>
-                                            <th class="col-md-3">Drug Name</th>
-                                            <th class="col-md-2">Dosage</th>
-                                            <th class="col-md-2">Frequency</th>
-                                            <th class="col-md-3">Precriber</th>
-                                            <th class="col-md-2"></th>
-                                        </tr>
-                                        @foreach (var product1 in item.MedicationList)
+                            @if (item.MedicationList.Count() != 0)
+                            {
+                                <tr>
+                                    <td align="center">
+                                        <a class="icon-plus-sign-alt"></a>
+                                        <div style="display:none">
+                                            <table class="table table-striped table-bordered">
+                                                <tr>
+                                                    <th class="col-md-4">Drug Name</th>
+                                                    <th class="col-md-1" style="text-align:center;">Dosage</th>
+                                                    <th class="col-md-2" style="text-align:center;">Frequency</th>
+                                                    <th class="col-md-3">Prescriber</th>
+                                                    <th class="col-md-2"></th>
+                                                </tr>
+                                                @foreach (var product1 in item.MedicationList)
+                                                {
+                                                    <tr>
+                                                        <td>@Html.DisplayFor(modelItem => product1.Name)</td>
+                                                        <td align="center">@Html.DisplayFor(modelItem => product1.Dosage)</td>
+                                                        <td align="center">@Html.DisplayFor(modelItem => product1.Frequency)</td>
+                                                        <td>@Html.DisplayFor(modelItem => product1.Prescriber)</td>
+                                                        <td align="center">
+                                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Mannager") || User.IsInRole("Supervisor")))
+                                                            {
+                                                                <a asp-action="Edit" asp-route-id="@product1.Id" class="btn btn-warning" title="Edit Medication"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a asp-action="DeleteBehavioral" asp-route-origin="1" asp-route-id="@product1.Id" class="btn btn-danger" title="Delete Medication"><i class="glyphicon glyphicon-trash"></i></a>                                                                
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="btn btn-warning disabled" title="Edit Medication"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a class="btn btn-danger disabled"><i class="glyphicon glyphicon-trash"></i></a>
+                                                            }                                                            
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
-                                            <tr>
-                                                <td>@Html.DisplayFor(modelItem => product1.Name)</td>
-                                                <td>@Html.DisplayFor(modelItem => product1.Dosage)</td>
-                                                <td>@Html.DisplayFor(modelItem => product1.Frequency)</td>
-                                                <td>@Html.DisplayFor(modelItem => product1.Prescriber)</td>
-                                                <td>
-                                                   @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Mannager"))
-                                                    {
-                                                        <a asp-action="Edit" asp-route-id="@product1.Id" class="btn btn-warning" title="Add Medication"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                    }
-                                                </td>
-                                            </tr>
-                                            @* cant_unit = cant_unit + product.Units;*@
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
                                         }
-                                    </table>
-                                </div>
-                            </td>
-                            <td>
-                                @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
-                                {
-                                    <i class="glyphicon glyphicon-user btn-danger"></i>
-                                }
-                                @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
-                                {
-                                    <i class="glyphicon glyphicon-user btn-primary"></i>
-                                }
-                                &nbsp;
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Code)
-                            </td>
-                            <td align="center">
-                                @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                                {
-                                    <span class="label label-success">
-                                        Open
-                                    </span>
-                                }
-                                @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                                {
-                                    <span class="label label-default">
-                                        Close
-                                    </span>
-                                }
-                            </td>
-                            <td align="right">
-                                @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Mannager"))
-                                {
-                                    <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-primary" title="Add Medication"><i class="glyphicon glyphicon-plus"></i></a>
-                                }
-                                </td>
-                        </tr>
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-success">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Service)
+                                    </td>
+                                    <td align="right">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Mannager") || User.IsInRole("Supervisor")))
+                                        {
+                                            <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-success" title="Add Medication"><i class="glyphicon glyphicon-plus"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-warning disabled" title="Add Medication"><i class="glyphicon glyphicon-plus"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr style="color:orange">
+                                    <td>&nbsp;</td>
+                                    <td>
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-warning">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Service)
+                                    </td>
+                                    <td align="right">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Mannager") || User.IsInRole("Supervisor")))
+                                        {
+                                            <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="Add Medication"><i class="glyphicon glyphicon-plus"></i></a>                                            
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-warning disabled" title="Add Medication"><i class="glyphicon glyphicon-plus"></i></a>
+
+                                        }
+                                    </td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>
@@ -151,21 +221,23 @@
     <script type="text/javascript">
          $(document).ready(function () {
               $('#MyTable').DataTable({
-                  "order": [[0, "asc"]],
+                  "order": [[1, "asc"]],
                    "pageLength": 100
               });
 
              // Delete item
              var item_to_delete;
+
              $('.deleteItem').click((e) => {
-                 item_to_delete = e.currentTarget.dataset.dataset.id;
-             });
+                 item_to_delete = e.currentTarget.dataset.id;
+             });                     
 
              $("#btnYesDelete").click(function () {
-             var url = "@Url.Action("Delete", "Medications")";
+                 var url = "@Url.Action("Delete", "Medications")";
                  window.location.href = url + '/' + item_to_delete;
-             });
-         });
+             });             
+        });
+
         $(function () {
 
             //Assign Click event to Plus Image.
@@ -181,4 +253,3 @@
         });
     </script>
 }
-

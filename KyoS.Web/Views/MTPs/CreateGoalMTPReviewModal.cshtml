@@ -1,0 +1,49 @@
+﻿@model KyoS.Web.Models.GoalViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="CreateGoalMTPReviewModal" onsubmit="return jQueryAjaxPostGoalMTPReview(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IdMTP" />
+            <input type="hidden" asp-for="IdMTPReview" />
+            <div class="container-fluid">
+                <h4 style="font-weight:bold;"> <span class="label label-info"> MTP - @Model.MTP.Client.Name </span></h4>
+            </div>
+            <div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="Number" class="control-label"></label> *&nbsp;
+                    <input asp-for="Number" class="form-control" />
+                    <span asp-validation-for="Number" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="IdService" class="control-label">Therapy</label> *&nbsp;
+                    <select asp-for="IdService" asp-items="Model.Services" class="form-control"></select>
+                    <span asp-validation-for="IdService" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-12 form-group">
+                    <label asp-for="Name" class="control-label"></label> *&nbsp;
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-12 form-group">
+                    <label asp-for="AreaOfFocus" class="control-label"></label> *&nbsp;
+                    <textarea asp-for="AreaOfFocus" class="form-control" rows="6"></textarea>
+                    <span asp-validation-for="AreaOfFocus" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -35,7 +35,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
         
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -44,67 +44,101 @@ namespace KyoS.Web.Controllers
             }
 
             UserEntity user_logged = await _context.Users
-                                                           .Include(u => u.Clinic)
-                                                           .ThenInclude(c => c.Setting)
-                                                           .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
-            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null)
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
                 return RedirectToAction("NotAuthorized", "Account");
             }
             else
             {
-                if (User.IsInRole("Manager"))
-                    return View(await _context.Discharge
-                                              .Include(f => f.Client)
-                                              .ThenInclude(f => f.Clients_Diagnostics)
-                                              .OrderBy(f => f.Client.Name)
+                if (User.IsInRole("Mannager"))
+                    return View(await _context.Clients
+
+                                              .Include(f => f.Discharge)
+                                              .Include(f => f.Clients_Diagnostics)
+
+                                              .Where(n => (n.Clinic.Id == user_logged.Clinic.Id && n.Status == StatusType.Close))
+                                              .OrderBy(f => f.Name)
                                               .ToListAsync());
 
+                if (User.IsInRole("Supervisor"))
+                {
+                    return View(await _context.Clients
+
+                                              .Include(f => f.Discharge)
+                                              .Include(f => f.Clients_Diagnostics)
+
+                                              .Where(n => (n.Clinic.Id == user_logged.Clinic.Id && n.Status == StatusType.Close))
+                                              .OrderBy(f => f.Name)
+                                              .ToListAsync());
+                }
                 if (User.IsInRole("Facilitator"))
                 {
+                    List<ClientEntity> ClientList = await _context.Clients
+                                                             .Include(n => n.Discharge)
+                                                             .Include(f => f.Clients_Diagnostics)
+                                                             .Include(n => n.Workdays_Clients)
+                                                             .ThenInclude(mf => mf.Facilitator)
+                                                             .Where(n => n.Discharge == null && n.Clinic.Id == user_logged.Clinic.Id
+                                                                   && n.Status == StatusType.Close).ToListAsync();
 
+                    List<ClientEntity> ClientOutput = new List<ClientEntity>();
+                    FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    foreach (var item in ClientList)
+                    {
+                        for (int i = item.Workdays_Clients.Count() - 1; i > 0; i--)
+                        {
+                            if (item.Workdays_Clients.ElementAtOrDefault(i).Facilitator.Id == facilitator.Id)
+                            {
+                                ClientOutput.Add(item);
+                                i = 0;
+                            }
 
+                        }
 
-                    return View(await _context.Discharge
-                                              .Include(f => f.Client)
-                                              .ThenInclude(f => f.Clients_Diagnostics)
-                                              //.Where(f => )
-                                              .OrderBy(f => f.Client.Name)
-                                              .ToListAsync());
+                    }
+
+                    return View(ClientOutput);
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Facilitator")]
         public IActionResult Create(int id = 0)
         {
 
             UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             DischargeViewModel model;
 
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Facilitator "))
             {
-
-
                 if (user_logged.Clinic != null)
                 {
-
                     model = new DischargeViewModel
                     {
                         IdClient = id,
-                        Client = _context.Clients.Include(n => n.MedicationList).FirstOrDefault(n => n.Id == id),
+                        Client = _context.Clients
+
+                                         .Include(n => n.MedicationList)
+
+                                         .Include(c => c.Clients_Diagnostics)
+                                         .ThenInclude(cd => cd.Diagnostic)
+
+                                         .FirstOrDefault(n => n.Id == id),
                         AdmissionedFor = user_logged.FullName,
-                        AgencyDischargeClient = true,
+                        AgencyDischargeClient = false,
                         BriefHistory = "",
-                        ClientDeceased = true,
-                        ClientDischargeAgainst = true,
-                        ClientMoved = true,
-                        ClientReferred = true,
+                        ClientDeceased = false,
+                        ClientDischargeAgainst = false,
+                        ClientMoved = false,
+                        ClientReferred = false,
                         Client_FK = id,
                         ConditionalDischarge = "",
                         CourseTreatment = "",
@@ -112,8 +146,8 @@ namespace KyoS.Web.Controllers
                         DateReport = DateTime.Now,
                         FollowDischarge = "",
                         Id = 0,
-                        PhysicallyUnstable = true,
-                        Planned = true,
+                        PhysicallyUnstable = false,
+                        Planned = false,
                         ReasonDischarge = "",
                         ReferralAgency1 = "",
                         ReferralAgency2 = "",
@@ -125,11 +159,13 @@ namespace KyoS.Web.Controllers
                         ReferralHoursOperation2 = "",
                         ReferralPhone1 = "",
                         ReferralPhone2 = "",
-                        TreatmentPlanObjCumpl = true,
+                        TreatmentPlanObjCumpl = false,
                         Others = false,
+                        Others_Explain = "",
                         Hospitalization = false,
                         DateSignatureEmployee = DateTime.Now,
                         DateSignaturePerson = DateTime.Now,
+                        DateSignatureSupervisor = DateTime.Now
 
                     };
                     if (model.Client.MedicationList == null)
@@ -141,14 +177,20 @@ namespace KyoS.Web.Controllers
             model = new DischargeViewModel
             {
                 IdClient = id,
-                Client = _context.Clients.Include(n => n.MedicationList).FirstOrDefault(n => n.Id == id),
+                Client = _context.Clients
+                                 .Include(n => n.MedicationList)
+                                         
+                                 .Include(c => c.Clients_Diagnostics)
+                                 .ThenInclude(cd => cd.Diagnostic)
+
+                                 .FirstOrDefault(n => n.Id == id),
                 AdmissionedFor = user_logged.FullName,
-                AgencyDischargeClient = true,
+                AgencyDischargeClient = false,
                 BriefHistory = "",
-                ClientDeceased = true,
-                ClientDischargeAgainst = true,
-                ClientMoved = true,
-                ClientReferred = true,
+                ClientDeceased = false,
+                ClientDischargeAgainst = false,
+                ClientMoved = false,
+                ClientReferred = false,
                 Client_FK = id,
                 ConditionalDischarge = "",
                 CourseTreatment = "",
@@ -156,8 +198,8 @@ namespace KyoS.Web.Controllers
                 DateReport = DateTime.Now,
                 FollowDischarge = "",
                 Id = 0,
-                PhysicallyUnstable = true,
-                Planned = true,
+                PhysicallyUnstable = false,
+                Planned = false,
                 ReasonDischarge = "",
                 ReferralAgency1 = "",
                 ReferralAgency2 = "",
@@ -169,14 +211,20 @@ namespace KyoS.Web.Controllers
                 ReferralHoursOperation2 = "",
                 ReferralPhone1 = "",
                 ReferralPhone2 = "",
-                TreatmentPlanObjCumpl = true,
+                TreatmentPlanObjCumpl = false,
+                Others = false,
+                Others_Explain = "",
+                Hospitalization = false,
+                DateSignatureEmployee = DateTime.Now,
+                DateSignaturePerson = DateTime.Now,
+                DateSignatureSupervisor = DateTime.Now
             };
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> Create(DischargeViewModel DischargeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -188,13 +236,13 @@ namespace KyoS.Web.Controllers
                 DischargeEntity DischargeEntity = _context.Discharge.Find(DischargeViewModel.Id);
                 if (DischargeEntity == null)
                 {
-                    DischargeEntity = await _converterHelper.ToDischargeEntity(DischargeViewModel, true);
+                    DischargeEntity = await _converterHelper.ToDischargeEntity(DischargeViewModel, true, user_logged.UserName);
                     _context.Discharge.Add(DischargeEntity);
                     try
                     {
                         await _context.SaveChangesAsync();
 
-                        return RedirectToAction("Index", "Discharge");
+                        return RedirectToAction("DischargeInEdit", "Discharge");
                     }
                     catch (System.Exception ex)
                     {
@@ -241,18 +289,22 @@ namespace KyoS.Web.Controllers
                 ReferralPhone1 = DischargeViewModel.ReferralPhone1,
                 ReferralPhone2 = DischargeViewModel.ReferralPhone2,
                 TreatmentPlanObjCumpl = DischargeViewModel.TreatmentPlanObjCumpl,
-                
-
+                Others = DischargeViewModel.Others,
+                Others_Explain = DischargeViewModel.Others_Explain,
+                DateSignatureEmployee = DischargeViewModel.DateSignatureEmployee,
+                DateSignaturePerson = DischargeViewModel.DateSignaturePerson,
+                DateSignatureSupervisor = DischargeViewModel.DateSignatureSupervisor,
+                Hospitalization = DischargeViewModel.Hospitalization
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", DischargeViewModel) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public IActionResult Edit(int id = 0)
         {
             DischargeViewModel model;
 
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Supervisor")|| User.IsInRole("Facilitator"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -262,9 +314,14 @@ namespace KyoS.Web.Controllers
                 {
 
                     DischargeEntity Discharge = _context.Discharge
-                                                                 .Include(m => m.Client)
-                                                                 .ThenInclude(m => m.MedicationList)
-                                                                 .FirstOrDefault(m => m.Id == id);
+                                                        .Include(m => m.Client)
+                                                        .ThenInclude(m => m.MedicationList)
+
+                                                        .Include(d => d.Client)
+                                                        .ThenInclude(c => c.Clients_Diagnostics)                                                        
+                                                        .ThenInclude(cd => cd.Diagnostic)
+
+                                                        .FirstOrDefault(m => m.Id == id);
                     if (Discharge == null)
                     {
                         return RedirectToAction("NotAuthorized", "Account");
@@ -286,7 +343,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> Edit(DischargeViewModel dischargeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -295,13 +352,19 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                DischargeEntity dischargeEntity = await _converterHelper.ToDischargeEntity(dischargeViewModel, false);
+                DischargeEntity dischargeEntity = await _converterHelper.ToDischargeEntity(dischargeViewModel, false, user_logged.Id);
                 _context.Discharge.Update(dischargeEntity);
                 try
                 {
                     await _context.SaveChangesAsync();
-
-                    return RedirectToAction("Index", "Discharge");
+                    if (User.IsInRole("Facilitator"))
+                    {
+                        return RedirectToAction("DischargeInEdit", "Discharge");
+                    }
+                    else
+                    {
+                        return RedirectToAction("PendingDischarge", "Discharge");
+                    }
                 }
                 catch (System.Exception ex)
                 {
@@ -313,36 +376,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", dischargeViewModel) });
         }
 
-        [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> DischargeCandidates(int idError = 0)
-        {
-            UserEntity user_logged = await _context.Users
-
-                                                   .Include(u => u.Clinic)
-                                                   .ThenInclude(c => c.Setting)
-
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-
-            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null /*|| !user_logged.Clinic.Setting.TCMClinic*/)
-            {
-                return RedirectToAction("NotAuthorized", "Account");
-            }
-
-            if (idError == 1) //Imposible to delete
-            {
-                ViewBag.Delete = "N";
-            }
-
-            List<ClientEntity> ClientList = await _context.Clients
-                                                          .Include(n => n.Discharge)
-                                                          .Where(n => n.Discharge == null && n.Status == StatusType.Close)
-                                                          .ToListAsync();
-
-            return View(ClientList);
-
-        }
-
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -368,5 +402,250 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        public IActionResult PrintDischarge(int id)
+        {
+            DischargeEntity entity = _context.Discharge
+
+                                             .Include(d => d.Client)
+                                             .ThenInclude(c => c.Clinic)
+
+                                             .Include(d => d.Client)
+                                             .ThenInclude(c => c.EmergencyContact)
+
+                                             .Include(d => d.Client)
+                                             .ThenInclude(c => c.LegalGuardian)
+
+                                             .Include(d => d.Client)
+                                             .ThenInclude(c => c.Clients_Diagnostics)
+                                             .ThenInclude(cd => cd.Diagnostic)
+
+                                             .Include(d => d.Client)
+                                             .ThenInclude(c => c.MedicationList)
+
+                                             .FirstOrDefault(f => (f.Id == id));
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            //if (entity.Client.Clinic.Name == "DAVILA")
+            //{
+            //    Stream stream = _reportHelper.FloridaSocialHSIntakeReport(entity);
+            //    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            //}
+
+            if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            {
+                Stream stream = _reportHelper.FloridaSocialHSDischargeReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+            {
+                Stream stream = _reportHelper.DreamsMentalHealthDischargeReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
+            return null;
+        }
+
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        public async Task<IActionResult> ClientswithoutDischarge(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (User.IsInRole("Facilitator"))
+            {
+               FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+
+                List<ClientEntity> clientListPSR = await _context.Clients
+                                                               .Include(m => m.Discharge)
+
+                                                               .Where(m => ((m.Discharge == null || m.Discharge.TypeService != ServiceType.PSR)
+                                                                     && m.Clinic.Id == user_logged.Clinic.Id
+                                                                     && m.Status == StatusType.Close && m.IdFacilitatorPSR == facilitator.Id)).ToListAsync();
+                List<ClientEntity> clientListIND = await _context.Clients
+                                                              .Include(m => m.Discharge)
+
+                                                              .Where(m => ((m.Discharge == null || m.Discharge.TypeService != ServiceType.Individual)
+                                                                    && m.Clinic.Id == user_logged.Clinic.Id
+                                                                    && m.Status == StatusType.Close && m.IndividualTherapyFacilitator.Id == facilitator.Id)).ToListAsync();
+                foreach (var item in clientListIND)
+                {
+                    item.Service = ServiceType.Individual;
+                    clientListPSR.Add(item);
+                }
+
+                return View(clientListPSR);
+            }
+            else
+            {
+                List<ClientEntity> clientListPSR = await _context.Clients
+                                                                .Include(m => m.Discharge)
+
+                                                                .Where(m => ((m.Discharge == null || m.Discharge.TypeService != ServiceType.PSR)
+                                                                      && m.Clinic.Id == user_logged.Clinic.Id
+                                                                      && m.Status == StatusType.Close)).ToListAsync();
+                List<ClientEntity> clientListIND = await _context.Clients
+                                                              .Include(m => m.Discharge)
+
+                                                              .Where(m => ((m.Discharge == null || m.Discharge.TypeService != ServiceType.Individual)
+                                                                    && m.Clinic.Id == user_logged.Clinic.Id
+                                                                    && m.Status == StatusType.Close)).ToListAsync();
+                
+                
+                foreach (var item in clientListIND)
+                {
+                    item.Service = ServiceType.Individual;
+                    clientListPSR.Add(item);
+                }
+               
+                return View(clientListPSR);
+            }
+        }
+
+       
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> FinishEditingDischarge(int id)
+        {
+            DischargeEntity discharge = await _context.Discharge.FirstOrDefaultAsync(n => n.Id == id);
+            if (User.IsInRole("Supervisor"))
+            {
+                discharge.Status = DischargeStatus.Approved;
+            }
+            else
+            {
+                discharge.Status = DischargeStatus.Pending;
+            }
+
+            _context.Update(discharge);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("DischargeInEdit", "Discharge");
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ApproveDischarge(int id)
+        {
+            DischargeEntity discharge = await _context.Discharge.FirstOrDefaultAsync(n => n.Id == id);
+            discharge.Status = DischargeStatus.Approved;
+            _context.Update(discharge);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(PendingDischarge));
+        }
+
+        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
+        public async Task<IActionResult> PendingDischarge(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                  .Include(u => u.Clinic)
+                                                  .ThenInclude(c => c.Setting)
+                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if (clinic != null)
+                {
+                    return View(await _context.Discharge
+                                              .Include(c => c.Client)
+                                              .ThenInclude(c => c.Clinic)
+                                              .Where(m => (m.Client.Clinic.Id == clinic.Id)
+                                                    && m.Status == DischargeStatus.Pending)
+                                              .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+
+                }
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        public async Task<IActionResult> DischargeInEdit(int idError = 0)
+        {
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+                if (User.IsInRole("Mannager"))
+                    return View(await _context.Clients
+
+                                              .Include(f => f.Discharge)
+                                              .Include(f => f.Clients_Diagnostics)
+
+                                              .Where(n => (n.Discharge.Status == DischargeStatus.Edition
+                                                    && n.Clinic.Id == user_logged.Clinic.Id && n.Status == StatusType.Close))
+                                              .OrderBy(f => f.Name)
+                                              .ToListAsync());
+
+                if (User.IsInRole("Supervisor"))
+                {
+                    return View(await _context.Clients
+
+                                              .Include(f => f.Discharge)
+                                              .Include(f => f.Clients_Diagnostics)
+
+                                              .Where(n => (n.Discharge.Status == DischargeStatus.Edition 
+                                                    && n.Clinic.Id == user_logged.Clinic.Id && n.Status == StatusType.Close))
+                                              .OrderBy(f => f.Name)
+                                              .ToListAsync());
+                }
+                if (User.IsInRole("Facilitator"))
+                {
+                    FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+
+                    List<ClientEntity> clientListPSR = await _context.Clients
+                                                               .Include(m => m.Discharge)
+
+                                                               .Where(m => ((m.Discharge == null || m.Discharge.TypeService != ServiceType.PSR)
+                                                                     && m.Clinic.Id == user_logged.Clinic.Id
+                                                                     && m.Status == StatusType.Close && m.IdFacilitatorPSR == facilitator.Id)).ToListAsync();
+                    List<ClientEntity> clientListIND = await _context.Clients
+                                                                  .Include(m => m.Discharge)
+
+                                                                  .Where(m => ((m.Discharge == null || m.Discharge.TypeService != ServiceType.Individual)
+                                                                        && m.Clinic.Id == user_logged.Clinic.Id
+                                                                        && m.Status == StatusType.Close && m.IndividualTherapyFacilitator.Id == facilitator.Id)).ToListAsync();
+                    foreach (var item in clientListIND)
+                    {
+                        clientListPSR.Add(item);
+                    }
+
+                    return View(clientListPSR);
+                }
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
     }
 }

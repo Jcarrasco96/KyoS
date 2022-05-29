@@ -10,5 +10,9 @@ namespace KyoS.Web.Models
         
         public int IdService { get; set; }
         public IEnumerable<SelectListItem> Services { get; set; }
+
+        public int IdAdendum { get; set; }
+
+        public int IdMTPReviewOfView { get; set; }
     }
 }

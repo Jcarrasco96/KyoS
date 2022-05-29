@@ -1,14 +1,13 @@
 ﻿@model KyoS.Web.Models.FarsFormViewModel
 @{
-    ViewData["Title"] = "Create FARS FORM";
+    ViewData["Title"] = "Create Fars Form";
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>CREATE FARS FORM</title>
+    <meta name="viewport" content="width=device-width" />    
 </head>
 <body>
 
@@ -16,29 +15,30 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("FarsForms", "Index", "FarsForms")
+                @Html.ActionLink("Fars Forms", "Index", "FarsForms")
             </li>
-            <li class="active">Create FARS FORM</li>
+            <li class="active">Create Fars Form</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Create FARS FORM</h4>
+    <h4>Create Fars Form</h4>
     <hr />
-    <div class="row">
-
-        <div>
-            <form asp-action="Create" asp-route-id="@Model.Id" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="IdClient" />
-                <input type="hidden" asp-for="AdmissionedFor" />
-                <partial name="_FarsForms" />
-                <div class="form-group col-md-12">
-                    <br /> 
-                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="Create" class="btn btn-primary" />
-                    <a asp-action="Index" class="btn btn-success">Back</a>
-                </div>
-            </form>
-        </div>
+    <div class="row">       
+        <form asp-action="Create" asp-route-id="@Model.Id" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdClient" />
+            <input type="hidden" asp-for="AdmissionedFor" />
+            <input type="hidden" asp-for="Status" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="LastModifiedBy" />
+            <input type="hidden" asp-for="LastModifiedOn" />
+            <partial name="_FarsForms" />
+            <div class="form-group col-md-12">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-success">Back</a>
+            </div>
+        </form>       
     </div>
 </body>
 </html>

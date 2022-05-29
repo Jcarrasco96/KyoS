@@ -1,72 +1,48 @@
 ﻿@model KyoS.Web.Models.IntakeFeeAgreementViewModel
-
-<br />
-<div class="container-fluid col-md-9">
+<div class="col-md-12">
     <pre>
-            I hereby certify that the financial information I have provided is true and complete to the best of my knowledge. I 
-            understand that <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong> may use my protected health information in 
-            order to secure payment of my services from outside funding sources such as Medicaid, Florida Department 
-            of Children and Families, etc. 
+    I hereby certify that the financial information I have provided is true and complete to the best of my knowledge. I understand that <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong> 
+    may use my protected health information in order to secure payment of my services from outside funding sources such as Medicaid, 
+    Florida Department of Children and Families, etc. 
             
-            For more information concerning the use and disclosure of your protected health information, please refer to a copy 
-            of the <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong> notice of Privacy Practices. 
+    For more information concerning the use and disclosure of your protected health information, please refer to a copy of the <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong> 
+    notice of Privacy Practices. 
             
-            I understand and agree to be responsible for any outstanding balance which may be refused for payment by my 
-            insurance company. I understand that I will be responsible for the unpaid balance or my sliding fee scale, 
-            whichever is less. If I have no insurance, I understand I am responsible for payment of services based on my 
-            sliding fee scale assessment. 
+    I understand and agree to be responsible for any outstanding balance which may be refused for payment by my insurance company. 
+    I understand that I will be responsible for the unpaid balance or my sliding fee scale, whichever is less. If I have no insurance, 
+    I understand I am responsible for payment of services based on my sliding fee scale assessment. 
 
-                    Brief Mental Assessment Screening               $29.32           0.00 
-                    Psychiatric evaluation                          $210.00          0.00 
-                    Medication management                           $60.00           0.00 
-                    Bio –psychosocial assessment                    $48.00           0.00 
-                    Limited functional assessment                   $15.00           0.00 
-                    Treatment plan                                  $97.00           0.00 
-                    Treatment plan review                           $48.50           0.00 
-                    Individual and family therapy                   $73.32           0.00 
-                    Therapeutic behavioral onsite services      $64.00 per hour      0.00 
-                    Psychosocial rehabilitation services        $36.00 per hour      0.00 
-                    Home Visit (as needed)                      $48.00 per hour      0.00 
-                    Community Visit (as needed)                 $48.00 per hour      0.00 
-                    Case Management Assessment                      $96.00           0.00 
-                    Service Planning                                $120.00          0.00 
-                    Service Plan Review                             $120.00          0.00
-          </pre>
+                  <strong>SERVICES                                 FULL FEE        YOUR COST</strong>
+            Brief Mental Assessment Screening               $29.32           0.00 
+            Psychiatric evaluation                          $210.00          0.00 
+            Medication management                           $60.00           0.00 
+            Bio –psychosocial assessment                    $48.00           0.00 
+            Limited functional assessment                   $15.00           0.00 
+            Treatment plan                                  $97.00           0.00 
+            Treatment plan review                           $48.50           0.00 
+            Individual and family therapy                   $73.32           0.00 
+            Therapeutic behavioral onsite services      $64.00 per hour      0.00 
+            Psychosocial rehabilitation services        $36.00 per hour      0.00 
+            Home Visit (as needed)                      $48.00 per hour      0.00 
+            Community Visit (as needed)                 $48.00 per hour      0.00 
+            Case Management Assessment                      $96.00           0.00 
+            Service Planning                                $120.00          0.00 
+            Service Plan Review                             $120.00          0.00
+    </pre>
 </div>
-<div class="form-group col-md-12">
-    <div class="form-group col-md-3">
-        <strong><u>@Html.DisplayFor(modelItem => Model.Client.Name)</u></strong><br />
-        <i>Person Served Signature</i>
-    </div>
-    <div class="form-group col-md-2">
-        <input asp-for="DateSignaturePerson" class="form-control">
-        <i>Signature Date</i>
-    </div>
+<div class="col-md-12">
+    <pre>
+    
+    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
+    <strong>(@Html.DisplayFor(modelItem => Model.Client.Name))</strong>     
+    
+    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+    </pre>
 </div>
-<br />
-<div class="form-group col-md-12">
-    <div class="form-group col-md-3">
-        <strong><u>@Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Name)</u></strong><br />
-        <i>Parent, (Legal Guardian or Authorized Representative Signature)</i>
-    </div>
-    <div class="form-group col-md-2">
-        <input asp-for="DateSignatureLegalGuardian" class="form-control">
-        <i>Signature Date</i>
-    </div>
+<div class="col-md-12">
+    &nbsp;
 </div>
-<br />
-<div class="form-group col-md-12">
-    <div class="form-group col-md-3">
-        <strong><u>@Html.DisplayFor(modelItem => Model.AdmissionedFor)</u></strong><br />
-        <i>Employee Signature</i>
-    </div>
-    <div class="form-group col-md-2">
-        <input asp-for="DateSignatureEmployee" class="form-control">
-        <i>Signature Date</i>
-    </div>
-</div>
-<br />
-
 <div>
     <div class="form-group col-md-12">
         <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />

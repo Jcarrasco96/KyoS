@@ -8,7 +8,7 @@ namespace KyoS.Web.Data.Entities
     {
         public int Id { get; set; }
 
-        [Display(Name = "Objetive")]
+        [Display(Name = "Objective")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string Objetive { get; set; }
 
@@ -39,5 +39,18 @@ namespace KyoS.Web.Data.Entities
 
         public IEnumerable<Objetive_Classification> Classifications { get; set; }
         public IEnumerable<IndividualNoteEntity> IndividualNotes { get; set; }
+
+        public bool Compliment { get; set; }
+
+        [Display(Name = "Date of compliment")]
+        [DataType(DataType.Date)]
+
+        public DateTime Compliment_Date { get; set; }
+
+        public string Compliment_Explain { get; set; }
+
+        public int Compliment_IdMTPReview { get; set; }
+
+        public int IdMTPReview { get; set; }
     }
 }

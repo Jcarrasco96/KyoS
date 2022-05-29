@@ -34,7 +34,8 @@ namespace KyoS.Web.Helpers
                 State = model.State,
                 ZipCode = model.ZipCode,
                 Phone = model.Phone,
-                FaxNo = model.FaxNo
+                FaxNo = model.FaxNo,
+                ClinicalDirector = model.ClinicalDirector
             };
         }
 
@@ -51,7 +52,8 @@ namespace KyoS.Web.Helpers
                 State = clinicEntity.State,
                 ZipCode = clinicEntity.ZipCode,
                 Phone = clinicEntity.Phone,
-                FaxNo = clinicEntity.FaxNo
+                FaxNo = clinicEntity.FaxNo,
+                ClinicalDirector = clinicEntity.ClinicalDirector
             };
         }
 
@@ -256,7 +258,8 @@ namespace KyoS.Web.Helpers
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
-                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                IdFacilitatorPSR = model.IdFacilitatorPSR
             };
         }
 
@@ -325,7 +328,8 @@ namespace KyoS.Web.Helpers
                 IdService = Convert.ToInt32(clientEntity.Service),
                 Services = _combosHelper.GetComboServices(),
                 IdFacilitatorIT = (clientEntity.IndividualTherapyFacilitator != null) ? clientEntity.IndividualTherapyFacilitator.Id : 0,
-                ITFacilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, true)
+                ITFacilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, true),
+                IdFacilitatorPSR = clientEntity.IdFacilitatorPSR
             };
         }
 
@@ -400,11 +404,54 @@ namespace KyoS.Web.Helpers
                 EndTime = model.EndTime,
                 LevelCare = model.LevelCare,
                 InitialDischargeCriteria = model.InitialDischargeCriteria,
-                Modality = model.Modality,
-                Frecuency = model.Frecuency,
-                NumberOfMonths = model.NumberOfMonths,
-                Active = isNew ? true : model.Active
-            };
+                Modality = "PSR",
+                Frecuency = model.PsychosocialFrecuency,
+                NumberOfMonths = model.PsychosocialDuration,
+                Active = isNew ? true : model.Active,
+                AdditionalRecommended = model.AdditionalRecommended,
+                AdmissionDateMTP = model.AdmissionDateMTP,
+                ClientLimitation = model.ClientLimitation,
+                ClientStrengths = model.ClientStrengths,
+                DateOfUpdate = model.DateOfUpdate,
+                Family = model.Family,
+                FamilyCode = model.FamilyCode,
+                FamilyDuration = model.FamilyDuration,
+                FamilyFrecuency = model.FamilyFrecuency,
+                FamilyUnits = model.FamilyUnits,
+                Group = model.Group,
+                GroupCode = model.GroupCode,
+                GroupDuration = model.GroupDuration,
+                GroupFrecuency = model.GroupFrecuency,
+                GroupUnits = model.GroupUnits,
+                Health = model.Health,
+                HealthWhere = model.HealthWhere,
+                Individual = model.Individual,
+                IndividualCode = model.IndividualCode,
+                IndividualDuration = model.IndividualDuration,
+                IndividualFrecuency = model.IndividualFrecuency,
+                IndividualUnits = model.IndividualUnits,
+                Legal = model.Legal,
+                LegalWhere = model.LegalWhere,
+                Medication = model.Medication,
+                MedicationCode = model.MedicationCode,
+                MedicationDuration = model.MedicationDuration,
+                MedicationFrecuency = model.MedicationFrecuency,
+                MedicationUnits = model.MedicationUnits,
+                Other = model.Other,
+                OtherWhere = model.OtherWhere,
+                Paint = model.Paint,
+                PaintWhere = model.PaintWhere,
+                Psychosocial = model.Psychosocial,
+                PsychosocialCode = model.PsychosocialCode,
+                PsychosocialDuration = model.PsychosocialDuration,
+                PsychosocialFrecuency = model.PsychosocialFrecuency,
+                PsychosocialUnits = model.PsychosocialUnits,
+                RationaleForUpdate = model.RationaleForUpdate,
+                Setting = model.Setting,
+                Substance = model.Substance,
+                SubstanceWhere = model.SubstanceWhere
+
+        };
         }
 
         public MTPViewModel ToMTPViewModel(MTPEntity mtpEntity)
@@ -423,7 +470,49 @@ namespace KyoS.Web.Helpers
                 Frecuency = mtpEntity.Frecuency,
                 NumberOfMonths = mtpEntity.NumberOfMonths,                
                 Setting = mtpEntity.Setting,
-                Active = mtpEntity.Active
+                Active = mtpEntity.Active,
+                AdditionalRecommended = mtpEntity.AdditionalRecommended,
+                AdmissionDateMTP = mtpEntity.AdmissionDateMTP,
+                ClientLimitation = mtpEntity.ClientLimitation,
+                ClientStrengths = mtpEntity.ClientStrengths,
+                DateOfUpdate = mtpEntity.DateOfUpdate,
+                Family = mtpEntity.Family,
+                FamilyCode = mtpEntity.FamilyCode,
+                FamilyDuration = mtpEntity.FamilyDuration,
+                FamilyFrecuency = mtpEntity.FamilyFrecuency,
+                FamilyUnits = mtpEntity.FamilyUnits,
+                Group = mtpEntity.Group,
+                GroupCode = mtpEntity.GroupCode,
+                GroupDuration = mtpEntity.GroupDuration,
+                GroupFrecuency = mtpEntity.GroupFrecuency,
+                GroupUnits = mtpEntity.GroupUnits,
+                Health = mtpEntity.Health,
+                HealthWhere = mtpEntity.HealthWhere,
+                Individual = mtpEntity.Individual,
+                IndividualCode = mtpEntity.IndividualCode,
+                IndividualDuration = mtpEntity.IndividualDuration,
+                IndividualFrecuency = mtpEntity.IndividualFrecuency,
+                IndividualUnits = mtpEntity.IndividualUnits,
+                Legal = mtpEntity.Legal,
+                LegalWhere = mtpEntity.LegalWhere,
+                Medication = mtpEntity.Medication,
+                MedicationCode = mtpEntity.MedicationCode,
+                MedicationDuration = mtpEntity.MedicationDuration,
+                MedicationFrecuency = mtpEntity.MedicationFrecuency,
+                MedicationUnits = mtpEntity.MedicationUnits,
+                Other = mtpEntity.Other,
+                OtherWhere = mtpEntity.OtherWhere,
+                Paint = mtpEntity.Paint,
+                PaintWhere = mtpEntity.PaintWhere,
+                Psychosocial = mtpEntity.Psychosocial,
+                PsychosocialCode = mtpEntity.PsychosocialCode,
+                PsychosocialDuration = mtpEntity.PsychosocialDuration,
+                PsychosocialFrecuency = mtpEntity.PsychosocialFrecuency,
+                PsychosocialUnits = mtpEntity.PsychosocialUnits,
+                RationaleForUpdate = mtpEntity.RationaleForUpdate,
+                Substance = mtpEntity.Substance,
+                SubstanceWhere = mtpEntity.SubstanceWhere,
+                Client = mtpEntity.Client
             };
         }        
 
@@ -436,13 +525,21 @@ namespace KyoS.Web.Helpers
                 Name = model.Name,
                 AreaOfFocus = model.AreaOfFocus,
                 MTP = await _context.MTPs.FindAsync(model.IdMTP),
-                Service = ServiceUtils.GetServiceByIndex(model.IdService)
+                Service = ServiceUtils.GetServiceByIndex(model.IdService),
+                Adendum = await _context.Adendums.FindAsync(model.IdAdendum),
+                Compliment = model.Compliment,
+                Compliment_Date = model.Compliment_Date,
+                Compliment_Explain = model.Compliment_Explain,
+                Compliment_IdMTPReview = model.Compliment_IdMTPReview,
+                IdMTPReview = model.IdMTPReview
+
             };
         }
 
         public GoalViewModel ToGoalViewModel(GoalEntity goalEntity)
         {
-            return new GoalViewModel
+            GoalViewModel model;
+            model = new GoalViewModel
             {
                 Id = goalEntity.Id,
                 Number = goalEntity.Number,
@@ -451,8 +548,19 @@ namespace KyoS.Web.Helpers
                 Name = goalEntity.Name,
                 AreaOfFocus = goalEntity.AreaOfFocus,
                 IdService = Convert.ToInt32(goalEntity.Service),
-                Services = _combosHelper.GetComboServices()
+                Services = _combosHelper.GetComboServices(),
+                Compliment = goalEntity.Compliment,
+                Compliment_Date = goalEntity.Compliment_Date != null ? goalEntity.Compliment_Date : DateTime.Now,
+                Compliment_Explain = goalEntity.Compliment_Explain,
+                Compliment_IdMTPReview = goalEntity.Compliment_IdMTPReview,
+                IdMTPReview = goalEntity.IdMTPReview                
             };
+            if (goalEntity.Adendum != null)
+            {
+                model.IdAdendum = goalEntity.Adendum.Id;               
+            }
+
+            return model;
         }
 
         public async Task<ObjetiveEntity> ToObjectiveEntity(ObjectiveViewModel model, bool isNew)
@@ -466,7 +574,12 @@ namespace KyoS.Web.Helpers
                 DateResolved = model.DateResolved,
                 Description = model.Description,
                 Intervention = model.Intervention,
-                Goal = await _context.Goals.FindAsync(model.IdGoal)
+                Goal = await _context.Goals.FindAsync(model.IdGoal),
+                Compliment = model.Compliment,
+                Compliment_Date = model.Compliment_Date,
+                Compliment_Explain = model.Compliment_Explain,
+                Compliment_IdMTPReview = model.Compliment_IdMTPReview,
+                IdMTPReview = model.IdMTPReview
             };
         }
 
@@ -483,7 +596,12 @@ namespace KyoS.Web.Helpers
                 DateTarget = objectiveEntity.DateTarget,
                 Description = objectiveEntity.Description,
                 Classifications = objectiveEntity.Classifications,
-                Intervention = objectiveEntity.Intervention
+                Intervention = objectiveEntity.Intervention,
+                Compliment = objectiveEntity.Compliment,
+                Compliment_Date = objectiveEntity.Compliment_Date,
+                Compliment_Explain = objectiveEntity.Compliment_Explain,
+                Compliment_IdMTPReview = objectiveEntity.Compliment_IdMTPReview,
+                IdMTPReview = objectiveEntity.IdMTPReview
             };
         }
 
@@ -2355,13 +2473,12 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<DischargeEntity> ToDischargeEntity(DischargeViewModel model, bool isNew)
+        public async Task<DischargeEntity> ToDischargeEntity(DischargeViewModel model, bool isNew, string userId)
         {
             return new DischargeEntity
             {
                 Id = isNew ? 0 : model.Id,
                 Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient),
-                // Client_FK = isNew ? model.IdClient : model.Client_FK,
                 Client_FK = model.IdClient,
                 AdmissionedFor = model.AdmissionedFor,
                 AgencyDischargeClient = model.AgencyDischargeClient,
@@ -2393,12 +2510,22 @@ namespace KyoS.Web.Helpers
                 Hospitalization = model.Hospitalization,
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignaturePerson = model.DateSignaturePerson,
+                DateSignatureSupervisor = model.DateSignatureSupervisor,
+                Others_Explain = model.Others_Explain,
+                Status = model.Status,
+                Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == model.IdSupervisor),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TypeService = model.TypeService
             };
         }
 
         public DischargeViewModel ToDischargeViewModel(DischargeEntity model)
         {
-            return new DischargeViewModel
+            DischargeViewModel salida;
+            salida = new DischargeViewModel
             {
                 Id = model.Id,
                 Client = model.Client,
@@ -2434,8 +2561,22 @@ namespace KyoS.Web.Helpers
                 Hospitalization = model.Hospitalization,
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignaturePerson = model.DateSignaturePerson,
+                DateSignatureSupervisor = model.DateSignatureSupervisor,
+                Others_Explain = model.Others_Explain,
+                Status = model.Status,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                TypeService = model.TypeService
+
             };
 
+            if (model.Supervisor != null)
+                salida.IdSupervisor = model.Supervisor.Id;
+            else
+                salida.IdSupervisor = 0;
+            return salida;
         }
 
         public async Task<MedicationEntity> ToMedicationEntity(MedicationViewModel model, bool isNew)
@@ -2447,7 +2588,8 @@ namespace KyoS.Web.Helpers
                 Dosage = model.Dosage,
                 Name = model.Name,
                 Frequency = model.Frequency,
-                Prescriber = model.Prescriber,
+                Prescriber = model.Prescriber
+                
             };
         }
 
@@ -2461,12 +2603,12 @@ namespace KyoS.Web.Helpers
                 Dosage = model.Dosage,
                 Name = model.Name,
                 Frequency = model.Frequency,
-                Prescriber = model.Prescriber,
+                Prescriber = model.Prescriber
             };
 
         }
 
-        public async Task<FarsFormEntity> ToFarsFormEntity(FarsFormViewModel model, bool isNew)
+        public async Task<FarsFormEntity> ToFarsFormEntity(FarsFormViewModel model, bool isNew, string userId)
         {
             return new FarsFormEntity
             {
@@ -2509,13 +2651,19 @@ namespace KyoS.Web.Helpers
                 ThoughtProcessScale = model.ThoughtProcessScale,
                 TraumaticsScale = model.TraumaticsScale,
                 WorkScale = model.WorkScale,
-
+                Status = model.Status,
+                Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == model.IdSupervisor),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
             };
         }
 
         public FarsFormViewModel ToFarsFormViewModel(FarsFormEntity model)
         {
-            return new FarsFormViewModel
+            FarsFormViewModel salida;
+            salida = new FarsFormViewModel
             {
                 Id = model.Id,
                 Client = model.Client,
@@ -2557,9 +2705,599 @@ namespace KyoS.Web.Helpers
                 ThoughtProcessScale = model.ThoughtProcessScale,
                 TraumaticsScale = model.TraumaticsScale,
                 WorkScale = model.WorkScale,
+                Status = model.Status,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+
+            };
+            
+            if (model.Supervisor != null)
+                salida.IdSupervisor = model.Supervisor.Id;
+            else
+                salida.IdSupervisor = 0;
+            return salida;
+
+        }
+
+        public async Task<BioEntity> ToBioEntity(BioViewModel model, bool isNew)
+        {
+            return new BioEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient),
+                AdultCurrentExperience = model.AdultCurrentExperience,
+                Affect_Angry = model.Affect_Angry,
+                Affect_Anxious = model.Affect_Anxious,
+                Affect_Appropriate = model.Affect_Appropriate,
+                Affect_Blunted = model.Affect_Blunted,
+                Affect_Constricted = model.Affect_Constricted,
+                Affect_Expansive = model.Affect_Expansive,
+                Affect_Flat = model.Affect_Flat,
+                Affect_labile = model.Affect_labile,
+                Affect_Other = model.Affect_Other,
+                Affect_Tearful_Sad = model.Affect_Tearful_Sad,
+                AlternativeDiagnosis = model.AlternativeDiagnosis,
+                Appearance_Bizarre = model.Appearance_Bizarre,
+                Appearance_Cleaned = model.Appearance_Cleaned,
+                Appearance_Disheveled = model.Appearance_Disheveled,
+                Appearance_FairHygiene = model.Appearance_FairHygiene,
+                Appearance_WellGroomed = model.Appearance_WellGroomed,
+                Appetite = BioType.GetBioAppetiteByIndex(model.IdIfSexuallyActive),
+                ApproximateDateReport = model.ApproximateDateReport,
+                ApproximateDateReport_Where = model.ApproximateDateReport_Where,
+                AReferral = model.AReferral,
+                AReferral_Services = model.AReferral_Services,
+                AReferral_When = model.AReferral_When,
+                AReferral_Where = model.AReferral_Where,
+                BioH0031HN = model.BioH0031HN,
+                IDAH0031HO = model.IDAH0031HO,
+                CanClientFollow = model.CanClientFollow,
+                Children = model.Children,
+                ClientAssessmentSituation = model.ClientAssessmentSituation,
+                ClientFamilyAbusoTrauma = model.ClientFamilyAbusoTrauma,
+                CMH = model.CMH,
+                Comments = model.Comments,
+                DateAbuse = model.DateAbuse,
+                DateBio = model.DateBio,
+                DateSignatureLicensedPractitioner = model.DateSignatureLicensedPractitioner,
+                DateSignaturePerson = model.DateSignaturePerson,
+                DateSignatureSupervisor = model.DateSignatureSupervisor,
+                DateSignatureUnlicensedTherapist = model.DateSignatureUnlicensedTherapist,
+                Details = model.Details,
+                DoesClient = model.DoesClient,
+                DoesClientRequired = model.DoesClientRequired,
+                DoesClientRequired_Where = model.DoesClientRequired_Where,
+                DoesNotAlways = model.DoesNotAlways,
+                DoesTheClientExperience = model.DoesTheClientExperience,
+                DoesTheClientExperience_Where = model.DoesTheClientExperience_Where,
+                DoYouHaveAnyPhysical = model.DoYouHaveAnyPhysical,
+                DoYouHaveAnyReligious = model.DoYouHaveAnyReligious,
+                DoYouHaveAnyVisual = model.DoYouHaveAnyVisual,
+                DoYouOwn = model.DoYouOwn,
+                DoYouOwn_Explain = model.DoYouOwn_Explain,
+                EastAlone = model.EastAlone,
+                EastFew = model.EastFew,
+                EastFewer = model.EastFewer,
+                FamilyAssessmentSituation = model.FamilyAssessmentSituation,
+                FamilyEmotional = model.FamilyEmotional,
+                GeneralDescription = model.GeneralDescription,
+                Has3OrMore = model.Has3OrMore,
+                HasAnIllnes = model.HasAnIllnes,
+                HasClientBeenTreatedPain = model.HasClientBeenTreatedPain,
+                HasClientBeenTreatedPain_Ifnot = model.HasClientBeenTreatedPain_Ifnot,
+                HasClientBeenTreatedPain_PleaseIncludeService = model.HasClientBeenTreatedPain_PleaseIncludeService,
+                HasClientBeenTreatedPain_Where = model.HasClientBeenTreatedPain_Where,
+                HasTheClient = model.HasTheClient,
+                HasTheClientVisitedPhysician = model.HasTheClientVisitedPhysician,
+                HasTheClientVisitedPhysician_Date = model.HasTheClientVisitedPhysician_Date,
+                HasTheClientVisitedPhysician_Reason = model.HasTheClientVisitedPhysician_Reason,
+                HasTheClient_Explain = model.HasTheClient_Explain,
+                HasTooth = model.HasTooth,
+                HaveYouEverBeen = model.HaveYouEverBeen,
+                HaveYouEverBeen_Explain = model.HaveYouEverBeen_Explain,
+                HaveYouEverThought = model.HaveYouEverThought,
+                HaveYouEverThought_Explain = model.HaveYouEverThought_Explain,
+                HigHestEducation = model.HigHestEducation,
+                Hydration = BioType.GetBioHydrationByIndex(model.IdHydratation),
+                IConcurWhitDiagnistic = model.IConcurWhitDiagnistic,
+                If6_Date = model.If6_Date,
+                If6_ReferredTo = model.If6_ReferredTo,
+                IfForeing_AgeArrival = model.IfForeing_AgeArrival,
+                IfForeing_Born = model.IfForeing_Born,
+                IfForeing_YearArrival = model.IfForeing_YearArrival,
+                IfMarried = model.IfMarried,
+                IfSeparated = model.IfSeparated,
+                IfSexuallyActive = BioType.GetBioIfSexuallyActiveByIndex(model.IdIfSexuallyActive),
+                Insight_Fair = model.Insight_Fair,
+                Insight_Good = model.Insight_Good,
+                Insight_Other = model.Insight_Other,
+                Insight_Poor = model.Insight_Poor,
+                Judgment_Fair = model.Judgment_Fair,
+                Judgment_Good = model.Judgment_Good,
+                Judgment_Other = model.Judgment_Other,
+                Judgment_Poor = model.Judgment_Poor,
+                Lacking_Location = model.Lacking_Location,
+                Lacking_Person = model.Lacking_Person,
+                Lacking_Place = model.Lacking_Place,
+                Lacking_Time = model.Lacking_Time,
+                LegalAssessment = model.LegalAssessment,
+                LegalHistory = model.LegalHistory,
+                LicensedPractitioner = model.LicensedPractitioner,
+                MaritalStatus = model.MaritalStatus,
+                Mood_Angry = model.Mood_Angry,
+                Mood_Anxious = model.Mood_Anxious,
+                Mood_Depressed = model.Mood_Depressed,
+                Mood_Euphoric = model.Mood_Euphoric,
+                Mood_Euthymic = model.Mood_Euthymic,
+                Mood_Maniac = model.Mood_Maniac,
+                Mood_Other = model.Mood_Other,
+                Motor_Agitated = model.Motor_Agitated,
+                Motor_Akathisia = model.Motor_Akathisia,
+                Motor_Normal = model.Motor_Normal,
+                Motor_Other = model.Motor_Other,
+                Motor_RestLess = model.Motor_RestLess,
+                Motor_Retardation = model.Motor_Retardation,
+                Motor_Tremor = model.Motor_Tremor,
+                NotAlwaysPhysically = model.NotAlwaysPhysically,
+                ObtainRelease = model.ObtainRelease,
+                ObtainReleaseInformation = model.ObtainReleaseInformation,
+                ObtainReleaseInformation7 = model.ObtainReleaseInformation7,
+                Oriented_FullOriented = model.Oriented_FullOriented,
+                Outcome = model.Outcome,
+                PersonalFamilyPsychiatric = model.PersonalFamilyPsychiatric,
+                PersonInvolved = model.PersonInvolved,
+                PleaseProvideGoal = model.PleaseProvideGoal,
+                PleaseRatePain = model.PleaseRatePain,
+                PresentingProblem = model.PresentingProblem,
+                PrimaryLocation = model.PrimaryLocation,
+                Priv = model.Priv,
+                ProvideIntegratedSummary = model.ProvideIntegratedSummary,
+                RecentWeight = BioType.GetBioRecentWeightChangeByIndex(model.IdRecentWeight),
+                RelationShips = model.RelationShips,
+                RelationshipWithFamily = model.RelationshipWithFamily,
+                RiskToOther_Chronic = model.RiskToOther_Chronic,
+                RiskToOther_High = model.RiskToOther_High,
+                RiskToOther_Low = model.RiskToOther_Low,
+                RiskToOther_Medium = model.RiskToOther_Medium,
+                RiskToSelf_Chronic = model.RiskToSelf_Chronic,
+                RiskToSelf_High = model.RiskToSelf_High,
+                RiskToSelf_Low = model.RiskToSelf_Low,
+                RiskToSelf_Medium = model.RiskToSelf_Medium,
+                SafetyPlan = model.SafetyPlan,
+                Setting = model.Setting,
+                Speech_Impoverished = model.Speech_Impoverished,
+                Speech_Loud = model.Speech_Loud,
+                Speech_Mumbled = model.Speech_Mumbled,
+                Speech_Normal = model.Speech_Normal,
+                Speech_Other = model.Speech_Other,
+                Speech_Pressured = model.Speech_Pressured,
+                Speech_Rapid = model.Speech_Rapid,
+                Speech_Slow = model.Speech_Slow,
+                Speech_Slurred = model.Speech_Slurred,
+                Speech_Stutters = model.Speech_Stutters,
+                SubstanceAbuse = model.SubstanceAbuse,
+                Takes3OrMore = model.Takes3OrMore,
+                ThoughtContent_Delusions = model.ThoughtContent_Delusions,
+                ThoughtContent_Delusions_Type = model.ThoughtContent_Delusions_Type,
+                ThoughtContent_Hallucinations = model.ThoughtContent_Hallucinations,
+                ThoughtContent_Hallucinations_Type = model.ThoughtContent_Hallucinations_Type,
+                ThoughtContent_RealityBased = model.ThoughtContent_RealityBased,
+                ThoughtContent_Relevant = model.ThoughtContent_Relevant,
+                ThoughtProcess_Blocking = model.ThoughtProcess_Blocking,
+                ThoughtProcess_Circumstantial = model.ThoughtProcess_Circumstantial,
+                ThoughtProcess_Disorganized = model.ThoughtProcess_Disorganized,
+                ThoughtProcess_FightIdeas = model.ThoughtProcess_FightIdeas,
+                ThoughtProcess_GoalDirected = model.ThoughtProcess_GoalDirected,
+                ThoughtProcess_Irrational = model.ThoughtProcess_Irrational,
+                ThoughtProcess_LooseAssociations = model.ThoughtProcess_LooseAssociations,
+                ThoughtProcess_Obsessive = model.ThoughtProcess_Obsessive,
+                ThoughtProcess_Organized = model.ThoughtProcess_Organized,
+                ThoughtProcess_Other = model.ThoughtProcess_Other,
+                ThoughtProcess_Preoccupied = model.ThoughtProcess_Preoccupied,
+                ThoughtProcess_Rigid = model.ThoughtProcess_Rigid,
+                ThoughtProcess_Tangential = model.ThoughtProcess_Tangential,
+                TreatmentNeeds = model.TreatmentNeeds,
+                Treatmentrecomendations = model.Treatmentrecomendations,
+                UnlicensedTherapist = model.UnlicensedTherapist,
+                WhatIsTheClient = model.WhatIsTheClient,
+                WhatIsYourLanguage = model.WhatIsYourLanguage,
+                WhereRecord = model.WhereRecord,
+                WhereRecord_When = model.WhereRecord_When,
+                WhereRecord_Where = model.WhereRecord_Where,
+                WithoutWanting = model.WithoutWanting,
+                Client_FK = model.Client_FK,
+                ClientDenied = model.ClientDenied,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime,
+                ForHowLong = model.ForHowLong
                 
             };
+        }
 
+        public BioViewModel ToBioViewModel(BioEntity model)
+        {
+            return new BioViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                AdultCurrentExperience = model.AdultCurrentExperience,
+                Affect_Angry = model.Affect_Angry,
+                Affect_Anxious = model.Affect_Anxious,
+                Affect_Appropriate = model.Affect_Appropriate,
+                Affect_Blunted = model.Affect_Blunted,
+                Affect_Constricted = model.Affect_Constricted,
+                Affect_Expansive = model.Affect_Expansive,
+                Affect_Flat = model.Affect_Flat,
+                Affect_labile = model.Affect_labile,
+                Affect_Other = model.Affect_Other,
+                Affect_Tearful_Sad = model.Affect_Tearful_Sad,
+                AlternativeDiagnosis = model.AlternativeDiagnosis,
+                Appearance_Bizarre = model.Appearance_Bizarre,
+                Appearance_Cleaned = model.Appearance_Cleaned,
+                Appearance_Disheveled = model.Appearance_Disheveled,
+                Appearance_FairHygiene = model.Appearance_FairHygiene,
+                Appearance_WellGroomed = model.Appearance_WellGroomed,
+                Appetite = model.Appetite,
+                ApproximateDateReport = model.ApproximateDateReport,
+                ApproximateDateReport_Where = model.ApproximateDateReport_Where,
+                AReferral = model.AReferral,
+                AReferral_Services = model.AReferral_Services,
+                AReferral_When = model.AReferral_When,
+                AReferral_Where = model.AReferral_Where,
+                BioH0031HN = model.BioH0031HN,
+                IDAH0031HO = model.IDAH0031HO,
+                CanClientFollow = model.CanClientFollow,
+                Children = model.Children,
+                ClientAssessmentSituation = model.ClientAssessmentSituation,
+                ClientFamilyAbusoTrauma = model.ClientFamilyAbusoTrauma,
+                CMH = model.CMH,
+                Comments = model.Comments,
+                DateAbuse = model.DateAbuse,
+                DateBio = model.DateBio,
+                DateSignatureLicensedPractitioner = model.DateSignatureLicensedPractitioner,
+                DateSignaturePerson = model.DateSignaturePerson,
+                DateSignatureSupervisor = model.DateSignatureSupervisor,
+                DateSignatureUnlicensedTherapist = model.DateSignatureUnlicensedTherapist,
+                Details = model.Details,
+                DoesClient = model.DoesClient,
+                DoesClientRequired = model.DoesClientRequired,
+                DoesClientRequired_Where = model.DoesClientRequired_Where,
+                DoesNotAlways = model.DoesNotAlways,
+                DoesTheClientExperience = model.DoesTheClientExperience,
+                DoesTheClientExperience_Where = model.DoesTheClientExperience_Where,
+                DoYouHaveAnyPhysical = model.DoYouHaveAnyPhysical,
+                DoYouHaveAnyReligious = model.DoYouHaveAnyReligious,
+                DoYouHaveAnyVisual = model.DoYouHaveAnyVisual,
+                DoYouOwn = model.DoYouOwn,
+                DoYouOwn_Explain = model.DoYouOwn_Explain,
+                EastAlone = model.EastAlone,
+                EastFew = model.EastFew,
+                EastFewer = model.EastFewer,
+                FamilyAssessmentSituation = model.FamilyAssessmentSituation,
+                FamilyEmotional = model.FamilyEmotional,
+                GeneralDescription = model.GeneralDescription,
+                Has3OrMore = model.Has3OrMore,
+                HasAnIllnes = model.HasAnIllnes,
+                HasClientBeenTreatedPain = model.HasClientBeenTreatedPain,
+                HasClientBeenTreatedPain_Ifnot = model.HasClientBeenTreatedPain_Ifnot,
+                HasClientBeenTreatedPain_PleaseIncludeService = model.HasClientBeenTreatedPain_PleaseIncludeService,
+                HasClientBeenTreatedPain_Where = model.HasClientBeenTreatedPain_Where,
+                HasTheClient = model.HasTheClient,
+                HasTheClientVisitedPhysician = model.HasTheClientVisitedPhysician,
+                HasTheClientVisitedPhysician_Date = model.HasTheClientVisitedPhysician_Date,
+                HasTheClientVisitedPhysician_Reason = model.HasTheClientVisitedPhysician_Reason,
+                HasTheClient_Explain = model.HasTheClient_Explain,
+                HasTooth = model.HasTooth,
+                HaveYouEverBeen = model.HaveYouEverBeen,
+                HaveYouEverBeen_Explain = model.HaveYouEverBeen_Explain,
+                HaveYouEverThought = model.HaveYouEverThought,
+                HaveYouEverThought_Explain = model.HaveYouEverThought_Explain,
+                HigHestEducation = model.HigHestEducation,
+                Hydration = model.Hydration,
+                IConcurWhitDiagnistic = model.IConcurWhitDiagnistic,
+                If6_Date = model.If6_Date,
+                If6_ReferredTo = model.If6_ReferredTo,
+                IfForeing_AgeArrival = model.IfForeing_AgeArrival,
+                IfForeing_Born = model.IfForeing_Born,
+                IfForeing_YearArrival = model.IfForeing_YearArrival,
+                IfMarried = model.IfMarried,
+                IfSeparated = model.IfSeparated,
+                IfSexuallyActive = model.IfSexuallyActive,
+                Insight_Fair = model.Insight_Fair,
+                Insight_Good = model.Insight_Good,
+                Insight_Other = model.Insight_Other,
+                Insight_Poor = model.Insight_Poor,
+                Judgment_Fair = model.Judgment_Fair,
+                Judgment_Good = model.Judgment_Good,
+                Judgment_Other = model.Judgment_Other,
+                Judgment_Poor = model.Judgment_Poor,
+                Lacking_Location = model.Lacking_Location,
+                Lacking_Person = model.Lacking_Person,
+                Lacking_Place = model.Lacking_Place,
+                Lacking_Time = model.Lacking_Time,
+                LegalAssessment = model.LegalAssessment,
+                LegalHistory = model.LegalHistory,
+                LicensedPractitioner = model.LicensedPractitioner,
+                MaritalStatus = model.MaritalStatus,
+                Mood_Angry = model.Mood_Angry,
+                Mood_Anxious = model.Mood_Anxious,
+                Mood_Depressed = model.Mood_Depressed,
+                Mood_Euphoric = model.Mood_Euphoric,
+                Mood_Euthymic = model.Mood_Euthymic,
+                Mood_Maniac = model.Mood_Maniac,
+                Mood_Other = model.Mood_Other,
+                Motor_Agitated = model.Motor_Agitated,
+                Motor_Akathisia = model.Motor_Akathisia,
+                Motor_Normal = model.Motor_Normal,
+                Motor_Other = model.Motor_Other,
+                Motor_RestLess = model.Motor_RestLess,
+                Motor_Retardation = model.Motor_Retardation,
+                Motor_Tremor = model.Motor_Tremor,
+                NotAlwaysPhysically = model.NotAlwaysPhysically,
+                ObtainRelease = model.ObtainRelease,
+                ObtainReleaseInformation = model.ObtainReleaseInformation,
+                ObtainReleaseInformation7 = model.ObtainReleaseInformation7,
+                Oriented_FullOriented = model.Oriented_FullOriented,
+                Outcome = model.Outcome,
+                PersonalFamilyPsychiatric = model.PersonalFamilyPsychiatric,
+                PersonInvolved = model.PersonInvolved,
+                PleaseProvideGoal = model.PleaseProvideGoal,
+                PleaseRatePain = model.PleaseRatePain,
+                PresentingProblem = model.PresentingProblem,
+                PrimaryLocation = model.PrimaryLocation,
+                Priv = model.Priv,
+                ProvideIntegratedSummary = model.ProvideIntegratedSummary,
+                RecentWeight = model.RecentWeight,
+                RelationShips = model.RelationShips,
+                RelationshipWithFamily = model.RelationshipWithFamily,
+                RiskToOther_Chronic = model.RiskToOther_Chronic,
+                RiskToOther_High = model.RiskToOther_High,
+                RiskToOther_Low = model.RiskToOther_Low,
+                RiskToOther_Medium = model.RiskToOther_Medium,
+                RiskToSelf_Chronic = model.RiskToSelf_Chronic,
+                RiskToSelf_High = model.RiskToSelf_High,
+                RiskToSelf_Low = model.RiskToSelf_Low,
+                RiskToSelf_Medium = model.RiskToSelf_Medium,
+                SafetyPlan = model.SafetyPlan,
+                Setting = model.Setting,
+                Speech_Impoverished = model.Speech_Impoverished,
+                Speech_Loud = model.Speech_Loud,
+                Speech_Mumbled = model.Speech_Mumbled,
+                Speech_Normal = model.Speech_Normal,
+                Speech_Other = model.Speech_Other,
+                Speech_Pressured = model.Speech_Pressured,
+                Speech_Rapid = model.Speech_Rapid,
+                Speech_Slow = model.Speech_Slow,
+                Speech_Slurred = model.Speech_Slurred,
+                Speech_Stutters = model.Speech_Stutters,
+                SubstanceAbuse = model.SubstanceAbuse,
+                Takes3OrMore = model.Takes3OrMore,
+                ThoughtContent_Delusions = model.ThoughtContent_Delusions,
+                ThoughtContent_Delusions_Type = model.ThoughtContent_Delusions_Type,
+                ThoughtContent_Hallucinations = model.ThoughtContent_Hallucinations,
+                ThoughtContent_Hallucinations_Type = model.ThoughtContent_Hallucinations_Type,
+                ThoughtContent_RealityBased = model.ThoughtContent_RealityBased,
+                ThoughtContent_Relevant = model.ThoughtContent_Relevant,
+                ThoughtProcess_Blocking = model.ThoughtProcess_Blocking,
+                ThoughtProcess_Circumstantial = model.ThoughtProcess_Circumstantial,
+                ThoughtProcess_Disorganized = model.ThoughtProcess_Disorganized,
+                ThoughtProcess_FightIdeas = model.ThoughtProcess_FightIdeas,
+                ThoughtProcess_GoalDirected = model.ThoughtProcess_GoalDirected,
+                ThoughtProcess_Irrational = model.ThoughtProcess_Irrational,
+                ThoughtProcess_LooseAssociations = model.ThoughtProcess_LooseAssociations,
+                ThoughtProcess_Obsessive = model.ThoughtProcess_Obsessive,
+                ThoughtProcess_Organized = model.ThoughtProcess_Organized,
+                ThoughtProcess_Other = model.ThoughtProcess_Other,
+                ThoughtProcess_Preoccupied = model.ThoughtProcess_Preoccupied,
+                ThoughtProcess_Rigid = model.ThoughtProcess_Rigid,
+                ThoughtProcess_Tangential = model.ThoughtProcess_Tangential,
+                TreatmentNeeds = model.TreatmentNeeds,
+                Treatmentrecomendations = model.Treatmentrecomendations,
+                UnlicensedTherapist = model.UnlicensedTherapist,
+                WhatIsTheClient = model.WhatIsTheClient,
+                WhatIsYourLanguage = model.WhatIsYourLanguage,
+                WhereRecord = model.WhereRecord,
+                WhereRecord_When = model.WhereRecord_When,
+                WhereRecord_Where = model.WhereRecord_Where,
+                WithoutWanting = model.WithoutWanting,
+                Client_FK = model.Client_FK,
+                ClientDenied = model.ClientDenied,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime,
+                ForHowLong = model.ForHowLong,
+                IdAppetite = Convert.ToInt32(model.Appetite) + 1,
+                Appetite_Status = _combosHelper.GetComboBio_Appetite(),
+                IdHydratation = Convert.ToInt32(model.Hydration) + 1,
+                Hydratation_Status = _combosHelper.GetComboBio_Hydration(),
+                IdIfSexuallyActive = Convert.ToInt32(model.IfSexuallyActive) + 1,
+                IfSexuallyActive_Status = _combosHelper.GetComboBio_IfSexuallyActive(),
+                IdRecentWeight = Convert.ToInt32(model.RecentWeight) + 1,
+                RecentWeight_Status = _combosHelper.GetComboBio_RecentWeight()
+
+            };
+
+        }
+        public async Task<Bio_BehavioralHistoryEntity> ToBio_BehaviorEntity(Bio_BehavioralHistoryViewModel model, bool isNew)
+        {
+            return new Bio_BehavioralHistoryEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient),
+                Date = model.Date,
+                Problem = model.Problem
+            };
+        }
+
+        public Bio_BehavioralHistoryViewModel ToBio_BehaviorViewModel(Bio_BehavioralHistoryEntity model)
+        {
+            return new Bio_BehavioralHistoryViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Date = model.Date,
+                Problem = model.Problem
+            };
+
+        }
+
+        public async Task<AdendumEntity> ToAdendumEntity(AdendumViewModel model, bool isNew, string userId)
+        {
+            return new AdendumEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Dateidentified = model.Dateidentified,
+                Duration = model.Duration,
+                Frecuency = model.Frecuency,
+                ProblemStatement = model.ProblemStatement,
+                Status = model.Status,
+                Unit = model.Unit,
+                Mtp = await _context.MTPs
+                                    .Include(m => m.Client)
+                                    .ThenInclude(c => c.Clients_Diagnostics)
+                                    .ThenInclude(cd => cd.Diagnostic)
+                                    .FirstOrDefaultAsync(c => c.Id == model.IdMTP),
+                
+                Goals = model.Goals,
+                Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == model.IdSupervisor),
+                Facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.Id == model.IdFacilitator),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+
+            };
+        }
+
+        public AdendumViewModel ToAdendumViewModel(AdendumEntity model)
+        {
+            AdendumViewModel salida;
+            salida = new AdendumViewModel
+            {
+                Id = model.Id,
+                Dateidentified = model.Dateidentified,
+                Duration = model.Duration,
+                Frecuency = model.Frecuency,
+                ProblemStatement = model.ProblemStatement,
+                Status = model.Status,
+                Unit = model.Unit,
+                IdMTP = model.Mtp.Id,
+                Facilitator = model.Facilitator,
+                Goals = model.Goals,
+                Mtp = model.Mtp,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+
+            };
+            if (model.Facilitator != null)
+                salida.IdFacilitator = model.Facilitator.Id;
+            else
+                salida.IdFacilitator = 0;
+            if (model.Supervisor != null)
+                salida.IdSupervisor = model.Supervisor.Id;
+            else
+                salida.IdSupervisor = 0;
+            return salida;
+        }
+
+        public async Task<MTPReviewEntity> ToMTPReviewEntity(MTPReviewViewModel model, bool isNew, string userId)
+        {
+            MTPReviewEntity salida;
+            salida = new MTPReviewEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+             
+                ACopy = model.ACopy,
+                DateClinicalDirector = model.DateClinicalDirector,
+                DateLicensedPractitioner = model.DateLicensedPractitioner,
+                DateSignaturePerson = model.DateSignaturePerson,
+                DateTherapist = model.DateTherapist,
+                DescribeAnyGoals = model.DescribeAnyGoals,
+                DescribeClient = model.DescribeClient,
+                IfCurrent = model.IfCurrent,
+                TheTreatmentPlan = model.TheTreatmentPlan,
+                MTP_FK = model.MTP_FK,
+                NumberUnit = model.NumberUnit,
+                ProviderNumber = model.ProviderNumber,
+                ReviewedOn = model.ReviewedOn,
+                ServiceCode = model.ServiceCode,
+                SpecifyChanges = model.SpecifyChanges,
+                SummaryOfServices = model.SummaryOfServices,
+                TheConsumer = model.TheConsumer,
+                ClinicalDirector = model.ClinicalDirector,
+                Documents = model.Documents,
+                LicensedPractitioner = model.LicensedPractitioner,
+                Therapist = model.Therapist,
+                Status = model.Status,
+                Mtp = await _context.MTPs
+                                    .Include(m => m.Client)
+                                    .ThenInclude(c => c.Clients_Diagnostics)
+                                    .ThenInclude(cd => cd.Diagnostic)
+                                    .FirstOrDefaultAsync(c => c.Id == model.IdMTP),
+                EndTime = model.EndTime,
+                Frecuency = model.Frecuency,
+                MonthOfTreatment = model.MonthOfTreatment,
+                Setting = model.Setting,
+                StartTime = model.StartTime,
+                DataOfService = model.DataOfService
+
+            };
+            
+            return salida;
+        }
+
+        public MTPReviewViewModel ToMTPReviewViewModel(MTPReviewEntity model)
+        {
+            return new MTPReviewViewModel
+            {
+                Id = model.Id,
+                Mtp = model.Mtp,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                IdMTP = model.MTP_FK,
+                MTP_FK = model.MTP_FK,
+
+                ACopy = model.ACopy,
+                DateClinicalDirector = model.DateClinicalDirector,
+                DateLicensedPractitioner = model.DateLicensedPractitioner,
+                DateSignaturePerson = model.DateSignaturePerson,
+                DateTherapist = model.DateTherapist,
+                DescribeAnyGoals = model.DescribeAnyGoals,
+                DescribeClient = model.DescribeClient,
+                IfCurrent = model.IfCurrent,
+                TheTreatmentPlan = model.TheTreatmentPlan,
+                NumberUnit = model.NumberUnit,
+                ProviderNumber = model.ProviderNumber,
+                ReviewedOn = model.ReviewedOn,
+                ServiceCode = model.ServiceCode,
+                SpecifyChanges = model.SpecifyChanges,
+                SummaryOfServices = model.SummaryOfServices,
+                TheConsumer = model.TheConsumer,
+                ClinicalDirector = model.ClinicalDirector,
+                Documents = model.Documents,
+                LicensedPractitioner = model.LicensedPractitioner,
+                Therapist = model.Therapist,
+                Status = model.Status,
+                EndTime = model.EndTime,
+                Frecuency = model.Frecuency,
+                MonthOfTreatment = model.MonthOfTreatment,
+                Setting = model.Setting,
+                StartTime = model.StartTime,
+                DataOfService = model.DataOfService
+
+            };
+           
         }
     }
 }

@@ -400,11 +400,11 @@ namespace KyoS.Web.Helpers
             return stream;
         }
 
-        public Stream HealthAndBeautyAbsenceNoteReport(Workday_Client workdayClient)
+        public Stream DreamsMentalHealthAbsenceNoteReport(Workday_Client workdayClient)
         {
             WebReport WebReport = new WebReport();
 
-            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\AbsencesNotes\\rptAbsenceNoteHealthAndBeauty.frx";
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\AbsencesNotes\\rptAbsenceNoteDreamsMentalHealth.frx";
 
             RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
             WebReport.Report.Load(rdlcFilePath);
@@ -791,11 +791,11 @@ namespace KyoS.Web.Helpers
             return stream;
         }
 
-        public Stream HealthAndBeautyMTPReport(MTPEntity mtp)
+        public Stream DreamsMentalHealthMTPReport(MTPEntity mtp)
         {
             WebReport WebReport = new WebReport();
 
-            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\MTPs\\rptMTPHealthAndBeauty.frx";
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\MTPs\\rptMTPDreamsMentalHealth.frx";
 
             RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
             WebReport.Report.Load(rdlcFilePath);
@@ -2031,6 +2031,210 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+        public Stream DreamsMentalHealthNoteReportSchema3(Workday_Client workdayClient)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\ApprovedNotes\\rptDreamsMentalHealthNote2.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetWorkdayClientDS(workdayClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Clients");
+            DataSet dataSet1 = new DataSet();
+            dataSet1.Tables.Add(GetClientDS(workdayClient.Client));
+            WebReport.Report.RegisterData(dataSet1.Tables[0], "Clients");
+            DataSet dataSet2 = new DataSet();
+            dataSet2.Tables.Add(GetFacilitatorDS(workdayClient.Facilitator));
+            WebReport.Report.RegisterData(dataSet2.Tables[0], "Facilitators");
+            DataSet dataSet3 = new DataSet();
+            dataSet3.Tables.Add(GetSupervisorDS(workdayClient.NoteP.Supervisor));
+            WebReport.Report.RegisterData(dataSet3.Tables[0], "Supervisors");
+            DataSet dataSet4 = new DataSet();
+            dataSet4.Tables.Add(GetNotePDS(workdayClient.NoteP));
+            WebReport.Report.RegisterData(dataSet4.Tables[0], "NotesP");
+
+            int i = 0;
+            var num_of_goal = string.Empty;
+            var goal_text = string.Empty;
+            var num_of_obj = string.Empty;
+            var obj_text = string.Empty;
+            foreach (NoteP_Activity item in workdayClient.NoteP.NotesP_Activities)
+            {
+                if (i == 0)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetNotePActivityDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "NotesP_Activities1");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetActivityDS(item.Activity));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Activities1");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Themes1");
+
+                    if (item.Objetive != null)
+                    {
+                        num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                        goal_text = item.Objetive.Goal.Name;
+                        num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                        obj_text = item.Objetive.Description;
+                    }
+                }
+                if (i == 1)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetNotePActivityDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "NotesP_Activities2");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetActivityDS(item.Activity));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Activities2");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Themes2");
+
+                    if (num_of_goal == string.Empty)
+                    {
+                        if (item.Objetive != null)
+                        {
+                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                            goal_text = item.Objetive.Goal.Name;
+                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                            obj_text = item.Objetive.Description;
+                        }
+                    }
+                }
+                if (i == 2)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetNotePActivityDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "NotesP_Activities3");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetActivityDS(item.Activity));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Activities3");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Themes3");
+
+                    if (num_of_goal == string.Empty)
+                    {
+                        if (item.Objetive != null)
+                        {
+                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                            goal_text = item.Objetive.Goal.Name;
+                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                            obj_text = item.Objetive.Description;
+                        }
+                    }
+                }
+                if (i == 3)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetNotePActivityDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "NotesP_Activities4");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetActivityDS(item.Activity));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Activities4");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Themes4");
+
+                    if (num_of_goal == string.Empty)
+                    {
+                        if (item.Objetive != null)
+                        {
+                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                            goal_text = item.Objetive.Goal.Name;
+                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                            obj_text = item.Objetive.Description;
+                        }
+                    }
+                }
+                i = ++i;
+            }
+
+            i = 0;
+            List<Workday_Activity_Facilitator> waf = workdayClient.Workday.Workdays_Activities_Facilitators
+                                                                          .Where(waf => waf.Facilitator.Id == workdayClient.Facilitator.Id)
+                                                                          .ToList();
+            foreach (Workday_Activity_Facilitator item in waf)
+            {
+                if (i == 0)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetWorkdayActivityFacilitatorDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Activities_Facilitators1");
+                }
+                if (i == 1)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetWorkdayActivityFacilitatorDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Activities_Facilitators2");
+                }
+                if (i == 2)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetWorkdayActivityFacilitatorDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Activities_Facilitators3");
+                }
+                if (i == 3)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetWorkdayActivityFacilitatorDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Activities_Facilitators4");
+                }
+                i = ++i;
+            }
+
+            var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
+            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+            var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(workdayClient.NoteP.Supervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.NoteP.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(workdayClient.Facilitator.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.SetParameterValue("datenote", date);
+            WebReport.Report.SetParameterValue("dateFacilitator", dateFacilitator);
+            WebReport.Report.SetParameterValue("dateSupervisor", dateSupervisor);
+            WebReport.Report.SetParameterValue("num_of_goal", num_of_goal);
+            WebReport.Report.SetParameterValue("goal_text", goal_text);
+            WebReport.Report.SetParameterValue("num_of_obj", num_of_obj);
+            WebReport.Report.SetParameterValue("obj_text", obj_text);
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         #endregion
 
         #region Approved Individual Notes reports
@@ -2118,6 +2322,85 @@ namespace KyoS.Web.Helpers
             WebReport WebReport = new WebReport();
 
             string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\ApprovedNotes\\rptIndNoteFloridaSocialHS0.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetWorkdayClientDS(workdayClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Clients");
+            DataSet dataSet1 = new DataSet();
+            dataSet1.Tables.Add(GetClientDS(workdayClient.Client));
+            WebReport.Report.RegisterData(dataSet1.Tables[0], "Clients");
+            DataSet dataSet2 = new DataSet();
+            dataSet2.Tables.Add(GetFacilitatorDS(workdayClient.Facilitator));
+            WebReport.Report.RegisterData(dataSet2.Tables[0], "Facilitators");
+            DataSet dataSet3 = new DataSet();
+            dataSet3.Tables.Add(GetSupervisorDS(workdayClient.IndividualNote.Supervisor));
+            WebReport.Report.RegisterData(dataSet3.Tables[0], "Supervisors");
+            DataSet dataSet4 = new DataSet();
+            dataSet4.Tables.Add(GetIndividualNoteDS(workdayClient.IndividualNote));
+            WebReport.Report.RegisterData(dataSet4.Tables[0], "IndividualNotes");
+
+            var num_of_goal = string.Empty;
+            var goal_text = string.Empty;
+            var num_of_obj = string.Empty;
+            var obj_text = string.Empty;
+
+            if (workdayClient.IndividualNote.Objective != null)
+            {
+                num_of_goal = $"GOAL #{workdayClient.IndividualNote.Objective.Goal.Number}:";
+                goal_text = workdayClient.IndividualNote.Objective.Goal.Name;
+                num_of_obj = $"OBJ {workdayClient.IndividualNote.Objective.Objetive}:";
+                obj_text = workdayClient.IndividualNote.Objective.Description;
+            }
+
+            var date = $"{workdayClient.Workday.Date.ToShortDateString()}";
+            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+            var dateSupervisor = workdayClient.IndividualNote
+                .DateOfApprove.Value.ToShortDateString();
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(workdayClient.IndividualNote.Supervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.IndividualNote.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(workdayClient.Facilitator.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.SetParameterValue("datenote", date);
+            WebReport.Report.SetParameterValue("dateFacilitator", dateFacilitator);
+            WebReport.Report.SetParameterValue("dateSupervisor", dateSupervisor);
+            WebReport.Report.SetParameterValue("num_of_goal", num_of_goal);
+            WebReport.Report.SetParameterValue("goal_text", goal_text);
+            WebReport.Report.SetParameterValue("num_of_obj", num_of_obj);
+            WebReport.Report.SetParameterValue("obj_text", obj_text);
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+
+        public Stream DreamsMentalHealthIndNoteReportSchema1(Workday_Client workdayClient)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\ApprovedNotes\\rptIndNoteDreamsMentalHealth0.frx";
 
             RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
             WebReport.Report.Load(rdlcFilePath);
@@ -2315,6 +2598,250 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+
+        public Stream FloridaSocialHSGroupNoteReportSchema1(Workday_Client workdayClient)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\ApprovedNotes\\rptGroupNoteFloridaSocialHS0.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetWorkdayClientDS(workdayClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Clients");
+            DataSet dataSet1 = new DataSet();
+            dataSet1.Tables.Add(GetClientDS(workdayClient.Client));
+            WebReport.Report.RegisterData(dataSet1.Tables[0], "Clients");
+            DataSet dataSet2 = new DataSet();
+            dataSet2.Tables.Add(GetFacilitatorDS(workdayClient.Facilitator));
+            WebReport.Report.RegisterData(dataSet2.Tables[0], "Facilitators");
+            DataSet dataSet3 = new DataSet();
+            dataSet3.Tables.Add(GetSupervisorDS(workdayClient.GroupNote.Supervisor));
+            WebReport.Report.RegisterData(dataSet3.Tables[0], "Supervisors");
+            DataSet dataSet4 = new DataSet();
+            dataSet4.Tables.Add(GetGroupNoteDS(workdayClient.GroupNote));
+            WebReport.Report.RegisterData(dataSet4.Tables[0], "GroupNotes");
+
+            int i = 0;
+            var num_of_goal = string.Empty;
+            var goal_text = string.Empty;
+            var num_of_obj = string.Empty;
+            var obj_text = string.Empty;
+            foreach (GroupNote_Activity item in workdayClient.GroupNote.GroupNotes_Activities)
+            {
+                if (i == 0)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetGroupNoteActivityDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "GroupNotes_Activities1");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetActivityDS(item.Activity));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Activities1");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Themes1");
+
+                    if (item.Objetive != null)
+                    {
+                        num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                        goal_text = item.Objetive.Goal.Name;
+                        num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                        obj_text = item.Objetive.Description;
+                    }
+                }
+                if (i == 1)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetGroupNoteActivityDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "GroupNotes_Activities2");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetActivityDS(item.Activity));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Activities2");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Themes2");
+
+                    if (num_of_goal == string.Empty)
+                    {
+                        if (item.Objetive != null)
+                        {
+                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                            goal_text = item.Objetive.Goal.Name;
+                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                            obj_text = item.Objetive.Description;
+                        }
+                    }
+                }
+                i = ++i;
+            }
+
+            var date = $"{workdayClient.Workday.Date.ToShortDateString()}";
+            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+            var dateSupervisor = workdayClient.GroupNote.DateOfApprove.Value.ToShortDateString();
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(workdayClient.GroupNote.Supervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.GroupNote.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(workdayClient.Facilitator.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.SetParameterValue("datenote", date);
+            WebReport.Report.SetParameterValue("dateFacilitator", dateFacilitator);
+            WebReport.Report.SetParameterValue("dateSupervisor", dateSupervisor);
+            WebReport.Report.SetParameterValue("num_of_goal", num_of_goal);
+            WebReport.Report.SetParameterValue("goal_text", goal_text);
+            WebReport.Report.SetParameterValue("num_of_obj", num_of_obj);
+            WebReport.Report.SetParameterValue("obj_text", obj_text);
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+
+        public Stream DreamsMentalHealthGroupNoteReportSchema1(Workday_Client workdayClient)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\ApprovedNotes\\rptGroupNoteDreamsMentalHealth0.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetWorkdayClientDS(workdayClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Clients");
+            DataSet dataSet1 = new DataSet();
+            dataSet1.Tables.Add(GetClientDS(workdayClient.Client));
+            WebReport.Report.RegisterData(dataSet1.Tables[0], "Clients");
+            DataSet dataSet2 = new DataSet();
+            dataSet2.Tables.Add(GetFacilitatorDS(workdayClient.Facilitator));
+            WebReport.Report.RegisterData(dataSet2.Tables[0], "Facilitators");
+            DataSet dataSet3 = new DataSet();
+            dataSet3.Tables.Add(GetSupervisorDS(workdayClient.GroupNote.Supervisor));
+            WebReport.Report.RegisterData(dataSet3.Tables[0], "Supervisors");
+            DataSet dataSet4 = new DataSet();
+            dataSet4.Tables.Add(GetGroupNoteDS(workdayClient.GroupNote));
+            WebReport.Report.RegisterData(dataSet4.Tables[0], "GroupNotes");
+
+            int i = 0;
+            var num_of_goal = string.Empty;
+            var goal_text = string.Empty;
+            var num_of_obj = string.Empty;
+            var obj_text = string.Empty;
+            foreach (GroupNote_Activity item in workdayClient.GroupNote.GroupNotes_Activities)
+            {
+                if (i == 0)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetGroupNoteActivityDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "GroupNotes_Activities1");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetActivityDS(item.Activity));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Activities1");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Themes1");
+
+                    if (item.Objetive != null)
+                    {
+                        num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                        goal_text = item.Objetive.Goal.Name;
+                        num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                        obj_text = item.Objetive.Description;
+                    }
+                }
+                if (i == 1)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetGroupNoteActivityDS(item));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "GroupNotes_Activities2");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetActivityDS(item.Activity));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Activities2");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], "Themes2");
+
+                    if (num_of_goal == string.Empty)
+                    {
+                        if (item.Objetive != null)
+                        {
+                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                            goal_text = item.Objetive.Goal.Name;
+                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                            obj_text = item.Objetive.Description;
+                        }
+                    }
+                }
+                i = ++i;
+            }
+
+            var date = $"{workdayClient.Workday.Date.ToShortDateString()}";
+            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+            var dateSupervisor = workdayClient.GroupNote.DateOfApprove.Value.ToShortDateString();
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(workdayClient.GroupNote.Supervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.GroupNote.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(workdayClient.Facilitator.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.SetParameterValue("datenote", date);
+            WebReport.Report.SetParameterValue("dateFacilitator", dateFacilitator);
+            WebReport.Report.SetParameterValue("dateSupervisor", dateSupervisor);
+            WebReport.Report.SetParameterValue("num_of_goal", num_of_goal);
+            WebReport.Report.SetParameterValue("goal_text", goal_text);
+            WebReport.Report.SetParameterValue("num_of_obj", num_of_obj);
+            WebReport.Report.SetParameterValue("obj_text", obj_text);
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         #endregion
 
         #region Intake reports
@@ -2391,6 +2918,96 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetIntakeMedicalHistoryDS(intake.Client.IntakeMedicalHistory));
             WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeMedicalHistory");
 
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDischargeDS(intake.Client.Discharge));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+
+        public Stream DreamsMentalHealthIntakeReport(IntakeScreeningEntity intake)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Intakes\\rptIntakeDreamsMentalHealth.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intake.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intake.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(intake.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(intake.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeScreeningsDS(intake.Client.IntakeScreening));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeScreenings");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeConsentForTreatmentDS(intake.Client.IntakeConsentForTreatment));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsentForTreatment");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeConsentForReleaseDS(intake.Client.IntakeConsentForRelease));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsentForRelease");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeConsumerRightsDS(intake.Client.IntakeConsumerRights));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsumerRights");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeAcknowledgementDS(intake.Client.IntakeAcknowledgementHipa));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeAcknowledgement");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeAccessToServicesDS(intake.Client.IntakeAccessToServices));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeAccessToServices");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeOrientationCheckListDS(intake.Client.IntakeOrientationChecklist));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeOrientationCheckList");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeFeeAgreementDS(intake.Client.IntakeFeeAgreement));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeFeeAgreement");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeTuberculosisDS(intake.Client.IntakeTuberculosis));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeTuberculosis");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeTransportationDS(intake.Client.IntakeTransportation));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeTransportation");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeConsentPhotographDS(intake.Client.IntakeConsentPhotograph));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsentPhotograph");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeMedicalHistoryDS(intake.Client.IntakeMedicalHistory));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeMedicalHistory");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDischargeDS(intake.Client.Discharge));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
             WebReport.Report.Prepare();
 
             Stream stream = new MemoryStream();
@@ -2400,6 +3017,686 @@ namespace KyoS.Web.Helpers
             return stream;
         }
         #endregion
+
+        #region Fars Form reports
+        public Stream FloridaSocialHSFarsReport(FarsFormEntity fars)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Fars\\rptFarsFloridaSocialHS.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(fars.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(fars.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(fars.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(fars.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFarsDS(fars));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "FarsForm");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+
+        public Stream DreamsMentalHealthFarsReport(FarsFormEntity fars)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Fars\\rptFarsDreamsMentalHealth.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(fars.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(fars.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(fars.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(fars.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFarsDS(fars));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "FarsForm");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
+
+        #region Discharge reports
+        public Stream FloridaSocialHSDischargeReport(DischargeEntity discharge)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Discharges\\rptDischargeFloridaSocialHS.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(discharge.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(discharge.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(discharge.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(discharge.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(discharge.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDischargeDS(discharge));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMedicationsListDS(discharge.Client.MedicationList.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Medication");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        public Stream DreamsMentalHealthDischargeReport(DischargeEntity discharge)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Discharges\\rptDischargeDreamsMentalHealth.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(discharge.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(discharge.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(discharge.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(discharge.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(discharge.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDischargeDS(discharge));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMedicationsListDS(discharge.Client.MedicationList.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Medication");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
+
+        #region Bio reports         
+        public Stream FloridaSocialHSBioReport(BioEntity bio)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Bios\\rptBioFloridaSocialHS.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(bio.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(bio.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(bio.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(bio.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMedicationsListDS(bio.Client.MedicationList.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Medication");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetBioBehavioralHistoryListDS(bio.Client.List_BehavioralHistory.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Bio_BehavioralHistory");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetBioDS(bio));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Bio");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(bio.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDoctorDS(bio.Client.Doctor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Doctors");
+
+
+            int nutritionScoreTotal = 0;
+            if (bio.HasAnIllnes)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.EastFewer)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.EastFew)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.Has3OrMore)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.HasTooth)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.DoesNotAlways)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.EastAlone)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.Takes3OrMore)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.WithoutWanting)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.NotAlwaysPhysically)
+            {
+                nutritionScoreTotal++;
+            }
+           
+            WebReport.Report.SetParameterValue("nutritionScoreTotal", nutritionScoreTotal);
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        public Stream DreamsMentalHealthBioReport(BioEntity bio)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Bios\\rptBioDreamsMentalHealth.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(bio.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(bio.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(bio.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(bio.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMedicationsListDS(bio.Client.MedicationList.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Medication");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetBioBehavioralHistoryListDS(bio.Client.List_BehavioralHistory.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Bio_BehavioralHistory");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetBioDS(bio));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Bio");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(bio.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDoctorDS(bio.Client.Doctor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Doctors");
+
+
+            int nutritionScoreTotal = 0;
+            if (bio.HasAnIllnes)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.EastFewer)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.EastFew)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.Has3OrMore)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.HasTooth)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.DoesNotAlways)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.EastAlone)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.Takes3OrMore)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.WithoutWanting)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.NotAlwaysPhysically)
+            {
+                nutritionScoreTotal++;
+            }
+
+            WebReport.Report.SetParameterValue("nutritionScoreTotal", nutritionScoreTotal);
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
+
+        #region Addendum reports
+        public Stream FloridaSocialHSAddendumReport(AdendumEntity addendum)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Addendums\\rptAddendumFloridaSocialHS.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetMtpDS(addendum.Mtp));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(addendum.Mtp.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(addendum.Mtp.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(addendum.Mtp.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+            
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(addendum.Mtp.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(addendum.Facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(addendum.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetAddendumDS(addendum));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Adendums");
+
+            List<GoalEntity> goals1 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives1 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals2 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives2 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals3 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives3 = new List<ObjetiveEntity>();
+            
+            int i = 0;
+
+            foreach (GoalEntity item in addendum.Goals)
+            {
+                if (i == 0)
+                {
+                    goals1 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives1 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 1)
+                {
+                    goals2 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives2 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 2)
+                {
+                    goals3 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives3 = item.Objetives.ToList();
+                    }
+                }               
+                i = ++i;
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals1));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals1");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives1));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives1");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals2");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives2");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals3));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals3");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives3));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives3");            
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        public Stream DreamsMentalHealthAddendumReport(AdendumEntity addendum)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Addendums\\rptAddendumDreamsMentalHealth.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetMtpDS(addendum.Mtp));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(addendum.Mtp.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(addendum.Mtp.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(addendum.Mtp.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(addendum.Mtp.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(addendum.Facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(addendum.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetAddendumDS(addendum));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Adendums");
+
+            List<GoalEntity> goals1 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives1 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals2 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives2 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals3 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives3 = new List<ObjetiveEntity>();
+
+            int i = 0;
+
+            foreach (GoalEntity item in addendum.Goals)
+            {
+                if (i == 0)
+                {
+                    goals1 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives1 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 1)
+                {
+                    goals2 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives2 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 2)
+                {
+                    goals3 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives3 = item.Objetives.ToList();
+                    }
+                }
+                i = ++i;
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals1));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals1");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives1));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives1");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals2");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives2");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals3));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals3");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives3));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives3");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
+
+        #region MTP Review reports
+        public Stream FloridaSocialHSMTPReviewReport(MTPReviewEntity review)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\MTPReviews\\rptMTPReviewFloridaSocialHS.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetMtpDS(review.Mtp));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(review.Mtp.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(review.Mtp.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(review.Mtp.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(review.Mtp.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMTPReviewDS(review));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPReviews");
+            
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        public Stream DreamsMentalHealthMTPReviewReport(MTPReviewEntity review)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\MTPReviews\\rptMTPReviewDreamsMentalHealth.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetMtpDS(review.Mtp));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(review.Mtp.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(review.Mtp.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(review.Mtp.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(review.Mtp.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMTPReviewDS(review));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPReviews");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion 
 
         #region Utils functions
         public byte[] ConvertStreamToByteArray(Stream stream)
@@ -2619,7 +3916,6 @@ namespace KyoS.Web.Helpers
                                             0,
                                             string.Empty,
                                             string.Empty,
-
                                             string.Empty,
                                             string.Empty,
                                             new DateTime(),
@@ -2649,8 +3945,7 @@ namespace KyoS.Web.Helpers
                                             0,
                                             string.Empty,
                                             new DateTime(),
-                                            string.Empty,
-                                            0,
+                                            string.Empty,                                            
                                             Common.Enums.RelationshipType.Brother
                                             });
             }
@@ -2728,6 +4023,58 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetDoctorDS(DoctorEntity doctor)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "Doctors"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Address", typeof(string));
+            dt.Columns.Add("Telephone", typeof(string));
+            dt.Columns.Add("Email", typeof(string));
+
+            if (doctor != null)
+            {
+                dt.Rows.Add(new object[]
+                                            {
+                                            doctor.Id,
+                                            doctor.CreatedBy,
+                                            doctor.CreatedOn,
+                                            doctor.LastModifiedBy,
+                                            doctor.LastModifiedOn,
+                                            doctor.Name,
+                                            doctor.Address,
+                                            doctor.Telephone,
+                                            doctor.Email
+            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                            {
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty
+                                            });
+            }
+
+            return dt;
+        }
+
         private DataTable GetLegalGuardianDS(LegalGuardianEntity legal)
         {
             DataTable dt = new DataTable
@@ -2756,42 +4103,42 @@ namespace KyoS.Web.Helpers
             {
                 dt.Rows.Add(new object[]
                                             {
-                                            legal.Id,
-                                            legal.CreatedBy,
-                                            legal.CreatedOn,
-                                            legal.LastModifiedBy,
-                                            legal.LastModifiedOn,
-                                            legal.Name,
-                                            legal.Address,
-                                            legal.Telephone,
-                                            legal.Email,
-                                            legal.Country,
-                                            legal.City,
-                                            legal.State,
-                                            legal.ZipCode,
-                                            legal.TelephoneSecondary,
-                                            legal.AdressLine2
+                                        legal.Id,
+                                        legal.CreatedBy,
+                                        legal.CreatedOn,
+                                        legal.LastModifiedBy,
+                                        legal.LastModifiedOn,
+                                        legal.Name,
+                                        legal.Address,
+                                        legal.Telephone,
+                                        legal.Email,
+                                        legal.Country,
+                                        legal.City,
+                                        legal.State,
+                                        legal.ZipCode,
+                                        legal.TelephoneSecondary,
+                                        legal.AdressLine2
             });
             }
             else
             {
                 dt.Rows.Add(new object[]
                                             {
-                                            0,
-                                            string.Empty,
-                                            new DateTime(),
-                                            string.Empty,
-                                            new DateTime(),
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty
+                                        0,
+                                        string.Empty,
+                                        new DateTime(),
+                                        string.Empty,
+                                        new DateTime(),
+                                        string.Empty,
+                                        string.Empty,
+                                        string.Empty,
+                                        string.Empty,
+                                        string.Empty,
+                                        string.Empty,
+                                        string.Empty,
+                                        string.Empty,
+                                        string.Empty,
+                                        string.Empty
                                             });
             }
 
@@ -2814,7 +4161,9 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("LinkedUser", typeof(string));
             dt.Columns.Add("SignaturePath", typeof(string));
 
-            dt.Rows.Add(new object[]
+            if (facilitator != null)
+            {
+                dt.Rows.Add(new object[]
                                         {
                                             facilitator.Id,
                                             facilitator.Name,
@@ -2824,6 +4173,20 @@ namespace KyoS.Web.Helpers
                                             facilitator.LinkedUser,
                                             facilitator.SignaturePath
                                         });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            Common.Enums.StatusType.Close,
+                                            string.Empty,
+                                            string.Empty
+                                        });
+            }
 
             return dt;
         }
@@ -2844,7 +4207,9 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("LinkedUser", typeof(string));
             dt.Columns.Add("SignaturePath", typeof(string));
 
-            dt.Rows.Add(new object[]
+            if (supervisor != null)
+            {
+                dt.Rows.Add(new object[]
                                         {
                                             supervisor.Id,
                                             supervisor.Name,
@@ -2854,6 +4219,214 @@ namespace KyoS.Web.Helpers
                                             supervisor.LinkedUser,
                                             supervisor.SignaturePath
                                         });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            string.Empty,
+                                            string.Empty
+                                        });
+            }           
+
+            return dt;
+        }
+
+        private DataTable GetAddendumDS(AdendumEntity addendum)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "Adendum"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("MtpId", typeof(int));
+            dt.Columns.Add("Dateidentified", typeof(DateTime));
+            dt.Columns.Add("ProblemStatement", typeof(string));
+            dt.Columns.Add("Unit", typeof(int));
+            dt.Columns.Add("Duration", typeof(int));
+            dt.Columns.Add("Frecuency", typeof(string));
+            dt.Columns.Add("FacilitatorId", typeof(int));
+            dt.Columns.Add("SupervisorId", typeof(int));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));            
+
+            if (addendum != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            addendum.Id,
+                                            0,
+                                            addendum.Dateidentified,
+                                            addendum.ProblemStatement,
+                                            addendum.Unit,
+                                            addendum.Duration,
+                                            addendum.Frecuency,
+                                            0,
+                                            0,
+                                            addendum.Status,
+                                            addendum.CreatedBy,
+                                            addendum.CreatedOn,
+                                            addendum.LastModifiedBy,
+                                            addendum.LastModifiedOn
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            string.Empty,
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            0,
+                                            0,
+                                            Common.Enums.AdendumStatus.Edition,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()
+                                        });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetMTPReviewDS(MTPReviewEntity review)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "MTPReview"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("MTP_FK", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("ACopy", typeof(bool));            
+            dt.Columns.Add("DateClinicalDirector", typeof(DateTime)); 
+            dt.Columns.Add("DateLicensedPractitioner", typeof(DateTime)); 
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime)); 
+            dt.Columns.Add("DateTherapist", typeof(DateTime));
+            dt.Columns.Add("DescribeAnyGoals", typeof(string));
+            dt.Columns.Add("DescribeClient", typeof(string));
+            dt.Columns.Add("IfCurrent", typeof(string));
+            dt.Columns.Add("NumberUnit", typeof(int));
+            dt.Columns.Add("ProviderNumber", typeof(string));
+            dt.Columns.Add("ReviewedOn", typeof(DateTime));
+            dt.Columns.Add("ServiceCode", typeof(string));
+            dt.Columns.Add("SpecifyChanges", typeof(string));
+            dt.Columns.Add("SummaryOfServices", typeof(string));
+            dt.Columns.Add("TheConsumer", typeof(bool));
+            dt.Columns.Add("TheTreatmentPlan", typeof(bool));
+            dt.Columns.Add("ClinicalDirector", typeof(string));
+            dt.Columns.Add("Documents", typeof(bool));
+            dt.Columns.Add("LicensedPractitioner", typeof(string));
+            dt.Columns.Add("Therapist", typeof(string));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("MtpId", typeof(int));
+            dt.Columns.Add("EndTime", typeof(DateTime));
+            dt.Columns.Add("Frecuency", typeof(string));
+            dt.Columns.Add("MonthOfTreatment", typeof(int));
+            dt.Columns.Add("Setting", typeof(string));
+            dt.Columns.Add("StartTime", typeof(DateTime));
+            dt.Columns.Add("DataOfService", typeof(DateTime));
+
+            if (review != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            review.Id,
+                                            review.MTP_FK,
+                                            review.CreatedBy,
+                                            review.CreatedOn,
+                                            review.LastModifiedBy,
+                                            review.LastModifiedOn,
+                                            review.ACopy,
+                                            review.DateClinicalDirector,
+                                            review.DateLicensedPractitioner,
+                                            review.DateSignaturePerson,
+                                            review.DateTherapist,
+                                            review.DescribeAnyGoals,
+                                            review.DescribeClient,
+                                            review.IfCurrent,
+                                            review.NumberUnit,
+                                            review.ProviderNumber,
+                                            review.ReviewedOn,
+                                            review.ServiceCode,
+                                            review.SpecifyChanges,
+                                            review.SummaryOfServices,
+                                            review.TheConsumer,
+                                            review.TheTreatmentPlan,
+                                            review.ClinicalDirector,
+                                            review.Documents,
+                                            review.LicensedPractitioner,
+                                            review.Therapist,
+                                            review.Status,
+                                            0,
+                                            review.EndTime,
+                                            review.Frecuency,
+                                            review.MonthOfTreatment,
+                                            review.Setting,
+                                            review.StartTime,
+                                            review.DataOfService,
+            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            false,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            string.Empty,
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            new DateTime()
+                                        });
+            }
 
             return dt;
         }
@@ -3648,7 +5221,6 @@ namespace KyoS.Web.Helpers
 
             return dt;
         }
-
         
         private DataTable GetIntakeMedicalHistoryDS(IntakeMedicalHistoryEntity intake)
         {
@@ -4128,6 +5700,275 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetFarsDS(FarsFormEntity fars)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "FarsForm"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("ClientId", typeof(int));
+            dt.Columns.Add("ContractorID", typeof(string));
+            dt.Columns.Add("DcfEvaluation", typeof(string));
+            dt.Columns.Add("EvaluationDate", typeof(DateTime));
+            dt.Columns.Add("ProviderId", typeof(string));
+            dt.Columns.Add("M_GafScore", typeof(string));
+            dt.Columns.Add("RaterEducation", typeof(string));
+            dt.Columns.Add("RaterFMHI", typeof(string));
+            dt.Columns.Add("SubstanceAbusoHistory", typeof(int));
+            dt.Columns.Add("DepressionScale", typeof(int));
+            dt.Columns.Add("AnxietyScale", typeof(int));
+            dt.Columns.Add("HyperAffectScale", typeof(int));
+            dt.Columns.Add("ThoughtProcessScale", typeof(int));
+            dt.Columns.Add("CognitiveScale", typeof(int));
+            dt.Columns.Add("MedicalScale", typeof(int));
+            dt.Columns.Add("TraumaticsScale", typeof(int));
+            dt.Columns.Add("SubstanceScale", typeof(int));
+            dt.Columns.Add("InterpersonalScale", typeof(int));
+            dt.Columns.Add("FamilyRelationShipsScale", typeof(int));
+            dt.Columns.Add("FamilyEnvironmentScale", typeof(int));
+            dt.Columns.Add("SocialScale", typeof(int));
+            dt.Columns.Add("WorkScale", typeof(int));
+            dt.Columns.Add("ActivitiesScale", typeof(int));
+            dt.Columns.Add("AbilityScale", typeof(int));
+            dt.Columns.Add("DangerToSelfScale", typeof(int));
+            dt.Columns.Add("DangerToOtherScale", typeof(int));
+            dt.Columns.Add("SecurityScale", typeof(int));
+            dt.Columns.Add("ContID1", typeof(string));
+            dt.Columns.Add("ContID2", typeof(string));
+            dt.Columns.Add("ContID3", typeof(string));
+            dt.Columns.Add("ProviderLocal", typeof(string));
+            dt.Columns.Add("MedicaidRecipientID", typeof(string));
+            dt.Columns.Add("MedicaidProviderID", typeof(string));
+            dt.Columns.Add("MCOID", typeof(string));
+            dt.Columns.Add("Country", typeof(string));
+            dt.Columns.Add("SignatureDate", typeof(DateTime));
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("ProgramEvaluation", typeof(string));            
+
+            if (fars != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            fars.Id,
+                                            fars.Client.Id,
+                                            fars.ContractorID,
+                                            fars.DcfEvaluation,
+                                            fars.EvaluationDate,
+                                            fars.ProviderId,
+                                            fars.M_GafScore,
+                                            fars.RaterEducation,
+                                            fars.RaterFMHI,
+                                            fars.SubstanceAbusoHistory,
+                                            fars.DepressionScale,
+                                            fars.AnxietyScale,
+                                            fars.HyperAffectScale,
+                                            fars.ThoughtProcessScale,
+                                            fars.CognitiveScale,
+                                            fars.MedicalScale,
+                                            fars.TraumaticsScale,
+                                            fars.SubstanceScale,
+                                            fars.InterpersonalScale,
+                                            fars.FamilyRelationShipsScale,
+                                            fars.FamilyEnvironmentScale,
+                                            fars.SocialScale,
+                                            fars.WorkScale,
+                                            fars.ActivitiesScale,
+                                            fars.AbilityScale,
+                                            fars.DangerToSelfScale,
+                                            fars.DangerToOtherScale,
+                                            fars.SecurityScale,
+                                            fars.ContID1,
+                                            fars.ContID2,
+                                            fars.ContID3,
+                                            fars.ProviderLocal,
+                                            fars.MedicaidRecipientID,
+                                            fars.MedicaidProviderID,
+                                            fars.MCOID,
+                                            fars.Country,
+                                            fars.SignatureDate,
+                                            fars.AdmissionedFor,
+                                            fars.ProgramEvaluation,
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty
+                                        });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetDischargeDS(DischargeEntity discharge)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "Discharge"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+            dt.Columns.Add("DateReport", typeof(DateTime));
+            dt.Columns.Add("DateDischarge", typeof(DateTime));            
+            dt.Columns.Add("Planned", typeof(bool));            
+            dt.Columns.Add("ReasonDischarge", typeof(string));
+            dt.Columns.Add("BriefHistory", typeof(string));
+            dt.Columns.Add("CourseTreatment", typeof(string));
+            dt.Columns.Add("ConditionalDischarge", typeof(string));
+            dt.Columns.Add("ReferralFor1", typeof(string));
+            dt.Columns.Add("ReferralAgency1", typeof(string));
+            dt.Columns.Add("ReferralContactPersonal1", typeof(string));
+            dt.Columns.Add("ReferralPhone1", typeof(string));
+            dt.Columns.Add("ReferralHoursOperation1", typeof(string));
+            dt.Columns.Add("ReferralFor2", typeof(string));
+            dt.Columns.Add("ReferralAgency2", typeof(string));
+            dt.Columns.Add("ReferralContactPersonal2", typeof(string));
+            dt.Columns.Add("ReferralPhone2", typeof(string));
+            dt.Columns.Add("ReferralHoursOperation2", typeof(string));
+            dt.Columns.Add("FollowDischarge", typeof(string));
+            dt.Columns.Add("TreatmentPlanObjCumpl", typeof(bool));
+            dt.Columns.Add("AgencyDischargeClient", typeof(bool));
+            dt.Columns.Add("ClientDischargeAgainst", typeof(bool));
+            dt.Columns.Add("ClientDeceased", typeof(bool));
+            dt.Columns.Add("ClientMoved", typeof(bool));
+            dt.Columns.Add("PhysicallyUnstable", typeof(bool));
+            dt.Columns.Add("ClientReferred", typeof(bool));            
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("Hospitalization", typeof(bool));
+            dt.Columns.Add("Others", typeof(bool));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("Others_Explain", typeof(string));
+            dt.Columns.Add("DateSignatureSupervisor", typeof(DateTime));
+
+            if (discharge != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            discharge.Id,
+                                            discharge.Client_FK,
+                                            discharge.DateReport,
+                                            discharge.DateDischarge,
+                                            discharge.Planned,
+                                            discharge.ReasonDischarge,
+                                            discharge.BriefHistory,
+                                            discharge.CourseTreatment,
+                                            discharge.ConditionalDischarge,
+                                            discharge.ReferralFor1,
+                                            discharge.ReferralAgency1,
+                                            discharge.ReferralContactPersonal1,
+                                            discharge.ReferralPhone1,
+                                            discharge.ReferralHoursOperation1,
+                                            discharge.ReferralFor2,
+                                            discharge.ReferralAgency2,
+                                            discharge.ReferralContactPersonal2,
+                                            discharge.ReferralPhone2,
+                                            discharge.ReferralHoursOperation2,
+                                            discharge.FollowDischarge,
+                                            discharge.TreatmentPlanObjCumpl,
+                                            discharge.AgencyDischargeClient,
+                                            discharge.ClientDischargeAgainst,
+                                            discharge.ClientDeceased,
+                                            discharge.ClientMoved,
+                                            discharge.PhysicallyUnstable,
+                                            discharge.ClientReferred,
+                                            discharge.AdmissionedFor,
+                                            discharge.Hospitalization,
+                                            discharge.Others,
+                                            discharge.DateSignatureEmployee,
+                                            discharge.DateSignaturePerson,
+                                            discharge.Others_Explain,
+                                            discharge.DateSignatureSupervisor,
+            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()                                  
+                                        });
+            }
+
+            return dt;
+        }
+
         private DataTable GetMtpDS(MTPEntity mtp)
         {
             DataTable dt = new DataTable
@@ -4147,6 +5988,48 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Frecuency", typeof(string));
             dt.Columns.Add("NumberOfMonths", typeof(string));
             dt.Columns.Add("Setting", typeof(string));
+            dt.Columns.Add("Active", typeof(bool));
+            dt.Columns.Add("AdditionalRecommended", typeof(string));
+            dt.Columns.Add("AdmissionDateMTP", typeof(DateTime));
+            dt.Columns.Add("ClientLimitation", typeof(string));
+            dt.Columns.Add("ClientStrengths", typeof(string));
+            dt.Columns.Add("DateOfUpdate", typeof(DateTime));
+            dt.Columns.Add("Family", typeof(bool));
+            dt.Columns.Add("FamilyCode", typeof(string));
+            dt.Columns.Add("FamilyDuration", typeof(int));
+            dt.Columns.Add("FamilyFrecuency", typeof(string));
+            dt.Columns.Add("FamilyUnits", typeof(int));
+            dt.Columns.Add("Group", typeof(bool));
+            dt.Columns.Add("GroupCode", typeof(string));
+            dt.Columns.Add("GroupDuration", typeof(int));
+            dt.Columns.Add("GroupFrecuency", typeof(string));
+            dt.Columns.Add("GroupUnits", typeof(int));
+            dt.Columns.Add("Health", typeof(bool));
+            dt.Columns.Add("HealthWhere", typeof(string));
+            dt.Columns.Add("Individual", typeof(bool));
+            dt.Columns.Add("IndividualCode", typeof(string));
+            dt.Columns.Add("IndividualDuration", typeof(int));
+            dt.Columns.Add("IndividualFrecuency", typeof(string));
+            dt.Columns.Add("IndividualUnits", typeof(int));
+            dt.Columns.Add("Legal", typeof(bool));
+            dt.Columns.Add("LegalWhere", typeof(string));
+            dt.Columns.Add("Medication", typeof(bool));
+            dt.Columns.Add("MedicationCode", typeof(string));
+            dt.Columns.Add("MedicationDuration", typeof(int));
+            dt.Columns.Add("MedicationFrecuency", typeof(string));
+            dt.Columns.Add("MedicationUnits", typeof(int));         
+            dt.Columns.Add("Other", typeof(bool));
+            dt.Columns.Add("OtherWhere", typeof(string));
+            dt.Columns.Add("Paint", typeof(bool));
+            dt.Columns.Add("PaintWhere", typeof(string));
+            dt.Columns.Add("Psychosocial", typeof(bool));
+            dt.Columns.Add("PsychosocialCode", typeof(string));
+            dt.Columns.Add("PsychosocialDuration", typeof(int));
+            dt.Columns.Add("PsychosocialFrecuency", typeof(string));
+            dt.Columns.Add("PsychosocialUnits", typeof(int));
+            dt.Columns.Add("RationaleForUpdate", typeof(string));
+            dt.Columns.Add("Substance", typeof(bool));
+            dt.Columns.Add("SubstanceWhere", typeof(string));
 
             dt.Rows.Add(new object[]
                                         {
@@ -4160,8 +6043,50 @@ namespace KyoS.Web.Helpers
                                             mtp.Modality,
                                             mtp.Frecuency,
                                             mtp.NumberOfMonths,
-                                            mtp.Setting
-                                        });
+                                            mtp.Setting,
+                                            mtp.Active,
+                                            mtp.AdditionalRecommended,
+                                            mtp.AdmissionDateMTP,
+                                            mtp.ClientLimitation,
+                                            mtp.ClientStrengths,
+                                            mtp.DateOfUpdate,
+                                            mtp.Family,
+                                            mtp.FamilyCode,
+                                            mtp.FamilyDuration,
+                                            mtp.FamilyFrecuency,
+                                            mtp.FamilyUnits,
+                                            mtp.Group,
+                                            mtp.GroupCode,
+                                            mtp.GroupDuration,
+                                            mtp.GroupFrecuency,
+                                            mtp.GroupUnits,
+                                            mtp.Health,
+                                            mtp.HealthWhere,
+                                            mtp.Individual,
+                                            mtp.IndividualCode,
+                                            mtp.IndividualDuration,
+                                            mtp.IndividualFrecuency,
+                                            mtp.IndividualUnits,
+                                            mtp.Legal,
+                                            mtp.LegalWhere,
+                                            mtp.Medication,
+                                            mtp.MedicationCode,
+                                            mtp.MedicationDuration,
+                                            mtp.MedicationFrecuency,
+                                            mtp.MedicationUnits,
+                                            mtp.Other,
+                                            mtp.OtherWhere,
+                                            mtp.Paint,
+                                            mtp.PaintWhere,
+                                            mtp.Psychosocial,
+                                            mtp.PsychosocialCode,
+                                            mtp.PsychosocialDuration,
+                                            mtp.PsychosocialFrecuency,
+                                            mtp.PsychosocialUnits,
+                                            mtp.RationaleForUpdate,
+                                            mtp.Substance,
+                                            mtp.SubstanceWhere
+        });
 
             return dt;
         }
@@ -4857,6 +6782,711 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetMedicationsListDS(List<MedicationEntity> medicationList)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "Medication"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("ClientId", typeof(int));
+            dt.Columns.Add("Dosage", typeof(string));
+            dt.Columns.Add("Frequency", typeof(string));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Prescriber", typeof(string));
+
+            foreach (MedicationEntity item in medicationList)
+            {
+
+                dt.Rows.Add(new object[]
+                                        {
+                                            item.Id,
+                                            0,
+                                            item.Dosage,
+                                            item.Frequency,
+                                            item.Name,
+                                            item.Prescriber
+                                        });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetBioBehavioralHistoryListDS(List<Bio_BehavioralHistoryEntity> BehavioralHistoryList)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "Bio_BehavioralHistory"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("ClientId", typeof(int));
+            dt.Columns.Add("Problem", typeof(string));
+            dt.Columns.Add("Date", typeof(DateTime));            
+
+            foreach (Bio_BehavioralHistoryEntity item in BehavioralHistoryList)
+            {
+
+                dt.Rows.Add(new object[]
+                                        {
+                                            item.Id,
+                                            0,
+                                            item.Problem,
+                                            item.Date
+                                        });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetBioDS(BioEntity bio)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "Bio"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateBio", typeof(DateTime));
+
+            dt.Columns.Add("Setting", typeof(string));
+
+            dt.Columns.Add("CMH", typeof(bool));
+            dt.Columns.Add("Priv", typeof(bool));
+            dt.Columns.Add("BioH0031HN", typeof(bool));
+            dt.Columns.Add("IDAH0031HO", typeof(bool));
+
+            dt.Columns.Add("PresentingProblem", typeof(string));
+            dt.Columns.Add("ClientAssessmentSituation", typeof(string));
+            dt.Columns.Add("FamilyAssessmentSituation", typeof(string));
+            dt.Columns.Add("FamilyEmotional", typeof(string));
+            dt.Columns.Add("LegalAssessment", typeof(string));
+
+            dt.Columns.Add("Appearance_Disheveled", typeof(bool));
+            dt.Columns.Add("Appearance_FairHygiene", typeof(bool));
+            dt.Columns.Add("Appearance_Cleaned", typeof(bool));
+            dt.Columns.Add("Appearance_WellGroomed", typeof(bool));
+            dt.Columns.Add("Appearance_Bizarre", typeof(bool));
+            dt.Columns.Add("Motor_Normal", typeof(bool));
+            dt.Columns.Add("Motor_Agitated", typeof(bool));
+            dt.Columns.Add("Motor_Retardation", typeof(bool));
+            dt.Columns.Add("Motor_RestLess", typeof(bool));
+            dt.Columns.Add("Motor_Akathisia", typeof(bool));
+            dt.Columns.Add("Motor_Tremor", typeof(bool));
+            dt.Columns.Add("Motor_Other", typeof(bool));
+            dt.Columns.Add("Speech_Normal", typeof(bool));
+            dt.Columns.Add("Speech_Loud", typeof(bool));
+            dt.Columns.Add("Speech_Mumbled", typeof(bool));
+            dt.Columns.Add("Speech_Stutters", typeof(bool));
+            dt.Columns.Add("Speech_Pressured", typeof(bool));
+            dt.Columns.Add("Speech_Rapid", typeof(bool));
+            dt.Columns.Add("Speech_Impoverished", typeof(bool));
+            dt.Columns.Add("Speech_Slow", typeof(bool));
+            dt.Columns.Add("Speech_Slurred", typeof(bool));
+            dt.Columns.Add("Speech_Other", typeof(bool));
+            dt.Columns.Add("Affect_Appropriate", typeof(bool));
+            dt.Columns.Add("Affect_labile", typeof(bool));
+            dt.Columns.Add("Affect_Flat", typeof(bool));
+            dt.Columns.Add("Affect_Tearful_Sad", typeof(bool));
+            dt.Columns.Add("Affect_Expansive", typeof(bool));
+            dt.Columns.Add("Affect_Anxious", typeof(bool));
+            dt.Columns.Add("Affect_Blunted", typeof(bool));
+            dt.Columns.Add("Affect_Angry", typeof(bool));
+            dt.Columns.Add("Affect_Constricted", typeof(bool));
+            dt.Columns.Add("Affect_Other", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Organized", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Obsessive", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_FightIdeas", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Disorganized", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Tangential", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_LooseAssociations", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_GoalDirected", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Circumstantial", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Other", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Irrational", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Preoccupied", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Rigid", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Blocking", typeof(bool));
+            dt.Columns.Add("Mood_Euthymic", typeof(bool));
+            dt.Columns.Add("Mood_Depressed", typeof(bool));
+            dt.Columns.Add("Mood_Anxious", typeof(bool));
+            dt.Columns.Add("Mood_Euphoric", typeof(bool));
+            dt.Columns.Add("Mood_Angry", typeof(bool));
+            dt.Columns.Add("Mood_Maniac", typeof(bool));
+            dt.Columns.Add("Mood_Other", typeof(bool));
+            dt.Columns.Add("Judgment_Good", typeof(bool));
+            dt.Columns.Add("Judgment_Fair", typeof(bool));
+            dt.Columns.Add("Judgment_Poor", typeof(bool));
+            dt.Columns.Add("Judgment_Other", typeof(bool));
+            dt.Columns.Add("Insight_Good", typeof(bool));
+            dt.Columns.Add("Insight_Fair", typeof(bool));
+            dt.Columns.Add("Insight_Poor", typeof(bool));
+            dt.Columns.Add("Insight_Other", typeof(bool));
+            dt.Columns.Add("ThoughtContent_Relevant", typeof(bool));
+            dt.Columns.Add("ThoughtContent_RealityBased", typeof(bool));
+            dt.Columns.Add("ThoughtContent_Hallucinations", typeof(bool));
+
+            dt.Columns.Add("ThoughtContent_Hallucinations_Type", typeof(string));
+
+            dt.Columns.Add("ThoughtContent_Delusions", typeof(bool));
+
+            dt.Columns.Add("ThoughtContent_Delusions_Type", typeof(string));
+
+            dt.Columns.Add("Oriented_FullOriented", typeof(bool));
+            dt.Columns.Add("Lacking_Time", typeof(bool));
+            dt.Columns.Add("Lacking_Place", typeof(bool));
+            dt.Columns.Add("Lacking_Person", typeof(bool));
+            dt.Columns.Add("Lacking_Location", typeof(bool));
+            dt.Columns.Add("RiskToSelf_Low", typeof(bool));
+            dt.Columns.Add("RiskToSelf_Medium", typeof(bool));
+            dt.Columns.Add("RiskToSelf_High", typeof(bool));
+            dt.Columns.Add("RiskToSelf_Chronic", typeof(bool));
+            dt.Columns.Add("RiskToOther_Low", typeof(bool));
+            dt.Columns.Add("RiskToOther_Medium", typeof(bool));
+            dt.Columns.Add("RiskToOther_High", typeof(bool));
+            dt.Columns.Add("RiskToOther_Chronic", typeof(bool));
+            dt.Columns.Add("SafetyPlan", typeof(bool));
+
+            dt.Columns.Add("Comments", typeof(string));
+
+            dt.Columns.Add("HaveYouEverThought", typeof(bool));
+
+            dt.Columns.Add("HaveYouEverThought_Explain", typeof(string));
+
+            dt.Columns.Add("DoYouOwn", typeof(bool));
+
+            dt.Columns.Add("DoYouOwn_Explain", typeof(string));
+
+            dt.Columns.Add("DoesClient", typeof(bool));
+            dt.Columns.Add("HaveYouEverBeen", typeof(bool));
+
+            dt.Columns.Add("HaveYouEverBeen_Explain", typeof(string));
+
+            dt.Columns.Add("HasTheClient", typeof(bool));
+
+            dt.Columns.Add("HasTheClient_Explain", typeof(string));
+
+            dt.Columns.Add("ClientFamilyAbusoTrauma", typeof(bool));
+
+            dt.Columns.Add("DateAbuse", typeof(DateTime));
+
+            dt.Columns.Add("PersonInvolved", typeof(string));
+
+            dt.Columns.Add("ApproximateDateReport", typeof(DateTime));
+
+            dt.Columns.Add("ApproximateDateReport_Where", typeof(string));
+            dt.Columns.Add("RelationShips", typeof(string));
+            dt.Columns.Add("Details", typeof(string));
+            dt.Columns.Add("Outcome", typeof(string));
+
+            dt.Columns.Add("AReferral", typeof(bool));
+
+            dt.Columns.Add("AReferral_Services", typeof(string));
+            dt.Columns.Add("AReferral_When", typeof(string));
+            dt.Columns.Add("AReferral_Where", typeof(string));
+
+            dt.Columns.Add("ObtainRelease", typeof(bool));
+            dt.Columns.Add("WhereRecord", typeof(bool));
+
+            dt.Columns.Add("WhereRecord_When", typeof(string));
+            dt.Columns.Add("WhereRecord_Where", typeof(string));
+
+            dt.Columns.Add("HasTheClientVisitedPhysician", typeof(bool));
+
+            dt.Columns.Add("HasTheClientVisitedPhysician_Reason", typeof(string));
+
+            dt.Columns.Add("HasTheClientVisitedPhysician_Date", typeof(DateTime));
+
+            dt.Columns.Add("DoesTheClientExperience", typeof(bool));
+
+            dt.Columns.Add("DoesTheClientExperience_Where", typeof(string));
+
+            dt.Columns.Add("PleaseRatePain", typeof(int));
+
+            dt.Columns.Add("HasClientBeenTreatedPain", typeof(bool));
+
+            dt.Columns.Add("HasClientBeenTreatedPain_PleaseIncludeService", typeof(string));
+            dt.Columns.Add("HasClientBeenTreatedPain_Ifnot", typeof(string));
+            dt.Columns.Add("HasClientBeenTreatedPain_Where", typeof(string));
+
+            dt.Columns.Add("ObtainReleaseInformation", typeof(bool));
+            dt.Columns.Add("HasAnIllnes", typeof(bool));
+            dt.Columns.Add("EastFewer", typeof(bool));
+            dt.Columns.Add("EastFew", typeof(bool));
+            dt.Columns.Add("Has3OrMore", typeof(bool));
+            dt.Columns.Add("HasTooth", typeof(bool));
+            dt.Columns.Add("DoesNotAlways", typeof(bool));
+            dt.Columns.Add("EastAlone", typeof(bool));
+            dt.Columns.Add("Takes3OrMore", typeof(bool));
+            dt.Columns.Add("WithoutWanting", typeof(bool));
+            dt.Columns.Add("NotAlwaysPhysically", typeof(bool));
+
+            dt.Columns.Add("If6_ReferredTo", typeof(string));
+
+            dt.Columns.Add("If6_Date", typeof(DateTime));
+
+            dt.Columns.Add("Appetite", typeof(int));
+            dt.Columns.Add("Hydration", typeof(int));
+            dt.Columns.Add("RecentWeight", typeof(int));
+
+            dt.Columns.Add("SubstanceAbuse", typeof(string));
+            dt.Columns.Add("LegalHistory", typeof(string));
+            dt.Columns.Add("PersonalFamilyPsychiatric", typeof(string));
+
+            dt.Columns.Add("DoesClientRequired", typeof(bool));
+
+            dt.Columns.Add("DoesClientRequired_Where", typeof(string));
+
+            dt.Columns.Add("ObtainReleaseInformation7", typeof(bool));
+            dt.Columns.Add("IfForeing_Born", typeof(bool));
+
+            dt.Columns.Add("IfForeing_AgeArrival", typeof(int));
+            dt.Columns.Add("IfForeing_YearArrival", typeof(int));
+
+            dt.Columns.Add("PrimaryLocation", typeof(string));
+            dt.Columns.Add("GeneralDescription", typeof(string));
+            dt.Columns.Add("AdultCurrentExperience", typeof(string));
+            dt.Columns.Add("WhatIsTheClient", typeof(string));
+            dt.Columns.Add("RelationshipWithFamily", typeof(string));
+            dt.Columns.Add("Children", typeof(string));
+            dt.Columns.Add("MaritalStatus", typeof(string));
+            dt.Columns.Add("IfMarried", typeof(string));
+            dt.Columns.Add("IfSeparated", typeof(string));
+
+            dt.Columns.Add("IfSexuallyActive", typeof(int));
+
+            dt.Columns.Add("PleaseProvideGoal", typeof(string));
+
+            dt.Columns.Add("DoYouHaveAnyReligious", typeof(bool));
+
+            dt.Columns.Add("WhatIsYourLanguage", typeof(string));
+
+            dt.Columns.Add("DoYouHaveAnyVisual", typeof(bool));
+
+            dt.Columns.Add("HigHestEducation", typeof(string));
+
+            dt.Columns.Add("DoYouHaveAnyPhysical", typeof(bool));
+            dt.Columns.Add("CanClientFollow", typeof(bool));
+
+            dt.Columns.Add("ProvideIntegratedSummary", typeof(string));
+            dt.Columns.Add("TreatmentNeeds", typeof(string));
+            dt.Columns.Add("Treatmentrecomendations", typeof(string));
+            dt.Columns.Add("LicensedPractitioner", typeof(string));
+
+            dt.Columns.Add("DateSignatureLicensedPractitioner", typeof(DateTime));
+
+            dt.Columns.Add("UnlicensedTherapist", typeof(string));
+
+            dt.Columns.Add("DateSignatureUnlicensedTherapist", typeof(DateTime));
+
+            dt.Columns.Add("IConcurWhitDiagnistic", typeof(bool));
+
+            dt.Columns.Add("AlternativeDiagnosis", typeof(string));
+
+            dt.Columns.Add("DateSignatureSupervisor", typeof(DateTime));
+            dt.Columns.Add("EndTime", typeof(DateTime));
+            dt.Columns.Add("StartTime", typeof(DateTime));
+
+            dt.Columns.Add("ClientDenied", typeof(bool));
+
+            dt.Columns.Add("ForHowLong", typeof(int));
+
+
+            if (bio != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            bio.Id,
+                                            bio.Client_FK,
+                                            bio.DateSignaturePerson,
+                                            bio.DateBio,
+                                            bio.Setting,
+                                            bio.CMH,
+                                            bio.Priv,
+                                            bio.BioH0031HN,
+                                            bio.IDAH0031HO,
+                                            bio.PresentingProblem,
+                                            bio.ClientAssessmentSituation,
+                                            bio.FamilyAssessmentSituation,
+                                            bio.FamilyEmotional,
+                                            bio.LegalAssessment,
+                                            bio.Appearance_Disheveled,
+                                            bio.Appearance_FairHygiene,
+                                            bio.Appearance_Cleaned,
+                                            bio.Appearance_WellGroomed,
+                                            bio.Appearance_Bizarre,
+                                            bio.Motor_Normal,
+                                            bio.Motor_Agitated,
+                                            bio.Motor_Retardation,
+                                            bio.Motor_RestLess,
+                                            bio.Motor_Akathisia,
+                                            bio.Motor_Tremor,
+                                            bio.Motor_Other,
+                                            bio.Speech_Normal,
+                                            bio.Speech_Loud,
+                                            bio.Speech_Mumbled,
+                                            bio.Speech_Stutters,
+                                            bio.Speech_Pressured,
+                                            bio.Speech_Rapid,
+                                            bio.Speech_Impoverished,
+                                            bio.Speech_Slow,
+                                            bio.Speech_Slurred,
+                                            bio.Speech_Other,
+                                            bio.Affect_Appropriate,
+                                            bio.Affect_labile,
+                                            bio.Affect_Flat,
+                                            bio.Affect_Tearful_Sad,
+                                            bio.Affect_Expansive,
+                                            bio.Affect_Anxious,
+                                            bio.Affect_Blunted,
+                                            bio.Affect_Angry,
+                                            bio.Affect_Constricted,
+                                            bio.Affect_Other,
+                                            bio.ThoughtProcess_Organized,
+                                            bio.ThoughtProcess_Obsessive,
+                                            bio.ThoughtProcess_FightIdeas,
+                                            bio.ThoughtProcess_Disorganized,
+                                            bio.ThoughtProcess_Tangential,
+                                            bio.ThoughtProcess_LooseAssociations,
+                                            bio.ThoughtProcess_GoalDirected,
+                                            bio.ThoughtProcess_Circumstantial,
+                                            bio.ThoughtProcess_Other,
+                                            bio.ThoughtProcess_Irrational,
+                                            bio.ThoughtProcess_Preoccupied,
+                                            bio.ThoughtProcess_Rigid,
+                                            bio.ThoughtProcess_Blocking,
+                                            bio.Mood_Euthymic,
+                                            bio.Mood_Depressed,
+                                            bio.Mood_Anxious,
+                                            bio.Mood_Euphoric,
+                                            bio.Mood_Angry,
+                                            bio.Mood_Maniac,
+                                            bio.Mood_Other,
+                                            bio.Judgment_Good,
+                                            bio.Judgment_Fair,
+                                            bio.Judgment_Poor,
+                                            bio.Judgment_Other,
+                                            bio.Insight_Good,
+                                            bio.Insight_Fair,
+                                            bio.Insight_Poor,
+                                            bio.Insight_Other,
+                                            bio.ThoughtContent_Relevant,
+                                            bio.ThoughtContent_RealityBased,
+                                            bio.ThoughtContent_Hallucinations,
+                                            bio.ThoughtContent_Hallucinations_Type,
+                                            bio.ThoughtContent_Delusions,
+                                            bio.ThoughtContent_Delusions_Type,
+                                            bio.Oriented_FullOriented,
+                                            bio.Lacking_Time,
+                                            bio.Lacking_Place,
+                                            bio.Lacking_Person,
+                                            bio.Lacking_Location,
+                                            bio.RiskToSelf_Low,
+                                            bio.RiskToSelf_Medium,
+                                            bio.RiskToSelf_High,
+                                            bio.RiskToSelf_Chronic,
+                                            bio.RiskToOther_Low,
+                                            bio.RiskToOther_Medium,
+                                            bio.RiskToOther_High,
+                                            bio.RiskToOther_Chronic,
+                                            bio.SafetyPlan,
+                                            bio.Comments,
+                                            bio.HaveYouEverThought,
+                                            bio.HaveYouEverThought_Explain,
+                                            bio.DoYouOwn,
+                                            bio.DoYouOwn_Explain,
+                                            bio.DoesClient,
+                                            bio.HaveYouEverBeen,
+                                            bio.HaveYouEverBeen_Explain,
+                                            bio.HasTheClient,
+                                            bio.HasTheClient_Explain,
+                                            bio.ClientFamilyAbusoTrauma,
+                                            bio.DateAbuse,
+                                            bio.PersonInvolved,
+                                            bio.ApproximateDateReport,
+                                            bio.ApproximateDateReport_Where,
+                                            bio.RelationShips,
+                                            bio.Details,
+                                            bio.Outcome,
+                                            bio.AReferral,
+                                            bio.AReferral_Services,
+                                            bio.AReferral_When,
+                                            bio.AReferral_Where,
+                                            bio.ObtainRelease,
+                                            bio.WhereRecord,
+                                            bio.WhereRecord_When,
+                                            bio.WhereRecord_Where,
+                                            bio.HasTheClientVisitedPhysician,
+                                            bio.HasTheClientVisitedPhysician_Reason,
+                                            bio.HasTheClientVisitedPhysician_Date,
+                                            bio.DoesTheClientExperience,
+                                            bio.DoesTheClientExperience_Where,
+                                            bio.PleaseRatePain,
+                                            bio.HasClientBeenTreatedPain,
+                                            bio.HasClientBeenTreatedPain_PleaseIncludeService,
+                                            bio.HasClientBeenTreatedPain_Ifnot,
+                                            bio.HasClientBeenTreatedPain_Where,
+                                            bio.ObtainReleaseInformation,
+                                            bio.HasAnIllnes,
+                                            bio.EastFewer,
+                                            bio.EastFew,
+                                            bio.Has3OrMore,
+                                            bio.HasTooth,
+                                            bio.DoesNotAlways,
+                                            bio.EastAlone,
+                                            bio.Takes3OrMore,
+                                            bio.WithoutWanting,
+                                            bio.NotAlwaysPhysically,
+                                            bio.If6_ReferredTo,
+                                            bio.If6_Date,
+                                            bio.Appetite,
+                                            bio.Hydration,
+                                            bio.RecentWeight,
+                                            bio.SubstanceAbuse,
+                                            bio.LegalHistory,
+                                            bio.PersonalFamilyPsychiatric,
+                                            bio.DoesClientRequired,
+                                            bio.DoesClientRequired_Where,
+                                            bio.ObtainReleaseInformation7,
+                                            bio.IfForeing_Born,
+                                            bio.IfForeing_AgeArrival,
+                                            bio.IfForeing_YearArrival,
+                                            bio.PrimaryLocation,
+                                            bio.GeneralDescription,
+                                            bio.AdultCurrentExperience,
+                                            bio.WhatIsTheClient,
+                                            bio.RelationshipWithFamily,
+                                            bio.Children,
+                                            bio.MaritalStatus,
+                                            bio.IfMarried,
+                                            bio.IfSeparated,
+                                            bio.IfSexuallyActive,
+                                            bio.PleaseProvideGoal,
+                                            bio.DoYouHaveAnyReligious,
+                                            bio.WhatIsYourLanguage,
+                                            bio.DoYouHaveAnyVisual,
+                                            bio.HigHestEducation,
+                                            bio.DoYouHaveAnyPhysical,
+                                            bio.CanClientFollow,
+                                            bio.ProvideIntegratedSummary,
+                                            bio.TreatmentNeeds,
+                                            bio.Treatmentrecomendations,
+                                            bio.LicensedPractitioner,
+                                            bio.DateSignatureLicensedPractitioner,
+                                            bio.UnlicensedTherapist,
+                                            bio.DateSignatureUnlicensedTherapist,
+                                            bio.IConcurWhitDiagnistic,
+                                            bio.AlternativeDiagnosis,
+                                            bio.DateSignatureSupervisor,
+                                            bio.EndTime,
+                                            bio.StartTime,
+                                            bio.ClientDenied,
+                                            bio.ForHowLong
+            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),                                            
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false, 
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            new DateTime(),
+                                            false,
+                                            string.Empty,
+                                            0,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            new DateTime(),
+                                            0,
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            false,
+                                            string.Empty,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            false,
+                                            0
+                                        });
+            }
+
+            return dt;
+        }
+
         private DataTable GetGoalsListDS(List<GoalEntity> goalsList)
         {
             DataTable dt = new DataTable
@@ -4870,6 +7500,13 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("AreaOfFocus", typeof(string));
             dt.Columns.Add("MTPId", typeof(int));
             dt.Columns.Add("Number", typeof(int));
+            dt.Columns.Add("Service", typeof(int));
+            dt.Columns.Add("AdendumId", typeof(int));
+            dt.Columns.Add("Compliment", typeof(bool));
+            dt.Columns.Add("Compliment_Date", typeof(DateTime));
+            dt.Columns.Add("Compliment_Explain", typeof(string));
+            dt.Columns.Add("Compliment_IdMTPReview", typeof(int));
+            dt.Columns.Add("IdMTPReview", typeof(int));
 
             foreach (GoalEntity item in goalsList)
             {
@@ -4880,7 +7517,14 @@ namespace KyoS.Web.Helpers
                                             item.Name,
                                             item.AreaOfFocus,
                                             item.MTP.Id,
-                                            item.Number
+                                            item.Number,
+                                            item.Service,
+                                            0,                                           
+                                            item.Compliment,
+                                            item.Compliment_Date,
+                                            item.Compliment_Explain,
+                                            item.Compliment_IdMTPReview,
+                                            item.IdMTPReview
                                         });
             }
 
@@ -4903,6 +7547,11 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("DateResolved", typeof(DateTime));
             dt.Columns.Add("Intervention", typeof(string));
             dt.Columns.Add("GoalId", typeof(int));
+            dt.Columns.Add("Compliment", typeof(bool));
+            dt.Columns.Add("Compliment_Date", typeof(DateTime));
+            dt.Columns.Add("Compliment_Explain", typeof(string));
+            dt.Columns.Add("Compliment_IdMTPReview", typeof(int));
+            dt.Columns.Add("IdMTPReview", typeof(int));
 
             foreach (ObjetiveEntity item in objetivesList)
             {
@@ -4916,7 +7565,12 @@ namespace KyoS.Web.Helpers
                                             item.DateTarget,
                                             item.DateResolved,
                                             item.Intervention,
-                                            0
+                                            0,
+                                            item.Compliment,
+                                            item.Compliment_Date,
+                                            item.Compliment_Explain,
+                                            item.Compliment_IdMTPReview,
+                                            item.IdMTPReview
                                         });
             }
 
@@ -4944,7 +7598,6 @@ namespace KyoS.Web.Helpers
 
             return dt;
         }
-
         #endregion        
     }
 }

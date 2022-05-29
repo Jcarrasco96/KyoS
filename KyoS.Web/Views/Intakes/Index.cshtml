@@ -1,6 +1,6 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.IntakeScreeningEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
 @{
-    ViewData["Title"] = "Intake";
+    ViewData["Title"] = "Intakes";
 }
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
@@ -10,239 +10,173 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Intake</li>
+        <li class="active">Intakes</li>
     </ul><!--.breadcrumb-->
 </div>
 
-<p>
-    <a asp-action="IntakeCandidates" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Candidate Intake</a>
-</p>
-
 <div class="row">
     <div class="col-md-12">
-        @if (ViewBag.Delete == "N")
-        {
-            <div class="alert alert-block alert-danger">
-                <button type="button" class="close" data-dismiss="alert">
-                    <i class="icon-remove"></i>
-                </button>
-                <strong class="red">
-                    Error. It is not posible delete the Intake Screening
-                </strong>
-            </div>
-        }
+        @*<div class="alert alert-warning" role="alert">
+        <span class="sr-only"></span>*@
+        <strong>Note: </strong> All clients will be displayed, orange color means the client has not intake documents
+        @*</div>*@
+    </div>
+    <div class="col-md-12">
+        &nbsp;
     </div>
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Intake Screening</h3>
+                <h3 class="panel-title">Intakes</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-1">
-                                @Html.DisplayNameFor(model => model.Client.Name)
+                            <th class="col-md-3">
+                                @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            @*<th class="col-md-1">
-                                    @Html.DisplayNameFor(model => model.Client.Code)
-                                    </th>
-                                    <th class="col-md-1" style="text-align:center;">
-                                    Admission Date
-                                </th>*@
-                            <th class="col-md-1" style="text-align:center;">
-                                CONSENT FOR TREATMENT/RELEASE
+                            <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.Code)
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                CONSUMER RIGHTS
+                            <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.AdmisionDate)
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                ACKNOWLEDGEMENT HIPPA
+                            <th class="col-md-2" style="text-align:center;">
+                                Status
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                ACCESS TO SERVICES
+                            <th class="col-md-2" style="text-align:center;">
+                                MH Therapy
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                ORIENTATION CHECKLIST
-                            </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                TRANSPORTATION / FOOD
-                            </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                CONSENT TO / PHOTOGRAPH
-                            </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                FEE AGREEMENT
-                            </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                TUBERCULOSIS (TB) SCREENING TOOL
-                            </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                MEDICAL HISTORY
-                            </th>
-                            <th class="col-md-1">
+                            <th class="col-md-1" align="right">
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
-                                    {
-                                        <i class="glyphicon glyphicon-user btn-danger"></i>
-                                    }
-                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
-                                    {
-                                        <i class="glyphicon glyphicon-user btn-primary"></i>
-                                    }
-                                    &nbsp;
-                                    @Html.DisplayFor(modelItem => item.Client.Name)
-                                </td>
-                                @*<td>
-                                        @Html.DisplayFor(modelItem => item.Client.Code)
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.DateAdmision)
-                                    </td>
-                                    <td align="center">
-                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                            @if ((item.IntakeScreening == null) && (item.IntakeConsentForTreatment == null) && (item.IntakeConsentForRelease == null) && (item.IntakeConsumerRights == null) && (item.IntakeAcknowledgementHipa == null) && (item.IntakeAccessToServices == null)
+                                        && (item.IntakeOrientationChecklist == null) && (item.IntakeTransportation == null) && (item.IntakeConsentPhotograph == null) && (item.IntakeFeeAgreement == null) && (item.IntakeTuberculosis == null)
+                                            && (item.IntakeMedicalHistory == null))
+                            {
+                                <tr style="color:orange">
+                                    <td>
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
-                                            <span class="label label-success">
+                                            <i class="glyphicon glyphicon-user btn-warning"></i>
+                                        }
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-warning"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-warning">
                                                 Open
                                             </span>
                                         }
-                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
                                         {
                                             <span class="label label-default">
                                                 Close
                                             </span>
                                         }
-                                    </td>*@
-                                <td align="center">
-                                    @if (item.Client.IntakeConsentForTreatment != null)
-                                    {
-                                        <a asp-action="CreateConsentForTreatment" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Consent For Treatment"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                    else
-                                    {
-                                        <a asp-action="CreateConsentForTreatment" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Consent For Treatment"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                    @if (item.Client.IntakeConsentForRelease != null)
-                                    {
-                                        <a asp-action="CreateConsentForRelease" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Consent For Release"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                    else
-                                    {
-                                        <a asp-action="CreateConsentForRelease" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Consent For Release"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                </td>
-                                <td align="center">
-                                    @if (item.Client.IntakeConsumerRights != null)
-                                    {
-                                        <a asp-action="CreateConsumerRights" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Consumer Rights"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                    else
-                                    {
-                                        <a asp-action="CreateConsumerRights" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Consumer Rights"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                </td>
-                                <td align="center">
-                                    @if (item.Client.IntakeAcknowledgementHipa != null)
-                                    {
-                                        <a asp-action="CreateAcknowledgementHippa" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Acknowledgement"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                    else
-                                    {
-                                        <a asp-action="CreateAcknowledgementHippa" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Acknowledgement"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                </td>
-                                <td align="center">
-                                    @if (item.Client.IntakeAccessToServices != null)
-                                    {
-                                        <a asp-action="CreateAccessToServices" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                    else
-                                    {
-                                        <a asp-action="CreateAccessToServices" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                </td>
-                                <td align="center">
-                                    @if (item.Client.IntakeOrientationChecklist != null)
-                                    {
-                                        <a asp-action="CreateOrientationCheckList" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                    else
-                                    {
-                                        <a asp-action="CreateOrientationCheckList" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                </td>
-                                <td align="center">
-                                    @if (item.Client.IntakeTransportation != null)
-                                    {
-                                        <a asp-action="CreateTransportation" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                    else
-                                    {
-                                        <a asp-action="CreateTransportation" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                </td>
-                                <td align="center">
-                                    @if (item.Client.IntakeConsentPhotograph != null)
-                                    {
-                                        <a asp-action="CreateConsentPhotograph" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                    else
-                                    {
-                                        <a asp-action="CreateConsentPhotograph" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                </td>
-                                <td align="center">
-                                    @if (item.Client.IntakeFeeAgreement != null)
-                                    {
-                                        <a asp-action="CreateFeeAgreement" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                    else
-                                    {
-                                        <a asp-action="CreateFeeAgreement" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                </td>
-                                <td align="center">
-                                    @if (item.Client.IntakeTuberculosis != null)
-                                    {
-                                        <a asp-action="CreateTuberculosis" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                    else
-                                    {
-                                        <a asp-action="CreateTuberculosis" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                </td>
-                                <td align="center">
-                                    @if (item.Client.IntakeMedicalHistory != null)
-                                    {
-                                        <a asp-action="CreateMedicalhistory" asp-route-id="@item.Client.Id" class="btn btn-success" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                    else
-                                    {
-                                        <a asp-action="CreateMedicalhistory" asp-route-id="@item.Client.Id" class="btn btn-default" title="Create Intake Access To Services"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                    }
-                                </td>
-                                <td align="right">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Intake Screening"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    @if ((item.Client.IntakeConsentForTreatment != null) && (item.Client.IntakeConsentForRelease != null) && (item.Client.IntakeConsumerRights != null) && (item.Client.IntakeAcknowledgementHipa != null) && (item.Client.IntakeAccessToServices != null)
-                                     && (item.Client.IntakeOrientationChecklist != null) && (item.Client.IntakeTransportation != null) && (item.Client.IntakeConsentPhotograph != null) && (item.Client.IntakeFeeAgreement != null) && (item.Client.IntakeTuberculosis != null)
-                                     && (item.Client.IntakeMedicalHistory != null))
-                                    {
-                                        <a asp-action="PrintIntake" asp-route-id="@item.Id" class="btn btn-success" title="Print Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                    }
-                                    else
-                                    { 
-                                        <a class="btn btn-success disabled" title="Print Intake"><i class="glyphicon glyphicon-print"></i></a>
-                                    }
-                                    @*<button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete Intake Screening"><i class="glyphicon glyphicon-trash"></i></button>*@
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Service)
+                                    </td>
+                                    <td align="right">
+                                        @if (User.IsInRole("Mannager"))
+                                        {
+                                            <a asp-action="IntakeDashboard" asp-route-id="@item.Id" class="btn btn-warning" title="New Intake"><i class="glyphicon glyphicon-plus"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-warning disabled" title="New Intake"><i class="glyphicon glyphicon-plus"></i></a>
+                                        }
+                                        @if ((item.IntakeScreening != null) && (item.IntakeConsentForTreatment != null) && (item.IntakeConsentForRelease != null) && (item.IntakeConsumerRights != null) && (item.IntakeAcknowledgementHipa != null) && (item.IntakeAccessToServices != null)
+                                            && (item.IntakeOrientationChecklist != null) && (item.IntakeTransportation != null) && (item.IntakeConsentPhotograph != null) && (item.IntakeFeeAgreement != null) && (item.IntakeTuberculosis != null)
+                                              && (item.IntakeMedicalHistory != null))
+                                        {
+                                            <a asp-action="PrintIntake" asp-route-id="@item.IntakeScreening.Id" class="btn btn-success" title="Print Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-success disabled" title="Print Intake"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            { 
+                                <tr>
+                                    <td>
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-success">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Service)
+                                    </td>
+                                    <td align="right">
+                                        @if (User.IsInRole("Mannager"))
+                                        {
+                                            <a asp-action="IntakeDashboard" asp-route-id="@item.Id" class="btn btn-success" title="Edit Intake"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        }
+                                        else
+                                        { 
+                                            <a class="btn btn-success disabled" title="Edit Intake"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        }
+                                        @if ((item.IntakeScreening != null) && (item.IntakeConsentForTreatment != null) && (item.IntakeConsentForRelease != null) && (item.IntakeConsumerRights != null) && (item.IntakeAcknowledgementHipa != null) && (item.IntakeAccessToServices != null)
+                                           && (item.IntakeOrientationChecklist != null) && (item.IntakeTransportation != null) && (item.IntakeConsentPhotograph != null) && (item.IntakeFeeAgreement != null) && (item.IntakeTuberculosis != null)
+                                            && (item.IntakeMedicalHistory != null))
+                                        {
+                                            <a asp-action="PrintIntake" asp-route-id="@item.IntakeScreening.Id" class="btn btn-success" title="Print Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-success disabled" title="Print Intake"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>

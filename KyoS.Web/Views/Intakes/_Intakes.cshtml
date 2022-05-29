@@ -1,144 +1,98 @@
 ﻿@model KyoS.Web.Models.IntakeScreeningViewModel
 
-<div class="container-fluid">
+<div class="col-md-push-12">
     <div class="form-group col-md-4">
-        <label asp-for="Client.Name" class="control-label">Name of Recipient</label>&nbsp;*
+        <label asp-for="Client.Name" class="control-label">Name of Recipient</label>
         <input asp-for="Client.Name" class="form-control" readonly>
         <span asp-validation-for="Client.Name" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="Client.Code" class="control-label">Case No.</label>&nbsp;*
+        <label asp-for="Client.Code" class="control-label">Case No.</label>
         <input asp-for="Client.Code" class="form-control" readonly>
         <span asp-validation-for="Client.Code" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-3">
-        <label asp-for="Client.AdmisionDate" class="control-label">Date of Admission</label>&nbsp;*
+    <div class="form-group col-md-2">
+        <label asp-for="Client.AdmisionDate" class="control-label">Date of Admission</label>
         <input asp-for="Client.AdmisionDate" class="form-control" readonly>
         <span asp-validation-for="Client.AdmisionDate" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-3">
-        <label asp-for="DateDischarge" class="control-label">Date of Discharge</label>&nbsp;*
-        <input asp-for="DateDischarge" class="form-control" readonly>
-        <span asp-validation-for="DateDischarge" class="text-danger"></span>
-    </div>
-</div>
-<div class="container-fluid">
-    <div class="form-group col-md-4">
-        <label asp-for="Client.FullAddress" class="control-label">Address</label>&nbsp;*
-        <input asp-for="Client.FullAddress" class="form-control" readonly>
-        <span asp-validation-for="Client.FullAddress" class="text-danger"></span>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.MedicaidID" class="control-label"></label>
+        <input asp-for="Client.MedicaidID" class="form-control" readonly>
+        <span asp-validation-for="Client.MedicaidID" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="Client.City" class="control-label">City</label>&nbsp;*
-        <input asp-for="Client.City" class="form-control" readonly>
-        <span asp-validation-for="Client.City" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Client.State" class="control-label">State</label>&nbsp;*
-        <input asp-for="Client.State" class="form-control" readonly>
-        <span asp-validation-for="Client.State" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Client.ZipCode" class="control-label">Zip Code</label>&nbsp;*
-        <input asp-for="Client.ZipCode" class="form-control" readonly>
-        <span asp-validation-for="Client.ZipCode" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Client.Telephone" class="control-label">Telephone</label>&nbsp;*
+        <label asp-for="Client.Telephone" class="control-label">Telephone</label>
         <input asp-for="Client.Telephone" class="form-control" readonly>
         <span asp-validation-for="Client.Telephone" class="text-danger"></span>
     </div>
 </div>
-<div class="container-fluid col-md-12">
-    <div class="container-fluid col-md-8">
-        <pre>
-        <strong>EMERGENCY CONTACT:</strong>
-        IN CASE OF EMERGENCY AND /OR YOU COULD NOT BE CONTACTED, AND TO IMPROVE THE COORDINATION OF CARE, AND TO EXCHANGE MEDICAL INFORMATION IN ORDER
-        TO AVOID MEDICATION INTERACTION, YOU ALLOW US TO CONTACT THE FOLLOWING PERSON AND IDENTIFY OURSELVES AS FLORIDA SOCIAL HEALTH SOLUTIONS(FSHS)
-
-        EN CASO DE EMERGENCIA Y/O USTED NO PUDO SER CONTACTADO, Y PARA MEJORAR LA COORDINACIÓN DE LA ATENCIÓN, ASÍ COMO INTERCAMBIAR INFORMACIÓN MÉDICA
-        CON EL FIN DE EVITAR LA INTERACCIÓN MEDICAMENTO, USTED PERMITE QUE NOS PONGAMOS EN CONTACTO CON LA SIGUIENTE PERSONA Y NOS IDENTIFICAMOS COMO
-        FLORIDA SOCIAL HEALTH SOLUTIONS(FSHS)
-        </pre>
+<div class="col-md-push-12">
+    <div class="form-group col-md-4">
+        <label asp-for="Client.FullAddress" class="control-label">Address</label>
+        <input asp-for="Client.FullAddress" class="form-control" readonly>
+        <span asp-validation-for="Client.FullAddress" class="text-danger"></span>
     </div>
-    <div class="container-fluid col-md-4">
-        <pre>
-        <input type="checkbox" asp-for="EmergencyContact" class="form-check-input" readonly id="check5"><strong> YES</strong> (SI)  <input type="checkbox" class="form-check-input" id="check105"><strong> NO </strong>(NO)  
-        
-        <strong>Full Name: (Nombre completo)</strong> 
-                <strong>@Html.DisplayFor(modelItem => Model.Client.EmergencyContact.Name)</strong>
-        <strong>Phone #: (# de Tel) </strong>
-                <strong>@Html.DisplayFor(modelItem => Model.Client.EmergencyContact.Telephone)</strong>
-        <strong>Relationship (Parentesco)</strong>
-                <strong>@Html.DisplayFor(modelItem => Model.Client.RelationShipOfEmergencyContact)</strong>
-    </pre>
+    <div class="form-group col-md-3">
+        <label asp-for="Client.City" class="control-label">City</label>
+        <input asp-for="Client.City" class="form-control" readonly>
+        <span asp-validation-for="Client.City" class="text-danger"></span>
     </div>
-
+    <div class="form-group col-md-3">
+        <label asp-for="Client.State" class="control-label">State</label>
+        <input asp-for="Client.State" class="form-control" readonly>
+        <span asp-validation-for="Client.State" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.ZipCode" class="control-label">Zip Code</label>
+        <input asp-for="Client.ZipCode" class="form-control" readonly>
+        <span asp-validation-for="Client.ZipCode" class="text-danger"></span>
+    </div>    
 </div>
-<div >
-   
-
-</div>
-<div class="container-fluid col-md-12">
-    <div class="container-fluid col-md-4">
-        <label asp-for="IdClientIs" class="control-label">Client Is</label>&nbsp;*
-        <select asp-for="IdClientIs" asp-items="Model.ClientIs_Status" class="form-control"></select>
-        <span asp-validation-for="IdClientIs" class="text-danger"></span> <br />
-    </div>
-    <div class="container-fluid col-md-4">
-        <label asp-for="IdBehaviorIs" class="control-label">Behavior Is</label>&nbsp;*
-        <select asp-for="IdBehaviorIs" asp-items="Model.BehaviorIs_Status" class="form-control"></select>
-        <span asp-validation-for="IdBehaviorIs" class="text-danger"></span><br />
-    </div>
-    <div class="container-fluid col-md-4">
-        <label asp-for="IdSpeechIs" class="control-label">Speech Is</label>&nbsp;*
-        <select asp-for="IdSpeechIs" asp-items="Model.SpeechIs_Status" class="form-control"></select>
-        <span asp-validation-for="IdSpeechIs" class="text-danger"></span><br />
-    </div>
-</div>
-<div class="container-fluid col-md-12">
+<div class="col-md-push-12">
+    <div class="container-fluid col-md-12">
     <pre>
-        Does the Client know his/her Name? <input type="checkbox" asp-for="DoesClientKnowHisName" class="form-check-input" readonly id="check1"> Yes    <input type="checkbox" class="form-check-input" id="check101"> No            Does the Client know where he/she is? <input type="checkbox" asp-for="DoesClientKnowWhereIs" class="form-check-input" id="check2"> Yes   <input type="checkbox" class="form-check-input" readonly id="check102"> No
-        Does the Client know today's Date? <input type="checkbox" asp-for="DoesClientKnowTodayDate" class="form-check-input" readonly id="check3"> Yes    <input type="checkbox" class="form-check-input" id="check103"> No            Does the Client know the time of day? <input type="checkbox" asp-for="DoesClientKnowTimeOfDay" class="form-check-input" id="check4"> Yes   <input type="checkbox" class="form-check-input" readonly id="check104"> No
+    <strong>EMERGENCY CONTACT:</strong>
+
+    IN CASE OF EMERGENCY AND /OR YOU COULD NOT BE CONTACTED, AND TO IMPROVE THE COORDINATION OF CARE, AND TO EXCHANGE MEDICAL INFORMATION IN ORDER TO AVOID MEDICATION INTERACTION, 
+    YOU ALLOW US TO CONTACT THE FOLLOWING PERSON AND IDENTIFY OURSELVES AS <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>
+
+    EN CASO DE EMERGENCIA Y/O USTED NO PUDO SER CONTACTADO, Y PARA MEJORAR LA COORDINACIÓN DE LA ATENCIÓN, ASÍ COMO INTERCAMBIAR INFORMACIÓN MÉDICA CON EL FIN DE EVITAR 
+    LA INTERACCIÓN MEDICAMENTO, USTED PERMITE QUE NOS PONGAMOS EN CONTACTO CON LA SIGUIENTE PERSONA Y NOS IDENTIFICAMOS COMO <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>
+
+    <input type="checkbox" asp-for="EmergencyContact" class="form-check-input" readonly id="check5"><strong> YES</strong> (SI)  <input type="checkbox" class="form-check-input" id="check105"><strong> NO </strong>(NO)  
         
+    @*<strong>Full Name: (Nombre completo)</strong>*@ 
+    <strong>@Html.DisplayFor(modelItem => Model.Client.EmergencyContact.Name)</strong>
+    @*<strong>Phone #: (# de Tel) </strong>*@
+    <strong>@Html.DisplayFor(modelItem => Model.Client.EmergencyContact.Telephone)</strong>
+    @*<strong>Relationship </strong>*@
+    <strong>@Html.DisplayFor(modelItem => Model.Client.RelationShipOfEmergencyContact)</strong>
+    </pre>
+    </div>    
+</div>
+<div class="col-md-12">
+    <pre>
+
+    <label asp-for="IdClientIs" class="control-label">Client Is</label>&nbsp;* <select asp-for="IdClientIs" asp-items="Model.ClientIs_Status"></select><span asp-validation-for="IdClientIs" class="text-danger"></span>                <label asp-for="IdBehaviorIs" class="control-label">Behavior Is</label>&nbsp;* <select asp-for="IdBehaviorIs" asp-items="Model.BehaviorIs_Status"></select><span asp-validation-for="IdBehaviorIs" class="text-danger"></span>              <label asp-for="IdSpeechIs" class="control-label">Speech Is</label>&nbsp;* <select asp-for="IdSpeechIs" asp-items="Model.SpeechIs_Status"></select> <span asp-validation-for="IdSpeechIs" class="text-danger"></span>
+
+    Does the Client know his/her Name?  <input type="checkbox" asp-for="DoesClientKnowHisName" class="form-check-input" readonly id="check1"> Yes     <input type="checkbox" class="form-check-input" id="check101"> No                     Does the Client know where he/she is?   <input type="checkbox" asp-for="DoesClientKnowWhereIs" class="form-check-input" id="check2"> Yes      <input type="checkbox" class="form-check-input" readonly id="check102"> No
+    Does the Client know today's Date?  <input type="checkbox" asp-for="DoesClientKnowTodayDate" class="form-check-input" readonly id="check3"> Yes     <input type="checkbox" class="form-check-input" id="check103"> No                     Does the Client know the time of day?   <input type="checkbox" asp-for="DoesClientKnowTimeOfDay" class="form-check-input" id="check4"> Yes      <input type="checkbox" class="form-check-input" readonly id="check104"> No        
     </pre>
 </div>
-
-<div class="form-group col-md-12">
-    <div class="form-group col-md-3">
-        <strong><u>@Html.DisplayFor(modelItem => Model.Client.Name)</u></strong><br />
-        <i>Person Served Signature</i>
-    </div>
-    <div class="form-group col-md-2">
-        <input asp-for="DateSignatureClient" class="form-control">
-        <i>Signature Date</i>
-    </div>
+<div class="col-md-12">
+    <pre>
+    
+    <strong>Person served signature date</strong>    <input asp-for="DateSignatureClient">      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureWitness">
+    <strong>(@Html.DisplayFor(modelItem => Model.Client.Name))</strong>     
+    
+    <strong>Information gathered by</strong>         <input asp-for="DateSignatureEmployee">        
+    <strong>(@Html.DisplayFor(modelItem => Model.InformationGatheredBy))</strong>                                                                    
+    </pre>
 </div>
-<br />
-<div class="form-group col-md-12">
-    <div class="form-group col-md-3">
-        <strong><u>@Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Name)</u></strong><br />
-        <i>Parent, (Legal Guardian or Authorized Representative Signature)</i>
-    </div>
-    <div class="form-group col-md-2">
-        <input asp-for="DateSignatureWitness" class="form-control">
-        <i>Signature Date</i>
-    </div>
+<div class="col-md-12">
+    &nbsp;
 </div>
-<br />
-<div class="form-group col-md-12">
-    <div class="form-group col-md-3">
-        <strong><u>@Html.DisplayFor(modelItem => Model.InformationGatheredBy)</u></strong><br />
-        <i>information gathered by:</i>
-    </div>
-    <div class="form-group col-md-2">
-        <input asp-for="DateSignatureEmployee" class="form-control">
-        <i>Signature Date</i>
-    </div>
-</div>
-<br />
-
-
 
 <script>
 

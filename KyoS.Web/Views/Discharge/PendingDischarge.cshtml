@@ -1,0 +1,148 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.DischargeEntity>
+@{
+    ViewData["Title"] = "Pending Discharges";
+}
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Pending Discharges</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @*<strong>Note: </strong> Only closed clients will be displayed, orange color means the client has not discharge documents*@
+    </div>    
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Pending Discharges</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-3">
+                                Client
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.Client.Code)
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.Client.AdmisionDate)
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                MH Therapy
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+
+                            <tr>
+
+                                <td>
+                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => item.Client.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Client.Code)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Client.AdmisionDate)
+                                </td>
+                                <td align="center">
+                                    @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                    {
+                                        <span class="label label-success">
+                                            Open
+                                        </span>
+                                    }
+                                    @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
+                                    {
+                                        <span class="label label-default">
+                                            Close
+                                        </span>
+                                    }
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Client.Service)
+                                </td>
+                                <td align="center">
+                                    @if (User.IsInRole("Supervisor"))
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="ApproveDischarge" asp-route-id="@item.Id" class="btn btn-success" title="Approve Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                    }
+                                    else
+                                    {
+                                        @if (User.IsInRole("Facilitator"))
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a class="btn btn-success disabled" title="Approve FARS"><i class="glyphicon glyphicon-ok"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-warning disabled" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a class="btn btn-success disabled" title="Approve FARS"><i class="glyphicon glyphicon-ok"></i></a>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                                "order": [[0, "asc"]],
+                                "pageLength": 100
+                            });
+
+            // Delete item
+            var item_to_delete;
+
+            $('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                var url = "@Url.Action("Delete", "Discharge")";
+                window.location.href = url + '/' + item_to_delete;
+            });
+        });
+       
+    </script>
+}
+

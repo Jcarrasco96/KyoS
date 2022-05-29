@@ -13,7 +13,7 @@ namespace KyoS.Web.Helpers
 
         #region PSR Absense Notes reports
         Stream LarkinAbsenceNoteReport(Workday_Client workdayClient);
-        Stream HealthAndBeautyAbsenceNoteReport(Workday_Client workdayClient);
+        Stream DreamsMentalHealthAbsenceNoteReport(Workday_Client workdayClient);
         Stream SolAndVidaAbsenceNoteReport(Workday_Client workdayClient);
         Stream DavilaAbsenceNoteReport(Workday_Client workdayClient);
         Stream AdvancedGroupMCAbsenceNoteReport(Workday_Client workdayClient);
@@ -26,21 +26,25 @@ namespace KyoS.Web.Helpers
         #region Approved PSR Notes reports
         Stream FloridaSocialHSNoteReportSchema3(Workday_Client workdayClient);
         Stream DavilaNoteReportSchema4(Workday_Client workdayClient);
+        Stream DreamsMentalHealthNoteReportSchema3(Workday_Client workdayClient);
         #endregion
 
         #region Approved Individual Notes reports
         Stream DavilaIndNoteReportSchema1(Workday_Client workdayClient);
         Stream FloridaSocialHSIndNoteReportSchema1(Workday_Client workdayClient);
+        Stream DreamsMentalHealthIndNoteReportSchema1(Workday_Client workdayClient);
         #endregion
 
         #region Approved Group Notes reports
         Stream DavilaGroupNoteReportSchema1(Workday_Client workdayClient);
+        Stream FloridaSocialHSGroupNoteReportSchema1(Workday_Client workdayClient);
+        Stream DreamsMentalHealthGroupNoteReportSchema1(Workday_Client workdayClient);
         #endregion
 
         #region MTP reports
         Stream LarkinMTPReport(MTPEntity mtp);
         Stream SolAndVidaMTPReport(MTPEntity mtp);
-        Stream HealthAndBeautyMTPReport(MTPEntity mtp);
+        Stream DreamsMentalHealthMTPReport(MTPEntity mtp);
         Stream AdvancedGroupMCMTPReport(MTPEntity mtp);
         Stream AtlanticGroupMCMTPReport(MTPEntity mtp);
         Stream FloridaSocialHSMTPReport(MTPEntity mtp);
@@ -56,6 +60,32 @@ namespace KyoS.Web.Helpers
 
         #region Intake reports
         Stream FloridaSocialHSIntakeReport(IntakeScreeningEntity intake);
+        Stream DreamsMentalHealthIntakeReport(IntakeScreeningEntity intake);
+        #endregion
+
+        #region Fars reports
+        Stream FloridaSocialHSFarsReport(FarsFormEntity intake);
+        Stream DreamsMentalHealthFarsReport(FarsFormEntity intake);
+        #endregion
+
+        #region Discharge reports
+        Stream FloridaSocialHSDischargeReport(DischargeEntity intake);
+        Stream DreamsMentalHealthDischargeReport(DischargeEntity intake);
+        #endregion
+
+        #region Bio reports
+        Stream FloridaSocialHSBioReport(BioEntity bio);
+        Stream DreamsMentalHealthBioReport(BioEntity bio);
+        #endregion
+
+        #region Addendum reports
+        Stream FloridaSocialHSAddendumReport(AdendumEntity addendum);
+        Stream DreamsMentalHealthAddendumReport(AdendumEntity addendum);
+        #endregion
+
+        #region MTP Review reports
+        Stream FloridaSocialHSMTPReviewReport(MTPReviewEntity review);
+        Stream DreamsMentalHealthMTPReviewReport(MTPReviewEntity review);
         #endregion
 
         #region Utils functions

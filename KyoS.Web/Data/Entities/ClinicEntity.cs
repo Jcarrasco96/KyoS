@@ -47,5 +47,8 @@ namespace KyoS.Web.Data.Entities
         public ICollection<WeekEntity> Weeks { get; set; }
         public ICollection<TemplateDOCEntity> Templates { get; set; }
         public SettingEntity Setting { get; set; }
+
+        [Display(Name = "Clinical Director")]
+        public string ClinicalDirector { get; set; }
     }
 }

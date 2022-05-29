@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using KyoS.Common.Enums;
+﻿using KyoS.Common.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
@@ -17,6 +14,7 @@ namespace KyoS.Web.Data.Entities
 
         public string InformationGatheredBy { get; set; }
 
+        [DataType(DataType.Date)]
         public DateTime DateDischarge { get; set; }
 
         [Display(Name = "Date of Client Signature")]

@@ -1,128 +1,116 @@
 ﻿@model KyoS.Web.Models.FarsFormViewModel
-
-<br />
-<div class="col-md-8">
-    <dl class="dl-horizontal col-md-4">
-        <dt>
-            Client Name:
-        </dt>
-        <dd>
-            @Html.DisplayFor(modelItem => Model.Client.Name)
-        </dd>
-       
-    </dl>
-    <dl class="dl-horizontal col-md-4">
-        <dt>
-            Client ID#:
-        </dt>
-        <dd>
-            @Html.DisplayFor(modelItem => Model.Client.Id)
-        </dd>
-        
-    </dl>
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <label asp-for="Client.Name" class="control-label"> Client Name:</label>
+        <input asp-for="Client.Name" class="form-control" readonly>
+        <span asp-validation-for="Client.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.MedicaidID" class="control-label">Client ID:</label>
+        <input asp-for="Client.MedicaidID" class="form-control" readonly>
+        <span asp-validation-for="Client.MedicaidID" class="text-danger"></span>
+    </div>
 </div>
-<div class="col-md-12">
+<div class="col-md-push-12">
     <div class="col-md-6">
-        <pre>
-        <strong>1.*CLIENT SSN:</strong>  @Html.DisplayFor(modelItem => Model.Client.SSN)
-        <strong>2.*CONTRACTOR ID:</strong>  <input asp-for="ContractorID">
-            Federal Employer ID# of agency directly contracted with SAMH.  If your
-            agency is subcontracted, enter the ID# of the contractor/ASO here.
-    </pre>
-        <pre>
-        <strong>3. *DCF EVALUATION (PURPOSE):</strong>  <input asp-for="DcfEvaluation">
+    <pre>
+        
+    <strong>1.*CLIENT SSN:</strong>  @Html.DisplayFor(modelItem => Model.Client.SSN)
+
+    <strong>2.*CONTRACTOR ID:</strong>  <input asp-for="ContractorID">
+        Federal Employer ID# of agency directly contracted with SAMH.  If your
+        agency is subcontracted, enter the ID# of the contractor/ASO here.
+        
+    <strong>3. *DCF EVALUATION (PURPOSE):</strong>  <input asp-for="DcfEvaluation">
         1 – Admission/initiation into episode of care
         2 - Six (6) month interval after admission
         3 - Discharge from agency
         4 – Administrative Discharge
         5 – None of the Above (Program Evaluation Only)
-
-    </pre>
-        <pre>
-        <strong>4. *EVALUATION DATE: </strong>  <input asp-for="EvaluationDate">
-                                    month/day/year
+    
+    <strong>4. *EVALUATION DATE: </strong>  <input asp-for="EvaluationDate">
+       (month/day/year)
     </pre>
     </div>
     <div class="col-md-6">
-        <pre>
-        <strong>5. *PROVIDER ID:</strong>  <input asp-for="ProviderId">
-        Federal Employer ID# of the provider agency actually completing the
-        FARS.  Subcontracted agencies Tax ID# goes here.  Contractor agencies
+    <pre>
+    <strong>5. *PROVIDER ID:</strong>  <input asp-for="ProviderId">
+        Federal Employer ID# of the provider agency actually completing the FARS. 
+        Subcontracted agencies Tax ID# goes here. Contractor agencies 
         reenter the Contractor ID.
     
-        <strong>6. Program Evaluation Purpose (Optional):</strong>  <input asp-for="ProgramEvaluation">
-        1.Admission to Program 
+    <strong>6. Program Evaluation Purpose (Optional):</strong>  <input asp-for="ProgramEvaluation">
+        1. Admission to Program 
         2. Six months after admission to program 
         3. Annually after admission to program or service 
         4. Planned discharge from /transfer to a program service within agency
         5. Administrative discharge
         6. None of the above
 
-
-        <strong>7. M-GAF SCORE: </strong>                <input asp-for="M_GafScore">
-        <strong>8. *RATER EDUCATION/SPECIALTY: </strong> <input asp-for="RaterEducation">
-        <strong>9. *RATER FMHI CERTICATION#:</strong>    <input asp-for="RaterFMHI">
+    <strong>7. M-GAF SCORE: </strong>                <input asp-for="M_GafScore">
+    <strong>8. *RATER EDUCATION/SPECIALTY: </strong> <input asp-for="RaterEducation">
+    <strong>9. *RATER FMHI CERTICATION#:</strong>    <input asp-for="RaterFMHI">
     </pre>
     </div>
-    <div class="col-md-12">
-        <pre>
-        <strong>10. *SUBSTANCE ABUSE HISTORY:  Yes (1) or No (0):</strong>  <input asp-for="SubstanceAbusoHistory">
-        <strong>Respond to questions 11 through 28 with the appropriate rating for this scale.  </strong>
+</div>
+<div class="col-md-12">
+    <pre>
+
+    <strong>10. *SUBSTANCE ABUSE HISTORY: Yes (1) or No (0):</strong> <input asp-for="SubstanceAbusoHistory">       
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <strong>Respond to questions 11 through 28 with the appropriate rating for this scale.  </strong>
         1 - No Problem                      4 - Slight to Moderate Problem          7 – Severe Problem 
         2 - Less than Slight Problem        5 - Moderate Problem                    8 – Severe/Extreme Problem
         3 - Slight Problem	            6 - Moderate /Severe Problem            9 – Extreme Problem
-        </pre>
-    </div>
-    <div class="col-md-6">
-        <pre>
-        <strong>11. *DEPRESSION SCALE: </strong>  <input asp-for="DepressionScale">
-        <strong>12. *ANXIETY SCALE: </strong>  <input asp-for="AnxietyScale">
-        <strong>13. *HYPER AFFECT SCALE: </strong>  <input asp-for="HyperAffectScale"> 
-        <strong>14. *THOUGHT PROCESS SCALE: </strong>  <input asp-for="ThoughtProcessScale">
-        <strong>15. *COGNITIVE PERFORMANCE SCALE: </strong>  <input asp-for="CognitiveScale">
-        <strong>16. *MEDICAL/PHYSICAL SCALE: </strong>  <input asp-for="MedicalScale">
-        <strong>17. *TRAUMATIC STRESS SCALE: </strong>  <input asp-for="TraumaticsScale">
-        <strong>18. *SUBSTANCE USE SCALE: </strong>  <input asp-for="SubstanceScale">
-        <strong>19. *INTERPERSONAL RELATIONSHIP SCALE: </strong>  <input asp-for="InterpersonalScale">
-        </pre>
-    </div>
-    <div class="col-md-6">
-        <pre>
-        <strong>20. *FAMILY RELATIONSHIPS SCALE: </strong>  <input asp-for="FamilyRelationShipsScale">
-        <strong>21. *FAMILY ENVIRONMENT SCALE: </strong>  <input asp-for="FamilyEnvironmentScale">
-        <strong>22. *SOCIAL-LEGAL SCALE: </strong>  <input asp-for="SocialScale"> 
-        <strong>23. *WORK / SCHOOL SCALE: </strong>  <input asp-for="WorkScale">
-        <strong>24. *ACTIVITIES OF DAILY LIVING (ADL) SCALE: </strong>  <input asp-for="ActivitiesScale">
-        <strong>25. *ABILITY TO CARE FOR SELF SCALE: </strong>  <input asp-for="AbilityScale">
-        <strong>26. *DANGER TO SELF SCALE: </strong>  <input asp-for="DangerToSelfScale">
-        <strong>27. *DANGER TO OTHERS SCALE: </strong>  <input asp-for="DangerToOtherScale">
-        <strong>28. *SECURITY MANAGEMENT NEEDS: </strong>  <input asp-for="SecurityScale">
-        </pre>
-    </div>
-    <div class="col-md-6">
-        <pre>
-        <strong>29. *ContID 1: ___  </strong>  <input asp-for="ContID1">
-        <strong>30.  ContID 2: ___  </strong>  <input asp-for="ContID2">
-        <strong>31.  ContID 3: ___  </strong>  <input asp-for="ContID3">
-        </pre>
-    </div>
-    <div class="col-md-6">
-        <pre>
-        <strong>32.PROVIDER LOCAL INFORMATION: </strong>  <textarea asp-for="ProviderLocal" rows="4"></textarea> 
-        </pre>
-    </div>
-    <div class="col-md-6">
-        <pre>
-        <strong>33.  Medicaid Recipient ID:  </strong>  <input asp-for="MedicaidRecipientID">
-        <strong>34.  Medicaid Provider ID: </strong>  <input asp-for="MedicaidProviderID">
-        </pre>
-    </div>
-    <div class="col-md-6">
-        <pre>
-        <strong>35.  MCO ID: ___  </strong>  <input asp-for="MCOID" /> 
-        <strong>36.  County of Service:  </strong>  <input asp-for="Country" /> 
-        </pre>
-    </div>
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <strong>11. *DEPRESSION SCALE: </strong>                    <input asp-for="DepressionScale">           <strong>20. *FAMILY RELATIONSHIPS SCALE: </strong>              <input asp-for="FamilyRelationShipsScale">
+
+    <strong>12. *ANXIETY SCALE: </strong>                       <input asp-for="AnxietyScale">           <strong>21. *FAMILY ENVIRONMENT SCALE: </strong>                <input asp-for="FamilyEnvironmentScale">
+
+    <strong>13. *HYPER AFFECT SCALE: </strong>                  <input asp-for="HyperAffectScale">           <strong>22. *SOCIAL-LEGAL SCALE: </strong>                      <input asp-for="SocialScale">
+ 
+    <strong>14. *THOUGHT PROCESS SCALE: </strong>               <input asp-for="ThoughtProcessScale">           <strong>23. *WORK / SCHOOL SCALE: </strong>                     <input asp-for="WorkScale">
+
+    <strong>15. *COGNITIVE PERFORMANCE SCALE: </strong>         <input asp-for="CognitiveScale">           <strong>24. *ACTIVITIES OF DAILY LIVING (ADL) SCALE: </strong>  <input asp-for="ActivitiesScale">
+
+    <strong>16. *MEDICAL/PHYSICAL SCALE: </strong>              <input asp-for="MedicalScale">           <strong>25. *ABILITY TO CARE FOR SELF SCALE: </strong>          <input asp-for="AbilityScale">
+
+    <strong>17. *TRAUMATIC STRESS SCALE: </strong>              <input asp-for="TraumaticsScale">           <strong>26. *DANGER TO SELF SCALE: </strong>                    <input asp-for="DangerToSelfScale">
+
+    <strong>18. *SUBSTANCE USE SCALE: </strong>                 <input asp-for="SubstanceScale">           <strong>27. *DANGER TO OTHERS SCALE: </strong>                  <input asp-for="DangerToOtherScale">
+
+    <strong>19. *INTERPERSONAL RELATIONSHIP SCALE: </strong>    <input asp-for="InterpersonalScale">           <strong>28. *SECURITY MANAGEMENT NEEDS: </strong>               <input asp-for="SecurityScale">
+    </pre>
+</div>
+<div class="col-md-12">    
+    <pre>
+    <strong>29. *ContID 1:   </strong>                  <input asp-for="ContID1">
+
+    <strong>30.  ContID 2:   </strong>                  <input asp-for="ContID2">
+
+    <strong>31.  ContID 3:   </strong>                  <input asp-for="ContID3">
+
+    <strong>32.  PROVIDER LOCAL INFORMATION: </strong>  <input asp-for="ProviderLocal" style="width:75%">
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <strong>33.  Medicaid Recipient ID:  </strong>  <input asp-for="MedicaidRecipientID">       <strong>35.  MCO ID: </strong>               <input asp-for="MCOID" /> 
+
+    <strong>34.  Medicaid Provider ID: </strong>    <input asp-for="MedicaidProviderID">       <strong>36.  County of Service: </strong>    <input asp-for="Country" />
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <strong>Employee signature date</strong>         <input asp-for="SignatureDate">      
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                           
+    </pre>
 </div>
 <br />
 

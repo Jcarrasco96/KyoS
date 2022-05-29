@@ -1,0 +1,84 @@
+﻿@model KyoS.Web.Models.AdendumViewModel
+@{
+    ViewData["Title"] = "Create Addendum";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("Addendums", "IndexAdendum", "MTPs")
+            </li>
+            <li class="active">Create Addendum</li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+    <h4>Create Addendum</h4>
+    <hr />
+    <div class="row">
+        <form asp-action="CreateAdendum" asp-route-id="@Model.Id" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdMTP" />
+            <input type="hidden" asp-for="IdFacilitator" />
+            <input type="hidden" asp-for="IdSupervisor" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="LastModifiedBy" />
+            <input type="hidden" asp-for="LastModifiedOn" />
+            <partial name="_Adendums" />
+            <div class="form-group col-md-12">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="IndexAdendum" class="btn btn-success">Back</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                                "order": [[0, "asc"]],
+                                "pageLength": 100
+                            });
+
+            var item_to_delete;
+
+            $('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                var url = "@Url.Action("Delete", "Adendums")";
+                window.location.href = url + '/' + item_to_delete;
+            });
+        });
+        $(function () {
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+    </script>
+}
+
+
+

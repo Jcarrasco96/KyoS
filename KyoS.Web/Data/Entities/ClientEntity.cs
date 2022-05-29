@@ -143,6 +143,12 @@ namespace KyoS.Web.Data.Entities
 
         public List<FarsFormEntity> FarsFormList { get; set; }
 
+        public BioEntity Bio { get; set; }
+
+        public List<Bio_BehavioralHistoryEntity> List_BehavioralHistory { get; set; }
+
+        public int IdFacilitatorPSR { get; set; }
+
         public string MissingDoc 
         {
             get
