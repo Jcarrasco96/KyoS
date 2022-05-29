@@ -178,15 +178,13 @@ namespace KyoS.Web.Controllers
                 ViewBag.ExpiredMTPsFacilitator = count.ToString();
 
                 List<ClientEntity> clientListPSR = await _context.Clients
-                                                              .Include(m => m.DischargeList)
-                                                              
-                                                              .Where(m => ((m.DischargeList.Count() == 0 /*|| m.DischargeList.ElementAt(0).TypeService != ServiceType.PSR*/) 
+                                                                  .Where(m => ((m.DischargeList.Count() == 0 || m.DischargeList.Where(n => n.TypeService == ServiceType.PSR).ToList().Count == 0) 
                                                                     && m.Clinic.Id == user_logged.Clinic.Id
                                                                     && m.Status == StatusType.Close && m.IdFacilitatorPSR == facilitator.Id)).ToListAsync();
                 List<ClientEntity> clientListIND = await _context.Clients
                                                               .Include(m => m.DischargeList)
 
-                                                              .Where(m => ((m.DischargeList.Count() == 0 /*|| m.DischargeList.ElementAt(0).TypeService != ServiceType.Individual*/) 
+                                                              .Where(m => ((m.DischargeList.Count() == 0 || m.DischargeList.Where(n => n.TypeService == ServiceType.Individual).ToList().Count == 0)
                                                                     && m.Clinic.Id == user_logged.Clinic.Id
                                                                     && m.Status == StatusType.Close && m.IndividualTherapyFacilitator.Id == facilitator.Id)).ToListAsync();
                 foreach (var item in clientListIND)
@@ -197,19 +195,23 @@ namespace KyoS.Web.Controllers
                 ViewBag.ClientDischarge = clientListPSR.Count().ToString();
 
                 List<DischargeEntity> DischargeEdit = await _context.Discharge
-                                                               .Include(n => n.Client)
-                                                               .ThenInclude(n => n.Clinic)
-                                                               .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                  && m.Status == DischargeStatus.Edition
-                                                                  && m.Client.Group.Facilitator.Id == facilitator.Id)).ToListAsync();
+                                                                    .Include(f => f.Client)
+                                                                    .ThenInclude(n => n.Clinic)
+                                                                    .Where(n => (n.Status == DischargeStatus.Edition
+                                                                        && n.Client.Clinic.Id == user_logged.Clinic.Id 
+                                                                        && n.CreatedBy == user_logged.UserName))
+                                                                    .OrderBy(f => f.Client.Name)
+                                                                    .ToListAsync();
                 ViewBag.DischargeEdition = DischargeEdit.Count().ToString();
 
                 List<DischargeEntity> DischargePending = await _context.Discharge
-                                                               .Include(n => n.Client)
-                                                               .ThenInclude(n => n.Clinic)
-                                                               .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                  && m.Status == DischargeStatus.Pending
-                                                                  && m.Client.Group.Facilitator.Id == facilitator.Id)).ToListAsync();
+                                                                    .Include(f => f.Client)
+                                                                    .ThenInclude(n => n.Clinic)
+                                                                    .Where(n => (n.Status == DischargeStatus.Pending
+                                                                        && n.Client.Clinic.Id == user_logged.Clinic.Id 
+                                                                        && n.CreatedBy == user_logged.UserName))
+                                                                    .OrderBy(f => f.Client.Name)
+                                                                    .ToListAsync();
                 ViewBag.DischargePending = DischargePending.Count().ToString();
 
                 List<MTPReviewEntity> MTPReviewEdit = await _context.MTPReviews
