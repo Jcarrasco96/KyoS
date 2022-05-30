@@ -1,16 +1,21 @@
 ﻿@model KyoS.Web.Models.ClinicViewModel
 <div class="col-md-push-12">
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-3">
         <label asp-for="Name" class="control-label"></label>
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-3">
         <label asp-for="CEO" class="control-label"></label>
         <input asp-for="CEO" class="form-control" />
         <span asp-validation-for="CEO" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-3">
+        <label asp-for="ProviderId" class="control-label">Provider Id</label>
+        <input asp-for="ProviderId" class="form-control" />
+        <span asp-validation-for="ProviderId" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
         <label asp-for="ClinicalDirector" class="control-label"></label>
         <input asp-for="ClinicalDirector" class="form-control" />
         <span asp-validation-for="ClinicalDirector" class="text-danger"></span>

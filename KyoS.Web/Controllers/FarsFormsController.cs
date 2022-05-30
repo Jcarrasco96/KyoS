@@ -86,7 +86,9 @@ namespace KyoS.Web.Controllers
             UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
+            ClientEntity client = _context.Clients.Include(n => n.FarsFormList)
+                                                  .Include(n => n.Clinic)
+                                                    .FirstOrDefault(n => n.Id == id);
             FarsFormViewModel model;
 
             if (user_logged.Clinic != null)
@@ -94,15 +96,15 @@ namespace KyoS.Web.Controllers
                 model = new FarsFormViewModel
                 {
                    IdClient = id,
-                   Client = _context.Clients.Include(n => n.FarsFormList).FirstOrDefault(n => n.Id == id),
+                   Client = client,
                    Id = 0,
                    AbilityScale = 0,
                    AdmissionedFor = user_logged.FullName,
                    ActivitiesScale = 0,
                    AnxietyScale = 0,
                    CognitiveScale = 0,
-                   ContractorID = "",
-                   Country = "",
+                   ContractorID = client.Clinic.ProviderId,
+                   Country = "13",
                    DangerToOtherScale = 0,
                    DangerToSelfScale = 0,
                    DcfEvaluation = "",
@@ -113,12 +115,12 @@ namespace KyoS.Web.Controllers
                    HyperAffectScale = 0,
                    InterpersonalScale = 0,
                    MCOID = "",
-                   MedicaidProviderID = "",
-                   MedicaidRecipientID = "",
+                   MedicaidProviderID = client.Clinic.ProviderId,
+                   MedicaidRecipientID = client.MedicaidID,
                    MedicalScale = 0,
                    M_GafScore = "",
-                   ProviderId = "",
-                   ProviderLocal = "",
+                   ProviderId = client.Clinic.ProviderId,
+                   ProviderLocal = client.Clinic.Address + ", " + client.Clinic.City + ", " + client.Clinic.State + ", "+ client.Clinic.ZipCode,
                    RaterEducation = "",
                    RaterFMHI = "",
                    SecurityScale = 0,
@@ -130,7 +132,7 @@ namespace KyoS.Web.Controllers
                    TraumaticsScale = 0,
                    WorkScale = 0,
                      
-                   ContID1 = "",
+                   ContID1 = client.Clinic.ProviderId,
                    ContID2 = "",
                    ContID3 = "",
                    ProgramEvaluation = "",
