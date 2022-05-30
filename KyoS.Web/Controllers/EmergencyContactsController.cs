@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Mannager")]
+    [Authorize(Roles = "Manager")]
     public class EmergencyContactsController : Controller
     {
         private readonly DataContext _context;
@@ -26,46 +26,45 @@ namespace KyoS.Web.Controllers
         
         public async Task<IActionResult> Index(int idError = 0)
         {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
             if (idError == 1) //Imposible to delete
             {
                 ViewBag.Delete = "N";
-            }
+            }            
+                
+            ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
 
-            if (User.IsInRole("Admin"))
+            if (clinic != null)
             {
-                return View(await _context.EmergencyContacts.OrderBy(d => d.Name).ToListAsync());
+                List<EmergencyContactEntity> ec = await _context.EmergencyContacts.OrderBy(d => d.Name).ToListAsync();
+                List<EmergencyContactEntity> ec_by_clinic = new List<EmergencyContactEntity>();
+                UserEntity user;
+                foreach (EmergencyContactEntity item in ec)
+                {
+                    user = _context.Users.FirstOrDefault(u => u.Id == item.CreatedBy);
+                    if (clinic.Users.Contains(user))
+                    {
+                        ec_by_clinic.Add(item);
+                    }
+                }
+                return View(ec_by_clinic);
             }
             else
             {
-                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-                if (user_logged.Clinic == null)
-                {
-                    return View(await _context.EmergencyContacts.OrderBy(d => d.Name).ToListAsync());
-                }
-
-                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
-
-                if (clinic != null)
-                {
-                    List<EmergencyContactEntity> ec = await _context.EmergencyContacts.OrderBy(d => d.Name).ToListAsync();
-                    List<EmergencyContactEntity> ec_by_clinic = new List<EmergencyContactEntity>();
-                    UserEntity user;
-                    foreach (EmergencyContactEntity item in ec)
-                    {
-                        user = _context.Users.FirstOrDefault(u => u.Id == item.CreatedBy);
-                        if (clinic.Users.Contains(user))
-                        {
-                            ec_by_clinic.Add(item);
-                        }
-                    }
-                    return View(ec_by_clinic);
-                }
-                else
-                {
-                    return View(null);
-                }
+                return View(null);
             }
+            
         }
         
         public IActionResult Create(int id = 0)

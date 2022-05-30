@@ -1,13 +1,20 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using KyoS.Web.Data.Entities
+@using KyoS.Web.Data
 @inject UserManager<UserEntity> UserManager
+@inject DataContext DataContext
 @{
     UserEntity user = await UserManager.GetUserAsync(User);
+
     var name = string.Empty;
     if (user != null)
     {
         name = user.FullName;
-    }    
+    }
+
+    SettingEntity setting = null;
+    if(user.Clinic != null)
+        setting = DataContext.Settings.FirstOrDefault(s => s.Clinic.Id == user.Clinic.Id);
  }
 
 <!DOCTYPE html>
@@ -15,18 +22,17 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - KyoS Notes</title>
+    <title>@ViewData["Title"] - DMS System</title>
     <link href="~/css/font-awesome.css" rel="stylesheet">
     <link href="~/css/font-awesome.min.css" rel="stylesheet">
     <link href="~/css/font-awesome-ie7.css" rel="stylesheet">
-    <link href="~/css/font-awesome-ie7.min.css" rel="stylesheet">
+    <link href="~/css/font-awesome-ie7.min.css" rel="stylesheet">    
     <link href="~/css/site.css" rel="stylesheet" />
 
     <style>
         .dropdown-submenu {
             position: relative;
         }
-
             .dropdown-submenu > .dropdown-menu {
                 top: 0;
                 left: 100%;
@@ -36,11 +42,9 @@
                 -moz-border-radius: 0 6px 6px 6px;
                 border-radius: 0 6px 6px 6px;
             }
-
             .dropdown-submenu:hover > .dropdown-menu {
                 display: block;
             }
-
             .dropdown-submenu > a:after {
                 display: block;
                 content: " ";
@@ -54,86 +58,83 @@
                 margin-top: 5px;
                 margin-right: -10px;
             }
-
             .dropdown-submenu:hover > a:after {
                 border-left-color: #ffffff;
             }
-
             .dropdown-submenu.pull-left {
                 float: none;
             }
-
             .dropdown-submenu.pull-left > .dropdown-menu {
-                left: -100%;
-                margin-left: 10px;
-                -webkit-border-radius: 6px 0 6px 6px;
-                -moz-border-radius: 6px 0 6px 6px;
-                border-radius: 6px 0 6px 6px;
-            }
-
-            .center-div {
-                width: 300px;
-                height: 300px;
-                position: absolute;
-                left: 50%;
-                top: 70%;
-                margin-left: -150px;
-                margin-top: -150px;
-            }
-
-            .spinner {
-                position: fixed;
-                z-index: 999;
-                height: 100%;
-                width: 100%;
-                top: 0;
-                left: 0;
-                background-color: black;
-                filter: alpha(opacity=90);
-                opacity: 0.9;
-                -moz-opacity: 0.8;
-            }
-
-            .loader {
-                margin: auto;
-                border: 8px solid #f3f3f3;
-                border-radius: 50%;
-                border-top: 8px solid #15a0ec;
-                border-bottom: 8px solid #15a0ec;
-                width: 35px;
-                height: 35px;
-                -webkit-animation: spin 1.2s linear infinite;
-                animation: spin 1.2s linear infinite;
-            }
-
-            .inner-div {
-                background-color: black;
-                border-radius: 15px;
-                margin: auto;
-                padding: 2%;
-                width: 100px;
-            }
-
-            @@-webkit-keyframes spin {
-                0% {
-                    -webkit-transform: rotate(0deg);
+                    left: -100%;
+                    margin-left: 10px;
+                    -webkit-border-radius: 6px 0 6px 6px;
+                    -moz-border-radius: 6px 0 6px 6px;
+                    border-radius: 6px 0 6px 6px;
                 }
 
-                100% {
-                    -webkit-transform: rotate(360deg);
-                }
+        .center-div {
+            width: 300px;
+            height: 300px;
+            position: absolute;
+            left: 50%;
+            top: 70%;
+            margin-left: -150px;
+            margin-top: -150px;
+        }
+
+        .spinner {
+            position: fixed;
+            z-index: 999;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background-color: black;
+            filter: alpha(opacity=90);
+            opacity: 0.9;
+            -moz-opacity: 0.8;
+        }
+
+        .loader {
+            margin: auto;
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #15a0ec;
+            border-bottom: 8px solid #15a0ec;
+            width: 35px;
+            height: 35px;
+            -webkit-animation: spin 1.2s linear infinite;
+            animation: spin 1.2s linear infinite;
+        }
+
+        .inner-div {
+            background-color: black;
+            border-radius: 15px;
+            margin: auto;
+            padding: 2%;
+            width: 100px;
+        }
+
+      @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
             }
 
-            @@keyframes spin {
-                0% {
-                    transform: rotate(0deg);
-                }
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
 
-                100% {
-                    transform: rotate(360deg);
-                }
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
             }
 
+            100% {
+                transform: rotate(360deg);
+            }
+
+        }
     </style>
 
     <environment include="Development">
@@ -168,10 +169,10 @@
                 </button>
                 <span class="navbar-brand">
                     <label style="font-family:Tahoma; color:goldenrod;">
-                        KyoS
+                        DMS
                     </label>
                     <label style="font-family:Tahoma; color:white;">
-                        Notes
+                        System
                     </label>
                 </span>
             </div>
@@ -185,8 +186,12 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a asp-area="" asp-controller="Clinics" asp-action="Index">Clinics</a></li>
+                                <li role="separator" class="divider"></li>
                                 <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
                                 <li>@Html.ActionLink("Facilitators", "Index", "Facilitators")</li>
+                                <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("Case Managers", "Index", "CaseMannager")</li>
+                                <li>@Html.ActionLink("TCM Supervisors", "Index", "TCMSupervisors")</li>
                             </ul>
                         </li>
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
@@ -194,326 +199,525 @@
                         <li><a asp-area="" asp-controller="Settings" asp-action="Index">Settings</a></li>
                     }
                     else
-              if (User.Identity.IsAuthenticated && (User.IsInRole("Mannager")))
+                      if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 General <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
-                                <li>@Html.ActionLink("Facilitators", "Index", "Facilitators")</li>
-                                <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Health Insurances", "Index", "HealthInsurances")</li>
                                 <li role="separator" class="divider"></li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Groups</a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("PSR", "Index", "Groups")</li>
-                                        <li>@Html.ActionLink("Group", "Group", "Groups")</li>
-                                    </ul>
-                                </li>
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Clients</a></li>
+                                }
+
+                                @if (setting != null && setting.MentalHealthClinic)
+                                {
+                                    <li>@Html.ActionLink("Diagnostics", "Index", "Diagnostics")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Diagnostics</a></li>
+                                }
+
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("Units per Insurances / Clients", "UnitsAvailability", "HealthInsurances")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Units per Insurances / Clients</a></li>
+                                }
                                 <li role="separator" class="divider"></li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Workdays</a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("PSR", "Index", "Workdays")</li>
-                                        <li>@Html.ActionLink("Individual", "IndividualWorkdays", "Workdays")</li>
-                                        <li>@Html.ActionLink("Group", "GroupWorkdays", "Workdays")</li>
-                                    </ul>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Topics / Themes", "Index", "Themes")</li>
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("Doctors", "Index", "Doctors")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Doctors</a></li>
+                                }
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("Psychiatrists", "Index", "Psychiatrists")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Psychiatrists</a></li>
+                                }
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("Legal Guardians", "Index", "LegalGuardians")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Legal Guardians</a></li>
+                                }
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("Emergency Contacts", "Index", "EmergencyContacts")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Emergency Contacts</a></li>
+                                }
+                                @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
+                                {
+                                    <li>@Html.ActionLink("Referreds", "Index", "Referreds")</li>
+                                }
+                                else
+                                {
+                                    <li class="disabled"><a class="test" href="#">Referreds</a></li>
+                                }
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Templates DOC.", "Index", "TemplatesDOC")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Clinic Management <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
-                                <li>@Html.ActionLink("Units per Insurances / Clients", "UnitsAvailability", "HealthInsurances")</li>
-                                <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Doctors", "Index", "Doctors")</li>
-                                <li>@Html.ActionLink("Psychiatrists", "Index", "Psychiatrists")</li>
-                                <li>@Html.ActionLink("Legal Guardians", "Index", "LegalGuardians")</li>
-                                <li>@Html.ActionLink("Emergency Contacts", "Index", "EmergencyContacts")</li>
-                                <li>@Html.ActionLink("Referreds", "Index", "Referreds")</li>
-                                <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Fars Forms</a>
+                            @if (setting != null && setting.MentalHealthClinic)
+                            {
+                                <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                    Mental Health <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
+                                    <li><a asp-area="" asp-controller="Facilitators" asp-action="Index">Facilitators</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>@Html.ActionLink("Topics / Themes", "Index", "Themes")</li>
+                                    <li role="separator" class="divider"></li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Groups</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("PSR", "Index", "Groups")</li>
+                                            <li>@Html.ActionLink("Group", "Group", "Groups")</li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Workdays</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("PSR", "Index", "Workdays")</li>
+                                            <li>@Html.ActionLink("Individual", "IndividualWorkdays", "Workdays")</li>
+                                            <li>@Html.ActionLink("Group", "GroupWorkdays", "Workdays")</li>
+                                        </ul>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Fars Forms</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("Clients without FARS", "ClientswithoutFARS", "FarsForms")</li>
+                                            <li>@Html.ActionLink("FARS Forms", "Index", "FarsForms")</li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">MTPs</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-submenu">
+                                                <a class="test" tabindex="-1" href="#">MTPs / Reviews</a>
+                                                <ul class="dropdown-menu">
+                                                    <li>@Html.ActionLink("Clients without MTP", "ClientsWithoutMTP", "Clients")</li>
+                                                    <li>@Html.ActionLink("Pending MTP Reviews", "PendingMtpReview", "MTPs")</li>
+                                                    <li>@Html.ActionLink("All MTPs", "Index", "MTPs")</li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown-submenu">
+                                                <a class="test" tabindex="-1" href="#">Addendums</a>
+                                                <ul class="dropdown-menu">
+                                                    <li>@Html.ActionLink("Pending Addendums", "PendingAdendum", "MTPs")</li>
+                                                    <li>@Html.ActionLink("All Addendums", "IndexAdendum", "MTPs")</li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">BIOs</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("Clients without BIO", "ClientswithoutBIO", "Bios")</li>
+                                            <li>@Html.ActionLink("Behavioral Health History", "IndexBehavioralHealthHistory", "Bios")</li>
+                                            <li>@Html.ActionLink("Medications", "Index", "Medications")</li>
+                                            <li>@Html.ActionLink("All BIOs", "Index", "Bios")</li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Discharges</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("Clients without Discharge", "ClientswithoutDischarge", "Discharge")</li>
+                                            <li>@Html.ActionLink("Pending Discharges", "PendingDischarge", "Discharge")</li>
+                                            <li>@Html.ActionLink("All Discharges", "Index", "Discharge")</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            }
+                            else
+                            {
+                            <li class="disabled">
+                                <a class="test" tabindex="-1" href="#">Mental Health</a>
+                            </li>
+                        }
+                            </li>
+                            <li class="class=" dropdown open"">
+                                @if (setting != null && setting.TCMClinic)
+                                {
+                                    <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                        TCM <span class="caret"></span>
+                                    </a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Clients without FARS", "ClientswithoutFARS", "FarsForms")</li>
+                                        <li>@Html.ActionLink("Case Managers", "Index", "CaseMannager")</li>
+                                        <li>@Html.ActionLink("TCM Supervisors", "Index", "TCMSupervisors")</li>
+                                        <li role="separator" class="divider"></li>
+                                        <li>@Html.ActionLink("Services / Stages", "Index", "TCMServices")</li>
+                                        <li role="separator" class="divider"></li>
+                                        <li class="dropdown-submenu">
+                                            <a class="test" tabindex="-1" href="#">TCM Cases</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a asp-area="" asp-controller="TCMClients" asp-action="Index">TCM Cases</a></li>
+                                                <li><a asp-area="" asp-controller="TCMClients" asp-action="GetCaseNotServicePlan">Not Started Cases</a></li>
+                                                <li><a asp-area="" asp-controller="TCMClients" asp-action="GetCaseClose">Close Cases</a></li>
+                                            </ul>
+                                        </li>
+                                        <li role="separator" class="divider"></li>
+                                        <li class="dropdown-submenu">
+                                            <a class="test" tabindex="-1" href="#">Services Plans / Clients</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a asp-area="" asp-controller="TCMServicePlans" asp-action="Index">Open</a></li>
+                                                <li><a asp-area="" asp-controller="TCMServicePlans" asp-action="AproveServicePlan">Pending Approval</a></li>
+                                                <li><a asp-area="" asp-controller="TCMServicePlans" asp-action="ClosedServicePlan">Closed</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown-submenu">
+                                            <a class="test" tabindex="-1" href="#">Adendums</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a asp-area="" asp-controller="TCMAdendums" asp-action="Index">Adendums all</a></li>
+                                                <li><a asp-area="" asp-controller="TCMAdendums" asp-action="AproveAdendum">Pending approval</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                }
+                                else
+                                {
+                                <li class="disabled">
+                                    <a class="test" tabindex="-1" href="#">TCM</a>
+                                </li>
+                            }
+                                </li>
+                                <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                                <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                            }
+                            else
+                                  if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
+                            {
+                                <li class="class=" dropdown open"">
+                                    <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                        Clients <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
+                                        <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
+                                    </ul>
+                                </li>
+                                <li class="class=" dropdown open"">
+                                    <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                        Topics / Activities <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>@Html.ActionLink("Topics / Themes", "Index", "Themes")</li>
+                                        <li>@Html.ActionLink("Activities / Facilitator's Interventions", "ActivitiesSupervision", "Activities")</li>
+                                    </ul>
+                                </li>
+                                <li class="class=" dropdown open"">
+                                    <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                        Documentation <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
                                         <li>@Html.ActionLink("FARS Forms", "Index", "FarsForms")</li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">MTPs</a>
-                                    <ul class="dropdown-menu">
                                         <li class="dropdown-submenu">
-                                            <a class="test" tabindex="-1" href="#">MTPs / Reviews</a>
+                                            <a class="test" tabindex="-1" href="#">MTPs</a>
                                             <ul class="dropdown-menu">
-                                                <li>@Html.ActionLink("Clients without MTP", "ClientsWithoutMTP", "Clients")</li>
-                                                <li>@Html.ActionLink("Pending MTP Reviews", "PendingMtpReview", "MTPs")</li>
-                                                <li>@Html.ActionLink("All MTPs", "Index", "MTPs")</li>
+                                                <li class="dropdown-submenu">
+                                                    <a class="test" tabindex="-1" href="#">MTPs / Reviews</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>@Html.ActionLink("Clients without MTP", "ClientsWithoutMTP", "Clients")</li>
+                                                        <li>@Html.ActionLink("Pending MTP Reviews", "PendingMtpReview", "MTPs")</li>
+                                                        <li>@Html.ActionLink("All MTPs", "Index", "MTPs")</li>
+                                                    </ul>
+                                                </li>
+                                                <li class="dropdown-submenu">
+                                                    <a class="test" tabindex="-1" href="#">Addendums</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>@Html.ActionLink("Pending Addendums", "PendingAdendum", "MTPs")</li>
+                                                        <li>@Html.ActionLink("All Addendums", "IndexAdendum", "MTPs")</li>
+                                                    </ul>
+                                                </li>
                                             </ul>
                                         </li>
                                         <li class="dropdown-submenu">
-                                            <a class="test" tabindex="-1" href="#">Addendums</a>
+                                            <a class="test" tabindex="-1" href="#">BIOs</a>
                                             <ul class="dropdown-menu">
-                                                <li>@Html.ActionLink("Pending Addendums", "PendingAdendum", "MTPs")</li>
-                                                <li>@Html.ActionLink("All Addendums", "IndexAdendum", "MTPs")</li>
+                                                <li>@Html.ActionLink("Clients without BIO", "ClientswithoutBIO", "Bios")</li>
+                                                <li>@Html.ActionLink("Behavioral Health History", "IndexBehavioralHealthHistory", "Bios")</li>
+                                                <li>@Html.ActionLink("Medications", "Index", "Medications")</li>
+                                                <li>@Html.ActionLink("BIOs", "Index", "Bios")</li>
                                             </ul>
                                         </li>
+                                        <li>@Html.ActionLink("Discharges", "Index", "Discharge")</li>
                                     </ul>
                                 </li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">BIOs</a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Clients without BIO", "ClientswithoutBIO", "Bios")</li>
-                                        <li>@Html.ActionLink("Behavioral Health History", "IndexBehavioralHealthHistory", "Bios")</li>
-                                        <li>@Html.ActionLink("Medications", "Index", "Medications")</li>
-                                        <li>@Html.ActionLink("All BIOs", "Index", "Bios")</li>
+                                <li class="class=" dropdown open"">
+                                    <a asp-area="" class="dropdown-toggle" asp-controller="Notes" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                        Notes <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>@Html.ActionLink("Approve PSR notes", "NotesSupervision", "Notes")</li>
+                                        <li>@Html.ActionLink("Approve Individual notes", "IndNotesSupervision", "Notes")</li>
+                                        <li>@Html.ActionLink("Approve Group notes", "GroupNotesSupervision", "Notes")</li>
                                     </ul>
                                 </li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Discharges</a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Clients without Discharge", "ClientswithoutDischarge", "Discharge")</li>
-                                        <li>@Html.ActionLink("Pending Discharges", "PendingDischarge", "Discharge")</li>
-                                        <li>@Html.ActionLink("All Discharges", "Index", "Discharge")</li>
+                                <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                            }
+                            else
+                                      if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
+                                        {
+                                            <li class="class=" dropdown open"">
+                                                <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                                    General <span class="caret"></span>
+                                                </a>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
+                                                    <li role="separator" class="divider"></li>
+                                                    <li>@Html.ActionLink("PSR Groups", "Index", "Groups")</li>
+                                                    <li role="separator" class="divider"></li>
+                                                    <li>@Html.ActionLink("Activities / Facilitator's Interventions", "Index", "Activities")</li>
+                                                    <li>@Html.ActionLink("Activities / Facilitator's Interventions per PSR week", "ActivitiesPerWeek", "Activities")</li>
+                                                    <li>@Html.ActionLink("Activities / Facilitator's Interventions per Group week", "ActivitiesPerGroupWeek", "Activities")</li>
+                                                </ul>
+                                            </li>
+                                            <li class="class=" dropdown open"">
+                                                <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                                    Notes <span class="caret"></span>
+                                                </a>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li>@Html.ActionLink("PSR Therapy", "Index", "Notes")</li>
+                                                    <li>@Html.ActionLink("Individual Therapy", "IndividualNotes", "Notes")</li>
+                                                    <li>@Html.ActionLink("Group Therapy", "GroupNotes", "Notes")</li>
+                                                </ul>
+                                            </li>
+                                            <li class="class=" dropdown open"">
+                                                <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                                    Documentation <span class="caret"></span>
+                                                </a>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
+                                                    <li class="dropdown-submenu">
+                                                        <a class="test" tabindex="-1" href="#">Fars Forms</a>
+                                                        <ul class="dropdown-menu">
+                                                            <li>@Html.ActionLink("Clients without FARS", "ClientswithoutFARS", "FarsForms")</li>
+                                                            <li>@Html.ActionLink("All FARS Forms", "Index", "FarsForms")</li>
+                                                        </ul>
+                                                    </li>
+                                                    <li class="dropdown-submenu">
+                                                        <a class="test" tabindex="-1" href="#">MTPs</a>
+                                                        <ul class="dropdown-menu">
+                                                            <li class="dropdown-submenu">
+                                                                <a class="test" tabindex="-1" href="#">MTPs / Reviews</a>
+                                                                <ul class="dropdown-menu">
+                                                                    <li>@Html.ActionLink("Clients without MTP", "ClientsWithoutMTP", "Clients")</li>
+                                                                    <li>@Html.ActionLink("Pending MTP Reviews", "PendingMtpReview", "MTPs")</li>
+                                                                    <li>@Html.ActionLink("All MTPs", "Index", "MTPs")</li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="dropdown-submenu">
+                                                                <a class="test" tabindex="-1" href="#">Addendums</a>
+                                                                <ul class="dropdown-menu">
+                                                                    <li>@Html.ActionLink("Pending Addendums", "PendingAdendum", "MTPs")</li>
+                                                                    <li>@Html.ActionLink("All Addendums", "IndexAdendum", "MTPs")</li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li class="dropdown-submenu">
+                                                        <a class="test" tabindex="-1" href="#">BIOs</a>
+                                                        <ul class="dropdown-menu">
+                                                            <li>@Html.ActionLink("Clients without BIO", "ClientswithoutBIO", "Bios")</li>
+                                                            <li>@Html.ActionLink("Behavioral Health History", "IndexBehavioralHealthHistory", "Bios")</li>
+                                                            <li>@Html.ActionLink("Medications", "Index", "Medications")</li>
+                                                            <li>@Html.ActionLink("All BIOs", "Index", "Bios")</li>
+                                                        </ul>
+                                                    </li>
+                                                    <li class="dropdown-submenu">
+                                                        <a class="test" tabindex="-1" href="#">Discharges</a>
+                                                        <ul class="dropdown-menu">
+                                                            <li>@Html.ActionLink("Clients without Discharge", "ClientswithoutDischarge", "Discharge")</li>
+                                                            <li>@Html.ActionLink("Pending Discharges", "PendingDischarge", "Discharge")</li>
+                                                            <li>@Html.ActionLink("Discharges of service", "DischargeOfService", "Discharge")</li>
+                                                            <li>@Html.ActionLink("All Discharges", "Index", "Discharge")</li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="class=" dropdown open"">
+                                                <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                                    Reports <span class="caret"></span>
+                                                </a>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li>@Html.ActionLink("PSR Daily assistance", "DailyAssistance", "Reports")</li>
+                                                    <li>@Html.ActionLink("PSR Individual sign in sheet", "IndividualSignInSheet", "Notes")</li>
+                                                </ul>
+                                            </li>
+                                            <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                                            <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                                        }
+                            else
+                                          if (User.Identity.IsAuthenticated && (User.IsInRole("TCMSupervisor")))
+                            {
+                                <li class="class=" dropdown open"">
+                                    <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                        Cases <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>@Html.ActionLink("Open cases", "Index", "TCMClients")</li>
+                                        <li>@Html.ActionLink("Not started case", "GetCaseNotServicePlan", "TCMClients")</li>
+                                        <li>@Html.ActionLink("Close cases", "GetCaseClose", "TCMClients")</li>
                                     </ul>
                                 </li>
-                                <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Diagnostics", "Index", "Diagnostics")</li>
-                            </ul>
-                        </li>
-                        <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
-                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
-                    }
-                    else
-              if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
-                    {
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Clients <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
-                            </ul>
-                        </li>
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Topics / Activities <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Topics / Themes", "Index", "Themes")</li>
-                                <li>@Html.ActionLink("Activities / Facilitator's Interventions", "ActivitiesSupervision", "Activities")</li>
-                            </ul>
-                        </li>
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Documentation <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
-                                <li>@Html.ActionLink("FARS Forms", "Index", "FarsForms")</li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">MTPs</a>
-                                    <ul class="dropdown-menu">
-                                        <li class="dropdown-submenu">
-                                            <a class="test" tabindex="-1" href="#">MTPs / Reviews</a>
-                                            <ul class="dropdown-menu">
-                                                <li>@Html.ActionLink("Clients without MTP", "ClientsWithoutMTP", "Clients")</li>
-                                                <li>@Html.ActionLink("Pending MTP Reviews", "PendingMtpReview", "MTPs")</li>
-                                                <li>@Html.ActionLink("All MTPs", "Index", "MTPs")</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a class="test" tabindex="-1" href="#">Addendums</a>
-                                            <ul class="dropdown-menu">
-                                                <li>@Html.ActionLink("Pending Addendums", "PendingAdendum", "MTPs")</li>
-                                                <li>@Html.ActionLink("All Addendums", "IndexAdendum", "MTPs")</li>
-                                            </ul>
-                                        </li>
+                                <li class="class=" dropdown open"">
+                                    <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                        Services Plan <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>@Html.ActionLink("Started", "Index", "TCMServiceplans")</li>
+                                        <li>@Html.ActionLink("Closed", "ClosedServicePlan", "TCMServiceplans")</li>
+                                        <li role="separator" class="divider"></li>
+                                        <li>@Html.ActionLink("Pending Approval", "AproveServicePlan", "TCMServicePlans")</li>
+                                        <li>@Html.ActionLink("In Review", "Index", "TCMServicePlans")</li>
+                                        <li role="separator" class="divider"></li>
+                                        <li>@Html.ActionLink("Service Plan Review", "AproveServicePlanReview", "TCMServicePlanReviews")</li>
+                                        <li role="separator" class="divider"></li>
+                                        <li>@Html.ActionLink("Discharge", "Index", "TCMDischarges")</li>
                                     </ul>
                                 </li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">BIOs</a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Clients without BIO", "ClientswithoutBIO", "Bios")</li>
-                                        <li>@Html.ActionLink("Behavioral Health History", "IndexBehavioralHealthHistory", "Bios")</li>
-                                        <li>@Html.ActionLink("Medications", "Index", "Medications")</li>
-                                        <li>@Html.ActionLink("BIOs", "Index", "Bios")</li>
+                                <li class="class=" dropdown open"">
+                                    <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                        Adendums <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>@Html.ActionLink("Adendums all", "Adendum", "TCMServicePlans")</li>
+                                        <li>@Html.ActionLink("Pending approval", "AproveAdendum", "TCMAdendums")</li>
                                     </ul>
                                 </li>
-                                <li>@Html.ActionLink("Discharges", "Index", "Discharge")</li>
-                            </ul>
-                        </li>
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Notes" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Notes <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Approve PSR notes", "NotesSupervision", "Notes")</li>
-                                <li>@Html.ActionLink("Approve Individual notes", "IndNotesSupervision", "Notes")</li>
-                                <li>@Html.ActionLink("Approve Group notes", "GroupNotesSupervision", "Notes")</li>
-                            </ul>
-                        </li>
-                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
-                    }
-                    else
-                  if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
-                    {
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                General <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
-                                <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("PSR Groups", "Index", "Groups")</li>
-                                <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Activities / Facilitator's Interventions", "Index", "Activities")</li>
-                                <li>@Html.ActionLink("Activities / Facilitator's Interventions per PSR week", "ActivitiesPerWeek", "Activities")</li>
-                                <li>@Html.ActionLink("Activities / Facilitator's Interventions per Group week", "ActivitiesPerGroupWeek", "Activities")</li>
-                            </ul>
-                        </li>
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Notes <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("PSR Therapy", "Index", "Notes")</li>
-                                <li>@Html.ActionLink("Individual Therapy", "IndividualNotes", "Notes")</li>
-                                <li>@Html.ActionLink("Group Therapy", "GroupNotes", "Notes")</li>
-                            </ul>
-                        </li>
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Documentation <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Fars Forms</a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Clients without FARS", "ClientswithoutFARS", "FarsForms")</li>
-                                        <li>@Html.ActionLink("All FARS Forms", "Index", "FarsForms")</li>
+                                <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                                <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                            }
+                            else
+                                              if (User.Identity.IsAuthenticated && (User.IsInRole("CaseManager")))
+                            {
+                                <li class="class=" dropdown open"">
+                                    <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                        Cases <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>@Html.ActionLink("Not Started", "GetCaseNotServicePlan", "TCMClients")</li>
+                                        <li>@Html.ActionLink("Open", "GetCaseOpen", "TCMClients")</li>
+                                        <li>@Html.ActionLink("Closed", "GetCaseClose", "TCMClients")</li>
                                     </ul>
                                 </li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">MTPs</a>
-                                    <ul class="dropdown-menu">
-                                        <li class="dropdown-submenu">
-                                            <a class="test" tabindex="-1" href="#">MTPs / Reviews</a>
-                                            <ul class="dropdown-menu">
-                                                <li>@Html.ActionLink("Clients without MTP", "ClientsWithoutMTP", "Clients")</li>
-                                                <li>@Html.ActionLink("Pending MTP Reviews", "PendingMtpReview", "MTPs")</li>
-                                                <li>@Html.ActionLink("All MTPs", "Index", "MTPs")</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a class="test" tabindex="-1" href="#">Addendums</a>
-                                            <ul class="dropdown-menu">
-                                                <li>@Html.ActionLink("Pending Addendums", "PendingAdendum", "MTPs")</li>
-                                                <li>@Html.ActionLink("All Addendums", "IndexAdendum", "MTPs")</li>
-                                            </ul>
-                                        </li>
+                                <li class="class=" dropdown open"">
+                                    <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                        Services Plan <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>@Html.ActionLink("Started", "Index", "TCMServiceplans")</li>
+                                        <li>@Html.ActionLink("Closed", "ClosedServicePlan", "TCMServiceplans")</li>
+                                        <li role="separator" class="divider"></li>
+                                        <li>@Html.ActionLink("Adendums", "Adendum", "TCMServicePlans")</li>
+                                        <li role="separator" class="divider"></li>
+                                        <li>@Html.ActionLink("Service Plan Review", "Index", "TCMServicePlanReviews")</li>
+                                        <li role="separator" class="divider"></li>
+                                        <li>@Html.ActionLink("Discharge", "Index", "TCMDischarges")</li>
+                                        <li role="separator" class="divider"></li>
+                                        <li>@Html.ActionLink("Domain/Objetives", "Domains", "TCMServicePlans")</li>
+                                        <li>@Html.ActionLink("Objetives", "Objectives", "TCMServicePlans")</li>
                                     </ul>
                                 </li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">BIOs</a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Clients without BIO", "ClientswithoutBIO", "Bios")</li>
-                                        <li>@Html.ActionLink("Behavioral Health History", "IndexBehavioralHealthHistory", "Bios")</li>
-                                        <li>@Html.ActionLink("Medications", "Index", "Medications")</li>
-                                        <li>@Html.ActionLink("All BIOs", "Index", "Bios")</li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Discharges</a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Clients without Discharge", "ClientswithoutDischarge", "Discharge")</li>
-                                        <li>@Html.ActionLink("Pending Discharges", "PendingDischarge", "Discharge")</li>
-                                        <li>@Html.ActionLink("Discharges of service", "DischargeOfService", "Discharge")</li>
-                                        <li>@Html.ActionLink("All Discharges", "Index", "Discharge")</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Reports <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("PSR Daily assistance", "DailyAssistance", "Reports")</li>
-                                <li>@Html.ActionLink("PSR Individual sign in sheet", "IndividualSignInSheet", "Notes")</li>
-                            </ul>
-                        </li>
-                        <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
-                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
-                    }
+
+                                <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                                <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                            }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li>
-                            <a class="">
-                                @if (User.IsInRole("Facilitator"))
-                                {
-                                    <span class="label label-default">
-                                        Facilitator
-                                    </span>
-                                }
-                                @if (User.IsInRole("Supervisor"))
-                                {
-                                    <span class="label label-default">
-                                        Supervisor
-                                    </span>
-                                }
-                                @if (User.IsInRole("Mannager"))
-                                {
-                                    <span class="label label-default">
-                                        Manager
-                                    </span>
-                                }
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <span class="label label-default">
-                                        Administrator
-                                    </span>
-                                }
-                            </a>
-                        </li>
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
-                                @*<div class="user-info">*@
-                                <span class="name pdd-right-5">@name</span>
-                                @*<i class="ti-angle-down font-size-10"></i>*@
-                                <span class="caret"></span>
-                                @*</div>*@
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="#">
-                                        <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
-                                        <span>Inbox</span>
-                                    </a>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                                <li>
-                                    <a asp-area="" asp-controller="Account" asp-action="Logout">
-                                        <i class="icon-off" style="padding-right: 10px !important;"></i>
-                                        <span>Logout</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                    <li>
+                        <a class="">
+                            @if (User.IsInRole("Facilitator"))
+                            {
+                                <span class="label label-default">
+                                    Facilitator
+                                </span>
+                            }
+                            @if (User.IsInRole("CaseManager"))
+                            {
+                                <span class="label label-default">
+                                    Case Manager
+                                </span>
+                            }
+                            @if (User.IsInRole("Supervisor"))
+                            {
+                                <span class="label label-default">
+                                    Supervisor
+                                </span>
+                            }
+                            @if (User.IsInRole("SupervisorTCM"))
+                            {
+                                <span class="label label-default">
+                                    TCM Supervisor
+                                </span>
+                            }
+                            @if (User.IsInRole("Manager"))
+                            {
+                                <span class="label label-default">
+                                    Manager
+                                </span>
+                            }
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <span class="label label-default">
+                                    Administrator
+                                </span>
+                            }
+                        </a>
+                    </li>
+                    <li class="class=" dropdown open"">
+                        <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                            @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
+                            @*<div class="user-info">*@
+                            <span class="name pdd-right-5">@name</span>
+                            @*<i class="ti-angle-down font-size-10"></i>*@
+                            <span class="caret"></span>
+                            @*</div>*@
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#">
+                                    <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
+                                    <span>Inbox</span>
+                                </a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a asp-area="" asp-controller="Account" asp-action="Logout">
+                                    <i class="icon-off" style="padding-right: 10px !important;"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     }
                 </ul>
             </div>
@@ -526,7 +730,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2021 - KyoS Notes</p>
+            <p>&copy; 2022 - DMS System</p>
         </footer>
     </div>    
 
@@ -568,3 +772,4 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+

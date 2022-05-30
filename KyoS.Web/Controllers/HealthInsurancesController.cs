@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Mannager")]
+    [Authorize(Roles = "Manager")]
     public class HealthInsurancesController : Controller
     {
         private readonly DataContext _context;

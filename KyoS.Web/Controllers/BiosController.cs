@@ -35,7 +35,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -56,7 +56,8 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Mannager")|| User.IsInRole("Supervisor"))
+                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                if (User.IsInRole("Manager")|| User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
                                               .Include(f => f.Clients_Diagnostics)
@@ -74,7 +75,8 @@ namespace KyoS.Web.Controllers
                                               .Include(f => f.Clients_Diagnostics)
                                               .Include(g => g.Bio)
                                               .Include(g => g.List_BehavioralHistory)
-                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                               && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -959,7 +961,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> IndexBehavioralHealthHistory(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -980,7 +982,8 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Mannager") || User.IsInRole("Supervisor"))
+                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
                                               .Include(f => f.Clients_Diagnostics)
@@ -998,7 +1001,8 @@ namespace KyoS.Web.Controllers
                                               .Include(g => g.Bio)
                                               .Include(g => g.List_BehavioralHistory)
 
-                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                    && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -1102,7 +1106,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction(nameof(CreateBehavioral), new { id = Bio_BehavioralEntity.Client.Id });
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public IActionResult PrintBio(int id)
         {
             BioEntity entity = _context.Bio
@@ -1155,7 +1159,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> ClientswithoutBIO(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -1170,13 +1174,28 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
-            List<ClientEntity> ClientList = await _context.Clients
+            else
+            {
+                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                if (User.IsInRole("Facilitator"))
+                {
+                    List<ClientEntity> ClientList = await _context.Clients
+                                                          .Include(n => n.Bio)
+                                                          .Where(n => n.Bio == null && n.Clinic.Id == user_logged.Clinic.Id
+                                                            && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                          .ToListAsync();
+                    return View(ClientList);
+                }
+                else
+                {
+                    List<ClientEntity> ClientList = await _context.Clients
                                                           .Include(n => n.Bio)
                                                           .Where(n => n.Bio == null && n.Clinic.Id == user_logged.Clinic.Id)
                                                           .ToListAsync();
+                    return View(ClientList);
+                }
 
-            return View(ClientList);
-
+            }
         }
     }
 }

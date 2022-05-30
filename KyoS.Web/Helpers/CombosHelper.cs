@@ -24,8 +24,10 @@ namespace KyoS.Web.Helpers
             List<SelectListItem> list = new List<SelectListItem>
                                 { new SelectListItem { Text = UserType.Facilitator.ToString(), Value = "1"},
                                   new SelectListItem { Text = UserType.Supervisor.ToString(), Value = "2"},
-                                  new SelectListItem { Text = UserType.Mannager.ToString(), Value = "3"},
-                                  new SelectListItem { Text = UserType.Admin.ToString(), Value = "4"}
+                                  new SelectListItem { Text = UserType.CaseManager.ToString(), Value = "3"},
+                                  new SelectListItem { Text = UserType.TCMSupervisor.ToString(), Value = "4"},
+                                  new SelectListItem { Text = UserType.Manager.ToString(), Value = "5"},
+                                  new SelectListItem { Text = UserType.Admin.ToString(), Value = "6"}
             };
             
             list.Insert(0, new SelectListItem
@@ -884,6 +886,279 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboCasemannagersByClinic(int idClinic)
+        {
+            List<SelectListItem> list = _context.CaseManagers.Where(f => f.Clinic.Id == idClinic).Select(f => new SelectListItem
+            {
+                Text = $"{f.Name}",
+                Value = $"{f.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Case Manager...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboCaseManager()
+        {
+            List<SelectListItem> list = _context.CaseManagers.Select(f => new SelectListItem
+            {
+                Text = $"{f.Name}",
+                Value = $"{f.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Casemanager...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboClientsForTCMCaseNotOpen(int idClinic)
+        {
+            List<ClientEntity> clients_Total = _context.Clients
+                                                   .Where(c => (c.Clinic.Id == idClinic
+                                                   && c.Status == StatusType.Open))
+                                                 .ToList();
+            List<TCMClientEntity> clients_Open = _context.TCMClient
+                                                 .Where(c => (c.Client.Clinic.Id == idClinic
+                                                            && c.Status == StatusType.Open))
+                                                 .ToList();
+            
+            foreach (var item in clients_Open)
+            {
+                if (item.Client != null)
+                {
+                    if (clients_Total.Exists(c => c.Id == item.Client.Id))
+                        clients_Total.Remove(item.Client);
+                }
+            }
+
+            List<SelectListItem> list = clients_Total.Select(c => new SelectListItem
+            {
+                Text = $"{c.Name}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select client...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboClientsForTCMCaseOpen(int idClinic)
+        {
+            
+            List<TCMClientEntity> tcmClients_Open = _context.TCMClient
+                                                 .Include(g => g.Client)
+                                                 .Where(c => (c.Client.Clinic.Id == idClinic
+                                                            && c.Status == StatusType.Open))
+                                                 .ToList();
+
+            List<SelectListItem> list = tcmClients_Open.Select(c => new SelectListItem
+            {
+                Text = $"{c.Client.Name}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select client...]",
+                Value = "0"
+                
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboServicesNotUsed(int idServicePlan)
+        {
+            List<TCMServiceEntity> Services_Total = _context.TCMServices
+                                                                     .Include(n => n.Stages)
+                                                                     .OrderBy(n => n.Code)
+                                                                     .ToList();
+            List<TCMDomainEntity> Services_Domain = _context.TCMDomains
+                                                    .Include(d => d.TcmServicePlan)
+                                                 .Where(d => d.TcmServicePlan.Id == idServicePlan)
+                                                 .ToList();
+            TCMServiceEntity Service = null;
+
+            foreach (var item in Services_Domain)
+            {
+                if (item.TcmServicePlan != null)
+                {
+                    if (Services_Total.Exists(c => c.Code == item.Code))
+                    {
+                        Service = _context.TCMServices.FirstOrDefault(n => n.Code == item.Code);
+                        Services_Total.Remove(Service);
+                    } 
+                }
+            }
+
+            List<SelectListItem> list = Services_Total.Select(c => new SelectListItem
+            {
+                Text = $"{c.Code + "-" + c.Name}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select service...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboStagesNotUsed(TCMDomainEntity Domain)
+        {
+            List<TCMStageEntity> Stages_Total = _context.TCMStages
+                                                        .Where(f => f.tCMservice.Code == Domain.Code)
+                                                        .OrderBy(n => n.Name)
+                                                        .ToList();
+            List<TCMDomainEntity> allDomain = _context.TCMDomains
+                                                         .Where(g => g.TcmServicePlan.Id == Domain.TcmServicePlan.Id)
+                                                         .OrderBy(g => g.Code)
+                                                         .ToList();
+            
+           
+            TCMStageEntity Stage = null;
+            List<TCMObjetiveEntity> Stages_Objetive = null;
+            foreach (var itemDomain in allDomain)
+            {
+
+                Stages_Objetive = _context.TCMObjetives
+                                                   .Where(f => f.TcmDomain.Code == itemDomain.Code)
+                                                       .OrderBy(n => n.Name)
+                                                       .ToList();
+                foreach (var item in Stages_Objetive)
+                {
+                    if (item.TcmDomain != null)
+                    {
+                        if (Stages_Total.Exists(c => c.Name == item.Name))
+                        {
+                            Stage = _context.TCMStages.FirstOrDefault(n => (n.Name == item.Name
+                                                                        && n.tCMservice.Code == itemDomain.Code));
+                            Stages_Total.Remove(Stage);
+                        }
+                    }
+                }
+            }
+            
+
+            List<SelectListItem> list = Stages_Total.Select(c => new SelectListItem
+            {
+                Text = $"{c.Name}",
+                Value = $"{c.Id}"
+            })
+                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select stage...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboServicesPlan(int idClinic)
+        {
+
+            List<TCMServicePlanEntity> tcmSerivicePlan= _context.TCMServicePlans
+                                                 .Include(g => g.TcmClient)
+                                                 .ThenInclude(g => g.Client)
+                                                 .Where(c => (c.TcmClient.Client.Clinic.Id == idClinic
+                                                            && c.Status == StatusType.Open 
+                                                            && c.Approved == 2))
+                                                 .ToList();
+
+            List<SelectListItem> list = tcmSerivicePlan.Select(c => new SelectListItem
+            {
+                Text = $"{c.TcmClient.CaseNumber}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Case Number...]",
+                Value = "0"
+
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboTCMServices()
+        {
+
+            List<TCMServiceEntity> tcmSerivices = _context.TCMServices
+                                                  .OrderBy(g => g.Code)
+                                                  .ToList();
+
+            List<SelectListItem> list = tcmSerivices.Select(c => new SelectListItem
+            {
+                Text = $"{c.Code + "-" + c.Name}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select TCM Service...]",
+                Value = "0"
+
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboTCMStages()
+        {
+
+            List<TCMStageEntity> tcmStages = _context.TCMStages
+                                                  .OrderBy(g => g.Name)
+                                                  .ToList();
+
+            List<SelectListItem> list = tcmStages.Select(c => new SelectListItem
+            {
+                Text = $"{c.Name}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select TCM Stage...]",
+                Value = "0"
+
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboObjetiveStatus()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = StatusType.Open.ToString(), Value = "0"},
+                                  new SelectListItem { Text = StatusType.Close.ToString(), Value = "1"}};
+
+           
+            return list;
+        }
         public IEnumerable<SelectListItem> GetComboIntake_ClientIs()
         {
             List<SelectListItem> list = new List<SelectListItem>

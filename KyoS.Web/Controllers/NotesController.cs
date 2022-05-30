@@ -56,16 +56,17 @@ namespace KyoS.Web.Controllers
                 ViewBag.FinishEdition = "Y";
             }
 
-            
-            UserEntity user_logged = await _context.Users
-                                                   .Include(u => u.Clinic)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (user_logged.Clinic == null)
+
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
-                return View(await _context.Weeks
-                                          .Include(w => w.Clinic)
-                                          .Include(w => w.Days)
-                                          .ThenInclude(d => d.Workdays_Clients).ToListAsync());
+                return RedirectToAction("NotAuthorized", "Account");
             }
 
             return View(await _context.Weeks
@@ -100,15 +101,16 @@ namespace KyoS.Web.Controllers
             }
 
 
-            UserEntity user_logged = await _context.Users
-                                                   .Include(u => u.Clinic)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (user_logged.Clinic == null)
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
-                return View(await _context.Weeks
-                                          .Include(w => w.Clinic)
-                                          .Include(w => w.Days)
-                                          .ThenInclude(d => d.Workdays_Clients).ToListAsync());
+                return RedirectToAction("NotAuthorized", "Account");
             }
 
             return View(await _context.Weeks
@@ -138,15 +140,16 @@ namespace KyoS.Web.Controllers
             }
 
 
-            UserEntity user_logged = await _context.Users
-                                                   .Include(u => u.Clinic)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (user_logged.Clinic == null)
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
-                return View(await _context.Weeks
-                                          .Include(w => w.Clinic)
-                                          .Include(w => w.Days)
-                                          .ThenInclude(d => d.Workdays_Clients).ToListAsync());
+                return RedirectToAction("NotAuthorized", "Account");
             }
 
             return View(await _context.Weeks
@@ -4131,7 +4134,7 @@ namespace KyoS.Web.Controllers
             return this.ZipFile(fileContentList, $"{workday.Date.ToShortDateString()}.zip");
         }
 
-        [Authorize(Roles = "Facilitator, Mannager")]        
+        [Authorize(Roles = "Facilitator, Manager")]        
         public IActionResult PrintNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -4232,7 +4235,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Mannager")]
+        [Authorize(Roles = "Facilitator, Manager")]
         public IActionResult PrintNoteP(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -4294,7 +4297,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Mannager")]
+        [Authorize(Roles = "Facilitator, Manager")]
         public IActionResult PrintIndNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -4344,7 +4347,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Mannager")]
+        [Authorize(Roles = "Facilitator, Manager")]
         public IActionResult PrintGroupNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -8240,7 +8243,7 @@ namespace KyoS.Web.Controllers
             return Json(text = _translateHelper.TranslateText("es", "en", text));            
         }
 
-        [Authorize(Roles = "Facilitator, Mannager")]
+        [Authorize(Roles = "Facilitator, Manager")]
         public async Task<IActionResult> NotStartedNotes(string name = "", int id = 0)
         {
             if (name != string.Empty && id != 0)
@@ -8582,7 +8585,7 @@ namespace KyoS.Web.Controllers
                                       .ToListAsync());
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> ApprovedNotesClinic(int id = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -8684,7 +8687,7 @@ namespace KyoS.Web.Controllers
                                                            .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                       && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
                                                                       && wc.Messages.Count() > 0
-                                                                      && wc.Workday.Service == ServiceType.PSR))
+                                                                      && (wc.Workday.Service == ServiceType.PSR || wc.Workday.Service == ServiceType.Individual)))
                                                            .ToListAsync());
             }
 
@@ -8707,9 +8710,9 @@ namespace KyoS.Web.Controllers
                                                                .Include(wc => wc.Messages)
 
                                                                .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                                   && wc.Note.Status == NoteStatus.Pending
-                                                                   && wc.Messages.Count() > 0
-                                                                   && wc.Workday.Service == ServiceType.PSR))
+                                                                   && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
+                                                                      && wc.Messages.Count() > 0
+                                                                      && (wc.Workday.Service == ServiceType.PSR || wc.Workday.Service == ServiceType.Individual)))
                                                                .ToListAsync());
                 }
             }
@@ -8830,7 +8833,7 @@ namespace KyoS.Web.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> NotNotesSummary()
         {
             UserEntity user_logged = await _context.Users
@@ -8864,7 +8867,7 @@ namespace KyoS.Web.Controllers
             return View(notStarted);
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> EditingSummary()
         {
             UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
@@ -8898,7 +8901,7 @@ namespace KyoS.Web.Controllers
             return View(editing);
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> PendingSummary()
         {
             UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
@@ -8932,7 +8935,7 @@ namespace KyoS.Web.Controllers
             return View(pending);
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> ReviewSummary()
         {
             UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
@@ -9032,7 +9035,7 @@ namespace KyoS.Web.Controllers
                                       .ToListAsync());
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> NotPresentNotesClinic(int id = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -9053,7 +9056,7 @@ namespace KyoS.Web.Controllers
                                                        .ToListAsync());
         }
 
-        [Authorize(Roles = "Facilitator, Mannager")]
+        [Authorize(Roles = "Facilitator, Manager")]
         public IActionResult PrintAbsenceNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -9124,7 +9127,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Mannager")]
+        [Authorize(Roles = "Facilitator, Manager")]
         public IActionResult PrintAbsenceIndNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -9195,7 +9198,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Mannager")]
+        [Authorize(Roles = "Facilitator, Manager")]
         public IActionResult PrintAbsenceGroupNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -9288,7 +9291,7 @@ namespace KyoS.Web.Controllers
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);            
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> BillingReport()
         {                     
             UserEntity user_logged = await _context.Users
@@ -9338,7 +9341,7 @@ namespace KyoS.Web.Controllers
                                       .ToListAsync());            
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> BillingWeek(int id)
         {
             UserEntity user_logged = await _context.Users
@@ -9376,7 +9379,7 @@ namespace KyoS.Web.Controllers
                                       .ToListAsync());
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult BillNote(int id)
         {
             BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
@@ -9385,7 +9388,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> BillNote(BillViewModel model)
         {
             if (ModelState.IsValid)
@@ -9433,7 +9436,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillNote", model) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult PaymentReceived(int id)
         {
             PaymentReceivedViewModel model = new PaymentReceivedViewModel { Id = id, PaymentDate = DateTime.Now };
@@ -9442,7 +9445,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> PaymentReceived(PaymentReceivedViewModel model)
         {
             if (ModelState.IsValid)
@@ -9490,7 +9493,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "PaymentReceived", model) });
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> NotesSummaryDetails()
         {
             UserEntity user_logged = await _context.Users
@@ -9525,7 +9528,7 @@ namespace KyoS.Web.Controllers
                                       .ToListAsync());
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> IndNotesSummaryDetails()
         {
             UserEntity user_logged = await _context.Users
@@ -9552,7 +9555,7 @@ namespace KyoS.Web.Controllers
                                             .ToListAsync());
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> GroupNotesSummaryDetails()
         {
             UserEntity user_logged = await _context.Users

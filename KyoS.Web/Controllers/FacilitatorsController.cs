@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Mannager")]
+    [Authorize(Roles = "Admin, Manager")]
     public class FacilitatorsController : Controller
     {
         private readonly DataContext _context;
@@ -40,17 +40,22 @@ namespace KyoS.Web.Controllers
                return View(await _context.Facilitators.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
             else
             {
-                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-                if (user_logged.Clinic == null)
-                   return View(await _context.Facilitators.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
+                UserEntity user_logged = _context.Users
 
-                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
-                if (clinic != null)
-                    return View(await _context.Facilitators.Include(f => f.Clinic)
-                                                          .Where(f => f.Clinic.Id == clinic.Id).OrderBy(f => f.Name).ToListAsync());
-                else
-                    return View(await _context.Facilitators.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
+                                                 .Include(u => u.Clinic)
+                                                 .ThenInclude(c => c.Setting)
+
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                {
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+
+                return View(await _context.Facilitators
+                                          .Include(f => f.Clinic)
+                                          .Where(f => f.Clinic.Id == user_logged.Clinic.Id)
+                                          .OrderBy(f => f.Name).ToListAsync());                
             }
         }
 

@@ -39,6 +39,7 @@ namespace KyoS.Web.Data.Entities
         public SchemaType Schema { get; set; }
 
         public ICollection<FacilitatorEntity> Facilitators { get; set; }
+        public ICollection<CaseMannagerEntity> CaseManagers { get; set; }
         public ICollection<SupervisorEntity> Supervisors { get; set; }
         public ICollection<ThemeEntity> Themes { get; set; }
         public ICollection<ClientEntity> Clients { get; set; }

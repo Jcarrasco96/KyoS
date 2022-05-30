@@ -1,0 +1,48 @@
+﻿@model KyoS.Web.Models.TCMDischargeViewModel
+@{
+    ViewData["Title"] = "Edit Discharge";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("TCMDischarges", "Index", "TCMDischarges")
+            </li>
+            <li class="active">Create</li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+    <h4>Create new Discharge</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+           
+        </div>
+        <div>
+            <form asp-action="Edit" asp-route-id="@Model.Id" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="IdServicePlan" />
+                <partial name="_TCMDischarges" />
+                <div class="form-group col-md-12">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

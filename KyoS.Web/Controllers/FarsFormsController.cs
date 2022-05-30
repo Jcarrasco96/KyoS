@@ -35,7 +35,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -56,7 +56,8 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Mannager")|| User.IsInRole("Supervisor"))
+                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                if (User.IsInRole("Manager")|| User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
                                               .Include(f => f.FarsFormList)
@@ -71,7 +72,8 @@ namespace KyoS.Web.Controllers
 
                                               .Include(f => f.FarsFormList)
 
-                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -330,7 +332,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public IActionResult PrintFarsForm(int id)
         {
             FarsFormEntity entity = _context.FarsForm
@@ -370,7 +372,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> ClientswithoutFARS(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -384,13 +386,28 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("NotAuthorized", "Account");
             }
+            FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+            if (User.IsInRole("Facilitator"))
+            {
+                
+                List<ClientEntity> ClientList = await _context.Clients
+                                                          .Include(n => n.FarsFormList)
+                                                          .Where(n => n.FarsFormList.Count == 0 && n.Clinic.Id == user_logged.Clinic.Id
+                                                             && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                          .ToListAsync();
 
-            List<ClientEntity> ClientList = await _context.Clients
+                return View(ClientList);
+            }
+            else
+            {
+                List<ClientEntity> ClientList = await _context.Clients
                                                           .Include(n => n.FarsFormList)
                                                           .Where(n => n.FarsFormList.Count == 0 && n.Clinic.Id == user_logged.Clinic.Id)
                                                           .ToListAsync();
 
-            return View(ClientList);
+                return View(ClientList);
+            }
+            
 
         }
 
@@ -426,7 +443,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(PendingFars));
         }
 
-        [Authorize(Roles = "Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> PendingFars(int idError = 0)
         {
             UserEntity user_logged = await _context.Users

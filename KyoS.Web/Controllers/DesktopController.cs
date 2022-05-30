@@ -220,7 +220,8 @@ namespace KyoS.Web.Controllers
                                                                 .ThenInclude(n => n.Clinic)
                                                                 .Where(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
                                                                    && m.Status == AdendumStatus.Edition
-                                                                   && m.Mtp.Client.Group.Facilitator.Id == facilitator.Id)).ToListAsync();
+                                                                   && (m.Mtp.Client.IdFacilitatorPSR == facilitator.Id ||
+                                                                       m.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))).ToListAsync();
                 ViewBag.MTPReviewEdition = MTPReviewEdit.Count().ToString();
 
                 List<MTPReviewEntity> MTPReviewPending = await _context.MTPReviews
@@ -312,7 +313,7 @@ namespace KyoS.Web.Controllers
                 notes_review_list = notes_review_list.Where(wc => wc.Messages.Count() > 0).ToList();
                 ViewBag.GroupNotesWithReview = notes_review_list.Count.ToString();
             }
-            if (User.IsInRole("Mannager"))
+            if (User.IsInRole("Manager"))
             {
                 UserEntity user_logged = await _context.Users
                                                        .Include(u => u.Clinic)
@@ -432,6 +433,10 @@ namespace KyoS.Web.Controllers
                 ViewBag.ExpiredMTPs = count.ToString();
             }
             if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction(nameof(Index), "Incidents");
+            }
+            if (User.IsInRole("CaseManager"))
             {
                 return RedirectToAction(nameof(Index), "Incidents");
             }

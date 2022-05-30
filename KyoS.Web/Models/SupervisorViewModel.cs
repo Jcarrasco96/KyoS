@@ -8,6 +8,8 @@ namespace KyoS.Web.Models
 {
     public class SupervisorViewModel : SupervisorEntity
     {
+        internal object TCM_Active;
+
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Clinic")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a clinic.")]

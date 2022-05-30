@@ -1,0 +1,162 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMServicePlanEntity>
+
+@if (Model != null)
+{
+    <div class="col-md-12">
+        @if (ViewBag.Delete == "N")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <strong class="red">
+                    Error. It is not posible delete the TCM Service Plan
+                </strong>
+            </div>
+        }
+    </div>
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Approve TCM Service Plan</h3>
+            </div>
+            <div class="panel-body" id="view-tcmServicePlan">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1">
+
+                            </th>
+                            <th class="col-md-3" align="center">
+                                Name
+                            </th>
+                            <th class="col-md-2" align="center">
+                                Case number
+                            </th>
+                            <th class="col-md-2" align="center">
+                                Casemanager
+                            </th>
+                            <th class="col-md-2" align="center">
+                                Services Plan Date
+                            </th>
+                            <th class="col-md-2" align="center">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td align="center">
+                                    @if (item.TCMDomain.Count() != 0)
+                                    {
+                                        <a class="icon-plus-sign-alt"></a>
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                    <div style="display:none">
+                                        <table class="table table-striped table-bordered">
+                                            <tr>
+                                                <th class="col-md-1"></th>
+                                                <th class="col-md-1">Domain Code</th>
+                                                <th class="col-md-2">Domain Name</th>
+                                                <th class="col-md-5">Need Identified</th>
+                                                <th class="col-md-1">Date Identified</th>
+                                                <th class="col-md-2"></th>
+                                            </tr>
+                                            @foreach (var product in item.TCMDomain)
+                                            {
+                                                <tr>
+                                                    <td align="center">
+                                                        @if (product.TCMObjetive.Count() != 0)
+                                                        {
+                                                            <a class="icon-plus-sign-alt"></a>
+                                                        }
+                                                        else
+                                                        {
+
+                                                        }
+                                                        <div style="display:none">
+                                                            <table class="table table-striped table-bordered">
+                                                                <tr>
+                                                                    <th class="col-md-3">Objetive Number</th>
+                                                                    <th class="col-md-4">Start Date</th>
+                                                                    <th class="col-md-4">Target Date</th>
+                                                                    <th class="col-md-2"></th>
+                                                                </tr>
+                                                                @foreach (var product1 in product.TCMObjetive)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@Html.DisplayFor(modelItem => product1.IdObjetive)</td>
+                                                                        <td>@Html.DisplayFor(modelItem => product1.StartDate)</td>
+                                                                        <td>@Html.DisplayFor(modelItem => product1.TargetDate)</td>
+                                                                        <td>
+                                                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("TCMSupervisor"))
+                                                                            {
+                                                                                @if (item.Approved == 1)
+                                                                                {
+                                                                            <a onclick="showInPopup('@Url.Action("Edit", "TCMObjetives", new { id = product1.Id }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-large" title="Edit"><i class="glyphicon glyphicon-search"></i></a>
+                                                                                }
+                                                                            }
+                                                                        </td>
+                                                                    </tr>
+                                                                    @* cant_unit = cant_unit + product.Units;*@
+                                                                }
+                                                            </table>
+                                                        </div>
+                                                    </td>
+                                                    <td>@Html.DisplayFor(modelItem => product.Code)</td>
+                                                    <td>@Html.DisplayFor(modelItem => product.Name)</td>
+                                                    <td>@Html.DisplayFor(modelItem => product.NeedsIdentified)</td>
+                                                    <td>@Html.DisplayFor(modelItem => product.DateIdentified)</td>
+                                                    <td>
+                                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("TCMSupervisor"))
+                                                        {
+                                                            @if (item.Approved == 1)
+                                                            {
+                                                                <a onclick="showInPopup('@Url.Action("Edit", "TCMDomains", new { id = product.Id }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-large" title="Edit"><i class="glyphicon glyphicon-search"></i></a>
+                                                            }
+                                                        }
+                                                    </td>
+                                                </tr>
+                                                @* cant_unit = cant_unit + product.Units;*@
+                                            }
+                                        </table>
+                                    </div>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TcmClient.Client.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TcmClient.CaseNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TcmClient.Casemanager.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateServicePlan)
+                                </td>
+                                <td align="right">
+                                    @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("TCMSupervisor"))
+                                    {
+                                        @if (item.Approved == 1)
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-small"><i class="glyphicon glyphicon-search"></i></a>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+

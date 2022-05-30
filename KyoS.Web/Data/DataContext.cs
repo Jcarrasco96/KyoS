@@ -13,7 +13,9 @@ namespace KyoS.Web.Data
         public DbSet<ClinicEntity> Clinics { get; set; }
         public DbSet<ClientEntity> Clients { get; set; }
         public DbSet<SupervisorEntity> Supervisors { get; set; }
+        public DbSet<TCMSupervisorEntity> TCMSupervisors { get; set; }
         public DbSet<FacilitatorEntity> Facilitators { get; set; }
+        public DbSet<CaseMannagerEntity> CaseManagers { get; set; }
         public DbSet<ThemeEntity> Themes { get; set; }
         public DbSet<ActivityEntity> Activities { get; set; }
         public DbSet<NotePrototypeEntity> NotesPrototypes { get; set; }
@@ -57,6 +59,19 @@ namespace KyoS.Web.Data
         public DbSet<GroupNoteEntity> GroupNotes { get; set; }
         public DbSet<GroupNote_Activity> GroupNotes_Activities { get; set; }
         public DbSet<SettingEntity> Settings { get; set; }
+        public DbSet<TCMServiceEntity> TCMServices { get; set; }
+        public DbSet<TCMStageEntity> TCMStages { get; set; }
+        public DbSet<TCMClientEntity> TCMClient { get; set; }
+        public DbSet<TCMObjetiveEntity> TCMObjetives { get; set; }
+        public DbSet<TCMDomainEntity> TCMDomains { get; set; }
+        public DbSet<TCMServicePlanEntity> TCMServicePlans { get; set; }
+        public DbSet<TCMAdendumEntity> TCMAdendums { get; set; }
+        public DbSet<TCMServicePlanReviewDomainEntity> TCMServicePlanReviewDomains { get; set; }
+        public DbSet<TCMServicePlanReviewEntity> TCMServicePlanReviews { get; set; }
+        public DbSet<TCMServicePlanReviewDomainObjectiveEntity> TCMServicePlanReviewDomainObjectives { get; set; }
+        public DbSet<TCMDischargeFollowUpEntity> TCMDischargeFollowUp { get; set; }
+        public DbSet<TCMDischargeEntity> TCMDischarge { get; set; }
+        public DbSet<TCMDischargeServiceStatusEntity> TCMDischargeServiceStatus { get; set; }
         public DbSet<IntakeScreeningEntity> IntakeScreenings { get; set; }
         public DbSet<IntakeConsentForTreatmentEntity> IntakeConsentForTreatment { get; set; }
         public DbSet<IntakeConsentForReleaseEntity> IntakeConsentForRelease { get; set; }
@@ -92,6 +107,28 @@ namespace KyoS.Web.Data
             modelBuilder.Entity<SupervisorEntity>()
                         .HasIndex(s => s.Name)
                         .IsUnique();
+            
+            modelBuilder.Entity<TCMSupervisorEntity>()
+                        .HasIndex(s => s.Name)
+                        .IsUnique();
+
+            modelBuilder.Entity<CaseMannagerEntity>()
+                        .HasIndex(s => s.Name)
+                        .IsUnique();
+
+            modelBuilder.Entity<TCMServiceEntity>()
+                        .HasIndex(s => s.Name)
+                        .IsUnique();
+
+            modelBuilder.Entity<TCMStageEntity>()
+                        .HasOne(o => o.tCMservice)
+                        .WithMany(g => g.Stages)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            /*modelBuilder.Entity<TCMStageEntity>()
+                        .HasOne(o => o.tCMservice)
+                        .WithMany(g => g.ID_Etapa)
+                        .OnDelete(DeleteBehavior.Cascade);*/
 
             //modelBuilder.Entity<ClientEntity>()
             //    .HasIndex(c => c.Name)
@@ -181,6 +218,50 @@ namespace KyoS.Web.Data
                         .HasOne(c => c.Setting)
                         .WithOne(s => s.Clinic)
                         .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMDomainEntity>()
+                                    .HasIndex(s => s.Id)
+                                    .IsUnique();
+
+            modelBuilder.Entity<TCMObjetiveEntity>()
+                        .HasOne(o => o.TcmDomain)
+                        .WithMany(g => g.TCMObjetive)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMServicePlanEntity>()
+                                   .HasIndex(s => s.Id)
+                                   .IsUnique();
+
+            modelBuilder.Entity<TCMAdendumEntity>()
+                                   .HasIndex(s => s.Id)
+                                   .IsUnique();
+
+            modelBuilder.Entity<TCMServicePlanReviewDomainEntity>()
+                                   .HasIndex(s => s.Id)
+                                   .IsUnique();
+
+            modelBuilder.Entity<TCMServicePlanReviewEntity>()
+                                   .HasIndex(s => s.Id)
+                                   .IsUnique();
+
+            modelBuilder.Entity<TCMServicePlanReviewDomainObjectiveEntity>()
+                                   .HasIndex(s => s.Id)
+                                   .IsUnique();
+
+            modelBuilder.Entity<TCMDischargeEntity>()
+                                  .HasIndex(s => s.Id)
+                                  .IsUnique();
+
+            modelBuilder.Entity<TCMDischargeFollowUpEntity>()
+                       .HasOne(o => o.TcmDischarge)
+                       .WithMany(g => g.TcmDischargeFollowUp)
+                       .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMDischargeServiceStatusEntity>()
+                       .HasOne(o => o.TcmDischarge)
+                       .WithMany(g => g.TcmDischargeServiceStatus)
+                       .OnDelete(DeleteBehavior.Cascade);
+
 
             modelBuilder.Entity<ClientEntity>()
                         .HasOne(c => c.IntakeScreening)
