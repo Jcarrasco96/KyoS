@@ -70,7 +70,8 @@ namespace KyoS.Web.Controllers
                                                   .ThenInclude(c => c.Clinic)
                                                   .Include(c => c.Client.Group)
                                                   .Where(m => (m.Client.Clinic.Id == clinic.Id 
-                                                        && m.Client.Group.Facilitator.Id == facilitator.Id))
+                                                        && (m.Client.IdFacilitatorPSR == facilitator.Id 
+                                                            || m.Client.IndividualTherapyFacilitator.Id == facilitator.Id)))
                                                   .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
                     }
                     if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
@@ -2126,20 +2127,38 @@ namespace KyoS.Web.Controllers
             }
             else
             {
+                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
                 if (clinic != null)
                 {
-                   return View(await _context.MTPs
+                    if (User.IsInRole("Facilitator"))
+                    {
+                        return View(await _context.MTPs
+                                                  .Include(m => m.AdendumList)
+                                                  .ThenInclude(c => c.Facilitator)
 
-                                             .Include(m => m.AdendumList)
-                                             .ThenInclude(c => c.Facilitator)
+                                                  .Include(c => c.Client)
+                                                  .ThenInclude(c => c.Clinic)
 
-                                             .Include(c => c.Client)
-                                             .ThenInclude(c => c.Clinic)
+                                                  .Where(m => (m.Client.Clinic.Id == clinic.Id && m.Client.Status == StatusType.Open
+                                                        && (m.Client.IdFacilitatorPSR == facilitator.Id || m.Client.IndividualTherapyFacilitator.Id == facilitator.Id)))
+                                                  .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
 
-                                             .Where(m => (m.Client.Clinic.Id == clinic.Id && m.Active == true && m.Client.Status == StatusType.Open))
-                                             .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
-               
+                    }
+                    else
+                    {
+                        return View(await _context.MTPs
+                                                  .Include(m => m.AdendumList)
+                                                  .ThenInclude(c => c.Facilitator)
+
+                                                  .Include(c => c.Client)
+                                                  .ThenInclude(c => c.Clinic)
+
+                                                  .Where(m => (m.Client.Clinic.Id == clinic.Id && m.Client.Status == StatusType.Open))
+                                                  .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+
+                    }
+
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");
@@ -2498,10 +2517,28 @@ namespace KyoS.Web.Controllers
             }
             else
             {
+
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
                 if (clinic != null)
                 {
-                    return View(await _context.Adendums
+                    FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    if (User.IsInRole("Facilitator"))
+                    {
+                        return View(await _context.Adendums
+                                              .Include(c => c.Mtp)
+                                              .ThenInclude(c => c.Client)
+                                              .ThenInclude(c => c.Clinic)
+                                              .Include(c => c.Goals)
+                                              .ThenInclude(c => c.Objetives)
+                                              .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
+                                                    && m.Status == AdendumStatus.Pending && (m.Mtp.Client.IdFacilitatorPSR == facilitator.Id 
+                                                    || m.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                              .OrderBy(m => m.Mtp.Client.Clinic.Name).ToListAsync());
+
+                    }
+                    else
+                    {
+                        return View(await _context.Adendums
                                               .Include(c => c.Mtp)
                                               .ThenInclude(c => c.Client)
                                               .ThenInclude(c => c.Clinic)
@@ -2510,6 +2547,8 @@ namespace KyoS.Web.Controllers
                                               .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
                                                     && m.Status == AdendumStatus.Pending)
                                               .OrderBy(m => m.Mtp.Client.Clinic.Name).ToListAsync());
+
+                    }
 
                 }
             }
@@ -2756,10 +2795,28 @@ namespace KyoS.Web.Controllers
             }
             else
             {
+
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
                 if (clinic != null)
                 {
-                    return View(await _context.MTPReviews
+                    FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    if (User.IsInRole("Facilitator"))
+                    {
+                        return View(await _context.MTPReviews
+                                              .Include(c => c.Mtp)
+                                              .ThenInclude(c => c.Client)
+                                              .ThenInclude(c => c.Clinic)
+                                              .Include(c => c.Mtp.Goals)
+                                              .ThenInclude(c => c.Objetives)
+                                              .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
+                                                    && m.Status == AdendumStatus.Pending && (m.Mtp.Client.IdFacilitatorPSR == facilitator.Id 
+                                                        || m.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                              .OrderBy(m => m.Mtp.Client.Clinic.Name).ToListAsync());
+
+                    }
+                    else
+                    {
+                        return View(await _context.MTPReviews
                                               .Include(c => c.Mtp)
                                               .ThenInclude(c => c.Client)
                                               .ThenInclude(c => c.Clinic)
@@ -2768,6 +2825,8 @@ namespace KyoS.Web.Controllers
                                               .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
                                                     && m.Status == AdendumStatus.Pending)
                                               .OrderBy(m => m.Mtp.Client.Clinic.Name).ToListAsync());
+
+                    }
 
                 }
             }
@@ -3034,18 +3093,20 @@ namespace KyoS.Web.Controllers
 
                                                   .Include(c => c.Client)
                                                   .ThenInclude(c => c.Clinic)
-                                                  .Include(c => c.Client.Group)
+                                                  
                                                   .Where(m => (m.Client.Clinic.Id == clinic.Id
-                                                        && m.Client.Group.Facilitator.Id == facilitator.Id
+                                                        && (m.Client.IdFacilitatorPSR == facilitator.Id 
+                                                            || m.Client.IndividualTherapyFacilitator.Id == facilitator.Id)
                                                         ))
-                                                  .OrderBy(m => m.Client.Clinic.Name).ToListAsync();
+                                                  .OrderBy(m => m.Client.Clinic.Name)
+                                                  .ToListAsync();
 
                         List<MTPEntity> mtp1 = new List<MTPEntity>();
                         foreach (var item in mtp)
                         {
                             foreach (var value in item.MtpReviewList)
                             {
-                                if (value.Status == AdendumStatus.Edition && item.Client.Group.Facilitator.Id == facilitator.Id)
+                                if (value.Status == AdendumStatus.Edition && (item.Client.IdFacilitatorPSR == facilitator.Id || item.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
                                     mtp1.Add(item);
                             
                             }
