@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="05/17/2022 13:42:09" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="05/30/2022 15:44:47" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3HFcyuKQz7H1l1E6VrTvQ8Q==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3KT0pHzg4eKwkqNyADEBD8Q==">
       <TableDataSource Name="Goals1" Alias="Goals2" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -22,7 +22,7 @@
         <Column Name="GoalId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3OqT4KRf2JFP+zu8Bb+i0UQ==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3GJwf07H4JBmU22ioYMDdjg==">
       <TableDataSource Name="Goals2" Alias="Goals3" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -43,7 +43,7 @@
         <Column Name="GoalId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3NaSu5R0PAiOO01LTmvejjA==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3jJ1B6dsCoPtojR+CnYxmww==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -246,7 +246,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <DataBand Name="Data5" Top="338.17" Width="778.3" Height="113.4">
+    <DataBand Name="Data5" Top="338.17" Width="778.3" Height="113.4" CanGrow="true" CanShrink="true">
       <TextObject Name="Text778" Top="5.45" Width="774.9" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="&lt;b&gt;Clinical interventions:&lt;/b&gt; [Objetives1.Intervention]" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TableObject Name="Table62" Top="37.8" Width="774.9" Height="62.37">
         <TableColumn Name="Column208" Width="151.2"/>
@@ -279,7 +279,7 @@
     <DataBand Name="Data8" Top="507.06" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives1">
       <TableObject Name="Table63" Width="774.9" Height="37.8">
         <TableColumn Name="Column214" Width="774.9"/>
-        <TableRow Name="Row288" Height="37.8">
+        <TableRow Name="Row288" Height="37.8" AutoSize="true">
           <TableCell Name="Cell1274" Text="&lt;b&gt;Objective [Objetives2.Objetive]:&lt;/b&gt; [Objetives2.Description]" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
         </TableRow>
       </TableObject>
@@ -317,7 +317,7 @@
     <DataBand Name="Data11" Top="708.43" Width="778.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="Objetives2">
       <TableObject Name="Table65" Width="774.9" Height="37.8">
         <TableColumn Name="Column221" Width="774.9"/>
-        <TableRow Name="Row291" Height="37.8">
+        <TableRow Name="Row291" Height="37.8" AutoSize="true">
           <TableCell Name="Cell1287" Text="&lt;b&gt;Objective [Objetives3.Objetive]:&lt;/b&gt; [Objetives3.Description]" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
         </TableRow>
       </TableObject>

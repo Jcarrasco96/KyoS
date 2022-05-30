@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
 @{
-    ViewData["Title"] = "Discharge";
+    ViewData["Title"] = "Discharges";
 }
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
@@ -10,14 +10,14 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Discharge</li>
+        <li class="active">Discharges</li>
     </ul><!--.breadcrumb-->
 </div>
 <div class="row">
     <div class="col-md-12">
         @*<div class="alert alert-warning" role="alert">
-            <span class="sr-only"></span>*@
-        <strong>Note: </strong> All clients will be displayed, orange color means the client has not fars
+        <span class="sr-only"></span>*@
+        <strong>Note: </strong> Only closed clients will be displayed, orange color means the client has not discharge documents
         @*</div>*@
     </div>
     <div class="col-md-12">
@@ -39,7 +39,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Discharge</h3>
+                <h3 class="panel-title">Discharges</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -47,7 +47,7 @@
                         <tr>
                             <th class="col-md-1">
                             </th>
-                            <th class="col-md-4">
+                            <th class="col-md-3">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -62,7 +62,7 @@
                             <th class="col-md-2" style="text-align:center;">
                                 MH Therapy
                             </th>
-                            <th class="col-md-1" align="right">
+                            <th class="col-md-2" align="right">
                             </th>
                         </tr>
                     </thead>
