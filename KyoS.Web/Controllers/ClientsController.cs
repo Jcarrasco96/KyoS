@@ -464,7 +464,7 @@ namespace KyoS.Web.Controllers
             return View(clientViewModel);
         }
 
-        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Manager, Facilitator")]
         public async Task<IActionResult> ClientsWithoutMTP()
         {
             UserEntity user_logged = await _context.Users
@@ -755,7 +755,7 @@ namespace KyoS.Web.Controllers
             _context.SaveChanges();
         }
 
-        [Authorize(Roles = "Mannager, Supervisor")]
+        [Authorize(Roles = "Manager, Supervisor")]
         public async Task<IActionResult> DocumentForClient()
         {
             if (User.IsInRole("Admin"))

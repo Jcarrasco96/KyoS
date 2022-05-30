@@ -35,7 +35,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -56,7 +56,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Mannager")|| User.IsInRole("Supervisor"))
+                if (User.IsInRole("Manager")|| User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
                                               .Include(f => f.Clients_Diagnostics)
@@ -959,7 +959,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> IndexBehavioralHealthHistory(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -980,7 +980,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Mannager") || User.IsInRole("Supervisor"))
+                if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
                                               .Include(f => f.Clients_Diagnostics)
@@ -1102,7 +1102,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction(nameof(CreateBehavioral), new { id = Bio_BehavioralEntity.Client.Id });
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public IActionResult PrintBio(int id)
         {
             BioEntity entity = _context.Bio
@@ -1155,7 +1155,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> ClientswithoutBIO(int idError = 0)
         {
             UserEntity user_logged = await _context.Users

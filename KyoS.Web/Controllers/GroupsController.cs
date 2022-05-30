@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Mannager, Facilitator")]
+    [Authorize(Roles = "Manager, Facilitator")]
     public class GroupsController : Controller
     {
         private readonly DataContext _context;
@@ -31,7 +31,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Mannager, Facilitator")]
+        [Authorize(Roles = "Manager, Facilitator")]
         public async Task<IActionResult> Index()
         {
             UserEntity user_logged = _context.Users
@@ -55,7 +55,7 @@ namespace KyoS.Web.Controllers
                 ViewBag.Message = "1";
             }
 
-            if (user_logged.UserType.ToString() == "Mannager")
+            if (user_logged.UserType.ToString() == "Manager")
             {
                 return View(await _context.Groups
 
@@ -84,7 +84,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Home/Error404");
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Create(int id = 0, int error = 0, int idFacilitator = 0, int idClient = 0)
         {
             if (id == 1)
@@ -154,7 +154,7 @@ namespace KyoS.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(GroupViewModel model, IFormCollection form)
         {
@@ -271,7 +271,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Edit(int? id, int error = 0, int idFacilitator = 0, int idClient = 0)
         {
             if (id == null)
@@ -340,7 +340,7 @@ namespace KyoS.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(GroupViewModel model, IFormCollection form)
         {
@@ -473,14 +473,14 @@ namespace KyoS.Web.Controllers
             return View(groupViewModel);
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Print(int id)
         {            
             var result = await _reportHelper.GroupAsyncReport(id);
             return await Task.Run(() => File(result, System.Net.Mime.MediaTypeNames.Application.Pdf));            
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Group()
         {
             UserEntity user_logged = await _context.Users
@@ -511,7 +511,7 @@ namespace KyoS.Web.Controllers
                                       .ToListAsync());
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> CreateGT(int id = 0, int error = 0, int idFacilitator = 0, int idClient = 0)
         {
             if (id == 1)
@@ -583,7 +583,7 @@ namespace KyoS.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateGT(GroupViewModel model, IFormCollection form)
         {
@@ -713,7 +713,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> EditGT(int? id, int error = 0, int idFacilitator = 0, int idClient = 0)
         {
             if (id == null)
@@ -786,7 +786,7 @@ namespace KyoS.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditGT(GroupViewModel model, IFormCollection form)
         {
@@ -931,7 +931,7 @@ namespace KyoS.Web.Controllers
             return View(groupViewModel);
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         #region Utils Functions     
         private bool VerifyFreeTimeOfFacilitator(int idFacilitator, ServiceType service, string session, DateTime date)
         {
@@ -1026,7 +1026,7 @@ namespace KyoS.Web.Controllers
             return true;
         }
 
-        [Authorize(Roles = "Mannager")]
+        [Authorize(Roles = "Manager")]
         private bool VerifyNotesAtSameTime(int idClient, string session, DateTime date, ServiceType service)
         {
             //Individual notes

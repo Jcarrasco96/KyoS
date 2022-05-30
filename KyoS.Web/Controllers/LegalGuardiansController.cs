@@ -23,6 +23,7 @@ namespace KyoS.Web.Controllers
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
         }
+        
         public async Task<IActionResult> Index(int idError = 0)
         {
             UserEntity user_logged = _context.Users

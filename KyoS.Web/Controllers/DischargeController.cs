@@ -35,7 +35,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
         
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -54,7 +54,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Mannager") || User.IsInRole("Supervisor"))
+                if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
                                               .Include(f => f.DischargeList)
@@ -387,7 +387,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public IActionResult PrintDischarge(int id)
         {
             DischargeEntity entity = _context.Discharge
@@ -434,7 +434,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> ClientswithoutDischarge(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -560,7 +560,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(PendingDischarge));
         }
 
-        [Authorize(Roles = "Supervisor, Mannager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Manager, Facilitator")]
         public async Task<IActionResult> PendingDischarge(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -590,7 +590,7 @@ namespace KyoS.Web.Controllers
                                                  .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
                     }
 
-                    if (User.IsInRole("Mannager") || User.IsInRole("Supervisor"))
+                    if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
                     {
                         return View(await _context.Discharge
                                                   .Include(c => c.Client)
@@ -606,7 +606,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> DischargeInEdit(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -625,7 +625,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Mannager"))
+                if (User.IsInRole("Manager"))
                     return View(await _context.Discharge
 
                                               .Include(f => f.Client)

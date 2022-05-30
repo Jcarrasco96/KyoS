@@ -35,7 +35,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -56,7 +56,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Mannager")|| User.IsInRole("Supervisor"))
+                if (User.IsInRole("Manager")|| User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
                                               .Include(f => f.FarsFormList)
@@ -330,7 +330,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public IActionResult PrintFarsForm(int id)
         {
             FarsFormEntity entity = _context.FarsForm
@@ -370,7 +370,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> ClientswithoutFARS(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -426,7 +426,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(PendingFars));
         }
 
-        [Authorize(Roles = "Supervisor, Mannager")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> PendingFars(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
