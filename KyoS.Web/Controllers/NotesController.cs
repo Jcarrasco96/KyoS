@@ -8687,7 +8687,7 @@ namespace KyoS.Web.Controllers
                                                            .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                       && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
                                                                       && wc.Messages.Count() > 0
-                                                                      && wc.Workday.Service == ServiceType.PSR))
+                                                                      && (wc.Workday.Service == ServiceType.PSR || wc.Workday.Service == ServiceType.Individual)))
                                                            .ToListAsync());
             }
 
@@ -8710,9 +8710,9 @@ namespace KyoS.Web.Controllers
                                                                .Include(wc => wc.Messages)
 
                                                                .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                                   && wc.Note.Status == NoteStatus.Pending
-                                                                   && wc.Messages.Count() > 0
-                                                                   && wc.Workday.Service == ServiceType.PSR))
+                                                                   && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
+                                                                      && wc.Messages.Count() > 0
+                                                                      && (wc.Workday.Service == ServiceType.PSR || wc.Workday.Service == ServiceType.Individual)))
                                                                .ToListAsync());
                 }
             }

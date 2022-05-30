@@ -220,7 +220,8 @@ namespace KyoS.Web.Controllers
                                                                 .ThenInclude(n => n.Clinic)
                                                                 .Where(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
                                                                    && m.Status == AdendumStatus.Edition
-                                                                   && m.Mtp.Client.Group.Facilitator.Id == facilitator.Id)).ToListAsync();
+                                                                   && (m.Mtp.Client.IdFacilitatorPSR == facilitator.Id ||
+                                                                       m.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))).ToListAsync();
                 ViewBag.MTPReviewEdition = MTPReviewEdit.Count().ToString();
 
                 List<MTPReviewEntity> MTPReviewPending = await _context.MTPReviews

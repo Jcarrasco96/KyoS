@@ -56,6 +56,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
+                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
                 if (User.IsInRole("Manager")|| User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
@@ -74,7 +75,8 @@ namespace KyoS.Web.Controllers
                                               .Include(f => f.Clients_Diagnostics)
                                               .Include(g => g.Bio)
                                               .Include(g => g.List_BehavioralHistory)
-                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                               && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -980,6 +982,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
+                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
                 if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
@@ -998,7 +1001,8 @@ namespace KyoS.Web.Controllers
                                               .Include(g => g.Bio)
                                               .Include(g => g.List_BehavioralHistory)
 
-                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                    && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -1170,13 +1174,28 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
-            List<ClientEntity> ClientList = await _context.Clients
+            else
+            {
+                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                if (User.IsInRole("Facilitator"))
+                {
+                    List<ClientEntity> ClientList = await _context.Clients
+                                                          .Include(n => n.Bio)
+                                                          .Where(n => n.Bio == null && n.Clinic.Id == user_logged.Clinic.Id
+                                                            && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                          .ToListAsync();
+                    return View(ClientList);
+                }
+                else
+                {
+                    List<ClientEntity> ClientList = await _context.Clients
                                                           .Include(n => n.Bio)
                                                           .Where(n => n.Bio == null && n.Clinic.Id == user_logged.Clinic.Id)
                                                           .ToListAsync();
+                    return View(ClientList);
+                }
 
-            return View(ClientList);
-
+            }
         }
     }
 }

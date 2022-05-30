@@ -49,6 +49,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
+                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
                 if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
@@ -63,8 +64,9 @@ namespace KyoS.Web.Controllers
                     return View(await _context.Clients
 
                                               .Include(f => f.MedicationList)
-                                              
-                                              .Where(n => (n.Clinic.Id == user_logged.Clinic.Id))
+
+                                              .Where(n => (n.Clinic.Id == user_logged.Clinic.Id)
+                                                && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
