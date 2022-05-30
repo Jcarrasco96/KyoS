@@ -3296,8 +3296,7 @@ namespace KyoS.Web.Helpers
                 StartTime = model.StartTime,
                 DataOfService = model.DataOfService
 
-            };
-           
-        }
+            };           
+        }        
     }
 }
