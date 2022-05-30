@@ -336,11 +336,10 @@ namespace KyoS.Web.Data
                         .HasForeignKey<IntakeMedicalHistoryEntity>(s => s.Client_FK);
 
             modelBuilder.Entity<ClientEntity>()
-                        .HasOne(c => c.Discharge)
+                        .HasMany(c => c.DischargeList)
                         .WithOne(s => s.Client)
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .HasForeignKey<DischargeEntity>(s => s.Client_FK);
-
+                        .OnDelete(DeleteBehavior.Cascade);
+                       
             modelBuilder.Entity<ClientEntity>()
                         .HasMany(c => c.MedicationList)
                         .WithOne(s => s.Client)

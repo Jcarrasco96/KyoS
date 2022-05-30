@@ -50,5 +50,7 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Clinical Director")]
         public string ClinicalDirector { get; set; }
+
+        public string ProviderId { get; set; }
     }
 }

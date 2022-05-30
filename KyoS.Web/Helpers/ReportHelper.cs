@@ -2919,7 +2919,7 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeMedicalHistory");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetDischargeDS(intake.Client.Discharge));
+            dataSet.Tables.Add(GetDischargeDS(intake.Client.DischargeList.ElementAt(0)));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
 
             WebReport.Report.Prepare();
@@ -3005,7 +3005,7 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeMedicalHistory");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetDischargeDS(intake.Client.Discharge));
+            dataSet.Tables.Add(GetDischargeDS(intake.Client.DischargeList.ElementAt(0)));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
 
             WebReport.Report.Prepare();

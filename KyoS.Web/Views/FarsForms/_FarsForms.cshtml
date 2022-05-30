@@ -17,7 +17,7 @@
         
     <strong>1.*CLIENT SSN:</strong>  @Html.DisplayFor(modelItem => Model.Client.SSN)
 
-    <strong>2.*CONTRACTOR ID:</strong>  <input asp-for="ContractorID">
+    <strong>2.*CONTRACTOR ID:</strong>  <input asp-for="ContractorID" readonly>
         Federal Employer ID# of agency directly contracted with SAMH.  If your
         agency is subcontracted, enter the ID# of the contractor/ASO here.
         
@@ -34,7 +34,7 @@
     </div>
     <div class="col-md-6">
     <pre>
-    <strong>5. *PROVIDER ID:</strong>  <input asp-for="ProviderId">
+    <strong>5. *PROVIDER ID:</strong>  <input asp-for="ProviderId" readonly>
         Federal Employer ID# of the provider agency actually completing the FARS. 
         Subcontracted agencies Tax ID# goes here. Contractor agencies 
         reenter the Contractor ID.
@@ -90,7 +90,7 @@
 </div>
 <div class="col-md-12">    
     <pre>
-    <strong>29. *ContID 1:   </strong>                  <input asp-for="ContID1">
+    <strong>29. *ContID 1:   </strong>                  <input asp-for="ContID1" readonly>
 
     <strong>30.  ContID 2:   </strong>                  <input asp-for="ContID2">
 
@@ -103,7 +103,7 @@
     <pre>
     <strong>33.  Medicaid Recipient ID:  </strong>  <input asp-for="MedicaidRecipientID">       <strong>35.  MCO ID: </strong>               <input asp-for="MCOID" /> 
 
-    <strong>34.  Medicaid Provider ID: </strong>    <input asp-for="MedicaidProviderID">       <strong>36.  County of Service: </strong>    <input asp-for="Country" />
+    <strong>34.  Medicaid Provider ID: </strong>    <input asp-for="MedicaidProviderID" readonly>       <strong>36.  County of Service: </strong>    <input asp-for="Country" />
     </pre>
 </div>
 <div class="col-md-12">

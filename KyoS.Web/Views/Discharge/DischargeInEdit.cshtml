@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.DischargeEntity>
 @{
     ViewData["Title"] = "Discharges in Edit";
 }
@@ -34,13 +34,13 @@
                     <thead>
                         <tr>
                             <th class="col-md-3">
-                                @Html.DisplayNameFor(model => model.Name)
+                                @Html.DisplayNameFor(model => model.Client.Name)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.Code)
+                                @Html.DisplayNameFor(model => model.Client.Code)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.AdmisionDate)
+                                @Html.DisplayNameFor(model => model.Client.AdmisionDate)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Status
@@ -55,35 +55,35 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            @if (item.Discharge == null)
+                            @if (item == null)
                             {
                                 <tr style="color:orange">
                                     <td>
-                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
                                             <i class="glyphicon glyphicon-user btn-danger"></i>
                                         }
-                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
                                         {
                                             <i class="glyphicon glyphicon-user btn-primary"></i>
                                         }
                                         &nbsp;
-                                        @Html.DisplayFor(modelItem => item.Name)
+                                        @Html.DisplayFor(modelItem => item.Client.Name)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Code)
+                                        @Html.DisplayFor(modelItem => item.Client.Code)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                        @Html.DisplayFor(modelItem => item.Client.AdmisionDate)
                                     </td>
                                     <td align="center">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
                                         {
                                             <span class="label label-warning">
                                                 Open
                                             </span>
                                         }
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
                                         {
                                             <span class="label label-default">
                                                 Close
@@ -91,10 +91,10 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Service)
+                                        @Html.DisplayFor(modelItem => item.TypeService)
                                     </td>
                                     <td align="right">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close && User.IsInRole("Facilitator"))
+                                        @if (User.IsInRole("Facilitator"))
                                         {
                                             <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="New Discharge"><i class="glyphicon glyphicon-plus"></i></a>
                                             <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>
@@ -112,31 +112,31 @@
                             {
                                 <tr>
                                     <td>
-                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
                                             <i class="glyphicon glyphicon-user btn-danger"></i>
                                         }
-                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
                                         {
                                             <i class="glyphicon glyphicon-user btn-primary"></i>
                                         }
                                         &nbsp;
-                                        @Html.DisplayFor(modelItem => item.Name)
+                                        @Html.DisplayFor(modelItem => item.Client.Name)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Code)
+                                        @Html.DisplayFor(modelItem => item.Client.Code)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                        @Html.DisplayFor(modelItem => item.Client.AdmisionDate)
                                     </td>
                                     <td align="center">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
                                         {
                                             <span class="label label-success">
                                                 Open
                                             </span>
                                         }
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
                                         {
                                             <span class="label label-default">
                                                 Close
@@ -144,24 +144,24 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Service)
+                                        @Html.DisplayFor(modelItem => item.TypeService)
                                     </td>
                                     <td align="right">
                                         @if (User.IsInRole("Supervisor"))
                                         {
-                                            @if (@item.Discharge.Status == KyoS.Common.Enums.DischargeStatus.Pending)
+                                            @if (@item.Status == KyoS.Common.Enums.DischargeStatus.Pending)
                                             {
-                                                <a asp-action="Edit" asp-route-id="@item.Discharge.Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                <a asp-action="ApproveDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Approve of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="ApproveDischarge" asp-route-id="@item.Id" class="btn btn-success" title="Approve of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
                                                 <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                             else
                                             {
                                                 <a class="btn btn-warning disabled" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
                                                 <a class="btn btn-success disabled" title="Approve of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
-                                                @if (item.Discharge.Status == KyoS.Common.Enums.DischargeStatus.Approved)
+                                                @if (item.Status == KyoS.Common.Enums.DischargeStatus.Approved)
                                                 {
-                                                    <a asp-action="PrintDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                    <a asp-action="PrintDischarge" asp-route-id="@item.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
                                                 else
                                                 {
@@ -171,16 +171,16 @@
                                         }
                                         else
                                         {
-                                            @if (item.Status == KyoS.Common.Enums.StatusType.Close && @item.Discharge.Status != KyoS.Common.Enums.DischargeStatus.Approved && item.Discharge.CreatedBy == User.Identity.Name)
+                                            @if (@item.Status != KyoS.Common.Enums.DischargeStatus.Approved && item.CreatedBy == User.Identity.Name)
                                             {
-                                                <a asp-action="Edit" asp-route-id="@item.Discharge.Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                @if (item.Discharge.Status == KyoS.Common.Enums.DischargeStatus.Pending)
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                @if (item.Status == KyoS.Common.Enums.DischargeStatus.Pending)
                                                 {
                                                     <a class="btn btn-success disabled" title="Finish edition of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
                                                 }
                                                 else
                                                 {
-                                                    <a asp-action="FinishEditingDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Finish edition of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    <a asp-action="FinishEditingDischarge" asp-route-id="@item.Id" class="btn btn-success" title="Finish edition of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
                                                 }
                                                 <a class="btn btn-success disabled" title="Print Discharge"><i class="glyphicon glyphicon-print"></i></a>
                                             }
@@ -188,9 +188,9 @@
                                             {
                                                 <a class="btn btn-warning disabled" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
                                                 <a class="btn btn-success disabled" title="Finish edition of Discharge"><i class="glyphicon glyphicon-ok"></i></a>
-                                                @if (item.Discharge.Status == KyoS.Common.Enums.DischargeStatus.Approved)
+                                                @if (item.Status == KyoS.Common.Enums.DischargeStatus.Approved)
                                                 {
-                                                    <a asp-action="PrintDischarge" asp-route-id="@item.Discharge.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                    <a asp-action="PrintDischarge" asp-route-id="@item.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
                                                 else
                                                 {

@@ -783,7 +783,7 @@ namespace KyoS.Web.Controllers
                                                               .ThenInclude(c => c.MtpReviewList)
                                                               .Include(c => c.FarsFormList)
                                                               .Include(c => c.Bio)
-                                                              .Include(c => c.Discharge)
+                                                              .Include(c => c.DischargeList)
                                                               .Include(c => c.IntakeAccessToServices)
                                                               .Include(c => c.IntakeAcknowledgementHipa)
                                                               .Include(c => c.IntakeConsentForRelease)

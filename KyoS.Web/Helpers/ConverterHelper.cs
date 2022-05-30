@@ -35,7 +35,8 @@ namespace KyoS.Web.Helpers
                 ZipCode = model.ZipCode,
                 Phone = model.Phone,
                 FaxNo = model.FaxNo,
-                ClinicalDirector = model.ClinicalDirector
+                ClinicalDirector = model.ClinicalDirector,
+                ProviderId = model.ProviderId
             };
         }
 
@@ -53,7 +54,8 @@ namespace KyoS.Web.Helpers
                 ZipCode = clinicEntity.ZipCode,
                 Phone = clinicEntity.Phone,
                 FaxNo = clinicEntity.FaxNo,
-                ClinicalDirector = clinicEntity.ClinicalDirector
+                ClinicalDirector = clinicEntity.ClinicalDirector,
+                ProviderId = clinicEntity.ProviderId
             };
         }
 

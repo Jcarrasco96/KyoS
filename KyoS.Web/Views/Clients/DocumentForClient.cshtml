@@ -218,7 +218,7 @@
                                     }
                                 </td>
                                 <td align="center">
-                                    @if (item.Discharge != null && item.Status == KyoS.Common.Enums.StatusType.Close)
+                                    @if (item.DischargeList != null && item.Status == KyoS.Common.Enums.StatusType.Close)
                                     {
                                         <span class="label label-success">
                                             DCHG
@@ -226,7 +226,7 @@
                                     }
                                     else
                                     {
-                                        @if (item.Discharge == null && item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        @if (item.DischargeList == null && item.Status == KyoS.Common.Enums.StatusType.Close)
                                         {
                                             <span class="label label-danger">
                                                 X
