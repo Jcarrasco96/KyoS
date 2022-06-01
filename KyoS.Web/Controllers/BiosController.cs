@@ -35,7 +35,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -56,8 +56,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                if (User.IsInRole("Manager")|| User.IsInRole("Supervisor"))
+                if (User.IsInRole("Mannager")|| User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
                                               .Include(f => f.Clients_Diagnostics)
@@ -75,8 +74,7 @@ namespace KyoS.Web.Controllers
                                               .Include(f => f.Clients_Diagnostics)
                                               .Include(g => g.Bio)
                                               .Include(g => g.List_BehavioralHistory)
-                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                               && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -915,6 +913,46 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        public IActionResult CreateBehavioralModal(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            Bio_BehavioralHistoryViewModel model;
+
+            if (User.IsInRole("Supervisor"))
+            {
+                if (user_logged.Clinic != null)
+                {
+
+                    model = new Bio_BehavioralHistoryViewModel
+                    {
+                        IdClient = id,
+                        Client = _context.Clients.Include(n => n.List_BehavioralHistory).FirstOrDefault(n => n.Id == id),
+                        Date = DateTime.Now,
+                        Id = 0,
+                        Problem = ""
+                    };
+                    if (model.Client.List_BehavioralHistory == null)
+                        model.Client.List_BehavioralHistory = new List<Bio_BehavioralHistoryEntity>();
+                    return View(model);
+                }
+            }
+
+            model = new Bio_BehavioralHistoryViewModel
+            {
+                IdClient = id,
+                Client = _context.Clients.Include(n => n.List_BehavioralHistory).FirstOrDefault(n => n.Id == id),
+                Date = DateTime.Now,
+                Id = 0,
+                Problem = ""
+            };
+
+            return View(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Supervisor")]
@@ -961,7 +999,59 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> CreateBehavioralModal(Bio_BehavioralHistoryViewModel bioViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                Bio_BehavioralHistoryEntity bioEntity = _context.Bio_BehavioralHistory.Find(bioViewModel.Id);
+                if (bioEntity == null)
+                {
+                    bioEntity = await _converterHelper.ToBio_BehaviorEntity(bioViewModel, true);
+                    _context.Bio_BehavioralHistory.Add(bioEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        List<Bio_BehavioralHistoryEntity> bio = await _context.Bio_BehavioralHistory
+                                                                                .Include(g => g.Client)
+                                                                                .Where(g => g.Client.Id == bioViewModel.IdClient)
+                                                                                .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewBehavioralHealth", bio) });
+                        
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Already exists the BIO.");
+
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateBehavioral", bioViewModel) });
+                }
+            }
+            Bio_BehavioralHistoryEntity model;
+            model = new Bio_BehavioralHistoryEntity
+            {
+
+                Date = DateTime.Now,
+                Id = 0,
+                Problem = ""
+            };
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
+        }
+
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
         public async Task<IActionResult> IndexBehavioralHealthHistory(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -982,8 +1072,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+                if (User.IsInRole("Mannager") || User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
                                               .Include(f => f.Clients_Diagnostics)
@@ -1001,8 +1090,7 @@ namespace KyoS.Web.Controllers
                                               .Include(g => g.Bio)
                                               .Include(g => g.List_BehavioralHistory)
 
-                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                                    && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -1012,6 +1100,43 @@ namespace KyoS.Web.Controllers
 
         [Authorize(Roles = "Supervisor")]
         public IActionResult EditBehavioral(int id = 0)
+        {
+            Bio_BehavioralHistoryViewModel model;
+
+            if (User.IsInRole("Supervisor"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic != null)
+                {
+
+                    Bio_BehavioralHistoryEntity Behavioral = _context.Bio_BehavioralHistory
+                                                                     .Include(m => m.Client)
+                                                                     .ThenInclude(m => m.List_BehavioralHistory)
+                                                                     .FirstOrDefault(m => m.Id == id);
+                    if (Behavioral == null)
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+                    else
+                    {
+
+                        model = _converterHelper.ToBio_BehaviorViewModel(Behavioral);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            model = new Bio_BehavioralHistoryViewModel();
+            return View(model);
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public IActionResult EditBehavioralModal(int id = 0)
         {
             Bio_BehavioralHistoryViewModel model;
 
@@ -1076,6 +1201,40 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditBehavioral", behavioralViewModel) });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> EditBehavioralModal(Bio_BehavioralHistoryViewModel behavioralViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                Bio_BehavioralHistoryEntity behavioralEntity = await _converterHelper.ToBio_BehaviorEntity(behavioralViewModel, false);
+                _context.Bio_BehavioralHistory.Update(behavioralEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<Bio_BehavioralHistoryEntity> bio = await _context.Bio_BehavioralHistory
+                                                                                .Include(g => g.Client)
+                                                                                .Where(g => g.Client.Id == behavioralViewModel.IdClient)
+                                                                                .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewBehavioralHealth", bio) });
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditBehavioralModal", behavioralViewModel) });
+        }
+
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> DeleteBehavioral(int? id, int origin = 0)
         {
@@ -1084,7 +1243,9 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            Bio_BehavioralHistoryEntity Bio_BehavioralEntity = await _context.Bio_BehavioralHistory.Include(n => n.Client).FirstOrDefaultAsync(s => s.Id == id);
+            Bio_BehavioralHistoryEntity Bio_BehavioralEntity = await _context.Bio_BehavioralHistory
+                                                                             .Include(n => n.Client)
+                                                                             .FirstOrDefaultAsync(s => s.Id == id);
             if (Bio_BehavioralEntity == null)
             {
                 return RedirectToAction("Home/Error404");
@@ -1103,10 +1264,17 @@ namespace KyoS.Web.Controllers
             if (origin == 1)
                 return RedirectToAction(nameof(Index));
             else
-                return RedirectToAction(nameof(CreateBehavioral), new { id = Bio_BehavioralEntity.Client.Id });
+            {
+                List<Bio_BehavioralHistoryEntity> bio = await _context.Bio_BehavioralHistory
+                                                                                    .Include(g => g.Client)
+                                                                                    .Where(g => g.Client.Id == Bio_BehavioralEntity.Client.Id)
+                                                                                    .ToListAsync();
+
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewBehavioralHealth", bio) });
+            }
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
         public IActionResult PrintBio(int id)
         {
             BioEntity entity = _context.Bio
@@ -1159,7 +1327,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
         public async Task<IActionResult> ClientswithoutBIO(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -1174,27 +1342,223 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
-            else
-            {
-                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                if (User.IsInRole("Facilitator"))
-                {
-                    List<ClientEntity> ClientList = await _context.Clients
-                                                          .Include(n => n.Bio)
-                                                          .Where(n => n.Bio == null && n.Clinic.Id == user_logged.Clinic.Id
-                                                            && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
-                                                          .ToListAsync();
-                    return View(ClientList);
-                }
-                else
-                {
-                    List<ClientEntity> ClientList = await _context.Clients
+            List<ClientEntity> ClientList = await _context.Clients
                                                           .Include(n => n.Bio)
                                                           .Where(n => n.Bio == null && n.Clinic.Id == user_logged.Clinic.Id)
                                                           .ToListAsync();
-                    return View(ClientList);
-                }
 
+            return View(ClientList);
+
+        }
+
+        [Authorize(Roles = "Manager, Supervisor")]
+        public IActionResult CreateMedicationModal(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            MedicationViewModel model;
+
+            if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+            {
+
+
+                if (user_logged.Clinic != null)
+                {
+
+                    model = new MedicationViewModel
+                    {
+                        IdClient = id,
+                        Client = _context.Clients.Include(n => n.MedicationList).FirstOrDefault(n => n.Id == id),
+                        Id = 0,
+                        Dosage = "",
+                        Frequency = "",
+                        Name = "",
+                        Prescriber = user_logged.FullName
+
+                    };
+                    if (model.Client.MedicationList == null)
+                        model.Client.MedicationList = new List<MedicationEntity>();
+                    return View(model);
+                }
+            }
+
+            model = new MedicationViewModel
+            {
+                IdClient = id,
+                Client = _context.Clients.Include(n => n.MedicationList).FirstOrDefault(n => n.Id == id),
+                Id = 0,
+                Dosage = "",
+                Frequency = "",
+                Name = "",
+                Prescriber = ""
+            };
+            if (model.Client.MedicationList == null)
+                model.Client.MedicationList = new List<MedicationEntity>();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, Supervisor")]
+        public async Task<IActionResult> CreateMedicationModal(MedicationViewModel medicationViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                MedicationEntity medicationEntity = _context.Medication.Find(medicationViewModel.Id);
+                if (medicationEntity == null)
+                {
+                    medicationEntity = await _converterHelper.ToMedicationEntity(medicationViewModel, true);
+                    _context.Medication.Add(medicationEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        List<MedicationEntity> medication = await _context.Medication
+                                                                          .Include(g => g.Client)
+                                                                          .Where(g => g.Client.Id == medicationViewModel.IdClient)
+                                                                          .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", medication) });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Already exists the Medication.");
+
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMedicationModal", medicationViewModel) });
+                }
+            }
+            MedicationViewModel model;
+            model = new MedicationViewModel
+            {
+                IdClient = medicationViewModel.IdClient,
+                Client = _context.Clients.Find(medicationViewModel.IdClient),
+                Id = medicationViewModel.Id,
+                Dosage = medicationViewModel.Dosage,
+                Frequency = medicationViewModel.Frequency,
+                Name = medicationViewModel.Name,
+                Prescriber = medicationViewModel.Prescriber
+
+            };
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMedicationModal", medicationViewModel) });
+        }
+
+        [Authorize(Roles = "Manager, Supervisor")]
+        public IActionResult EditMedicationModal(int id = 0)
+        {
+            MedicationViewModel model;
+
+            if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic != null)
+                {
+
+                    MedicationEntity Medication = _context.Medication
+                                                         .Include(m => m.Client)
+                                                         .ThenInclude(m => m.MedicationList)
+                                                         .FirstOrDefault(m => m.Id == id);
+                    if (Medication == null)
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+                    else
+                    {
+
+                        model = _converterHelper.ToMedicationViewModel(Medication);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            model = new MedicationViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, Supervisor")]
+        public async Task<IActionResult> EditMedicationModal(MedicationViewModel medicationViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                MedicationEntity medicationEntity = await _converterHelper.ToMedicationEntity(medicationViewModel, false);
+                _context.Medication.Update(medicationEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<MedicationEntity> medication = await _context.Medication
+                                                                         .Include(g => g.Client)
+                                                                         .Where(g => g.Client.Id == medicationViewModel.IdClient)
+                                                                         .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", medication) });
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditMedicationModal", medicationViewModel) });
+        }
+
+        [Authorize(Roles = "Manager, Supervisor")]
+        public async Task<IActionResult> DeleteMedication(int? id, int origin = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            MedicationEntity medicationEntity = await _context.Medication
+                                                              .Include(n => n.Client)
+                                                              .FirstOrDefaultAsync(s => s.Id == id);
+            if (medicationEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.Medication.Remove(medicationEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            if (origin == 1)
+                return RedirectToAction(nameof(Index));
+            else
+            {
+                List<MedicationEntity> medication = await _context.Medication
+                                                                         .Include(g => g.Client)
+                                                                         .Where(g => g.Client.Id == medicationEntity.Client.Id)
+                                                                         .ToListAsync();
+
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", medication) });
             }
         }
     }

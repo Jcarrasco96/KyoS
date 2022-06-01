@@ -1,0 +1,51 @@
+﻿@model KyoS.Web.Models.Bio_BehavioralHistoryViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="CreateBehavioralModal" onsubmit="return jQueryAjaxPostBIOBehavioral(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IdClient" />
+            <input type="hidden" asp-for="Client.Name" />
+            <div class="container-fluid">
+                <h4 style="font-weight:bold;"> <span class="label label-info"> Client - @Model.Client.Name </span></h4>
+            </div>
+            <div>
+                <div class=" col-md-4 form-group">
+                    <label asp-for="Client.AdmisionDate" class="control-label"></label>
+                    <input asp-for="Client.AdmisionDate" class="form-control" readonly />
+                    <span asp-validation-for="Client.AdmisionDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-4 form-group">
+                    <label asp-for="Client.Code" class="control-label"></label>
+                    <input asp-for="Client.Code" class="form-control" readonly />
+                    <span asp-validation-for="Client.Code" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-4 form-group">
+                    <label asp-for="Date" class="control-label"></label>
+                    <input asp-for="Date" class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-12 form-group">
+                    <label asp-for="Problem" class="control-label"></label>
+                    <textarea asp-for="Problem" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Problem" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

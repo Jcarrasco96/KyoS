@@ -483,6 +483,7 @@ namespace KyoS.Web.Controllers
                     client.Status = item.Status;
                     client.Service = ServiceType.Individual;
                     clientList.Add(client);
+                    client = new ClientEntity();
                 }
 
                 return View(clientList);
@@ -714,6 +715,7 @@ namespace KyoS.Web.Controllers
                     client.Status = item.Status;
                     client.Service = ServiceType.Individual;
                     clientList.Add(client);
+                    client = new ClientEntity();
                 }
 
                 return View(clientList);
