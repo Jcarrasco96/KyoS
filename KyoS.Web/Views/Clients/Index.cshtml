@@ -52,7 +52,7 @@
                                 MH Therapy
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                Birth's date
+                                @Html.DisplayNameFor(model => model.AdmisionDate)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Individual Therapy
@@ -89,7 +89,7 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.DateOfBirth)
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
                                     </td>
                                     <td align="center">
                                         @if (item.IndividualTherapyFacilitator != null)

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.MedicationEntity>
+<div class="col-push-12">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                4. CURRENT MEDICATIONS (PSYCHOTROPIC, MEDICAL AND OVER THE COUNTER)
+            </div>
+            <div class="panel-body">
+
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-4">
+                                Medication
+                            </th>
+                            <th class="col-md-2">
+                                Dose
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Frequency
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Prescriber
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Dosage)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Frequency)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Prescriber)
+                                </td>
+                                <td align="center">
+                                    <a onclick="showInPopup('@Url.Action("EditMedicationModal", "Bios", new { id = @item.Id }, Context.Request.Scheme)','Edit Medication List')" class="btn btn-warning" title="Edit Medication List"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <a asp-action="DeleteMedication" asp-route-origin="1" asp-route-id="@item.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

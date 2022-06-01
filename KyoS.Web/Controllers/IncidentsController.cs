@@ -23,7 +23,7 @@ namespace KyoS.Web.Controllers
             _converterHelper = converterHelper;           
         }
         
-        [Authorize(Roles = "Admin, Manager, Facilitator, CaseManager")]
+        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, CaseManager")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -66,7 +66,7 @@ namespace KyoS.Web.Controllers
                                           .ToListAsync());
             }
 
-            if (User.IsInRole("Facilitator"))
+            if (User.IsInRole("Supervisor") || User.IsInRole("Facilitator"))
             {
                 return View(await _context.Incidents
                                           .Include(i => i.UserCreatedBy)
@@ -79,7 +79,7 @@ namespace KyoS.Web.Controllers
             return View(null);
         }
         
-        [Authorize(Roles = "Admin, Manager, Facilitator")]
+        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator")]
         public IActionResult Create(int id = 0)
         {
             if (id == 1)
@@ -105,6 +105,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> Create(IncidentViewModel incidentViewModel)
         {
             if (ModelState.IsValid)
@@ -172,7 +173,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Admin, Manager, Facilitator")]
+        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -193,7 +194,7 @@ namespace KyoS.Web.Controllers
             return View(incidentViewModel);
         }
 
-        [Authorize(Roles = "Admin, Manager, Facilitator")]
+        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, IncidentViewModel incidentViewModel)
