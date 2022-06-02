@@ -35,7 +35,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -1051,7 +1051,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> IndexBehavioralHealthHistory(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -1072,7 +1072,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Mannager") || User.IsInRole("Supervisor"))
+                if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
                                               .Include(f => f.Clients_Diagnostics)
@@ -1351,7 +1351,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager, Supervisor")]
+        [Authorize(Roles = "Supervisor")]
         public IActionResult CreateMedicationModal(int id = 0)
         {
 
@@ -1402,7 +1402,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Supervisor")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> CreateMedicationModal(MedicationViewModel medicationViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1453,7 +1453,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMedicationModal", medicationViewModel) });
         }
 
-        [Authorize(Roles = "Manager, Supervisor")]
+        [Authorize(Roles = "Supervisor")]
         public IActionResult EditMedicationModal(int id = 0)
         {
             MedicationViewModel model;
@@ -1492,7 +1492,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Supervisor")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> EditMedicationModal(MedicationViewModel medicationViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1523,7 +1523,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditMedicationModal", medicationViewModel) });
         }
 
-        [Authorize(Roles = "Manager, Supervisor")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> DeleteMedication(int? id, int origin = 0)
         {
             if (id == null)

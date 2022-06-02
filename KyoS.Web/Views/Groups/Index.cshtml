@@ -116,7 +116,7 @@
                                     }
                                 </td>
                                 <td align="right">
-                                    @if (User.IsInRole("Mannager"))
+                                    @if (User.IsInRole("Manager"))
                                     {
                                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit PSR group"><i class="glyphicon glyphicon-pencil"></i></a>
                                     }
