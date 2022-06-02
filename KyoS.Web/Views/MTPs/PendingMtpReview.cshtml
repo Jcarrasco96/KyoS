@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.MTPReviewEntity>
 @{
-    ViewData["Title"] = "MTP Reviews Pending";
+    ViewData["Title"] = "Pending MTP Reviews";
 }
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
@@ -10,19 +10,18 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">MTP Reviews Pending</li>
+        <li class="active">Pending MTP Reviews</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <div class="row">
     <div class="col-md-12">
         @*<strong>Note: </strong> Only closed clients will be displayed, orange color means the client has not discharge documents*@
-
     </div>    
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">MTP Reviews Pending</h3>
+                <h3 class="panel-title">Pending MTP Reviews</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -107,13 +106,9 @@
                                                 <a class="btn btn-success disabled" title="Approval MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
                                             }
                                         }
-
                                     </td>
                                 </tr>
-
                             }
-
-
                         }
                     </tbody>
                 </table>
