@@ -825,7 +825,7 @@ namespace KyoS.Web.Helpers
 
             int i = 0;
 
-            foreach (GoalEntity item in mtp.Goals)
+            foreach (GoalEntity item in mtp.Goals.Where(g => (g.Adendum == null && g.IdMTPReview == 0)))
             {
                 if (i == 0)
                 {
@@ -1337,7 +1337,7 @@ namespace KyoS.Web.Helpers
 
             int i = 0;
 
-            foreach (GoalEntity item in mtp.Goals)
+            foreach (GoalEntity item in mtp.Goals.Where(g =>(g.Adendum == null && g.IdMTPReview == 0)))
             {
                 if (i == 0)
                 {
@@ -2919,7 +2919,7 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeMedicalHistory");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetDischargeDS(intake.Client.DischargeList.ElementAt(0)));
+            dataSet.Tables.Add(GetDischargeDS(intake.Client.DischargeList.ElementAtOrDefault(0)));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
 
             WebReport.Report.Prepare();
@@ -3005,7 +3005,7 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeMedicalHistory");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetDischargeDS(intake.Client.DischargeList.ElementAt(0)));
+            dataSet.Tables.Add(GetDischargeDS(intake.Client.DischargeList.ElementAtOrDefault(0)));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
 
             WebReport.Report.Prepare();
