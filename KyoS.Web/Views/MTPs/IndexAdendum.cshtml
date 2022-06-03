@@ -74,7 +74,8 @@
                                                     <th class="col-md-1" style="text-align:center">Unit</th>
                                                     <th class="col-md-2" style="text-align:center"> Frecuency</th>
                                                     <th class="col-md-2" style="text-align:center">Duration (month)</th>
-                                                    <th class="col-md-3" style="text-align:center">Create by</th>
+                                                    <th class="col-md-2" style="text-align:center">Create by</th>
+                                                    <th class="col-md-1" style="text-align:center;">Status</th>
                                                     <th class="col-md-2"></th>
                                                 </tr>
                                                 @foreach (var element in item.AdendumList)
@@ -85,6 +86,32 @@
                                                             <td align="center">@Html.DisplayFor(modelItem => element.Frecuency)</td>
                                                             <td align="center">@Html.DisplayFor(modelItem => element.Duration)</td>
                                                             <td align="center">@Html.DisplayFor(modelItem => element.CreatedBy)</td>
+                                                            <td align="center">
+                                                                @if (element.Status == KyoS.Common.Enums.AdendumStatus.Edition)
+                                                                {
+                                                                    <span class="label label-default">
+                                                                        Edition
+                                                                    </span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (element.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                                                    {
+                                                                        <span class="label label-info">
+                                                                            Pending
+                                                                        </span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if (element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                                        {
+                                                                            <span class="label label-success">
+                                                                                Approved
+                                                                            </span>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </td>       
                                                             <td align="center">
                                                                 @if (User.IsInRole("Supervisor"))
                                                                 {

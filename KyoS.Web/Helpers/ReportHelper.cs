@@ -825,7 +825,7 @@ namespace KyoS.Web.Helpers
 
             int i = 0;
 
-            foreach (GoalEntity item in mtp.Goals)
+            foreach (GoalEntity item in mtp.Goals.Where(g => (g.Adendum == null && g.IdMTPReview == 0)))
             {
                 if (i == 0)
                 {
@@ -1337,7 +1337,7 @@ namespace KyoS.Web.Helpers
 
             int i = 0;
 
-            foreach (GoalEntity item in mtp.Goals)
+            foreach (GoalEntity item in mtp.Goals.Where(g =>(g.Adendum == null && g.IdMTPReview == 0)))
             {
                 if (i == 0)
                 {
