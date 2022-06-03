@@ -56,7 +56,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Mannager")|| User.IsInRole("Supervisor"))
+                if (User.IsInRole("Manager")|| User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
                                               .Include(f => f.Clients_Diagnostics)
@@ -1274,7 +1274,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public IActionResult PrintBio(int id)
         {
             BioEntity entity = _context.Bio
@@ -1327,7 +1327,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Mannager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public async Task<IActionResult> ClientswithoutBIO(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
