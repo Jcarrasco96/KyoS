@@ -1957,6 +1957,9 @@ namespace KyoS.Web.Controllers
                                                .Include(m => m.Goals)
                                                .ThenInclude(g => g.Objetives)
 
+                                               .Include(m => m.Goals)
+                                               .ThenInclude(g => g.Adendum)
+
                                                .Include(wc => wc.Client)
                                                .ThenInclude(c => c.Clients_Diagnostics)
                                                .ThenInclude(cd => cd.Diagnostic)
@@ -2853,6 +2856,13 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             MTPReviewViewModel model = new MTPReviewViewModel();
+            MTPEntity mtp = _context.MTPs
+                                  .Include(n => n.Client)
+                                  .ThenInclude(n => n.LegalGuardian)
+                                  .Include(n => n.Client.Clinic)
+                                  .Include(n => n.Goals)
+                                  .ThenInclude(n => n.Objetives)
+                                  .FirstOrDefault(m => m.Id == id);
 
             if (User.IsInRole("Supervisor"))
             {
@@ -2864,7 +2874,7 @@ namespace KyoS.Web.Controllers
                     DateLicensedPractitioner = DateTime.Now,
                     DateSignaturePerson = DateTime.Now,
                     DateTherapist = DateTime.Now,
-                    ReviewedOn = DateTime.Now,
+                    ReviewedOn = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths)),
                     Status = AdendumStatus.Edition,
                     ACopy = false,
                     ClinicalDirector = "",
@@ -2876,13 +2886,7 @@ namespace KyoS.Web.Controllers
                     IdMTP = id,
                     IfCurrent = "",
                     LicensedPractitioner = "",
-                    Mtp = _context.MTPs
-                                  .Include(n => n.Client)
-                                  .ThenInclude(n => n.LegalGuardian)
-                                  .Include(n => n.Client.Clinic)
-                                  .Include(n => n.Goals)
-                                  .ThenInclude(n => n.Objetives)
-                                  .FirstOrDefault(m => m.Id == id),
+                    Mtp = mtp,
                     MTP_FK = id,
                     NumberUnit = 4,
                     ServiceCode = "H0032TS",
@@ -2894,7 +2898,7 @@ namespace KyoS.Web.Controllers
                     Frecuency = "Four times per week",
                     MonthOfTreatment = 3,
                     Setting = "02",
-                    DataOfService = DateTime.Now
+                    DataOfService = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths))
 
                 };
             }
@@ -2908,7 +2912,7 @@ namespace KyoS.Web.Controllers
                     DateLicensedPractitioner = DateTime.Now,
                     DateSignaturePerson = DateTime.Now,
                     DateTherapist = DateTime.Now,
-                    ReviewedOn = DateTime.Now,
+                    ReviewedOn = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths)),
                     Status = AdendumStatus.Edition,
                     ACopy = false,
                     ClinicalDirector = "",
@@ -2920,13 +2924,7 @@ namespace KyoS.Web.Controllers
                     IdMTP = id,
                     IfCurrent = "",
                     LicensedPractitioner = "",
-                    Mtp = _context.MTPs
-                                  .Include(n => n.Client)
-                                  .ThenInclude(n => n.LegalGuardian)
-                                  .Include(n => n.Client.Clinic)
-                                  .Include(n => n.Goals)
-                                  .ThenInclude(n => n.Objetives)
-                                  .FirstOrDefault(m => m.Id == id),
+                    Mtp = mtp,
                     MTP_FK = id,
                     NumberUnit = 4,
                     ServiceCode = "H0032TS",
@@ -2938,7 +2936,7 @@ namespace KyoS.Web.Controllers
                     Frecuency = "Four times per week",
                     MonthOfTreatment = 3,
                     Setting = "02",
-                    DataOfService = DateTime.Now
+                    DataOfService = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths))
                 };
                
             }
@@ -3106,7 +3104,7 @@ namespace KyoS.Web.Controllers
                         {
                             foreach (var value in item.MtpReviewList)
                             {
-                                if (value.Status == AdendumStatus.Edition && (item.Client.IdFacilitatorPSR == facilitator.Id || item.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                if (value.Status == AdendumStatus.Edition && mtp1.Where(n => n.Id == value.Mtp.Id).ToList().Count() == 0)
                                     mtp1.Add(item);
                             
                             }
