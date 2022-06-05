@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220605025624_TCMOrientationCheckList")]
+    partial class TCMOrientationCheckList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4823,45 +4825,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("TCMIntakeAcknowledgement");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeAdvancedDirectiveEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("AdmissionedFor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateSignatureEmployee")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignatureLegalGuardian")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignaturePerson")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Documents")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IHave")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IHaveNot")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("TcmClient_FK")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TcmClient_FK")
-                        .IsUnique();
-
-                    b.ToTable("TCMIntakeAdvancedDirective");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeConsentForReleaseEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -6815,17 +6778,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TcmClient");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeAdvancedDirectiveEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
-                        .WithOne("TCMIntakeAdvancedDirective")
-                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeAdvancedDirectiveEntity", "TcmClient_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TcmClient");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeConsentForReleaseEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
@@ -7295,8 +7247,6 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMClientEntity", b =>
                 {
                     b.Navigation("TcmIntakeAcknowledgementHipa");
-
-                    b.Navigation("TCMIntakeAdvancedDirective");
 
                     b.Navigation("TcmIntakeConsentForRelease");
 

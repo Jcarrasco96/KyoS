@@ -72,12 +72,24 @@
         <input asp-for="OtherLanguage" class="form-control" />
         <span asp-validation-for="OtherLanguage" class="text-danger"></span>
     </div>
+    <div class="form-group col-md-1">
+        <label asp-for="OtherLanguage_Read" class="control-label">Read</label><br />
+        <input type="checkbox" asp-for="OtherLanguage_Read" class="form-check-input">
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="OtherLanguage_Speak" class="control-label">Speak</label><br />
+        <input type="checkbox" asp-for="OtherLanguage_Speak" class="form-check-input">
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="OtherLanguage_Understand" class="control-label">Understand</label><br />
+        <input type="checkbox" asp-for="OtherLanguage_Understand" class="form-check-input">
+    </div>
     <div class="form-group col-md-2">
         <label asp-for="PlaceOfBirth" class="control-label"></label>
         <input asp-for="PlaceOfBirth" class="form-control" />
         <span asp-validation-for="PlaceOfBirth" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-3">
         &nbsp;
     </div>
 </div>

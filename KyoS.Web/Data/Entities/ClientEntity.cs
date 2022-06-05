@@ -75,6 +75,10 @@ namespace KyoS.Web.Data.Entities
         [Display(Name = "Other Language")]
         public string OtherLanguage { get; set; }
 
+        public bool OtherLanguage_Read { get; set; }
+        public bool OtherLanguage_Speak { get; set; }
+        public bool OtherLanguage_Understand { get; set; }
+
         [Display(Name = "Sign")]
         public string SignPath { get; set; }
 
@@ -148,6 +152,8 @@ namespace KyoS.Web.Data.Entities
         public List<Bio_BehavioralHistoryEntity> List_BehavioralHistory { get; set; }
 
         public int IdFacilitatorPSR { get; set; }
+
+        public string MedicareId { get; set; }
 
         public string MissingDoc 
         {

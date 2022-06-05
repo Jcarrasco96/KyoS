@@ -14,11 +14,16 @@
                     <span asp-validation-for="IdHealthInsurance" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-md-12">
-                <div class="form-group">
+            <div>
+                <div class="col-md-8 form-group">
                     <label asp-for="IdClient" class="control-label"></label>&nbsp;*
                     <select asp-for="IdClient" class="form-control" asp-items="Model.Clients"></select>
                     <span asp-validation-for="IdClient" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label asp-for="MemberId" class="control-label"></label>&nbsp;*
+                    <input asp-for="MemberId" class="form-control" />
+                    <span asp-validation-for="MemberId" class="text-danger"></span>
                 </div>
             </div>
             <div>

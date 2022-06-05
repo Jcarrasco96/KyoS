@@ -1,0 +1,426 @@
+﻿@model KyoS.Web.Models.TCMIntakeFormViewModel
+
+<div class="col-md-push-12">
+    <div class="form-group col-md-4">
+        <label asp-for="TcmClient.Client.Name" class="control-label">Name of Recipient</label>
+        <input asp-for="TcmClient.Client.Name" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.CaseNumber" class="control-label">Case No.</label>
+        <input asp-for="TcmClient.CaseNumber" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.CaseNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.AdmisionDate" class="control-label">Date of Admission</label>
+        <input asp-for="TcmClient.Client.AdmisionDate" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.AdmisionDate" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.MedicaidID" class="control-label"></label>
+        <input asp-for="TcmClient.Client.MedicaidID" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.MedicaidID" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.Telephone" class="control-label">Telephone</label>
+        <input asp-for="TcmClient.Client.Telephone" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Telephone" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-4">
+        <label asp-for="TcmClient.Client.FullAddress" class="control-label">Address</label>
+        <input asp-for="TcmClient.Client.FullAddress" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.FullAddress" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="TcmClient.Client.City" class="control-label">City</label>
+        <input asp-for="TcmClient.Client.City" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.City" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="TcmClient.Client.State" class="control-label">State</label>
+        <input asp-for="TcmClient.Client.State" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.State" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.ZipCode" class="control-label">Zip Code</label>
+        <input asp-for="TcmClient.Client.ZipCode" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.ZipCode" class="text-danger"></span>
+    </div>
+</div>
+<div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.DateOfBirth" class="control-label">DOB:</label>
+        <input asp-for="TcmClient.Client.DateOfBirth" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.DateOfBirth" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.SSN" class="control-label">SSN:</label>
+        <input asp-for="TcmClient.Client.SSN" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.SSN" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.Email" class="control-label">Email Address:</label>
+        <input asp-for="TcmClient.Client.Email" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Email" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.Race" class="control-label">Race:</label>
+        <input asp-for="TcmClient.Client.Race" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Race" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.Ethnicity" class="control-label">Ethnicity:</label>
+        <input asp-for="TcmClient.Client.Ethnicity" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Ethnicity" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.MaritalStatus" class="control-label">Marital Status:</label>
+        <input asp-for="TcmClient.Client.MaritalStatus" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.MaritalStatus" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.PreferredLanguage" class="control-label">Primary Language</label>
+        <input asp-for="TcmClient.Client.PreferredLanguage" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.PreferredLanguage" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.OtherLanguage" class="control-label">Other Language</label>
+        <input asp-for="TcmClient.Client.OtherLanguage" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.OtherLanguage" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.OtherLanguage_Read" class="control-label">Read  </label>
+        <label asp-for="TcmClient.Client.OtherLanguage_Speak" class="control-label">Speak  </label>
+        <label asp-for="TcmClient.Client.OtherLanguage_Understand" class="control-label">Understand</label><br />
+        <input type="checkbox" asp-for="TcmClient.Client.OtherLanguage_Read" class="form-check-input" readonly>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="TcmClient.Client.OtherLanguage_Speak" class="form-check-input" readonly>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="TcmClient.Client.OtherLanguage_Understand" class="form-check-input" readonly>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.LegalGuardian.Name" class="control-label">Legal Guardian</label>
+        <input asp-for="TcmClient.Client.LegalGuardian.Name" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.LegalGuardian.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.LegalGuardian.Telephone" class="control-label">Phone No:</label>
+        <input asp-for="TcmClient.Client.LegalGuardian.Telephone" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.LegalGuardian.Telephone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        &nbsp;
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-4">
+        <label asp-for="TcmClient.Client.LegalGuardian.Address" class="control-label">Address</label>
+        <input asp-for="TcmClient.Client.LegalGuardian.Address" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.LegalGuardian.Address" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="TcmClient.Client.LegalGuardian.City" class="control-label">City</label>
+        <input asp-for="TcmClient.Client.LegalGuardian.City" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.LegalGuardian.City" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="TcmClient.Client.State" class="control-label">State</label>
+        <input asp-for="TcmClient.Client.State" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.State" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.LegalGuardian.ZipCode" class="control-label">Zip Code</label>
+        <input asp-for="TcmClient.Client.LegalGuardian.ZipCode" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.LegalGuardian.ZipCode" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="EducationLevel" class="control-label">Education Level</label>
+        <input asp-for="EducationLevel" class="form-control">
+        <span asp-validation-for="EducationLevel" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="ReligionOrEspiritual" class="control-label">Religion or Spiritual Beliefs</label>
+        <input asp-for="ReligionOrEspiritual" class="form-control" >
+        <span asp-validation-for="ReligionOrEspiritual" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="EmploymentStatus" class="control-label">Employment Status</label>
+        <input asp-for="EmploymentStatus" class="form-control" >
+        <span asp-validation-for="EmploymentStatus" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="ResidentialStatus" class="control-label">Residential Status</label>
+        <input asp-for="ResidentialStatus" class="form-control" >
+        <span asp-validation-for="ResidentialStatus" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.Referred.Name" class="control-label">Referred by:</label>
+        <input asp-for="TcmClient.Client.Referred.Name" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Referred.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.Referred.Telephone" class="control-label">Phone No:</label>
+        <input asp-for="TcmClient.Client.Referred.Telephone" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Referred.Telephone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="TcmClient.Client.Referred.Address" class="control-label">Address</label>
+        <input asp-for="TcmClient.Client.Referred.Address" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Referred.Address" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code" class="control-label">Address</label>
+        <input asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Description" class="control-label">Address</label>
+        <input asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Description" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Description" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="TitlePosition" class="control-label">Title/Position:</label>
+        <input asp-for="TitlePosition" class="form-control">
+        <span asp-validation-for="TitlePosition" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Agency" class="control-label">Agency (if applicable):</label>
+        <input asp-for="Agency" class="form-control">
+        <span asp-validation-for="Agency" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        Do you currently have a cough that has lasted 3 weeks or longer? <br />
+        Yes <input type="checkbox" asp-for="IsClientCurrently" class="form-check-input" id="check1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No <input type="checkbox" class="form-check-input" id="check101">
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <label asp-for="Elibigility" class="control-label">Elibigility:</label>
+        <textarea asp-for="Elibigility" class="form-control" rows="2"></textarea>
+        <span asp-validation-for="Elibigility" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.MedicaidID" class="control-label">Medicaid ID:</label>
+        <input asp-for="TcmClient.Client.MedicaidID" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.MedicaidID" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.MedicareId" class="control-label">Medicare ID:</label>
+        <input asp-for="TcmClient.Client.MedicareId" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.MedicareId" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.Clients_HealthInsurances.ElementAt(0).HealthInsurance.Name" class="control-label">Health Plan:</label>
+        <input asp-for="TcmClient.Client.Clients_HealthInsurances.ElementAt(0).HealthInsurance.Name" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Clients_HealthInsurances.ElementAt(0).HealthInsurance.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.Clients_HealthInsurances.ElementAt(0).MemberId" class="control-label">Member ID:</label>
+        <input asp-for="TcmClient.Client.Clients_HealthInsurances.ElementAt(0).MemberId" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Clients_HealthInsurances.ElementAt(0).MemberId" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="InsuranceOther" class="control-label">Insurance Other:</label>
+        <input asp-for="InsuranceOther" class="form-control" >
+        <span asp-validation-for="InsuranceOther" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="School" class="control-label">School:</label>
+        <input asp-for="School" class="form-control">
+        <span asp-validation-for="School" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Grade" class="control-label">Grade:</label>
+        <input asp-for="Grade" class="form-control">
+        <span asp-validation-for="Grade" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TeacherCounselor_Name" class="control-label">Teacher Counselor Name:</label>
+        <input asp-for="TeacherCounselor_Name" class="form-control">
+        <span asp-validation-for="TeacherCounselor_Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TeacherCounselor_Phone" class="control-label">Phone No:</label>
+        <input asp-for="TeacherCounselor_Phone" class="form-control">
+        <span asp-validation-for="TeacherCounselor_Phone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <pre>School Program:&nbsp;&nbsp;<br /><input type="checkbox" asp-for="School_Regular" class="form-check-input"> Regular &nbsp;&nbsp;<input type="checkbox" asp-for="School_ESE" class="form-check-input"> ESE&nbsp;&nbsp; <input type="checkbox" asp-for="School_EBD" class="form-check-input">  EBD &nbsp;&nbsp;<input type="checkbox" asp-for="School_ESOL" class="form-check-input"> ESOL&nbsp;&nbsp;<input type="checkbox" asp-for="School_HHIP" class="form-check-input">  HHIP (Homebound) &nbsp;&nbsp;<input type="checkbox" asp-for="School_Other" class="form-check-input"> Other&nbsp;&nbsp;</pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="CountryOfBirth" class="control-label">Country of Birth:</label>
+        <input asp-for="CountryOfBirth" class="form-control">
+        <span asp-validation-for="CountryOfBirth" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="YearEnterUsa" class="control-label">Year entered USA:</label>
+        <input asp-for="YearEnterUsa" class="form-control">
+        <span asp-validation-for="YearEnterUsa" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-8">
+        <pre>Status:
+        <input type="checkbox" asp-for="StausCitizen" class="form-check-input"> Citizen &nbsp;&nbsp; &nbsp;&nbsp;<input type="checkbox" asp-for="StatusResident" class="form-check-input"> Resident&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="StatusOther" class="form-check-input">  Other (If Other, please explain): <input asp-for="StatusOther_Explain" style="width:40%"></pre>
+    </div> 
+</div>
+<div class="col-md-push-12">
+
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.EmergencyContact.Name" class="control-label">Primary Contact:</label>
+        <input asp-for="TcmClient.Client.EmergencyContact.Name" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.EmergencyContact.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.EmergencyContact.Telephone" class="control-label">Phone No:</label>
+        <input asp-for="TcmClient.Client.EmergencyContact.Telephone" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.EmergencyContact.Telephone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.RelationShipOfEmergencyContact" class="control-label">RelationShip:</label>
+        <input asp-for="TcmClient.Client.RelationShipOfEmergencyContact" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.RelationShipOfEmergencyContact" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="SecondaryContact" class="control-label">Secondary Contact:</label>
+        <input asp-for="SecondaryContact" class="form-control">
+        <span asp-validation-for="SecondaryContact" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="SecondaryContact_Phone" class="control-label">Phone No:</label>
+        <input asp-for="SecondaryContact_Phone" class="form-control">
+        <span asp-validation-for="SecondaryContact_Phone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="SecondaryContact_RelationShip" class="control-label">RelationShip:</label>
+        <input asp-for="SecondaryContact_RelationShip" class="form-control">
+        <span asp-validation-for="SecondaryContact_RelationShip" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <strong>* May we leave/send voice/text messages to the above contacts if necessary?</strong>
+        <input type="checkbox" asp-for="EmergencyContact" class="form-check-input" id="check2">
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.Psychiatrist.Name" class="control-label">Psychiarist:</label>
+        <input asp-for="TcmClient.Client.Psychiatrist.Name" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Psychiatrist.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.Psychiatrist.Telephone" class="control-label">Phone No:</label>
+        <input asp-for="TcmClient.Client.Psychiatrist.Telephone" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Psychiatrist.Telephone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-8">
+        <label asp-for="TcmClient.Client.Psychiatrist.Address" class="control-label">Address:</label>
+        <input asp-for="TcmClient.Client.Psychiatrist.Address" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Psychiatrist.Address" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.Doctor.Name" class="control-label">Primary Care Physician (PCP):</label>
+        <input asp-for="TcmClient.Client.Doctor.Name" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Doctor.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.Doctor.Telephone" class="control-label">Phone No:</label>
+        <input asp-for="TcmClient.Client.Doctor.Telephone" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Doctor.Telephone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-8">
+        <label asp-for="TcmClient.Client.Doctor.Address" class="control-label">Address:</label>
+        <input asp-for="TcmClient.Client.Doctor.Address" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Doctor.Address" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="Other" class="control-label">Other:</label>
+        <input asp-for="Other" class="form-control" >
+        <span asp-validation-for="Other" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Other_Phone" class="control-label">Phone No:</label>
+        <input asp-for="Other_Phone" class="form-control" >
+        <span asp-validation-for="Other_Phone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="Other_Address" class="control-label">Address:</label>
+        <input asp-for="Other_Address" class="form-control" >
+        <span asp-validation-for="Other_Address" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="Other_City" class="control-label">City, State, Zip:</label>
+        <input asp-for="Other_City" class="form-control" >
+        <span asp-validation-for="Other_City" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <strong>Need of Special Accommodations?</strong>&nbsp;&nbsp;
+        <input type="checkbox" asp-for="NeedSpecial" class="form-check-input">
+    </div>
+    <div class="form-group col-md-9">
+        <label asp-for="NeedSpecial_Specify" class="control-label">Specify:</label>
+        <input asp-for="NeedSpecial_Specify" class="form-control">
+        <span asp-validation-for="NeedSpecial_Specify" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <label asp-for="CaseManagerNotes" class="control-label">Case Manager's notes:</label>
+        <textarea asp-for="CaseManagerNotes" class="form-control" rows="2"></textarea>
+        <span asp-validation-for="CaseManagerNotes" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    
+</div>
+<script>
+    check1.addEventListener('change', (e) => {
+        if (check1.checked == true) {
+            check101.checked = false;
+        } else {
+            check101.checked = true;
+        }
+
+    })
+    check101.addEventListener('change', (e) => {
+        if (check101.checked == true) {
+            check1.checked = false;
+        } else {
+            check1.checked = true;
+        }
+
+    })
+    if (check1.checked == true) {
+        check101.checked = false;
+    } else {
+        check101.checked = true;
+    }
+    
+</script>
+
+
+

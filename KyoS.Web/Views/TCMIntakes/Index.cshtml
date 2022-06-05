@@ -1,0 +1,210 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMClientEntity>
+@{
+    ViewData["Title"] = "TCM Intakes";
+}
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">TCM Intakes</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @*<div class="alert alert-warning" role="alert">
+            <span class="sr-only"></span>*@
+        <strong>Note: </strong> All clients will be displayed, orange color means the client has not intake documents
+        @*</div>*@
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">TCM Intakes</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-3">
+                                @Html.DisplayNameFor(model => model.Client.Name)
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.Client.Code)
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.Client.AdmisionDate)
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                MH Therapy
+                            </th>
+                            <th class="col-md-1" align="right">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            @if ((item.TCMIntakeForm == null))
+                            {
+                                <tr style="color:orange">
+                                    <td>
+                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-warning"></i>
+                                        }
+                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-warning"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Client.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Client.Code)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Client.AdmisionDate)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-warning">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Client.Service)
+                                    </td>
+                                    <td align="right">
+                                        @if (User.IsInRole("Manager"))
+                                        {
+                                            <a asp-action="TCMIntakeDashboard" asp-route-id="@item.Id" class="btn btn-warning" title="New TCM Intake"><i class="glyphicon glyphicon-plus"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-warning disabled" title="New Intake"><i class="glyphicon glyphicon-plus"></i></a>
+                                        }
+                                        @if ((item.TCMIntakeForm != null) && (item.TcmIntakeConsentForTreatment != null) && (item.TcmIntakeConsentForRelease != null) && (item.TcmIntakeConsumerRights != null)
+                                          && (item.TcmIntakeAcknowledgementHipa != null) && (item.TCMIntakeOrientationChecklist != null) && (item.TCMIntakeAdvancedDirective != null))
+                                        {
+                                            <a asp-action="PrintIntake" asp-route-id="@item.TCMIntakeForm.Id" class="btn btn-success" title="Print TCM Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-success disabled" title="Print Intake"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>
+                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Client.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Client.Code)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Client.AdmisionDate)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-success">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Client.Service)
+                                    </td>
+                                    <td align="right">
+                                        @if (User.IsInRole("Manager"))
+                                        {
+                                            <a asp-action="TCMIntakeDashboard" asp-route-id="@item.Id" class="btn btn-success" title="Edit TCM Intake"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-success disabled" title="Edit TCM Intake"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        }
+                                        @if ((item.TCMIntakeForm != null) && (item.TcmIntakeConsentForTreatment != null) && (item.TcmIntakeConsentForRelease != null) && (item.TcmIntakeConsumerRights != null)
+                                          && (item.TcmIntakeAcknowledgementHipa != null) && (item.TCMIntakeOrientationChecklist != null) && (item.TCMIntakeAdvancedDirective != null))
+                                        {
+                                            <a asp-action="PrintIntake" asp-route-id="@item.TCMIntakeForm.Id" class="btn btn-success" title="Print TCM Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-success disabled" title="Print TCM Intake"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+                        $(document).ready(function () {
+                            $('#MyTable').DataTable({
+                                "order": [[0, "asc"]],
+                                "pageLength": 100
+                            });
+
+                            // Delete item
+                            var item_to_delete;
+
+                            $('.deleteItem').click((e) => {
+                                item_to_delete = e.currentTarget.dataset.id;
+                            });
+
+                            $("#btnYesDelete").click(function () {
+                                var url = "@Url.Action("Delete", "TCMIntakes")";
+                                window.location.href = url + '/' + item_to_delete;
+                            });
+                        });
+    </script>
+}
