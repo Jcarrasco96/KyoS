@@ -46,8 +46,7 @@
         </div>
 
         <div class="col-md-12">
-            <div class="panel panel-default">
-                var dias = 0;
+            <div class="panel panel-default">                
                 <div class="panel-heading">
                     <h3 class="panel-title">Master Treatment Plan</h3>
                 </div>
@@ -104,8 +103,9 @@
                                                         <tr>
                                                             <th class="col-md-1" style="text-align:center">Date</th>
                                                             <th class="col-md-2" style="text-align:center">Date Review On</th>
-                                                            <th class="col-md-3" style="text-align:center">Admitted by</th>
+                                                            <th class="col-md-4" style="text-align:center">Admitted by</th>
                                                             <th class="col-md-2" style="text-align:center">Month</th>
+                                                            <th class="col-md-1" style="text-align:center;">Status</th>
                                                             <th class="col-md-2" style="text-align:center"></th>
                                                         </tr>
                                                         @foreach (var element in item.MtpReviewList)
@@ -114,7 +114,33 @@
                                                                 <td align="center">@Html.DisplayFor(modelItem => element.DataOfService)</td>
                                                                 <td align="center">@Html.DisplayFor(modelItem => element.ReviewedOn)</td>
                                                                 <td align="center">@Html.DisplayFor(modelItem => element.Therapist)</td>
-                                                                <td align="center">@Html.DisplayFor(modelItem => element.MonthOfTreatment)</td>
+                                                                <td align="center">@Html.DisplayFor(modelItem => element.MonthOfTreatment)</td>                                                                
+                                                                <td align="center">
+                                                                    @if (element.Status == KyoS.Common.Enums.AdendumStatus.Edition)
+                                                                    {
+                                                                        <span class="label label-default">
+                                                                            Edition
+                                                                        </span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if (element.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                                                        {
+                                                                            <span class="label label-info">
+                                                                                Pending
+                                                                            </span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                                            {
+                                                                                <span class="label label-success">
+                                                                                    Approved
+                                                                                </span>
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                </td> 
                                                                 <td align="center">
                                                                     @if (User.IsInRole("Supervisor"))
                                                                     {
@@ -396,8 +422,9 @@
                                                         <tr>
                                                             <th class="col-md-1" style="text-align:center">Date</th>
                                                             <th class="col-md-2" style="text-align:center">Date Review On</th>
-                                                            <th class="col-md-3" style="text-align:center">Admitted by</th>
+                                                            <th class="col-md-4" style="text-align:center">Admitted by</th>
                                                             <th class="col-md-2" style="text-align:center">Month</th>
+                                                            <th class="col-md-1" style="text-align:center;">Status</th>
                                                             <th class="col-md-2" style="text-align:center"></th>
                                                         </tr>
                                                         @foreach (var element in item.MtpReviewList)
@@ -406,7 +433,33 @@
                                                                 <td align="center">@Html.DisplayFor(modelItem => element.DataOfService)</td>
                                                                 <td align="center">@Html.DisplayFor(modelItem => element.ReviewedOn)</td>
                                                                 <td align="center">@Html.DisplayFor(modelItem => element.Therapist)</td>
-                                                                <td align="center">@Html.DisplayFor(modelItem => element.MonthOfTreatment)</td>
+                                                                <td align="center">@Html.DisplayFor(modelItem => element.MonthOfTreatment)</td>                                                                
+                                                                <td align="center">
+                                                                    @if (element.Status == KyoS.Common.Enums.AdendumStatus.Edition)
+                                                                    {
+                                                                        <span class="label label-default">
+                                                                            Edition
+                                                                        </span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if (element.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                                                        {
+                                                                            <span class="label label-info">
+                                                                                Pending
+                                                                            </span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                                            {
+                                                                                <span class="label label-success">
+                                                                                    Approved
+                                                                                </span>
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                </td> 
                                                                 <td align="center">
                                                                     @if (User.IsInRole("Supervisor"))
                                                                     {

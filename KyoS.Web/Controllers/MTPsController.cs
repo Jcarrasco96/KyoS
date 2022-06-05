@@ -1957,6 +1957,9 @@ namespace KyoS.Web.Controllers
                                                .Include(m => m.Goals)
                                                .ThenInclude(g => g.Objetives)
 
+                                               .Include(m => m.Goals)
+                                               .ThenInclude(g => g.Adendum)
+
                                                .Include(wc => wc.Client)
                                                .ThenInclude(c => c.Clients_Diagnostics)
                                                .ThenInclude(cd => cd.Diagnostic)
