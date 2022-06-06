@@ -24,6 +24,14 @@ namespace KyoS.Web.Data.Entities
 
         public Workday_Client Workday_Client { get; set; }
 
+        public FarsFormEntity FarsForm { get; set; }
+
+        public MTPReviewEntity MTPReview { get; set; }
+
+        public AdendumEntity Addendum { get; set; }
+
+        public DischargeEntity Discharge { get; set; }
+
         public string From { get; set; }
 
         public string To { get; set; }

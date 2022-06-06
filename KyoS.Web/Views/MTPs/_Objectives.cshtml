@@ -52,20 +52,3 @@
 <div class="col-md-12">
     &nbsp;
 </div>
-@if(User.IsInRole("Admin"))
-{ 
-<div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label class="control-label">Classification</label>
-            @Html.ListBox("classifications", ViewData["classification"] as MultiSelectList, new { @class = "chosen-select", @style = "width:100%;" })
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="form-group">            
-        </div>
-    </div>
-</div>
-}
-
-

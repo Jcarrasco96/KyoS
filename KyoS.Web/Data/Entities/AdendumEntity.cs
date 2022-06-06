@@ -46,5 +46,7 @@ namespace KyoS.Web.Data.Entities
         public SupervisorEntity Supervisor { get; set; }
 
         public AdendumStatus Status { get; set; }
+
+        public IEnumerable<MessageEntity> Messages { get; set; }
     }
 }
