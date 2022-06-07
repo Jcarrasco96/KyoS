@@ -11,5 +11,6 @@ namespace KyoS.Web.Models
     public class MTPReviewViewModel : MTPReviewEntity
     {
         public int IdMTP { get; set; }
+        public int Origin { get; set; }
     }
 }

@@ -91,6 +91,13 @@ namespace KyoS.Web.Data
         public DbSet<Bio_BehavioralHistoryEntity> Bio_BehavioralHistory { get; set; }
         public DbSet<AdendumEntity> Adendums { get; set; }
         public DbSet<MTPReviewEntity> MTPReviews { get; set; }
+        public DbSet<TCMIntakeFormEntity> TCMIntakeForms { get; set; }
+        public DbSet<TCMIntakeConsentForTreatmentEntity> TCMIntakeConsentForTreatment { get; set; }
+        public DbSet<TCMIntakeConsentForReleaseEntity> TCMIntakeConsentForRelease { get; set; }
+        public DbSet<TCMIntakeConsumerRightsEntity> TCMIntakeConsumerRights { get; set; }
+        public DbSet<TCMIntakeAcknowledgementHippaEntity> TCMIntakeAcknowledgement { get; set; }
+        public DbSet<TCMIntakeOrientationChecklistEntity> TCMIntakeOrientationCheckList { get; set; }
+        public DbSet<TCMIntakeAdvancedDirectiveEntity> TCMIntakeAdvancedDirective { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -366,6 +373,48 @@ namespace KyoS.Web.Data
                        .WithOne(s => s.Mtp)
                        .OnDelete(DeleteBehavior.Cascade)
                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TCMIntakeForm)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMIntakeFormEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TcmIntakeConsentForTreatment)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMIntakeConsentForTreatmentEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TcmIntakeConsentForRelease)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMIntakeConsentForReleaseEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TcmIntakeConsumerRights)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMIntakeConsumerRightsEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TcmIntakeAcknowledgementHipa)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMIntakeAcknowledgementHippaEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                       .HasOne(c => c.TCMIntakeOrientationChecklist)
+                       .WithOne(s => s.TcmClient)
+                       .OnDelete(DeleteBehavior.Cascade)
+                       .HasForeignKey<TCMIntakeOrientationChecklistEntity>(s => s.TcmClient_FK);
+
+           modelBuilder.Entity<TCMClientEntity>()
+                       .HasOne(c => c.TCMIntakeAdvancedDirective)
+                       .WithOne(s => s.TcmClient)
+                       .OnDelete(DeleteBehavior.Cascade)
+                       .HasForeignKey<TCMIntakeAdvancedDirectiveEntity>(s => s.TcmClient_FK);
         }
     }
 }

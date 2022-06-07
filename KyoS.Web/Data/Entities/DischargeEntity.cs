@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using KyoS.Web.Data.Contracts;
 using KyoS.Common.Enums;
+using System.Collections.Generic;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -96,5 +97,7 @@ namespace KyoS.Web.Data.Entities
         public DischargeStatus Status { get; set; }
 
         public ServiceType TypeService { get; set; }
+
+        public IEnumerable<MessageEntity> Messages { get; set; }
     }
 }

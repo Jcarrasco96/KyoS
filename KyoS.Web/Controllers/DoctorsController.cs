@@ -85,6 +85,18 @@ namespace KyoS.Web.Controllers
                 }
             }
 
+            UserEntity user_logged = _context.Users
+
+                                              .Include(u => u.Clinic)
+                                              .ThenInclude(c => c.Setting)
+
+                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
             DoctorViewModel model = new DoctorViewModel();            
             return View(model);           
         }
@@ -134,6 +146,18 @@ namespace KyoS.Web.Controllers
             if (id == null)
             {
                 return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+
+                                              .Include(u => u.Clinic)
+                                              .ThenInclude(c => c.Setting)
+
+                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
             }
 
             DoctorEntity doctorEntity = await _context.Doctors.FirstOrDefaultAsync(c => c.Id == id);

@@ -49,13 +49,13 @@
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => day_client.Present)
                                 </td>
-                                <td align="center">                                    
+                                <td align="center">
                                     <span class="label label-success">
                                         Approved
                                     </span>
                                 </td>
                                 <td align="right">
-                                    <a asp-action="PrintNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print note"  target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                    <a asp-action="PrintNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                 </td>
                             </tr>
 
@@ -70,11 +70,20 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
     <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
+
+            $.fn.dataTable.moment('MM/DD/YYYY');     
+
             $('#MyTable').DataTable({
-              "pageLength": 100
+                "order": [[0, "asc"]],
+                "lengthMenu": [[100, 200, -1], [100, 200, "All"]],
+                "pageLength": 200
             });
         });
     </script>

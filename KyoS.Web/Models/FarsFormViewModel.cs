@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using KyoS.Web.Data.Entities;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using KyoS.Web.Data.Entities;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Models
@@ -16,5 +12,6 @@ namespace KyoS.Web.Models
 
         public int IdClient { get; set; }
         public int IdSupervisor { get; set; }
+        public int Origin { get; set; }
     }
 }

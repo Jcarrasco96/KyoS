@@ -26,6 +26,9 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, CaseManager")]
         public async Task<IActionResult> Index(int idError = 0)
         {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (idError == 1) //Imposible to delete
             {
                 ViewBag.Delete = "N";
@@ -48,14 +51,7 @@ namespace KyoS.Web.Controllers
                                           .OrderByDescending(i => i.CreatedDate)
                                           .ToListAsync());
             }
-            UserEntity user_logged = await _context.Users
-                                                   .Include(u => u.Clinic)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (user_logged.Clinic == null)
-            {
-                return RedirectToAction("Home/Error404");
-            }
-
+            
             if (User.IsInRole("Manager"))
             {
                 return View(await _context.Incidents
@@ -80,7 +76,7 @@ namespace KyoS.Web.Controllers
         }
         
         [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator")]
-        public IActionResult Create(int id = 0)
+        public async Task<IActionResult> Create(int id = 0)
         {
             if (id == 1)
             {
@@ -97,6 +93,10 @@ namespace KyoS.Web.Controllers
                     ViewBag.Creado = "N";
                 }
             }
+
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);            
 
             IncidentViewModel model = new IncidentViewModel();
             
@@ -181,6 +181,10 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            
             IncidentEntity incidentEntity = await _context.Incidents
                                                           .Include(i => i.UserCreatedBy)                                                      
                                                           .FirstOrDefaultAsync(i => i.Id == id);

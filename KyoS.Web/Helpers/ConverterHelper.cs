@@ -261,7 +261,12 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                IdFacilitatorPSR = model.IdFacilitatorPSR
+                IdFacilitatorPSR = model.IdFacilitatorPSR,
+                OtherLanguage_Read = model.OtherLanguage_Read,
+                OtherLanguage_Speak = model.OtherLanguage_Speak,
+                OtherLanguage_Understand = model.OtherLanguage_Understand,
+                MedicareId = model.MedicareId,
+                DateOfClose = model.DateOfClose
             };
         }
 
@@ -331,7 +336,12 @@ namespace KyoS.Web.Helpers
                 Services = _combosHelper.GetComboServices(),
                 IdFacilitatorIT = (clientEntity.IndividualTherapyFacilitator != null) ? clientEntity.IndividualTherapyFacilitator.Id : 0,
                 ITFacilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, true),
-                IdFacilitatorPSR = clientEntity.IdFacilitatorPSR
+                IdFacilitatorPSR = clientEntity.IdFacilitatorPSR,
+                OtherLanguage_Read = clientEntity.OtherLanguage_Read,
+                OtherLanguage_Speak = clientEntity.OtherLanguage_Speak,
+                OtherLanguage_Understand = clientEntity.OtherLanguage_Understand,
+                MedicareId = clientEntity.MedicareId,
+                DateOfClose = clientEntity.DateOfClose
             };
         }
 
@@ -344,7 +354,9 @@ namespace KyoS.Web.Helpers
                 Code = model.Code,
                 LinkedUser = _userHelper.GetUserNameById(model.IdUser),
                 Name = model.Name,
-                SignaturePath = signaturePath
+                SignaturePath = signaturePath,
+                RaterEducation = model.RaterEducation,
+                RaterFMHCertification = model.RaterFMHCertification
             };
         }
 
@@ -360,6 +372,8 @@ namespace KyoS.Web.Helpers
                 IdUser = _userHelper.GetIdByUserName(supervisorEntity.LinkedUser),
                 UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, idClinic),
                 SignaturePath = supervisorEntity.SignaturePath,
+                RaterEducation = supervisorEntity.RaterEducation,
+                RaterFMHCertification = supervisorEntity.RaterFMHCertification
             };
         }
 
@@ -878,9 +892,17 @@ namespace KyoS.Web.Helpers
             return new MessageEntity
             {
                 Id = isNew ? 0 : model.Id,
-                Workday_Client = await _context.Workdays_Clients
-                                               .Include(wc => wc.Facilitator)
-                                               .FirstOrDefaultAsync(wc => wc.Id == model.IdWorkdayClient),
+                Workday_Client = (model.IdWorkdayClient != 0) ? await _context.Workdays_Clients
+                                                                              .Include(wc => wc.Facilitator)
+                                                                              .FirstOrDefaultAsync(wc => wc.Id == model.IdWorkdayClient) : null,
+                FarsForm = (model.IdFarsForm != 0) ? await _context.FarsForm                                                                   
+                                                                   .FirstOrDefaultAsync(f => f.Id == model.IdFarsForm) : null,
+                MTPReview = (model.IdMTPReview != 0) ? await _context.MTPReviews
+                                                                     .FirstOrDefaultAsync(m => m.Id == model.IdMTPReview) : null,
+                Addendum = (model.IdAddendum != 0) ? await _context.Adendums
+                                                                   .FirstOrDefaultAsync(a => a.Id == model.IdAddendum) : null,
+                Discharge = (model.IdDischarge != 0) ? await _context.Discharge
+                                                                     .FirstOrDefaultAsync(d => d.Id == model.IdDischarge) : null,
                 Title = model.Title,
                 Text = model.Text,
                 DateCreated = DateTime.Now,
@@ -1174,7 +1196,8 @@ namespace KyoS.Web.Helpers
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
-                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                MemberId = model.MemberId
             };
         }
 
@@ -1194,7 +1217,8 @@ namespace KyoS.Web.Helpers
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
-                LastModifiedOn = model.LastModifiedOn
+                LastModifiedOn = model.LastModifiedOn,
+                MemberId = model.MemberId
             };
         }
 
@@ -3299,6 +3323,444 @@ namespace KyoS.Web.Helpers
                 DataOfService = model.DataOfService
 
             };           
-        }        
+        }
+
+        public async Task<TCMIntakeFormEntity> ToTCMIntakeFormEntity(TCMIntakeFormViewModel model, bool isNew, string userId)
+        {
+            TCMIntakeFormEntity salida;
+            salida = new TCMIntakeFormEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+
+                TcmClient_FK = model.TcmClient_FK,
+                TcmClient = await _context.TCMClient
+                                          .Include(m => m.Client)
+                                          .ThenInclude(m => m.Clients_Diagnostics)
+                                          .ThenInclude(m => m.Diagnostic)
+                                          .Include(m => m.Client)
+                                          .ThenInclude(m => m.Clients_HealthInsurances)
+                                          .ThenInclude(m => m.HealthInsurance)
+                                          .Include(m => m.Client.LegalGuardian)
+                                          .Include(n => n.Client.EmergencyContact)
+                                          .Include(n => n.Client.Referred)
+                                          .Include(n => n.Client.Doctor)
+                                          .Include(n => n.Client.Psychiatrist)
+                                          .FirstOrDefaultAsync(n => n.Id == model.Id),
+                Agency = model.Agency,
+                CaseManagerNotes = model.CaseManagerNotes,
+                Elibigility = model.Elibigility,
+                EmploymentStatus = model.EmploymentStatus,
+                Grade = model.Grade,
+                IntakeDate = model.IntakeDate,
+                IsClientCurrently = model.IsClientCurrently,
+                LTC = model.LTC,
+                MMA = model.MMA,
+                MonthlyFamilyIncome = model.MonthlyFamilyIncome,
+                NeedSpecial = model.NeedSpecial,
+                NeedSpecial_Specify = model.NeedSpecial_Specify,
+                Other = model.Other,
+                Other_Address = model.Other_Address,
+                Other_City = model.Other_City,
+                Other_Phone = model.Other_Phone,
+                PrimarySourceIncome = model.PrimarySourceIncome,
+                ResidentialStatus = model.ResidentialStatus,
+                School = model.School,
+                School_EBD = model.School_EBD,
+                School_ESE = model.School_ESE,
+                School_ESOL = model.School_ESOL,
+                School_HHIP = model.School_HHIP,
+                School_Other = model.School_Other,
+                School_Regular = model.School_Regular,
+                SecondaryContact = model.SecondaryContact,
+                SecondaryContact_Phone = model.SecondaryContact_Phone,
+                SecondaryContact_RelationShip = model.SecondaryContact_RelationShip,
+                TeacherCounselor_Name = model.TeacherCounselor_Name,
+                TeacherCounselor_Phone = model.TeacherCounselor_Phone,
+                TitlePosition = model.TitlePosition,
+                EducationLevel = model.EducationLevel,
+                InsuranceOther = model.InsuranceOther,
+                ReligionOrEspiritual = model.ReligionOrEspiritual,
+                CountryOfBirth = model.CountryOfBirth,
+                EmergencyContact = model.EmergencyContact,
+                StatusOther = model.StatusOther,
+                StatusOther_Explain = model.StatusOther_Explain,
+                StatusResident = model.StatusResident,
+                StausCitizen = model.StausCitizen,
+                YearEnterUsa = model.YearEnterUsa
+
+            };
+
+            return salida;
+        }
+
+        public TCMIntakeFormViewModel ToTCMIntakeFormViewModel(TCMIntakeFormEntity model)
+        {
+            return new TCMIntakeFormViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                IdTCMClient = model.TcmClient.Client.Id,
+                
+                TcmClient_FK = model.TcmClient_FK,
+                TcmClient = model.TcmClient,
+                Agency = model.Agency,
+                CaseManagerNotes = model.CaseManagerNotes,
+                Elibigility = model.Elibigility,
+                EmploymentStatus = model.EmploymentStatus,
+                Grade = model.Grade,
+                IntakeDate = model.IntakeDate,
+                IsClientCurrently = model.IsClientCurrently,
+                LTC = model.LTC,
+                MMA = model.MMA,
+                MonthlyFamilyIncome = model.MonthlyFamilyIncome,
+                NeedSpecial = model.NeedSpecial,
+                NeedSpecial_Specify = model.NeedSpecial_Specify,
+                Other = model.Other,
+                Other_Address = model.Other_Address,
+                Other_City = model.Other_City,
+                Other_Phone = model.Other_Phone,
+                PrimarySourceIncome = model.PrimarySourceIncome,
+                ResidentialStatus = model.ResidentialStatus,
+                School = model.School,
+                School_EBD = model.School_EBD,
+                School_ESE = model.School_ESE,
+                School_ESOL = model.School_ESOL,
+                School_HHIP = model.School_HHIP,
+                School_Other = model.School_Other,
+                School_Regular = model.School_Regular,
+                SecondaryContact = model.SecondaryContact,
+                SecondaryContact_Phone = model.SecondaryContact_Phone,
+                SecondaryContact_RelationShip = model.SecondaryContact_RelationShip,
+                TeacherCounselor_Name = model.TeacherCounselor_Name,
+                TeacherCounselor_Phone = model.TeacherCounselor_Phone,
+                TitlePosition = model.TitlePosition,
+                EducationLevel = model.EducationLevel,
+                InsuranceOther = model.InsuranceOther,
+                ReligionOrEspiritual = model.ReligionOrEspiritual,
+                CountryOfBirth = model.CountryOfBirth,
+                EmergencyContact = model.EmergencyContact,
+                StatusOther = model.StatusOther,
+                StatusOther_Explain = model.StatusOther_Explain,
+                StatusResident = model.StatusResident,
+                StausCitizen = model.StausCitizen,
+                YearEnterUsa = model.YearEnterUsa
+                
+
+            };
+        }
+
+        public async Task<TCMIntakeConsentForTreatmentEntity> ToTCMIntakeConsentForTreatmentEntity(TCMIntakeConsentForTreatmentViewModel model, bool isNew)
+        {
+            return new TCMIntakeConsentForTreatmentEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient = model.TcmClient,
+
+                Aggre = model.Aggre,
+                Aggre1 = model.Aggre1,
+                AuthorizeRelease = model.AuthorizeRelease,
+                AuthorizeStaff = model.AuthorizeStaff,
+                Certify = model.Certify,
+                Certify1 = model.Certify1,
+                Client_FK = model.Client_FK,//model.Client.Id,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Underestand = model.Underestand,
+                AdmissionedFor = model.AdmissionedFor,
+
+
+            };
+        }
+
+        public TCMIntakeConsentForTreatmentViewModel ToTCMIntakeConsentForTreatmentViewModel(TCMIntakeConsentForTreatmentEntity model)
+        {
+            return new TCMIntakeConsentForTreatmentViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                Aggre = model.Aggre,
+                Aggre1 = model.Aggre1,
+                AuthorizeRelease = model.AuthorizeRelease,
+                AuthorizeStaff = model.AuthorizeStaff,
+                Certify = model.Certify,
+                Certify1 = model.Certify1,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Underestand = model.Underestand,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+
+        }
+
+        public async Task<TCMIntakeConsentForReleaseEntity> ToTCMIntakeConsentForReleaseEntity(TCMIntakeConsentForReleaseViewModel model, bool isNew)
+        {
+            return new TCMIntakeConsentForReleaseEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Discaherge = model.Discaherge,
+                ForPurpose_CaseManagement = model.ForPurpose_CaseManagement,
+                ForPurpose_Other = model.ForPurpose_Other,
+                ForPurpose_OtherExplain = model.ForPurpose_OtherExplain,
+                ForPurpose_Treatment = model.ForPurpose_Treatment,
+                InForm_Facsimile = model.InForm_Facsimile,
+                InForm_VerbalInformation = model.InForm_VerbalInformation,
+                InForm_WrittenRecords = model.InForm_WrittenRecords,
+                History = model.History,
+                HospitalRecord = model.HospitalRecord,
+                IncidentReport = model.IncidentReport,
+
+                LabWork = model.LabWork,
+                Other = model.Other,
+                Other_Explain = model.Other_Explain,
+                ProgressReports = model.ProgressReports,
+                PsychologycalEvaluation = model.PsychologycalEvaluation,
+                SchoolRecord = model.SchoolRecord,
+                ToRelease = model.ToRelease,
+                AdmissionedFor = model.AdmissionedFor,
+            };
+        }
+
+        public TCMIntakeConsentForReleaseViewModel ToTCMIntakeConsentForReleaseViewModel(TCMIntakeConsentForReleaseEntity model)
+        {
+            return new TCMIntakeConsentForReleaseViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                ToRelease = model.ToRelease,
+                SchoolRecord = model.SchoolRecord,
+                PsychologycalEvaluation = model.PsychologycalEvaluation,
+                ProgressReports = model.ProgressReports,
+                Other = model.Other,
+                Other_Explain = model.Other_Explain,
+                Discaherge = model.Discaherge,
+                LabWork = model.LabWork,
+                History = model.History,
+                HospitalRecord = model.HospitalRecord,
+                IncidentReport = model.IncidentReport,
+                ForPurpose_CaseManagement = model.ForPurpose_CaseManagement,
+                ForPurpose_Other = model.ForPurpose_Other,
+                ForPurpose_OtherExplain = model.ForPurpose_OtherExplain,
+                ForPurpose_Treatment = model.ForPurpose_Treatment,
+                InForm_Facsimile = model.InForm_Facsimile,
+                InForm_VerbalInformation = model.InForm_VerbalInformation,
+                InForm_WrittenRecords = model.InForm_WrittenRecords,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+
+        }
+
+        public async Task<TCMIntakeConsumerRightsEntity> ToTCMIntakeConsumerRightsEntity(TCMIntakeConsumerRightsViewModel model, bool isNew)
+        {
+            return new TCMIntakeConsumerRightsEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                ServedOf = model.ServedOf,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+        }
+
+        public TCMIntakeConsumerRightsViewModel ToTCMIntakeConsumerRightsViewModel(TCMIntakeConsumerRightsEntity model)
+        {
+            return new TCMIntakeConsumerRightsViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                ServedOf = model.ServedOf,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+
+        }
+
+        public async Task<TCMIntakeAcknowledgementHippaEntity> ToTCMIntakeAcknoewledgementHippaEntity(TCMIntakeAcknoewledgementHippaViewModel model, bool isNew)
+        {
+            return new TCMIntakeAcknowledgementHippaEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+        }
+
+        public TCMIntakeAcknoewledgementHippaViewModel ToTCMIntakeAcknoewledgementHippaViewModel(TCMIntakeAcknowledgementHippaEntity model)
+        {
+            return new TCMIntakeAcknoewledgementHippaViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+
+        }
+
+        public async Task<TCMIntakeOrientationChecklistEntity> ToTCMIntakeOrientationChecklistEntity(TCMIntakeOrientationCheckListViewModel model, bool isNew)
+        {
+            return new TCMIntakeOrientationChecklistEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Access = model.Access,
+                AgencyExpectation = model.AgencyExpectation,
+                AgencyPolice = model.AgencyPolice,
+                Code = model.Code,
+                Confidentiality = model.Confidentiality,
+                Discharge = model.Discharge,
+                Education = model.Education,
+                Explanation = model.Explanation,
+                Fire = model.Fire,
+                Identification = model.Identification,
+                IndividualPlan = model.IndividualPlan,
+                Insent = model.Insent,
+                Methods = model.Methods,
+                PoliceGrievancce = model.PoliceGrievancce,
+                PoliceIllicit = model.PoliceIllicit,
+                PoliceTobacco = model.PoliceTobacco,
+                PoliceWeapons = model.PoliceWeapons,
+                Program = model.Program,
+                Purpose = model.Purpose,
+                Rights = model.Rights,
+                Services = model.Services,
+                TheAbove = model.TheAbove,
+                TourFacility = model.TourFacility,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+        }
+
+        public TCMIntakeOrientationCheckListViewModel ToTCMIntakeOrientationChecklistViewModel(TCMIntakeOrientationChecklistEntity model)
+        {
+            return new TCMIntakeOrientationCheckListViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTcmClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                Access = model.Access,
+                AgencyExpectation = model.AgencyExpectation,
+                AgencyPolice = model.AgencyPolice,
+                Code = model.Code,
+                Confidentiality = model.Confidentiality,
+                Discharge = model.Discharge,
+                Education = model.Education,
+                Explanation = model.Explanation,
+                Fire = model.Fire,
+                Identification = model.Identification,
+                IndividualPlan = model.IndividualPlan,
+                Insent = model.Insent,
+                Methods = model.Methods,
+                PoliceGrievancce = model.PoliceGrievancce,
+                PoliceIllicit = model.PoliceIllicit,
+                PoliceTobacco = model.PoliceTobacco,
+                PoliceWeapons = model.PoliceWeapons,
+                Program = model.Program,
+                Purpose = model.Purpose,
+                Rights = model.Rights,
+                Services = model.Services,
+                TheAbove = model.TheAbove,
+                TourFacility = model.TourFacility,
+                AdmissionedFor = model.AdmissionedFor,
+
+            };
+
+        }
+
+        public async Task<TCMIntakeAdvancedDirectiveEntity> ToTCMIntakeAdvancedDirectiveEntity(TCMIntakeAdvancedDirectiveViewModel model, bool isNew)
+        {
+            return new TCMIntakeAdvancedDirectiveEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+                IHave = model.IHave,
+                IHaveNot = model.IHaveNot
+
+            };
+        }
+
+        public TCMIntakeAdvancedDirectiveViewModel ToTCMIntakeAdvancedDirectiveViewModel(TCMIntakeAdvancedDirectiveEntity model)
+        {
+            return new TCMIntakeAdvancedDirectiveViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+                IHave = model.IHave,
+                IHaveNot = model.IHaveNot
+            };
+
+        }
     }
 }

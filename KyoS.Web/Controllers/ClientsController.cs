@@ -132,7 +132,11 @@ namespace KyoS.Web.Controllers
                         IdLegalGuardian = 0,
                         LegalsGuardians = _combosHelper.GetComboLegalGuardiansByClinic(user_logged.Id),
                         DiagnosticTemp = _context.DiagnosticsTemp,
-                        DocumentTemp = _context.DocumentsTemp
+                        DocumentTemp = _context.DocumentsTemp,
+                        OtherLanguage_Read = false,
+                        OtherLanguage_Speak = false,
+                        OtherLanguage_Understand = false,
+                        MedicareId = ""
                     };
                     return View(model);
                 }

@@ -69,10 +69,15 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
             $('#MyTable').DataTable({
-              "pageLength": 100
+                "order": [[0, "asc"]],
+                "lengthMenu": [[100, 200, -1], [100, 200, "All"]],
+                "pageLength": 200
             });
         });
     </script>

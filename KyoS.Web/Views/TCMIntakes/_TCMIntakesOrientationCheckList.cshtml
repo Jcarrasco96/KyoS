@@ -1,0 +1,56 @@
+﻿@model KyoS.Web.Models.TCMIntakeOrientationCheckListViewModel
+<div class="col-md-12">
+    <pre>
+                               
+    The following information has been provided as part of the Orientation Process. A check of the item and the signatures below indicate that each area has been fully explained
+    and is understood by:
+
+    <input type="checkbox" asp-for="TourFacility" class="form-check-input"> Tour of facility(if applicable)
+    <input type="checkbox" asp-for="Rights" class="form-check-input"> Rights and Responsibilities of the Consumer 
+    <input type="checkbox" asp-for="PoliceGrievancce" class="form-check-input"> Policy on grievance and appeal procedures 
+    <input type="checkbox" asp-for="Insent" class="form-check-input"> Intent/consent to treat/serve 
+    <input type="checkbox" asp-for="Services" class="form-check-input"> Services provided, days and hours of operation, and expected level of participation 
+    <input type="checkbox" asp-for="Access" class="form-check-input"> Access to emergency services, including afterhours emergencies 
+    <input type="checkbox" asp-for="Code" class="form-check-input"> Code of ethics/conduct 
+    <input type="checkbox" asp-for="Confidentiality" class="form-check-input"> Confidentiality policy and limits of confidentiality 
+    <input type="checkbox" asp-for="Methods" class="form-check-input"> Methods, opportunities, and policy on input 
+    <input type="checkbox" asp-for="Explanation" class="form-check-input"> Explanation of financial obligations, fees, and financial arrangements 
+    <input type="checkbox" asp-for="Fire" class="form-check-input"> Fire, safety, and emergency precautions 
+    <input type="checkbox" asp-for="PoliceTobacco" class="form-check-input"> Policy on tobacco products no smoking on premise 
+    <input type="checkbox" asp-for="PoliceIllicit" class="form-check-input"> Policy on illicit or licit drugs brought into the facility 
+    <input type="checkbox" asp-for="PoliceWeapons" class="form-check-input"> Policy on weapons brought into the facility 
+    <input type="checkbox" asp-for="Identification" class="form-check-input"> Identification of the staff(s) responsible for service coordination 
+    <input type="checkbox" asp-for="Program" class="form-check-input"> Program rules and regulations 
+    <input type="checkbox" asp-for="Purpose" class="form-check-input"> Purpose and process of mental health screenings, case management assessment 
+    <input type="checkbox" asp-for="IndividualPlan" class="form-check-input"> Individual plan development and the participation of recipient in goal development and explanation of the potential course of treatment/service. 
+    <input type="checkbox" asp-for="Discharge" class="form-check-input"> Discharge/transition criteria and procedures 
+    <input type="checkbox" asp-for="AgencyPolice" class="form-check-input"> Agency’s Policy regarding response to and identification of potential risk to the recipient 
+    <input type="checkbox" asp-for="AgencyExpectation" class="form-check-input"> Agency’s expectations for legally required appointments, sanctions, or court notification (if applicable) 
+    <input type="checkbox" asp-for="Education" class="form-check-input"> Education on advance directives (if applicable) 
+    <input type="checkbox" asp-for="TheAbove" class="form-check-input"> The above has been reviewed with me and a copy has been provided to me. 
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    
+    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
+    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>     
+    
+    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+    </pre>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+        <label asp-for="Documents" class="forgot">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+        </label>
+    </div>
+</div>
+<br />
+
+

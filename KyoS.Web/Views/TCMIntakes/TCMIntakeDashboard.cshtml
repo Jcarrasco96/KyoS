@@ -1,0 +1,141 @@
+﻿@model KyoS.Web.Data.Entities.TCMClientEntity
+
+@{
+    ViewData["Title"] = "TCM Intake";
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("TCM Intake", "Index", "TCMIntakes")
+        </li>
+        <li class="active">TCM Intake of @Model.Client.Name</li>
+    </ul><!--.breadcrumb-->
+</div>
+<div>
+
+    <div class="row">
+        <div class="container-fluid">
+            <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">TCM Intake - @Model.Client.Name </span></h4>
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.TCMIntakeForm == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Intake<br>Intake Form</h4>
+                    <p style="text-align:right"><a asp-action="Create" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Intake<br>Intake Form</h4>
+                    <p style="text-align:right"><a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.TcmIntakeConsentForTreatment == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Consent for<br>Treatment</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMConsentForTreatment" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Consent for<br>Treatment</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMConsentForTreatment" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.TcmIntakeConsentForRelease == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Consent for<br>Release</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMConsentForRelease" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Consent for<br>Release</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMConsentForRelease" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.TcmIntakeConsumerRights == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Consumer<br>Rights</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMConsumerRights" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Consumer<br>Rights</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMConsumerRights" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.TcmIntakeAcknowledgementHipa == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">ACKNOWLEDGEMENT<br>Hippa</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMAcknowledgementHippa" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">ACKNOWLEDGEMENT<br>Hippa</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMAcknowledgementHippa" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.TCMIntakeOrientationChecklist == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Orientation<br>Checklist</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMOrientationCheckList" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Orientation<br>Checklist</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMOrientationCheckList" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-md-12">
+            &nbsp;
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.TCMIntakeAdvancedDirective == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Advance<br>Directive</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMIntakeAdvenceDirective" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Advance<br>Directive</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMIntakeAdvenceDirective" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+    </div>
+    </div>

@@ -2683,7 +2683,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator, Supervisor")]
-        public async Task<IActionResult> EditMTPReview(int? id)
+        public async Task<IActionResult> EditMTPReview(int? id, int origin  = 0)
         {
             if (id == null)
             {
@@ -2701,6 +2701,7 @@ namespace KyoS.Web.Controllers
             }
 
             MTPReviewViewModel mtpReviewViewModel = _converterHelper.ToMTPReviewViewModel(mtpReviewEntity);
+            mtpReviewViewModel.Origin = origin;
             if (mtpReviewViewModel.Mtp.Client.LegalGuardian == null)
                 mtpReviewViewModel.Mtp.Client.LegalGuardian = new LegalGuardianEntity();
             return View(mtpReviewViewModel);
@@ -2709,7 +2710,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Facilitator, Supervisor")]
-        public async Task<IActionResult> EditMTPReview(int id, MTPReviewViewModel mtpReviewViewModel, IFormCollection form)
+        public async Task<IActionResult> EditMTPReview(int id, MTPReviewViewModel mtpReviewViewModel)
         {
             if (id != mtpReviewViewModel.Id)
             {
@@ -2718,8 +2719,9 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 MTPReviewEntity mtpReviewEntity = await _converterHelper.ToMTPReviewEntity(mtpReviewViewModel, false, user_logged.Id);
                                 
@@ -2728,8 +2730,16 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("MTPRinEdit", "MTPs");
-                    
+                    if (mtpReviewViewModel.Origin == 1)
+                    {
+                        return RedirectToAction(nameof(PendingMtpReview));
+                    }
+                    if (mtpReviewViewModel.Origin == 2)
+                    {
+                        return RedirectToAction(nameof(MTPRinEdit));
+                    }
+
+                    return RedirectToAction(nameof(Index));                   
                 }
                 catch (System.Exception ex)
                 {
@@ -2767,7 +2777,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> ApproveMTPReview(int id)
+        public async Task<IActionResult> ApproveMTPReview(int id, int origin = 0)
         {
             UserEntity user_logged = await _context.Users
                                                   .Include(u => u.Clinic)
@@ -2781,7 +2791,16 @@ namespace KyoS.Web.Controllers
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(PendingMtpReview));
+            if (origin == 1)
+            {
+                return RedirectToAction(nameof(PendingMtpReview));
+            }
+            if (origin == 2)
+            {
+                return RedirectToAction(nameof(MTPRinEdit));
+            }
+
+            return RedirectToAction(nameof(Index));            
         }
 
         [Authorize(Roles = "Supervisor, Manager, Facilitator")]

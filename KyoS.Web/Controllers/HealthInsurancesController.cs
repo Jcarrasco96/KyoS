@@ -45,7 +45,7 @@ namespace KyoS.Web.Controllers
 
             if (user_logged.Clinic == null)
             {
-                return RedirectToAction("Home/Error404");
+                return RedirectToAction("NotAuthorized", "Account");
             }
 
             return View(await _context.HealthInsurances
@@ -53,7 +53,7 @@ namespace KyoS.Web.Controllers
                                       .OrderBy(c => c.Name).ToListAsync());
         }
 
-        public IActionResult Create(int id = 0)
+        public async Task<IActionResult> Create(int id = 0)
         {
             if (id == 1)
             {
@@ -69,6 +69,15 @@ namespace KyoS.Web.Controllers
                 {
                     ViewBag.Creado = "N";
                 }
+            }
+
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
             }
 
             HealthInsuranceViewModel entity = new HealthInsuranceViewModel()

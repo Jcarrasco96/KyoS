@@ -1763,6 +1763,7 @@ namespace KyoS.Web.Controllers
                                                       .Include(c => c.IntakeTransportation)
                                                       .Include(c => c.IntakeTuberculosis)
                                                       .Include(c => c.IntakeMedicalHistory)
+                                                      .Include(c => c.Clinic)
 
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
