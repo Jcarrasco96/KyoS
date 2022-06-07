@@ -32,17 +32,17 @@
 <div class="col-md-push-12">
     <div class="form-group col-md-2">
         <label asp-for="Country" class="control-label"></label>
-        <input asp-for="Country" class="form-control" readonly/>
+        <input asp-for="Country" class="form-control" readonly />
         <span asp-validation-for="Country" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
         <label asp-for="City" class="control-label"></label>
-        <input asp-for="City" class="form-control" readonly/>
+        <input asp-for="City" class="form-control" readonly />
         <span asp-validation-for="City" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
         <label asp-for="State" class="control-label"></label>
-        <input asp-for="State" class="form-control" readonly/>
+        <input asp-for="State" class="form-control" readonly />
         <span asp-validation-for="State" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
@@ -51,17 +51,22 @@
         <span asp-validation-for="IdRace" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
+        <label asp-for="PlaceOfBirth" class="control-label"></label>
+        <input asp-for="PlaceOfBirth" class="form-control" readonly/>
+        <span asp-validation-for="PlaceOfBirth" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
         <label asp-for="MaritalStatus" class="control-label"></label>
         <select asp-for="IdMaritalStatus" asp-items="Model.Maritals" class="form-control" disabled></select>
         <span asp-validation-for="IdMaritalStatus" class="text-danger"></span>
-    </div>
+    </div>    
+</div>
+<div class="col-md-push-12">
     <div class="form-group col-md-2">
         <label asp-for="Ethnicity" class="control-label"></label>
         <select asp-for="IdEthnicity" asp-items="Model.Ethnicities" class="form-control" disabled></select>
         <span asp-validation-for="IdEthnicity" class="text-danger"></span>
     </div>
-</div>
-<div class="col-md-push-12">
     <div class="form-group col-md-2">
         <label asp-for="PreferredLanguage" class="control-label"></label>
         <select asp-for="IdPreferredLanguage" asp-items="Model.Languages" class="form-control" disabled></select>
@@ -69,10 +74,23 @@
     </div>
     <div class="form-group col-md-2">
         <label asp-for="OtherLanguage" class="control-label"></label>
-        <input asp-for="OtherLanguage" class="form-control" readonly/>
+        <input asp-for="OtherLanguage" class="form-control" readonly />
         <span asp-validation-for="OtherLanguage" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-8">
+    <div class="form-group col-md-1">
+        <label asp-for="OtherLanguage_Read" class="control-label">Read</label><br />
+        <input type="checkbox" asp-for="OtherLanguage_Read" class="form-check-input" disabled>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="OtherLanguage_Speak" class="control-label">Speak</label><br />
+        <input type="checkbox" asp-for="OtherLanguage_Speak" class="form-check-input" disabled>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="OtherLanguage_Understand" class="control-label">Understand</label><br />
+        <input type="checkbox" asp-for="OtherLanguage_Understand" class="form-check-input" disabled>
+    </div>
+
+    <div class="form-group col-md-3">
         &nbsp;
     </div>
 </div>
@@ -103,6 +121,11 @@
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-3">
+        <label asp-for="IdRelationshipEC" class="control-label"></label>
+        <select asp-for="IdRelationshipEC" asp-items="Model.RelationshipsEC" class="form-control" disabled></select>
+        <span asp-validation-for="IdRelationshipEC" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
         <label asp-for="IdLegalGuardian" class="control-label"></label>
         <select asp-for="IdLegalGuardian" asp-items="Model.LegalsGuardians" class="form-control" disabled></select>
         <span asp-validation-for="IdLegalGuardian" class="text-danger"></span>
@@ -121,7 +144,7 @@
             <span asp-validation-for="IdService" class="text-danger"></span>
         </div>
         <div class="form-group col-md-3">
-            <label asp-for="IdFacilitatorIT" class="control-label"></label>            
+            <label asp-for="IdFacilitatorIT" class="control-label"></label>
             <select asp-for="IdFacilitatorIT" asp-items="Model.ITFacilitators" class="form-control" disabled></select>
             <span asp-validation-for="IdFacilitatorIT" class="text-danger"></span>
         </div>

@@ -29,11 +29,6 @@ namespace KyoS.Web.Controllers
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (user_logged.Clinic == null)
-            {
-                return RedirectToAction("NotAuthorized", "Account");
-            }
-
             if (idError == 1) //Imposible to delete
             {
                 ViewBag.Delete = "N";
@@ -101,11 +96,7 @@ namespace KyoS.Web.Controllers
 
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (user_logged.Clinic == null)
-            {
-                return RedirectToAction("NotAuthorized", "Account");
-            }
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);            
 
             IncidentViewModel model = new IncidentViewModel();
             
@@ -193,11 +184,7 @@ namespace KyoS.Web.Controllers
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (user_logged.Clinic == null)
-            {
-                return RedirectToAction("NotAuthorized", "Account");
-            }
-
+            
             IncidentEntity incidentEntity = await _context.Incidents
                                                           .Include(i => i.UserCreatedBy)                                                      
                                                           .FirstOrDefaultAsync(i => i.Id == id);
