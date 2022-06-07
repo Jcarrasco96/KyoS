@@ -1,0 +1,110 @@
+﻿@model KyoS.Web.Models.TCMIntakeConsentForReleaseViewModel
+
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="TcmClient.Client.Name" class="control-label">Person Served Name</label>
+        <input asp-for="TcmClient.Client.Name" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.Code" class="control-label">Case No</label>
+        <input asp-for="TcmClient.Client.Code" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Code" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.DateOfBirth" class="control-label">DOB</label>
+        <input asp-for="TcmClient.Client.DateOfBirth" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.DateOfBirth" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.SSN" class="control-label">SSN</label>
+        <input asp-for="TcmClient.Client.SSN" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.SSN" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="TcmClient.Client.FullAddress" class="control-label">Address</label>
+        <input asp-for="TcmClient.Client.FullAddress" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.FullAddress" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="TcmClient.Client.City" class="control-label">City</label>
+        <input asp-for="TcmClient.Client.City" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.City" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.State" class="control-label">State</label>
+        <input asp-for="TcmClient.Client.State" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.State" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.ZipCode" class="control-label">Zip Code</label>
+        <input asp-for="TcmClient.Client.ZipCode" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.ZipCode" class="text-danger"></span>
+    </div>
+    <div class="container-fluid">
+        &nbsp;
+    </div>
+</div>
+<div class="col-md-12">
+    <pre>    
+    <strong>THIS WILL AUTHORIZE:</strong>     
+
+    Clinic Name: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</u>     Address: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Address)</u>     City: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.City)</u>     State: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.State)</u>     Zip: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.ZipCode)</u>                                        
+    Phone No: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Phone)</u>     Fax No: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.FaxNo)</u>
+    
+    <input type="checkbox" asp-for="ToRelease" class="form-check-input" id="ToRelease"> to release/request general medical, psychiatric/psychological, alcohol and drug abuse information and/or records in accordance with Florida Statues 394, 
+    459, 396, 11, 297, 053, 90.50 and 458.21 to/ from:
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>    
+    <strong>In the form of: </strong>              <input type="checkbox" asp-for="InForm_VerbalInformation" class="form-check-input" id="InForm_VerbalInformation"> Verbal Information            <input type="checkbox" asp-for="InForm_Facsimile" class="form-check-input" id="InForm_Facsimile"> Facsimile              <input type="checkbox" asp-for="InForm_WrittenRecords" class="form-check-input" id="InForm_WrittenRecords"> Written Records   
+    <strong>For the purpose of: </strong>          <input type="checkbox" asp-for="ForPurpose_CaseManagement" class="form-check-input" id="ForPurpose_Treatment"> Treatment/Treatment Planning     <input type="checkbox" asp-for="ForPurpose_CaseManagement" class="form-check-input" id="ForPurpose_CaseManagement"> Case Management     <input type="checkbox" asp-for="ForPurpose_Other" class="form-check-input" id="ForPurpose_Other"> Other     <input asp-for="ForPurpose_OtherExplain">
+
+
+      
+    <strong>I understand that the specific reports disclosed might include: </strong>
+    <input type="checkbox" asp-for="Discaherge" class="form-check-input" id="Discaherge"> Discharge/Termination summary     <input type="checkbox" asp-for="SchoolRecord" class="form-check-input" id="SchoolRecord"> School records     <input type="checkbox" asp-for="ProgressReports" class="form-check-input" id="ProgressReports"> Progress reports    <input type="checkbox" asp-for="IncidentReport" class="form-check-input" id="IncidentReport"> Incident Reports
+    <input type="checkbox" asp-for="PsychologycalEvaluation" class="form-check-input" id="PsychologycalEvaluation"> Psychiatric/Psychological Evaluations    <input type="checkbox" asp-for="History" class="form-check-input" id="History"> History, Physical     <input type="checkbox" asp-for="LabWork" class="form-check-input" id="LabWork"> Lab Work     <input type="checkbox" asp-for="HospitalRecord" class="form-check-input" id="HospitalRecord"> Hospital Records
+    <input type="checkbox" asp-for="Other" class="form-check-input" id="Other"> Other (explain)     <input asp-for="Other_Explain">
+
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    I understand this consent is revocable upon written notice to <strong>__@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)__ </strong> except to the extent that action by <strong>__@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)__</strong>. 
+    Has been taken in reliance on this authorization and that this authorization shall remain in force for a twelve-month period in order to effect the purpose
+    for which it is given, unless resolved by person served or legal representative, as above.
+    
+    <strong>Alcohol and drug abuse information if present may be disclosed from records whose confidentiality is protected by Federal regulations (42 CFR, Part II)
+    prohibit making any further disclosure of records without the specific written authorization of the person served or legal representative, 
+    or as otherwise permitted by such regulations. This information may not be used to criminally prosecute the person served.</strong>
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    
+    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
+    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>     
+    
+    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+    </pre>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+        <label asp-for="Documents" class="forgot">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+        </label>
+    </div>
+</div>
+<br />
+
+
+

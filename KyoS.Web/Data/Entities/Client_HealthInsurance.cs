@@ -23,6 +23,8 @@ namespace KyoS.Web.Data.Entities
 
         public ClientEntity Client { get; set; }
 
-        public HealthInsuranceEntity HealthInsurance { get; set; }        
+        public HealthInsuranceEntity HealthInsurance { get; set; }    
+        
+        public string MemberId { get; set; }
     }
 }

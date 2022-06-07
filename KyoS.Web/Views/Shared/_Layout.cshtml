@@ -306,6 +306,7 @@
                                             <li>@Html.ActionLink("Group", "GroupWorkdays", "Workdays")</li>
                                         </ul>
                                     </li>
+                                    <li>@Html.ActionLink("Changes", "ChangeNotes", "Notes")</li>
                                     <li role="separator" class="divider"></li>
                                     <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
                                     <li class="dropdown-submenu">
@@ -381,6 +382,8 @@
                                                 <li><a asp-area="" asp-controller="TCMClients" asp-action="GetCaseClose">Close Cases</a></li>
                                             </ul>
                                         </li>
+                                        <li role="separator" class="divider"></li>
+                                        <li>@Html.ActionLink("Intakes", "Index", "TCMIntakes")</li>
                                         <li role="separator" class="divider"></li>
                                         <li class="dropdown-submenu">
                                             <a class="test" tabindex="-1" href="#">Services Plans / Clients</a>

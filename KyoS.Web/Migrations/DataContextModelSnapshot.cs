@@ -801,6 +801,9 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DateOfClose")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("DoctorId")
                         .HasColumnType("int");
 
@@ -843,6 +846,9 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("MedicaidID")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MedicareId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -850,6 +856,15 @@ namespace KyoS.Web.Migrations
 
                     b.Property<string>("OtherLanguage")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("OtherLanguage_Read")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("OtherLanguage_Speak")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("OtherLanguage_Understand")
+                        .HasColumnType("bit");
 
                     b.Property<string>("PhotoPath")
                         .HasColumnType("nvarchar(max)");
@@ -978,6 +993,9 @@ namespace KyoS.Web.Migrations
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("MemberId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Units")
                         .HasColumnType("int");
@@ -4546,6 +4564,12 @@ namespace KyoS.Web.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("RaterEducation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RaterFMHCertification")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SignaturePath")
                         .HasColumnType("nvarchar(max)");
 
@@ -4793,6 +4817,510 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("TcmServicePlanId");
 
                     b.ToTable("TCMDomains");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeAcknowledgementHippaEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("AdmissionedFor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateSignatureEmployee")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureLegalGuardian")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignaturePerson")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Documents")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TcmClient_FK")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TcmClient_FK")
+                        .IsUnique();
+
+                    b.ToTable("TCMIntakeAcknowledgement");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeAdvancedDirectiveEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("AdmissionedFor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateSignatureEmployee")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureLegalGuardian")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignaturePerson")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Documents")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IHave")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IHaveNot")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TcmClient_FK")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TcmClient_FK")
+                        .IsUnique();
+
+                    b.ToTable("TCMIntakeAdvancedDirective");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeConsentForReleaseEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("AdmissionedFor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateSignatureEmployee")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureLegalGuardian")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignaturePerson")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Discaherge")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Documents")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ForPurpose_CaseManagement")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ForPurpose_Other")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ForPurpose_OtherExplain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ForPurpose_Treatment")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("History")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HospitalRecord")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("InForm_Facsimile")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("InForm_VerbalInformation")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("InForm_WrittenRecords")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IncidentReport")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LabWork")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Other")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Other_Explain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ProgressReports")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("PsychologycalEvaluation")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SchoolRecord")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TcmClient_FK")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ToRelease")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TcmClient_FK")
+                        .IsUnique();
+
+                    b.ToTable("TCMIntakeConsentForRelease");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeConsentForTreatmentEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("AdmissionedFor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Aggre")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Aggre1")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AuthorizeRelease")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AuthorizeStaff")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Certify")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Certify1")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Client_FK")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateSignatureEmployee")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureLegalGuardian")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignaturePerson")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Documents")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Underestand")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Client_FK")
+                        .IsUnique();
+
+                    b.ToTable("TCMIntakeConsentForTreatment");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeConsumerRightsEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("AdmissionedFor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateSignatureEmployee")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureLegalGuardian")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignaturePerson")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Documents")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ServedOf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TcmClient_FK")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TcmClient_FK")
+                        .IsUnique();
+
+                    b.ToTable("TCMIntakeConsumerRights");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeFormEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Agency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CaseManagerNotes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CountryOfBirth")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EducationLevel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Elibigility")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmergencyContact")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("EmploymentStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Grade")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InsuranceOther")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("IntakeDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsClientCurrently")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LTC")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("MMA")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MonthlyFamilyIncome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("NeedSpecial")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NeedSpecial_Specify")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Other")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Other_Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Other_City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Other_Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PrimarySourceIncome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReligionOrEspiritual")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ResidentialStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("School")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("School_EBD")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("School_ESE")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("School_ESOL")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("School_HHIP")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("School_Other")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("School_Regular")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecondaryContact")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SecondaryContact_Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SecondaryContact_RelationShip")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("StatusOther")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("StatusOther_Explain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("StatusResident")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("StausCitizen")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TcmClient_FK")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TeacherCounselor_Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TeacherCounselor_Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TitlePosition")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("YearEnterUsa")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TcmClient_FK")
+                        .IsUnique();
+
+                    b.ToTable("TCMIntakeForms");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeOrientationChecklistEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<bool>("Access")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("AdmissionedFor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("AgencyExpectation")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AgencyPolice")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Code")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Confidentiality")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("DateSignatureEmployee")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureLegalGuardian")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignaturePerson")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Discharge")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Documents")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Education")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Explanation")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Fire")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Identification")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IndividualPlan")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Insent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Methods")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("PoliceGrievancce")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("PoliceIllicit")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("PoliceTobacco")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("PoliceWeapons")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Program")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Purpose")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Rights")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Services")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TcmClient_FK")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("TheAbove")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TourFacility")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TcmClient_FK")
+                        .IsUnique();
+
+                    b.ToTable("TCMIntakeOrientationCheckList");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMObjetiveEntity", b =>
@@ -6329,6 +6857,83 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TcmServicePlan");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeAcknowledgementHippaEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
+                        .WithOne("TcmIntakeAcknowledgementHipa")
+                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeAcknowledgementHippaEntity", "TcmClient_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TcmClient");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeAdvancedDirectiveEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
+                        .WithOne("TCMIntakeAdvancedDirective")
+                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeAdvancedDirectiveEntity", "TcmClient_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TcmClient");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeConsentForReleaseEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
+                        .WithOne("TcmIntakeConsentForRelease")
+                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeConsentForReleaseEntity", "TcmClient_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TcmClient");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeConsentForTreatmentEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
+                        .WithOne("TcmIntakeConsentForTreatment")
+                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeConsentForTreatmentEntity", "Client_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TcmClient");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeConsumerRightsEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
+                        .WithOne("TcmIntakeConsumerRights")
+                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeConsumerRightsEntity", "TcmClient_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TcmClient");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeFormEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
+                        .WithOne("TCMIntakeForm")
+                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeFormEntity", "TcmClient_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TcmClient");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeOrientationChecklistEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
+                        .WithOne("TCMIntakeOrientationChecklist")
+                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeOrientationChecklistEntity", "TcmClient_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TcmClient");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMObjetiveEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.TCMDomainEntity", "TcmDomain")
@@ -6755,6 +7360,23 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Notes");
 
                     b.Navigation("NotesP");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMClientEntity", b =>
+                {
+                    b.Navigation("TcmIntakeAcknowledgementHipa");
+
+                    b.Navigation("TCMIntakeAdvancedDirective");
+
+                    b.Navigation("TcmIntakeConsentForRelease");
+
+                    b.Navigation("TcmIntakeConsentForTreatment");
+
+                    b.Navigation("TcmIntakeConsumerRights");
+
+                    b.Navigation("TCMIntakeForm");
+
+                    b.Navigation("TCMIntakeOrientationChecklist");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDischargeEntity", b =>

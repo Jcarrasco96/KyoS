@@ -31,5 +31,9 @@ namespace KyoS.Web.Data.Entities
         public ICollection<IndividualNoteEntity> IndividualNotes { get; set; }
 
         public ICollection<GroupNoteEntity> GroupNotes { get; set; }
+
+        public string RaterEducation { get; set; }
+
+        public string RaterFMHCertification { get; set; }
     }
 }

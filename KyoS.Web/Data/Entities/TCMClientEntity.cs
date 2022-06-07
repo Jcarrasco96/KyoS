@@ -30,5 +30,18 @@ namespace KyoS.Web.Data.Entities
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public StatusType Status { get; set; }
 
+        public TCMIntakeFormEntity TCMIntakeForm { get; set; }
+
+        public TCMIntakeConsentForTreatmentEntity TcmIntakeConsentForTreatment { get; set; }
+
+        public TCMIntakeConsentForReleaseEntity TcmIntakeConsentForRelease { get; set; }
+
+        public TCMIntakeConsumerRightsEntity TcmIntakeConsumerRights { get; set; }
+
+        public TCMIntakeAcknowledgementHippaEntity TcmIntakeAcknowledgementHipa { get; set; }
+
+        public TCMIntakeOrientationChecklistEntity TCMIntakeOrientationChecklist { get; set; }
+
+        public TCMIntakeAdvancedDirectiveEntity TCMIntakeAdvancedDirective { get; set; }
     }
 }

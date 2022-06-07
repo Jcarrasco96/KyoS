@@ -143,12 +143,16 @@ namespace KyoS.Web.Controllers
                    Supervisor = new SupervisorEntity()
                 };
 
-                if (User.IsInRole("Supervisor"))
+                SupervisorEntity supervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                if (User.IsInRole("Supervisor") && supervisor != null)
                 {
-                    model.IdSupervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Id;
+                    model.Supervisor = supervisor;
+                    model.IdSupervisor = supervisor.Id;
+                    model.RaterEducation = supervisor.RaterEducation;
+                    model.RaterFMHI = supervisor.RaterFMHCertification;
                 }
 
-                    if (model.Client.FarsFormList == null)
+                if (model.Client.FarsFormList == null)
                     model.Client.FarsFormList = new List<FarsFormEntity>();
                 return View(model);
                 }
