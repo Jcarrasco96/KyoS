@@ -11,20 +11,9 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">MTPs</li>
+        <li class="active">MTPRs in Edit</li>
     </ul><!--.breadcrumb-->
 </div>
-
-<p>
-    @if (User.IsInRole("Supervisor"))
-    {
-        <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create MTP</a>
-    }
-    else
-    {
-        <a class="btn btn-primary disabled" title="Create MTP"><i class="glyphicon glyphicon-plus"></i> Create MTP</a>
-    }
-</p>
 
 <div class="row">
     <div class="col-md-12">
@@ -43,7 +32,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Master Treatment Plan</h3>
+                <h3 class="panel-title">Master Treatment Plan Reviews</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -98,8 +87,9 @@
                                                     <tr>
                                                         <th class="col-md-1" style="text-align:center">Date</th>
                                                         <th class="col-md-2" style="text-align:center">Date Review On</th>
-                                                        <th class="col-md-3" style="text-align:center">Admitted by</th>
-                                                        <th class="col-md-2" style="text-align:center">Frecuency</th>
+                                                        <th class="col-md-4" style="text-align:center">Admitted by</th>
+                                                        <th class="col-md-2" style="text-align:center">Month</th>
+                                                        <th class="col-md-1" style="text-align:center;">Status</th>
                                                         <th class="col-md-2" style="text-align:center"></th>
                                                     </tr>
                                                     @foreach (var element in item.MtpReviewList)
@@ -108,13 +98,39 @@
                                                             <td align="center">@Html.DisplayFor(modelItem => element.DataOfService)</td>
                                                             <td align="center">@Html.DisplayFor(modelItem => element.ReviewedOn)</td>
                                                             <td align="center">@Html.DisplayFor(modelItem => element.Therapist)</td>
-                                                            <td align="center">@Html.DisplayFor(modelItem => element.Frecuency)</td>
+                                                            <td align="center">@Html.DisplayFor(modelItem => element.MonthOfTreatment)</td>                                                                
+                                                            <td align="center">
+                                                                @if (element.Status == KyoS.Common.Enums.AdendumStatus.Edition)
+                                                                {
+                                                                    <span class="label label-default">
+                                                                        Edition
+                                                                    </span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (element.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                                                    {
+                                                                        <span class="label label-info">
+                                                                            Pending
+                                                                        </span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if (element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                                        {
+                                                                            <span class="label label-success">
+                                                                                Approved
+                                                                            </span>
+                                                                        }
+                                                                    }
+                                                                }
+                                                                </td> 
                                                             <td align="center">
                                                                 @if (User.IsInRole("Supervisor"))
                                                                 {
                                                                     @if ((element.Status == KyoS.Common.Enums.AdendumStatus.Edition && element.CreatedBy == User.Identity.Name) || (@element.Status == KyoS.Common.Enums.AdendumStatus.Pending))
                                                                     {
-                                                                        <a asp-action="EditMTPReview" asp-route-id="@element.Id" class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                        <a asp-action="EditMTPReview" asp-route-id="@element.Id" asp-route-origin="2"  class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
                                                                         <a asp-action="FinishEditingMtpReview" asp-route-id="@element.Id" class="btn btn-success" title="Approve MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
                                                                         <a class="btn btn-success disabled" title="Print MTP Review"><i class="glyphicon glyphicon-print"></i></a>
                                                                     }
@@ -131,13 +147,12 @@
                                                                             <a class="btn btn-success disabled" title="Print MTP Review"><i class="glyphicon glyphicon-print"></i></a>
                                                                         }
                                                                     }
-
                                                                 }
                                                                 else
                                                                 {
                                                                     @if (@element.Status != KyoS.Common.Enums.AdendumStatus.Approved && @element.CreatedBy == User.Identity.Name)
                                                                     {
-                                                                        <a asp-action="EditMTPReview" asp-route-id="@element.Id" class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                        <a asp-action="EditMTPReview" asp-route-id="@element.Id" asp-route-origin="2"  class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
                                                                         @if (@element.Status == KyoS.Common.Enums.AdendumStatus.Pending)
                                                                         {
                                                                             <a class="btn btn-success disabled" title="Edit MTP Review"><i class="glyphicon glyphicon-ok"></i></a>

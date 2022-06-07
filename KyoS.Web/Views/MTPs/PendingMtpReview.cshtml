@@ -36,13 +36,13 @@
                             <th class="col-md-2" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Mtp.Client.AdmisionDate)
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center">Date</th>
+                            <th class="col-md-2" style="text-align:center">Date Review On</th>
+                            <th class="col-md-1" style="text-align:center">Month</th>
+                            <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                MH Therapy
-                            </th>
-                            <th class="col-md-2" >
+                            <th class="col-md-1">
                             </th>
                         </tr>
                     </thead>
@@ -52,7 +52,7 @@
                             @if (item.Mtp.MtpReviewList != null)
                             {
                                 <tr>
-                                   <td>
+                                    <td>
                                         @if (item.Mtp.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
                                             <i class="glyphicon glyphicon-user btn-danger"></i>
@@ -71,27 +71,45 @@
                                         @Html.DisplayFor(modelItem => item.Mtp.Client.AdmisionDate)
                                     </td>
                                     <td align="center">
-                                        @if (item.Mtp.Client.Status == KyoS.Common.Enums.StatusType.Open)
-                                        {
-                                            <span class="label label-success">
-                                                Open
-                                            </span>
-                                        }
-                                        @if (item.Mtp.Client.Status == KyoS.Common.Enums.StatusType.Close)
-                                        {
-                                            <span class="label label-default">
-                                                Close
-                                            </span>
-                                        }
+                                        @Html.DisplayFor(modelItem => item.DataOfService)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Mtp.Client.Service)
+                                        @Html.DisplayFor(modelItem => item.ReviewedOn)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.MonthOfTreatment)
+                                    </td>    
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.AdendumStatus.Edition)
+                                        {
+                                            <span class="label label-default">
+                                                Edition
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            if (item.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                            {
+                                                <span class="label label-info">
+                                                    Pending
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                if (item.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                {
+                                                    <span class="label label-success">
+                                                        Approved
+                                                    </span>
+                                                }
+                                            }
+                                        }
                                     </td>
                                     <td align="right">
                                         @if (User.IsInRole("Supervisor"))
                                         {
-                                            <a asp-action="EditMTPReview" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="ApproveMTPReview" asp-route-id="@item.Id" class="btn btn-success" title="Approval MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a asp-action="EditMTPReview" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="ApproveMTPReview" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Approval MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
                                         }
                                         else
                                         {

@@ -240,7 +240,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Facilitator")]
-        public IActionResult Edit(int id = 0)
+        public IActionResult Edit(int id = 0, int origin = 0)
         {
             FarsFormViewModel model;
 
@@ -254,9 +254,11 @@ namespace KyoS.Web.Controllers
                 {
 
                     FarsFormEntity FarsForm = _context.FarsForm
-                                                        .Include(m => m.Client)
-                                                        .ThenInclude(m => m.FarsFormList)
-                                                        .FirstOrDefault(m => m.Id == id);
+
+                                                      .Include(m => m.Client)
+                                                      .ThenInclude(m => m.FarsFormList)
+
+                                                      .FirstOrDefault(m => m.Id == id);
                     if (FarsForm == null)
                     {
                         return RedirectToAction("NotAuthorized", "Account");
@@ -265,7 +267,7 @@ namespace KyoS.Web.Controllers
                     {
 
                         model = _converterHelper.ToFarsFormViewModel(FarsForm);
-
+                        model.Origin = origin;
                         return View(model);
                     }
 
@@ -293,7 +295,12 @@ namespace KyoS.Web.Controllers
                 {
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Index", "FarsForms");
+                    if (farsFormViewModel.Origin == 1)
+                    {
+                        return RedirectToAction(nameof(PendingFars));
+                    }
+
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (System.Exception ex)
                 {
@@ -432,15 +439,20 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> ApproveFars(int id)
+        public async Task<IActionResult> ApproveFars(int id, int origin = 0)
         {
             FarsFormEntity fars = await _context.FarsForm.FirstOrDefaultAsync(n => n.Id == id);
             fars.Status = FarsStatus.Approved;
             _context.Update(fars);
 
             await _context.SaveChangesAsync();
+            
+            if (origin == 1)
+            {
+                return RedirectToAction(nameof(PendingFars));
+            }
 
-            return RedirectToAction(nameof(PendingFars));
+            return RedirectToAction(nameof(Index));
         }
 
         [Authorize(Roles = "Supervisor, Manager")]
@@ -472,5 +484,46 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
+        [Authorize(Roles = "Supervisor")]
+        public IActionResult AddMessageEntity(int id = 0, int origin = 0)
+        {
+            if (id == 0)
+            {
+                return View(new MessageViewModel());
+            }
+            else
+            {
+                MessageViewModel model = new MessageViewModel()
+                {
+                    IdFarsForm = id,
+                    Origin = origin
+                };
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> AddMessageEntity(MessageViewModel messageViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                MessageEntity model = await _converterHelper.ToMessageEntity(messageViewModel, true);
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                model.From = user_logged.UserName;
+                model.To = model.FarsForm.CreatedBy;
+                _context.Add(model);
+                await _context.SaveChangesAsync();
+            }
+            
+            if (messageViewModel.Origin == 1)
+                return RedirectToAction("PendingFars");
+
+            return RedirectToAction("Index");
+        }
     }
 }

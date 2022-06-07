@@ -878,9 +878,17 @@ namespace KyoS.Web.Helpers
             return new MessageEntity
             {
                 Id = isNew ? 0 : model.Id,
-                Workday_Client = await _context.Workdays_Clients
-                                               .Include(wc => wc.Facilitator)
-                                               .FirstOrDefaultAsync(wc => wc.Id == model.IdWorkdayClient),
+                Workday_Client = (model.IdWorkdayClient != 0) ? await _context.Workdays_Clients
+                                                                              .Include(wc => wc.Facilitator)
+                                                                              .FirstOrDefaultAsync(wc => wc.Id == model.IdWorkdayClient) : null,
+                FarsForm = (model.IdFarsForm != 0) ? await _context.FarsForm                                                                   
+                                                                   .FirstOrDefaultAsync(f => f.Id == model.IdFarsForm) : null,
+                MTPReview = (model.IdMTPReview != 0) ? await _context.MTPReviews
+                                                                     .FirstOrDefaultAsync(m => m.Id == model.IdMTPReview) : null,
+                Addendum = (model.IdAddendum != 0) ? await _context.Adendums
+                                                                   .FirstOrDefaultAsync(a => a.Id == model.IdAddendum) : null,
+                Discharge = (model.IdDischarge != 0) ? await _context.Discharge
+                                                                     .FirstOrDefaultAsync(d => d.Id == model.IdDischarge) : null,
                 Title = model.Title,
                 Text = model.Text,
                 DateCreated = DateTime.Now,
