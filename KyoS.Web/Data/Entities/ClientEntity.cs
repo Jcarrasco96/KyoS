@@ -155,6 +155,10 @@ namespace KyoS.Web.Data.Entities
 
         public string MedicareId { get; set; }
 
+        [Display(Name = "Date of close")]
+        [DataType(DataType.Date)]
+        public DateTime DateOfClose { get; set; }
+
         public string MissingDoc 
         {
             get

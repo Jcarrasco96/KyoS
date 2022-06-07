@@ -265,7 +265,8 @@ namespace KyoS.Web.Helpers
                 OtherLanguage_Read = model.OtherLanguage_Read,
                 OtherLanguage_Speak = model.OtherLanguage_Speak,
                 OtherLanguage_Understand = model.OtherLanguage_Understand,
-                MedicareId = model.MedicareId
+                MedicareId = model.MedicareId,
+                DateOfClose = model.DateOfClose
             };
         }
 
@@ -339,7 +340,8 @@ namespace KyoS.Web.Helpers
                 OtherLanguage_Read = clientEntity.OtherLanguage_Read,
                 OtherLanguage_Speak = clientEntity.OtherLanguage_Speak,
                 OtherLanguage_Understand = clientEntity.OtherLanguage_Understand,
-                MedicareId = clientEntity.MedicareId
+                MedicareId = clientEntity.MedicareId,
+                DateOfClose = clientEntity.DateOfClose
             };
         }
 
