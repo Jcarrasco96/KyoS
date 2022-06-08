@@ -71,7 +71,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        public IActionResult Create(int id = 0)
+        public async Task<IActionResult> Create(int id = 0)
         {
             if (id == 1)
             {
@@ -87,6 +87,16 @@ namespace KyoS.Web.Controllers
                 {
                     ViewBag.Creado = "N";
                 }
+            }
+
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
             }
 
             DiagnosticViewModel model = new DiagnosticViewModel();            
@@ -138,6 +148,16 @@ namespace KyoS.Web.Controllers
             if (id == null)
             {
                 return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
             }
 
             DiagnosticEntity diagnosticEntity = await _context.Diagnostics.FirstOrDefaultAsync(c => c.Id == id);

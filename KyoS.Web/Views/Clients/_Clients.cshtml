@@ -13,11 +13,6 @@
         <select asp-for="IdGender" asp-items="Model.GenderList" class="form-control"></select>
         <span asp-validation-for="IdGender" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-1">
-        <label asp-for="IdStatus" class="control-label"></label>&nbsp;*
-        <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
-        <span asp-validation-for="IdStatus" class="text-danger"></span>
-    </div>
     <div class="form-group col-md-2">
         <label asp-for="AdmisionDate" class="control-label"></label>&nbsp;*
         <input asp-for="AdmisionDate" class="form-control" />
@@ -28,10 +23,15 @@
         <input asp-for="DateOfBirth" class="form-control" />
         <span asp-validation-for="DateOfBirth" class="text-danger"></span>
     </div>
+    <div class="form-group col-md-1">
+        <label asp-for="IdStatus" class="control-label"></label>&nbsp;*
+        <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
+        <span asp-validation-for="IdStatus" class="text-danger"></span>
+    </div>
     <div class="form-group col-md-2">
-        <label asp-for="Email" class="control-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
+        <label asp-for="DateOfClose" class="control-label"></label>
+        <input asp-for="DateOfClose" class="form-control" />
+        <span asp-validation-for="DateOfClose" class="text-danger"></span>
     </div>
 </div>
 <div class="col-md-push-12">
@@ -43,20 +43,25 @@
         <input asp-for="PhotoFile" class="form-control" type="file" id="photoBrowser" />
         <span asp-validation-for="PhotoFile" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-2">
         <label asp-for="SignFile" class="control-label"></label>
         <input asp-for="SignFile" class="form-control" type="file" id="signBrowser" />
         <span asp-validation-for="SignFile" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="SSN" class="control-label"></label>
-        <input asp-for="SSN" class="form-control" />
-        <span asp-validation-for="SSN" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
         <label asp-for="MedicaidID" class="control-label"></label>
         <input asp-for="MedicaidID" class="form-control" />
         <span asp-validation-for="MedicaidID" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="MedicareId" class="control-label">Medicare ID</label>
+        <input asp-for="MedicareId" class="form-control" />
+        <span asp-validation-for="MedicareId" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="SSN" class="control-label"></label>
+        <input asp-for="SSN" class="form-control" />
+        <span asp-validation-for="SSN" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
         <label asp-for="Code" class="control-label"></label>

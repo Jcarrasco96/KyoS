@@ -37,42 +37,42 @@
                     <tbody>
                         @foreach (var day_client in Model.OrderBy(dc => dc.Workday.Date).OrderBy(dc => dc.Session))
                         {
-                        <tr>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => day_client.Workday.Date)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => day_client.Workday.Service)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => day_client.Session)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => day_client.Client.Name)
-                            </td>
-                            <td align="center">
-                                <span class="label label-success">
-                                    Approved
-                                </span>
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
-                            </td>
-                            <td align="right">
-                                @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)
-                                {
-                                    <a asp-action="PrintNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print PSR note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                }
-                                @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
-                                {
-                                    <a asp-action="PrintIndNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                }
-                                @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
-                                {
-                                    <a asp-action="PrintGroupNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                }
-                            </td>
-                        </tr>
+                            <tr>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => day_client.Workday.Date)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => day_client.Workday.Service)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => day_client.Session)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => day_client.Client.Name)
+                                </td>
+                                <td align="center">
+                                    <span class="label label-success">
+                                        Approved
+                                    </span>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
+                                </td>
+                                <td align="right">
+                                    @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)
+                                    {
+                                        <a asp-action="PrintNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print PSR note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                    }
+                                    @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
+                                    {
+                                        <a asp-action="PrintIndNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                    }
+                                    @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
+                                    {
+                                        <a asp-action="PrintGroupNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                    }
+                                </td>
+                            </tr>
 
                         }
                     </tbody>
@@ -86,10 +86,15 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
             $('#MyTable').DataTable({
-              "pageLength": 100
+                "order": [[0, "asc"]],
+                "lengthMenu": [[100, 200, -1], [100, 200, "All"]],
+                "pageLength": 200
             });
         });
     </script>

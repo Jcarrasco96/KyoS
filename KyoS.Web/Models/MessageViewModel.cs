@@ -9,6 +9,15 @@ namespace KyoS.Web.Models
     public class MessageViewModel : MessageEntity
     {
         public int IdWorkdayClient { get; set; }
+
+        public int IdFarsForm { get; set; }
+
+        public int IdMTPReview { get; set; }
+
+        public int IdAddendum { get; set; }
+
+        public int IdDischarge { get; set; }
+
         public int Origin { get; set; }
     }
 }

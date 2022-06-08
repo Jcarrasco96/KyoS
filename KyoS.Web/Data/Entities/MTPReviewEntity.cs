@@ -93,5 +93,7 @@ namespace KyoS.Web.Data.Entities
         [DataType(DataType.Date)]
 
         public DateTime DataOfService { get; set; }
+
+        public IEnumerable<MessageEntity> Messages { get; set; }
     }
 }

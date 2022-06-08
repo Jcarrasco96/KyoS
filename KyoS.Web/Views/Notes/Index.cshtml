@@ -89,10 +89,11 @@
                                                             <table class="table table-striped">
                                                                 <tr>
                                                                     <th class="col-md-1" style="text-align:center;">Session</th>
-                                                                    <th class="col-md-4">Name</th>
+                                                                    <th class="col-md-3">Name</th>
                                                                     <th class="col-md-2" style="text-align:center;">Present</th>
                                                                     <th class="col-md-2" style="text-align:center;">Note Status</th>
-                                                                    <th class="col-md-3"></th>
+                                                                    <th class="col-md-2" style="text-align:center;">Change Session</th>
+                                                                    <th class="col-md-2"></th>
                                                                     <th></th>
                                                                 </tr>
                                                                 @foreach (var day_client in day.Workdays_Clients.Where(dc => dc.Facilitator.LinkedUser == User.Identity.Name))
@@ -142,6 +143,16 @@
                                                                                             }
                                                                                         }
                                                                                     }
+                                                                                }
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @if (day_client.Note == null && day_client.NoteP == null)
+                                                                                {
+                                                                                    <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <a asp-action="ChangeSession" asp-route-id="@day_client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-calendar"></i></a>
                                                                                 }
                                                                             </td>
                                                                             <td align="right">
@@ -227,6 +238,16 @@
                                                                                             }
                                                                                         }
                                                                                     }
+                                                                                }
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @if (day_client.Note == null && day_client.NoteP == null)
+                                                                                {
+                                                                                    <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <a asp-action="ChangeSession" asp-route-id="@day_client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-calendar"></i></a>
                                                                                 }
                                                                             </td>
                                                                             <td align="right">
@@ -369,7 +390,7 @@
         </div>
     </div>
 </div>
-
+<partial name="_ModalPopup" />
 <partial name="_DeleteDialog" />
 
 @section Scripts {
