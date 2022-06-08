@@ -30,11 +30,11 @@
             </div>
             <div class="col-md-3">
                 <label asp-for="Status" class="control-label"></label>&nbsp;*
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                 {
                     <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
                 }
-                @if (!User.IsInRole("Admin"))
+                else
                 {
                     <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control" disabled></select>
                 }
