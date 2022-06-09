@@ -34,7 +34,7 @@ namespace KyoS.Web.Data.Entities
 
         public TCMIntakeConsentForTreatmentEntity TcmIntakeConsentForTreatment { get; set; }
 
-        public TCMIntakeConsentForReleaseEntity TcmIntakeConsentForRelease { get; set; }
+        public List<TCMIntakeConsentForReleaseEntity> TcmIntakeConsentForRelease { get; set; }
 
         public TCMIntakeConsumerRightsEntity TcmIntakeConsumerRights { get; set; }
 
@@ -43,5 +43,9 @@ namespace KyoS.Web.Data.Entities
         public TCMIntakeOrientationChecklistEntity TCMIntakeOrientationChecklist { get; set; }
 
         public TCMIntakeAdvancedDirectiveEntity TCMIntakeAdvancedDirective { get; set; }
+
+        public TCMIntakeForeignLanguageEntity TCMIntakeForeignLanguage { get; set; }
+
+        public TCMIntakeWelcomeEntity TCMIntakeWelcome { get; set; }
     }
 }

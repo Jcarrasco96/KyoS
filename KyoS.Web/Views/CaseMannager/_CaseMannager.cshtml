@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.CaseMannagerViewModel
 
-<div class="col-md-4 form-group">
+<div class="col-md-3 form-group">
     <label asp-for="Name" class="control-label"></label>
     <input asp-for="Name" class="form-control" />
     <span asp-validation-for="Name" class="text-danger"></span>
@@ -10,15 +10,10 @@
     <input asp-for="Codigo" class="form-control" />
     <span asp-validation-for="Codigo" class="text-danger"></span>
 </div>
-<div class="col-md-4 form-group">
+<div class="col-md-3 form-group">
     <label asp-for="IdClinic" class="control-label"></label>
     <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control"></select>
     <span asp-validation-for="IdClinic" class="text-danger"></span>
-</div>
-<div class="col-md-4 form-group">
-    <label asp-for="IdUser" class="control-label"></label>
-    <select asp-for="IdUser" asp-items="Model.UserList" class="form-control"></select>
-    <span asp-validation-for="IdUser" class="text-danger"></span>
 </div>
 <div class="col-md-3 form-group">
     <label asp-for="IdStatus" class="control-label"></label>
@@ -26,8 +21,22 @@
     <span asp-validation-for="IdStatus" class="text-danger"></span>
 </div>
 <div class="col-md-3 form-group">
+    <label asp-for="IdUser" class="control-label"></label>
+    <select asp-for="IdUser" asp-items="Model.UserList" class="form-control"></select>
+    <span asp-validation-for="IdUser" class="text-danger"></span>
+</div>
+<div class="col-md-3 form-group">
     <label asp-for="SignatureFile" class="control-label"></label>
     <input asp-for="SignatureFile" type="file" class="form-control" />
     <span asp-validation-for="SignatureFile" class="text-danger"></span>
 </div>
-
+<div class="col-md-3 form-group">
+    <label asp-for="Phone" class="control-label"></label>
+    <input asp-for="Phone" class="form-control" />
+    <span asp-validation-for="Phone" class="text-danger"></span>
+</div>
+<div class="col-md-3 form-group">
+    <label asp-for="Email" class="control-label"></label>
+    <input asp-for="Email" class="form-control" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+</div>

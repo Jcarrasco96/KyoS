@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220608182111_ImprovesTCMIntakeForRelease")]
+    partial class ImprovesTCMIntakeForRelease
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -727,9 +729,6 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("Codigo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("LinkedUser")
                         .HasColumnType("nvarchar(max)");
 
@@ -737,9 +736,6 @@ namespace KyoS.Web.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SignaturePath")
                         .HasColumnType("nvarchar(max)");
@@ -4904,13 +4900,7 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("AdmissionedFor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CityStateZip")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateSignatureEmployee")
@@ -4922,14 +4912,11 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("DateSignaturePerson")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("Discharge")
+                    b.Property<bool>("Discaherge")
                         .HasColumnType("bit");
 
                     b.Property<bool>("Documents")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FaxNo")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("ForPurpose_CaseManagement")
                         .HasColumnType("bit");
@@ -4964,16 +4951,10 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("LabWork")
                         .HasColumnType("bit");
 
-                    b.Property<string>("NameOfFacility")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("Other")
                         .HasColumnType("bit");
 
                     b.Property<string>("Other_Explain")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNo")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("ProgressReports")
@@ -5089,39 +5070,6 @@ namespace KyoS.Web.Migrations
                         .IsUnique();
 
                     b.ToTable("TCMIntakeConsumerRights");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeForeignLanguageEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("AdmissionedFor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateSignatureEmployee")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignatureLegalGuardian")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignaturePerson")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Documents")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("TcmClient_FK")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TcmClient_FK")
-                        .IsUnique();
-
-                    b.ToTable("TCMIntakeForeignLanguage");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeFormEntity", b =>
@@ -5377,30 +5325,6 @@ namespace KyoS.Web.Migrations
                         .IsUnique();
 
                     b.ToTable("TCMIntakeOrientationCheckList");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeWelcomeEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("AdmissionedFor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TcmClient_FK")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TcmClient_FK")
-                        .IsUnique();
-
-                    b.ToTable("TCMIntakeWelcome");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMObjetiveEntity", b =>
@@ -6991,17 +6915,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TcmClient");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeForeignLanguageEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
-                        .WithOne("TCMIntakeForeignLanguage")
-                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeForeignLanguageEntity", "TcmClient_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TcmClient");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeFormEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
@@ -7018,17 +6931,6 @@ namespace KyoS.Web.Migrations
                     b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
                         .WithOne("TCMIntakeOrientationChecklist")
                         .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeOrientationChecklistEntity", "TcmClient_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TcmClient");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeWelcomeEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
-                        .WithOne("TCMIntakeWelcome")
-                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeWelcomeEntity", "TcmClient_FK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -7475,13 +7377,9 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("TcmIntakeConsumerRights");
 
-                    b.Navigation("TCMIntakeForeignLanguage");
-
                     b.Navigation("TCMIntakeForm");
 
                     b.Navigation("TCMIntakeOrientationChecklist");
-
-                    b.Navigation("TCMIntakeWelcome");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDischargeEntity", b =>
