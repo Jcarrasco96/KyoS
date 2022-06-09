@@ -2757,7 +2757,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Facilitator")]
-        public async Task<IActionResult> FinishEditingMtpReview(int id)
+        public async Task<IActionResult> FinishEditingMtpReview(int id, int origin = 0)
         {
             MTPReviewEntity MtpReview = await _context.MTPReviews.FirstOrDefaultAsync(n => n.Id == id);
             if (User.IsInRole("Supervisor"))
@@ -2773,7 +2773,12 @@ namespace KyoS.Web.Controllers
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("MTPRinEdit", "MTPs");
+            if (origin == 2)
+            {
+                return RedirectToAction(nameof(MTPRinEdit));
+            }
+
+            return RedirectToAction("Index", "MTPs");
         }
 
         [Authorize(Roles = "Supervisor")]
@@ -2868,7 +2873,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Facilitator")]
-        public IActionResult CreateMTPReview(int id = 0)
+        public IActionResult CreateMTPReview(int id = 0, int origin = 0)
         {
 
             UserEntity user_logged = _context.Users.Include(u => u.Clinic)
@@ -2917,8 +2922,8 @@ namespace KyoS.Web.Controllers
                     Frecuency = "Four times per week",
                     MonthOfTreatment = 3,
                     Setting = "02",
-                    DataOfService = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths))
-
+                    DataOfService = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths)),
+                    Origin = origin
                 };
             }
             if (User.IsInRole("Facilitator"))
@@ -2955,7 +2960,8 @@ namespace KyoS.Web.Controllers
                     Frecuency = "Four times per week",
                     MonthOfTreatment = 3,
                     Setting = "02",
-                    DataOfService = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths))
+                    DataOfService = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths)),
+                    Origin = origin
                 };
                
             }
@@ -2980,7 +2986,6 @@ namespace KyoS.Web.Controllers
                 MTPReviewEntity reviewEntity = _context.MTPReviews.Find(reviewViewModel.Id);
                 if (reviewEntity == null)
                 {
-
                     reviewEntity = await _converterHelper.ToMTPReviewEntity(reviewViewModel, true, reviewViewModel.CreatedBy);
 
                     _context.MTPReviews.Add(reviewEntity);
@@ -2988,8 +2993,17 @@ namespace KyoS.Web.Controllers
                     {
                         await _context.SaveChangesAsync();
 
-                        return RedirectToAction("ExpiredMTP", "MTPs");
-                       
+                        if (reviewViewModel.Origin == 1)
+                        {
+                            return RedirectToAction(nameof(ExpiredMTP));
+                        }
+
+                        if (reviewViewModel.Origin == 2)
+                        {
+                            return RedirectToAction(nameof(MTPRinEdit));
+                        }
+
+                        return RedirectToAction(nameof(Index));                
                     }
                     catch (System.Exception ex)
                     {
@@ -3136,6 +3150,51 @@ namespace KyoS.Web.Controllers
                 else
                     return View(null);
             }
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public IActionResult AddMessageEntity(int id = 0, int origin = 0)
+        {
+            if (id == 0)
+            {
+                return View(new MessageViewModel());
+            }
+            else
+            {
+                MessageViewModel model = new MessageViewModel()
+                {
+                    IdMTPReview = id,
+                    Origin = origin
+                };
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> AddMessageEntity(MessageViewModel messageViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                MessageEntity model = await _converterHelper.ToMessageEntity(messageViewModel, true);
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                model.From = user_logged.UserName;
+                model.To = model.MTPReview.CreatedBy;
+                _context.Add(model);
+                await _context.SaveChangesAsync();
+            }
+
+            if (messageViewModel.Origin == 1)
+                return RedirectToAction("PendingMtpReview");
+
+            if (messageViewModel.Origin == 2)
+                return RedirectToAction("MTPRinEdit");
+
+            return RedirectToAction("Index");
         }
     }
 }

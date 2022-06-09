@@ -18,14 +18,13 @@
                     else
                     {
                         <h4 style="font-weight:bold;"><span class="label label-info">Facilitator: @Model.Facilitator.Name</span></h4>
-                    }
-                   
+                    }                   
                     <hr />
                 </div>
             </div>
             <div>
                 <div class=" col-md-5 form-group">
-                    <label asp-for="ClientName" class="control-label"></label>
+                    <label asp-for="ClientName" class="control-label">Client Name</label>
                     <input asp-for="ClientName" class="form-control" readonly/>
                     <span asp-validation-for="ClientName" class="text-danger"></span>
                 </div>
@@ -36,26 +35,19 @@
                 </div>
                 <div class=" col-md-3 form-group">
                     <label asp-for="Session" class="control-label"></label>
-                    <input asp-for="Session" class="form-control"readonly />
-                    <span asp-validation-for="Session" class="text-danger"></span>
-                </div>
-            </div>
-            <div>
-                <div class="col-md-4 form-group">
-                    &nbsp;
-                </div>
-                <div class="col-md-2 form-group">
+                    @*<input asp-for="Session" class="form-control"readonly />
+                      <span asp-validation-for="Session" class="text-danger"></span>*@
+                    <br />
                     @if (ViewData["am"].ToString() == "true")
                     {
                         <input type="radio" name="Meridian" value="Am" checked="checked" />
                     }
                     else
                     {
-                        <input type="radio" name="Meridian" value="Am" checked="checked" />
+                        <input type="radio" name="Meridian" value="Am" />
                     }
                     <label style="font-weight: bold;"> AM</label>
-                </div>
-                <div class="col-md-2 form-group">
+                    &nbsp;&nbsp;
                     @if (ViewData["am"].ToString() == "true")
                     {
                         <input type="radio" name="Meridian" value="Pm" />
@@ -66,15 +58,12 @@
                     }
                     <label style="font-weight: bold;"> PM</label>
                 </div>
-                <div class="col-md-4 form-group">
-                    &nbsp;
-                </div>
+            </div>            
+            <div class="form-group col-md-12"></div>
+            <div class="col-md-offset-9">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
             </div>
-                <div class="form-group col-md-12"></div>
-                <div class="col-md-offset-9">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
-                </div>
         </form>
     </div>
 </div>

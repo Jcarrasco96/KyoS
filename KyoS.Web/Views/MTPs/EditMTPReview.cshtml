@@ -53,6 +53,11 @@
             <br />
             <div class="form-group col-md-12">
                 <input type="submit" value="Save All" class="btn btn-primary" />
+                @if (User.IsInRole("Supervisor"))
+                {
+                    <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","MTPs",new {id = Model.Id, origin = Model.Origin},Context.Request.Scheme)','Add message to document creator')" title="Not approved note due to problems">Review</a>
+                    <a asp-action="ApproveMTPReview" asp-route-id="@Model.Id" asp-route-id="@Model.Origin" class="btn btn-default" title="Approve MTP Review">Approve</a>
+                }
                 @if (Model.Origin == 0)
                 {
                     <a asp-action="Index" class="btn btn-success">Back</a>
@@ -64,7 +69,7 @@
                 @if (Model.Origin == 2)
                 {
                     <a asp-action="MTPRinEdit" class="btn btn-success">Back</a>
-                }                
+                }
             </div>
         </form>
     </div>

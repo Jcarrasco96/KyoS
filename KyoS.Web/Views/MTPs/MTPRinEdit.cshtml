@@ -131,7 +131,7 @@
                                                                     @if ((element.Status == KyoS.Common.Enums.AdendumStatus.Edition && element.CreatedBy == User.Identity.Name) || (@element.Status == KyoS.Common.Enums.AdendumStatus.Pending))
                                                                     {
                                                                         <a asp-action="EditMTPReview" asp-route-id="@element.Id" asp-route-origin="2"  class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                        <a asp-action="FinishEditingMtpReview" asp-route-id="@element.Id" class="btn btn-success" title="Approve MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        <a asp-action="FinishEditingMtpReview" asp-route-id="@element.Id" asp-route-origin="2" class="btn btn-success" title="Approve MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
                                                                         <a class="btn btn-success disabled" title="Print MTP Review"><i class="glyphicon glyphicon-print"></i></a>
                                                                     }
                                                                     else
@@ -159,7 +159,7 @@
                                                                         }
                                                                         else
                                                                         {
-                                                                            <a asp-action="FinishEditingMtpReview" asp-route-id="@element.Id" class="btn btn-success" title="Finish edition of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                            <a asp-action="FinishEditingMtpReview" asp-route-id="@element.Id" asp-route-origin="2" class="btn btn-success" title="Finish edition of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
                                                                         }
 
                                                                         <a class="btn btn-success disabled" title="Print MTP Review"><i class="glyphicon glyphicon-print"></i></a>
@@ -239,7 +239,7 @@
                                         <td align="center">
                                             @if (User.IsInRole("Facilitator") || User.IsInRole("Supervisor"))
                                             {
-                                                <a asp-action="CreateMTPReview" asp-route-id="@item.Id" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
+                                                <a asp-action="CreateMTPReview" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
                                             }
                                             else
                                             {
@@ -330,7 +330,7 @@
                                         <td align="center">
                                             @if (User.IsInRole("Facilitator") || User.IsInRole("Supervisor"))
                                             {
-                                                <a asp-action="CreateMTPReview" asp-route-id="@item.Id" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
+                                                <a asp-action="CreateMTPReview" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
                                             }
                                             else
                                             {
@@ -399,7 +399,7 @@
                                                                     @if ((element.Status == KyoS.Common.Enums.AdendumStatus.Edition && element.CreatedBy == User.Identity.Name) || (@element.Status == KyoS.Common.Enums.AdendumStatus.Pending))
                                                                     {
                                                                         <a asp-action="EditMTPReview" asp-route-id="@element.Id" class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                        <a asp-action="FinishEditingMtpReview" asp-route-id="@element.Id" class="btn btn-success" title="Finish edition of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        <a asp-action="FinishEditingMtpReview" asp-route-id="@element.Id" asp-route-origin="2" class="btn btn-success" title="Finish edition of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
                                                                         <a class="btn btn-success disabled" title="Print MTP Review"><i class="glyphicon glyphicon-print"></i></a>
                                                                     }
                                                                     else
@@ -422,7 +422,7 @@
                                                                     @if (@element.Status == KyoS.Common.Enums.AdendumStatus.Edition && @element.CreatedBy == User.Identity.Name)
                                                                     {
                                                                         <a asp-action="EditMTPReview" asp-route-id="@element.Id" class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                        <a asp-action="FinishEditingMtpReview" asp-route-id="@element.Id" class="btn btn-success" title="Finish edition of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        <a asp-action="FinishEditingMtpReview" asp-route-id="@element.Id" asp-route-origin="2" class="btn btn-success" title="Finish edition of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
                                                                         <a class="btn btn-success disabled" title="Print MTP Review"><i class="glyphicon glyphicon-print"></i></a>
                                                                     }
                                                                     else
