@@ -100,6 +100,8 @@ namespace KyoS.Web.Data
         public DbSet<TCMIntakeAdvancedDirectiveEntity> TCMIntakeAdvancedDirective { get; set; }
         public DbSet<TCMIntakeForeignLanguageEntity> TCMIntakeForeignLanguage { get; set; }
         public DbSet<TCMIntakeWelcomeEntity> TCMIntakeWelcome { get; set; }
+        public DbSet<TCMIntakeNonClinicalLogEntity> TCMIntakeNonClinicalLog { get; set; }
+        public DbSet<TCMIntakeMiniMentalEntity> TCMIntakeMiniMental { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -425,10 +427,22 @@ namespace KyoS.Web.Data
                         .HasForeignKey<TCMIntakeForeignLanguageEntity>(s => s.TcmClient_FK);
 
             modelBuilder.Entity<TCMClientEntity>()
-                       .HasOne(c => c.TCMIntakeWelcome)
-                       .WithOne(s => s.TcmClient)
-                       .OnDelete(DeleteBehavior.Cascade)
-                       .HasForeignKey<TCMIntakeWelcomeEntity>(s => s.TcmClient_FK);
+                        .HasOne(c => c.TCMIntakeWelcome)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMIntakeWelcomeEntity>(s => s.TcmClient_FK);
+ 
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TCMIntakeNonClinicalLog)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMIntakeNonClinicalLogEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TCMIntakeMiniMental)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMIntakeMiniMentalEntity>(s => s.TcmClient_FK);
         }
     }
 }

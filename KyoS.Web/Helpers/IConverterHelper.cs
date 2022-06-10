@@ -140,5 +140,9 @@ namespace KyoS.Web.Helpers
         TCMIntakeForeignLanguageViewModel ToTCMIntakeForeignLanguageViewModel(TCMIntakeForeignLanguageEntity model);
         Task<TCMIntakeWelcomeEntity> ToTCMIntakeWelcomeEntity(TCMIntakeWelcomeViewModel model, bool isNew);
         TCMIntakeWelcomeViewModel ToTCMIntakeWelcomeViewModel(TCMIntakeWelcomeEntity model);
+        Task<TCMIntakeNonClinicalLogEntity> ToTCMIntakeNonClinicalLogEntity(TCMIntakeNonClinicalLogViewModel model, bool isNew);
+        TCMIntakeNonClinicalLogViewModel ToTCMIntakeNonClinicalLogViewModel(TCMIntakeNonClinicalLogEntity model);
+        Task<TCMIntakeMiniMentalEntity> ToTCMIntakeMiniMenatalEntity(TCMIntakeMiniMentalViewModel model, bool isNew);
+        TCMIntakeMiniMentalViewModel ToTCMIntakeMiniMenatalViewModel(TCMIntakeMiniMentalEntity model);
     }
 }

@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220609230831_ImprovesTCMIntakeNonClinical#1")]
+    partial class ImprovesTCMIntakeNonClinical1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -5277,69 +5279,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("TCMIntakeForms");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeMiniMentalEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("AdmissionedFor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Attention")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("LanguageCopy")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LanguageFollow")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LanguageName")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LanguageRead")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LanguageRepeat")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LanguageWrite")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrientationWhat")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrientationWhere")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Recall")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RegistrationName")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TcmClient_FK")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalScore")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Trials")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TcmClient_FK")
-                        .IsUnique();
-
-                    b.ToTable("TCMIntakeMiniMental");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeNonClinicalLogEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -7103,17 +7042,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TcmClient");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeMiniMentalEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
-                        .WithOne("TCMIntakeMiniMental")
-                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeMiniMentalEntity", "TcmClient_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TcmClient");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeNonClinicalLogEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
@@ -7590,8 +7518,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TCMIntakeForeignLanguage");
 
                     b.Navigation("TCMIntakeForm");
-
-                    b.Navigation("TCMIntakeMiniMental");
 
                     b.Navigation("TCMIntakeNonClinicalLog");
 

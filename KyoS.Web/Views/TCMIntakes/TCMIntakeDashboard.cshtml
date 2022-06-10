@@ -10,14 +10,15 @@
             <i class="icon-home"></i>
             @Html.ActionLink("TCM Intake", "Index", "TCMIntakes")
         </li>
-        <li class="active">TCM Intake of @Model.Client.Name</li>
+        <li class="active">TCM OPEN BINDER of @Model.Client.Name</li>
     </ul><!--.breadcrumb-->
 </div>
 <div>
 
     <div class="row">
         <div class="container-fluid">
-            <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">TCM Intake - @Model.Client.Name </span></h4>
+            @*<h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">@Model.Client.Name </span></h4>*@
+            <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">OPEN BINDER SECTION 1 </span></h4>
         </div>
         <div class="col-md-12">
             <hr />
@@ -166,14 +167,14 @@
             @if (Model.TCMIntakeWelcome == null)
             {
                 <div class="thumbnail list-group-item list-group-item-text">
-                    <h4 style="align-content:end;">Welcome <br>Letter</h4>
+                    <h4 style="align-content:end;">Correspondence<br>&nbsp;</h4>
                     <p style="text-align:right"><a asp-action="CreateTCMWelcome" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
                 </div>
             }
             else
             {
                 <div class="thumbnail list-group-item list-group-item-success">
-                    <h4 style="align-content:end;">Welcome<br>Letter</h4>
+                    <h4 style="align-content:end;">Correspondence<br>&nbsp;</h4>
                     <p style="text-align:right"><a asp-action="CreateTCMWelcome" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
                 </div>
             }
@@ -181,5 +182,111 @@
         <div class="col-md-2">
             &nbsp;
         </div>
+        <div class="col-md-12">
+            &nbsp;
+        </div>
+        <div class="col-md-12 container-fluid">
+            <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">OPEN BINDER SECTION 2 / OPEN BINDER SECTION 3</span></h4>
+        </div>
+        <div class="col-md-12">
+            &nbsp;
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.Client.Documents.Count() == 0)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Scanned<br>Documentation</h4>
+                    <p style="text-align:right"><a asp-action="ClientsDocuments" asp-route-id="@Model.Client.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Scanned<br>Documentation</h4>
+                    <p style="text-align:right"><a asp-action="ClientsDocuments" asp-route-id="@Model.Client.Id" class="btn btn-success" role="button">@Model.Client.Documents.Count()</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.Client.IntakeFeeAgreement == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Fee<br>Agreement</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMFeeAgreement" asp-route-id="@Model.Client.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Fee<br>Agreement</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMFeeAgreement" asp-route-id="@Model.Client.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.TCMIntakeNonClinicalLog == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Non Clinical<br>Log</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMNonClinicalLog" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Non Clinical<br>Log</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMNonClinicalLog" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.TCMIntakeMiniMental == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Mini Mental<br>State Exam</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMMiniMental" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Mini Mental<br>State Exam</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMMiniMental" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.Client.IntakeMedicalHistory == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Medical<br>History</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMMedicalhistory" asp-route-id="@Model.Client.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Medical<br>History</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMMedicalhistory" asp-route-id="@Model.Client.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.Client.MedicationList == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Medication<br>>&nbsp;</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMMedication" asp-route-id="@Model.Client.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Medication<br>&nbsp;</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMMedication" asp-route-id="@Model.Client.Id" class="btn btn-success" role="button">@Model.Client.MedicationList.Count()</a></p>
+                </div>
+            }
+        </div>
     </div>
     </div>
+

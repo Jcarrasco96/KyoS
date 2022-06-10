@@ -345,7 +345,8 @@ namespace KyoS.Web.Helpers
                 OtherLanguage_Speak = clientEntity.OtherLanguage_Speak,
                 OtherLanguage_Understand = clientEntity.OtherLanguage_Understand,
                 MedicareId = clientEntity.MedicareId,
-                DateOfClose = clientEntity.DateOfClose
+                DateOfClose = clientEntity.DateOfClose,
+                Documents = clientEntity.Documents
             };
         }
 
@@ -3153,6 +3154,7 @@ namespace KyoS.Web.Helpers
             };
 
         }
+
         public async Task<Bio_BehavioralHistoryEntity> ToBio_BehaviorEntity(Bio_BehavioralHistoryViewModel model, bool isNew)
         {
             return new Bio_BehavioralHistoryEntity
@@ -3840,5 +3842,90 @@ namespace KyoS.Web.Helpers
             };
 
         }
+
+        public async Task<TCMIntakeNonClinicalLogEntity> ToTCMIntakeNonClinicalLogEntity(TCMIntakeNonClinicalLogViewModel model, bool isNew)
+        {
+            return new TCMIntakeNonClinicalLogEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Date = model.Date,
+                DateActivity = model.DateActivity
+
+            };
+        }
+
+        public TCMIntakeNonClinicalLogViewModel ToTCMIntakeNonClinicalLogViewModel(TCMIntakeNonClinicalLogEntity model)
+        {
+            return new TCMIntakeNonClinicalLogViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Date = model.Date,
+                DateActivity = model.DateActivity
+
+            };
+
+        }
+
+        public async Task<TCMIntakeMiniMentalEntity> ToTCMIntakeMiniMenatalEntity(TCMIntakeMiniMentalViewModel model, bool isNew)
+        {
+            return new TCMIntakeMiniMentalEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Date = model.Date,
+                Attention = model.Attention,
+                LanguageCopy = model.LanguageCopy,
+                LanguageFollow = model.LanguageFollow,
+                LanguageName = model.LanguageName,
+                LanguageRead = model.LanguageRead,
+                LanguageRepeat = model.LanguageRepeat,
+                LanguageWrite = model.LanguageWrite,
+                OrientationWhat = model.OrientationWhat,
+                OrientationWhere = model.OrientationWhere,
+                Recall = model.Recall,
+                RegistrationName = model.RegistrationName,
+                TotalScore = model.TotalScore,
+                Trials = model.Trials
+
+            };
+        }
+
+        public TCMIntakeMiniMentalViewModel ToTCMIntakeMiniMenatalViewModel(TCMIntakeMiniMentalEntity model)
+        {
+            return new TCMIntakeMiniMentalViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Date = model.Date,
+                Attention = model.Attention,
+                LanguageCopy = model.LanguageCopy,
+                LanguageFollow = model.LanguageFollow,
+                LanguageName = model.LanguageName,
+                LanguageRead = model.LanguageRead,
+                LanguageRepeat = model.LanguageRepeat,
+                LanguageWrite = model.LanguageWrite,
+                OrientationWhat = model.OrientationWhat,
+                OrientationWhere = model.OrientationWhere,
+                Recall = model.Recall,
+                RegistrationName = model.RegistrationName,
+                TotalScore = model.TotalScore,
+                Trials = model.Trials
+            };
+
+        }
+
+
     }
 }
