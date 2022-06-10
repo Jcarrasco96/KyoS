@@ -98,6 +98,8 @@ namespace KyoS.Web.Data
         public DbSet<TCMIntakeAcknowledgementHippaEntity> TCMIntakeAcknowledgement { get; set; }
         public DbSet<TCMIntakeOrientationChecklistEntity> TCMIntakeOrientationCheckList { get; set; }
         public DbSet<TCMIntakeAdvancedDirectiveEntity> TCMIntakeAdvancedDirective { get; set; }
+        public DbSet<TCMIntakeForeignLanguageEntity> TCMIntakeForeignLanguage { get; set; }
+        public DbSet<TCMIntakeWelcomeEntity> TCMIntakeWelcome { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -387,10 +389,10 @@ namespace KyoS.Web.Data
                         .HasForeignKey<TCMIntakeConsentForTreatmentEntity>(s => s.Client_FK);
 
             modelBuilder.Entity<TCMClientEntity>()
-                        .HasOne(c => c.TcmIntakeConsentForRelease)
+                        .HasMany(c => c.TcmIntakeConsentForRelease)
                         .WithOne(s => s.TcmClient)
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .HasForeignKey<TCMIntakeConsentForReleaseEntity>(s => s.TcmClient_FK);
+                        .OnDelete(DeleteBehavior.Cascade);
+                        
 
             modelBuilder.Entity<TCMClientEntity>()
                         .HasOne(c => c.TcmIntakeConsumerRights)
@@ -405,16 +407,28 @@ namespace KyoS.Web.Data
                         .HasForeignKey<TCMIntakeAcknowledgementHippaEntity>(s => s.TcmClient_FK);
 
             modelBuilder.Entity<TCMClientEntity>()
-                       .HasOne(c => c.TCMIntakeOrientationChecklist)
-                       .WithOne(s => s.TcmClient)
-                       .OnDelete(DeleteBehavior.Cascade)
-                       .HasForeignKey<TCMIntakeOrientationChecklistEntity>(s => s.TcmClient_FK);
+                        .HasOne(c => c.TCMIntakeOrientationChecklist)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMIntakeOrientationChecklistEntity>(s => s.TcmClient_FK);
 
-           modelBuilder.Entity<TCMClientEntity>()
-                       .HasOne(c => c.TCMIntakeAdvancedDirective)
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TCMIntakeAdvancedDirective)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMIntakeAdvancedDirectiveEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TCMIntakeForeignLanguage)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMIntakeForeignLanguageEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                       .HasOne(c => c.TCMIntakeWelcome)
                        .WithOne(s => s.TcmClient)
                        .OnDelete(DeleteBehavior.Cascade)
-                       .HasForeignKey<TCMIntakeAdvancedDirectiveEntity>(s => s.TcmClient_FK);
+                       .HasForeignKey<TCMIntakeWelcomeEntity>(s => s.TcmClient_FK);
         }
     }
 }

@@ -44,7 +44,7 @@ namespace KyoS.Web.Data.Entities
         public bool ForPurpose_Other { get; set; }
         public string ForPurpose_OtherExplain { get; set; }
 
-        public bool Discaherge { get; set; }
+        public bool Discharge { get; set; }
         public bool SchoolRecord { get; set; }
         public bool ProgressReports { get; set; }
         public bool IncidentReport { get; set; }
@@ -55,5 +55,11 @@ namespace KyoS.Web.Data.Entities
         public bool Other { get; set; }
         public string Other_Explain { get; set; }
         public bool Documents { get; set; }
+
+        public string NameOfFacility { get; set; }
+        public string Address { get; set; }
+        public string CityStateZip { get; set; }
+        public string PhoneNo { get; set; }
+        public string FaxNo { get; set; }
     }
 }

@@ -169,20 +169,6 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<CaseMannagerEntity> ToCaseMannagerEntity(CaseMannagerViewModel model, string signaturePath, bool isNew)
-        {
-            return new CaseMannagerEntity
-            {
-                Id = isNew ? 0 : model.Id,
-                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
-                Codigo = model.Codigo,
-                Name = model.Name,
-                Status = StatusUtils.GetStatusByIndex(model.IdStatus),
-                LinkedUser = _userHelper.GetUserNameById(model.IdUser),
-                SignaturePath = signaturePath
-            };
-        }
-
         public FacilitatorViewModel ToFacilitatorViewModel(FacilitatorEntity facilitatorEntity, int idClinic)
         {
             return new FacilitatorViewModel
@@ -200,6 +186,22 @@ namespace KyoS.Web.Helpers
             };
         }
 
+        public async Task<CaseMannagerEntity> ToCaseMannagerEntity(CaseMannagerViewModel model, string signaturePath, bool isNew)
+        {
+            return new CaseMannagerEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
+                Codigo = model.Codigo,
+                Name = model.Name,
+                Status = StatusUtils.GetStatusByIndex(model.IdStatus),
+                LinkedUser = _userHelper.GetUserNameById(model.IdUser),
+                SignaturePath = signaturePath,
+                Email = model.Email,
+                Phone = model.Phone
+            };
+        }
+
         public CaseMannagerViewModel ToCaseMannagerViewModel(CaseMannagerEntity caseMannagerEntity, int idClinic)
         {
             return new CaseMannagerViewModel
@@ -213,7 +215,9 @@ namespace KyoS.Web.Helpers
                 StatusList = _combosHelper.GetComboClientStatus(),
                 IdUser = _userHelper.GetIdByUserName(caseMannagerEntity.LinkedUser),
                 UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, idClinic),
-                SignaturePath = caseMannagerEntity.SignaturePath
+                SignaturePath = caseMannagerEntity.SignaturePath,
+                Email = caseMannagerEntity.Email,
+                Phone = caseMannagerEntity.Phone
             };
         }
 
@@ -1281,6 +1285,7 @@ namespace KyoS.Web.Helpers
                 Description = TcmServiceEntity.Description
             };
         }
+
         public async Task<TCMStageEntity> ToTCMStageEntity(TCMStageViewModel model, bool isNew)
         {
             return new TCMStageEntity
@@ -1310,6 +1315,7 @@ namespace KyoS.Web.Helpers
                 tCMservice = TcmStageEntity.tCMservice
             };
         }
+
         public async Task<TCMClientEntity> ToTCMClientEntity(TCMClientViewModel model, bool isNew)
         {
             return new TCMClientEntity
@@ -1414,6 +1420,7 @@ namespace KyoS.Web.Helpers
                 TcmServicePlan = model.TcmServicePlan
             };
         }
+
         public async Task<IntakeScreeningEntity> ToIntakeEntity(IntakeScreeningViewModel model, bool isNew)
         {
             return new IntakeScreeningEntity
@@ -1461,7 +1468,7 @@ namespace KyoS.Web.Helpers
                 IdSpeechIs = Convert.ToInt32(model.SpeechIsStatus) + 1,
                 SpeechIs_Status = _combosHelper.GetComboIntake_SpeechIs(),
                 EmergencyContact = model.EmergencyContact,
-                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureEmployee = model.DateSignatureEmployee
 
             };
            
@@ -1486,7 +1493,7 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
                 Underestand = model.Underestand,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
                 
 
             };
@@ -1511,7 +1518,7 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
                 Underestand = model.Underestand,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
             };
             
@@ -1581,7 +1588,7 @@ namespace KyoS.Web.Helpers
                 InForm_Facsimile = model.InForm_Facsimile,
                 InForm_VerbalInformation = model.InForm_VerbalInformation,
                 InForm_WrittenRecords = model.InForm_WrittenRecords,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
             };
 
@@ -1599,7 +1606,7 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 ServedOf = model.ServedOf,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
             };
         }
@@ -1617,7 +1624,7 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 ServedOf = model.ServedOf,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
             };
 
@@ -1634,7 +1641,7 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
             };
         }
@@ -1651,7 +1658,7 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
                
             };
 
@@ -1685,7 +1692,7 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
                 
             };
 
@@ -1725,7 +1732,7 @@ namespace KyoS.Web.Helpers
                 Services = model.Services,
                 TheAbove = model.TheAbove,
                 TourFacility = model.TourFacility,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
             };
         }
@@ -1808,7 +1815,7 @@ namespace KyoS.Web.Helpers
                 Services = model.Services,
                 TheAbove = model.TheAbove,
                 TourFacility = model.TourFacility,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
             };
 
@@ -1825,7 +1832,7 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
             };
         }
@@ -1842,7 +1849,7 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
             };
 
@@ -1869,7 +1876,7 @@ namespace KyoS.Web.Helpers
                 Broadcast = model.Broadcast,
                 Markrting = model.Markrting,
                 ByTODocument = model.ByTODocument,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
             };
         }
@@ -1945,7 +1952,7 @@ namespace KyoS.Web.Helpers
                 ChangesUpdate = TcmServicePlanReviewDomianEntity.ChangesUpdate,
                 IdTcmDomain = TcmServicePlanReviewDomianEntity.TcmDomain.Id,
                 TcmDomain = TcmServicePlanReviewDomianEntity.TcmDomain,
-                status = _combosHelper.GetComboClientStatus(),
+                status = _combosHelper.GetComboClientStatus()
               
             };
         }
@@ -1956,7 +1963,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 TcmDomain = model.TcmDomain,
-                ChangesUpdate = model.ChangesUpdate,
+                ChangesUpdate = model.ChangesUpdate
                
             };
         }
@@ -1986,7 +1993,7 @@ namespace KyoS.Web.Helpers
                 SupervisorSignatureDate = DateTime.Now,
                 TcmDischargeFollowUp = TcmDischargeEntity.TcmDischargeFollowUp,
                 TcmDischargeServiceStatus = TcmDischargeEntity.TcmDischargeServiceStatus,
-                TcmServices = TcmDischargeEntity.TcmServicePlan.TCMService,
+                TcmServices = TcmDischargeEntity.TcmServicePlan.TCMService
 
             };
         }
@@ -2014,7 +2021,7 @@ namespace KyoS.Web.Helpers
                 TcmDischargeFollowUp = model.TcmDischargeFollowUp,
                 StaffSignatureDate = model.StaffSignatureDate,
                 SupervisorSignatureDate = model.SupervisorSignatureDate,
-                TcmServicePlan = _context.TCMServicePlans.Find(model.IdServicePlan),
+                TcmServicePlan = _context.TCMServicePlans.Find(model.IdServicePlan)
 
             };
         }
@@ -2041,7 +2048,7 @@ namespace KyoS.Web.Helpers
                 Broadcast = model.Broadcast,
                 Markrting = model.Markrting,
                 ByTODocument = model.ByTODocument,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
 
             };
@@ -2059,7 +2066,7 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
             };
         }
@@ -2076,7 +2083,7 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
                 
 
             };
@@ -3451,8 +3458,7 @@ namespace KyoS.Web.Helpers
                 StatusResident = model.StatusResident,
                 StausCitizen = model.StausCitizen,
                 YearEnterUsa = model.YearEnterUsa
-                
-
+            
             };
         }
 
@@ -3475,8 +3481,7 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
                 Underestand = model.Underestand,
-                AdmissionedFor = model.AdmissionedFor,
-
+                AdmissionedFor = model.AdmissionedFor
 
             };
         }
@@ -3500,7 +3505,7 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
                 Underestand = model.Underestand,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
             };
 
@@ -3511,13 +3516,13 @@ namespace KyoS.Web.Helpers
             return new TCMIntakeConsentForReleaseEntity
             {
                 Id = isNew ? 0 : model.Id,
-                TcmClient = model.TcmClient,
+                TcmClient = await _context.TCMClient.FirstOrDefaultAsync(c => c.Id == model.TcmClient_FK),
                 TcmClient_FK = model.TcmClient_FK,
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                Discaherge = model.Discaherge,
+                Discharge = model.Discharge,
                 ForPurpose_CaseManagement = model.ForPurpose_CaseManagement,
                 ForPurpose_Other = model.ForPurpose_Other,
                 ForPurpose_OtherExplain = model.ForPurpose_OtherExplain,
@@ -3537,6 +3542,11 @@ namespace KyoS.Web.Helpers
                 SchoolRecord = model.SchoolRecord,
                 ToRelease = model.ToRelease,
                 AdmissionedFor = model.AdmissionedFor,
+                NameOfFacility = model.NameOfFacility,
+                Address = model.Address,
+                CityStateZip = model.CityStateZip,
+                PhoneNo = model.PhoneNo,
+                FaxNo = model.FaxNo
             };
         }
 
@@ -3558,7 +3568,7 @@ namespace KyoS.Web.Helpers
                 ProgressReports = model.ProgressReports,
                 Other = model.Other,
                 Other_Explain = model.Other_Explain,
-                Discaherge = model.Discaherge,
+                Discharge = model.Discharge,
                 LabWork = model.LabWork,
                 History = model.History,
                 HospitalRecord = model.HospitalRecord,
@@ -3571,6 +3581,11 @@ namespace KyoS.Web.Helpers
                 InForm_VerbalInformation = model.InForm_VerbalInformation,
                 InForm_WrittenRecords = model.InForm_WrittenRecords,
                 AdmissionedFor = model.AdmissionedFor,
+                NameOfFacility = model.NameOfFacility,
+                Address = model.Address,
+                CityStateZip = model.CityStateZip,
+                PhoneNo = model.PhoneNo,
+                FaxNo = model.FaxNo
 
             };
 
@@ -3588,7 +3603,8 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 ServedOf = model.ServedOf,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
+                
 
             };
         }
@@ -3606,7 +3622,7 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 ServedOf = model.ServedOf,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
             };
 
@@ -3623,7 +3639,7 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
             };
         }
@@ -3640,7 +3656,7 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
             };
 
@@ -3680,7 +3696,7 @@ namespace KyoS.Web.Helpers
                 Services = model.Services,
                 TheAbove = model.TheAbove,
                 TourFacility = model.TourFacility,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
             };
         }
@@ -3720,7 +3736,7 @@ namespace KyoS.Web.Helpers
                 Services = model.Services,
                 TheAbove = model.TheAbove,
                 TourFacility = model.TourFacility,
-                AdmissionedFor = model.AdmissionedFor,
+                AdmissionedFor = model.AdmissionedFor
 
             };
 
@@ -3759,6 +3775,68 @@ namespace KyoS.Web.Helpers
                 AdmissionedFor = model.AdmissionedFor,
                 IHave = model.IHave,
                 IHaveNot = model.IHaveNot
+            };
+
+        }
+
+        public async Task<TCMIntakeForeignLanguageEntity> ToTCMIntakeForeignLanguageEntity(TCMIntakeForeignLanguageViewModel model, bool isNew)
+        {
+            return new TCMIntakeForeignLanguageEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor
+
+            };
+        }
+
+        public TCMIntakeForeignLanguageViewModel ToTCMIntakeForeignLanguageViewModel(TCMIntakeForeignLanguageEntity model)
+        {
+            return new TCMIntakeForeignLanguageViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor
+
+            };
+
+        }
+
+        public async Task<TCMIntakeWelcomeEntity> ToTCMIntakeWelcomeEntity(TCMIntakeWelcomeViewModel model, bool isNew)
+        {
+            return new TCMIntakeWelcomeEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Date = model.Date
+
+            };
+        }
+
+        public TCMIntakeWelcomeViewModel ToTCMIntakeWelcomeViewModel(TCMIntakeWelcomeEntity model)
+        {
+            return new TCMIntakeWelcomeViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Date = model.Date
+
             };
 
         }
