@@ -29,7 +29,7 @@
             <partial name="_TCMMedications" />
             <div class="col-md-12">
                 <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="TCMIntakeDashboard" class="btn btn-success">Back</a>
+                <a asp-action="TCMIntakeDashboard" asp-route-id="@Model.IdClient" class="btn btn-success">Back</a>
             </div>
         </form>
     </div>
@@ -113,7 +113,7 @@
             });
 
             $("#btnYesDelete").click(function () {
-                var url = "@Url.Action("Delete", "Medications")";
+                var url = "@Url.Action("DeleteTCMMedication", "TCMIntakes")";
                 window.location.href = url + '/' + item_to_delete;
             });
         });

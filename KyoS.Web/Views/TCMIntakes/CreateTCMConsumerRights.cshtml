@@ -15,7 +15,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("TCM Intakes", "Index", "TCMIntakes")
+                @Html.ActionLink("TCM Intakes", "TCMIntakeDashboard", "TCMIntakes", new { id = Model.TcmClient_FK })
             </li>
             <li class="active">Consumer Rights</li>
         </ul><!--.breadcrumb-->
