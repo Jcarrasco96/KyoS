@@ -22,6 +22,9 @@
         <div class="col-md-12">
             <hr />
         </div>
+        <div class="col-md-1">
+            &nbsp;
+        </div>
         <div class="col-sm-3 col-md-2">
             @if (Model.TCMIntakeForm == null)
             {
@@ -55,7 +58,7 @@
             }
         </div>
         <div class="col-sm-3 col-md-2">
-            @if (Model.TcmIntakeConsentForRelease == null)
+            @if (Model.TcmIntakeConsentForRelease.Count() == 0)
             {
                 <div class="thumbnail list-group-item list-group-item-text">
                     <h4 style="align-content:end;">Consent for<br>Release</h4>
@@ -66,7 +69,7 @@
             {
                 <div class="thumbnail list-group-item list-group-item-success">
                     <h4 style="align-content:end;">Consent for<br>Release</h4>
-                    <p style="text-align:right"><a asp-action="CreateTCMConsentForRelease" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                    <p style="text-align:right"><a asp-action="ListConsentForrelease" asp-route-id="@Model.Id" class="btn btn-success" role="button">@Model.TcmIntakeConsentForRelease.Count()</a></p>
                 </div>
             }
         </div>
@@ -90,17 +93,26 @@
             @if (Model.TcmIntakeAcknowledgementHipa == null)
             {
                 <div class="thumbnail list-group-item list-group-item-text">
-                    <h4 style="align-content:end;">ACKNOWLEDGEMENT<br>Hippa</h4>
+                    <h4 style="align-content:end;">Acknowledgement<br>Hippa</h4>
                     <p style="text-align:right"><a asp-action="CreateTCMAcknowledgementHippa" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
                 </div>
             }
             else
             {
                 <div class="thumbnail list-group-item list-group-item-success">
-                    <h4 style="align-content:end;">ACKNOWLEDGEMENT<br>Hippa</h4>
+                    <h4 style="align-content:end;">Acknowledgement<br>Hippa</h4>
                     <p style="text-align:right"><a asp-action="CreateTCMAcknowledgementHippa" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
                 </div>
             }
+        </div>
+        <div class="col-md-1">
+            &nbsp;
+        </div>
+        <div class="col-md-12">
+            &nbsp;
+        </div>
+        <div class="col-md-2">
+            &nbsp;
         </div>
         <div class="col-sm-3 col-md-2">
             @if (Model.TCMIntakeOrientationChecklist == null)
@@ -118,9 +130,6 @@
                 </div>
             }
         </div>
-        <div class="col-md-12">
-            &nbsp;
-        </div>
         <div class="col-sm-3 col-md-2">
             @if (Model.TCMIntakeAdvancedDirective == null)
             {
@@ -136,6 +145,41 @@
                     <p style="text-align:right"><a asp-action="CreateTCMIntakeAdvenceDirective" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
                 </div>
             }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.TCMIntakeForeignLanguage == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Foreign Language<br>Acknowledgement</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMForeignLanguage" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Foreign Language<br>Acknowledgement</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMForeignLanguage" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.TCMIntakeWelcome == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Welcome <br>Letter</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMWelcome" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Welcome<br>Letter</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMWelcome" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-md-2">
+            &nbsp;
         </div>
     </div>
     </div>

@@ -58,6 +58,33 @@
     459, 396, 11, 297, 053, 90.50 and 458.21 to/ from:
     </pre>
 </div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="NameOfFacility" class="control-label">Name of Facility, Individual or Agency</label>
+        <input asp-for="NameOfFacility" class="form-control" >
+        <span asp-validation-for="NameOfFacility" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Address" class="control-label">Address</label>
+        <input asp-for="Address" class="form-control" >
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="CityStateZip" class="control-label">City, State, Zip</label>
+        <input asp-for="CityStateZip" class="form-control" >
+        <span asp-validation-for="CityStateZip" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="PhoneNo" class="control-label">Phone No</label>
+        <input asp-for="PhoneNo" class="form-control" >
+        <span asp-validation-for="PhoneNo" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="FaxNo" class="control-label">Fax No</label>
+        <input asp-for="FaxNo" class="form-control" >
+        <span asp-validation-for="FaxNo" class="text-danger"></span>
+    </div>
+</div>
 <div class="col-md-12">
     <pre>    
     <strong>In the form of: </strong>              <input type="checkbox" asp-for="InForm_VerbalInformation" class="form-check-input" id="InForm_VerbalInformation"> Verbal Information            <input type="checkbox" asp-for="InForm_Facsimile" class="form-check-input" id="InForm_Facsimile"> Facsimile              <input type="checkbox" asp-for="InForm_WrittenRecords" class="form-check-input" id="InForm_WrittenRecords"> Written Records   
@@ -66,7 +93,7 @@
 
       
     <strong>I understand that the specific reports disclosed might include: </strong>
-    <input type="checkbox" asp-for="Discaherge" class="form-check-input" id="Discaherge"> Discharge/Termination summary     <input type="checkbox" asp-for="SchoolRecord" class="form-check-input" id="SchoolRecord"> School records     <input type="checkbox" asp-for="ProgressReports" class="form-check-input" id="ProgressReports"> Progress reports    <input type="checkbox" asp-for="IncidentReport" class="form-check-input" id="IncidentReport"> Incident Reports
+    <input type="checkbox" asp-for="Discharge" class="form-check-input" id="Discharge"> Discharge/Termination summary     <input type="checkbox" asp-for="SchoolRecord" class="form-check-input" id="SchoolRecord"> School records     <input type="checkbox" asp-for="ProgressReports" class="form-check-input" id="ProgressReports"> Progress reports    <input type="checkbox" asp-for="IncidentReport" class="form-check-input" id="IncidentReport"> Incident Reports
     <input type="checkbox" asp-for="PsychologycalEvaluation" class="form-check-input" id="PsychologycalEvaluation"> Psychiatric/Psychological Evaluations    <input type="checkbox" asp-for="History" class="form-check-input" id="History"> History, Physical     <input type="checkbox" asp-for="LabWork" class="form-check-input" id="LabWork"> Lab Work     <input type="checkbox" asp-for="HospitalRecord" class="form-check-input" id="HospitalRecord"> Hospital Records
     <input type="checkbox" asp-for="Other" class="form-check-input" id="Other"> Other (explain)     <input asp-for="Other_Explain">
 

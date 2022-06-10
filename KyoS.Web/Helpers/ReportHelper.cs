@@ -3786,6 +3786,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("DayOfWeek", typeof(string));
             dt.Columns.Add("Date", typeof(DateTime));
             dt.Columns.Add("Present", typeof(bool));
+            dt.Columns.Add("Session", typeof(string));
 
             listWorkdayClient = listWorkdayClient.OrderBy(wc => wc.Workday.Date).ToList();
 
@@ -3795,7 +3796,8 @@ namespace KyoS.Web.Helpers
                                         {
                                             item.Workday.Day,
                                             item.Workday.Date,
-                                            item.Present
+                                            item.Present,
+                                            item.Session
                                         });
             }
 

@@ -136,5 +136,9 @@ namespace KyoS.Web.Helpers
         TCMIntakeOrientationCheckListViewModel ToTCMIntakeOrientationChecklistViewModel(TCMIntakeOrientationChecklistEntity model);
         Task<TCMIntakeAdvancedDirectiveEntity> ToTCMIntakeAdvancedDirectiveEntity(TCMIntakeAdvancedDirectiveViewModel model, bool isNew);
         TCMIntakeAdvancedDirectiveViewModel ToTCMIntakeAdvancedDirectiveViewModel(TCMIntakeAdvancedDirectiveEntity model);
+        Task<TCMIntakeForeignLanguageEntity> ToTCMIntakeForeignLanguageEntity(TCMIntakeForeignLanguageViewModel model, bool isNew);
+        TCMIntakeForeignLanguageViewModel ToTCMIntakeForeignLanguageViewModel(TCMIntakeForeignLanguageEntity model);
+        Task<TCMIntakeWelcomeEntity> ToTCMIntakeWelcomeEntity(TCMIntakeWelcomeViewModel model, bool isNew);
+        TCMIntakeWelcomeViewModel ToTCMIntakeWelcomeViewModel(TCMIntakeWelcomeEntity model);
     }
 }
