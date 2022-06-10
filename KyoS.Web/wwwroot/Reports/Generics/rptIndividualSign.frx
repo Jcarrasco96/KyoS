@@ -1,14 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/29/2021 15:55:43" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="06/09/2022 10:34:05" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3mxH0PhOfm9pWtOE/BkZOLw==">
-      <TableDataSource Name="Table" Alias="WorkdaysItems" DataType="System.Int32" Enabled="true" SelectCommand="SELECT W.CauseOfNotPresent AS DayOfWeek, W1.Date, W.Present&#13;&#10;FROM &quot;Workdays_Clients&quot; W, &quot;Workdays&quot; W1&#13;&#10;">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3VZmAjK0MxwUQQZ2oD3YNQQ==">
+      <TableDataSource Name="Table" Alias="WorkdaysItems" DataType="System.Int32" Enabled="true">
         <Column Name="DayOfWeek" DataType="System.String"/>
         <Column Name="Date" DataType="System.DateTime"/>
         <Column Name="Present" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Session" DataType="System.String" PropName="Column"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3I4n67qVUGB9cR4r8ajVNnQ==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3xoXg38UsQyFsd2rLGY+UwA==">
       <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -44,44 +45,46 @@
       <TextObject Name="Textbox64" Left="170.1" Top="31.33" Width="383.9" Height="22" CanGrow="true" Text="PSR INDIVIDUAL SIGN IN SHEET" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold"/>
       <LineObject Name="Line3" Left="160.65" Top="14.45" Height="37.2"/>
       <LineObject Name="Line4" Left="774.52" Top="89.05" Width="-776"/>
-      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15" Image=""/>
+      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15"/>
       <LineObject Name="Line6" Left="159.65" Top="13.45" Height="37.8"/>
       <LineObject Name="Line7" Left="774.9" Top="88.15" Width="-776"/>
     </ReportTitleBand>
-    <PageHeaderBand Name="PageHeader1" Top="98.5" Width="778.3" Height="98.28">
-      <TextObject Name="Text12" Left="513.65" Top="10" Width="56.7" Height="18.9" Text="Group" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text14" Left="570.35" Top="10.45" Width="94.5" Height="18.9" Text="[session1]" Font="Arial, 10pt, style=Bold"/>
+    <PageHeaderBand Name="PageHeader1" Top="98.62" Width="778.3" Height="98.28">
       <TextObject Name="Text16" Left="14.8" Top="12" Width="122.85" Height="18.9" Text="Client Name:" HorzAlign="Right" Font="Arial, 10pt"/>
       <TextObject Name="Text34" Left="15.45" Top="32.8" Width="122.85" Height="18.9" Text="Client Code:" HorzAlign="Right" Font="Arial, 10pt"/>
       <TextObject Name="Text35" Left="141.75" Top="11.45" Width="349.65" Height="18.9" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text36" Left="141.75" Top="32.35" Width="349.65" Height="18.9" Text="[Clients.Code]" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text37" Left="32.8" Top="75.6" Width="383.9" Height="22" CanGrow="true" Text="PSR INDIVIDUAL SIGN IN SHEET" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold"/>
     </PageHeaderBand>
-    <DataBand Name="Data1" Top="230.91" Width="778.3" Height="28.35" Guides="0" DataSource="Table">
-      <TableObject Name="Table1" Left="37.8" Top="-0.1" Width="623.71" Height="28.35">
+    <DataBand Name="Data1" Top="231.28" Width="778.3" Height="28.35" Guides="0" DataSource="Table">
+      <TableObject Name="Table1" Left="37.8" Top="-0.1" Width="708.76" Height="28.35">
         <TableColumn Name="Column1" Width="141.75"/>
         <TableColumn Name="Column2" Width="141.76"/>
+        <TableColumn Name="Column12" Width="85.05"/>
         <TableColumn Name="Column10" Width="340.2"/>
         <TableRow Name="Row1" Height="28.35">
           <TableCell Name="Cell1" Border.Lines="All" Text="[WorkdaysItems.DayOfWeek]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell2" Border.Lines="All" Text="[WorkdaysItems.Date]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell12" Border.Lines="All" Text="[WorkdaysItems.Session]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell10" Border.Lines="All" Text="[IIf([WorkdaysItems.Present] == false,&quot;Absent&quot;,&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader1" Top="200.78" Width="778.3" Height="26.13">
-        <TableObject Name="Table2" Left="37.8" Top="3.45" Width="623.71" Height="22.68">
+      <DataHeaderBand Name="DataHeader1" Top="201.03" Width="778.3" Height="26.13">
+        <TableObject Name="Table2" Left="37.8" Top="3.45" Width="708.76" Height="22.68">
           <TableColumn Name="Column3" Width="141.75"/>
           <TableColumn Name="Column4" Width="141.76"/>
+          <TableColumn Name="Column11" Width="85.05"/>
           <TableColumn Name="Column9" Width="340.2"/>
           <TableRow Name="Row2" Height="22.68">
             <TableCell Name="Cell3" Border.Lines="All" Fill.Color="Gainsboro" Text="DAY OF WEEK" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
             <TableCell Name="Cell4" Border.Lines="All" Fill.Color="Gainsboro" Text="DATE" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+            <TableCell Name="Cell11" Restrictions="DontMove" Border.Lines="All" Fill.Color="Gainsboro" Text="SESSION" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
             <TableCell Name="Cell9" Border.Lines="All" Fill.Color="Gainsboro" Text="SIGN" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
           </TableRow>
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="263.26" Width="778.3" Height="56.7">
+    <PageFooterBand Name="PageFooter1" Top="263.75" Width="778.3" Height="56.7">
       <LineObject Name="Line9" Left="773.45" Top="27.25" Width="-776"/>
       <TextObject Name="Text28" Left="10" Top="30.25" Width="207.9" Height="18.9" Text="Group Facilitator / Credentials" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text30" Left="527.75" Top="30.8" Width="245.7" Height="18.9" Text="Group Facilitator (print legibly)" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
