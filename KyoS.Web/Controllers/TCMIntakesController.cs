@@ -62,6 +62,8 @@ namespace KyoS.Web.Controllers
                                                           .Include(n => n.TcmIntakeAcknowledgementHipa)
                                                           .Include(n => n.TCMIntakeOrientationChecklist)
                                                           .Include(n => n.TCMIntakeAdvancedDirective)
+                                                          .Include(n => n.TCMIntakeForeignLanguage)
+                                                          .Include(n => n.TCMIntakeWelcome)
                                                           .Include(n => n.Client)
                                                           .ThenInclude(n => n.Clinic)
                                                           .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id)
@@ -342,12 +344,18 @@ namespace KyoS.Web.Controllers
                                                             .Include(c => c.TCMIntakeForm)
                                                             .Include(c => c.Client)
                                                             .Include(c => c.TcmIntakeConsentForTreatment)
-                                                            .Include(n => n.TcmIntakeConsentForRelease)
+                                                            .Include(n => n.TcmIntakeConsentForRelease.Where(m => m.TcmClient_FK == id))
                                                             .Include(n => n.TcmIntakeConsumerRights)
                                                             .Include(n => n.TcmIntakeAcknowledgementHipa)
                                                             .Include(n => n.TCMIntakeOrientationChecklist)
                                                             .Include(n => n.TCMIntakeAdvancedDirective)
+                                                            .Include(n => n.TCMIntakeForeignLanguage)
+                                                            .Include(n => n.TCMIntakeWelcome)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
+            List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
+                                                                               .Where(m => m.TcmClient_FK == id).ToListAsync();
+            TcmClientEntity.TcmIntakeConsentForRelease = listRelease;
+
             if (TcmClientEntity == null)
             {
                 return RedirectToAction("Home/Error404");
@@ -581,64 +589,52 @@ namespace KyoS.Web.Controllers
             {
                 if (user_logged.Clinic != null)
                 {
-                    TCMIntakeConsentForReleaseEntity intakeConsent = _context.TCMIntakeConsentForRelease
-                                                                             .Include(n => n.TcmClient)
-                                                                             .ThenInclude(n => n.Client)
-                                                                             .ThenInclude(n => n.LegalGuardian)
-                                                                             .FirstOrDefault(n => n.TcmClient.Id == id);
-                    if (intakeConsent == null)
+                    model = new TCMIntakeConsentForReleaseViewModel
                     {
-                        model = new TCMIntakeConsentForReleaseViewModel
-                        {
-                            TcmClient = _context.TCMClient
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.LegalGuardian)
-                                                .FirstOrDefault(n => n.Id == id),
-                            IdTCMClient = id,
-                            TcmClient_FK = id,
-                            Id = 0,
-                            ToRelease = true,
-                            ForPurpose_CaseManagement = false,
-                            ForPurpose_Other = false,
-                            ForPurpose_OtherExplain = "",
-                            ForPurpose_Treatment = false,
-                            InForm_Facsimile = false,
-                            InForm_VerbalInformation = false,
-                            InForm_WrittenRecords = false,
-                            Discaherge = false,
-                            SchoolRecord = false,
-                            ProgressReports = false,
-                            IncidentReport = false,
-                            PsychologycalEvaluation = false,
-                            History = false,
-                            LabWork = false,
-                            HospitalRecord = false,
-                            Other = false,
-                            Other_Explain = "",
-                            Documents = true,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
-                            AdmissionedFor = user_logged.FullName
-
-                        };
+                        TcmClient = _context.TCMClient
+                                            .Include(n => n.Client)
+                                            .ThenInclude(n => n.LegalGuardian)
+                                            .FirstOrDefault(n => n.Id == id),
+                        IdTCMClient = id,
+                        TcmClient_FK = id,
+                        Id = 0,
+                        ToRelease = true,
+                        ForPurpose_CaseManagement = false,
+                        ForPurpose_Other = false,
+                        ForPurpose_OtherExplain = "",
+                        ForPurpose_Treatment = false,
+                        InForm_Facsimile = false,
+                        InForm_VerbalInformation = false,
+                        InForm_WrittenRecords = false,
+                        Discharge = false,
+                        SchoolRecord = false,
+                        ProgressReports = false,
+                        IncidentReport = false,
+                        PsychologycalEvaluation = false,
+                        History = false,
+                        LabWork = false,
+                        HospitalRecord = false,
+                        Other = false,
+                        Other_Explain = "",
+                        Documents = true,
+                        DateSignatureEmployee = DateTime.Now,
+                        DateSignatureLegalGuardian = DateTime.Now,
+                        DateSignaturePerson = DateTime.Now,
+                        AdmissionedFor = user_logged.FullName,
+                        NameOfFacility = "",
+                        Address = "",
+                        CityStateZip = "",
+                        PhoneNo = "",
+                        FaxNo = ""
+                    };
                         if (model.TcmClient.Client.LegalGuardian == null)
                             model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
                         return View(model);
-                    }
-                    else
-                    {
-                        if (intakeConsent.TcmClient.Client.LegalGuardian == null)
-                            intakeConsent.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
-                        model = _converterHelper.ToTCMIntakeConsentForReleaseViewModel(intakeConsent);
-
-                        return View(model);
-                    }
-
+                
                 }
             }
 
-            return RedirectToAction("Index", "Intakes");
+            return RedirectToAction("TCMIntakeDashboard", new { id = id });
         }
 
         [HttpPost]
@@ -656,7 +652,7 @@ namespace KyoS.Web.Controllers
 
                 if (IntakeConsentEntity.Id == 0)
                 {
-                    IntakeConsentEntity.TcmClient = null;
+                   
                     _context.TCMIntakeConsentForRelease.Add(IntakeConsentEntity);
                     try
                     {
@@ -670,7 +666,7 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    IntakeConsentEntity.TcmClient = null;
+                   
                     _context.TCMIntakeConsentForRelease.Update(IntakeConsentEntity);
                     try
                     {
@@ -1129,6 +1125,340 @@ namespace KyoS.Web.Controllers
             IntakeViewModel.TcmClient = _context.TCMClient.Find(IntakeViewModel.Id);
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMIntakeAdvenceDirective", IntakeViewModel) });
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        public async Task<IActionResult> ListConsentForrelease(int id = 0)
+        {
+           
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+                List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
+                                                                                   .Include(n => n.TcmClient)
+                                                                                   .ThenInclude(n => n.Client)
+                                                                                   .Where(m => m.TcmClient_FK == id)
+                                                                                   .ToListAsync();
+                return View(listRelease);
+            }
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult EditConsentForRelease(int id = 0)
+        {
+            TCMIntakeConsentForReleaseEntity entity = _context.TCMIntakeConsentForRelease
+                                                              .Include(m => m.TcmClient)
+                                                              .ThenInclude(m => m.Client)
+                                                              .ThenInclude(m => m.Clients_Diagnostics)
+                                                              .ThenInclude(m => m.Diagnostic)
+                                                              .Include(m => m.TcmClient)
+                                                              .ThenInclude(m => m.Client)
+                                                              .ThenInclude(m => m.Clients_HealthInsurances)
+                                                              .ThenInclude(m => m.HealthInsurance)
+                                                              .Include(m => m.TcmClient.Client.LegalGuardian)
+                                                              .Include(n => n.TcmClient.Client.EmergencyContact)
+                                                              .Include(n => n.TcmClient.Client.Referred)
+                                                              .Include(n => n.TcmClient.Client.Doctor)
+                                                              .Include(n => n.TcmClient.Client.Psychiatrist)
+                                                              .FirstOrDefault(i => i.Id == id);
+            if (entity == null)
+            {
+                return RedirectToAction("EditConsentForRelease", new { id = id });
+            }
+
+            TCMIntakeConsentForReleaseEntity model;
+
+            if (User.IsInRole("Manager"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic != null)
+                {
+                    model = _converterHelper.ToTCMIntakeConsentForReleaseViewModel(entity);
+                    if (model.TcmClient.Client.LegalGuardian == null)
+                        model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
+                    if (model.TcmClient.Client.EmergencyContact == null)
+                    {
+                        model.TcmClient.Client.EmergencyContact = new EmergencyContactEntity();
+
+                    }
+
+                    return View(model);
+                }
+            }
+
+            model = new TCMIntakeConsentForReleaseEntity();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> EditConsentForRelease(TCMIntakeConsentForReleaseViewModel intakeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMIntakeConsentForReleaseEntity intakeEntity = await _converterHelper.ToTCMIntakeConsentForReleaseEntity(intakeViewModel, false);
+                _context.TCMIntakeConsentForRelease.Update(intakeEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("ListConsentForrelease", new { id = intakeViewModel.IdTCMClient });
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+
+            }
+
+            else
+            {
+                intakeViewModel.TcmClient = await _context.TCMClient
+                                                          .Include(m => m.Client)
+                                                          .ThenInclude(m => m.Clients_Diagnostics)
+                                                          .ThenInclude(m => m.Diagnostic)
+                                                          .Include(m => m.Client)
+                                                          .ThenInclude(m => m.Clients_HealthInsurances)
+                                                          .ThenInclude(m => m.HealthInsurance)
+                                                          .Include(m => m.Client.LegalGuardian)
+                                                          .Include(n => n.Client.EmergencyContact)
+                                                          .Include(n => n.Client.Referred)
+                                                          .Include(n => n.Client.Doctor)
+                                                          .Include(n => n.Client.Psychiatrist)
+                                                          .FirstOrDefaultAsync(n => n.Id == intakeViewModel.IdTCMClient);
+
+
+            }
+
+            return View(intakeViewModel);
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult CreateTCMForeignLanguage(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakeForeignLanguageViewModel model;
+
+            if (User.IsInRole("Manager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakeForeignLanguageEntity intakeForeign = _context.TCMIntakeForeignLanguage
+                                                                            .Include(n => n.TcmClient)
+                                                                            .ThenInclude(n => n.Client)
+                                                                            .ThenInclude(n => n.LegalGuardian)
+                                                                            .FirstOrDefault(n => n.TcmClient.Id == id);
+
+                    if (intakeForeign == null)
+                    {
+
+                        model = new TCMIntakeForeignLanguageViewModel
+                        {
+                            TcmClient = _context.TCMClient
+                                                .Include(d => d.Client)
+                                                .ThenInclude(d => d.LegalGuardian)
+                                                .FirstOrDefault(n => n.Id == id),
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardian = DateTime.Now,
+                            DateSignaturePerson = DateTime.Now,
+                            Documents = true,
+                            Id = 0,
+                            IdTCMClient = id,
+                            TcmClient_FK = id,
+                            AdmissionedFor = user_logged.FullName
+
+                        };
+                        if (model.TcmClient.Client.LegalGuardian == null)
+                            model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
+                        return View(model);
+                    }
+                    else
+                    {
+                        if (intakeForeign.TcmClient.Client.LegalGuardian == null)
+                            intakeForeign.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
+                        model = _converterHelper.ToTCMIntakeForeignLanguageViewModel(intakeForeign);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "TCMIntakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> CreateTCMForeignLanguage(TCMIntakeForeignLanguageViewModel IntakeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMIntakeForeignLanguageEntity IntakeForeignEntity = await _converterHelper.ToTCMIntakeForeignLanguageEntity(IntakeViewModel, false);
+
+                if (IntakeForeignEntity.Id == 0)
+                {
+                    IntakeForeignEntity.TcmClient = null;
+                    _context.TCMIntakeForeignLanguage.Add(IntakeForeignEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakeForeignEntity.TcmClient = null;
+                    _context.TCMIntakeForeignLanguage.Update(IntakeForeignEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            IntakeViewModel.TcmClient = _context.TCMClient.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMForeignLanguage", IntakeViewModel) });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult CreateTCMWelcome(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakeWelcomeViewModel model;
+
+            if (User.IsInRole("Manager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakeWelcomeEntity intakeForeign = _context.TCMIntakeWelcome
+                                                                   .Include(n => n.TcmClient)
+                                                                   .ThenInclude(n => n.Client)
+                                                                   .ThenInclude(n => n.LegalGuardian)
+                                                                   .Include(n => n.TcmClient)
+                                                                   .ThenInclude(n => n.Casemanager)
+                                                                   .ThenInclude(n => n.Clinic)
+                                                                   .FirstOrDefault(n => n.TcmClient.Id == id);
+
+                    if (intakeForeign == null)
+                    {
+
+                        model = new TCMIntakeWelcomeViewModel
+                        {
+                            TcmClient = _context.TCMClient
+                                                .Include(d => d.Client)
+                                                .ThenInclude(d => d.LegalGuardian)
+                                                .FirstOrDefault(n => n.Id == id),
+                            Date = DateTime.Now,
+                            Id = 0,
+                            IdTCMClient = id,
+                            TcmClient_FK = id,
+                            AdmissionedFor = user_logged.FullName
+
+                        };
+                        if (model.TcmClient.Client.LegalGuardian == null)
+                            model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
+                        return View(model);
+                    }
+                    else
+                    {
+                        if (intakeForeign.TcmClient.Client.LegalGuardian == null)
+                            intakeForeign.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
+                        model = _converterHelper.ToTCMIntakeWelcomeViewModel(intakeForeign);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "TCMIntakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> CreateTCMWelcome(TCMIntakeWelcomeViewModel IntakeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMIntakeWelcomeEntity IntakeForeignEntity = await _converterHelper.ToTCMIntakeWelcomeEntity(IntakeViewModel, false);
+
+                if (IntakeForeignEntity.Id == 0)
+                {
+                    IntakeForeignEntity.TcmClient = null;
+                    _context.TCMIntakeWelcome.Add(IntakeForeignEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakeForeignEntity.TcmClient = null;
+                    _context.TCMIntakeWelcome.Update(IntakeForeignEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            IntakeViewModel.TcmClient = _context.TCMClient.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMWelcome", IntakeViewModel) });
         }
 
     }

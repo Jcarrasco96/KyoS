@@ -35,10 +35,22 @@
             <input type="hidden" asp-for="Therapist" />
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="Origin" />
             <partial name="_MTPReviews" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Save All" class="btn btn-primary" />
-                <a asp-action="ExpiredMTP" class="btn btn-success">Back</a>
+                @if (Model.Origin == 0)
+                {
+                <a asp-action="Index" class="btn btn-success">Back</a>
+                }
+                @if (Model.Origin == 1)
+                {
+                    <a asp-action="ExpiredMTP" class="btn btn-success">Back</a>
+                }
+                @if (Model.Origin == 2)
+                {
+                    <a asp-action="MTPRinEdit" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>

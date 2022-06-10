@@ -103,7 +103,8 @@
                                             <a class="btn btn-warning disabled" title="New Intake"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
                                         @if ((item.TCMIntakeForm != null) && (item.TcmIntakeConsentForTreatment != null) && (item.TcmIntakeConsentForRelease != null) && (item.TcmIntakeConsumerRights != null)
-                                          && (item.TcmIntakeAcknowledgementHipa != null) && (item.TCMIntakeOrientationChecklist != null) && (item.TCMIntakeAdvancedDirective != null))
+                                          && (item.TcmIntakeAcknowledgementHipa != null) && (item.TCMIntakeOrientationChecklist != null) && (item.TCMIntakeAdvancedDirective != null)
+                                          && (item.TCMIntakeForeignLanguage != null) && (item.TCMIntakeWelcome != null))
                                         {
                                             <a asp-action="PrintIntake" asp-route-id="@item.TCMIntakeForm.Id" class="btn btn-success" title="Print TCM Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
@@ -162,7 +163,8 @@
                                             <a class="btn btn-success disabled" title="Edit TCM Intake"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
                                         @if ((item.TCMIntakeForm != null) && (item.TcmIntakeConsentForTreatment != null) && (item.TcmIntakeConsentForRelease != null) && (item.TcmIntakeConsumerRights != null)
-                                          && (item.TcmIntakeAcknowledgementHipa != null) && (item.TCMIntakeOrientationChecklist != null) && (item.TCMIntakeAdvancedDirective != null))
+                                         && (item.TcmIntakeAcknowledgementHipa != null) && (item.TCMIntakeOrientationChecklist != null) && (item.TCMIntakeAdvancedDirective != null)
+                                         && (item.TCMIntakeForeignLanguage != null) && (item.TCMIntakeWelcome != null))
                                         {
                                             <a asp-action="PrintIntake" asp-route-id="@item.TCMIntakeForm.Id" class="btn btn-success" title="Print TCM Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }

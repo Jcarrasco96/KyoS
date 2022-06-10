@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220609013945_ImprovesTCMIntakeForeignLanguage")]
+    partial class ImprovesTCMIntakeForeignLanguage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -727,9 +729,6 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("Codigo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("LinkedUser")
                         .HasColumnType("nvarchar(max)");
 
@@ -737,9 +736,6 @@ namespace KyoS.Web.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SignaturePath")
                         .HasColumnType("nvarchar(max)");
@@ -5379,30 +5375,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("TCMIntakeOrientationCheckList");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeWelcomeEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("AdmissionedFor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TcmClient_FK")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TcmClient_FK")
-                        .IsUnique();
-
-                    b.ToTable("TCMIntakeWelcome");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMObjetiveEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -7024,17 +6996,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TcmClient");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeWelcomeEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
-                        .WithOne("TCMIntakeWelcome")
-                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeWelcomeEntity", "TcmClient_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TcmClient");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMObjetiveEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.TCMDomainEntity", "TcmDomain")
@@ -7480,8 +7441,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TCMIntakeForm");
 
                     b.Navigation("TCMIntakeOrientationChecklist");
-
-                    b.Navigation("TCMIntakeWelcome");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDischargeEntity", b =>

@@ -22,6 +22,12 @@ namespace KyoS.Web.Data.Entities
         [Display(Name = "Signature")]
         public string SignaturePath { get; set; }
 
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Display(Name = "Phone")]
+        public string Phone { get; set; }
+
         public ClinicEntity Clinic { get; set; }
     }
 }

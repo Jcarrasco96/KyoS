@@ -8244,34 +8244,43 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator, Manager")]
-        public async Task<IActionResult> NotStartedNotes(string name = "", int id = 0)
+        public async Task<IActionResult> NotStartedNotes(string name, int id = 0)
         {
             if (name != string.Empty && id != 0)
             {
-                return View(await _context.Workdays_Clients.Include(wc => wc.Note)
-                                                           .Include(wc => wc.NoteP)
-                                                           .Include(wc => wc.Facilitator)
-                                                           .Include(wc => wc.Client)
-                                                           .Include(wc => wc.Workday)
-                                                           .ThenInclude(w => w.Week)
-                                                           .Where(wc => (wc.Facilitator.Name == name
-                                                                      && wc.Workday.Week.Id == id
-                                                                      && wc.Note == null && wc.NoteP == null && wc.Present == true
-                                                                      && wc.Workday.Service == ServiceType.PSR))
-                                                           .ToListAsync());
+                return View(await _context.Workdays_Clients
+
+                                          .Include(wc => wc.Note)
+                                          .Include(wc => wc.NoteP)
+                                          .Include(wc => wc.Facilitator)
+
+                                          .Include(wc => wc.Client)
+                                          .ThenInclude(c => c.Clinic)
+
+                                          .Include(wc => wc.Workday)
+                                          .ThenInclude(w => w.Week)
+
+                                          .Where(wc => (wc.Facilitator.Name == name
+                                                     && wc.Workday.Week.Id == id
+                                                     && wc.Note == null && wc.NoteP == null && wc.Present == true
+                                                     && wc.Workday.Service == ServiceType.PSR))
+                                          .ToListAsync());
             }
             else
             { 
-                return View(await _context.Workdays_Clients.Include(wc => wc.Note)
-                                                           .Include(wc => wc.NoteP)
-                                                           .Include(wc => wc.Facilitator)
-                                                           .Include(wc => wc.Client)
-                                                           .Include(wc => wc.Workday)
-                                                           .ThenInclude(w => w.Week)
-                                                           .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                                      && wc.Note == null && wc.NoteP == null && wc.Present == true
-                                                                      && wc.Workday.Service == ServiceType.PSR))
-                                                           .ToListAsync());
+                return View(await _context.Workdays_Clients
+
+                                          .Include(wc => wc.Note)
+                                          .Include(wc => wc.NoteP)
+                                          .Include(wc => wc.Facilitator)
+                                          .Include(wc => wc.Client)
+                                          .Include(wc => wc.Workday)
+                                          .ThenInclude(w => w.Week)
+                                          
+                                          .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                     && wc.Note == null && wc.NoteP == null && wc.Present == true
+                                                     && wc.Workday.Service == ServiceType.PSR))
+                                          .ToListAsync());
             }
         }
 
@@ -9828,30 +9837,30 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    //return RedirectToAction(nameof(Index));
-                   /* List<WeekEntity> week = await _context.Weeks
+                    
+                    List<WeekEntity> week = await _context.Weeks
 
-                                    .Include(w => w.Days)
-                                    .ThenInclude(d => d.Workdays_Clients)
-                                    .ThenInclude(wc => wc.Client)
+                                                          .Include(w => w.Days)
+                                                          .ThenInclude(d => d.Workdays_Clients)
+                                                          .ThenInclude(wc => wc.Client)
 
-                                    .Include(w => w.Days)
-                                    .ThenInclude(d => d.Workdays_Clients)
-                                    .ThenInclude(g => g.Facilitator)
+                                                          .Include(w => w.Days)
+                                                          .ThenInclude(d => d.Workdays_Clients)
+                                                          .ThenInclude(g => g.Facilitator)
 
-                                    .Include(w => w.Days)
-                                    .ThenInclude(d => d.Workdays_Clients)
-                                    .ThenInclude(wc => wc.Note)
+                                                          .Include(w => w.Days)
+                                                          .ThenInclude(d => d.Workdays_Clients)
+                                                          .ThenInclude(wc => wc.Note)
 
-                                    .Include(w => w.Days)
-                                    .ThenInclude(d => d.Workdays_Clients)
-                                    .ThenInclude(wc => wc.NoteP)
+                                                          .Include(w => w.Days)
+                                                          .ThenInclude(d => d.Workdays_Clients)
+                                                          .ThenInclude(wc => wc.NoteP)
 
-                                    .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
-                                              && w.Days.Where(d => (d.Service == ServiceType.PSR)).Count() > 0))
-                                    .ToListAsync();*/
+                                                          .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                                    && w.Days.Where(d => (d.Service == ServiceType.PSR && d.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))
+                                                          .ToListAsync();
 
-                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "Index", null) });
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotes", week) });
                 }
                 catch (System.Exception ex)
                 {
@@ -9868,5 +9877,116 @@ namespace KyoS.Web.Controllers
             return View(workdayClientModel);
         }
 
+        [Authorize(Roles = "Manager, Facilitator")]
+        public async Task<IActionResult> ChangeSessionByManager(int? id = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Workday_Client wordayClient = await _context.Workdays_Clients
+                                                        .Include(n => n.Facilitator)
+                                                        .Include(n => n.Client)
+                                                        .Include(n => n.Workday)
+                                                        .FirstOrDefaultAsync(c => c.Id == id);
+            if (wordayClient == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Workday_ClientViewModel wordayClientViewModel = _converterHelper.ToWorkdayClientViewModel(wordayClient);
+            if (wordayClientViewModel.Session == "AM")
+            {
+                ViewData["am"] = "true";
+            }
+            else
+            {
+                ViewData["am"] = "false";
+            }
+
+
+            return View(wordayClientViewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager, Facilitator")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeSessionByManager(int id, Workday_ClientViewModel workdayClientModel, IFormCollection form)
+        {
+            if (id != workdayClientModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (ModelState.IsValid)
+            {
+                switch (form["Meridian"])
+                {
+                    case "Am":
+                        {
+                            workdayClientModel.Session = "AM";
+                            break;
+                        }
+                    case "Pm":
+                        {
+                            workdayClientModel.Session = "PM";
+                            break;
+                        }
+                    default:
+                        break;
+                }
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                Workday_Client wordayClient = await _context.Workdays_Clients
+                                                            .Include(n => n.Facilitator)
+                                                            .Include(n => n.Client)
+                                                            .Include(n => n.Workday)
+                                                            .FirstOrDefaultAsync(c => c.Id == workdayClientModel.Id);
+                wordayClient.Session = workdayClientModel.Session;
+                _context.Update(wordayClient);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<WeekEntity> weeks = await _context.Weeks
+
+                                                           .Include(w => w.Days)
+                                                           .ThenInclude(d => d.Workdays_Clients)
+                                                           .ThenInclude(wc => wc.Client)
+
+                                                           .Include(w => w.Days)
+                                                           .ThenInclude(d => d.Workdays_Clients)
+                                                           .ThenInclude(g => g.Facilitator)
+
+                                                           .Include(w => w.Days)
+                                                           .ThenInclude(d => d.Workdays_Clients)
+                                                           .ThenInclude(wc => wc.Note)
+
+                                                           .Include(w => w.Days)
+                                                           .ThenInclude(d => d.Workdays_Clients)
+                                                           .ThenInclude(wc => wc.NoteP)
+
+                                                           .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                                     && w.Days.Where(d => (d.Service == ServiceType.PSR)).Count() > 0))
+                                                           .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotesForChanges", weeks) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the note: {wordayClient.ClientName}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            return View(workdayClientModel);
+        }
     }
 }
