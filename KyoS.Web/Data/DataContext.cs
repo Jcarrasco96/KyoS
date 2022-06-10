@@ -102,6 +102,7 @@ namespace KyoS.Web.Data
         public DbSet<TCMIntakeWelcomeEntity> TCMIntakeWelcome { get; set; }
         public DbSet<TCMIntakeNonClinicalLogEntity> TCMIntakeNonClinicalLog { get; set; }
         public DbSet<TCMIntakeMiniMentalEntity> TCMIntakeMiniMental { get; set; }
+        public DbSet<TCMIntakeCoordinationCareEntity> TCMIntakeCoordinationCare { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -443,6 +444,12 @@ namespace KyoS.Web.Data
                         .WithOne(s => s.TcmClient)
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasForeignKey<TCMIntakeMiniMentalEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TCMIntakeCoordinationCare)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMIntakeCoordinationCareEntity>(s => s.TcmClient_FK);
         }
     }
 }

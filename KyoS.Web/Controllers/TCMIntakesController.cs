@@ -78,6 +78,7 @@ namespace KyoS.Web.Controllers
                                                           .Include(n => n.Client.MedicationList)
                                                           .Include(n => n.TCMIntakeNonClinicalLog)
                                                           .Include(n => n.TCMIntakeMiniMental)
+                                                          .Include(n => n.TCMIntakeCoordinationCare)
                                                           .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id)
                                                           .ToListAsync();
                 return View(tcmClient);
@@ -115,6 +116,7 @@ namespace KyoS.Web.Controllers
                                             .Include(n => n.Client.Referred)
                                             .Include(n => n.Client.Doctor)
                                             .Include(n => n.Client.Psychiatrist)
+                                            .Include(n => n.TCMIntakeCoordinationCare)
                                             .FirstOrDefault(n => n.Id == id),
                         Agency = "",
                         CaseManagerNotes = "",
@@ -370,6 +372,7 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.Client.MedicationList)
                                                             .Include(n => n.TCMIntakeNonClinicalLog)
                                                             .Include(n => n.TCMIntakeMiniMental)
+                                                            .Include(n => n.TCMIntakeCoordinationCare)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
             List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
@@ -2356,6 +2359,144 @@ namespace KyoS.Web.Controllers
              //return RedirectToAction(nameof(Create), new { id = medicationEntity.Client.Id });
              return RedirectToAction("CreateTCMMedication", new { id = medicationEntity.Client.Id });
         }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult CreateTCMCoordinationCare(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakeCoordinationCareViewModel model;
+
+            if (User.IsInRole("CaseManager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakeCoordinationCareEntity intakeCoordination = _context.TCMIntakeCoordinationCare
+                                                                                 .Include(n => n.TcmClient)
+                                                                                 .ThenInclude(n => n.Client)
+                                                                                 .ThenInclude(n => n.LegalGuardian)
+                                                                                 .Include(n => n.TcmClient)
+                                                                                 .ThenInclude(n => n.Casemanager)
+                                                                                 .ThenInclude(n => n.Clinic)
+                                                                                 .Include(n => n.TcmClient)
+                                                                                 .ThenInclude(n => n.Client)
+                                                                                 .ThenInclude(n => n.Doctor)
+                                                                                 .FirstOrDefault(n => n.TcmClient.Id == id);
+
+                    if (intakeCoordination == null)
+                    {
+
+                        model = new TCMIntakeCoordinationCareViewModel
+                        {
+                            TcmClient = _context.TCMClient
+                                                .Include(d => d.Client)
+                                                .ThenInclude(d => d.LegalGuardian)
+                                                .Include(d => d.Casemanager)
+                                                .ThenInclude(d => d.Clinic)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.Doctor)
+                                                .FirstOrDefault(n => n.Id == id),
+                            Date = DateTime.Now,
+                            Id = 0,
+                            IdTCMClient = id,
+                            TcmClient_FK = id,
+                            AdmissionedFor = user_logged.FullName,
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardian = DateTime.Now,
+                            DateSignaturePerson = DateTime.Now,
+                            Documents = true,
+                            IAuthorize = true,
+                            InformationAllBefore = false,
+                            InformationElectronic = false,
+                            InformationFascimile = false,
+                            InformationNonKnown = false,
+                            InformationToRelease = false,
+                            InformationTorequested = false,
+                            InformationVerbal = false,
+                            InformationWrited = false,
+                            IRefuse = true,
+                            PCP = true,
+                            Specialist = false,
+                            SpecialistText = ""
+                            
+
+
+
+                        };
+                        if (model.TcmClient.Client.LegalGuardian == null)
+                            model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
+                        if (model.TcmClient.Client.Doctor == null)
+                            model.TcmClient.Client.Doctor = new DoctorEntity();
+                        return View(model);
+                    }
+                    else
+                    {
+                        if (intakeCoordination.TcmClient.Client.LegalGuardian == null)
+                            intakeCoordination.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
+                        if (intakeCoordination.TcmClient.Client.Doctor == null)
+                            intakeCoordination.TcmClient.Client.Doctor = new DoctorEntity();
+                        model = _converterHelper.ToTCMIntakeCoordinationCareViewModel(intakeCoordination);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "TCMIntakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> CreateTCMCoordinationCare(TCMIntakeCoordinationCareViewModel IntakeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMIntakeCoordinationCareEntity IntakeCoordination = await _converterHelper.ToTCMIntakeCoordinationCareEntity(IntakeViewModel, false);
+
+                if (IntakeCoordination.Id == 0)
+                {
+                    IntakeCoordination.TcmClient = null;
+                    _context.TCMIntakeCoordinationCare.Add(IntakeCoordination);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakeCoordination.TcmClient = null;
+                    _context.TCMIntakeCoordinationCare.Update(IntakeCoordination);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            IntakeViewModel.TcmClient = _context.TCMClient.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMCoordinationCare", IntakeViewModel) });
+        }
+
 
     }
 }

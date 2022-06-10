@@ -287,6 +287,31 @@
                 </div>
             }
         </div>
+        <div class="col-md-12">
+            &nbsp;
+        </div>
+        <div class="col-md-5">
+            &nbsp;
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.TCMIntakeCoordinationCare == null)
+            {
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;">Coordination<br>of Care</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMCoordinationCare" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;">Coordination<br>of Care</h4>
+                    <p style="text-align:right"><a asp-action="CreateTCMCoordinationCare" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                </div>
+            }
+        </div>
+        <div class="col-md-5">
+            &nbsp;
+        </div>
     </div>
     </div>
 

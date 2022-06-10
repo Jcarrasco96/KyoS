@@ -927,7 +927,8 @@ namespace KyoS.Web.Helpers
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
-                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                FaxNumber = model.FaxNumber
             };
         }
 
@@ -1032,7 +1033,8 @@ namespace KyoS.Web.Helpers
                 Telephone = model.Telephone,
                 Email = model.Email,
                 CreatedBy = model.CreatedBy,
-                CreatedOn = model.CreatedOn
+                CreatedOn = model.CreatedOn,
+                FaxNumber = model.FaxNumber
             };
         }
 
@@ -3926,6 +3928,66 @@ namespace KyoS.Web.Helpers
 
         }
 
+        public async Task<TCMIntakeCoordinationCareEntity> ToTCMIntakeCoordinationCareEntity(TCMIntakeCoordinationCareViewModel model, bool isNew)
+        {
+            return new TCMIntakeCoordinationCareEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Date = model.Date,
+                DateSignatureEmployee =model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                IAuthorize = model.IAuthorize,
+                InformationAllBefore = model.InformationAllBefore,
+                InformationElectronic = model.InformationElectronic,
+                InformationFascimile = model.InformationFascimile,
+                InformationNonKnown = model.InformationNonKnown,
+                InformationToRelease = model.InformationToRelease,
+                InformationTorequested = model.InformationTorequested,
+                InformationVerbal = model.InformationVerbal,
+                InformationWrited = model.InformationWrited,
+                IRefuse = model.IRefuse,
+                PCP = model.PCP,
+                Specialist = model.Specialist,
+                SpecialistText = model.SpecialistText
 
+            };
+        }
+
+        public TCMIntakeCoordinationCareViewModel ToTCMIntakeCoordinationCareViewModel(TCMIntakeCoordinationCareEntity model)
+        {
+            return new TCMIntakeCoordinationCareViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Date = model.Date,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                IAuthorize = model.IAuthorize,
+                InformationAllBefore = model.InformationAllBefore,
+                InformationElectronic = model.InformationElectronic,
+                InformationFascimile = model.InformationFascimile,
+                InformationNonKnown = model.InformationNonKnown,
+                InformationToRelease = model.InformationToRelease,
+                InformationTorequested = model.InformationTorequested,
+                InformationVerbal = model.InformationVerbal,
+                InformationWrited = model.InformationWrited,
+                IRefuse = model.IRefuse,
+                PCP = model.PCP,
+                Specialist = model.Specialist,
+                SpecialistText = model.SpecialistText
+
+            };
+
+        }
     }
 }

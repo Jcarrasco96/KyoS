@@ -51,5 +51,7 @@ namespace KyoS.Web.Data.Entities
         public TCMIntakeNonClinicalLogEntity TCMIntakeNonClinicalLog { get; set; }
 
         public TCMIntakeMiniMentalEntity TCMIntakeMiniMental { get; set; }
+
+        public TCMIntakeCoordinationCareEntity TCMIntakeCoordinationCare { get; set; }
     }
 }
