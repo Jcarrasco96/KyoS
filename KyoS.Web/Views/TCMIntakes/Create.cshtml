@@ -31,7 +31,7 @@
             <partial name="_TCMIntakesForm" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="TCMIntakeDashboard" asp-route-id="@Model.TcmClient.Client.Id" class="btn btn-success">Back</a>
+                <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmClient.Client.Id" asp-route-section="1" class="btn btn-success">Back</a>
             </div>
         </form>
     </div>

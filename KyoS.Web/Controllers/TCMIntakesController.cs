@@ -79,7 +79,10 @@ namespace KyoS.Web.Controllers
                                                           .Include(n => n.TCMIntakeNonClinicalLog)
                                                           .Include(n => n.TCMIntakeMiniMental)
                                                           .Include(n => n.TCMIntakeCoordinationCare)
-                                                          .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id)
+                                                          .Include(n => n.TcmServicePlan)
+                                                          .ThenInclude(n => n.TCMAdendum)
+                                                          .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                           && n.Casemanager.LinkedUser == user_logged.UserName))
                                                           .ToListAsync();
                 return View(tcmClient);
             }
@@ -373,6 +376,8 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.TCMIntakeNonClinicalLog)
                                                             .Include(n => n.TCMIntakeMiniMental)
                                                             .Include(n => n.TCMIntakeCoordinationCare)
+                                                            .Include(n => n.TcmServicePlan)
+                                                            .ThenInclude(n => n.TCMAdendum)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
             List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
@@ -382,6 +387,7 @@ namespace KyoS.Web.Controllers
 
             TcmClientEntity.TcmIntakeConsentForRelease = listRelease;
             TcmClientEntity.Client.Documents = listDocument;
+            
 
             if (TcmClientEntity == null)
             {
@@ -2498,7 +2504,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> TCMIntakeSectionDashboard(int id = 0)
+        public async Task<IActionResult> TCMIntakeSectionDashboard(int id = 0, int section = 0)
         {
             if (id == 0)
             {
@@ -2524,6 +2530,8 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.TCMIntakeNonClinicalLog)
                                                             .Include(n => n.TCMIntakeMiniMental)
                                                             .Include(n => n.TCMIntakeCoordinationCare)
+                                                            .Include(n => n.TcmServicePlan)
+                                                            .ThenInclude(n => n.TCMAdendum)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
             List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
@@ -2538,7 +2546,7 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
-
+            ViewBag.Section = section.ToString();
             return View(TcmClientEntity);
         }
     }

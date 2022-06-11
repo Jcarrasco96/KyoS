@@ -1086,16 +1086,33 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboServicesPlan(int idClinic)
+        public IEnumerable<SelectListItem> GetComboServicesPlan(int idClinic, int caseManagerId, string idClient = "")
         {
+            List<TCMServicePlanEntity> tcmSerivicePlan = new List<TCMServicePlanEntity>();
 
-            List<TCMServicePlanEntity> tcmSerivicePlan= _context.TCMServicePlans
-                                                 .Include(g => g.TcmClient)
-                                                 .ThenInclude(g => g.Client)
-                                                 .Where(c => (c.TcmClient.Client.Clinic.Id == idClinic
-                                                            && c.Status == StatusType.Open 
-                                                            && c.Approved == 2))
-                                                 .ToList();
+            if (idClient == "")
+            {
+                tcmSerivicePlan  = _context.TCMServicePlans
+                                           .Include(g => g.TcmClient)
+                                           .ThenInclude(g => g.Client)
+                                           .Where(c => (c.TcmClient.Client.Clinic.Id == idClinic
+                                               && c.Status == StatusType.Open
+                                                && c.Approved == 2 && c.TcmClient.Casemanager.Id == caseManagerId))
+                                           .ToList();
+            }
+            else
+            {
+                tcmSerivicePlan = _context.TCMServicePlans
+                                          .Include(g => g.TcmClient)
+                                          .ThenInclude(g => g.Client)
+                                          .Where(c => (c.TcmClient.Client.Clinic.Id == idClinic
+                                               && c.Status == StatusType.Open
+                                               && c.Approved == 2 && c.TcmClient.Casemanager.Id == caseManagerId
+                                               && c.TcmClient.CaseNumber == idClient))
+                                          .ToList();
+            }
+
+            
 
             List<SelectListItem> list = tcmSerivicePlan.Select(c => new SelectListItem
             {

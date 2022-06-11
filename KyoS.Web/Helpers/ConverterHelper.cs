@@ -1903,7 +1903,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = TcmAdendumEntity.Id,
                 TcmServicePlan = TcmAdendumEntity.TcmServicePlan,
-                ListTcmServicePlan = _combosHelper.GetComboServicesPlan(TcmAdendumEntity.TcmServicePlan.TcmClient.Casemanager.Clinic.Id),
+                ListTcmServicePlan = _combosHelper.GetComboServicesPlan(TcmAdendumEntity.TcmServicePlan.TcmClient.Casemanager.Clinic.Id, TcmAdendumEntity.TcmServicePlan.TcmClient.Casemanager.Id, TcmAdendumEntity.TcmServicePlan.TcmClient.CaseNumber),
                 TcmDominio = _combosHelper.GetComboTCMServices(),
                 TcmDomain = TcmAdendumEntity.TcmDomain,
                 DateAdendum = TcmAdendumEntity.DateAdendum

@@ -231,18 +231,22 @@ namespace KyoS.Web.Data
                         .WithOne(s => s.Clinic)
                         .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<TCMDomainEntity>()
-                                    .HasIndex(s => s.Id)
-                                    .IsUnique();
+            modelBuilder.Entity<TCMServicePlanEntity>()
+                        .HasMany(c => c.TCMDomain)
+                        .WithOne(s => s.TcmServicePlan)
+                        .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<TCMObjetiveEntity>()
                         .HasOne(o => o.TcmDomain)
                         .WithMany(g => g.TCMObjetive)
                         .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<TCMServicePlanEntity>()
-                                   .HasIndex(s => s.Id)
-                                   .IsUnique();
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TcmServicePlan)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMServicePlanEntity>(s => s.TcmClient_FK);
+
 
             modelBuilder.Entity<TCMAdendumEntity>()
                                    .HasIndex(s => s.Id)
