@@ -5896,7 +5896,7 @@ namespace KyoS.Web.Helpers
                                             discharge.DateReport,
                                             discharge.DateDischarge,
                                             discharge.Planned,
-                                            discharge.ReasonDischarge,
+                                            /*discharge.ReasonDischarge,
                                             discharge.BriefHistory,
                                             discharge.CourseTreatment,
                                             discharge.ConditionalDischarge,
@@ -5920,10 +5920,9 @@ namespace KyoS.Web.Helpers
                                             discharge.ClientReferred,
                                             discharge.AdmissionedFor,
                                             discharge.Hospitalization,
-                                            discharge.Others,
+                                            discharge.Others,*/
                                             discharge.DateSignatureEmployee,
                                             discharge.DateSignaturePerson,
-                                            discharge.Others_Explain,
                                             discharge.DateSignatureSupervisor,
             });
             }
