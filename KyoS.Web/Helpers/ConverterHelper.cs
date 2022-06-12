@@ -345,7 +345,8 @@ namespace KyoS.Web.Helpers
                 OtherLanguage_Speak = clientEntity.OtherLanguage_Speak,
                 OtherLanguage_Understand = clientEntity.OtherLanguage_Understand,
                 MedicareId = clientEntity.MedicareId,
-                DateOfClose = clientEntity.DateOfClose
+                DateOfClose = clientEntity.DateOfClose,
+                Documents = clientEntity.Documents
             };
         }
 
@@ -926,7 +927,8 @@ namespace KyoS.Web.Helpers
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
-                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                FaxNumber = model.FaxNumber
             };
         }
 
@@ -1031,7 +1033,8 @@ namespace KyoS.Web.Helpers
                 Telephone = model.Telephone,
                 Email = model.Email,
                 CreatedBy = model.CreatedBy,
-                CreatedOn = model.CreatedOn
+                CreatedOn = model.CreatedOn,
+                FaxNumber = model.FaxNumber
             };
         }
 
@@ -1900,7 +1903,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = TcmAdendumEntity.Id,
                 TcmServicePlan = TcmAdendumEntity.TcmServicePlan,
-                ListTcmServicePlan = _combosHelper.GetComboServicesPlan(TcmAdendumEntity.TcmServicePlan.TcmClient.Casemanager.Clinic.Id),
+                ListTcmServicePlan = _combosHelper.GetComboServicesPlan(TcmAdendumEntity.TcmServicePlan.TcmClient.Casemanager.Clinic.Id, TcmAdendumEntity.TcmServicePlan.TcmClient.Casemanager.Id, TcmAdendumEntity.TcmServicePlan.TcmClient.CaseNumber),
                 TcmDominio = _combosHelper.GetComboTCMServices(),
                 TcmDomain = TcmAdendumEntity.TcmDomain,
                 DateAdendum = TcmAdendumEntity.DateAdendum
@@ -2514,37 +2517,37 @@ namespace KyoS.Web.Helpers
                 Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient),
                 Client_FK = model.IdClient,
                 AdmissionedFor = model.AdmissionedFor,
-                AgencyDischargeClient = model.AgencyDischargeClient,
-                BriefHistory = model.BriefHistory,
-                ClientDeceased = model.ClientDeceased,
-                ClientDischargeAgainst = model.ClientDischargeAgainst,
-                ClientMoved = model.ClientMoved,
-                ClientReferred = model.ClientReferred,
-                ConditionalDischarge = model.ConditionalDischarge,
-                CourseTreatment = model.CourseTreatment,
+                Administrative = model.Administrative,
+                ClientTransferred = model.ClientTransferred,
+                ClinicalCoherente = model.ClinicalCoherente,
+                ClinicalIncoherente = model.ClinicalIncoherente,
+                ClinicalInRemission = model.ClinicalInRemission,
+                ClinicalStable = model.ClinicalStable,
+                ClinicalUnpredictable = model.ClinicalUnpredictable,
+                ClinicalUnstable = model.ClinicalUnstable,
+                CompletedTreatment = model.CompletedTreatment,
                 DateDischarge = model.DateDischarge,
                 DateReport = model.DateReport,
-                FollowDischarge = model.FollowDischarge,
-                PhysicallyUnstable = model.PhysicallyUnstable,
+                DischargeDiagnosis = model.DischargeDiagnosis,
+                LeftBefore = model.LeftBefore,
+                Messages = model.Messages,
+                NonCompliant = model.NonCompliant,
+                Other = model.Other,
+                Other_Explain = model.Other_Explain,
                 Planned = model.Planned,
-                ReasonDischarge = model.ReasonDischarge,
-                ReferralAgency1 = model.ReferralAgency1,
-                ReferralAgency2 = model.ReferralAgency2,
-                ReferralContactPersonal1 = model.ReferralContactPersonal1,
-                ReferralContactPersonal2 = model.ReferralContactPersonal2,
-                ReferralFor1 = model.ReferralFor1,
-                ReferralFor2 = model.ReferralFor2,
-                ReferralHoursOperation1 = model.ReferralHoursOperation1,
-                ReferralHoursOperation2 = model.ReferralHoursOperation2,
-                ReferralPhone1 = model.ReferralPhone1,
-                ReferralPhone2 = model.ReferralPhone2,
-                TreatmentPlanObjCumpl = model.TreatmentPlanObjCumpl,
-                Others = model.Others,
-                Hospitalization = model.Hospitalization,
+                PrognosisFair = model.PrognosisFair,
+                PrognosisGood = model.PrognosisGood,
+                PrognosisGuarded = model.PrognosisGuarded,
+                PrognosisPoor = model.PrognosisPoor,
+                ProgramClubHouse = model.ProgramClubHouse,
+                ProgramGroup = model.ProgramGroup,
+                ProgramInd = model.ProgramInd,
+                ProgramPSR = model.ProgramPSR,
+                ReferralsTo = model.ReferralsTo,
+                Termination = model.Termination,
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignaturePerson = model.DateSignaturePerson,
                 DateSignatureSupervisor = model.DateSignatureSupervisor,
-                Others_Explain = model.Others_Explain,
                 Status = model.Status,
                 Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == model.IdSupervisor),
                 CreatedBy = isNew ? userId : model.CreatedBy,
@@ -2565,37 +2568,37 @@ namespace KyoS.Web.Helpers
                 IdClient = model.Client.Id,
                 Client_FK = model.Client_FK,
                 AdmissionedFor = model.AdmissionedFor,
-                AgencyDischargeClient = model.AgencyDischargeClient,
-                BriefHistory = model.BriefHistory,
-                ClientDeceased = model.ClientDeceased,
-                ClientDischargeAgainst = model.ClientDischargeAgainst,
-                ClientMoved = model.ClientMoved,
-                ClientReferred = model.ClientReferred,
-                ConditionalDischarge = model.ConditionalDischarge,
-                CourseTreatment = model.CourseTreatment,
                 DateDischarge = model.DateDischarge,
                 DateReport = model.DateReport,
-                FollowDischarge = model.FollowDischarge,
-                PhysicallyUnstable = model.PhysicallyUnstable,
+                Administrative = model.Administrative,
+                ClientTransferred = model.ClientTransferred,
+                ClinicalCoherente = model.ClinicalCoherente,
+                ClinicalIncoherente = model.ClinicalIncoherente,
+                ClinicalInRemission = model.ClinicalInRemission,
+                ClinicalStable = model.ClinicalStable,
+                ClinicalUnpredictable = model.ClinicalUnpredictable,
+                ClinicalUnstable = model.ClinicalUnstable,
+                CompletedTreatment = model.CompletedTreatment,
+                DischargeDiagnosis = model.DischargeDiagnosis,
+                LeftBefore = model.LeftBefore,
+                Messages = model.Messages,
+                NonCompliant = model.NonCompliant,
+                Other = model.Other,
+                Other_Explain = model.Other_Explain,
                 Planned = model.Planned,
-                ReasonDischarge = model.ReasonDischarge,
-                ReferralAgency1 = model.ReferralAgency1,
-                ReferralAgency2 = model.ReferralAgency2,
-                ReferralContactPersonal1 = model.ReferralContactPersonal1,
-                ReferralContactPersonal2 = model.ReferralContactPersonal2,
-                ReferralFor1 = model.ReferralFor1,
-                ReferralFor2 = model.ReferralFor2,
-                ReferralHoursOperation1 = model.ReferralHoursOperation1,
-                ReferralHoursOperation2 = model.ReferralHoursOperation2,
-                ReferralPhone1 = model.ReferralPhone1,
-                ReferralPhone2 = model.ReferralPhone2,
-                TreatmentPlanObjCumpl = model.TreatmentPlanObjCumpl,
-                Others = model.Others,
-                Hospitalization = model.Hospitalization,
+                PrognosisFair = model.PrognosisFair,
+                PrognosisGood = model.PrognosisGood,
+                PrognosisGuarded = model.PrognosisGuarded,
+                PrognosisPoor = model.PrognosisPoor,
+                ProgramClubHouse = model.ProgramClubHouse,
+                ProgramGroup = model.ProgramGroup,
+                ProgramInd = model.ProgramInd,
+                ProgramPSR = model.ProgramPSR,
+                ReferralsTo = model.ReferralsTo,
+                Termination = model.Termination,
                 DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignaturePerson = model.DateSignaturePerson,
                 DateSignatureSupervisor = model.DateSignatureSupervisor,
-                Others_Explain = model.Others_Explain,
                 Status = model.Status,
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
@@ -3153,6 +3156,7 @@ namespace KyoS.Web.Helpers
             };
 
         }
+
         public async Task<Bio_BehavioralHistoryEntity> ToBio_BehaviorEntity(Bio_BehavioralHistoryViewModel model, bool isNew)
         {
             return new Bio_BehavioralHistoryEntity
@@ -3836,6 +3840,151 @@ namespace KyoS.Web.Helpers
                 TcmClient_FK = model.TcmClient_FK,
                 AdmissionedFor = model.AdmissionedFor,
                 Date = model.Date
+
+            };
+
+        }
+
+        public async Task<TCMIntakeNonClinicalLogEntity> ToTCMIntakeNonClinicalLogEntity(TCMIntakeNonClinicalLogViewModel model, bool isNew)
+        {
+            return new TCMIntakeNonClinicalLogEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Date = model.Date,
+                DateActivity = model.DateActivity
+
+            };
+        }
+
+        public TCMIntakeNonClinicalLogViewModel ToTCMIntakeNonClinicalLogViewModel(TCMIntakeNonClinicalLogEntity model)
+        {
+            return new TCMIntakeNonClinicalLogViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Date = model.Date,
+                DateActivity = model.DateActivity
+
+            };
+
+        }
+
+        public async Task<TCMIntakeMiniMentalEntity> ToTCMIntakeMiniMenatalEntity(TCMIntakeMiniMentalViewModel model, bool isNew)
+        {
+            return new TCMIntakeMiniMentalEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Date = model.Date,
+                Attention = model.Attention,
+                LanguageCopy = model.LanguageCopy,
+                LanguageFollow = model.LanguageFollow,
+                LanguageName = model.LanguageName,
+                LanguageRead = model.LanguageRead,
+                LanguageRepeat = model.LanguageRepeat,
+                LanguageWrite = model.LanguageWrite,
+                OrientationWhat = model.OrientationWhat,
+                OrientationWhere = model.OrientationWhere,
+                Recall = model.Recall,
+                RegistrationName = model.RegistrationName,
+                TotalScore = model.TotalScore,
+                Trials = model.Trials
+
+            };
+        }
+
+        public TCMIntakeMiniMentalViewModel ToTCMIntakeMiniMenatalViewModel(TCMIntakeMiniMentalEntity model)
+        {
+            return new TCMIntakeMiniMentalViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Date = model.Date,
+                Attention = model.Attention,
+                LanguageCopy = model.LanguageCopy,
+                LanguageFollow = model.LanguageFollow,
+                LanguageName = model.LanguageName,
+                LanguageRead = model.LanguageRead,
+                LanguageRepeat = model.LanguageRepeat,
+                LanguageWrite = model.LanguageWrite,
+                OrientationWhat = model.OrientationWhat,
+                OrientationWhere = model.OrientationWhere,
+                Recall = model.Recall,
+                RegistrationName = model.RegistrationName,
+                TotalScore = model.TotalScore,
+                Trials = model.Trials
+            };
+
+        }
+
+        public async Task<TCMIntakeCoordinationCareEntity> ToTCMIntakeCoordinationCareEntity(TCMIntakeCoordinationCareViewModel model, bool isNew)
+        {
+            return new TCMIntakeCoordinationCareEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Date = model.Date,
+                DateSignatureEmployee =model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                IAuthorize = model.IAuthorize,
+                InformationAllBefore = model.InformationAllBefore,
+                InformationElectronic = model.InformationElectronic,
+                InformationFascimile = model.InformationFascimile,
+                InformationNonKnown = model.InformationNonKnown,
+                InformationToRelease = model.InformationToRelease,
+                InformationTorequested = model.InformationTorequested,
+                InformationVerbal = model.InformationVerbal,
+                InformationWrited = model.InformationWrited,
+                IRefuse = model.IRefuse,
+                PCP = model.PCP,
+                Specialist = model.Specialist,
+                SpecialistText = model.SpecialistText
+
+            };
+        }
+
+        public TCMIntakeCoordinationCareViewModel ToTCMIntakeCoordinationCareViewModel(TCMIntakeCoordinationCareEntity model)
+        {
+            return new TCMIntakeCoordinationCareViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Date = model.Date,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                IAuthorize = model.IAuthorize,
+                InformationAllBefore = model.InformationAllBefore,
+                InformationElectronic = model.InformationElectronic,
+                InformationFascimile = model.InformationFascimile,
+                InformationNonKnown = model.InformationNonKnown,
+                InformationToRelease = model.InformationToRelease,
+                InformationTorequested = model.InformationTorequested,
+                InformationVerbal = model.InformationVerbal,
+                InformationWrited = model.InformationWrited,
+                IRefuse = model.IRefuse,
+                PCP = model.PCP,
+                Specialist = model.Specialist,
+                SpecialistText = model.SpecialistText
 
             };
 

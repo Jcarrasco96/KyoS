@@ -11,6 +11,8 @@ namespace KyoS.Web.Data.Entities
     {
         public int Id { get; set; }
 
+        public int TcmClient_FK { get; set; }
+
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime DateServicePlan{ get; set; }
 

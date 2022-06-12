@@ -15,7 +15,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("TCM Intakes", "Index", "TCMIntakes")
+                @Html.ActionLink("TCM Intakes", "TCMIntakeDashboard", "TCMIntakes", new { id = Model.IdTCMClient })
             </li>
             <li class="active">Consent for Treatment and Receive Medication</li>
         </ul><!--.breadcrumb-->

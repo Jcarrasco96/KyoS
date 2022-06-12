@@ -22,61 +22,37 @@ namespace KyoS.Web.Data.Entities
         [DataType(DataType.Date)]
         public DateTime DateDischarge { get; set; }
 
+        public bool ProgramPSR { get; set; }
+        public bool ProgramInd { get; set; }
+        public bool ProgramGroup { get; set; }
+        public bool ProgramClubHouse { get; set; }
+
         public bool Planned { get; set; }
 
-        public string ReasonDischarge { get; set; }
-        
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public string BriefHistory { get; set; }
-                
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public string CourseTreatment { get; set; }
-        
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public string ConditionalDischarge { get; set; }
+        public bool CompletedTreatment { get; set; }
+        public bool Termination { get; set; }
+        public bool ClientTransferred { get; set; }
+        public bool NonCompliant { get; set; }
+        public bool LeftBefore { get; set; }
+        public bool Administrative { get; set; }
+        public bool Other { get; set; }
+        public string Other_Explain { get; set; }
 
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public string FollowDischarge { get; set; }
+        public bool PrognosisGood { get; set; }
+        public bool PrognosisFair { get; set; }
+        public bool PrognosisGuarded { get; set; }
+        public bool PrognosisPoor { get; set; }
 
-        public string ReferralFor1 { get; set; }
+        public bool ClinicalStable { get; set; }
+        public bool ClinicalUnstable { get; set; }
+        public bool ClinicalUnpredictable { get; set; }
+        public bool ClinicalCoherente { get; set; }
+        public bool ClinicalIncoherente { get; set; }
+        public bool ClinicalInRemission { get; set; }
 
-        public string ReferralAgency1 { get; set; }
+        public string ReferralsTo { get; set; }
 
-        public string ReferralContactPersonal1 { get; set; }
-
-        public string ReferralPhone1 { get; set; }
-
-        public string ReferralHoursOperation1 { get; set; }
-
-        public string ReferralFor2 { get; set; }
-
-        public string ReferralAgency2 { get; set; }
-
-        public string ReferralContactPersonal2 { get; set; }
-
-        public string ReferralPhone2 { get; set; }
-
-        public string ReferralHoursOperation2 { get; set; }
-
-        public bool TreatmentPlanObjCumpl { get; set; }
-
-        public bool AgencyDischargeClient { get; set; }
-
-        public bool ClientDischargeAgainst { get; set; }
-
-        public bool ClientDeceased { get; set; }
-
-        public bool ClientMoved { get; set; }
-
-        public bool PhysicallyUnstable { get; set; }
-
-        public bool Hospitalization { get; set; }
-
-        public bool ClientReferred { get; set; }
-
-        public bool Others { get; set; }
-
-        public string Others_Explain { get; set; }
+        public string DischargeDiagnosis{ get; set; }
 
         public string AdmissionedFor { get; set; }
 
