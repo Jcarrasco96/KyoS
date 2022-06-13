@@ -392,22 +392,11 @@ namespace KyoS.Web.Controllers
         {
             DischargeEntity entity = _context.Discharge
 
-                                             .Include(d => d.Client)
+                                             .Include(d => d.Client)     
                                              .ThenInclude(c => c.Clinic)
-
-                                             .Include(d => d.Client)
-                                             .ThenInclude(c => c.EmergencyContact)
-
-                                             .Include(d => d.Client)
-                                             .ThenInclude(c => c.LegalGuardian)
-
-                                             .Include(d => d.Client)
-                                             .ThenInclude(c => c.Clients_Diagnostics)
-                                             .ThenInclude(cd => cd.Diagnostic)
-
-                                             .Include(d => d.Client)
-                                             .ThenInclude(c => c.MedicationList)
-
+                                             
+                                             .Include(d => d.Supervisor)
+                                             
                                              .FirstOrDefault(f => (f.Id == id));
             if (entity == null)
             {
