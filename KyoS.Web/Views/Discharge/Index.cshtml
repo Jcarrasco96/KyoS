@@ -122,7 +122,6 @@
                                                                     }
                                                                 }
                                                             </td>       
-
                                                         <td align="center">
                                                             @if (User.IsInRole("Supervisor"))
                                                             {
@@ -149,7 +148,7 @@
                                                             }
                                                             else
                                                             {
-                                                                @if (item.Status == KyoS.Common.Enums.StatusType.Close && @element.Status != KyoS.Common.Enums.DischargeStatus.Approved && element.CreatedBy == User.Identity.Name)
+                                                                @if (@element.Status != KyoS.Common.Enums.DischargeStatus.Approved && element.CreatedBy == User.Identity.Name)
                                                                 {
                                                                     <a asp-action="Edit" asp-route-id="@element.Id" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
                                                                     @if (@element.Status == KyoS.Common.Enums.DischargeStatus.Pending)
@@ -169,7 +168,7 @@
 
                                                                     @if (@element.Status == KyoS.Common.Enums.DischargeStatus.Approved)
                                                                     {
-                                                                        <a asp-action="PrintFarsDischarge" asp-route-id="@element.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                                        <a asp-action="PrintDischarge" asp-route-id="@element.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                                     }
                                                                     else
                                                                     {

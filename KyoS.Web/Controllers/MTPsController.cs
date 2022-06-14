@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -65,12 +64,12 @@ namespace KyoS.Web.Controllers
                     {
                         return View(await _context.MTPs
                                                   .Include(m => m.MtpReviewList)
-                                                
+
                                                   .Include(c => c.Client)
                                                   .ThenInclude(c => c.Clinic)
                                                   .Include(c => c.Client.Group)
-                                                  .Where(m => (m.Client.Clinic.Id == clinic.Id 
-                                                        && (m.Client.IdFacilitatorPSR == facilitator.Id 
+                                                  .Where(m => (m.Client.Clinic.Id == clinic.Id
+                                                        && (m.Client.IdFacilitatorPSR == facilitator.Id
                                                             || m.Client.IndividualTherapyFacilitator.Id == facilitator.Id)))
                                                   .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
                     }
@@ -185,12 +184,12 @@ namespace KyoS.Web.Controllers
                             Paint = false,
                             Other = false,
                             Client = new ClientEntity()
-                            
+
                         };
                         model.Client.Clients_Diagnostics = new List<Client_Diagnostic>();
                         model.Client.Name = "null";
                     }
-                    
+
                     return View(model);
                 }
             }
@@ -251,7 +250,7 @@ namespace KyoS.Web.Controllers
                     item.Active = false;
                     _context.Update(item);
                 }
-                               
+
                 _context.Add(mtpEntity);
                 try
                 {
@@ -335,22 +334,22 @@ namespace KyoS.Web.Controllers
 
             MTPViewModel mtpViewModel = _converterHelper.ToMTPViewModel(mtpEntity);
 
-               if (User.IsInRole("Supervisor"))
+            if (User.IsInRole("Supervisor"))
+            {
+
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Insert(0, new SelectListItem
                 {
+                    Text = mtpEntity.Client.Name,
+                    Value = $"{mtpEntity.Client.Id}"
+                });
+                mtpViewModel.Clients = list;
 
-                    List<SelectListItem> list = new List<SelectListItem>();
-                    list.Insert(0, new SelectListItem
-                    {
-                        Text = mtpEntity.Client.Name,
-                        Value = $"{mtpEntity.Client.Id}"
-                    });
-                    mtpViewModel.Clients = list;
-                    
-                    return View(mtpViewModel);
-                }
+                return View(mtpViewModel);
+            }
 
-                return RedirectToAction(nameof(Index));
-           
+            return RedirectToAction(nameof(Index));
+
         }
 
         [HttpPost]
@@ -404,7 +403,7 @@ namespace KyoS.Web.Controllers
                         return View(model);
                     }
                 }
-               // mtpEntity.MtpReview = await _context.MTPReviews.FirstOrDefaultAsync(u => u.MTP_FK == mtpViewModel.Id);
+                // mtpEntity.MtpReview = await _context.MTPReviews.FirstOrDefaultAsync(u => u.MTP_FK == mtpViewModel.Id);
                 if ((User.IsInRole("Supervisor"))) //|| ((mtpEntity.MtpReview != null) && (mtpEntity.MtpReview.CreatedBy == user_logged.Id)))
                 {
                     mtpEntity.Setting = form["Setting"].ToString();
@@ -511,7 +510,7 @@ namespace KyoS.Web.Controllers
                 IdMTP = mtpEntity.Id,
                 Number = mtpEntity.Goals.Count() + 1,
                 IdService = 0,
-                Services = _combosHelper.GetComboServices(), 
+                Services = _combosHelper.GetComboServices(),
                 IdAdendum = idAdendum
             };
 
@@ -561,7 +560,7 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    if(model.IdAdendum == 0)
+                    if (model.IdAdendum == 0)
                         return RedirectToAction("UpdateGoals", new { id = model.IdMTP });
                     else
                         return RedirectToAction("EditAdendum", new { id = model.IdAdendum });
@@ -662,7 +661,7 @@ namespace KyoS.Web.Controllers
                                                            .Include(g => g.Adendum)
                                                            .Where(g => g.Adendum.Id == model.IdAdendum)
                                                            .ToListAsync();
-                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoals", goals) });                    
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoals", goals) });
                 }
                 catch (System.Exception ex)
                 {
@@ -747,15 +746,15 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    
+
                     List<GoalEntity> goals = await _context.Goals
                                                            .Include(g => g.Objetives)
                                                            .Include(g => g.MTP)
-                                                           
+
                                                            .Where(g => g.MTP.Id == model.MTP.Id)
                                                            .ToListAsync();
-                    
-                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsMTPReview", goals, new Dictionary<string, object>() { {"Id", model.IdMTPReview } }) });
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsMTPReview", goals, new Dictionary<string, object>() { { "Id", model.IdMTPReview } }) });
                 }
                 catch (System.Exception ex)
                 {
@@ -766,7 +765,7 @@ namespace KyoS.Web.Controllers
             model.Services = _combosHelper.GetComboServices();
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalMTPReviewModal", model) });
         }
-        
+
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> DeleteGoal(int? id)
         {
@@ -859,7 +858,7 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    if(model.IdAdendum == 0)
+                    if (model.IdAdendum == 0)
                         return RedirectToAction("UpdateGoals", new { id = model.IdMTP });
                     else
                         return RedirectToAction("EditAdendum", new { id = model.IdAdendum });
@@ -1056,7 +1055,7 @@ namespace KyoS.Web.Controllers
                                                            .Include(g => g.Objetives)
 
                                                            .Include(g => g.MTP)
-                                                           
+
                                                            .Where(g => g.MTP.Id == model.IdMTP)
                                                            .OrderBy(g => g.Number)
                                                            .ToListAsync();
@@ -1454,7 +1453,7 @@ namespace KyoS.Web.Controllers
                         Compliment_Explain = model.Compliment_Explain,
                         Compliment_IdMTPReview = model.Compliment_IdMTPReview,
                         IdMTPReview = model.IdMTPReview
-                        
+
                     };
                     return View(newmodel);
                 }
@@ -1513,7 +1512,7 @@ namespace KyoS.Web.Controllers
             model.IdGoal = goalEntity.Id;
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjectiveMTPReviewModal", model) });
         }
-        
+
         [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> DeleteObjective(int? id, int origin = 0)
         {
@@ -1548,7 +1547,7 @@ namespace KyoS.Web.Controllers
             else
             {
                 return RedirectToAction("EditAdendum", new { id = objectiveEntity.Goal.Adendum.Id });
-            }            
+            }
         }
 
         [Authorize(Roles = "Supervisor, Facilitator")]
@@ -1577,8 +1576,8 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("EditMTPReview", new { id = objectiveEntity.Goal.Id, idError = 1 });
             }
 
-                return RedirectToAction("EditMTPReview", new { id = objectiveEntity.IdMTPReview });
-            
+            return RedirectToAction("EditMTPReview", new { id = objectiveEntity.IdMTPReview });
+
         }
 
         [Authorize(Roles = "Supervisor, Facilitator")]
@@ -1704,11 +1703,11 @@ namespace KyoS.Web.Controllers
             }
 
             ObjetiveEntity objectiveEntity = await _context.Objetives
-                                                           
+
                                                            .Include(o => o.Goal)
                                                            .ThenInclude(g => g.MTP)
-                                                           .ThenInclude(m => m.Client)                                                           
-                                                           
+                                                           .ThenInclude(m => m.Client)
+
                                                            .FirstOrDefaultAsync(d => d.Id == id);
 
             ObjectiveViewModel model = _converterHelper.ToObjectiveViewModel(objectiveEntity);
@@ -1888,7 +1887,7 @@ namespace KyoS.Web.Controllers
                 {
                     objective.Compliment_IdMTPReview = 0;
                 }
-                
+
                 _context.Update(objective);
 
                 ObjetiveEntity original_classifications = await _context.Objetives
@@ -1929,7 +1928,7 @@ namespace KyoS.Web.Controllers
                                                            .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsMTPReview", goals, new Dictionary<string, object>() { { "Id", model.IdMTPReviewOfView } }) });
-                    
+
                 }
                 catch (System.Exception ex)
                 {
@@ -2081,7 +2080,7 @@ namespace KyoS.Web.Controllers
                     {
                         month = 0;
                     }
-                    
+
                     if (item.NumberOfMonths != null)
                     {
                         if (DateTime.Now > item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)))
@@ -2202,7 +2201,7 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("Facilitator"))
             {
                 model = new AdendumViewModel
-                    {
+                {
                     Mtp = _context.MTPs
                                   .Include(c => c.Client.Clients_Diagnostics)
                                   .ThenInclude(cd => cd.Diagnostic)
@@ -2218,14 +2217,14 @@ namespace KyoS.Web.Controllers
                     Supervisor = new SupervisorEntity(),
                     IdFacilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Id,
                     IdSupervisor = 0,
-                    Goals = new List<GoalEntity>()                    
+                    Goals = new List<GoalEntity>()
                 };
 
                 return View(model);
             }
 
             return View(model);
-            
+
         }
 
         [HttpPost]
@@ -2236,7 +2235,7 @@ namespace KyoS.Web.Controllers
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
-            
+
             if (ModelState.IsValid)
             {
                 AdendumEntity adendumEntity = _context.Adendums.Find(adendumViewModel.Id);
@@ -2263,7 +2262,7 @@ namespace KyoS.Web.Controllers
                                 Id = adendumViewModel.Id,
                                 LastModifiedBy = adendumViewModel.LastModifiedBy,
                                 LastModifiedOn = adendumViewModel.LastModifiedOn,
-                                
+
                                 ProblemStatement = adendumViewModel.ProblemStatement,
                                 Status = adendumViewModel.Status,
                                 Supervisor = adendumViewModel.Supervisor,
@@ -2271,20 +2270,20 @@ namespace KyoS.Web.Controllers
                                 IdFacilitator = adendumViewModel.IdFacilitator,
                                 IdMTP = adendumViewModel.IdMTP,
                                 IdSupervisor = adendumViewModel.IdSupervisor,
-                                
+
                                 Mtp = _context.MTPs
                                               .Include(c => c.Client.Clients_Diagnostics)
                                               .ThenInclude(cd => cd.Diagnostic)
                                               .FirstOrDefault(n => n.Id == adendumViewModel.IdMTP)
-                                
+
 
                             };
                             return View(model1);
-                           
+
                         }
                     }
                     adendumEntity = await _converterHelper.ToAdendumEntity(adendumViewModel, true, user_logged.UserName);
-                                       
+
                     _context.Adendums.Add(adendumEntity);
                     try
                     {
@@ -2346,10 +2345,10 @@ namespace KyoS.Web.Controllers
                                                     .ThenInclude(m => m.Client)
                                                     .ThenInclude(c => c.Clients_Diagnostics)
                                                     .ThenInclude(cd => cd.Diagnostic)
-                                                    
+
                                                     .Include(a => a.Goals)
                                                     .ThenInclude(g => g.Objetives)
-                                                      
+
                                                     .Include(a => a.Goals)
                                                     .ThenInclude(g => g.MTP)
 
@@ -2489,21 +2488,25 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> ApproveAdendum(int id)
+        public async Task<IActionResult> ApproveAdendum(int id, int origin = 0)
         {
 
             AdendumEntity adendum = await _context.Adendums.FirstOrDefaultAsync(n => n.Id == id);
 
 
             adendum.Status = AdendumStatus.Approved;
-           // adendum.DateOfApprove = DateTime.Now;
+            // adendum.DateOfApprove = DateTime.Now;
             adendum.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
             _context.Update(adendum);
 
             await _context.SaveChangesAsync();
 
-           
-            return RedirectToAction(nameof(PendingAdendum));
+            if (origin == 1)
+            {
+                return RedirectToAction(nameof(PendingAdendum));
+            }
+
+            return RedirectToAction(nameof(IndexAdendum));
         }
 
         [Authorize(Roles = "Supervisor, Manager, Facilitator")]
@@ -2534,7 +2537,7 @@ namespace KyoS.Web.Controllers
                                               .Include(c => c.Goals)
                                               .ThenInclude(c => c.Objetives)
                                               .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
-                                                    && m.Status == AdendumStatus.Pending && (m.Mtp.Client.IdFacilitatorPSR == facilitator.Id 
+                                                    && m.Status == AdendumStatus.Pending && (m.Mtp.Client.IdFacilitatorPSR == facilitator.Id
                                                     || m.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
                                               .OrderBy(m => m.Mtp.Client.Clinic.Name).ToListAsync());
 
@@ -2569,7 +2572,7 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction(nameof(PendingAdendum));
         }
-        
+
         [Authorize(Roles = "Manager, Supervisor, Facilitator")]
         public IActionResult PrintAdendum(int id)
         {
@@ -2601,7 +2604,7 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
-            
+
             if (entity.Mtp.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
                 Stream stream = _reportHelper.FloridaSocialHSAddendumReport(entity);
@@ -2627,9 +2630,9 @@ namespace KyoS.Web.Controllers
             GoalEntity goalEntity = await _context.Goals
 
                                                   .Include(g => g.MTP)
-                                                  
+
                                                   .Include(g => g.Adendum)
-                                                  
+
                                                   .FirstOrDefaultAsync(g => g.Id == id);
             if (goalEntity == null)
             {
@@ -2683,7 +2686,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator, Supervisor")]
-        public async Task<IActionResult> EditMTPReview(int? id, int origin  = 0)
+        public async Task<IActionResult> EditMTPReview(int? id, int origin = 0)
         {
             if (id == null)
             {
@@ -2724,9 +2727,9 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 MTPReviewEntity mtpReviewEntity = await _converterHelper.ToMTPReviewEntity(mtpReviewViewModel, false, user_logged.Id);
-                                
+
                 _context.Update(mtpReviewEntity);
-                
+
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -2739,7 +2742,7 @@ namespace KyoS.Web.Controllers
                         return RedirectToAction(nameof(MTPRinEdit));
                     }
 
-                    return RedirectToAction(nameof(Index));                   
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (System.Exception ex)
                 {
@@ -2805,7 +2808,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction(nameof(MTPRinEdit));
             }
 
-            return RedirectToAction(nameof(Index));            
+            return RedirectToAction(nameof(Index));
         }
 
         [Authorize(Roles = "Supervisor, Manager, Facilitator")]
@@ -2836,7 +2839,7 @@ namespace KyoS.Web.Controllers
                                               .Include(c => c.Mtp.Goals)
                                               .ThenInclude(c => c.Objetives)
                                               .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
-                                                    && m.Status == AdendumStatus.Pending && (m.Mtp.Client.IdFacilitatorPSR == facilitator.Id 
+                                                    && m.Status == AdendumStatus.Pending && (m.Mtp.Client.IdFacilitatorPSR == facilitator.Id
                                                         || m.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
                                               .OrderBy(m => m.Mtp.Client.Clinic.Name).ToListAsync());
 
@@ -2963,7 +2966,7 @@ namespace KyoS.Web.Controllers
                     DataOfService = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths)),
                     Origin = origin
                 };
-               
+
             }
 
             if (model.Mtp.Client.LegalGuardian == null)
@@ -3003,7 +3006,7 @@ namespace KyoS.Web.Controllers
                             return RedirectToAction(nameof(MTPRinEdit));
                         }
 
-                        return RedirectToAction(nameof(Index));                
+                        return RedirectToAction(nameof(Index));
                     }
                     catch (System.Exception ex)
                     {
@@ -3017,7 +3020,7 @@ namespace KyoS.Web.Controllers
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMTPReview", reviewViewModel) });
                 }
             }
-          
+
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMTPReview", reviewViewModel.Id) });
         }
 
@@ -3058,7 +3061,7 @@ namespace KyoS.Web.Controllers
             }
 
             return null;
-        }        
+        }
 
         [Authorize(Roles = "Supervisor, Facilitator")]
         public JsonResult GetCodeByClient(int idClient)
@@ -3089,7 +3092,7 @@ namespace KyoS.Web.Controllers
                     text += $"{item.Diagnostic.Code} - {item.Diagnostic.Description} ";
                 }
             }
-               
+
             return Json(text);
         }
 
@@ -3124,9 +3127,9 @@ namespace KyoS.Web.Controllers
 
                                                   .Include(c => c.Client)
                                                   .ThenInclude(c => c.Clinic)
-                                                  
+
                                                   .Where(m => (m.Client.Clinic.Id == clinic.Id
-                                                        && (m.Client.IdFacilitatorPSR == facilitator.Id 
+                                                        && (m.Client.IdFacilitatorPSR == facilitator.Id
                                                             || m.Client.IndividualTherapyFacilitator.Id == facilitator.Id)
                                                         ))
                                                   .OrderBy(m => m.Client.Clinic.Name)
@@ -3139,12 +3142,12 @@ namespace KyoS.Web.Controllers
                             {
                                 if (value.Status == AdendumStatus.Edition && mtp1.Where(n => n.Id == value.Mtp.Id).ToList().Count() == 0)
                                     mtp1.Add(item);
-                            
+
                             }
                         }
                         return View(mtp1);
                     }
-                   
+
                     return RedirectToAction("Home/Error404");
                 }
                 else
@@ -3195,6 +3198,48 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("MTPRinEdit");
 
             return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public IActionResult AddAddendumMessageEntity(int id = 0, int origin = 0)
+        {
+            if (id == 0)
+            {
+                return View(new MessageViewModel());
+            }
+            else
+            {
+                MessageViewModel model = new MessageViewModel()
+                {
+                    IdAddendum = id,
+                    Origin = origin
+                };
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> AddAddendumMessageEntity(MessageViewModel messageViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                MessageEntity model = await _converterHelper.ToMessageEntity(messageViewModel, true);
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                model.From = user_logged.UserName;
+                model.To = model.Addendum.CreatedBy;
+                _context.Add(model);
+                await _context.SaveChangesAsync();
+            }
+
+            if (messageViewModel.Origin == 1)
+                return RedirectToAction("PendingAdendum");
+
+            return RedirectToAction("IndexAdendum");
         }
     }
 }

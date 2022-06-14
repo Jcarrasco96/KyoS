@@ -1,0 +1,54 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.DocumentEntity>
+
+@if (Model != null)
+{    
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Documents</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover table-responsive table-striped" id="MyTableDoc">
+                        <thead>
+                            <tr>
+                                <th class="col-md-6">
+                                    @Html.DisplayNameFor(model => model.FileName)
+                                </th>
+                                <th class="col-md-2">
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>
+                                <th class="col-md-2" style="text-align:center;">
+                                    Created
+                                </th>
+                                <th class="col-md-2">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FileName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.CreatedOn)
+                                    </td>
+                                    <td align="right">
+                                        <a asp-action="OpenDocument" asp-route-id="@item.Id" class="btn btn-default" title="View document" target="_blank"><i class="glyphicon glyphicon-download-alt"></i></a>
+                                        @if (!User.IsInRole("Facilitator"))
+                                        {
+                                            <button type="button" onclick="DeleteDocumentTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete document"><i class="glyphicon glyphicon-trash"></i></button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>   
+}

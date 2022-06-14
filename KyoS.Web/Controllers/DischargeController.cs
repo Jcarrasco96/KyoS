@@ -89,7 +89,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public IActionResult Create(int id = 0, ServiceType service = 0)
+        public IActionResult Create(int id = 0, ServiceType service = 0, int origin = 0)
         {
 
             UserEntity user_logged = _context.Users
@@ -114,41 +114,38 @@ namespace KyoS.Web.Controllers
 
                                          .FirstOrDefault(n => n.Id == id),
                         AdmissionedFor = user_logged.FullName,
-                        AgencyDischargeClient = false,
-                        BriefHistory = "",
-                        ClientDeceased = false,
-                        ClientDischargeAgainst = false,
-                        ClientMoved = false,
-                        ClientReferred = false,
-                        Client_FK = id,
-                        ConditionalDischarge = "",
-                        CourseTreatment = "",
-                        DateDischarge =DateTime.Now,
+                        Administrative = false,
+                        ClientTransferred = false,
+                        ClinicalCoherente = false,
+                        ClinicalIncoherente = false,
+                        ClinicalInRemission = false,
+                        ClinicalStable = false,
+                        ClinicalUnpredictable = false,
+                        ClinicalUnstable = false,
+                        CompletedTreatment = false,
+                        DateDischarge = DateTime.Now,
                         DateReport = DateTime.Now,
-                        FollowDischarge = "",
-                        Id = 0,
-                        PhysicallyUnstable = false,
+                        DischargeDiagnosis = "",
+                        LeftBefore = false,
+                        //Messages = ,
+                        NonCompliant = false,
+                        Other = false,
+                        Other_Explain = "",
                         Planned = false,
-                        ReasonDischarge = "",
-                        ReferralAgency1 = "",
-                        ReferralAgency2 = "",
-                        ReferralContactPersonal1 = "",
-                        ReferralContactPersonal2 = "",
-                        ReferralFor1 = "",
-                        ReferralFor2 = "",
-                        ReferralHoursOperation1 = "",
-                        ReferralHoursOperation2 = "",
-                        ReferralPhone1 = "",
-                        ReferralPhone2 = "",
-                        TreatmentPlanObjCumpl = false,
-                        Others = false,
-                        Others_Explain = "",
-                        Hospitalization = false,
+                        PrognosisFair = false,
+                        PrognosisGood = false,
+                        PrognosisGuarded = false,
+                        PrognosisPoor = false,
+                        ProgramClubHouse = false,
+                        ProgramGroup = false,
+                        ProgramInd = false,
+                        ProgramPSR = false,
+                        ReferralsTo = "",
+                        Termination = false,
                         DateSignatureEmployee = DateTime.Now,
                         DateSignaturePerson = DateTime.Now,
                         DateSignatureSupervisor = DateTime.Now,
-                        TypeService = service
-
+                        TypeService = service                        
                     };
                     if (model.Client.MedicationList == null)
                         model.Client.MedicationList = new List<MedicationEntity>();
@@ -167,40 +164,40 @@ namespace KyoS.Web.Controllers
 
                                  .FirstOrDefault(n => n.Id == id),
                 AdmissionedFor = user_logged.FullName,
-                AgencyDischargeClient = false,
-                BriefHistory = "",
-                ClientDeceased = false,
-                ClientDischargeAgainst = false,
-                ClientMoved = false,
-                ClientReferred = false,
                 Client_FK = id,
-                ConditionalDischarge = "",
-                CourseTreatment = "",
                 DateDischarge = DateTime.Now,
                 DateReport = DateTime.Now,
-                FollowDischarge = "",
                 Id = 0,
-                PhysicallyUnstable = false,
+                Administrative = false,
+                ClientTransferred = false,
+                ClinicalCoherente = false,
+                ClinicalIncoherente = false,
+                ClinicalInRemission = false,
+                ClinicalStable = false,
+                ClinicalUnpredictable = false,
+                ClinicalUnstable = false,
+                CompletedTreatment = false,
+                DischargeDiagnosis = "",
+                LeftBefore = false,
+                //Messages = "",
+                NonCompliant = false,
+                Other = false,
+                Other_Explain = "",
                 Planned = false,
-                ReasonDischarge = "",
-                ReferralAgency1 = "",
-                ReferralAgency2 = "",
-                ReferralContactPersonal1 = "",
-                ReferralContactPersonal2 = "",
-                ReferralFor1 = "",
-                ReferralFor2 = "",
-                ReferralHoursOperation1 = "",
-                ReferralHoursOperation2 = "",
-                ReferralPhone1 = "",
-                ReferralPhone2 = "",
-                TreatmentPlanObjCumpl = false,
-                Others = false,
-                Others_Explain = "",
-                Hospitalization = false,
+                PrognosisFair = false,
+                PrognosisGood = false,
+                PrognosisGuarded = false,
+                PrognosisPoor = false,
+                ProgramClubHouse = false,
+                ProgramGroup = false,
+                ProgramInd = false,
+                ProgramPSR = false,
+                ReferralsTo = "",
+                Termination = false,
                 DateSignatureEmployee = DateTime.Now,
                 DateSignaturePerson = DateTime.Now,
                 DateSignatureSupervisor = DateTime.Now,
-                TypeService = service
+                TypeService = service                
             };
             return View(model);
         }
@@ -245,50 +242,51 @@ namespace KyoS.Web.Controllers
                 IdClient = DischargeViewModel.IdClient,
                 Client = _context.Clients.Find(DischargeViewModel.IdClient),
                 AdmissionedFor = user_logged.FullName,
-                AgencyDischargeClient = DischargeViewModel.AgencyDischargeClient,
-                BriefHistory = DischargeViewModel.BriefHistory,
-                ClientDeceased = DischargeViewModel.ClientDeceased,
-                ClientDischargeAgainst = DischargeViewModel.ClientDischargeAgainst,
-                ClientMoved = DischargeViewModel.ClientMoved,
-                ClientReferred = DischargeViewModel.ClientReferred,
-                Client_FK = DischargeViewModel.Client_FK,
-                ConditionalDischarge =DischargeViewModel.ConditionalDischarge,
-                CourseTreatment =DischargeViewModel.CourseTreatment,
                 DateDischarge = DischargeViewModel.DateDischarge,
                 DateReport =DischargeViewModel.DateReport ,
-                FollowDischarge = DischargeViewModel.FollowDischarge,
                 Id = DischargeViewModel.Id,
-                PhysicallyUnstable = DischargeViewModel.PhysicallyUnstable,
-                Planned =DischargeViewModel.Planned,
-                ReasonDischarge = DischargeViewModel.ReasonDischarge,
-                ReferralAgency1 = DischargeViewModel.ReferralAgency1,
-                ReferralAgency2 = DischargeViewModel.ReferralAgency2,
-                ReferralContactPersonal1 = DischargeViewModel.ReferralContactPersonal1,
-                ReferralContactPersonal2 = DischargeViewModel.ReferralContactPersonal2,
-                ReferralFor1 = DischargeViewModel.ReferralFor1,
-                ReferralFor2 = DischargeViewModel.ReferralFor2,
-                ReferralHoursOperation1 = DischargeViewModel.ReferralHoursOperation1,
-                ReferralHoursOperation2 = DischargeViewModel.ReferralHoursOperation2,
-                ReferralPhone1 = DischargeViewModel.ReferralPhone1,
-                ReferralPhone2 = DischargeViewModel.ReferralPhone2,
-                TreatmentPlanObjCumpl = DischargeViewModel.TreatmentPlanObjCumpl,
-                Others = DischargeViewModel.Others,
-                Others_Explain = DischargeViewModel.Others_Explain,
+                Administrative = DischargeViewModel.Administrative,
+                ClientTransferred = DischargeViewModel.ClientTransferred,
+                ClinicalCoherente = DischargeViewModel.ClinicalCoherente,
+                ClinicalIncoherente = DischargeViewModel.ClinicalIncoherente,
+                ClinicalInRemission = DischargeViewModel.ClinicalInRemission,
+                ClinicalStable = DischargeViewModel.ClinicalStable,
+                ClinicalUnpredictable = DischargeViewModel.ClinicalUnpredictable,
+                ClinicalUnstable = DischargeViewModel.ClinicalUnstable,
+                CompletedTreatment = DischargeViewModel.CompletedTreatment,
+                DischargeDiagnosis = DischargeViewModel.DischargeDiagnosis,
+                LeftBefore = DischargeViewModel.LeftBefore,
+                Messages = DischargeViewModel.Messages,
+                NonCompliant = DischargeViewModel.NonCompliant,
+                Other = DischargeViewModel.Other,
+                Other_Explain = DischargeViewModel.Other_Explain,
+                Planned = DischargeViewModel.Planned,
+                PrognosisFair = DischargeViewModel.PrognosisFair,
+                PrognosisGood = DischargeViewModel.PrognosisGood,
+                PrognosisGuarded = DischargeViewModel.PrognosisGuarded,
+                PrognosisPoor = DischargeViewModel.PrognosisPoor,
+                ProgramClubHouse = DischargeViewModel.ProgramClubHouse,
+                ProgramGroup = DischargeViewModel.ProgramGroup,
+                ProgramInd = DischargeViewModel.ProgramInd,
+                ProgramPSR = DischargeViewModel.ProgramPSR,
+                ReferralsTo = DischargeViewModel.ReferralsTo,
+                Termination = DischargeViewModel.Termination,
                 DateSignatureEmployee = DischargeViewModel.DateSignatureEmployee,
                 DateSignaturePerson = DischargeViewModel.DateSignaturePerson,
                 DateSignatureSupervisor = DischargeViewModel.DateSignatureSupervisor,
-                Hospitalization = DischargeViewModel.Hospitalization,
+                Status = DischargeStatus.Edition,
+                
                 TypeService = DischargeViewModel.TypeService
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", DischargeViewModel) });
         }
 
         [Authorize(Roles = "Supervisor, Facilitator")]
-        public IActionResult Edit(int id = 0)
+        public IActionResult Edit(int id = 0, int origin = 0)
         {
             DischargeViewModel model;
 
-            if (User.IsInRole("Supervisor")|| User.IsInRole("Facilitator"))
+            if (User.IsInRole("Supervisor") || User.IsInRole("Facilitator"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -312,12 +310,10 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-
                         model = _converterHelper.ToDischargeViewModel(Discharge);
-
+                        model.Origin = origin;
                         return View(model);
                     }
-
                 }
             }
 
@@ -341,14 +337,17 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    if (User.IsInRole("Facilitator"))
+
+                    if (dischargeViewModel.Origin == 1)
                     {
-                        return RedirectToAction("DischargeInEdit", "Discharge");
+                        return RedirectToAction("DischargeInEdit");
                     }
-                    else
+                    if (dischargeViewModel.Origin == 2)
                     {
-                        return RedirectToAction("PendingDischarge", "Discharge");
+                        return RedirectToAction("PendingDischarge");
                     }
+
+                    return RedirectToAction("Index");
                 }
                 catch (System.Exception ex)
                 {
@@ -392,22 +391,11 @@ namespace KyoS.Web.Controllers
         {
             DischargeEntity entity = _context.Discharge
 
-                                             .Include(d => d.Client)
+                                             .Include(d => d.Client)     
                                              .ThenInclude(c => c.Clinic)
-
-                                             .Include(d => d.Client)
-                                             .ThenInclude(c => c.EmergencyContact)
-
-                                             .Include(d => d.Client)
-                                             .ThenInclude(c => c.LegalGuardian)
-
-                                             .Include(d => d.Client)
-                                             .ThenInclude(c => c.Clients_Diagnostics)
-                                             .ThenInclude(cd => cd.Diagnostic)
-
-                                             .Include(d => d.Client)
-                                             .ThenInclude(c => c.MedicationList)
-
+                                             
+                                             .Include(d => d.Supervisor)
+                                             
                                              .FirstOrDefault(f => (f.Id == id));
             if (entity == null)
             {
@@ -530,7 +518,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> FinishEditingDischarge(int id)
+        public async Task<IActionResult> FinishEditingDischarge(int id, int origin = 0)
         {
             DischargeEntity discharge = await _context.Discharge.FirstOrDefaultAsync(n => n.Id == id);
             if (User.IsInRole("Supervisor"))
@@ -546,19 +534,28 @@ namespace KyoS.Web.Controllers
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("DischargeInEdit", "Discharge");
+            if (origin == 1)
+            {
+                return RedirectToAction("DischargeInEdit");
+            }
+            return RedirectToAction("Index");
         }
 
         [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> ApproveDischarge(int id)
+        public async Task<IActionResult> ApproveDischarge(int id, int origin = 0)
         {
             DischargeEntity discharge = await _context.Discharge.FirstOrDefaultAsync(n => n.Id == id);
             discharge.Status = DischargeStatus.Approved;
             _context.Update(discharge);
 
             await _context.SaveChangesAsync();
+            
+            if(origin == 1)
+            {
+                return RedirectToAction(nameof(PendingDischarge));
+            }
 
-            return RedirectToAction(nameof(PendingDischarge));
+            return RedirectToAction(nameof(Index));
         }
 
         [Authorize(Roles = "Supervisor, Manager, Facilitator")]

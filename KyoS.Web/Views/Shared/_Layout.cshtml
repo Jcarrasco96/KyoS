@@ -200,7 +200,7 @@
                     }
                     else
                      if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
-                    {
+                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 General <span class="caret"></span>
@@ -278,140 +278,140 @@
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Templates DOC.", "Index", "TemplatesDOC")</li>
                             </ul>
-                        </li>
-                        <li class="class=" dropdown open"">
-                            @if (setting != null && setting.MentalHealthClinic)
-                            {
-                                <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                    Mental Health <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
-                                    <li><a asp-area="" asp-controller="Facilitators" asp-action="Index">Facilitators</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li>@Html.ActionLink("Topics / Themes", "Index", "Themes")</li>
-                                    <li role="separator" class="divider"></li>
-                                    <li class="dropdown-submenu">
-                                        <a class="test" tabindex="-1" href="#">Groups</a>
-                                        <ul class="dropdown-menu">
-                                            <li>@Html.ActionLink("PSR", "Index", "Groups")</li>
-                                            <li>@Html.ActionLink("Group", "Group", "Groups")</li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropdown-submenu">
-                                        <a class="test" tabindex="-1" href="#">Workdays</a>
-                                        <ul class="dropdown-menu">
-                                            <li>@Html.ActionLink("PSR", "Index", "Workdays")</li>
-                                            <li>@Html.ActionLink("Individual", "IndividualWorkdays", "Workdays")</li>
-                                            <li>@Html.ActionLink("Group", "GroupWorkdays", "Workdays")</li>
-                                        </ul>
-                                    </li>
-                                    <li>@Html.ActionLink("Changes", "ChangeNotes", "Notes")</li>
-                                    <li role="separator" class="divider"></li>
-                                    <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
-                                    <li class="dropdown-submenu">
-                                        <a class="test" tabindex="-1" href="#">Fars Forms</a>
-                                        <ul class="dropdown-menu">
-                                            <li>@Html.ActionLink("Clients without FARS", "ClientswithoutFARS", "FarsForms")</li>
-                                            <li>@Html.ActionLink("FARS Forms", "Index", "FarsForms")</li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropdown-submenu">
-                                        <a class="test" tabindex="-1" href="#">MTPs</a>
-                                        <ul class="dropdown-menu">
-                                            <li class="dropdown-submenu">
-                                                <a class="test" tabindex="-1" href="#">MTPs / Reviews</a>
-                                                <ul class="dropdown-menu">
-                                                    <li>@Html.ActionLink("Clients without MTP", "ClientsWithoutMTP", "Clients")</li>
-                                                    <li>@Html.ActionLink("Pending MTP Reviews", "PendingMtpReview", "MTPs")</li>
-                                                    <li>@Html.ActionLink("All MTPs", "Index", "MTPs")</li>
-                                                </ul>
-                                            </li>
-                                            <li class="dropdown-submenu">
-                                                <a class="test" tabindex="-1" href="#">Addendums</a>
-                                                <ul class="dropdown-menu">
-                                                    <li>@Html.ActionLink("Pending Addendums", "PendingAdendum", "MTPs")</li>
-                                                    <li>@Html.ActionLink("All Addendums", "IndexAdendum", "MTPs")</li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropdown-submenu">
-                                        <a class="test" tabindex="-1" href="#">BIOs</a>
-                                        <ul class="dropdown-menu">
-                                            <li>@Html.ActionLink("Clients without BIO", "ClientswithoutBIO", "Bios")</li>
-                                            <li>@Html.ActionLink("Behavioral Health History", "IndexBehavioralHealthHistory", "Bios")</li>
-                                            <li>@Html.ActionLink("Medications", "Index", "Medications")</li>
-                                            <li>@Html.ActionLink("All BIOs", "Index", "Bios")</li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropdown-submenu">
-                                        <a class="test" tabindex="-1" href="#">Discharges</a>
-                                        <ul class="dropdown-menu">
-                                            <li>@Html.ActionLink("Clients without Discharge", "ClientswithoutDischarge", "Discharge")</li>
-                                            <li>@Html.ActionLink("Pending Discharges", "PendingDischarge", "Discharge")</li>
-                                            <li>@Html.ActionLink("All Discharges", "Index", "Discharge")</li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            }
-                            else
-                            {
-                            <li class="disabled">
-                                <a class="test" tabindex="-1" href="#">Mental Health</a>
-                            </li>
-                            }
-                        </li>
+                        </li>                        
+                        @if (setting != null && setting.MentalHealthClinic)
+                        {
                             <li class="class=" dropdown open"">
-                                @if (setting != null && setting.TCMClinic)
-                                {
-                                    <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                        TCM <span class="caret"></span>
-                                    </a>
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Mental Health <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
+                                <li><a asp-area="" asp-controller="Facilitators" asp-action="Index">Facilitators</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("Topics / Themes", "Index", "Themes")</li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Groups</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Case Managers", "Index", "CaseMannager")</li>
-                                        <li>@Html.ActionLink("TCM Supervisors", "Index", "TCMSupervisors")</li>
-                                        <li role="separator" class="divider"></li>
-                                        <li>@Html.ActionLink("Services / Stages", "Index", "TCMServices")</li>
-                                        <li role="separator" class="divider"></li>
+                                        <li>@Html.ActionLink("PSR", "Index", "Groups")</li>
+                                        <li>@Html.ActionLink("Group", "Group", "Groups")</li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Workdays</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("PSR", "Index", "Workdays")</li>
+                                        <li>@Html.ActionLink("Individual", "IndividualWorkdays", "Workdays")</li>
+                                        <li>@Html.ActionLink("Group", "GroupWorkdays", "Workdays")</li>
+                                    </ul>
+                                </li>
+                                <li>@Html.ActionLink("Session Changes", "ChangeNotes", "Notes")</li>
+                                <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Fars Forms</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Clients without FARS", "ClientswithoutFARS", "FarsForms")</li>
+                                        <li>@Html.ActionLink("FARS Forms", "Index", "FarsForms")</li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">MTPs</a>
+                                    <ul class="dropdown-menu">
                                         <li class="dropdown-submenu">
-                                            <a class="test" tabindex="-1" href="#">TCM Cases</a>
+                                            <a class="test" tabindex="-1" href="#">MTPs / Reviews</a>
                                             <ul class="dropdown-menu">
-                                                <li><a asp-area="" asp-controller="TCMClients" asp-action="Index">TCM Cases</a></li>
-                                                <li><a asp-area="" asp-controller="TCMClients" asp-action="GetCaseNotServicePlan">Not Started Cases</a></li>
-                                                <li><a asp-area="" asp-controller="TCMClients" asp-action="GetCaseClose">Close Cases</a></li>
+                                                <li>@Html.ActionLink("Clients without MTP", "ClientsWithoutMTP", "Clients")</li>
+                                                <li>@Html.ActionLink("Pending MTP Reviews", "PendingMtpReview", "MTPs")</li>
+                                                <li>@Html.ActionLink("All MTPs", "Index", "MTPs")</li>
                                             </ul>
                                         </li>
-                                        <li role="separator" class="divider"></li>
-                                        <li>@Html.ActionLink("Intakes", "Index", "TCMIntakes")</li>
-                                        <li role="separator" class="divider"></li>
                                         <li class="dropdown-submenu">
-                                            <a class="test" tabindex="-1" href="#">Services Plans / Clients</a>
+                                            <a class="test" tabindex="-1" href="#">Addendums</a>
                                             <ul class="dropdown-menu">
-                                                <li><a asp-area="" asp-controller="TCMServicePlans" asp-action="Index">Open</a></li>
-                                                <li><a asp-area="" asp-controller="TCMServicePlans" asp-action="AproveServicePlan">Pending Approval</a></li>
-                                                <li><a asp-area="" asp-controller="TCMServicePlans" asp-action="ClosedServicePlan">Closed</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a class="test" tabindex="-1" href="#">Adendums</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a asp-area="" asp-controller="TCMAdendums" asp-action="Index">Adendums all</a></li>
-                                                <li><a asp-area="" asp-controller="TCMAdendums" asp-action="AproveAdendum">Pending approval</a></li>
+                                                <li>@Html.ActionLink("Pending Addendums", "PendingAdendum", "MTPs")</li>
+                                                <li>@Html.ActionLink("All Addendums", "IndexAdendum", "MTPs")</li>
                                             </ul>
                                         </li>
                                     </ul>
-                                }
-                                else
-                                {
-                                <li class="disabled">
-                                    <a class="test" tabindex="-1" href="#">TCM</a>
                                 </li>
-                            }
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">BIOs</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Clients without BIO", "ClientswithoutBIO", "Bios")</li>
+                                        <li>@Html.ActionLink("Behavioral Health History", "IndexBehavioralHealthHistory", "Bios")</li>
+                                        <li>@Html.ActionLink("Medications", "Index", "Medications")</li>
+                                        <li>@Html.ActionLink("All BIOs", "Index", "Bios")</li>
+                                    </ul>
                                 </li>
-                                <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
-                                <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
-                            }
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Discharges</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Clients without Discharge", "ClientswithoutDischarge", "Discharge")</li>
+                                        <li>@Html.ActionLink("Pending Discharges", "PendingDischarge", "Discharge")</li>
+                                        <li>@Html.ActionLink("All Discharges", "Index", "Discharge")</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            </li>
+                        }
+                        else
+                        {
+                        <li class="disabled">
+                            <a class="test" tabindex="-1" href="#">Mental Health</a>
+                        </li>
+                        }                       
+                        @if (setting != null && setting.TCMClinic)
+                        {
+                            <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                TCM <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Case Managers", "Index", "CaseMannager")</li>
+                                <li>@Html.ActionLink("TCM Supervisors", "Index", "TCMSupervisors")</li>
+                                <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("Services / Stages", "Index", "TCMServices")</li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">TCM Cases</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a asp-area="" asp-controller="TCMClients" asp-action="Index">TCM Cases</a></li>
+                                        <li><a asp-area="" asp-controller="TCMClients" asp-action="GetCaseNotServicePlan">Not Started Cases</a></li>
+                                        <li><a asp-area="" asp-controller="TCMClients" asp-action="GetCaseClose">Close Cases</a></li>
+                                    </ul>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("Intakes", "Index", "TCMIntakes")</li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Services Plans / Clients</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a asp-area="" asp-controller="TCMServicePlans" asp-action="Index">Open</a></li>
+                                        <li><a asp-area="" asp-controller="TCMServicePlans" asp-action="AproveServicePlan">Pending Approval</a></li>
+                                        <li><a asp-area="" asp-controller="TCMServicePlans" asp-action="ClosedServicePlan">Closed</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Adendums</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a asp-area="" asp-controller="TCMAdendums" asp-action="Index">Adendums all</a></li>
+                                        <li><a asp-area="" asp-controller="TCMAdendums" asp-action="AproveAdendum">Pending approval</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            </li>
+                        }
+                        else
+                        {
+                        <li class="disabled">
+                            <a class="test" tabindex="-1" href="#">TCM</a>
+                        </li>
+                        }                        
+                        <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                      }
                             else
                                          if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
                             {
@@ -559,7 +559,7 @@
                                             <ul class="dropdown-menu">
                                                 <li>@Html.ActionLink("Clients without Discharge", "ClientswithoutDischarge", "Discharge")</li>
                                                 <li>@Html.ActionLink("Pending Discharges", "PendingDischarge", "Discharge")</li>
-                                                <li>@Html.ActionLink("Discharges of service", "DischargeOfService", "Discharge")</li>
+                                                <li>@Html.ActionLink("Discharges for services", "DischargeOfService", "Discharge")</li>
                                                 <li>@Html.ActionLink("All Discharges", "Index", "Discharge")</li>
                                             </ul>
                                         </li>

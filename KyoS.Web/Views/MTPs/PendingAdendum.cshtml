@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.AdendumEntity>
 @{
-    ViewData["Title"] = "Addendums";
+    ViewData["Title"] = "Pending Addendums";
 }
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
@@ -66,9 +66,9 @@
                                                     <th class="col-md-1" style="text-align:center"></th>
                                                     <th class="col-md-1" style="text-align:center">Identified Date</th>
                                                     <th class="col-md-1" style="text-align:center">Unit</th>
-                                                    <th class="col-md-1" style="text-align:center"> Frecuency</th>
+                                                    <th class="col-md-2" style="text-align:center"> Frecuency</th>
                                                     <th class="col-md-1" style="text-align:center">Duration (month)</th>
-                                                    <th class="col-md-5" style="text-align:center">Problem Statement</th>
+                                                    <th class="col-md-4" style="text-align:center">Problem Statement</th>
                                                     <th class="col-md-2"></th>
                                                 </tr>
                                                @foreach (var element in item.Mtp.AdendumList)
@@ -139,8 +139,8 @@
                                                         <td align="center">
                                                             @if (item.Mtp.Client.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.AdendumStatus.Pending && User.IsInRole("Supervisor"))
                                                             {
-                                                                <a asp-action="ReviewAdendum" asp-route-id="@element.Id" class="btn btn-warning" title="Review Addendum"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                                <a asp-action="ApproveAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Approve Addendum"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                <a  class="btn btn-warning" onclick="showInPopup('@Url.Action("AddAddendumMessageEntity", "MTPs", new {id = element.Id, origin = 1}, Context.Request.Scheme)','Add message to document creator')" title="Not approved document due to problems"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                                <a asp-action="ApproveAdendum" asp-route-id="@element.Id" asp-route-origin="1" class="btn btn-success" title="Approve Addendum"><i class="glyphicon glyphicon-ok"></i></a>
                                                             }
                                                             else
                                                             {
@@ -201,6 +201,7 @@
 </div>
 
 <partial name="_DeleteDialog" />
+<partial name="_ModalPopup" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -833,11 +833,23 @@ namespace KyoS.Web.Helpers
                 new SelectListItem { Text = DocumentDescription.Psychiatrist_evaluation.ToString(), Value = "0"},
                 new SelectListItem { Text = DocumentDescription.Intake.ToString(), Value = "1"},
                 new SelectListItem { Text = DocumentDescription.Bio.ToString(), Value = "2"},
-                new SelectListItem { Text = DocumentDescription.MTP.ToString(), Value = "3"},
-                new SelectListItem { Text = DocumentDescription.Fars.ToString(), Value = "4"},
-                new SelectListItem { Text = DocumentDescription.MTP_review.ToString(), Value = "5"},
-                new SelectListItem { Text = DocumentDescription.Consent.ToString(), Value = "6"},
-                new SelectListItem { Text = DocumentDescription.Others.ToString(), Value = "7"}
+                new SelectListItem { Text = DocumentDescription.Fars.ToString(), Value = "3"},
+                new SelectListItem { Text = DocumentDescription.MTP.ToString(), Value = "4"},
+                new SelectListItem { Text = DocumentDescription.Addendum.ToString(), Value = "5"},
+                new SelectListItem { Text = DocumentDescription.MTP_review.ToString(), Value = "6"},
+                new SelectListItem { Text = DocumentDescription.Consent.ToString(), Value = "7"},
+                new SelectListItem { Text = DocumentDescription.Identification.ToString(), Value = "8"},
+                new SelectListItem { Text = DocumentDescription.MedicaidCard.ToString(), Value = "9"},
+                new SelectListItem { Text = DocumentDescription.MedicareCard.ToString(), Value = "10"},
+                new SelectListItem { Text = DocumentDescription.Social.ToString(), Value = "11"},
+                new SelectListItem { Text = DocumentDescription.Referrals.ToString(), Value = "12"},
+                new SelectListItem { Text = DocumentDescription.MentalStateExamination.ToString(), Value = "13"},
+                new SelectListItem { Text = DocumentDescription.AdicionalClinicDocumentation.ToString(), Value = "14"},
+                new SelectListItem { Text = DocumentDescription.FollowUps.ToString(), Value = "15"},
+                new SelectListItem { Text = DocumentDescription.YearlyPhysical.ToString(), Value = "16"},
+                new SelectListItem { Text = DocumentDescription.MedicalReports.ToString(), Value = "17"},
+                new SelectListItem { Text = DocumentDescription.Others.ToString(), Value = "18"}
+                
             };
 
             return list;
@@ -1074,16 +1086,33 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboServicesPlan(int idClinic)
+        public IEnumerable<SelectListItem> GetComboServicesPlan(int idClinic, int caseManagerId, string idClient = "")
         {
+            List<TCMServicePlanEntity> tcmSerivicePlan = new List<TCMServicePlanEntity>();
 
-            List<TCMServicePlanEntity> tcmSerivicePlan= _context.TCMServicePlans
-                                                 .Include(g => g.TcmClient)
-                                                 .ThenInclude(g => g.Client)
-                                                 .Where(c => (c.TcmClient.Client.Clinic.Id == idClinic
-                                                            && c.Status == StatusType.Open 
-                                                            && c.Approved == 2))
-                                                 .ToList();
+            if (idClient == "")
+            {
+                tcmSerivicePlan  = _context.TCMServicePlans
+                                           .Include(g => g.TcmClient)
+                                           .ThenInclude(g => g.Client)
+                                           .Where(c => (c.TcmClient.Client.Clinic.Id == idClinic
+                                               && c.Status == StatusType.Open
+                                                && c.Approved == 2 && c.TcmClient.Casemanager.Id == caseManagerId))
+                                           .ToList();
+            }
+            else
+            {
+                tcmSerivicePlan = _context.TCMServicePlans
+                                          .Include(g => g.TcmClient)
+                                          .ThenInclude(g => g.Client)
+                                          .Where(c => (c.TcmClient.Client.Clinic.Id == idClinic
+                                               && c.Status == StatusType.Open
+                                               && c.Approved == 2 && c.TcmClient.Casemanager.Id == caseManagerId
+                                               && c.TcmClient.CaseNumber == idClient))
+                                          .ToList();
+            }
+
+            
 
             List<SelectListItem> list = tcmSerivicePlan.Select(c => new SelectListItem
             {

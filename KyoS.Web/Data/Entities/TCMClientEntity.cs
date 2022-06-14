@@ -47,5 +47,13 @@ namespace KyoS.Web.Data.Entities
         public TCMIntakeForeignLanguageEntity TCMIntakeForeignLanguage { get; set; }
 
         public TCMIntakeWelcomeEntity TCMIntakeWelcome { get; set; }
+
+        public TCMIntakeNonClinicalLogEntity TCMIntakeNonClinicalLog { get; set; }
+
+        public TCMIntakeMiniMentalEntity TCMIntakeMiniMental { get; set; }
+
+        public TCMIntakeCoordinationCareEntity TCMIntakeCoordinationCare { get; set; }
+
+        public TCMServicePlanEntity TcmServicePlan { get; set; }
     }
 }

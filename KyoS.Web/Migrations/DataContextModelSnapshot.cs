@@ -1151,41 +1151,41 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<bool>("Administrative")
+                        .HasColumnType("bit");
+
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("AgencyDischargeClient")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("BriefHistory")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("ClientDeceased")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("ClientDischargeAgainst")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("ClientId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("ClientMoved")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("ClientReferred")
+                    b.Property<bool>("ClientTransferred")
                         .HasColumnType("bit");
 
                     b.Property<int>("Client_FK")
                         .HasColumnType("int");
 
-                    b.Property<string>("ConditionalDischarge")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("ClinicalCoherente")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("CourseTreatment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("ClinicalInRemission")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ClinicalIncoherente")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ClinicalStable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ClinicalUnpredictable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ClinicalUnstable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CompletedTreatment")
+                        .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -1208,12 +1208,8 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("DateSignatureSupervisor")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FollowDischarge")
-                        .IsRequired()
+                    b.Property<string>("DischargeDiagnosis")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Hospitalization")
-                        .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
@@ -1221,49 +1217,46 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("Others")
+                    b.Property<bool>("LeftBefore")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Others_Explain")
+                    b.Property<bool>("NonCompliant")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Other")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Other_Explain")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhysicallyUnstable")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("Planned")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ReasonDischarge")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("PrognosisFair")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("ReferralAgency1")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("PrognosisGood")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("ReferralAgency2")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("PrognosisGuarded")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("ReferralContactPersonal1")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("PrognosisPoor")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("ReferralContactPersonal2")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("ProgramClubHouse")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("ReferralFor1")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("ProgramGroup")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("ReferralFor2")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("ProgramInd")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("ReferralHoursOperation1")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("ProgramPSR")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("ReferralHoursOperation2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReferralPhone1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReferralPhone2")
+                    b.Property<string>("ReferralsTo")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
@@ -1272,7 +1265,7 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("SupervisorId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("TreatmentPlanObjCumpl")
+                    b.Property<bool>("Termination")
                         .HasColumnType("bit");
 
                     b.Property<int>("TypeService")
@@ -1304,6 +1297,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FaxNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastModifiedBy")
@@ -4817,9 +4813,6 @@ namespace KyoS.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Id")
-                        .IsUnique();
-
                     b.HasIndex("TcmServicePlanId");
 
                     b.ToTable("TCMDomains");
@@ -5091,6 +5084,81 @@ namespace KyoS.Web.Migrations
                     b.ToTable("TCMIntakeConsumerRights");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeCoordinationCareEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("AdmissionedFor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureEmployee")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureLegalGuardian")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignaturePerson")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Documents")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IAuthorize")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IRefuse")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("InformationAllBefore")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("InformationElectronic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("InformationFascimile")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("InformationNonKnown")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("InformationToRelease")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("InformationTorequested")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("InformationVerbal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("InformationWrited")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("PCP")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Specialist")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SpecialistText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TcmClient_FK")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TcmClient_FK")
+                        .IsUnique();
+
+                    b.ToTable("TCMIntakeCoordinationCare");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeForeignLanguageEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -5275,6 +5343,96 @@ namespace KyoS.Web.Migrations
                         .IsUnique();
 
                     b.ToTable("TCMIntakeForms");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeMiniMentalEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("AdmissionedFor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Attention")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LanguageCopy")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LanguageFollow")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LanguageName")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LanguageRead")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LanguageRepeat")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LanguageWrite")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrientationWhat")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrientationWhere")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Recall")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RegistrationName")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TcmClient_FK")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalScore")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Trials")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TcmClient_FK")
+                        .IsUnique();
+
+                    b.ToTable("TCMIntakeMiniMental");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeNonClinicalLogEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("AdmissionedFor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DateActivity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TcmClient_FK")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TcmClient_FK")
+                        .IsUnique();
+
+                    b.ToTable("TCMIntakeNonClinicalLog");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeOrientationChecklistEntity", b =>
@@ -5517,7 +5675,7 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("Strengths")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TcmClientId")
+                    b.Property<int>("TcmClient_FK")
                         .HasColumnType("int");
 
                     b.Property<string>("Weakness")
@@ -5525,10 +5683,8 @@ namespace KyoS.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Id")
+                    b.HasIndex("TcmClient_FK")
                         .IsUnique();
-
-                    b.HasIndex("TcmClientId");
 
                     b.ToTable("TCMServicePlans");
                 });
@@ -6932,7 +7088,8 @@ namespace KyoS.Web.Migrations
                 {
                     b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanEntity", "TcmServicePlan")
                         .WithMany("TCMDomain")
-                        .HasForeignKey("TcmServicePlanId");
+                        .HasForeignKey("TcmServicePlanId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("TcmServicePlan");
                 });
@@ -6991,6 +7148,17 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TcmClient");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeCoordinationCareEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
+                        .WithOne("TCMIntakeCoordinationCare")
+                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeCoordinationCareEntity", "TcmClient_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TcmClient");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeForeignLanguageEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
@@ -7007,6 +7175,28 @@ namespace KyoS.Web.Migrations
                     b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
                         .WithOne("TCMIntakeForm")
                         .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeFormEntity", "TcmClient_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TcmClient");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeMiniMentalEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
+                        .WithOne("TCMIntakeMiniMental")
+                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeMiniMentalEntity", "TcmClient_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TcmClient");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeNonClinicalLogEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
+                        .WithOne("TCMIntakeNonClinicalLog")
+                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeNonClinicalLogEntity", "TcmClient_FK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -7061,8 +7251,10 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServicePlanEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
-                        .WithMany()
-                        .HasForeignKey("TcmClientId");
+                        .WithOne("TcmServicePlan")
+                        .HasForeignKey("KyoS.Web.Data.Entities.TCMServicePlanEntity", "TcmClient_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("TcmClient");
                 });
@@ -7475,13 +7667,21 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("TcmIntakeConsumerRights");
 
+                    b.Navigation("TCMIntakeCoordinationCare");
+
                     b.Navigation("TCMIntakeForeignLanguage");
 
                     b.Navigation("TCMIntakeForm");
 
+                    b.Navigation("TCMIntakeMiniMental");
+
+                    b.Navigation("TCMIntakeNonClinicalLog");
+
                     b.Navigation("TCMIntakeOrientationChecklist");
 
                     b.Navigation("TCMIntakeWelcome");
+
+                    b.Navigation("TcmServicePlan");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDischargeEntity", b =>

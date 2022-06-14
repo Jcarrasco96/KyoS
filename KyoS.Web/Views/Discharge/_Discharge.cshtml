@@ -55,138 +55,30 @@
 <div class="container-fluid">
     <hr />
 </div>
-<div class="col-md-push-12">    
-    <div class="form-group col-md-12">
-        <input type="checkbox" asp-for="Planned" class="form-check-input" id="check1"> Planned Discharge
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-4">
-        <label asp-for="BriefHistory" class="control-label">Brief History:</label>&nbsp;*
-        <textarea asp-for="BriefHistory" class="form-control" rows="4"></textarea>
-        <span asp-validation-for="BriefHistory" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-4">
-        <label asp-for="CourseTreatment" class="control-label">Course of Treatment:</label>&nbsp;*
-        <textarea asp-for="CourseTreatment" class="form-control" rows="4"></textarea>
-        <span asp-validation-for="CourseTreatment" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-4">
-        <label asp-for="ConditionalDischarge" class="control-label">Condition on Discharge:</label>&nbsp;*
-        <textarea asp-for="ConditionalDischarge" class="form-control" rows="4"></textarea>
-        <span asp-validation-for="ConditionalDischarge" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-4">
-        <input type="checkbox" asp-for="TreatmentPlanObjCumpl" class="form-check-input"> Treatment Plan Objectives Completed<br />
-        <input type="checkbox" asp-for="AgencyDischargeClient" class="form-check-input"> Agency Discharged Client Due to Non-cooperation<br />
-        <input type="checkbox" asp-for="ClientDeceased" class="form-check-input"> Client deceased &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="ClientMoved" class="form-check-input"> Client moved  <br />
-        <input type="checkbox" asp-for="Others" class="form-check-input"> Others <input asp-for="Others_Explain" class="form-control" />
-    </div>
-    <div class="form-group col-md-8">
-        <input type="checkbox" asp-for="ClientDischargeAgainst" class="form-check-input"> Client Discharged Against Recommendation of Agency<br />
-        <input type="checkbox" asp-for="PhysicallyUnstable" class="form-check-input"> Physically unstable  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="Hospitalization" class="form-check-input"> Hospitalization<br />
-        <input type="checkbox" asp-for="ClientReferred" class="form-check-input"> Client referred to another agency
-    </div>    
-</div>
 <div class="col-md-push-12">
     <div class="form-group col-md-12">
-        <label asp-for="FollowDischarge" class="control-label">Follow Discharge:</label>&nbsp;*
-        <textarea asp-for="FollowDischarge" class="form-control" rows="3"></textarea>
-        <span asp-validation-for="FollowDischarge" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Medications at the time of discharge</h3>
-            </div>
-            <div class="panel-body">                
-                <table class="table table-hover table-responsive table-striped" id="MyTable">
-                    <thead>
-                        <tr>
-                            <th class="col-md-8">
-                                Type
-                            </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Dosage
-                            </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Frequency
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.Client.MedicationList)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Dosage)
-                                </td>
-                                <td align="center">
+        <pre>
+        <strong>PROGRAM:</strong>            <input type="checkbox" asp-for="ProgramPSR" class="form-check-input"> PSR     <input type="checkbox" asp-for="ProgramInd" class="form-check-input"> IND. THERAPY     <input type="checkbox" asp-for="ProgramGroup" class="form-check-input"> GROUP THERAPY     <input type="checkbox" asp-for="ProgramClubHouse" class="form-check-input"> CLUB HOUSE
+        <strong>Type of Discharge: </strong> <input type="checkbox" asp-for="Planned" class="form-check-input" id="check1"> Planned        <input type="checkbox" class="form-check-input" id="check101">  Unplanned
 
-                                    @Html.DisplayFor(modelItem => item.Frequency)
+        <strong>Circumstances of Discharge (Discharge Status)</strong>
+        <input type="checkbox" asp-for="CompletedTreatment" class="form-check-input"> Completed Treatment
+        <input type="checkbox" asp-for="Termination" class="form-check-input"> Termination of treatment due to end of insurance coverage to provide services
+        <input type="checkbox" asp-for="ClientTransferred" class="form-check-input"> Client transferred to another provider for continued MH services
+        <input type="checkbox" asp-for="NonCompliant" class="form-check-input"> Non-Compliant with CMHC Rules
+        <input type="checkbox" asp-for="LeftBefore" class="form-check-input"> Left Before Completing Treatment
+        <input type="checkbox" asp-for="Administrative" class="form-check-input"> Administrative Discharge
+        <input type="checkbox" asp-for="Other" class="form-check-input"> Other:     <input asp-for="Other_Explain"  style="width:50%">
 
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>    
-</div>
-<div class="col-md-push-12">
-    <div class="col-md-6">
-        <label asp-for="ReferralFor1" class="control-label">Referral 1</label>
-        <input asp-for="ReferralFor1" class="form-control">
-        <span asp-validation-for="ReferralFor1" class="text-danger"></span>
-        <br />
-        <label asp-for="ReferralAgency1" class="control-label">Referral Agency 1</label>
-        <input asp-for="ReferralAgency1" class="form-control">
-        <span asp-validation-for="ReferralAgency1" class="text-danger"></span>
-        <br />
-        <label asp-for="ReferralContactPersonal1" class="control-label">Referral Contact Personal 1</label>
-        <input asp-for="ReferralContactPersonal1" class="form-control">
-        <span asp-validation-for="ReferralContactPersonal1" class="text-danger"></span>
-        <br />
-        <label asp-for="ReferralPhone1" class="control-label">Phone # 1</label>
-        <input asp-for="ReferralPhone1" class="form-control">
-        <span asp-validation-for="ReferralPhone1" class="text-danger"></span>
-        <br />
-        <label asp-for="ReferralHoursOperation1" class="control-label">Hours of Operation 1</label>
-        <input asp-for="ReferralHoursOperation1" class="form-control">
-        <span asp-validation-for="ReferralHoursOperation1" class="text-danger"></span>
+        <strong>PROGNOSIS:</strong>    <input type="checkbox" asp-for="PrognosisGood" class="form-check-input"> Good     <input type="checkbox" asp-for="PrognosisFair" class="form-check-input"> Fair     <input type="checkbox" asp-for="PrognosisGuarded" class="form-check-input"> Guarded  <input type="checkbox" asp-for="PrognosisPoor" class="form-check-input"> Poor
+
+        <strong>Clinical Impressions at discharge:</strong>    <input type="checkbox" asp-for="ClinicalStable" class="form-check-input"> Stable     <input type="checkbox" asp-for="ClinicalUnstable" class="form-check-input"> Unstable     <input type="checkbox" asp-for="ClinicalUnpredictable" class="form-check-input"> Unpredictable      <input type="checkbox" asp-for="ClinicalCoherente" class="form-check-input"> Coherent      <input type="checkbox" asp-for="ClinicalIncoherente" class="form-check-input"> Incoherent      <input type="checkbox" asp-for="ClinicalInRemission" class="form-check-input"> In remission  
+    
+        <strong>Referrals to: </strong>                         <input asp-for="ReferralsTo" style="width:40%">
+
+        <strong>Discharge Diagnosis (ICD-10 / DSM 5): </strong> <input asp-for="DischargeDiagnosis" style="width:40%">
+        </pre>  
     </div>
-    <div class="col-md-6">
-        <label asp-for="ReferralFor2" class="control-label">Referral 2</label>
-        <input asp-for="ReferralFor2" class="form-control">
-        <span asp-validation-for="ReferralFor2" class="text-danger"></span>
-        <br />
-        <label asp-for="ReferralAgency2" class="control-label">Referral Agency 2</label>
-        <input asp-for="ReferralAgency2" class="form-control">
-        <span asp-validation-for="ReferralAgency2" class="text-danger"></span>
-        <br />
-        <label asp-for="ReferralContactPersonal2" class="control-label">Referral Contact Personal 2</label>
-        <input asp-for="ReferralContactPersonal2" class="form-control">
-        <span asp-validation-for="ReferralContactPersonal2" class="text-danger"></span>
-        <br />
-        <label asp-for="ReferralPhone2" class="control-label">Phone # 2</label>
-        <input asp-for="ReferralPhone2" class="form-control">
-        <span asp-validation-for="ReferralPhone2" class="text-danger"></span>
-        <br />
-        <label asp-for="ReferralHoursOperation2" class="control-label">Hours of Operation 2</label>
-        <input asp-for="ReferralHoursOperation2" class="form-control">
-        <span asp-validation-for="ReferralHoursOperation2" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-12">
-    &nbsp;
 </div>
 <div class="col-md-12">
     <pre>

@@ -1,20 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="05/03/2022 15:12:51" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="06/12/2022 15:09:29" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3jnf1tpqCskVj1xuzr9c3hQ==">
-      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="Name" DataType="System.String"/>
-        <Column Name="LogoPath" DataType="System.String"/>
-        <Column Name="Schema" DataType="System.Int32"/>
-        <Column Name="Address" DataType="System.String"/>
-        <Column Name="CEO" DataType="System.String"/>
-        <Column Name="City" DataType="System.String"/>
-        <Column Name="FaxNo" DataType="System.String"/>
-        <Column Name="Phone" DataType="System.String"/>
-        <Column Name="State" DataType="System.String"/>
-        <Column Name="ZipCode" DataType="System.String"/>
-      </TableDataSource>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3mbItpAzsvXOfwOAHCXbA3w==">
       <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -58,92 +45,59 @@
         <Column Name="PlaceOfBirth" DataType="System.String"/>
         <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
       </TableDataSource>
-      <TableDataSource Name="EmergencyContacts" DataType="System.Int32" Enabled="true" TableName="EmergencyContacts">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="CreatedBy" DataType="System.String"/>
-        <Column Name="CreatedOn" DataType="System.DateTime"/>
-        <Column Name="LastModifiedBy" DataType="System.String"/>
-        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
-        <Column Name="Name" DataType="System.String"/>
-        <Column Name="Address" DataType="System.String"/>
-        <Column Name="Telephone" DataType="System.String"/>
-        <Column Name="Email" DataType="System.String"/>
-        <Column Name="Country" DataType="System.String"/>
-        <Column Name="City" DataType="System.String"/>
-        <Column Name="State" DataType="System.String"/>
-        <Column Name="ZipCode" DataType="System.String"/>
-        <Column Name="TelephoneSecondary" DataType="System.String"/>
-        <Column Name="AdressLine2" DataType="System.String"/>
-      </TableDataSource>
-      <TableDataSource Name="LegalGuardians" DataType="System.Int32" Enabled="true" TableName="LegalGuardians">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="CreatedBy" DataType="System.String"/>
-        <Column Name="CreatedOn" DataType="System.DateTime"/>
-        <Column Name="LastModifiedBy" DataType="System.String"/>
-        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
-        <Column Name="Name" DataType="System.String"/>
-        <Column Name="Address" DataType="System.String"/>
-        <Column Name="Telephone" DataType="System.String"/>
-        <Column Name="Email" DataType="System.String"/>
-        <Column Name="Country" DataType="System.String"/>
-        <Column Name="City" DataType="System.String"/>
-        <Column Name="State" DataType="System.String"/>
-        <Column Name="ZipCode" DataType="System.String"/>
-        <Column Name="TelephoneSecondary" DataType="System.String"/>
-        <Column Name="AdressLine2" DataType="System.String"/>
-      </TableDataSource>
-      <TableDataSource Name="Diagnostics" DataType="System.Int32" Enabled="true" TableName="Diagnostics">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="Code" DataType="System.String"/>
-        <Column Name="Description" DataType="System.String"/>
-        <Column Name="CreatedBy" DataType="System.String"/>
-        <Column Name="CreatedOn" DataType="System.DateTime"/>
-        <Column Name="LastModifiedBy" DataType="System.String"/>
-        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
-      </TableDataSource>
       <TableDataSource Name="Discharge" DataType="System.Int32" Enabled="true" TableName="Discharge">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Client_FK" DataType="System.Int32"/>
         <Column Name="DateReport" DataType="System.DateTime"/>
         <Column Name="DateDischarge" DataType="System.DateTime"/>
         <Column Name="Planned" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="ReasonDischarge" DataType="System.String"/>
-        <Column Name="BriefHistory" DataType="System.String"/>
-        <Column Name="CourseTreatment" DataType="System.String"/>
-        <Column Name="ConditionalDischarge" DataType="System.String"/>
-        <Column Name="ReferralFor1" DataType="System.String"/>
-        <Column Name="ReferralAgency1" DataType="System.String"/>
-        <Column Name="ReferralContactPersonal1" DataType="System.String"/>
-        <Column Name="ReferralPhone1" DataType="System.String"/>
-        <Column Name="ReferralHoursOperation1" DataType="System.String"/>
-        <Column Name="ReferralFor2" DataType="System.String"/>
-        <Column Name="ReferralAgency2" DataType="System.String"/>
-        <Column Name="ReferralContactPersonal2" DataType="System.String"/>
-        <Column Name="ReferralPhone2" DataType="System.String"/>
-        <Column Name="ReferralHoursOperation2" DataType="System.String"/>
-        <Column Name="FollowDischarge" DataType="System.String"/>
-        <Column Name="TreatmentPlanObjCumpl" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="AgencyDischargeClient" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="ClientDischargeAgainst" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="ClientDeceased" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="ClientMoved" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="PhysicallyUnstable" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="ClientReferred" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="AdmissionedFor" DataType="System.String"/>
-        <Column Name="Hospitalization" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="Others" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="DateSignatureEmployee" DataType="System.DateTime"/>
         <Column Name="DateSignaturePerson" DataType="System.DateTime"/>
-        <Column Name="Others_Explain" DataType="System.String"/>
         <Column Name="DateSignatureSupervisor" DataType="System.DateTime"/>
-      </TableDataSource>
-      <TableDataSource Name="Medication" DataType="System.Int32" Enabled="true" TableName="Medication">
-        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Other_Explain" DataType="System.String"/>
+        <Column Name="ReferralsTo" DataType="System.String"/>
+        <Column Name="DischargeDiagnosis" DataType="System.String"/>
+        <Column Name="Termination" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="PrognosisFair" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="PrognosisGuarded" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="PrognosisGood" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="PrognosisPoor" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ProgramPSR" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ProgramClubHouse" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ProgramGroup" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ProgramInd" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="SupervisorId" DataType="System.Int32"/>
+        <Column Name="TypeService" DataType="System.Int32"/>
         <Column Name="ClientId" DataType="System.Int32"/>
-        <Column Name="Dosage" DataType="System.String"/>
-        <Column Name="Frequency" DataType="System.String"/>
+        <Column Name="Administrative" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClientTransferred" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClinicalCoherente" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClinicalInRemission" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClinicalIncoherente" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClinicalStable" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClinicalUnpredictable" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClinicalUnstable" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="CompletedTreatment" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="LeftBefore" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="NonCompliant" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Other" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="Supervisors" DataType="System.Int32" Enabled="true" TableName="Supervisors">
+        <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
-        <Column Name="Prescriber" DataType="System.String"/>
+        <Column Name="Firm" DataType="System.String"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="RaterEducation" DataType="System.String"/>
+        <Column Name="RaterFMHCertification" DataType="System.String"/>
       </TableDataSource>
     </MsSqlDataConnection>
   </Dictionary>
@@ -155,134 +109,87 @@
         <TextObject Name="Text67" Left="68.06" Top="32.35" Width="387.45" Height="24.57" Text="Discharge Summary" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt, style=Bold" TextRenderType="HtmlTags"/>
       </ContainerObject>
     </PageHeaderBand>
-    <DataBand Name="Data7" Top="92.95" Width="778.3" Height="485.95" CanGrow="true" CanShrink="true" DataSource="Clients">
-      <TextObject Name="Text70" Left="22.45" Top="10.8" Width="103.95" Height="18.9" Text="Client name:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text71" Left="126.4" Top="10.8" Width="245.7" Height="18.9" Text="[Clients.Name]" Font="Arial, 10pt"/>
-      <TextObject Name="Text72" Left="597.35" Top="10.8" Width="47.25" Height="18.9" Text="MR#:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text73" Left="644.05" Top="10.8" Width="132.3" Height="18.9" Text="[Clients.MedicaidID]" Font="Arial, 10pt"/>
-      <TextObject Name="Text133" Left="378.55" Top="10.45" Width="122.85" Height="18.9" Text="Admission Date:" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text134" Left="492.3" Top="10.45" Width="103.95" Height="18.9" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
-      <TextObject Name="Text135" Left="1.45" Top="31.8" Width="132.3" Height="18.9" Text="Date of Discharge:" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text136" Left="125.65" Top="31.8" Width="189" Height="18.9" Text="[Discharge.DateDischarge]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
-      <TextObject Name="Text137" Left="315.4" Top="31.8" Width="79.38" Height="18.9" Text="Diagnosis:" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text138" Left="395.9" Top="32.35" Width="378" Height="37.8" CanGrow="true" CanShrink="true" Text="[Diagnostics.Code]  [Diagnostics.Description]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
-      <TextObject Name="Text139" Top="98.5" Width="774.9" Height="37.8" CanGrow="true" CanShrink="true" CanBreak="false" Text="&lt;b&gt;Brief History:&lt;/b&gt; [Discharge.BriefHistory]" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text140" Top="145.75" Width="774.9" Height="37.8" CanGrow="true" CanShrink="true" CanBreak="false" Text="&lt;b&gt;Course of Treatment:&lt;/b&gt; [Discharge.CourseTreatment]" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text141" Top="193" Width="774.9" Height="37.8" CanGrow="true" CanShrink="true" CanBreak="false" Text="&lt;b&gt;Condition on Discharge:&lt;/b&gt; [Discharge.ConditionalDischarge]" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <LineObject Name="Line5" Left="776.35" Top="83.05" Width="-776"/>
-      <TableObject Name="Table1" Left="6" Top="268.6" Width="765.44" Height="143.64" Border.Lines="All">
-        <TableColumn Name="Column1" Width="373.27"/>
-        <TableColumn Name="Column2" Width="392.17"/>
-        <TableRow Name="Row1" Height="22.68">
-          <TableCell Name="Cell1" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox3" Left="6.45" Top="7" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.Planned"/>
-            <TextObject Name="Text8" Left="20.9" Top="2" Width="113.4" Height="18.9" Text="Planned" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-          <TableCell Name="Cell2" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox4" Left="9.45" Top="6.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Discharge.Planned] == true,false,true)"/>
-            <TextObject Name="Text142" Left="23.9" Top="2.45" Width="113.4" Height="18.9" Text="Unplanned" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-        </TableRow>
-        <TableRow Name="Row2" Height="30.24">
-          <TableCell Name="Cell6" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox5" Left="6.45" Top="10" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.TreatmentPlanObjCumpl"/>
-            <TextObject Name="Text143" Left="20.9" Top="7" Width="340.2" Height="18.9" Text="Treatment Plan Objectives Completed" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-          <TableCell Name="Cell7" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox11" Left="9.45" Top="10" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Discharge.TreatmentPlanObjCumpl] == true,false,true)"/>
-            <TextObject Name="Text150" Left="24.35" Top="3" Width="368.55" Height="28.35" Text="Treatment Plan Objectives Not Completed (other appropriate services not available)" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-        </TableRow>
-        <TableRow Name="Row3" Height="22.68">
-          <TableCell Name="Cell11" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox6" Left="6" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.AgencyDischargeClient"/>
-            <TextObject Name="Text144" Left="20.45" Top="2" Width="340.2" Height="18.9" Text="Agency Discharged Client Due to Non-cooperation" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-          <TableCell Name="Cell12" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox12" Left="9.45" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.ClientDischargeAgainst"/>
-            <TextObject Name="Text151" Left="23.9" Top="2" Width="359.1" Height="18.9" Text="Client Discharged Against Recommendation of Agency" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-        </TableRow>
-        <TableRow Name="Row4" Height="22.68">
-          <TableCell Name="Cell16" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox7" Left="6.45" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.ClientDeceased"/>
-            <TextObject Name="Text145" Left="20.9" Top="3" Width="113.4" Height="18.9" Text="Client deceased" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox8" Left="183.75" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.ClientMoved"/>
-            <TextObject Name="Text146" Left="198.2" Top="3" Width="113.4" Height="18.9" Text="Client moved" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-          <TableCell Name="Cell17" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox13" Left="9.45" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.PhysicallyUnstable"/>
-            <TextObject Name="Text152" Left="24.35" Top="3" Width="132.3" Height="18.9" Text="Physically unstable" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox14" Left="196.2" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.Hospitalization"/>
-            <TextObject Name="Text153" Left="210.65" Top="3" Width="113.4" Height="18.9" Text="Hospitalization" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-        </TableRow>
-        <TableRow Name="Row6" Height="22.68">
-          <TableCell Name="Cell23" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox9" Left="6" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.ClientReferred"/>
-            <TextObject Name="Text147" Left="20.45" Top="3" Width="292.95" Height="18.9" Text="Client referred to another agency" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-          <TableCell Name="Cell24" Border.Lines="All" Font="Arial, 10pt"/>
-        </TableRow>
-        <TableRow Name="Row5" Height="22.68">
-          <TableCell Name="Cell21" Border.Lines="All" Font="Arial, 10pt" ColSpan="2">
-            <CheckBoxObject Name="CheckBox10" Left="6" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.Others"/>
-            <TextObject Name="Text148" Left="20.45" Top="3" Width="47.25" Height="18.9" Text="Other:" VertAlign="Center" Font="Arial, 9pt"/>
-            <TextObject Name="Text149" Left="62.15" Top="3.45" Width="699.3" Height="18.9" Text="[Discharge.Others_Explain]" HorzAlign="Justify" Font="Arial, 10pt"/>
-          </TableCell>
-          <TableCell Name="Cell22" Border.Lines="All" Font="Arial, 10pt"/>
-        </TableRow>
-      </TableObject>
-      <LineObject Name="Line6" Left="776.9" Top="247.7" Width="-776"/>
-      <TextObject Name="Text154" Top="433.25" Width="774.9" Height="37.8" CanGrow="true" CanShrink="true" CanBreak="false" Text="&lt;b&gt;Follow Discharge:&lt;/b&gt; [Discharge.FollowDischarge]" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-    </DataBand>
-    <DataBand Name="Data1" Top="624.95" Width="778.3" Height="18.9" DataSource="Medication">
-      <TableObject Name="Table3" Left="4.51" Width="765.45" Height="18.9" Border.Lines="All">
-        <TableColumn Name="Column5" Width="255.15"/>
-        <TableColumn Name="Column6" Width="255.15"/>
-        <TableColumn Name="Column7" Width="255.15"/>
-        <TableRow Name="Row8">
-          <TableCell Name="Cell25" Border.Lines="All" Text="[Medication.Name]" Font="Arial, 9pt"/>
-          <TableCell Name="Cell26" Border.Lines="All" Text="[Medication.Dosage]" HorzAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell27" Border.Lines="All" Text="[Medication.Frequency]" HorzAlign="Center" Font="Arial, 9pt"/>
-        </TableRow>
-      </TableObject>
-      <DataHeaderBand Name="DataHeader1" Top="583.03" Width="778.3" Height="37.8">
-        <TableObject Name="Table2" Left="4.45" Top="18.9" Width="765.45" Height="18.9">
-          <TableColumn Name="Column4" Width="765.45"/>
-          <TableRow Name="Row7">
-            <TableCell Name="Cell4" Border.Lines="All" Text="Medications at the time of Discharge" Font="Arial, 10pt, style=Bold"/>
-          </TableRow>
-        </TableObject>
-      </DataHeaderBand>
-    </DataBand>
-    <DataBand Name="Data2" Top="647.97" Width="778.3" Height="283.5" DataSource="Discharge">
-      <TextObject Name="Text155" Top="24.35" Width="103.95" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Referrals:" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text156" Top="47.25" Width="378" Height="18.9" Text="[Discharge.ReferralFor1]" Font="Arial, 10pt"/>
-      <TextObject Name="Text157" Top="66.15" Width="378" Height="18.9" Text="[Discharge.ReferralAgency1]" Font="Arial, 10pt"/>
-      <TextObject Name="Text158" Top="85.05" Width="378" Height="18.9" Text="[Discharge.ReferralContactPersonal1]" Font="Arial, 10pt"/>
-      <TextObject Name="Text159" Top="103.95" Width="378" Height="18.9" Text="[Discharge.ReferralPhone1]" Font="Arial, 10pt"/>
-      <TextObject Name="Text160" Top="122.85" Width="378" Height="18.9" Text="[Discharge.ReferralHoursOperation1]" Font="Arial, 10pt"/>
-      <TextObject Name="Text161" Left="387.45" Top="47.25" Width="387.45" Height="18.9" Text="[Discharge.ReferralFor2]" Font="Arial, 10pt"/>
-      <TextObject Name="Text162" Left="387.45" Top="66.15" Width="387.45" Height="18.9" Text="[Discharge.ReferralAgency2]" Font="Arial, 10pt"/>
-      <TextObject Name="Text163" Left="387.45" Top="85.05" Width="387.45" Height="18.9" Text="[Discharge.ReferralContactPersonal2]" Font="Arial, 10pt"/>
-      <TextObject Name="Text164" Left="387.45" Top="103.95" Width="387.45" Height="18.9" Text="[Discharge.ReferralPhone2]" Font="Arial, 10pt"/>
-      <TextObject Name="Text165" Left="387.45" Top="122.85" Width="387.45" Height="18.9" Text="[Discharge.ReferralHoursOperation2]" Font="Arial, 10pt"/>
-      <TextObject Name="Text166" Left="72.6" Top="166.65" Width="122.85" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Client Signature" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text167" Left="40.25" Top="204" Width="151.2" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Staff Name/Signature" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text168" Left="-1" Top="238.35" Width="189" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Supervisor Name/Signature" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text69" Left="186" Top="167.65" Width="302.4" Height="18.9" Text="____________________________________________" Font="Arial, 9pt"/>
-      <TextObject Name="Text169" Left="185" Top="205" Width="302.4" Height="18.9" Text="____________________________________________" Font="Arial, 9pt"/>
-      <TextObject Name="Text170" Left="185" Top="240.35" Width="302.4" Height="18.9" Text="____________________________________________" Font="Arial, 9pt"/>
-      <TextObject Name="Text171" Left="526.3" Top="168.1" Width="47.25" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Date" HorzAlign="Right" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text172" Left="526.2" Top="204.05" Width="47.25" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Date" HorzAlign="Right" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text173" Left="526.2" Top="238.4" Width="47.25" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Date" HorzAlign="Right" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text174" Left="577.45" Top="169.1" Width="170.1" Height="18.9" Text="____________________________________________" Font="Arial, 9pt"/>
-      <TextObject Name="Text175" Left="577.45" Top="205.18" Width="170.1" Height="18.9" Text="____________________________________________" Font="Arial, 9pt"/>
-      <TextObject Name="Text176" Left="577.45" Top="240.29" Width="170.1" Height="18.9" Text="____________________________________________" Font="Arial, 9pt"/>
-      <TextObject Name="Text177" Left="596.9" Top="166.75" Width="122.85" Height="18.9" Text="[Discharge.DateSignaturePerson]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text178" Left="597.35" Top="202" Width="122.85" Height="18.9" Text="[Discharge.DateSignatureEmployee]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text179" Left="597.35" Top="237.8" Width="122.85" Height="18.9" Text="[Discharge.DateSignatureSupervisor]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 9pt"/>
+    <DataBand Name="Data7" Top="92.95" Width="778.3" Height="693.85" CanGrow="true" CanShrink="true" DataSource="Discharge">
+      <TextObject Name="Text70" Left="31.9" Top="10.8" Width="103.95" Height="18.9" Text="Client name:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text71" Left="135.85" Top="10.8" Width="245.7" Height="18.9" Text="[Clients.Name]" Font="Arial, 10pt"/>
+      <TextObject Name="Text72" Left="453.6" Top="10.8" Width="47.25" Height="18.9" Text="MR#:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text73" Left="500.3" Top="10.8" Width="132.3" Height="18.9" Text="[Clients.MedicaidID]" Font="Arial, 10pt"/>
+      <TextObject Name="Text133" Left="387" Top="31.35" Width="122.85" Height="18.9" Text="Admission Date:" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text134" Left="500.75" Top="31.35" Width="132.3" Height="18.9" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
+      <TextObject Name="Text135" Left="10.9" Top="31.8" Width="132.3" Height="18.9" Text="Date of Discharge:" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text136" Left="135.1" Top="31.8" Width="189" Height="18.9" Text="[Discharge.DateDischarge]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
+      <LineObject Name="Line5" Left="776.35" Top="60.7" Width="-776"/>
+      <TextObject Name="Text180" Left="12.45" Top="75.6" Width="122.85" Height="18.9" Text="Program:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
+      <CheckBoxObject Name="CheckBox15" Left="141.75" Top="78.6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.ProgramPSR"/>
+      <TextObject Name="Text181" Left="156.2" Top="75.6" Width="47.25" Height="18.9" Text="PSR" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox16" Left="217.35" Top="78.6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.ProgramInd"/>
+      <TextObject Name="Text182" Left="231.8" Top="75.6" Width="103.95" Height="18.9" Text="IND. THERAPY " VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox17" Left="349.65" Top="78.6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.ProgramGroup"/>
+      <TextObject Name="Text183" Left="364.1" Top="75.6" Width="122.85" Height="18.9" Text="GROUP THERAPY " VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox18" Left="491.4" Top="78.6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.ProgramClubHouse"/>
+      <TextObject Name="Text184" Left="505.85" Top="75.6" Width="122.85" Height="18.9" Text="CLUB HOUSE" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text185" Left="3" Top="101.95" Width="132.3" Height="18.9" Text="Type of Discharge:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
+      <CheckBoxObject Name="CheckBox19" Left="141.75" Top="104.95" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.Planned"/>
+      <TextObject Name="Text186" Left="156.2" Top="100.95" Width="56.7" Height="18.9" Text="Planned" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox20" Left="217.62" Top="105.4" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Discharge.Planned] == true,false,true)"/>
+      <TextObject Name="Text187" Left="232.07" Top="102.4" Width="113.4" Height="18.9" Text="Unplanned" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text188" Top="144.75" Width="359.1" Height="18.9" Text="Circumstances of Discharge (Discharge Status) " Font="Arial, 10pt, style=Bold"/>
+      <CheckBoxObject Name="CheckBox21" Left="9.45" Top="174.1" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.CompletedTreatment"/>
+      <TextObject Name="Text189" Left="23.9" Top="170.1" Width="274.05" Height="18.9" Text="Completed Treatment" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox22" Left="9.45" Top="195" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.Termination"/>
+      <TextObject Name="Text190" Left="23.9" Top="191" Width="500.85" Height="18.9" Text="Termination of treatment due to end of insurance coverage to provide services" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox23" Left="9.45" Top="216.9" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.ClientTransferred"/>
+      <TextObject Name="Text191" Left="23.9" Top="211.9" Width="500.85" Height="18.9" Text="Client transferred to another provider for continued MH services" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox24" Left="9.45" Top="237.8" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.NonCompliant"/>
+      <TextObject Name="Text192" Left="23.9" Top="233.8" Width="500.85" Height="18.9" Text="Non-Compliant with CMHC Rules" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox25" Left="9.45" Top="259.15" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.LeftBefore"/>
+      <TextObject Name="Text193" Left="23.9" Top="255.15" Width="500.85" Height="18.9" Text="Left Before Completing Treatment" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox26" Left="9.45" Top="280.05" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.Administrative"/>
+      <TextObject Name="Text194" Left="23.9" Top="276.05" Width="500.85" Height="18.9" Text="Administrative Discharge" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox27" Left="9.45" Top="300.95" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.Other"/>
+      <TextObject Name="Text195" Left="23.9" Top="297.95" Width="47.25" Height="18.9" Text="Other:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text196" Left="66.15" Top="297.95" Width="708.75" Height="18.9" Text="[Discharge.Other_Explain]" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text197" Left="3" Top="334.75" Width="132.3" Height="18.9" Text="Prognosis:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
+      <CheckBoxObject Name="CheckBox28" Left="141.75" Top="337.75" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.PrognosisGood"/>
+      <TextObject Name="Text198" Left="156.2" Top="333.75" Width="47.25" Height="18.9" Text="Good" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox29" Left="220.35" Top="337.75" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.PrognosisFair"/>
+      <TextObject Name="Text199" Left="234.8" Top="333.75" Width="37.8" Height="18.9" Text="Fair" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox30" Left="295.95" Top="337.75" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.PrognosisGuarded"/>
+      <TextObject Name="Text200" Left="310.4" Top="333.75" Width="75.6" Height="18.9" Text="Guarded" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox31" Left="399.9" Top="337.75" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.PrognosisPoor"/>
+      <TextObject Name="Text201" Left="414.35" Top="333.75" Width="122.85" Height="18.9" Text="Poor" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text202" Left="2" Top="369.55" Width="236.25" Height="18.9" Text="Clinical Impressions at discharge:" Font="Arial, 10pt, style=Bold"/>
+      <CheckBoxObject Name="CheckBox32" Left="233.25" Top="373.55" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.ClinicalStable"/>
+      <TextObject Name="Text203" Left="247.7" Top="369.55" Width="47.25" Height="18.9" Text="Stable" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox33" Left="302.4" Top="373.55" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.ClinicalUnstable"/>
+      <TextObject Name="Text204" Left="316.85" Top="369.55" Width="66.15" Height="18.9" Text="Unstable" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox34" Left="387.45" Top="373.55" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.ClinicalUnpredictable"/>
+      <TextObject Name="Text205" Left="401.9" Top="369.55" Width="85.05" Height="18.9" Text="Unpredictable" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox35" Left="498.85" Top="373.55" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.ClinicalCoherente"/>
+      <TextObject Name="Text206" Left="513.3" Top="369.55" Width="66.15" Height="18.9" Text="Coherent" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox36" Left="581.9" Top="373.55" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.ClinicalIncoherente"/>
+      <TextObject Name="Text207" Left="596.35" Top="369.55" Width="75.6" Height="18.9" Text="Incoherent" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox37" Left="673.4" Top="373.55" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.ClinicalInRemission"/>
+      <TextObject Name="Text208" Left="687.85" Top="369.55" Width="85.05" Height="18.9" Text="In remission" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text209" Left="2" Top="406.35" Width="94.5" Height="18.9" Text="Referrals to: " Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text210" Left="87.05" Top="406.35" Width="689.85" Height="18.9" Text="[Discharge.ReferralsTo]" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text211" Left="2" Top="442.15" Width="264.6" Height="18.9" Text="Discharge Diagnosis (ICD-10 / DSM 5):" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text212" Left="255.15" Top="442.15" Width="519.75" Height="18.9" Text="[Discharge.DischargeDiagnosis]" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text166" Left="82.05" Top="574.55" Width="122.85" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Client Signature" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text69" Left="195.45" Top="575.55" Width="302.4" Height="18.9" Text="____________________________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text167" Left="50.7" Top="616.25" Width="151.2" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Staff Name/Signature" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text168" Left="9.45" Top="660.05" Width="189" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Supervisor Name/Signature" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text169" Left="195.45" Top="617.25" Width="302.4" Height="18.9" Text="____________________________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text170" Left="195.45" Top="662.05" Width="302.4" Height="18.9" Text="____________________________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text172" Left="536.65" Top="616.3" Width="47.25" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Date" HorzAlign="Right" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text173" Left="536.65" Top="660.1" Width="47.25" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Date" HorzAlign="Right" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text175" Left="587.9" Top="617.43" Width="170.1" Height="18.9" Text="____________________________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text176" Left="587.9" Top="661.99" Width="170.1" Height="18.9" Text="____________________________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text178" Left="607.8" Top="614.25" Width="122.85" Height="18.9" Text="[Discharge.DateSignatureEmployee]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text179" Left="607.8" Top="659.5" Width="122.85" Height="18.9" Text="[Discharge.DateSignatureSupervisor]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text171" Left="536.65" Top="574.8" Width="47.25" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Date" HorzAlign="Right" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text174" Left="587.8" Top="575.8" Width="170.1" Height="18.9" Text="____________________________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text177" Left="607.25" Top="573.45" Width="122.85" Height="18.9" Text="[Discharge.DateSignaturePerson]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 9pt"/>
     </DataBand>
   </ReportPage>
 </Report>

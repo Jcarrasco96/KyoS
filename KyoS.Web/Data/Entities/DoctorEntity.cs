@@ -7,5 +7,6 @@ namespace KyoS.Web.Data.Entities
     {
         public int Id { get; set; }
         public virtual ICollection<ClientEntity> Clients { get; set; }
+        public string FaxNumber { get; set; }
     }
 }
