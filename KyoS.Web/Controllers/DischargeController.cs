@@ -89,7 +89,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public IActionResult Create(int id = 0, ServiceType service = 0)
+        public IActionResult Create(int id = 0, ServiceType service = 0, int origin = 0)
         {
 
             UserEntity user_logged = _context.Users
@@ -145,8 +145,7 @@ namespace KyoS.Web.Controllers
                         DateSignatureEmployee = DateTime.Now,
                         DateSignaturePerson = DateTime.Now,
                         DateSignatureSupervisor = DateTime.Now,
-                        TypeService = service
-
+                        TypeService = service                        
                     };
                     if (model.Client.MedicationList == null)
                         model.Client.MedicationList = new List<MedicationEntity>();
@@ -198,8 +197,7 @@ namespace KyoS.Web.Controllers
                 DateSignatureEmployee = DateTime.Now,
                 DateSignaturePerson = DateTime.Now,
                 DateSignatureSupervisor = DateTime.Now,
-                TypeService = service,
-                
+                TypeService = service                
             };
             return View(model);
         }
@@ -284,11 +282,11 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Facilitator")]
-        public IActionResult Edit(int id = 0)
+        public IActionResult Edit(int id = 0, int origin = 0)
         {
             DischargeViewModel model;
 
-            if (User.IsInRole("Supervisor")|| User.IsInRole("Facilitator"))
+            if (User.IsInRole("Supervisor") || User.IsInRole("Facilitator"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -312,12 +310,10 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-
                         model = _converterHelper.ToDischargeViewModel(Discharge);
-
+                        model.Origin = origin;
                         return View(model);
                     }
-
                 }
             }
 
@@ -341,14 +337,17 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    if (User.IsInRole("Facilitator"))
+
+                    if (dischargeViewModel.Origin == 1)
                     {
-                        return RedirectToAction("DischargeInEdit", "Discharge");
+                        return RedirectToAction("DischargeInEdit");
                     }
-                    else
+                    if (dischargeViewModel.Origin == 2)
                     {
-                        return RedirectToAction("PendingDischarge", "Discharge");
+                        return RedirectToAction("PendingDischarge");
                     }
+
+                    return RedirectToAction("Index");
                 }
                 catch (System.Exception ex)
                 {
@@ -519,7 +518,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> FinishEditingDischarge(int id)
+        public async Task<IActionResult> FinishEditingDischarge(int id, int origin = 0)
         {
             DischargeEntity discharge = await _context.Discharge.FirstOrDefaultAsync(n => n.Id == id);
             if (User.IsInRole("Supervisor"))
@@ -535,19 +534,28 @@ namespace KyoS.Web.Controllers
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("DischargeInEdit", "Discharge");
+            if (origin == 1)
+            {
+                return RedirectToAction("DischargeInEdit");
+            }
+            return RedirectToAction("Index");
         }
 
         [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> ApproveDischarge(int id)
+        public async Task<IActionResult> ApproveDischarge(int id, int origin = 0)
         {
             DischargeEntity discharge = await _context.Discharge.FirstOrDefaultAsync(n => n.Id == id);
             discharge.Status = DischargeStatus.Approved;
             _context.Update(discharge);
 
             await _context.SaveChangesAsync();
+            
+            if(origin == 1)
+            {
+                return RedirectToAction(nameof(PendingDischarge));
+            }
 
-            return RedirectToAction(nameof(PendingDischarge));
+            return RedirectToAction(nameof(Index));
         }
 
         [Authorize(Roles = "Supervisor, Manager, Facilitator")]

@@ -59,7 +59,7 @@
     <div class="form-group col-md-12">
         <pre>
         <strong>PROGRAM:</strong>            <input type="checkbox" asp-for="ProgramPSR" class="form-check-input"> PSR     <input type="checkbox" asp-for="ProgramInd" class="form-check-input"> IND. THERAPY     <input type="checkbox" asp-for="ProgramGroup" class="form-check-input"> GROUP THERAPY     <input type="checkbox" asp-for="ProgramClubHouse" class="form-check-input"> CLUB HOUSE
-        <strong>Type of Discharge: </strong> <input type="checkbox" asp-for="ProgramPSR" class="form-check-input" id="check1"> Planned        <input type="checkbox" class="form-check-input" id="check101">  Unplanned
+        <strong>Type of Discharge: </strong> <input type="checkbox" asp-for="Planned" class="form-check-input" id="check1"> Planned        <input type="checkbox" class="form-check-input" id="check101">  Unplanned
 
         <strong>Circumstances of Discharge (Discharge Status)</strong>
         <input type="checkbox" asp-for="CompletedTreatment" class="form-check-input"> Completed Treatment
@@ -79,11 +79,6 @@
         <strong>Discharge Diagnosis (ICD-10 / DSM 5): </strong> <input asp-for="DischargeDiagnosis" style="width:40%">
         </pre>  
     </div>
-</div>
-
-
-<div class="col-md-12">
-    &nbsp;
 </div>
 <div class="col-md-12">
     <pre>

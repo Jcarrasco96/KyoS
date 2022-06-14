@@ -34,18 +34,22 @@
             <input type="hidden" asp-for="LastModifiedBy" />
             <input type="hidden" asp-for="LastModifiedOn" />
             <input type="hidden" asp-for="TypeService" />
+            <input type="hidden" asp-for="Origin" />
             <partial name="_Discharge" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                @if (User.IsInRole("Facilitator"))
+                @if (Model.Origin == 0)
+                {
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                }
+                @if (Model.Origin == 1)
                 {
                     <a asp-action="DischargeInEdit" class="btn btn-success">Back</a>
                 }
-                @if (User.IsInRole("Supervisor"))
+                @if (Model.Origin == 2)
                 {
                     <a asp-action="PendingDischarge" class="btn btn-success">Back</a>
                 }
-
             </div>
         </form>       
     </div>
