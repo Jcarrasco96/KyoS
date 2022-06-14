@@ -3111,28 +3111,12 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetClinicDS(discharge.Client.Clinic));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetEmergencyContactDS(discharge.Client.EmergencyContact));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetLegalGuardianDS(discharge.Client.LegalGuardian));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetDiagnosticsListDS(discharge.Client.Clients_Diagnostics.ToList()));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
-
-            dataSet = new DataSet();
             dataSet.Tables.Add(GetDischargeDS(discharge));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetMedicationsListDS(discharge.Client.MedicationList.ToList()));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Medication");
+            dataSet.Tables.Add(GetSupervisorDS(discharge.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
 
             WebReport.Report.Prepare();
 
@@ -3156,28 +3140,12 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetClinicDS(discharge.Client.Clinic));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetEmergencyContactDS(discharge.Client.EmergencyContact));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetLegalGuardianDS(discharge.Client.LegalGuardian));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetDiagnosticsListDS(discharge.Client.Clients_Diagnostics.ToList()));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
-
-            dataSet = new DataSet();
             dataSet.Tables.Add(GetDischargeDS(discharge));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetMedicationsListDS(discharge.Client.MedicationList.ToList()));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Medication");
+            dataSet.Tables.Add(GetSupervisorDS(discharge.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
 
             WebReport.Report.Prepare();
 
@@ -5856,36 +5824,43 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Client_FK", typeof(int));
             dt.Columns.Add("DateReport", typeof(DateTime));
             dt.Columns.Add("DateDischarge", typeof(DateTime));            
-            dt.Columns.Add("Planned", typeof(bool));            
-            dt.Columns.Add("ReasonDischarge", typeof(string));
-            dt.Columns.Add("BriefHistory", typeof(string));
-            dt.Columns.Add("CourseTreatment", typeof(string));
-            dt.Columns.Add("ConditionalDischarge", typeof(string));
-            dt.Columns.Add("ReferralFor1", typeof(string));
-            dt.Columns.Add("ReferralAgency1", typeof(string));
-            dt.Columns.Add("ReferralContactPersonal1", typeof(string));
-            dt.Columns.Add("ReferralPhone1", typeof(string));
-            dt.Columns.Add("ReferralHoursOperation1", typeof(string));
-            dt.Columns.Add("ReferralFor2", typeof(string));
-            dt.Columns.Add("ReferralAgency2", typeof(string));
-            dt.Columns.Add("ReferralContactPersonal2", typeof(string));
-            dt.Columns.Add("ReferralPhone2", typeof(string));
-            dt.Columns.Add("ReferralHoursOperation2", typeof(string));
-            dt.Columns.Add("FollowDischarge", typeof(string));
-            dt.Columns.Add("TreatmentPlanObjCumpl", typeof(bool));
-            dt.Columns.Add("AgencyDischargeClient", typeof(bool));
-            dt.Columns.Add("ClientDischargeAgainst", typeof(bool));
-            dt.Columns.Add("ClientDeceased", typeof(bool));
-            dt.Columns.Add("ClientMoved", typeof(bool));
-            dt.Columns.Add("PhysicallyUnstable", typeof(bool));
-            dt.Columns.Add("ClientReferred", typeof(bool));            
+            dt.Columns.Add("Planned", typeof(bool));
             dt.Columns.Add("AdmissionedFor", typeof(string));
-            dt.Columns.Add("Hospitalization", typeof(bool));
-            dt.Columns.Add("Others", typeof(bool));
             dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
             dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
-            dt.Columns.Add("Others_Explain", typeof(string));
             dt.Columns.Add("DateSignatureSupervisor", typeof(DateTime));
+            dt.Columns.Add("Other_Explain", typeof(string));
+            dt.Columns.Add("ReferralsTo", typeof(string));
+            dt.Columns.Add("DischargeDiagnosis", typeof(string));            
+            dt.Columns.Add("Termination", typeof(bool));
+            dt.Columns.Add("PrognosisFair", typeof(bool));
+            dt.Columns.Add("PrognosisGuarded", typeof(bool));
+            dt.Columns.Add("PrognosisGood", typeof(bool));
+            dt.Columns.Add("PrognosisPoor", typeof(bool));
+            dt.Columns.Add("ProgramPSR", typeof(bool));
+            dt.Columns.Add("ProgramClubHouse", typeof(bool));
+            dt.Columns.Add("ProgramGroup", typeof(bool));
+            dt.Columns.Add("ProgramInd", typeof(bool));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("SupervisorId", typeof(int));
+            dt.Columns.Add("TypeService", typeof(int));
+            dt.Columns.Add("ClientId", typeof(int));
+            dt.Columns.Add("Administrative", typeof(bool));
+            dt.Columns.Add("ClientTransferred", typeof(bool));
+            dt.Columns.Add("ClinicalCoherente", typeof(bool));
+            dt.Columns.Add("ClinicalInRemission", typeof(bool));
+            dt.Columns.Add("ClinicalIncoherente", typeof(bool));
+            dt.Columns.Add("ClinicalStable", typeof(bool));
+            dt.Columns.Add("ClinicalUnpredictable", typeof(bool));
+            dt.Columns.Add("ClinicalUnstable", typeof(bool));
+            dt.Columns.Add("CompletedTreatment", typeof(bool));            
+            dt.Columns.Add("LeftBefore", typeof(bool));
+            dt.Columns.Add("NonCompliant", typeof(bool));
+            dt.Columns.Add("Other", typeof(bool));            
 
             if (discharge != null)
             {
@@ -5896,35 +5871,43 @@ namespace KyoS.Web.Helpers
                                             discharge.DateReport,
                                             discharge.DateDischarge,
                                             discharge.Planned,
-                                            /*discharge.ReasonDischarge,
-                                            discharge.BriefHistory,
-                                            discharge.CourseTreatment,
-                                            discharge.ConditionalDischarge,
-                                            discharge.ReferralFor1,
-                                            discharge.ReferralAgency1,
-                                            discharge.ReferralContactPersonal1,
-                                            discharge.ReferralPhone1,
-                                            discharge.ReferralHoursOperation1,
-                                            discharge.ReferralFor2,
-                                            discharge.ReferralAgency2,
-                                            discharge.ReferralContactPersonal2,
-                                            discharge.ReferralPhone2,
-                                            discharge.ReferralHoursOperation2,
-                                            discharge.FollowDischarge,
-                                            discharge.TreatmentPlanObjCumpl,
-                                            discharge.AgencyDischargeClient,
-                                            discharge.ClientDischargeAgainst,
-                                            discharge.ClientDeceased,
-                                            discharge.ClientMoved,
-                                            discharge.PhysicallyUnstable,
-                                            discharge.ClientReferred,
                                             discharge.AdmissionedFor,
-                                            discharge.Hospitalization,
-                                            discharge.Others,*/
                                             discharge.DateSignatureEmployee,
                                             discharge.DateSignaturePerson,
                                             discharge.DateSignatureSupervisor,
-            });
+                                            discharge.Other_Explain,
+                                            discharge.ReferralsTo,
+                                            discharge.DischargeDiagnosis,
+                                            discharge.Termination,
+                                            discharge.PrognosisFair,
+                                            discharge.PrognosisGuarded,
+                                            discharge.PrognosisGood,
+                                            discharge.PrognosisPoor,
+                                            discharge.ProgramPSR,
+                                            discharge.ProgramClubHouse,
+                                            discharge.ProgramGroup,
+                                            discharge.ProgramInd,
+                                            discharge.CreatedBy,
+                                            discharge.CreatedOn,
+                                            discharge.LastModifiedBy,
+                                            discharge.LastModifiedOn,
+                                            discharge.Status,
+                                            0,
+                                            discharge.TypeService,
+                                            0,
+                                            discharge.Administrative,
+                                            discharge.ClientTransferred,
+                                            discharge.ClinicalCoherente,
+                                            discharge.ClinicalInRemission,
+                                            discharge.ClinicalIncoherente,
+                                            discharge.ClinicalStable,
+                                            discharge.ClinicalUnpredictable,
+                                            discharge.ClinicalUnstable,
+                                            discharge.CompletedTreatment,
+                                            discharge.LeftBefore,
+                                            discharge.NonCompliant,
+                                            discharge.Other,
+                                        });
             }
             else
             {
@@ -5936,34 +5919,41 @@ namespace KyoS.Web.Helpers
                                             new DateTime(),
                                             false,
                                             string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            false,
-                                            false,
-                                            false,
-                                            false,
-                                            false,
-                                            false,
-                                            false,
-                                            string.Empty,
-                                            false,
-                                            false,
+                                            new DateTime(),
                                             new DateTime(),
                                             new DateTime(),
                                             string.Empty,
-                                            new DateTime()                                  
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false
                                         });
             }
 

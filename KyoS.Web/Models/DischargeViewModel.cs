@@ -16,5 +16,6 @@ namespace KyoS.Web.Models
 
         public int IdClient { get; set; }
         public int IdSupervisor { get; set; }
+        public int Origin { get; set; }
     }
 }

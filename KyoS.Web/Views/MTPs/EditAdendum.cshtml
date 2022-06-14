@@ -6,9 +6,9 @@
 <!DOCTYPE html>
 
 <html>
-<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 </head>
 <body>
 
@@ -48,6 +48,11 @@
             <br />
             <div class="form-group col-md-12">
                 <input type="submit" value="Save All" class="btn btn-primary" />
+                @if (User.IsInRole("Supervisor"))
+                {
+                    <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddAddendumMessageEntity", "MTPs", new {id = @Model.Id, origin = 0}, Context.Request.Scheme)','Add message to document creator')" title="Not approved document due to problems">Review</a>
+                    <a asp-action="ApproveAdendum" asp-route-id="@Model.Id" class="btn btn-default" title="Approve Addendum">Approve</a>
+                }
                 <a asp-action="IndexAdendum" class="btn btn-success">Back</a>
             </div>
         </form>

@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
 @{
-    ViewData["Title"] = "Discharge of Service";
+    ViewData["Title"] = "Discharges for services";
 }
 
 @if (Model != null)
@@ -13,14 +13,14 @@
                 <i class="icon-home"></i>
                 @Html.ActionLink("Dashboard", "Index", "Desktop")
             </li>
-            <li class="active">Discharge of Service</li>
+            <li class="active">Discharges for services</li>
         </ul><!--.breadcrumb-->
     </div>
 
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Discharge of Service</h3>
+                <h3 class="panel-title">Discharges for services</h3>
             </div>
             <div class="panel-body" id="view-ClientsWithoutDischarge">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
