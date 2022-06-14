@@ -10,6 +10,8 @@ namespace KyoS.Web.Data.Entities
     {
         public int Id { get; set; }
 
+        public int TcmServicePlan_FK { get; set; }
+
         [Display(Name = "Start Time")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{mm/dd/yyyy}", ApplyFormatInEditMode = false)]

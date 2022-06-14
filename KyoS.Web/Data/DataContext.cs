@@ -256,9 +256,11 @@ namespace KyoS.Web.Data
                                    .HasIndex(s => s.Id)
                                    .IsUnique();
 
-            modelBuilder.Entity<TCMServicePlanReviewEntity>()
-                                   .HasIndex(s => s.Id)
-                                   .IsUnique();
+            modelBuilder.Entity<TCMServicePlanEntity>()
+                        .HasOne(c => c.TCMServicePlanReview)
+                        .WithOne(s => s.TcmServicePlan)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMServicePlanReviewEntity>(s => s.TcmServicePlan_FK);
 
             modelBuilder.Entity<TCMServicePlanReviewDomainObjectiveEntity>()
                                    .HasIndex(s => s.Id)
