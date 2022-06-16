@@ -88,7 +88,7 @@
                                 <td align="right">
                                     @if (User.IsInRole("Facilitator"))
                                     {
-                                        <a asp-action="Create" asp-controller="Discharge" asp-route-id="@item.Id" asp-route-service="@item.Service" class="btn btn-primary" title="Create Discharge"><i class="glyphicon glyphicon-plus"></i></a>
+                                        <a asp-action="Create" asp-controller="Discharge" asp-route-id="@item.Id" asp-route-origin ="1" asp-route-service="@item.Service" class="btn btn-primary" title="Create Discharge"><i class="glyphicon glyphicon-plus"></i></a>
                                     }
                                     else
                                     {
