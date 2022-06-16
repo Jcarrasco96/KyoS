@@ -33,15 +33,9 @@
                     <input type="hidden" asp-for="IdServicePlan" />
                     <partial name="_TCMServicePlanReview" />
                     <div class="col-md-push-12">
-                       
-                        <div class="col-md-12">
-                            <div id="view-goals">
-                                @await Html.PartialAsync("_ViewDomainServicePlanReview", Model)
-                            </div>
-                        </div>
                     </div>
                     <div class="form-group col-md-12">
-                        <input type="submit" value="Create" class="btn btn-primary" />
+                        <input type="submit" value="Create" asp-route-origin="1" class="btn btn-primary" />
                         <a asp-action="Index" class="btn btn-success">Back</a>
                     </div>
                 </div>
@@ -52,7 +46,7 @@
 </body>
 </html>
 
-<partial name="_ModalPopup" />
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/jquery.dataTables.min.js"></script>

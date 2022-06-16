@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KyoS.Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace KyoS.Web.Data.Entities
         public int IdObjetive { get; set; }
 
         public string Task { get; set; }
-        public int Status { get; set; }
+        public StatusType Status { get; set; }
         public string Responsible { get; set; }
        
 
@@ -29,6 +30,8 @@ namespace KyoS.Web.Data.Entities
         public DateTime EndDate { get; set; }
 
         public TCMDomainEntity TcmDomain { get; set; }
-        
+
+        public string Origin { get; set; }
+
     }
 }

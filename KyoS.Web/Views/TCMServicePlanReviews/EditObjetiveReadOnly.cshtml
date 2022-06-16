@@ -5,11 +5,12 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="CreateObjetive" onsubmit="return jQueryAjaxPostTCMServicePlanReview(this);">
+        <form asp-action="EditObjetive" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMServicePlanReview(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Idd" />
             <input type="hidden" asp-for="Origin" />
             <input type="hidden" asp-for="Id_Domain" />
-            <input type="hidden" asp-for="IdServicePlanReview" />
             <div class="">
                 <div class="form-group col-md-3">
                     <b>Service code:</b>
@@ -29,32 +30,32 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label asp-for="Start_Date" class="control-label">Start Date</label>&nbsp;*
-                    <input asp-for="Start_Date" class="form-control" />
+                    <input asp-for="Start_Date" class="form-control" readonly/>
                     <span asp-validation-for="Start_Date" class="text-danger"></span>
                 </div>
             </div>
             <div class="">
                 <div class="form-group col-md-6">
                     <label asp-for="Target_Date" class="control-label"></label>&nbsp;
-                    <input asp-for="Target_Date" class="form-control" />
+                    <input asp-for="Target_Date" class="form-control" readonly/>
                     <span asp-validation-for="Target_Date" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-6">
                     <label asp-for="End_Date" class="control-label">End date</label>&nbsp;
-                    <input asp-for="End_Date" class="form-control" />
+                    <input asp-for="End_Date" class="form-control" readonly/>
                     <span asp-validation-for="End_Date" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label asp-for="Id_Stage" class="control-label">Stages</label>&nbsp;*
-                    <select asp-for="Id_Stage" asp-items="Model.Stages" class="form-control" id="Code_Name" onchange="getCode();"></select>
+                    <label asp-for="Id_Stage" class="control-label">Stages</label>
+                    <select asp-for="Id_Stage" asp-items="Model.Stages" class="form-control" id="Code_Name" onchange="getCode();" readonly></select>
                     <span asp-validation-for="Id_Stage" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label asp-for="name" class="control-label">Name</label>&nbsp;*
+                    <label asp-for="name" class="control-label">Name</label>
                     <input asp-for="name" id="GetName" class="form-control" readonly />
                     <span asp-validation-for="name" class="text-danger"></span>
                 </div>
@@ -62,21 +63,29 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="descriptionStages" class="control-label">Description</label>
-                    <textarea asp-for="descriptionStages" id="lbDescription" class="form-control" rows="4" readonly />
+                    <input asp-for="descriptionStages" id="lbDescription" class="form-control" rows="4" readonly />
                     <span asp-validation-for="descriptionStages" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="task" class="control-label">Task/Case Management Strategy</label>&nbsp;*
-                    <textarea asp-for="task" class="form-control" />
+                    <input asp-for="task" class="form-control" readonly/>
                     <span asp-validation-for="task" class="text-danger"></span>
                 </div>
-            </div> <div class="col-md-12">
+            </div>
+            <div class="col-md-12">
                 <div class="form-group">
-                    <label asp-for="Responsible" class="control-label">Responsible Provider and Resources</label>&nbsp;*
-                    <textarea asp-for="Responsible" class="form-control" />
-                    <span asp-validation-for="Responsible" class="text-danger"></span>
+                    <label asp-for="IdStatus" class="control-label">Stages</label>
+                    <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control" ></select>
+                    <span asp-validation-for="IdStatus" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="ChangesUpdates" class="control-label">Objectives Changes/Updates</label>&nbsp;*
+                    <input asp-for="ChangesUpdates" class="form-control" />
+                    <span asp-validation-for="ChangesUpdates" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">
@@ -84,7 +93,7 @@
             </div>
             <div>
                 <div class="col-md-offset-9">
-                    <input type="submit" value="Submit" class="btn btn-primary" />
+                    <input type="submit" value="Submit" class="btn btn-primary" asp-all-route-id="model.tCMservice.Id" />
                     <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -92,31 +101,44 @@
     </div>
 </div>
 
-<script>
-    function getCode() {
-        var x = document.getElementById('Code_Name');
-        var y = x.options[x.selectedIndex].text;
-        var value = x.options[x.selectedIndex];
-        if (y[0] != '[') {
-            var name = "";
-            for (var i = 0; i < y.length; i++) {
-                name = name + y[i];
-            }
-            document.getElementById('GetName').value = name;
-
-            var url = "@Url.Action("GetDescriptionStage", "TCMServicePlans")";
-            $.get(url, { idStage: $("#Code_Name").val() }, function (data) {$("#lbDescription").text(data);});
-        }
-        else {
-            document.getElementById('GetName').value = "";
-            var url = "@Url.Action("GetDescriptionStage", "TCMServicePlans")";
-            $.get(url, { idStage: 0 }, function (data) {$("#lbDescription").text(data);});
-        }
-    }
-</script>
 
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
+    <script src="~/js/jquery.dataTables.min.js"></script>
 
+    <script type="text/javascript">
+
+        //    jQueryAjaxPost = form => {
+        //        try {
+        //            $.ajax({
+        //                type: 'POST',
+        //                url: form.action,
+        //                data: new FormData(form),
+        //                contentType: false,
+        //                processData: false,
+        //                success: function (res) {
+        //                    if (res.isValid) {
+        //                        $('#view-all').html(res.html)
+        //                        $('#form-modal .modal-body').html('');
+        //                        $('#form-modal .modal-title').html('');
+        //                        $('#form-modal').modal('hide');
+        //                    }
+        //                    else
+        //                        $('#form-modal .modal-body').html(res.html);
+        //                },
+        //                error: function (err) {
+        //                    console.log(err)
+        //                }
+        //            })
+        //            //to prevent default form submit event
+        //            return false;
+        //        } catch (ex) {
+        //            console.log(ex)
+        //        }
+        //}
+    </script>
+}
 
 

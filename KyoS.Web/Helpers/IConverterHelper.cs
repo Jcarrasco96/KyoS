@@ -110,9 +110,9 @@ namespace KyoS.Web.Helpers
         TCMClientViewModel ToTCMClientViewModel(TCMClientEntity model);
         Task<TCMServicePlanEntity> ToTCMServicePlanEntity(TCMServicePlanViewModel model, bool isNew);
         TCMServicePlanViewModel ToTCMServicePlanViewModel(TCMServicePlanEntity model);
-        Task<TCMDomainEntity> ToTCMDomainEntity(TCMDomainViewModel model, bool isNew);
+        Task<TCMDomainEntity> ToTCMDomainEntity(TCMDomainViewModel model, bool isNew, string origin);
         TCMDomainViewModel ToTCMDomainViewModel(TCMDomainEntity model);
-        Task<TCMObjetiveEntity> ToTCMObjetiveEntity(TCMObjetiveViewModel model, bool isNew);
+        Task<TCMObjetiveEntity> ToTCMObjetiveEntity(TCMObjetiveViewModel model, bool isNew, int Origin);
         TCMObjetiveViewModel ToTCMObjetiveViewModel(TCMObjetiveEntity model);
         Task<TCMAdendumEntity> ToTCMAdendumEntity(TCMAdendumViewModel model, bool isNew);
         TCMAdendumViewModel ToTCMAdendumViewModel(TCMAdendumEntity model);

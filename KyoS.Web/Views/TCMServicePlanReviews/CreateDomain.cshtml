@@ -5,7 +5,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="CreateDomain" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMServicePlan(this);">
+        <form asp-action="CreateDomain" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMServicePlanReview(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Id_ServicePlan" />

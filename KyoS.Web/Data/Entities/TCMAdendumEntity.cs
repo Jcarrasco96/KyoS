@@ -18,5 +18,8 @@ namespace KyoS.Web.Data.Entities
 
         public TCMServicePlanEntity TcmServicePlan{ get; set; }
         public TCMDomainEntity TcmDomain { get; set; }
+         
+        public string NeedsIdentified { get; set; }
+        public string LongTerm { get; set; }
     }
 }

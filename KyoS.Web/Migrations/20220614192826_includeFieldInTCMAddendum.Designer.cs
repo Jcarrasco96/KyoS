@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220614192826_includeFieldInTCMAddendum")]
+    partial class includeFieldInTCMAddendum
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4814,9 +4816,6 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("NeedsIdentified")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Origin")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("TcmServicePlanId")
                         .HasColumnType("int");
 
@@ -5591,9 +5590,6 @@ namespace KyoS.Web.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Origin")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Responsible")
                         .HasColumnType("nvarchar(max)");
 
@@ -5718,10 +5714,10 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TcmDomainId")
+                    b.Property<int?>("TCMServicePlanReviewEntityId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TcmServicePlanReviewId")
+                    b.Property<int?>("TcmDomainId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -5729,9 +5725,9 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.HasIndex("TcmDomainId");
+                    b.HasIndex("TCMServicePlanReviewEntityId");
 
-                    b.HasIndex("TcmServicePlanReviewId");
+                    b.HasIndex("TcmDomainId");
 
                     b.ToTable("TCMServicePlanReviewDomains");
                 });
@@ -5742,10 +5738,6 @@ namespace KyoS.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
-
-                    b.Property<string>("ChangesUpdate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateEndObjective")
                         .HasColumnType("datetime2");
@@ -5759,7 +5751,7 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int?>("tcmServicePlanReviewDomainId")
+                    b.Property<int?>("TCMServicePlanReviewDomainEntityId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -5767,7 +5759,7 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.HasIndex("tcmServicePlanReviewDomainId");
+                    b.HasIndex("TCMServicePlanReviewDomainEntityId");
 
                     b.ToTable("TCMServicePlanReviewDomainObjectives");
                 });
@@ -7281,26 +7273,22 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServicePlanReviewDomainEntity", b =>
                 {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanReviewEntity", null)
+                        .WithMany("TCMServicePlanRevDomain")
+                        .HasForeignKey("TCMServicePlanReviewEntityId");
+
                     b.HasOne("KyoS.Web.Data.Entities.TCMDomainEntity", "TcmDomain")
                         .WithMany()
                         .HasForeignKey("TcmDomainId");
 
-                    b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanReviewEntity", "TcmServicePlanReview")
-                        .WithMany("TCMServicePlanRevDomain")
-                        .HasForeignKey("TcmServicePlanReviewId");
-
                     b.Navigation("TcmDomain");
-
-                    b.Navigation("TcmServicePlanReview");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServicePlanReviewDomainObjectiveEntity", b =>
                 {
-                    b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanReviewDomainEntity", "tcmServicePlanReviewDomain")
+                    b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanReviewDomainEntity", null)
                         .WithMany("TCMServicePlanRevDomainObjectiive")
-                        .HasForeignKey("tcmServicePlanReviewDomainId");
-
-                    b.Navigation("tcmServicePlanReviewDomain");
+                        .HasForeignKey("TCMServicePlanReviewDomainEntityId");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServicePlanReviewEntity", b =>

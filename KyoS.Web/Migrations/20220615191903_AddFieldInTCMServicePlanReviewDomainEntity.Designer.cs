@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220615191903_AddFieldInTCMServicePlanReviewDomainEntity")]
+    partial class AddFieldInTCMServicePlanReviewDomainEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -5759,7 +5761,7 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int?>("tcmServicePlanReviewDomainId")
+                    b.Property<int?>("TCMServicePlanReviewDomainEntityId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -5767,7 +5769,7 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.HasIndex("tcmServicePlanReviewDomainId");
+                    b.HasIndex("TCMServicePlanReviewDomainEntityId");
 
                     b.ToTable("TCMServicePlanReviewDomainObjectives");
                 });
@@ -7296,11 +7298,9 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServicePlanReviewDomainObjectiveEntity", b =>
                 {
-                    b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanReviewDomainEntity", "tcmServicePlanReviewDomain")
+                    b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanReviewDomainEntity", null)
                         .WithMany("TCMServicePlanRevDomainObjectiive")
-                        .HasForeignKey("tcmServicePlanReviewDomainId");
-
-                    b.Navigation("tcmServicePlanReviewDomain");
+                        .HasForeignKey("TCMServicePlanReviewDomainEntityId");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServicePlanReviewEntity", b =>

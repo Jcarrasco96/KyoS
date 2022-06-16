@@ -5,7 +5,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="EditDomain" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMAdendum(this);">
+        <form asp-action="EditDomain" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMServicePlanReview(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Origin" />
@@ -20,7 +20,7 @@
                 </div>
                 <div class="col-md-6">
                     <label asp-for="Date_Identified" class="control-label">Identified Date</label>
-                    <input asp-for="Date_Identified" class="form-control" />
+                    <input asp-for="Date_Identified" class="form-control" readonly/>
                     <span asp-validation-for="Date_Identified" class="text-danger"></span>
                 </div>
             </div>
@@ -45,14 +45,14 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Needs_Identified" class="control-label">Need Identified</label>
-                    <textarea asp-for="Needs_Identified" class="form-control" rows="4"></textarea>
+                    <textarea asp-for="Needs_Identified" class="form-control" rows="4" readonly></textarea>
                     <span asp-validation-for="Needs_Identified" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Long_Term" class="control-label">Long Term</label>
-                    <textarea asp-for="Long_Term" class="form-control" rows="4"></textarea>
+                    <textarea asp-for="Long_Term" class="form-control" rows="4" readonly></textarea>
                     <span asp-validation-for="Long_Term" class="text-danger"></span>
                 </div>
             </div>
@@ -119,5 +119,4 @@
                                 //}
     </script>
 }
-
 

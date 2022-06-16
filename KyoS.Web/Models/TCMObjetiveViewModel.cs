@@ -41,6 +41,17 @@ namespace KyoS.Web.Models
         public int Id_Domain { get; set; }
         // public IEnumerable<SelectListItem> Clinics { get; set; }
         public IEnumerable<SelectListItem> Stages { get; set; }
-       
+
+        public int IdServicePlanReview { get; set; }
+
+        public string ChangesUpdates { get; set; }
+
+        //[Required(ErrorMessage = "The field {0} is mandatory.")]
+        [Display(Name = "Status")]
+        
+        public int IdStatus { get; set; }
+        public IEnumerable<SelectListItem> StatusList { get; set; }
+
+        public int Idd { get; set; }
     }
 }

@@ -1405,12 +1405,15 @@ namespace KyoS.Web.Helpers
                 Code = TcmDomainEntity.Code,
                 Name = TcmDomainEntity.Name,
                 TcmServicePlan = TcmDomainEntity.TcmServicePlan,
-                Services = _combosHelper.GetComboServicesNotUsed(TcmDomainEntity.TcmServicePlan.Id)
+                Services = _combosHelper.GetComboServicesNotUsed(TcmDomainEntity.TcmServicePlan.Id),
+                Origin = TcmDomainEntity.Origin
+
             };
         }
 
-        public async Task<TCMDomainEntity> ToTCMDomainEntity(TCMDomainViewModel model, bool isNew)
+        public async Task<TCMDomainEntity> ToTCMDomainEntity(TCMDomainViewModel model, bool isNew, string origin = "Service Plan Review")
         {
+           
             return new TCMDomainEntity
             {
                 Id = isNew ? 0 : model.Id,
@@ -1420,7 +1423,8 @@ namespace KyoS.Web.Helpers
                 TCMObjetive = model.TCMObjetive,
                 Code = model.Code,
                 Name = model.Name,
-                TcmServicePlan = model.TcmServicePlan
+                TcmServicePlan = model.TcmServicePlan,
+                Origin = origin
             };
         }
 
@@ -1740,8 +1744,14 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMObjetiveEntity> ToTCMObjetiveEntity(TCMObjetiveViewModel model, bool isNew)
-        {            
+        public async Task<TCMObjetiveEntity> ToTCMObjetiveEntity(TCMObjetiveViewModel model, bool isNew, int origin)
+        {
+            string valor = "Service Plan";
+            if (origin == 1)
+                valor = "Addendum";
+            if (origin == 2)
+                valor = "Service Plan Review";
+
             return new TCMObjetiveEntity
             {
                 Id = isNew ? 0 : model.Id,
@@ -1751,19 +1761,23 @@ namespace KyoS.Web.Helpers
                 Task = model.task,
                 //Long_Term = model.long_Term,
                 StartDate = model.Start_Date,
+                
                 TargetDate = model.Target_Date,
                 EndDate = model.End_Date,
                 Finish = model.Finish,
                 IdObjetive = model.ID_Objetive,
-                Status = model.Status,
-                Responsible = model.Responsible
-                
+                Status = StatusUtils.GetStatusByIndex(model.IdStatus),
+                Responsible = model.Responsible,
+                Origin = valor
+
             };
         }
 
         public TCMObjetiveViewModel ToTCMObjetiveViewModel(TCMObjetiveEntity TcmObjetiveEntity)
         {
-            return new TCMObjetiveViewModel
+            TCMObjetiveViewModel salida;
+
+            salida = new TCMObjetiveViewModel
             {
                 Id = TcmObjetiveEntity.Id,
                 Id_Domain = TcmObjetiveEntity.TcmDomain.Id,
@@ -1779,8 +1793,22 @@ namespace KyoS.Web.Helpers
                 Finish = TcmObjetiveEntity.Finish,
                 TcmDomain = TcmObjetiveEntity.TcmDomain,
                 Stages = _combosHelper.GetComboStagesNotUsed(TcmObjetiveEntity.TcmDomain),
-                Responsible = TcmObjetiveEntity.Responsible
+                Responsible = TcmObjetiveEntity.Responsible,
+                IdStatus = (TcmObjetiveEntity.Status == StatusType.Open) ? 1 : 2,
+                StatusList = _combosHelper.GetComboClientStatus(),
+                ID_Objetive = TcmObjetiveEntity.IdObjetive,
+                IdServicePlanReview = TcmObjetiveEntity.TcmDomain.TcmServicePlan.TCMServicePlanReview.Id,
+                Idd = TcmObjetiveEntity.Id
+
             };
+            if (TcmObjetiveEntity.Origin == "Service Plan")
+                salida.Origin = 0;
+            if (TcmObjetiveEntity.Origin == "Addendum")
+                salida.Origin = 1;
+            if (TcmObjetiveEntity.Origin == "Service Plan Review")
+                salida.Origin = 2;
+
+            return salida;
         }
 
         public IntakeOrientationCheckListViewModel ToIntakeOrientationChecklistViewModel(IntakeOrientationChecklistEntity model)
@@ -1892,7 +1920,9 @@ namespace KyoS.Web.Helpers
                 Id = isNew ? 0 : model.Id,
                 DateAdendum = model.Date_Identified,
                 TcmServicePlan = model.TcmServicePlan,
-                TcmDomain = model.TcmDomain
+                TcmDomain = model.TcmDomain,
+                LongTerm = model.Long_term,
+                NeedsIdentified = model.Needs_Identified
                 
             };
         }
@@ -1906,7 +1936,9 @@ namespace KyoS.Web.Helpers
                 ListTcmServicePlan = _combosHelper.GetComboServicesPlan(TcmAdendumEntity.TcmServicePlan.TcmClient.Casemanager.Clinic.Id, TcmAdendumEntity.TcmServicePlan.TcmClient.Casemanager.Id, TcmAdendumEntity.TcmServicePlan.TcmClient.CaseNumber),
                 TcmDominio = _combosHelper.GetComboTCMServices(),
                 TcmDomain = TcmAdendumEntity.TcmDomain,
-                DateAdendum = TcmAdendumEntity.DateAdendum
+                DateAdendum = TcmAdendumEntity.DateAdendum,
+                LongTerm = TcmAdendumEntity.LongTerm,
+                NeedsIdentified = TcmAdendumEntity.NeedsIdentified
             };
         }
 

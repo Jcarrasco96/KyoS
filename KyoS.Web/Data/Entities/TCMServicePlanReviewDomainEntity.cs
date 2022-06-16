@@ -18,5 +18,9 @@ namespace KyoS.Web.Data.Entities
         public StatusType Status { get; set; }
 
         public List<TCMServicePlanReviewDomainObjectiveEntity> TCMServicePlanRevDomainObjectiive { get; set; }
+
+        public string CodeDomain { get; set; }
+
+        public TCMServicePlanReviewEntity TcmServicePlanReview { get; set; }
     }
 }

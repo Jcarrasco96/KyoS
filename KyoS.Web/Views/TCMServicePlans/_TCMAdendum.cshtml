@@ -25,22 +25,25 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-1" align="center">
-                                
+                            <th class="col-md-1">
+
                             </th>
-                            <th class="col-md-3" align="center">
+                            <th class="col-md-2" style="text-align:left;">
                                 Name
                             </th>
-                            <th class="col-md-2" align="center">
+                            <th class="col-md-2" style="text-align:center;">
                                 Case number
                             </th>
-                            <th class="col-md-2" align="center">
+                            <th class="col-md-2" style="text-align:center;">
                                 Casemanager
                             </th>
-                            <th class="col-md-2" align="center">
-                                Adendum Date
+                            <th class="col-md-2" style="text-align:center;">
+                                Addendum Date
                             </th>
-                            <th class="col-md-2" align="center">
+                            <th class="col-md-2" style="text-align:center;">
+                                Approved
+                            </th>
+                            <th class="col-md-2">
                             </th>
                         </tr>
                     </thead>
@@ -68,7 +71,7 @@
                                         </tr>
                                         <tr>
                                             <td align="center">
-                                               @if (item.TcmDomain.TCMObjetive.Count() != 0)
+                                                @if (item.TcmDomain.TCMObjetive.Count() != 0)
                                                 {
                                                     <a class="icon-plus-sign-alt"></a>
                                                 }
@@ -85,35 +88,48 @@
                                                             <th class="col-md-2">Target Date</th>
                                                             <th class="col-md-2"></th>
                                                         </tr>
-                                                       @foreach (var product in item.TcmDomain.TCMObjetive)
+                                                        @foreach (var product in item.TcmDomain.TCMObjetive)
                                                         {
-                                                            <tr>
-                                                                <td>@Html.DisplayFor(modelItem => product.IdObjetive)</td>
-                                                                <td>@Html.DisplayFor(modelItem => product.Name)</td>
-                                                                <td>@Html.DisplayFor(modelItem => product.StartDate)</td>
-                                                                <td>@Html.DisplayFor(modelItem => product.TargetDate)</td>
-                                                                <td>
-                                                                   @if (item.TcmServicePlan.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("CaseManager"))
-                                                                    {
-                                                                       @if (item.Approved == 0)
+                                                            @if (product.Origin == "Addendum")
+                                                            {
+                                                                <tr>
+                                                                    <td>@Html.DisplayFor(modelItem => product.IdObjetive)</td>
+                                                                    <td>@Html.DisplayFor(modelItem => product.Name)</td>
+                                                                    <td>@Html.DisplayFor(modelItem => product.StartDate)</td>
+                                                                    <td>@Html.DisplayFor(modelItem => product.TargetDate)</td>
+                                                                    <td>
+                                                                        @if (item.TcmServicePlan.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("CaseManager"))
                                                                         {
-                                                                            <a onclick="showInPopup('@Url.Action("EditObjetive", "TCMServicePlans", new { id = product.Id, Origin = 1 }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning" title="Edit objetive"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                            @if (item.Approved == 0)
+                                                                            {
+                                                                                <a onclick="showInPopup('@Url.Action("EditObjetive", "TCMServicePlans", new { id = product.Id, Origin = 1 }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning" title="Edit objetive"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                            }
                                                                         }
-                                                                    }
-                                                                </td>
-                                                            </tr>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+
                                                         }
                                                     </table>
                                                 </div>
                                             </td>
                                             <td>@Html.DisplayFor(modelItem => item.TcmDomain.Code)</td>
                                             <td>@Html.DisplayFor(modelItem => item.TcmDomain.Name)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.TcmDomain.NeedsIdentified)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.NeedsIdentified)</td>
                                             <td>
-                                               @if (User.IsInRole("CaseManager") && item.Approved == 0)
+                                                @if (User.IsInRole("CaseManager") && item.Approved == 0)
                                                 {
-                                                    <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlans", new { id = item.TcmDomain.Id, Origin = 1}, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning" title="Edit domain"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                    <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlans", new { id = item.TcmDomain.Id, Origin = 1 }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning" title="Edit domain"><i class="glyphicon glyphicon-pencil"></i></a>
                                                     <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlans", new { id = item.TcmDomain.Id, Origin = 1 }, Context.Request.Scheme)','Create TCM Objetive')" class="btn btn-info" title="Create objetive"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                    <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-info disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-plus"></i></a>
                                                 }
                                             </td>
                                         </tr>
@@ -121,32 +137,74 @@
                                 </div>
                             </td>
                             <td>
+                                @if (item.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                {
+                                    <i class="glyphicon glyphicon-user btn-danger"></i>
+                                }
+                                @if (item.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                {
+                                    <i class="glyphicon glyphicon-user btn-primary"></i>
+                                }
+                                &nbsp;
                                 @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Client.Name)
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.CaseNumber)
+                            <td align="center">
+                                @if (item.TcmServicePlan.TcmClient.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                {
+                                    <span class="label label-success">
+                                        @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.CaseNumber)
+                                    </span>
+                                }
+                                @if (item.TcmServicePlan.TcmClient.Client.Status == KyoS.Common.Enums.StatusType.Close)
+                                {
+                                    <span class="label label-default">
+                                        @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.CaseNumber)
+                                    </span>
+                                }
                             </td>
-                            <td>
+                            <td align="center">
                                 @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Casemanager.Name)
                             </td>
-                            <td>
+                            <td align="center">
                                 @Html.DisplayFor(modelItem => item.DateAdendum)
                             </td>
-                            <td align="right">
-                               @if (User.IsInRole("CaseManager") && item.TcmServicePlan.Status == KyoS.Common.Enums.StatusType.Open)
+                            <td align="center">
+                                @if (item.Approved == 2)
                                 {
-                                   @if (item.Approved == 0)
+                                    <span class="label label-success">
+                                        Approved
+                                    </span>
+                                }
+                                @if (item.Approved == 1)
+                                {
+                                    <span class="label label-info">
+                                        Pending
+                                    </span>
+                                }
+                                @if (item.Approved == 0)
+                                {
+                                    <span class="label label-warning">
+                                        Edition
+                                    </span>
+                                }
+                            </td>
+                            <td align="right">
+                                @if (User.IsInRole("CaseManager") && item.TcmServicePlan.Status == KyoS.Common.Enums.StatusType.Open)
+                                {
+                                    @if (item.Approved == 0)
                                     {
-                                       <a onclick="showInPopup('@Url.Action("Edit", "TCMAdendums", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Adendum')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-                                       <a asp-action="FinishEditingAdendum" asp-route-id="@item.Id" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("Edit", "TCMAdendums", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Adendum')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="FinishEditingAdendum" asp-route-id="@item.Id" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></a>
                                     }
-                                   @if (item.Approved == 1)
+                                    @if (item.Approved == 1)
                                     {
-                                       <i class="btn btn-warning glyphicon glyphicon-search"></i>
+                                        <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-ok"></i></a>
                                     }
-                                   @if (item.Approved == 2)
+                                    @if (item.Approved == 2)
                                     {
-                                       <i class="btn btn-success glyphicon glyphicon-flag"></i>
+                                        <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-ok"></i></a>
                                     }
                                 }
                             </td>

@@ -362,14 +362,31 @@
                 }
                 else
                 {
-                    <div class="thumbnail list-group-item list-group-item-success">
-                        <h4 style="align-content:end;">Service<br>Plan</h4>
-                        <p style="text-align:right"><a asp-action="Edit" asp-controller="TCMServicePlans" asp-route-id="@Model.TcmServicePlan.Id" class="btn btn-success" role="button">Go</a></p>
-                    </div>
+                    @if (Model.TcmServicePlan.Approved == 0)
+                    {
+                        <div class="thumbnail list-group-item list-group-item-warning">
+                            <h4 style="align-content:end;">Service<br>Plan</h4>
+                            <p style="text-align:right"><a asp-action="Edit" asp-controller="TCMServicePlans" asp-route-id="@Model.TcmServicePlan.Id" class="btn btn-warning" role="button">Go</a></p>
+                        </div>
+                    }
+                    @if (Model.TcmServicePlan.Approved == 1)
+                    {
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <h4 style="align-content:end;">Service<br>Plan</h4>
+                            <p style="text-align:right"><a asp-action="Edit" asp-controller="TCMServicePlans" asp-route-id="@Model.TcmServicePlan.Id" class="btn btn-info" role="button">Go</a></p>
+                        </div>
+                    }
+                    @if (Model.TcmServicePlan.Approved == 2)
+                    {
+                        <div class="thumbnail list-group-item list-group-item-success">
+                            <h4 style="align-content:end;">Service<br>Plan</h4>
+                            <p style="text-align:right"><a asp-action="Edit" asp-controller="TCMServicePlans" asp-route-id="@Model.TcmServicePlan.Id" class="btn btn-success" role="button">Go</a></p>
+                        </div>
+                    }
                 }
             </div>
             <div class="col-sm-3 col-md-2">
-                @if (Model.TcmServicePlan == null)
+                @if (Model.TcmServicePlan == null || Model.TcmServicePlan.Approved == 0)
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;">Addendum<br>&nbsp;</h4>
@@ -386,22 +403,43 @@
                         </div>
                     }
                     else
-                    { 
-                        <div class="thumbnail list-group-item list-group-item-success">
-                            <h4 style="align-content:end;">Addendum<br>&nbsp;</h4>
-                            <p style="text-align:right"><a asp-action="Adendum" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.CaseNumber" class="btn btn-success" role="button">Go</a></p>
-                        </div>
+                    {
+                        @if (Model.TcmServicePlan.TCMAdendum.Where(n => n.Approved == 0).Count() > 0)
+                        {
+                            <div class="thumbnail list-group-item list-group-item-warning">
+                                <h4 style="align-content:end;">Addendum<br>&nbsp;</h4>
+                                <p style="text-align:right"><a asp-action="Adendum" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.CaseNumber" class="btn btn-warning" role="button">Go</a></p>
+                            </div>
+                        }
+                        else
+                        {
+                            @if (Model.TcmServicePlan.TCMAdendum.Where(n => n.Approved == 1).Count() > 0)
+                            {
+                                <div class="thumbnail list-group-item list-group-item-info">
+                                    <h4 style="align-content:end;">Addendum<br>&nbsp;</h4>
+                                    <p style="text-align:right"><a asp-action="Adendum" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.CaseNumber" class="btn btn-info" role="button">Go</a></p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="thumbnail list-group-item list-group-item-success">
+                                    <h4 style="align-content:end;">Addendum<br>&nbsp;</h4>
+                                    <p style="text-align:right"><a asp-action="Adendum" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.CaseNumber" class="btn btn-success" role="button">Go</a></p>
+                                </div>
+                            }
+                        }
+
                     }
-                    
+
                 }
             </div>
             <div class="col-sm-3 col-md-2">
                 @if (Model.TcmServicePlan == null)
                 {
-                <div class="thumbnail list-group-item list-group-item-text">
-                    <h4 style="align-content:end;">Service Plan<br>Review</h4>
-                    <p style="text-align:right"><a asp-action="Index" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.CaseNumber" class="btn btn-default disabled" role="button">Go</a></p>
-                </div>
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;">Service Plan<br>Review</h4>
+                        <p style="text-align:right"><a asp-action="Index" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.CaseNumber" class="btn btn-default disabled" role="button">Go</a></p>
+                    </div>
                 }
                 else
                 {
@@ -413,13 +451,30 @@
                         </div>
                     }
                     else
-                    { 
-                        <div class="thumbnail list-group-item list-group-item-success">
-                            <h4 style="align-content:end;">Service Plan<br>Review</h4>
-                            <p style="text-align:right"><a asp-action="Edit" asp-controller="TCMServicePlanReviews" asp-route-id="@Model.TcmServicePlan.TCMServicePlanReview.Id" asp-route-IdServicePlan="@Model.TcmServicePlan.Id" class="btn btn-success" role="button">Go</a></p>
-                        </div>
+                    {
+                        @if (Model.TcmServicePlan.TCMServicePlanReview.Approved == 0)
+                        {
+                            <div class="thumbnail list-group-item list-group-item-warning">
+                                <h4 style="align-content:end;">Service Plan<br>Review</h4>
+                                <p style="text-align:right"><a asp-action="Edit" asp-controller="TCMServicePlanReviews" asp-route-id="@Model.TcmServicePlan.TCMServicePlanReview.Id" asp-route-IdServicePlan="@Model.TcmServicePlan.Id" class="btn btn-warning" role="button">Go</a></p>
+                            </div>
+                        }
+                        @if (Model.TcmServicePlan.TCMServicePlanReview.Approved == 1)
+                        {
+                            <div class="thumbnail list-group-item list-group-item-info">
+                                <h4 style="align-content:end;">Service Plan<br>Review</h4>
+                                <p style="text-align:right"><a asp-action="Edit" asp-controller="TCMServicePlanReviews" asp-route-id="@Model.TcmServicePlan.TCMServicePlanReview.Id" asp-route-IdServicePlan="@Model.TcmServicePlan.Id" class="btn btn-info" role="button">Go</a></p>
+                            </div>
+                        }
+                        @if (Model.TcmServicePlan.TCMServicePlanReview.Approved == 2)
+                        {
+                            <div class="thumbnail list-group-item list-group-item-success">
+                                <h4 style="align-content:end;">Service Plan<br>Review</h4>
+                                <p style="text-align:right"><a asp-action="Edit" asp-controller="TCMServicePlanReviews" asp-route-id="@Model.TcmServicePlan.TCMServicePlanReview.Id" asp-route-IdServicePlan="@Model.TcmServicePlan.Id" class="btn btn-success" role="button">Go</a></p>
+                            </div>
+                        }
                     }
-                    
+
                 }
             </div>
              <div class="col-sm-3 col-md-2">
