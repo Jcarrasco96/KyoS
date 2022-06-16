@@ -1423,6 +1423,8 @@ namespace KyoS.Web.Controllers
                             TcmClient = _context.TCMClient
                                                 .Include(d => d.Client)
                                                 .ThenInclude(d => d.LegalGuardian)
+                                                .Include(d => d.Casemanager)
+                                                .ThenInclude(d => d.Clinic)
                                                 .FirstOrDefault(n => n.Id == id),
                             Date = DateTime.Now,
                             Id = 0,
@@ -1499,7 +1501,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> ClientsDocuments(int id = 0)
+        public async Task<IActionResult> ClientsDocuments(int id = 0, int idTCMCLient = 0)
         {
            
             UserEntity user_logged = await _context.Users
@@ -1517,7 +1519,9 @@ namespace KyoS.Web.Controllers
                                                        .Include(n => n.Clinic)
                                                        .Include(n => n.Documents)
                                                        .FirstOrDefaultAsync(n => n.Id == id);
-                return View(await _converterHelper.ToClientViewModel(Client,user_logged.Id));
+                ClientViewModel model = await _converterHelper.ToClientViewModel(Client, user_logged.Id);
+                model.IdTCMClient = idTCMCLient;
+                return View(model);
             }
         }
 
@@ -1619,7 +1623,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult CreateTCMFeeAgreement(int id = 0)
+        public IActionResult CreateTCMFeeAgreement(int id = 0, int idTCMCLient = 0)
         {
 
             UserEntity user_logged = _context.Users
@@ -1659,8 +1663,9 @@ namespace KyoS.Web.Controllers
                     {
                         if (intakefeeAgreement.Client.LegalGuardian == null)
                             intakefeeAgreement.Client.LegalGuardian = new LegalGuardianEntity();
-                        model = _converterHelper.ToIntakeFeeAgreementViewModel(intakefeeAgreement);
 
+                        model = _converterHelper.ToIntakeFeeAgreementViewModel(intakefeeAgreement);
+                        model.IdTCMClient = idTCMCLient;
                         return View(model);
                     }
 
@@ -1935,7 +1940,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult CreateTCMMedicalhistory(int id = 0)
+        public IActionResult CreateTCMMedicalhistory(int id = 0, int idTCMClient = 0)
         {
 
             UserEntity user_logged = _context.Users
@@ -2114,6 +2119,7 @@ namespace KyoS.Web.Controllers
                         };
                         if (model.Client.LegalGuardian == null)
                             model.Client.LegalGuardian = new LegalGuardianEntity();
+                        model.IdTCMClient = idTCMClient;
                         return View(model);
                     }
                     else
@@ -2121,7 +2127,7 @@ namespace KyoS.Web.Controllers
                         if (intakeMedicalHistory.Client.LegalGuardian == null)
                             intakeMedicalHistory.Client.LegalGuardian = new LegalGuardianEntity();
                         model = _converterHelper.ToIntakeMedicalHistoryViewModel(intakeMedicalHistory);
-
+                        model.IdTCMClient = idTCMClient;
                         return View(model);
                     }
 
@@ -2180,7 +2186,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult CreateTCMMedication(int id = 0)
+        public IActionResult CreateTCMMedication(int id = 0, int idTCMClient = 0)
         {
 
             UserEntity user_logged = _context.Users
@@ -2209,6 +2215,7 @@ namespace KyoS.Web.Controllers
                     };
                     if (model.Client.MedicationList == null)
                         model.Client.MedicationList = new List<MedicationEntity>();
+                    model.IdTCMClient = idTCMClient;
                     return View(model);
                 }
             }
@@ -2225,6 +2232,7 @@ namespace KyoS.Web.Controllers
             };
             if (model.Client.MedicationList == null)
                 model.Client.MedicationList = new List<MedicationEntity>();
+            model.IdTCMClient = idTCMClient;
             return View(model);
         }
 

@@ -266,9 +266,11 @@ namespace KyoS.Web.Data
                                    .HasIndex(s => s.Id)
                                    .IsUnique();
 
-            modelBuilder.Entity<TCMDischargeEntity>()
-                                  .HasIndex(s => s.Id)
-                                  .IsUnique();
+            modelBuilder.Entity<TCMServicePlanEntity>()
+                        .HasOne(c => c.TCMDischarge)
+                        .WithOne(s => s.TcmServicePlan)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMDischargeEntity>(s => s.TcmServicePlan_FK);
 
             modelBuilder.Entity<TCMDischargeFollowUpEntity>()
                        .HasOne(o => o.TcmDischarge)

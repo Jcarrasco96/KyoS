@@ -88,5 +88,7 @@ namespace KyoS.Web.Models
         [Display(Name = "Facilitator for individual therapy")]
         public int IdFacilitatorIT { get; set; }
         public IEnumerable<SelectListItem> ITFacilitators { get; set; }
+
+        public int IdTCMClient { get; set; }
     }
 }

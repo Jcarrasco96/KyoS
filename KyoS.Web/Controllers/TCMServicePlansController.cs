@@ -111,7 +111,9 @@ namespace KyoS.Web.Controllers
                                                      .ToListAsync();
               
             }
-
+            
+            ViewData["origin"] = caseNumber;
+            
             return View(servicePlan);
 
         }
@@ -1046,6 +1048,8 @@ namespace KyoS.Web.Controllers
 
             ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
             CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
+            TCMClientEntity tcmClient = await _context.TCMClient.FirstOrDefaultAsync(n => n.CaseNumber == tcmClientId);
+
 
             if (user_logged.UserType.ToString() == "CaseManager")
             {
@@ -1076,6 +1080,8 @@ namespace KyoS.Web.Controllers
                                              .ToListAsync();
 
                     ViewData["tcmClientId"] = tcmClientId;
+                    if(tcmClient != null)
+                        ViewData["Id"] = tcmClient.Id;
                 }
                 
 

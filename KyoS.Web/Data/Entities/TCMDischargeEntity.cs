@@ -9,7 +9,9 @@ namespace KyoS.Web.Data.Entities
     public class TCMDischargeEntity
     {
         public int Id { get; set; }
-        
+
+        public int TcmServicePlan_FK { get; set; }
+
         public TCMServicePlanEntity TcmServicePlan { get; set; }
 
         [Display(Name = "Date of Staffing")]

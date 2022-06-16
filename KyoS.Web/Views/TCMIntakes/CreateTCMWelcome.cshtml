@@ -15,7 +15,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("TCM Intakes", "TCMIntakeDashboard", "TCMIntakes", new { id = Model.TcmClient_FK })
+                @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 1 })
             </li>
             <li class="active">
                 Mental Health Targeted Case Management Program

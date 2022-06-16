@@ -86,22 +86,7 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager")]
         public IActionResult Create(int id = 0)
         {
-            if (id == 1)
-            {
-                ViewBag.Creado = "Y";
-            }
-            else
-            {
-                if (id == 2)
-                {
-                    ViewBag.Creado = "E";
-                }
-                else
-                {
-                    ViewBag.Creado = "N";
-                }
-            }
-
+            
             TCMDischargeViewModel model;
 
             if (User.IsInRole("CaseManager"))
