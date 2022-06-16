@@ -15,6 +15,8 @@
     SettingEntity setting = null;
     if(user.Clinic != null)
         setting = DataContext.Settings.FirstOrDefault(s => s.Clinic.Id == user.Clinic.Id);
+
+    int counts_of_message = DataContext.Messages.Count(m => (m.To == user.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead));
  }
 
 <!DOCTYPE html>
@@ -93,6 +95,59 @@
             filter: alpha(opacity=90);
             opacity: 0.9;
             -moz-opacity: 0.8;
+        }
+
+        .message-counter-cero {
+            position: absolute;
+            right: 6px;
+            top: 12px;
+            background-color: #777777;
+            color: #ffffff;
+            padding: 3px 5.5px;
+            border-radius: 50px;
+            line-height: 1;
+            font-size: 11px;
+        }
+
+        .message-counter {
+            position: absolute;
+            right: 6px;
+            top: 12px;
+            background-color: #d9534f;
+            color: #ffffff;
+            padding: 3px 5.5px;
+            border-radius: 50px;
+            line-height: 1;
+            font-size: 11px;
+        }
+
+        .notifications-counter {
+            position: absolute;
+            right: 6px;
+            top: 12px;
+            background-color: #d9534f;
+            color: #ffffff;
+            padding: 3px 5.5px;
+            border-radius: 50px;
+            line-height: 1;
+            font-size: 10px;
+        }
+
+        .notifications-counter-cero {
+            position: absolute;
+            right: 6px;
+            top: 12px;
+            background-color: #777777;
+            color: #ffffff;
+            padding: 3px 5.5px;
+            border-radius: 50px;
+            line-height: 1;
+            font-size: 10px;
+        }
+
+        .notice-header { 
+            padding: 15px 20px; border-bottom: 1px solid #e6ecf5; 
+
         }
 
         .loader {
@@ -657,71 +712,169 @@
                 <ul class="nav navbar-nav navbar-right">
                     @if (User.Identity.IsAuthenticated)
                     {
-                    <li>
-                        <a class="">
-                            @if (User.IsInRole("Facilitator"))
-                            {
-                                <span class="label label-default">
-                                    Facilitator
-                                </span>
-                            }
-                            @if (User.IsInRole("CaseManager"))
-                            {
-                                <span class="label label-default">
-                                    Case Manager
-                                </span>
-                            }
-                            @if (User.IsInRole("Supervisor"))
-                            {
-                                <span class="label label-default">
-                                    Supervisor
-                                </span>
-                            }
-                            @if (User.IsInRole("SupervisorTCM"))
-                            {
-                                <span class="label label-default">
-                                    TCM Supervisor
-                                </span>
-                            }
-                            @if (User.IsInRole("Manager"))
-                            {
-                                <span class="label label-default">
-                                    Manager
-                                </span>
-                            }
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <span class="label label-default">
-                                    Administrator
-                                </span>
-                            }
-                        </a>
-                    </li>
-                    <li class="class=" dropdown open"">
-                        <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                            @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
-                            @*<div class="user-info">*@
-                            <span class="name pdd-right-5">@name</span>
-                            @*<i class="ti-angle-down font-size-10"></i>*@
-                            <span class="caret"></span>
-                            @*</div>*@
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
+                        <li class="class=" dropdown open"">
+                            <span class="notifications-counter-cero">0</span>
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" style="background-color: transparent;">
+                                <i class="icon-bell">&nbsp;</i>
+                            </a>
+                            <ul class="dropdown-menu ">
+                                <li class="notice-header">
+                                    <i class="icon-bell pdd-right-10"></i>
+                                    <span>Notifications</span>
+                                </li>
+                                <li class="notice-header">
+                                    <span>&nbsp;&nbsp; In Construction</span>
+                                </li>
+                                @*<li>
+                        <ul class="list-info overflow-y-auto relative scrollable">
                             <li>
                                 <a href="#">
-                                    <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
-                                    <span>Inbox</span>
+                                    <img class="thumb-img" src="assets/images/avatars/thumb-5.jpg" alt="">
+                                    <div class="info">
+                                        <span class="title">
+                                            <span class="font-size-14 text-semibold">Jennifer Watkins</span>
+                                            <span class="text-gray">commented on your <span class="text-dark">post</span></span>
+                                        </span>
+                                        <span class="sub-title">5 mins ago</span>
+                                    </div>
                                 </a>
                             </li>
-                            <li role="separator" class="divider"></li>
                             <li>
-                                <a asp-area="" asp-controller="Account" asp-action="Logout">
-                                    <i class="icon-off" style="padding-right: 10px !important;"></i>
-                                    <span>Logout</span>
+                                <a href="#">
+                                    <img class="thumb-img" src="assets/images/avatars/thumb-4.jpg" alt="">
+                                    <div class="info">
+                                        <span class="title">
+                                            <span class="font-size-14 text-semibold">Samuel Field</span>
+                                            <span class="text-gray">likes your <span class="text-dark">photo</span></span>
+                                        </span>
+                                        <span class="sub-title">8 hours ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="thumb-img bg-primary">
+                                        <span class="text-white">M</span>
+                                    </span>
+                                    <div class="info">
+                                        <span class="title">
+                                            <span class="font-size-14 text-semibold">Michael Birch</span>
+                                            <span class="text-gray">likes your <span class="text-dark">photo</span></span>
+                                        </span>
+                                        <span class="sub-title">5 hours ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="thumb-img bg-success">
+                                        <span class="text-white"><i class="fa fa-paper-plane-o"></i></span>
+                                    </span>
+                                    <div class="info">
+                                        <span class="title">
+                                            <span class="font-size-14 text-semibold">Message sent</span>
+                                        </span>
+                                        <span class="sub-title">8 hours ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="thumb-img bg-info">
+                                        <span class="text-white"><i class="ti-user"></i></span>
+                                    </span>
+                                    <div class="info">
+                                        <span class="title">
+                                            <span class="font-size-14 text-semibold">Admin</span>
+                                            <span class="text-gray">Welcome on board</span>
+                                        </span>
+                                        <span class="sub-title">8 hours ago</span>
+                                    </div>
                                 </a>
                             </li>
                         </ul>
                     </li>
+
+                    <li class="notice-footer">
+                        <span>
+                            <a href="#" class="text-gray">Check all notifications <i class="ei-right-chevron pdd-left-5 font-size-10"></i></a>
+                        </span>
+                    </li>*@
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="">
+                                @if (User.IsInRole("Facilitator"))
+                                {
+                                    <span class="label label-default">
+                                        Facilitator
+                                    </span>
+                                }
+                                @if (User.IsInRole("CaseManager"))
+                                {
+                                    <span class="label label-default">
+                                        Case Manager
+                                    </span>
+                                }
+                                @if (User.IsInRole("Supervisor"))
+                                {
+                                    <span class="label label-default">
+                                        Supervisor
+                                    </span>
+                                }
+                                @if (User.IsInRole("SupervisorTCM"))
+                                {
+                                    <span class="label label-default">
+                                        TCM Supervisor
+                                    </span>
+                                }
+                                @if (User.IsInRole("Manager"))
+                                {
+                                    <span class="label label-default">
+                                        Manager
+                                    </span>
+                                }
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <span class="label label-default">
+                                        Administrator
+                                    </span>
+                                }
+                            </a>
+                        </li>
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
+                                @*<div class="user-info">*@
+                                <span class="name pdd-right-5">@name</span>
+                                @*<i class="ti-angle-down font-size-10"></i>*@
+                                <span class="caret"></span>
+                                @*</div>*@
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a asp-area="" asp-controller="Messages" asp-action="Index">
+                                        <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
+                                        Inbox
+                                        @if (counts_of_message == 0)
+                                        {
+                                            <span class="message-counter-cero">@counts_of_message</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="message-counter">@counts_of_message</span>
+                                        }
+                                    </a>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li>
+                                    <a asp-area="" asp-controller="Account" asp-action="Logout">
+                                        <i class="icon-off" style="padding-right: 10px !important;"></i>
+                                        <span>Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     }
                 </ul>
             </div>
