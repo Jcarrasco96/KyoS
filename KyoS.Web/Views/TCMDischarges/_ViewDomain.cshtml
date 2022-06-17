@@ -1,0 +1,40 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMDomainEntity>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">TCM Service Plan's Domain</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-hover table-responsive table-striped" id="MyTable">
+            <thead>
+                <tr>
+                    <th class="col-md-2" style="text-align:center;">
+                        Domain Used
+                    </th>
+                    <th class="col-md-2">
+                        Domain Code
+                    </th>
+                    <th class="col-md-6" style="text-align:left;">
+                        Domain Name
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td align="center">
+                            @Html.DisplayFor(modelItem => item.Used)
+                        </td>
+                        <td align="left">
+                            @Html.DisplayFor(modelItem => item.Code)
+                        </td>
+                        <td align="left">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

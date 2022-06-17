@@ -27,5 +27,8 @@ namespace KyoS.Web.Data.Entities
 
         public string Origin { get; set; }
 
+        public bool Used { get; set; }
+        public bool Status { get; set; }
+
     }
 }

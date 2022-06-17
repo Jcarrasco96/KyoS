@@ -4021,5 +4021,40 @@ namespace KyoS.Web.Helpers
             };
 
         }
+
+        public async Task<TCMDischargeFollowUpEntity> ToTCMDischargeFollowUpEntity(TCMDischargeFollowUpViewModel model, bool isNew)
+        {
+            TCMDischargeFollowUpEntity salida;
+            salida  = new TCMDischargeFollowUpEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Address_Location = model.Address_Location,
+                NextAppt = model.NextAppt,
+                PhoneNumber = model.PhoneNumber,
+                ProviderAgency = model.ProviderAgency,
+                TcmDischarge = await _context.TCMDischarge.FirstAsync(n => n.Id == model.IdTCMDischarge),
+                TypeService = model.TypeService
+
+            };
+
+            return salida;
+        }
+
+        public TCMDischargeFollowUpViewModel ToTCMDischargeFollowUpViewModel(TCMDischargeFollowUpEntity model)
+        {
+            return new TCMDischargeFollowUpViewModel
+            {
+                Id = model.Id,
+                Address_Location = model.Address_Location,
+                NextAppt = model.NextAppt,
+                PhoneNumber = model.PhoneNumber,
+                ProviderAgency = model.ProviderAgency,
+                TcmDischarge = model.TcmDischarge,
+                TypeService = model.TypeService,
+                IdTCMDischarge = model.TcmDischarge.Id
+            };
+
+        }
+
     }
 }

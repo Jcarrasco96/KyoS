@@ -32,7 +32,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
-        public async Task<IActionResult> Index(int idError = 0)
+        public async Task<IActionResult> Index(int idError = 0, int idTCMClient = 0)
         {
 
             UserEntity user_logged = await _context.Users
@@ -78,15 +78,15 @@ namespace KyoS.Web.Controllers
                                                                        .OrderBy(m => m.TcmServicePlan.TcmClient.CaseNumber)
                                                                        .ToListAsync();
 
+                ViewData["idTCMClient"] = idTCMClient;
                 return View(tcmDischarge);
             }
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "CaseManager")]
         public IActionResult Create(int id = 0)
         {
-            
+
             TCMDischargeViewModel model;
 
             if (User.IsInRole("CaseManager"))
@@ -121,10 +121,12 @@ namespace KyoS.Web.Controllers
                         TcmServicePlan = _context.TCMServicePlans
                                                  .Include(n => n.TcmClient)
                                                  .ThenInclude(n => n.Client)
+                                                 .Include(n => n.TCMDomain)
+                                                 .Include(n => n.TCMService)
                                                  .FirstOrDefault(n => n.Id == id),
                         TcmServices = _context.TCMServices.ToList(),
                         TcmDischargeServiceStatus = new List<TCMDischargeServiceStatusEntity>()
-                        
+
                     };
                     TCMDischargeEntity tcmDischarge = _context.TCMDischarge.FirstOrDefault(n => n.TcmServicePlan.Id == id);
                     if (tcmDischarge == null)
@@ -135,25 +137,8 @@ namespace KyoS.Web.Controllers
                     {
                         model.Id = tcmDischarge.Id;
                     }
-                    TCMDischargeServiceStatusEntity ServiceStatus = new TCMDischargeServiceStatusEntity();
-
-                    foreach (var item in model.TcmServices)
-                    {
-                        ServiceStatus.CodeService = item.Code;
-                        ServiceStatus.NameService = item.Name;
-                        ServiceStatus.Status = false;
-                        ServiceStatus.Id = 0;
-                        model.TcmDischargeServiceStatus.Add(ServiceStatus);
-                        ServiceStatus = new TCMDischargeServiceStatusEntity();
-                    }
-                    TCMDischargeFollowUpEntity tcmDischargeFollowUp = new TCMDischargeFollowUpEntity();
-                    tcmDischargeFollowUp.ProviderAgency = "";
-                    tcmDischargeFollowUp.TypeService = "";
-                    tcmDischargeFollowUp.Address_Location = "";
-                    tcmDischargeFollowUp.PhoneNumber = "";
-                    tcmDischargeFollowUp.NextAppt = "";
-                    model.TcmDischargeFollowUp.Add(tcmDischargeFollowUp);
-                    //model.TcmDischargeFollowUp.Insert(0,tcmDischargeFollowUp);
+                    
+                    
                     return View(model);
                 }
             }
@@ -181,16 +166,15 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        List<TCMDischargeEntity> tcmDischarge = await _context.TCMDischarge
+                        TCMDischargeEntity tcmDischarge = await _context.TCMDischarge
                                                                        .Include(m => m.TcmServicePlan)
                                                                        .ThenInclude(m => m.TcmClient)
                                                                        .ThenInclude(m => m.Client)
                                                                        .Include(n => n.TcmDischargeFollowUp)
-                                                                       .Where(m => m.TcmServicePlan.TcmClient.Casemanager.LinkedUser == user_logged.UserName)
-                                                                       .OrderBy(m => m.TcmServicePlan.TcmClient.CaseNumber)
-                                                                       .ToListAsync();
+                                                                       .FirstOrDefaultAsync(m => m.TcmServicePlan.TcmClient.Casemanager.LinkedUser == user_logged.UserName
+                                                                            && m.TcmServicePlan.Id == tcmDischargeViewModel.IdServicePlan);
 
-                        return RedirectToAction("Index", "TCMDischarges");
+                        return RedirectToAction("Index", "TCMDischarges", new { idTCMClient = tcmDischarge.TcmServicePlan.TcmClient.Id});
                     }
                     catch (System.Exception ex)
                     {
@@ -228,6 +212,8 @@ namespace KyoS.Web.Controllers
                                                               .Include(b => b.TcmServicePlan)
                                                               .ThenInclude(b => b.TcmClient)
                                                               .ThenInclude(b => b.Client)
+                                                              .Include(b => b.TcmServicePlan)
+                                                              .ThenInclude(b => b.TCMDomain)
                                                               .FirstOrDefault(m => m.Id == id);
                     if (TcmDischarge == null)
                     {
@@ -360,5 +346,224 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("Index", "TCMDischarges");
         }
+
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult CreateTCMDischargeFolowUp(int idDischarge = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMDischargeFollowUpViewModel model;
+
+            if (User.IsInRole("CaseManager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMDischargeEntity tcmDischarge = _context.TCMDischarge
+                                                                      .Include(n => n.TcmServicePlan)
+                                                                      .ThenInclude(n => n.TcmClient)
+                                                                      .FirstOrDefault(n => n.Id == idDischarge);
+
+                    if (tcmDischarge != null)
+                    {
+
+                        model = new TCMDischargeFollowUpViewModel
+                        {
+                            TcmDischarge = _context.TCMDischarge
+                                                   .Include(n => n.TcmServicePlan)
+                                                   .ThenInclude(n => n.TcmClient)
+                                                   .ThenInclude(n => n.Client)
+                                                   .FirstOrDefault(n => n.Id == idDischarge),
+                            Id = 0,
+                            IdTCMDischarge = idDischarge,
+                            Address_Location = "",
+                            NextAppt = "",
+                            PhoneNumber = "",
+                            ProviderAgency = "",
+                            TypeService = ""
+                            
+                        };
+
+                        return View(model);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "TCMDischarges");
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "TCMDischarges");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> CreateTCMDischargeFolowUp(TCMDischargeFollowUpViewModel DischargeFollowUpViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMDischargeFollowUpEntity dischargeFollowUpEntity = await _converterHelper.ToTCMDischargeFollowUpEntity(DischargeFollowUpViewModel, false);
+
+               
+                    _context.TCMDischargeFollowUp.Add(dischargeFollowUpEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        List<TCMDischargeFollowUpEntity> dischargeFollowUp = await _context.TCMDischargeFollowUp
+                                                                                           .Include(h => h.TcmDischarge)
+                                                                                           .ThenInclude(f => f.TcmServicePlan)
+                                                                                           .ThenInclude(f => f.TcmClient)
+                                                                                           .ThenInclude(f => f.Client)
+                                                                                           .Where(n => n.TcmDischarge.Id == DischargeFollowUpViewModel.IdTCMDischarge)
+                                                                                           .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDischargeFollowUp", dischargeFollowUp) });
+
+                        
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+               
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMDischargeFolowUp", DischargeFollowUpViewModel) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> EditTCMDischargeFolowUp(int id = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                  .Include(u => u.Clinic)
+                                                  .ThenInclude(c => c.Setting)
+                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (User.IsInRole("CaseManager"))
+            {
+
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+                {
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+
+
+                TCMDischargeFollowUpEntity tcmDischargeFollowUpEntity = await _context.TCMDischargeFollowUp
+                                                                                      .Include(n => n.TcmDischarge)
+                                                                                      .ThenInclude(n => n.TcmServicePlan)
+                                                                                      .ThenInclude(n => n.TcmClient)
+                                                                                      .ThenInclude(n => n.Client)
+                                                                                      .FirstOrDefaultAsync(s => s.Id == id);
+
+
+                TCMDischargeFollowUpViewModel model = _converterHelper.ToTCMDischargeFollowUpViewModel(tcmDischargeFollowUpEntity);
+               
+                return View(model);
+
+            }
+            else
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> EditTCMDischargeFolowUp(TCMDischargeFollowUpViewModel tcmDischargeFollowUpViewModel)
+        {
+
+            UserEntity user_logged = await _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .ThenInclude(c => c.Setting)
+                                                 .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (User.IsInRole("CaseManager"))
+            {
+
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+                {
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+
+                
+                TCMDischargeFollowUpEntity tcmDischargeFollowUpEntity = await _converterHelper.ToTCMDischargeFollowUpEntity(tcmDischargeFollowUpViewModel, false);
+               
+                if (ModelState.IsValid)
+                {
+                    _context.Update(tcmDischargeFollowUpEntity);
+                   
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        List<TCMDischargeFollowUpEntity> tcmDischargeFollowUpEntityList = await _context.TCMDischargeFollowUp
+                                                                                                 .Include(h => h.TcmDischarge)
+                                                                                                 .ThenInclude(f => f.TcmServicePlan)
+                                                                                                 .ThenInclude(f => f.TcmClient)
+                                                                                                 .ThenInclude(f => f.Client)
+                                                                                                 .Where(g => g.TcmDischarge.Id == tcmDischargeFollowUpViewModel.IdTCMDischarge)
+                                                                                                 .ToListAsync();
+                                                                                                 
+                                                                                                 
+
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDischargeFollowUp", tcmDischargeFollowUpEntityList) });
+
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditTCMDischargeFolowUp", tcmDischargeFollowUpViewModel) });
+                }
+
+                return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditTCMDischargeFolowUp", tcmDischargeFollowUpViewModel) });
+
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> DeleteDischargeFollowUp(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMDischargeFollowUpEntity tcmDischargeFollowUpEntity = await _context.TCMDischargeFollowUp
+                                                                                  .Include(n => n.TcmDischarge)
+                                                                                  .FirstOrDefaultAsync(s => s.Id == id);
+            if (tcmDischargeFollowUpEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.TCMDischargeFollowUp.Remove(tcmDischargeFollowUpEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1, caseNumber = 0 });
+            }
+
+            return RedirectToAction("Edit", new { id = tcmDischargeFollowUpEntity.Id });
+        }
+
     }
 }
