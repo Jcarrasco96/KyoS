@@ -1,0 +1,79 @@
+﻿@model KyoS.Web.Models.BioViewModel
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="Client.Name" class="control-label">Client Name</label>
+        <input asp-for="Client.Name" class="form-control" readonly>
+        <span asp-validation-for="Client.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.Code" class="control-label">Medical Record</label>
+        <input asp-for="Client.Code" class="form-control" readonly>
+        <span asp-validation-for="Client.Code" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.DateOfBirth" class="control-label">DOB</label>
+        <input asp-for="Client.DateOfBirth" class="form-control" readonly>
+        <span asp-validation-for="Client.DateOfBirth" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="ReferralName" class="control-label">Referral Source</label>
+        <input asp-for="ReferralName" class="form-control" readonly>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="LegalGuardianName" class="control-label">Legal Guardian</label>
+        <input asp-for="LegalGuardianName" class="form-control" readonly>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="LegalGuardianTelephone" class="control-label">Legal Guardian Phone</label>
+        <input asp-for="LegalGuardianTelephone" class="form-control" readonly>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="EmergencyContactName" class="control-label">Emergency Contact</label>
+        <input asp-for="EmergencyContactName" class="form-control" readonly>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="RelationShipOfEmergencyContact" class="control-label">Relationship</label>
+        <input asp-for="RelationShipOfEmergencyContact" class="form-control" readonly>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="EmergencyContactTelephone" class="control-label">Emergency Contact Phone</label>
+        <input asp-for="EmergencyContactTelephone" class="form-control" readonly>
+    </div>
+    <div class="container-fluid">
+        &nbsp;
+    </div>
+</div>
+<div class="container-fluid">
+    <hr />
+</div>
+<div class="col-md-12">
+    <pre>
+<strong>1. DEMOGRAPHIC DATA:</strong>
+        
+        The purpose of mental health programs/services is to assist clients in gaining more stable mental health and reduce behavioral symptoms and health risks.\
+
+        Program: <input type="checkbox" asp-for="CMH" class="form-check-input"> CMH <input type="checkbox" asp-for="Priv" class="form-check-input"> PRIV               Setting: <strong><u><input asp-for="Setting"></u></strong>                         Select: <input type="checkbox" asp-for="BioH0031HN" class="form-check-input"> BIO H0031 HN  <input type="checkbox" asp-for="IDAH0031HO" class="form-check-input"> IDA H0031 HO 
+    
+           Date: <input asp-for="DateBio">                Time: <input asp-for="StartTime" > - <input asp-for="EndTime">                                      
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+<strong>2.  CLIENT’S PRESENTING PROBLEM (S):</strong> (list specific symptoms, onset history, criteria for diagnosis and justification  of  treatment recommendations)
+    <textarea asp-for="PresentingProblem" rows="10" style="width:90%"></textarea> 
+
+    <strong>CLIENT’S ASSESSMENT OF SITUATION: </strong>(list how the client’s symptoms are affecting clients emotional functioning and use their own words)
+    <textarea asp-for="ClientAssessmentSituation" style="width:90%" rows="2"></textarea> 
+
+    <strong>FAMILY'S ASSESSMENT OF SITUATION: </strong>(if applicable, list how the client’s symptoms are affecting clients emotional functioning and use family’s own words)
+    <textarea asp-for="FamilyAssessmentSituation" style="width:90%" rows="2"></textarea> 
+
+    <strong>FAMILY'S EMOTIONAL FUNCTIONING: </strong> (describe any emotional issues, difficulties functioning, substance abuse and/or abuse history affecting family members)
+    <textarea asp-for="FamilyEmotional" style="width:90%" rows="2"></textarea> 
+
+    <strong>LEGAL REPRESENTATIVE’S ASSESSMENT OF SITUATION: </strong> (if applicable, in their own words)
+    <textarea asp-for="LegalAssessment" style="width:90%" rows="2"></textarea> 
+    </pre>
+</div>

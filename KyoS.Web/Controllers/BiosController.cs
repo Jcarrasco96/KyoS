@@ -90,7 +90,7 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            BioViewModel model;
+            BioViewModel model = new BioViewModel();
 
             if (User.IsInRole("Supervisor"))
             {
@@ -297,8 +297,8 @@ namespace KyoS.Web.Controllers
                         IdIfSexuallyActive = 0,
                         IfSexuallyActive_Status = _combosHelper.GetComboBio_IfSexuallyActive(),
                         ClientDenied = false,
-                        StartTime = DateTime.Now,
-                        EndTime = DateTime.Now,
+                        /*StartTime = DateTime.Now,
+                        EndTime = DateTime.Now,*/
                         ForHowLong = 0
                     };
                     if (model.Client.LegalGuardian == null)
@@ -323,219 +323,6 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            model = new BioViewModel
-            {
-                IdClient = id,
-                Client = _context.Clients.Include(n => n.LegalGuardian)
-                                                 .Include(n => n.EmergencyContact)
-                                                 .Include(n => n.MedicationList)
-                                                 .Include(n => n.Referred)
-                                                 .Include(n => n.List_BehavioralHistory)
-                                                 .FirstOrDefault(n => n.Id == id),
-                AdultCurrentExperience = "",
-                Affect_Angry = false,
-                Affect_Anxious = false,
-                Affect_Appropriate = false,
-                Affect_Blunted = false,
-                Affect_Constricted = false,
-                Affect_Expansive = false,
-                Affect_Flat = false,
-                Affect_labile = false,
-                Affect_Other = false,
-                Affect_Tearful_Sad = false,
-                AlternativeDiagnosis = "",
-                Appearance_Bizarre = false,
-                Appearance_Cleaned = false,
-                Appearance_Disheveled = false,
-                Appearance_FairHygiene = false,
-                Appearance_WellGroomed = false,
-                Appetite = Bio_Appetite.Diminished,
-                ApproximateDateReport = DateTime.Now,
-                ApproximateDateReport_Where = "",
-                AReferral = false,
-                AReferral_Services = "",
-                AReferral_When = "",
-                AReferral_Where = "",
-                BioH0031HN = false,
-                IDAH0031HO = false,
-                CanClientFollow = false,
-                Children = "",
-                ClientAssessmentSituation = "",
-                ClientFamilyAbusoTrauma = false,
-                CMH = false,
-                Comments = "",
-                DateAbuse = DateTime.Now,
-                DateBio = DateTime.Now,
-                DateSignatureLicensedPractitioner = DateTime.Now,
-                DateSignaturePerson = DateTime.Now,
-                DateSignatureSupervisor = DateTime.Now,
-                DateSignatureUnlicensedTherapist = DateTime.Now,
-                Details = "",
-                DoesClient = false,
-                DoesClientRequired = false,
-                DoesClientRequired_Where = "",
-                DoesNotAlways = false,
-                DoesTheClientExperience = false,
-                DoesTheClientExperience_Where = "",
-                DoYouHaveAnyPhysical = false,
-                DoYouHaveAnyReligious = false,
-                DoYouHaveAnyVisual = false,
-                DoYouOwn = false,
-                DoYouOwn_Explain = "",
-                EastAlone = false,
-                EastFew = false,
-                EastFewer = false,
-                FamilyAssessmentSituation = "",
-                FamilyEmotional = "",
-                GeneralDescription = "",
-                Has3OrMore = false,
-                HasAnIllnes = false,
-                HasClientBeenTreatedPain = false,
-                HasClientBeenTreatedPain_Ifnot = "",
-                HasClientBeenTreatedPain_PleaseIncludeService = "",
-                HasClientBeenTreatedPain_Where = "",
-                HasTheClient = false,
-                HasTheClientVisitedPhysician = false,
-                HasTheClientVisitedPhysician_Date = DateTime.Now,
-                HasTheClientVisitedPhysician_Reason = "",
-                HasTheClient_Explain = "",
-                HasTooth = false,
-                HaveYouEverBeen = false,
-                HaveYouEverBeen_Explain = "",
-                HaveYouEverThought = false,
-                HaveYouEverThought_Explain = "",
-                HigHestEducation = "",
-                Hydration = Bio_Hydration.Diminished,
-                IConcurWhitDiagnistic = false,
-                Id = 0,
-                If6_Date = DateTime.Now,
-                If6_ReferredTo = "",
-                IfForeing_AgeArrival = 0,
-                IfForeing_Born = false,
-                IfForeing_YearArrival = 0,
-                IfMarried = "",
-                IfSeparated = "",
-                IfSexuallyActive = Bio_IfSexuallyActive.N_A,
-                Insight_Fair = false,
-                Insight_Good = false,
-                Insight_Other = false,
-                Insight_Poor = false,
-                Judgment_Fair = false,
-                Judgment_Good = false,
-                Judgment_Other = false,
-                Judgment_Poor = false,
-                Lacking_Location = false,
-                Lacking_Person = false,
-                Lacking_Place = false,
-                Lacking_Time = false,
-                LegalAssessment = "",
-                LegalHistory = "",
-                LicensedPractitioner = "",
-                MaritalStatus = "",
-                Mood_Angry = false,
-                Mood_Anxious = false,
-                Mood_Depressed = false,
-                Mood_Euphoric = false,
-                Mood_Euthymic = false,
-                Mood_Maniac = false,
-                Mood_Other = false,
-                Motor_Agitated = false,
-                Motor_Akathisia = false,
-                Motor_Normal = false,
-                Motor_Other = false,
-                Motor_RestLess = false,
-                Motor_Retardation = false,
-                Motor_Tremor = false,
-                NotAlwaysPhysically = false,
-                ObtainRelease = false,
-                ObtainReleaseInformation = false,
-                ObtainReleaseInformation7 = false,
-                Oriented_FullOriented = false,
-                Outcome = "",
-                PersonalFamilyPsychiatric = "",
-                PersonInvolved = "",
-                PleaseProvideGoal = "",
-                PleaseRatePain = 0,
-                PresentingProblem = "",
-                PrimaryLocation = "",
-                Priv = false,
-                ProvideIntegratedSummary = "",
-                RecentWeight = Bio_RecentWeightChange.Gained,
-                RelationShips = "",
-                RelationshipWithFamily = "",
-                RiskToOther_Chronic = false,
-                RiskToOther_High = false,
-                RiskToOther_Low = false,
-                RiskToOther_Medium = false,
-                RiskToSelf_Chronic = false,
-                RiskToSelf_High = false,
-                RiskToSelf_Low = false,
-                RiskToSelf_Medium = false,
-                SafetyPlan = false,
-                Setting = "02",
-                Speech_Impoverished = false,
-                Speech_Loud = false,
-                Speech_Mumbled = false,
-                Speech_Normal = false,
-                Speech_Other = false,
-                Speech_Pressured = false,
-                Speech_Rapid = false,
-                Speech_Slow = false,
-                Speech_Slurred = false,
-                Speech_Stutters = false,
-                SubstanceAbuse = "",
-                Takes3OrMore = false,
-                ThoughtContent_Delusions = false,
-                ThoughtContent_Delusions_Type = "",
-                ThoughtContent_Hallucinations = false,
-                ThoughtContent_Hallucinations_Type = "",
-                ThoughtContent_RealityBased = false,
-                ThoughtContent_Relevant = false,
-                ThoughtProcess_Blocking = false,
-                ThoughtProcess_Circumstantial = false,
-                ThoughtProcess_Disorganized = false,
-                ThoughtProcess_FightIdeas = false,
-                ThoughtProcess_GoalDirected = false,
-                ThoughtProcess_Irrational = false,
-                ThoughtProcess_LooseAssociations = false,
-                ThoughtProcess_Obsessive = false,
-                ThoughtProcess_Organized = false,
-                ThoughtProcess_Other = false,
-                ThoughtProcess_Preoccupied = false,
-                ThoughtProcess_Rigid = false,
-                ThoughtProcess_Tangential = false,
-                TreatmentNeeds = "",
-                Treatmentrecomendations = "",
-                UnlicensedTherapist = "",
-                WhatIsTheClient = "",
-                WhatIsYourLanguage = "",
-                WhereRecord = false,
-                WhereRecord_When = "",
-                WhereRecord_Where = "",
-                WithoutWanting = false,
-                IdAppetite = 0,
-                Appetite_Status = _combosHelper.GetComboBio_Appetite(),
-                IdHydratation = 0,
-                Hydratation_Status = _combosHelper.GetComboBio_Hydration(),
-                IdRecentWeight = 0,
-                RecentWeight_Status = _combosHelper.GetComboBio_RecentWeight(),
-                IdIfSexuallyActive = 0,
-                IfSexuallyActive_Status = _combosHelper.GetComboBio_IfSexuallyActive(),
-                ClientDenied = false,
-                StartTime = DateTime.Now,
-                EndTime = DateTime.Now,
-                ForHowLong = 0
-            };
-            if (model.Client.LegalGuardian == null)
-                model.Client.LegalGuardian = new LegalGuardianEntity();
-            if (model.Client.EmergencyContact == null)
-                model.Client.EmergencyContact = new EmergencyContactEntity();
-            if (model.Client.MedicationList == null)
-                model.Client.MedicationList = new List<MedicationEntity>();
-            if (model.Client.Doctor == null)
-                model.Client.Doctor = new DoctorEntity();
-            if (model.Client.Referred == null)
-                model.Client.Referred = new ReferredEntity();
             return View(model);
         }
 
@@ -1261,17 +1048,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Index", new { idError = 1 });
             }
 
-            if (origin == 1)
-                return RedirectToAction(nameof(Index));
-            else
-            {
-                List<Bio_BehavioralHistoryEntity> bio = await _context.Bio_BehavioralHistory
-                                                                                    .Include(g => g.Client)
-                                                                                    .Where(g => g.Client.Id == Bio_BehavioralEntity.Client.Id)
-                                                                                    .ToListAsync();
-
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewBehavioralHealth", bio) });
-            }
+            return RedirectToAction(nameof(IndexBehavioralHealthHistory));            
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator")]
