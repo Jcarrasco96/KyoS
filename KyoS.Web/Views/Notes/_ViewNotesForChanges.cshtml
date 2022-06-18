@@ -117,7 +117,8 @@
                                                                                     }
                                                                                 </td>
                                                                                 <td align="right">
-                                                                                    @if (day_client.Note == null && day_client.NoteP == null)
+                                                                                    @if ((day_client.Note == null && day_client.NoteP == null)||(day_client.Note.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                                                           || (day_client.NoteP.Status == KyoS.Common.Enums.NoteStatus.Edition))
                                                                                     {
                                                                                         <a onclick="showInPopup('@Url.Action("ChangeSessionByManager", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
                                                                                     }
