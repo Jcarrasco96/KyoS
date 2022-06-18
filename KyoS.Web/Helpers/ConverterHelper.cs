@@ -2056,7 +2056,9 @@ namespace KyoS.Web.Helpers
                 TcmDischargeFollowUp = model.TcmDischargeFollowUp,
                 StaffSignatureDate = model.StaffSignatureDate,
                 SupervisorSignatureDate = model.SupervisorSignatureDate,
-                TcmServicePlan = _context.TCMServicePlans.Find(model.IdServicePlan)
+                TcmServicePlan = await _context.TCMServicePlans
+                                         .Include(n => n.TcmClient)
+                                         .FirstOrDefaultAsync(m => m.Id == model.IdServicePlan)
 
             };
         }
@@ -3449,7 +3451,7 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
-                IdTCMClient = model.TcmClient.Client.Id,
+                IdTCMClient = model.TcmClient.Id,
                 
                 TcmClient_FK = model.TcmClient_FK,
                 TcmClient = model.TcmClient,
@@ -4052,6 +4054,108 @@ namespace KyoS.Web.Helpers
                 TcmDischarge = model.TcmDischarge,
                 TypeService = model.TypeService,
                 IdTCMDischarge = model.TcmDischarge.Id
+            };
+
+        }
+
+        public async Task<TCMIntakeAppendixJEntity> ToTCMIntakeAppendixJEntity(TCMIntakeAppendixJViewModel model, bool isNew)
+        {
+            TCMIntakeAppendixJEntity salida;
+            salida = new TCMIntakeAppendixJEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient= await _context.TCMClient.FirstAsync(n => n.Id == model.IdTCMClient),
+                AdmissionedFor = model.AdmissionedFor,
+                Approved = model.Approved,
+                Date = model.Date,
+                HasBeen = model.HasBeen,
+                HasHad = model.HasHad,
+                IsAt = model.IsAt,
+                IsAwaiting = model.IsAwaiting,
+                IsExperiencing = model.IsExperiencing,
+                SupervisorSignatureDate = model.SupervisorSignatureDate,
+                TcmClient_FK = model.TcmClient_FK,
+                TcmSupervisor = model.TcmSupervisor
+
+            };
+
+            return salida;
+        }
+
+        public TCMIntakeAppendixJViewModel ToTCMIntakeAppendixJViewModel(TCMIntakeAppendixJEntity model)
+        {
+            return new TCMIntakeAppendixJViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Approved = model.Approved,
+                Date = model.Date,
+                HasBeen = model.HasBeen,
+                HasHad = model.HasHad,
+                IsAt = model.IsAt,
+                IsAwaiting = model.IsAwaiting,
+                IsExperiencing = model.IsExperiencing,
+                SupervisorSignatureDate = model.SupervisorSignatureDate,
+                TcmClient_FK = model.TcmClient_FK,
+                TcmSupervisor = model.TcmSupervisor
+            };
+
+        }
+
+        public async Task<TCMIntakeInterventionLogEntity> ToTCMIntakeInterventionLogEntity(TCMIntakeInterventionLogViewModel model, bool isNew)
+        {
+            TCMIntakeInterventionLogEntity salida;
+            salida = new TCMIntakeInterventionLogEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient = await _context.TCMClient.FirstAsync(n => n.Id == model.IdTCMClient),
+                TcmClient_FK = model.TcmClient_FK,
+                InterventionList = new System.Collections.Generic.List<TCMIntakeInterventionEntity>()
+                
+            };
+
+            return salida;
+        }
+
+        public TCMIntakeInterventionLogViewModel ToTCMIntakeInterventionLogViewModel(TCMIntakeInterventionLogEntity model)
+        {
+            return new TCMIntakeInterventionLogViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient_FK,
+                TcmClient_FK = model.TcmClient_FK,
+                InterventionList = model.InterventionList
+            };
+
+        }
+
+        public async Task<TCMIntakeInterventionEntity> ToTCMIntakeInterventionEntity(TCMIntakeInterventionViewModel model, bool isNew)
+        {
+            TCMIntakeInterventionEntity salida;
+            salida = new TCMIntakeInterventionEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Activity = model.Activity,
+                Date = model.Date,
+                TcmInterventionLog = await _context.TCMIntakeInterventionLog.FirstOrDefaultAsync(n => n.Id == model.IdInterventionLog)
+        };
+
+            return salida;
+        }
+
+        public TCMIntakeInterventionViewModel ToTCMIntakeInterventionViewModel(TCMIntakeInterventionEntity model)
+        {
+            return new TCMIntakeInterventionViewModel
+            {
+                Id = model.Id,
+                Activity = model.Activity,
+                Date = model.Date,
+                TcmInterventionLog = model.TcmInterventionLog,
+                IdInterventionLog = model.TcmInterventionLog.Id
+               
             };
 
         }

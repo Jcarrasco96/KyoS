@@ -103,6 +103,9 @@ namespace KyoS.Web.Data
         public DbSet<TCMIntakeNonClinicalLogEntity> TCMIntakeNonClinicalLog { get; set; }
         public DbSet<TCMIntakeMiniMentalEntity> TCMIntakeMiniMental { get; set; }
         public DbSet<TCMIntakeCoordinationCareEntity> TCMIntakeCoordinationCare { get; set; }
+        public DbSet<TCMIntakeAppendixJEntity> TCMIntakeAppendixJ { get; set; }
+        public DbSet<TCMIntakeInterventionLogEntity> TCMIntakeInterventionLog { get; set; }
+        public DbSet<TCMIntakeInterventionEntity> TCMIntakeIntervention { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -458,6 +461,23 @@ namespace KyoS.Web.Data
                         .WithOne(s => s.TcmClient)
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasForeignKey<TCMIntakeCoordinationCareEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                       .HasOne(c => c.TcmIntakeAppendixJ)
+                       .WithOne(s => s.TcmClient)
+                       .OnDelete(DeleteBehavior.Cascade)
+                       .HasForeignKey<TCMIntakeAppendixJEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                       .HasOne(c => c.TcmInterventionLog)
+                       .WithOne(s => s.TcmClient)
+                       .OnDelete(DeleteBehavior.Cascade)
+                       .HasForeignKey<TCMIntakeInterventionLogEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMIntakeInterventionEntity>()
+                       .HasOne(g => g.TcmInterventionLog)
+                       .WithMany(m => m.InterventionList)
+                       .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

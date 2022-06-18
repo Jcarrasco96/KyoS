@@ -32,7 +32,10 @@
 @if (User.IsInRole("CaseManager"))
 {
 <p>
-    <a asp-action="TCMDischargeCandidates" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> TCM Discharge Candidate</a>
+    @if (ViewData["idTCMClient"] == "0")
+    {
+        <a asp-action="TCMDischargeCandidates" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> TCM Discharge Candidate</a>
+    }
 </p>
 }
 

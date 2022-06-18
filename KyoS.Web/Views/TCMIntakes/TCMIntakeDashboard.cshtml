@@ -88,7 +88,7 @@
             &nbsp;
         </div>
         <div class="col-sm-3 col-md-2">
-            @if ((Model.TcmServicePlan != null) && (Model.TcmServicePlan.TCMAdendum.Count() > 0) && (Model.TcmServicePlan.TCMServicePlanReview != null))
+            @if ((Model.TcmIntakeAppendixJ != null) && (Model.TcmServicePlan != null) && (Model.TcmServicePlan.TCMAdendum.Count() > 0) && (Model.TcmServicePlan.TCMServicePlanReview != null))
             {
             <div class="thumbnail list-group-item list-group-item-success">
                 <h4 style="align-content:end;">SECTION 4<br>&nbsp;</h4>
@@ -104,18 +104,18 @@
             }
         </div>
         <div class="col-sm-3 col-md-2">
-            @if ((Model == null) )
+            @if ((Model.TcmInterventionLog != null))
             {
                 <div class="thumbnail list-group-item list-group-item-success">
                     <h4 style="align-content:end;">SECTION 5<br>&nbsp;</h4>
-                    <p style="text-align:right"><a asp-action="" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                    <p style="text-align:right"><a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.Id" asp-route-section="5" class="btn btn-success" role="button">Go</a></p>
                 </div>    
             }
             else
             {
                  <div class="thumbnail list-group-item list-group-item-text">
                     <h4 style="align-content:end;">SECTION 5<br>&nbsp;</h4>
-                    <p style="text-align:right"><a asp-action="" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                    <p style="text-align:right"><a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.Id" asp-route-section="5" class="btn btn-default" role="button">Go</a></p>
                 </div>
             }
         </div>
@@ -124,7 +124,7 @@
             {
                 <div class="thumbnail list-group-item list-group-item-success">
                     <h4 style="align-content:end;">SECTION 6<br>&nbsp;</h4>
-                    <p style="text-align:right"><a asp-action="" asp-route-id="@Model.Id" class="btn btn-success" role="button">@Model.TcmIntakeConsentForRelease.Count()</a></p>
+                    <p style="text-align:right"><a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.Id" class="btn btn-success" role="button">@Model.TcmIntakeConsentForRelease.Count()</a></p>
                 </div>
             }
             else

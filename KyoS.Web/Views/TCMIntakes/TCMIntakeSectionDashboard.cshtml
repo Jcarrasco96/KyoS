@@ -313,7 +313,7 @@
                 {
                     <div class="thumbnail list-group-item list-group-item-success">
                         <h4 style="align-content:end;">Medication<br>&nbsp;</h4>
-                        <p style="text-align:right"><a asp-action="CreateTCMMedication" asp-route-id="@Model.Client.Id" asp-route-idTCMClient="@Model.Id"  class="btn btn-success" role="button">@Model.Client.MedicationList.Count()</a></p>
+                        <p style="text-align:right"><a asp-action="CreateTCMMedication" asp-route-id="@Model.Client.Id" asp-route-idTCMClient="@Model.Id" class="btn btn-success" role="button">@Model.Client.MedicationList.Count()</a></p>
                     </div>
                 }
             </div>
@@ -349,8 +349,25 @@
             <div class="col-md-12">
                 <hr />
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 &nbsp;
+            </div>
+            <div class="col-sm-3 col-md-2">
+                @if (Model.TcmIntakeAppendixJ == null)
+                 {
+                     <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;">AppendixJ<br>&nbsp;</h4>
+                        <p style="text-align:right"><a asp-action="CreateTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.Id" class="btn btn-default " role="button">Go</a></p>
+                     </div>
+                 }
+                 else
+                 {
+                     <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;">AppendixJ<br>&nbsp;</h4>
+                        <p style="text-align:right"><a asp-action="CreateTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                     </div>
+
+                 }
             </div>
             <div class="col-sm-3 col-md-2">
                 @if (Model.TcmServicePlan == null)
@@ -482,7 +499,7 @@
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;">Discharge<br>&nbsp;</h4>
-                        <p style="text-align:right"><a asp-action="Index" asp-controller="TCMDischarges"  class="btn btn-default disabled" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="Index" asp-controller="TCMDischarges" class="btn btn-default disabled" role="button">Go</a></p>
                     </div>
                 }
                 else
@@ -521,10 +538,43 @@
 
                 }
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 &nbsp;
             </div>
         </div>
+    }
+    @if (ViewData["Section"].ToString() == "5")
+    {
+<div class="row">
+    <div class="container-fluid">
+        @*<h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">@Model.Client.Name </span></h4>*@
+        <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">OPEN BINDER SECTION 5 </span></h4>
+    </div>
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div class="col-md-2">
+        &nbsp;
+    </div>
+   
+    <div class="col-sm-3 col-md-2">
+        @if (Model.TcmInterventionLog == null)
+        {
+            <div class="thumbnail list-group-item list-group-item-text">
+                <h4 style="align-content:end;">Intervention<br>Log</h4>
+                <p style="text-align:right"><a asp-action="CreateTCMInterventionLog" asp-controller="TCMIntakes" asp-route-id="@Model.Id" class="btn btn-default " role="button">Go</a></p>
+            </div>
+        }
+        else
+        {
+            <div class="thumbnail list-group-item list-group-item-success">
+                <h4 style="align-content:end;">Intervention<br>Log</h4>
+                <p style="text-align:right"><a asp-action="EditTCMInterventionLog" asp-controller="TCMIntakes" asp-route-id="@Model.TcmInterventionLog.Id" class="btn btn-success" role="button">Go</a></p>
+            </div>
+
+        }
+    </div>
+</div>
     }
     else
     {

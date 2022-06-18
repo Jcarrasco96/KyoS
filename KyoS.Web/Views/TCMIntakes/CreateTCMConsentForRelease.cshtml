@@ -15,7 +15,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 1 })
+                @Html.ActionLink("Consent for Release List", "ListConsentForrelease", "TCMIntakes", new { id = @Model.IdTCMClient})
             </li>
             <li class="active">Consent for Release and Request of Information</li>
         </ul><!--.breadcrumb-->
@@ -33,7 +33,7 @@
             <partial name="_TCMIntakesConsentForRelease" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="TCMIntakeDashboard" asp-route-id="@Model.TcmClient.Id" class="btn btn-success">Back</a>
+                <a asp-action="ListConsentForrelease" asp-route-id="@Model.TcmClient.Id"  class="btn btn-success">Back</a>
             </div>
         </form>
     </div>
