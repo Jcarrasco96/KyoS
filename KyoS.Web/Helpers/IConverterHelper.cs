@@ -154,5 +154,7 @@ namespace KyoS.Web.Helpers
         TCMIntakeInterventionLogViewModel ToTCMIntakeInterventionLogViewModel(TCMIntakeInterventionLogEntity model);
         Task<TCMIntakeInterventionEntity> ToTCMIntakeInterventionEntity(TCMIntakeInterventionViewModel model, bool isNew);
         TCMIntakeInterventionViewModel ToTCMIntakeInterventionViewModel(TCMIntakeInterventionEntity model);
+        Task<TCMFarsFormEntity> ToTCMFarsFormEntity(TCMFarsFormViewModel model, bool isNew, string userId);
+        TCMFarsFormViewModel ToTCMFarsFormViewModel(TCMFarsFormEntity model);
     }
 }

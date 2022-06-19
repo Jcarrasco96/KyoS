@@ -104,7 +104,7 @@
             }
         </div>
         <div class="col-sm-3 col-md-2">
-            @if ((Model.TcmInterventionLog != null))
+            @if ((Model.TcmInterventionLog != null) && (Model.TCMFarsFormList.Count() > 0))
             {
                 <div class="thumbnail list-group-item list-group-item-success">
                     <h4 style="align-content:end;">SECTION 5<br>&nbsp;</h4>

@@ -106,6 +106,7 @@ namespace KyoS.Web.Data
         public DbSet<TCMIntakeAppendixJEntity> TCMIntakeAppendixJ { get; set; }
         public DbSet<TCMIntakeInterventionLogEntity> TCMIntakeInterventionLog { get; set; }
         public DbSet<TCMIntakeInterventionEntity> TCMIntakeIntervention { get; set; }
+        public DbSet<TCMFarsFormEntity> TCMFarsForm { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

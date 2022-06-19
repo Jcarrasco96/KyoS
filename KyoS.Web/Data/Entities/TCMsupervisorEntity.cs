@@ -26,5 +26,9 @@ namespace KyoS.Web.Data.Entities
         public StatusType Status { get; set; }
 
         public ClinicEntity Clinic { get; set; }
+
+        public string RaterEducation { get; set; }
+
+        public string RaterFMHCertification { get; set; }
     }
 }

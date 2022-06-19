@@ -4160,5 +4160,118 @@ namespace KyoS.Web.Helpers
 
         }
 
+        public async Task<TCMFarsFormEntity> ToTCMFarsFormEntity(TCMFarsFormViewModel model, bool isNew, string userId)
+        {
+            return new TCMFarsFormEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TCMClient = await _context.TCMClient.FirstOrDefaultAsync(c => c.Id == model.IdTCMClient),
+                AbilityScale = model.AbilityScale,
+                ActivitiesScale = model.ActivitiesScale,
+                AdmissionedFor = model.AdmissionedFor,
+                AnxietyScale = model.AnxietyScale,
+                CognitiveScale = model.CognitiveScale,
+                ContID1 = model.ContID1,
+                ContID2 = model.ContID2,
+                ContID3 = model.ContID3,
+                ContractorID = model.ContractorID,
+                Country = model.Country,
+                DangerToOtherScale = model.DangerToOtherScale,
+                DangerToSelfScale = model.DangerToSelfScale,
+                DcfEvaluation = model.DcfEvaluation,
+                DepressionScale = model.DepressionScale,
+                EvaluationDate = model.EvaluationDate,
+                FamilyEnvironmentScale = model.FamilyEnvironmentScale,
+                FamilyRelationShipsScale = model.FamilyRelationShipsScale,
+                HyperAffectScale = model.HyperAffectScale,
+                InterpersonalScale = model.InterpersonalScale,
+                MCOID = model.MCOID,
+                MedicaidProviderID = model.MedicaidProviderID,
+                MedicaidRecipientID = model.MedicaidRecipientID,
+                MedicalScale = model.MedicalScale,
+                M_GafScore = model.M_GafScore,
+                ProgramEvaluation = model.ProgramEvaluation,
+                ProviderId = model.ProviderId,
+                ProviderLocal = model.ProviderLocal,
+                RaterEducation = model.RaterEducation,
+                RaterFMHI = model.RaterFMHI,
+                SecurityScale = model.SecurityScale,
+                SignatureDate = model.SignatureDate,
+                SocialScale = model.SocialScale,
+                SubstanceAbusoHistory = model.SubstanceAbusoHistory,
+                SubstanceScale = model.SubstanceScale,
+                ThoughtProcessScale = model.ThoughtProcessScale,
+                TraumaticsScale = model.TraumaticsScale,
+                WorkScale = model.WorkScale,
+                Status = model.Status,
+                TCMSupervisor = await _context.TCMSupervisors.FirstOrDefaultAsync(n => n.Id == model.IdTCMSupervisor),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+            };
+        }
+
+        public TCMFarsFormViewModel ToTCMFarsFormViewModel(TCMFarsFormEntity model)
+        {
+            TCMFarsFormViewModel salida;
+            salida = new TCMFarsFormViewModel
+            {
+                Id = model.Id,
+                TCMClient = model.TCMClient,
+                IdTCMClient = model.TCMClient.Id,
+                AbilityScale = model.AbilityScale,
+                ActivitiesScale = model.ActivitiesScale,
+                AdmissionedFor = model.AdmissionedFor,
+                AnxietyScale = model.AnxietyScale,
+                CognitiveScale = model.CognitiveScale,
+                ContID1 = model.ContID1,
+                ContID2 = model.ContID2,
+                ContID3 = model.ContID3,
+                ContractorID = model.ContractorID,
+                Country = model.Country,
+                DangerToOtherScale = model.DangerToOtherScale,
+                DangerToSelfScale = model.DangerToSelfScale,
+                DcfEvaluation = model.DcfEvaluation,
+                DepressionScale = model.DepressionScale,
+                EvaluationDate = model.EvaluationDate,
+                FamilyEnvironmentScale = model.FamilyEnvironmentScale,
+                FamilyRelationShipsScale = model.FamilyRelationShipsScale,
+                HyperAffectScale = model.HyperAffectScale,
+                InterpersonalScale = model.InterpersonalScale,
+                MCOID = model.MCOID,
+                MedicaidProviderID = model.MedicaidProviderID,
+                MedicaidRecipientID = model.MedicaidRecipientID,
+                MedicalScale = model.MedicalScale,
+                M_GafScore = model.M_GafScore,
+                ProgramEvaluation = model.ProgramEvaluation,
+                ProviderId = model.ProviderId,
+                ProviderLocal = model.ProviderLocal,
+                RaterEducation = model.RaterEducation,
+                RaterFMHI = model.RaterFMHI,
+                SecurityScale = model.SecurityScale,
+                SignatureDate = model.SignatureDate,
+                SocialScale = model.SocialScale,
+                SubstanceAbusoHistory = model.SubstanceAbusoHistory,
+                SubstanceScale = model.SubstanceScale,
+                ThoughtProcessScale = model.ThoughtProcessScale,
+                TraumaticsScale = model.TraumaticsScale,
+                WorkScale = model.WorkScale,
+                Status = model.Status,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+
+            };
+
+            if (model.TCMSupervisor != null)
+                salida.IdTCMSupervisor = model.TCMSupervisor.Id;
+            else
+                salida.IdTCMSupervisor = 0;
+            return salida;
+
+        }
+
     }
 }

@@ -87,6 +87,7 @@ namespace KyoS.Web.Controllers
                                                           .ThenInclude(n => n.TCMDischarge)
                                                           .Include(n => n.TcmIntakeAppendixJ)
                                                           .Include(n => n.TcmInterventionLog)
+                                                          .Include(n => n.TCMFarsFormList)
                                                           .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
                                                            && n.Casemanager.LinkedUser == user_logged.UserName))
                                                           .ToListAsync();
@@ -390,6 +391,7 @@ namespace KyoS.Web.Controllers
                                                             .ThenInclude(n => n.TCMDischarge)
                                                             .Include(n => n.TcmIntakeAppendixJ)
                                                             .Include(n => n.TcmInterventionLog)
+                                                            .Include(n => n.TCMFarsFormList)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
             List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
@@ -2558,6 +2560,7 @@ namespace KyoS.Web.Controllers
                                                             .ThenInclude(n => n.TCMDischarge)
                                                             .Include(n => n.TcmIntakeAppendixJ)
                                                             .Include(n => n.TcmInterventionLog)
+                                                            .Include(n => n.TCMFarsFormList)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
             List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
