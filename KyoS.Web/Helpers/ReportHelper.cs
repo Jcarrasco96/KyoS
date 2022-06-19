@@ -5860,7 +5860,8 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("CompletedTreatment", typeof(bool));            
             dt.Columns.Add("LeftBefore", typeof(bool));
             dt.Columns.Add("NonCompliant", typeof(bool));
-            dt.Columns.Add("Other", typeof(bool));            
+            dt.Columns.Add("Other", typeof(bool));
+            dt.Columns.Add("DateAdmissionService", typeof(DateTime));
 
             if (discharge != null)
             {
@@ -5907,6 +5908,7 @@ namespace KyoS.Web.Helpers
                                             discharge.LeftBefore,
                                             discharge.NonCompliant,
                                             discharge.Other,
+                                            discharge.DateAdmissionService
                                         });
             }
             else
@@ -5953,7 +5955,8 @@ namespace KyoS.Web.Helpers
                                             false,
                                             false,
                                             false,
-                                            false
+                                            false,
+                                            new DateTime()
                                         });
             }
 
