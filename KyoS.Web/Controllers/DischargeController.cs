@@ -97,22 +97,23 @@ namespace KyoS.Web.Controllers
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             DischargeViewModel model;
+            ClientEntity client = _context.Clients
 
-            if (User.IsInRole("Facilitator "))
+                                        .Include(n => n.MedicationList)
+
+                                        .Include(c => c.Clients_Diagnostics)
+                                        .ThenInclude(cd => cd.Diagnostic)
+
+                                        .FirstOrDefault(n => n.Id == id);
+
+            if (User.IsInRole("Facilitator"))
             {
                 if (user_logged.Clinic != null)
                 {
                     model = new DischargeViewModel
                     {
                         IdClient = id,
-                        Client = _context.Clients
-
-                                         .Include(n => n.MedicationList)
-
-                                         .Include(c => c.Clients_Diagnostics)
-                                         .ThenInclude(cd => cd.Diagnostic)
-
-                                         .FirstOrDefault(n => n.Id == id),
+                        Client = client,
                         AdmissionedFor = user_logged.FullName,
                         Administrative = false,
                         ClientTransferred = false,
@@ -145,7 +146,8 @@ namespace KyoS.Web.Controllers
                         DateSignatureEmployee = DateTime.Now,
                         DateSignaturePerson = DateTime.Now,
                         DateSignatureSupervisor = DateTime.Now,
-                        TypeService = service                        
+                        TypeService = service,
+                        DateAdmissionService = client.AdmisionDate
                     };
                     if (model.Client.MedicationList == null)
                         model.Client.MedicationList = new List<MedicationEntity>();
@@ -156,13 +158,7 @@ namespace KyoS.Web.Controllers
             model = new DischargeViewModel
             {
                 IdClient = id,
-                Client = _context.Clients
-                                 .Include(n => n.MedicationList)
-                                         
-                                 .Include(c => c.Clients_Diagnostics)
-                                 .ThenInclude(cd => cd.Diagnostic)
-
-                                 .FirstOrDefault(n => n.Id == id),
+                Client = client,
                 AdmissionedFor = user_logged.FullName,
                 Client_FK = id,
                 DateDischarge = DateTime.Now,
@@ -197,7 +193,8 @@ namespace KyoS.Web.Controllers
                 DateSignatureEmployee = DateTime.Now,
                 DateSignaturePerson = DateTime.Now,
                 DateSignatureSupervisor = DateTime.Now,
-                TypeService = service                
+                TypeService = service,
+                DateAdmissionService = client.AdmisionDate
             };
             return View(model);
         }
@@ -275,8 +272,8 @@ namespace KyoS.Web.Controllers
                 DateSignaturePerson = DischargeViewModel.DateSignaturePerson,
                 DateSignatureSupervisor = DischargeViewModel.DateSignatureSupervisor,
                 Status = DischargeStatus.Edition,
-                
-                TypeService = DischargeViewModel.TypeService
+                TypeService = DischargeViewModel.TypeService,
+                DateAdmissionService = DischargeViewModel.DateAdmissionService
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", DischargeViewModel) });
         }
