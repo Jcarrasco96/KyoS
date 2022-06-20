@@ -416,18 +416,25 @@ namespace KyoS.Web.Controllers
                                                              && wc.Present == false)).ToString();
 
                 List<MTPEntity> mtps = await _context.MTPs
+                                                     .Include(n => n.MtpReviewList)
                                                      .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id 
                                                                && m.Active == true && m.Client.Status == StatusType.Open)).ToListAsync();
                 int count = 0;
+                int month = 0;
                 foreach (var item in mtps)
                 {
+                    foreach (var product in item.MtpReviewList)
+                    {
+                        month += product.MonthOfTreatment;
+                    }
                     if (item.NumberOfMonths != null)
                     {
-                        if (DateTime.Now > item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths)))
+                        if (DateTime.Now > item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths+month)))
                         {
                             count++;
                         }
-                    }                    
+                    }
+                    month = 0;
                 }
 
                 ViewBag.ExpiredMTPs = count.ToString();

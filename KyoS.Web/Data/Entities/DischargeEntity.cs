@@ -75,5 +75,9 @@ namespace KyoS.Web.Data.Entities
         public ServiceType TypeService { get; set; }
 
         public IEnumerable<MessageEntity> Messages { get; set; }
+
+        [Display(Name = "Date of Admission Service")]
+        [DataType(DataType.Date)]
+        public DateTime DateAdmissionService { get; set; }
     }
 }

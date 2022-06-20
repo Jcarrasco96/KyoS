@@ -466,10 +466,10 @@ jQueryAjaxPostBIOBehavioral = form => {
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
 
-                    $('#MyTable').DataTable({
-                        "order": [[1, "asc"]],
-                        "pageLength": 100
-                    });
+                    //$('#MyTable').DataTable({
+                    //    "order": [[1, "asc"]],
+                    //    "pageLength": 100
+                    //});
                     var item_to_delete;
                     $('.deleteItem').click((e) => {
                         item_to_delete = e.currentTarget.dataset.id;
@@ -513,10 +513,10 @@ jQueryAjaxPostMedication = form => {
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
 
-                    $('#MyTable').DataTable({
-                        "order": [[1, "asc"]],
-                        "pageLength": 100
-                    });
+                    //$('#MyTable').DataTable({
+                    //    "order": [[1, "asc"]],
+                    //    "pageLength": 100
+                    //});
                     var item_to_delete;
                     $('.deleteItem').click((e) => {
                         item_to_delete = e.currentTarget.dataset.id;

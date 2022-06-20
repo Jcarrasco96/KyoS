@@ -2592,7 +2592,8 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                TypeService = model.TypeService
+                TypeService = model.TypeService,
+                DateAdmissionService = model.DateAdmissionService
             };
         }
 
@@ -2642,7 +2643,8 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
-                TypeService = model.TypeService
+                TypeService = model.TypeService,
+                DateAdmissionService = model.DateAdmissionService
 
             };
 

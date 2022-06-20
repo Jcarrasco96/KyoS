@@ -136,7 +136,7 @@
                                                             @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Supervisor"))
                                                             {
                                                                 <a asp-action="EditBehavioral" asp-route-id="@product1.Id" class="btn btn-warning" title="Edit Behavioral Health History"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                <a asp-action="Delete" asp-route-origin="1" asp-route-id="@product1.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>
+                                                                <a asp-action="DeleteBehavioral" asp-route-id="@product1.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>
                                                             }
                                                             else
                                                             {
@@ -221,12 +221,12 @@
                              // Delete item
                              var item_to_delete;
                              $('.deleteItem').click((e) => {
-                                 item_to_delete = e.currentTarget.dataset.dataset.id;
+                                 item_to_delete = e.currentTarget.dataset.id;
                              });
 
                              $("#btnYesDelete").click(function () {
-                             var url = "@Url.Action("Delete", "FarsForms")";
-                                 window.location.href = url + '/' + item_to_delete;
+                             var url = "@Url.Action("DeleteBehavioral", "Bios")";
+                             window.location.href = url + '/' + item_to_delete;
                              });
                          });
                         $(function () {
