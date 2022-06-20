@@ -1,0 +1,76 @@
+﻿@model KyoS.Web.Models.TCMAssessmentViewModel
+@{
+    ViewData["Title"] = "Edit Case Management Assessment";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit Case Management Assessment</title>
+</head>
+<body>
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboard", "TCMAssessments", new { id = @Model.TcmClient.Id, section = 4 })
+            </li>
+            <li class="active">Edit Case Management Assessment</li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+    <h4>Edit Case Management Assessment</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+
+        </div>
+        <div>
+            <form asp-action="Edit" asp-route-id="@Model.Id" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="TcmClient_FK" />
+                <partial name="_TCMAssessment" />
+                
+                <div class="form-group col-md-12">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+
+
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                                "order": [[1, "asc"]],
+                                "pageLength": 100
+                            });
+
+            var item_to_delete;
+
+            $('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                var url = "@Url.Action("DeleteDomain", "TCMServicePlanReviews")";
+                window.location.href = url + '/' + item_to_delete;
+            });
+        });
+       
+    </script>
+}
+
+

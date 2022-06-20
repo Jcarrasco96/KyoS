@@ -349,8 +349,25 @@
             <div class="col-md-12">
                 <hr />
             </div>
-            <div class="col-md-1">
+            <div class="col-md-3">
                 &nbsp;
+            </div>
+            <div class="col-sm-3 col-md-2">
+                @if (Model.TcmIntakeAppendixJ == null)
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;">Case Management<br>Assessment</h4>
+                        <p style="text-align:right"><a asp-action="CreateTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.Id" class="btn btn-default " role="button">Go</a></p>
+                    </div>
+                }
+                else
+                {
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;">Case Management<br>Assessment</h4>
+                        <p style="text-align:right"><a asp-action="CreateTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                    </div>
+
+                }
             </div>
             <div class="col-sm-3 col-md-2">
                 @if (Model.TcmIntakeAppendixJ == null)
@@ -401,6 +418,15 @@
                         </div>
                     }
                 }
+            </div>
+            <div class="col-md-3">
+                &nbsp;
+            </div>
+            <div class="col-md-12">
+                <hr />
+            </div>
+            <div class="col-md-3">
+                &nbsp;
             </div>
             <div class="col-sm-3 col-md-2">
                 @if (Model.TcmServicePlan == null || Model.TcmServicePlan.Approved == 0)
@@ -538,7 +564,7 @@
 
                 }
             </div>
-            <div class="col-md-1">
+            <div class="col-md-3">
                 &nbsp;
             </div>
         </div>

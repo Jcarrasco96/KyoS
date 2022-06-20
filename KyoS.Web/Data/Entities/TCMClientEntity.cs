@@ -61,5 +61,7 @@ namespace KyoS.Web.Data.Entities
         public TCMIntakeInterventionLogEntity TcmInterventionLog { get; set; }
 
         public List<TCMFarsFormEntity> TCMFarsFormList { get; set; }
+
+        public TCMFarsFormEntity TCMAssessment { get; set; }
     }
 }

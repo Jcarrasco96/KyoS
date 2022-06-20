@@ -1005,7 +1005,9 @@ namespace KyoS.Web.Helpers
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
-                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Agency = model.Agency,
+                Title = model.Title
             };
         }
 
@@ -1063,7 +1065,9 @@ namespace KyoS.Web.Helpers
                 Email = model.Email,
                 ReferredNote = model.ReferredNote,
                 CreatedBy = model.CreatedBy,
-                CreatedOn = model.CreatedOn
+                CreatedOn = model.CreatedOn,
+                Agency = model.Agency,
+                Title = model.Title
             };
         }
 
@@ -4269,6 +4273,91 @@ namespace KyoS.Web.Helpers
                 salida.IdTCMSupervisor = model.TCMSupervisor.Id;
             else
                 salida.IdTCMSupervisor = 0;
+            return salida;
+
+        }
+
+        public async Task<TCMAssessmentEntity> ToTCMAssessmentEntity(TCMAssessmentViewModel model, bool isNew, string userId)
+        {
+            return new TCMAssessmentEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient = await _context.TCMClient.FirstOrDefaultAsync(c => c.Id == model.TcmClient_FK),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Approved = model.Approved,
+                AreChild = model.AreChild,
+                AreChildAddress = model.AreChildAddress,
+                TcmClient_FK = model.TcmClient_FK,
+                AreChildCity = model.AreChildCity,
+                AreChildName = model.AreChildName,
+                AreChildPhone = model.AreChildPhone,
+                Caregiver = model.Caregiver,
+                ChildFather = model.ChildFather,
+                ChildMother = model.ChildMother,
+                ClientInput = model.ClientInput,
+                DateAssessment = model.DateAssessment,
+                Divorced = model.Divorced,
+                Family = model.Family,
+                Married = model.Married,
+                MayWe = model.MayWe,
+                MayWeNA = model.MayWeNA,
+                NeverMarried = model.NeverMarried,
+                Other = model.Other,
+                OtherExplain = model.OtherExplain,
+                PresentingProblems = model.PresentingProblems,
+                Referring = model.Referring,
+                Review = model.Review,
+                School = model.School,
+                Separated = model.Separated,
+                Treating = model.Treating
+                
+                
+            };
+        }
+
+        public TCMAssessmentViewModel ToTCMAssessmentViewModel(TCMAssessmentEntity model)
+        {
+            TCMAssessmentViewModel salida;
+            salida = new TCMAssessmentViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                Approved = model.Approved,
+                AreChild = model.AreChild,
+                AreChildAddress = model.AreChildAddress,
+                TcmClient_FK = model.TcmClient_FK,
+                AreChildCity = model.AreChildCity,
+                AreChildName = model.AreChildName,
+                AreChildPhone = model.AreChildPhone,
+                Caregiver = model.Caregiver,
+                ChildFather = model.ChildFather,
+                ChildMother = model.ChildMother,
+                ClientInput = model.ClientInput,
+                DateAssessment = model.DateAssessment,
+                Divorced = model.Divorced,
+                Family = model.Family,
+                Married = model.Married,
+                MayWe = model.MayWe,
+                MayWeNA = model.MayWeNA,
+                NeverMarried = model.NeverMarried,
+                Other = model.Other,
+                OtherExplain = model.OtherExplain,
+                PresentingProblems = model.PresentingProblems,
+                Referring = model.Referring,
+                Review = model.Review,
+                School = model.School,
+                Separated = model.Separated,
+                Treating = model.Treating
+
+            };
+
             return salida;
 
         }

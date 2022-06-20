@@ -41,32 +41,6 @@
     </div>
 </div>
 
-
-@*
-    <div class="container-fluid col-md-12">
-        <h4>&nbsp; Services Provided (Check all that apply according to the services listed in the Service Plan)</h4>
-       @for (int i = 0; i < Model.TcmDischargeServiceStatus.Count(); i++)
-        {
-               <div class="form-group col-md-6">
-                   <div class="form-group col-md-1">
-                       &nbsp;
-                   </div>
-                   <div class="form-group col-md-1">
-                       <input type="checkbox" asp-for="@Model.TcmDischargeServiceStatus[i].Status" readonly/>
-                   </div>
-                   <div class="form-group col-md-1">
-                       <input asp-for="@Model.TcmDischargeServiceStatus[i].CodeService" readonly/>
-                   </div>
-                   <div class="form-group col-md-3">
-                       <input asp-for="@Model.TcmDischargeServiceStatus[i].NameService" style="width:150%" readonly/>
-                   </div>
-
-               </div>
-
-        }
-
-    </div>
-*@
 <div class="container-fluid">
     <div class="form-group col-md-12">
         <pre>
@@ -80,56 +54,3 @@
         </pre>
     </div>
 </div>
-
-@*
-
-    <div class="container-fluid">
-        <table class="table table-hover table-responsive table-striped" id="MyTable">
-            <thead>
-                <tr>
-                    <th class="col-md-3" align="center">
-                        Provider/Agency
-                    </th>
-                    <th class="col-md-2" align="center">
-                        Type of Service
-                    </th>
-                    <th class="col-md-3" align="center">
-                        Address/Location
-                    </th>
-                    <th class="col-md-2" align="center">
-                        Phone Number
-                    </th>
-                    <th class="col-md-2" align="center">
-                        Next Appt.
-
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < Model.TcmDischargeFollowUp.Count(); i++)
-                {
-                    <tr>
-                        <td>
-                            <input asp-for="@Model.TcmDischargeFollowUp[i].Id" />
-                            <input asp-for="@Model.TcmDischargeFollowUp[i].ProviderAgency" class="form-control" />
-                        </td>
-                        <td>
-                            <input asp-for="@Model.TcmDischargeFollowUp[i].TypeService" class="form-control" />
-                        </td>
-                        <td>
-                            <input asp-for="@Model.TcmDischargeFollowUp[i].Address_Location" class="form-control" />
-                        </td>
-                        <td>
-                            <input asp-for="@Model.TcmDischargeFollowUp[i].PhoneNumber" class="form-control" />
-                        </td>
-                        <td>
-                            <input asp-for="@Model.TcmDischargeFollowUp[i].NextAppt" class="form-control" />
-
-                        </td>
-                    </tr>
-
-                }
-            </tbody>
-        </table>
-    </div>
-    <br />
-*@

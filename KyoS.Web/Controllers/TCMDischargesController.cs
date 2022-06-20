@@ -84,6 +84,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
+        [Authorize(Roles = "CaseManager")]
         public IActionResult Create(int id = 0)
         {
 

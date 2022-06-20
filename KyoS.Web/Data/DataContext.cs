@@ -107,6 +107,7 @@ namespace KyoS.Web.Data
         public DbSet<TCMIntakeInterventionLogEntity> TCMIntakeInterventionLog { get; set; }
         public DbSet<TCMIntakeInterventionEntity> TCMIntakeIntervention { get; set; }
         public DbSet<TCMFarsFormEntity> TCMFarsForm { get; set; }
+        public DbSet<TCMAssessmentEntity> TCMAssessment { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -479,6 +480,12 @@ namespace KyoS.Web.Data
                        .HasOne(g => g.TcmInterventionLog)
                        .WithMany(m => m.InterventionList)
                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                      .HasOne(c => c.TCMAssessment)
+                      .WithOne(s => s.TCMClient)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasForeignKey<TCMAssessmentEntity>(s => s.TcmClient_FK);
         }
     }
 }
