@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="05/26/2022 12:45:10" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="06/17/2022 09:46:21" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u35TgW3iXkhSH+sotuQR8/jw==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3CFS4VaHRI5ePhF/xztOm/w==">
       <TableDataSource Name="Goals1" Alias="Goals2" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -32,7 +32,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3cfSAI6tMn+o3FiKbFKFd8A==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3rGNtNkU5uBdbRrHxF5hpEQ==">
       <TableDataSource Name="Goals2" Alias="Goals3" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -63,7 +63,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u36fAsBJKDP/qKTp2CVYt9YQ==">
+    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3rzw71IJb/C8uuTIk9neyTw==">
       <TableDataSource Name="Goals3" Alias="Goals4" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -94,7 +94,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3bX90kIYgQ3j68zkTmM+ErQ==">
+    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u33XhNGzPcHHYNuF2RN9kYVw==">
       <TableDataSource Name="Goals4" Alias="Goals5" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -125,7 +125,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3fS5vmgEKMRAukHuSzkRRPA==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3iBGwR2jcFYo1OZkoilLs6w==">
       <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -782,14 +782,14 @@
     </DataBand>
     <DataBand Name="Data14" Top="2884.2" Width="778.3" Height="500.85">
       <TextObject Name="Text57" Left="-2.55" Top="28.35" Width="274.05" Height="18.9" Text="ANTICIPATED LENGTH OF TREATMENT:" HorzAlign="Right" Font="Arial, 10pt, style=Bold, Underline"/>
-      <CheckBoxObject Name="CheckBox5" Left="277.5" Top="30.35" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" CheckWidthRatio="2"/>
+      <CheckBoxObject Name="CheckBox5" Left="277.5" Top="30.35" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([MTPs.NumberOfMonths] == 1,true,false)" CheckWidthRatio="2"/>
       <TextObject Name="Text59" Left="291.4" Top="29.35" Width="47.25" Height="18.9" Text="1 mo" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox6" Left="355.55" Top="31.35" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" CheckWidthRatio="2"/>
-      <TextObject Name="Text60" Left="369.45" Top="30.35" Width="47.25" Height="18.9" Text="2 mo" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox7" Left="432.15" Top="30.8" Width="13.23" Height="13.23" Border.Lines="All" CheckedSymbol="Cross" CheckWidthRatio="2"/>
+      <CheckBoxObject Name="CheckBox6" Left="355.55" Top="31.35" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([MTPs.NumberOfMonths] == 3,true,false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text60" Left="369.45" Top="30.35" Width="47.25" Height="18.9" Text="3 mo" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox7" Left="432.15" Top="30.8" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([MTPs.NumberOfMonths] == 6,true,false)" CheckWidthRatio="2"/>
       <TextObject Name="Text61" Left="446.05" Top="29.8" Width="47.25" Height="18.9" Text="6 mo" Font="Arial, 9pt"/>
       <TextObject Name="Text62" Left="567" Top="29.35" Width="47.25" Height="18.9" Text="Other:" HorzAlign="Right" Font="Arial, 9pt"/>
-      <TextObject Name="Text63" Left="614.25" Top="29.35" Width="160.65" Height="18.9" Text="__________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text63" Left="610.25" Top="29.35" Width="103.95" Height="18.9" Text="[IIf(([MTPs.NumberOfMonths] != 1 &amp;&amp; [MTPs.NumberOfMonths] != 3 &amp;&amp; [MTPs.NumberOfMonths] != 6),[MTPs.NumberOfMonths],&quot;&quot;)] [IIf(([MTPs.NumberOfMonths] != 1 &amp;&amp; [MTPs.NumberOfMonths] != 3 &amp;&amp; [MTPs.NumberOfMonths] != 6),&quot;mo&quot;,&quot;&quot;)] " Font="Arial, 9pt, style=Underline"/>
       <TextObject Name="Text64" Left="5.45" Top="62.7" Width="576.45" Height="18.9" Text="These services are medically necessary according to the needs and diagnoses of the client" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text67" Left="22.35" Top="241.9" Width="179.55" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
       <TextObject Name="Text68" Left="39.8" Top="261.15" Width="132.3" Height="18.9" Text="Client Signature" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>

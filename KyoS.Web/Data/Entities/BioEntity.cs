@@ -18,17 +18,15 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Date of Client Signature")]
         [DataType(DataType.Date)]
-
         public DateTime DateSignaturePerson { get; set; }
 
         [Display(Name = "Date of BIO-PSYCHOSOCIAL")]
         [DataType(DataType.Date)]
-
         public DateTime DateBio { get; set; }
 
         [Display(Name = "Start Time")]
         [DataType(DataType.Time)]
-        [DisplayFormat(DataFormatString = "{0:hh:mm tt}", ApplyFormatInEditMode = false)]
+        [DisplayFormat(DataFormatString = "{0:hh:mm tt}", ApplyFormatInEditMode = false)]        
         public DateTime StartTime { get; set; }
 
         [Display(Name = "End Time")]
