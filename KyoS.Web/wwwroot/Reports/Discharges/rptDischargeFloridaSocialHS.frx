@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="06/12/2022 15:09:29" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="06/18/2022 23:53:04" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3mbItpAzsvXOfwOAHCXbA3w==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3nanb4ZhhX2PowBXPZEZGOQ==">
       <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -87,6 +87,7 @@
         <Column Name="LeftBefore" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="NonCompliant" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="Other" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="DateAdmissionService" DataType="System.DateTime"/>
       </TableDataSource>
       <TableDataSource Name="Supervisors" DataType="System.Int32" Enabled="true" TableName="Supervisors">
         <Column Name="Id" DataType="System.Int32"/>
@@ -114,8 +115,8 @@
       <TextObject Name="Text71" Left="135.85" Top="10.8" Width="245.7" Height="18.9" Text="[Clients.Name]" Font="Arial, 10pt"/>
       <TextObject Name="Text72" Left="453.6" Top="10.8" Width="47.25" Height="18.9" Text="MR#:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text73" Left="500.3" Top="10.8" Width="132.3" Height="18.9" Text="[Clients.MedicaidID]" Font="Arial, 10pt"/>
-      <TextObject Name="Text133" Left="387" Top="31.35" Width="122.85" Height="18.9" Text="Admission Date:" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text134" Left="500.75" Top="31.35" Width="132.3" Height="18.9" Text="[Clients.AdmisionDate]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
+      <TextObject Name="Text133" Left="335.75" Top="31.35" Width="171.99" Height="18.9" Text="Service Admission Date:" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text134" Left="500.75" Top="31.35" Width="132.3" Height="18.9" Text="[Discharge.DateAdmissionService]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
       <TextObject Name="Text135" Left="10.9" Top="31.8" Width="132.3" Height="18.9" Text="Date of Discharge:" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text136" Left="135.1" Top="31.8" Width="189" Height="18.9" Text="[Discharge.DateDischarge]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
       <LineObject Name="Line5" Left="776.35" Top="60.7" Width="-776"/>
