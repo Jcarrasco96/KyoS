@@ -116,5 +116,204 @@ namespace KyoS.Web.Controllers
 
             return View();
         }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> MessagesOfFars(int id = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (User.IsInRole("Facilitator"))
+            {
+                return View(await _context.FarsForm
+
+                                          .Include(f => f.Client)
+
+                                          .Include(f => f.Messages)
+
+                                          .Where(f => (f.AdmissionedFor == user_logged.FullName
+                                                      && f.Messages.Count() > 0))
+                                          .ToListAsync());
+            }
+
+            //if (User.IsInRole("Supervisor"))
+            //{
+            //    UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+            //                                                 .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            //    if (user_logged.Clinic != null)
+            //    {
+            //        return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+
+            //                                                   .Include(wc => wc.Facilitator)
+            //                                                   .ThenInclude(f => f.Clinic)
+
+            //                                                   .Include(wc => wc.Client)
+
+            //                                                   .Include(wc => wc.Workday)
+            //                                                   .ThenInclude(w => w.Week)
+
+            //                                                   .Include(wc => wc.Messages)
+
+            //                                                   .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+            //                                                       && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
+            //                                                          && wc.Messages.Count() > 0
+            //                                                          && (wc.Workday.Service == ServiceType.PSR || wc.Workday.Service == ServiceType.Individual)))
+            //                                                   .ToListAsync());
+            //    }
+            //}
+
+            return View();
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> MessagesOfMTPReviews(int id = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (User.IsInRole("Facilitator"))
+            {
+                return View(await _context.MTPReviews
+
+                                          .Include(m => m.Mtp)
+                                          .ThenInclude(m => m.Client)
+
+                                          .Include(m => m.Messages)
+
+                                          .Where(m => (m.CreatedBy == user_logged.UserName && m.Messages.Count() > 0))
+                                          .ToListAsync());
+            }
+
+            //if (User.IsInRole("Supervisor"))
+            //{
+            //    UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+            //                                                 .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            //    if (user_logged.Clinic != null)
+            //    {
+            //        return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+
+            //                                                   .Include(wc => wc.Facilitator)
+            //                                                   .ThenInclude(f => f.Clinic)
+
+            //                                                   .Include(wc => wc.Client)
+
+            //                                                   .Include(wc => wc.Workday)
+            //                                                   .ThenInclude(w => w.Week)
+
+            //                                                   .Include(wc => wc.Messages)
+
+            //                                                   .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+            //                                                       && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
+            //                                                          && wc.Messages.Count() > 0
+            //                                                          && (wc.Workday.Service == ServiceType.PSR || wc.Workday.Service == ServiceType.Individual)))
+            //                                                   .ToListAsync());
+            //    }
+            //}
+
+            return View();
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> MessagesOfAddendums(int id = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (User.IsInRole("Facilitator"))
+            {
+                return View(await _context.Adendums
+
+                                          .Include(a => a.Mtp)
+                                          .ThenInclude(a => a.Client)
+
+                                          .Include(a => a.Messages)
+
+                                          .Where(a => (a.CreatedBy == user_logged.UserName && a.Messages.Count() > 0))
+                                          .ToListAsync());
+            }
+
+            //if (User.IsInRole("Supervisor"))
+            //{
+            //    UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+            //                                                 .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            //    if (user_logged.Clinic != null)
+            //    {
+            //        return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+
+            //                                                   .Include(wc => wc.Facilitator)
+            //                                                   .ThenInclude(f => f.Clinic)
+
+            //                                                   .Include(wc => wc.Client)
+
+            //                                                   .Include(wc => wc.Workday)
+            //                                                   .ThenInclude(w => w.Week)
+
+            //                                                   .Include(wc => wc.Messages)
+
+            //                                                   .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+            //                                                       && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
+            //                                                          && wc.Messages.Count() > 0
+            //                                                          && (wc.Workday.Service == ServiceType.PSR || wc.Workday.Service == ServiceType.Individual)))
+            //                                                   .ToListAsync());
+            //    }
+            //}
+
+            return View();
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> MessagesOfDischarges(int id = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (User.IsInRole("Facilitator"))
+            {
+                return View(await _context.Discharge
+
+                                          .Include(d => d.Client)
+                                          
+                                          .Include(a => a.Messages)
+
+                                          .Where(a => (a.CreatedBy == user_logged.UserName && a.Messages.Count() > 0))
+                                          .ToListAsync());
+            }
+
+            //if (User.IsInRole("Supervisor"))
+            //{
+            //    UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+            //                                                 .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            //    if (user_logged.Clinic != null)
+            //    {
+            //        return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+
+            //                                                   .Include(wc => wc.Facilitator)
+            //                                                   .ThenInclude(f => f.Clinic)
+
+            //                                                   .Include(wc => wc.Client)
+
+            //                                                   .Include(wc => wc.Workday)
+            //                                                   .ThenInclude(w => w.Week)
+
+            //                                                   .Include(wc => wc.Messages)
+
+            //                                                   .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+            //                                                       && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
+            //                                                          && wc.Messages.Count() > 0
+            //                                                          && (wc.Workday.Service == ServiceType.PSR || wc.Workday.Service == ServiceType.Individual)))
+            //                                                   .ToListAsync());
+            //    }
+            //}
+
+            return View();
+        }
     }
 }

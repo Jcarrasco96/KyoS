@@ -121,6 +121,42 @@
             font-size: 11px;
         }
 
+        .message-counter-warning {
+            position: absolute;
+            right: 6px;
+            top: 12px;
+            background-color: #f0ad4e;
+            color: #ffffff;
+            padding: 3px 5.5px;
+            border-radius: 50px;
+            line-height: 1;
+            font-size: 11px;
+        }
+
+        .message-counter-info {
+            position: absolute;
+            right: 6px;
+            top: 12px;
+            background-color: #5bc0de;
+            color: #ffffff;
+            padding: 3px 5.5px;
+            border-radius: 50px;
+            line-height: 1;
+            font-size: 11px;
+        }
+
+        .message-counter-success {
+            position: absolute;
+            right: 6px;
+            top: 12px;
+            background-color: #5cb85c;
+            color: #ffffff;
+            padding: 3px 5.5px;
+            border-radius: 50px;
+            line-height: 1;
+            font-size: 11px;
+        }
+
         .notifications-counter {
             position: absolute;
             right: 6px;
@@ -338,7 +374,7 @@
                         {
                             <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Mental Health <span class="caret"></span>
+                                CMH <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
@@ -414,7 +450,7 @@
                         else
                         {
                         <li class="disabled">
-                            <a class="test" tabindex="-1" href="#">Mental Health</a>
+                            <a class="test" tabindex="-1" href="#">CMH</a>
                         </li>
                         }                       
                         @if (setting != null && setting.TCMClinic)

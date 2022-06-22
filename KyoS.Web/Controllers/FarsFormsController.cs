@@ -297,11 +297,23 @@ namespace KyoS.Web.Controllers
                 _context.FarsForm.Update(farsFormEntity);
                 try
                 {
+                    //todos los mensajes que tiene el Fars los pongo como leidos
+                    foreach (MessageEntity value in farsFormEntity.Messages)
+                    {
+                        value.Status = MessageStatus.Read;
+                        value.DateRead = DateTime.Now;
+                        _context.Update(value);
+                    }
+
                     await _context.SaveChangesAsync();
 
                     if (farsFormViewModel.Origin == 1)
                     {
                         return RedirectToAction(nameof(PendingFars));
+                    }
+                    if (farsFormViewModel.Origin == 2)
+                    {
+                        return RedirectToAction("MessagesOfFars", "Messages");
                     }
 
                     return RedirectToAction(nameof(Index));

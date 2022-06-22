@@ -34,7 +34,7 @@
             {
                 <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","FarsForms",new {id = Model.Id, origin = Model.Origin},Context.Request.Scheme)','Add message to document creator')" title="Not approved note due to problems">Review</a>
                 <a asp-action="ApproveFars" asp-route-id="@Model.Id" class="btn btn-default" title="Approve FARS">Approve</a>
-            }            
+            }
             @if (Model.Origin == 0)
             {
                 <a asp-action="Index" class="btn btn-success">Back</a>
@@ -42,6 +42,10 @@
             @if (Model.Origin == 1)
             {
                 <a asp-action="PendingFars" class="btn btn-success">Back</a>
+            }
+            @if (Model.Origin == 2)
+            {
+                <a asp-action="MessagesOfFars" asp-controller="Messages" class="btn btn-success">Back</a>
             }
         </div>
     </form>        

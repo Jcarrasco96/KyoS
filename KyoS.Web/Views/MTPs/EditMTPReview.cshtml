@@ -70,6 +70,10 @@
                 {
                     <a asp-action="MTPRinEdit" class="btn btn-success">Back</a>
                 }
+                @if (Model.Origin == 3)
+                {
+                    <a asp-action="MessagesOfMTPReviews" asp-controller="Messages" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>

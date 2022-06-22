@@ -86,7 +86,7 @@
                                                 <tr>
                                                     <th class="col-md-2" style="text-align:center">Evaluation Date</th>
                                                     <th class="col-md-4">Admissioned for</th>
-                                                    <th class="col-md-3">MH Therapy</th>
+                                                    <th class="col-md-3" style="text-align:center;">MH Therapy</th>
                                                     <th class="col-md-1" style="text-align:center;">Status</th>
                                                     <th class="col-md-2"></th>
                                                 </tr>
@@ -95,7 +95,7 @@
                                                     <tr>
                                                         <td align="center">@Html.DisplayFor(modelItem => element.DateDischarge)</td>
                                                         <td>@Html.DisplayFor(modelItem => element.AdmissionedFor)</td>
-                                                        <td>@Html.DisplayFor(modelItem => element.TypeService)</td>
+                                                        <td align="center">@Html.DisplayFor(modelItem => element.TypeService)</td>
                                                         <td align="center">
                                                                 @if (element.Status == KyoS.Common.Enums.DischargeStatus.Edition)
                                                                 {
