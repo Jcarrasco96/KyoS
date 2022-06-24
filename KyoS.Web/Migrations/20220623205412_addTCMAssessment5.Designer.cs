@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220623205412_addTCMAssessment5")]
+    partial class addTCMAssessment5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4801,9 +4803,6 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("Briefly")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("CantDoItAtAll")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("Caregiver")
                         .HasColumnType("bit");
 
@@ -4879,12 +4878,6 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("DateOfOnSetPresentingProblem")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateSignatureCaseManager")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignatureTCMSupervisor")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("DentalExam")
                         .HasColumnType("nvarchar(max)");
 
@@ -4949,12 +4942,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DoesClientNeedAssistanceExplain")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("DoesClientTranspotation")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("DoesClientTranspotationExplain")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("DoesDelusions")
@@ -5263,12 +5250,6 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("HowWeelWithSome")
                         .HasColumnType("bit");
 
-                    b.Property<string>("HoweverOn")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("HoweverVisitScheduler")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("IfThereAnyHousing")
                         .HasColumnType("nvarchar(max)");
 
@@ -5443,20 +5424,11 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("MonthlyFamilyIncome")
                         .HasColumnType("int");
 
-                    b.Property<bool>("NeedALot")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("NeedNoHelp")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("NeedOfSpecial")
                         .HasColumnType("bit");
 
                     b.Property<string>("NeedOfSpecialSpecify")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("NeedSome")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("NeverMarried")
                         .HasColumnType("bit");
@@ -5578,8 +5550,8 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("RecommendedOther")
                         .HasColumnType("bit");
 
-                    b.Property<string>("RecommendedOtherSpecify")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("RecommendedOtherSpecify")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("RecommendedPhysicalHealth")
                         .HasColumnType("bit");
@@ -5686,17 +5658,11 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Stairs")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
                     b.Property<bool>("Structural")
                         .HasColumnType("bit");
 
                     b.Property<bool>("Suicidal")
                         .HasColumnType("bit");
-
-                    b.Property<int?>("TCMSupervisorId")
-                        .HasColumnType("int");
 
                     b.Property<bool>("TakesABus")
                         .HasColumnType("bit");
@@ -5819,8 +5785,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TCMSupervisorId");
 
                     b.HasIndex("TcmClient_FK")
                         .IsUnique();
@@ -8827,10 +8791,6 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMAssessmentEntity", b =>
                 {
-                    b.HasOne("KyoS.Web.Data.Entities.TCMSupervisorEntity", "TCMSupervisor")
-                        .WithMany()
-                        .HasForeignKey("TCMSupervisorId");
-
                     b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
                         .WithOne("TCMAssessment")
                         .HasForeignKey("KyoS.Web.Data.Entities.TCMAssessmentEntity", "TcmClient_FK")
@@ -8838,8 +8798,6 @@ namespace KyoS.Web.Migrations
                         .IsRequired();
 
                     b.Navigation("TcmClient");
-
-                    b.Navigation("TCMSupervisor");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMAssessmentHospitalEntity", b =>

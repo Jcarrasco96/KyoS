@@ -1,0 +1,61 @@
+﻿@model KyoS.Web.Models.TCMAssessmentViewModel
+
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong>How does client remember to take his/her medications? <i>(Check all that apply)</i> </strong>
+        <input asp-for="HowDoesByFollowing" />  By following directions         <input asp-for="HowDoesPill" />  Pill Organizer                 <input asp-for="HowDoesFamily" /> Family/Caregiver
+        <input asp-for="HowDoesCalendar" />  Calendar reminder               <input asp-for="HowDoesElectronic" />  Electronic reminder            <input asp-for="HowDoesRNHHA" /> RN/HHA Set-up
+        <input asp-for="HowDoesKeeping" />  Keeping them visible            <input asp-for="HowDoesDaily" />  Daily task association         <input asp-for="HowDoesOther" /> Other:  <input asp-for="HowDoesOtherExplain" style="width:40%" />
+
+        <strong>How well does client self-administer medication? </strong>
+        <input asp-for="HowWeelWithNo" />  With no help or supervision         <input asp-for="HowWeelWithALot" />  With a lot of help or constant supervision        
+        <input asp-for="HowWeelWithSome" /> With some help or occasional supervision               <input asp-for="HowWeelEnable" />  Unable to administer own medications/caregiver gives them            
+
+        Has the client had problems getting the medication dispensed or refilled on time?   <input asp-for="HasTheClient" class="form-check-input" id="check6"> Yes <input type="checkbox" class="form-check-input" id="check106"> No       
+        What pharmacy does client use? <input asp-for="WhatPharmacy" style="width:20%" >                  Phone #: <input asp-for="PharmacyPhone"style="width:15%" > 
+        
+        Any other significant medication issue or concern (e.g. medication side effect, drug interaction, adjustment, effectiveness, cost, etc.)? 
+        <textarea asp-for="AnyOther" rows="2" style="width:90%" > </textarea>
+    </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong>SECTION V: AREAS OF FUNCTIONING AND NEEDS ASSESSMENT  </strong>
+        <strong>1. MENTAL HEALTH / BEHAVIORAL / SUBSTANCE ABUSE  </strong>
+        <u>Mental Health / Psychiatric History</u><i>(include client and family history):</i>
+        <textarea asp-for="PharmacyPhone" rows="5" style="width:90%"> </textarea>
+       </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.Psychiatrist.Name" class="control-label">Psychiatrist:</label>
+        <input asp-for="TcmClient.Client.Psychiatrist.Name" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Psychiatrist.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.Psychiatrist.Telephone" class="control-label">Phone No</label>
+        <input asp-for="TcmClient.Client.Psychiatrist.Telephone" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Psychiatrist.Telephone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="TcmClient.Client.Psychiatrist.Address" class="control-label">Address</label>
+        <input asp-for="TcmClient.Client.Psychiatrist.Address" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Psychiatrist.Address" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code" class="control-label">Address</label>
+        <input asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Description" class="control-label">Address</label>
+        <input asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Description" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Description" class="text-danger"></span>
+    </div>
+</div>
+
+

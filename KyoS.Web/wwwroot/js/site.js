@@ -680,3 +680,378 @@ jQueryAjaxPostTCMServicePlanReview = form => {
 
 }
 
+jQueryAjaxPostTCMAssessmentIndividualAgency = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-AssessmentIndividual').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    //$('#MyTable').DataTable({
+                    //    "order": [[1, "asc"]],
+                    //    "pageLength": 100
+                    //});
+                    var item_to_delete;
+                    $('.deleteItem').click((e) => {
+                        item_to_delete = e.currentTarget.dataset.id;
+                    });
+                    $("#btnYesDelete").click(function () {
+                        var wwwUrlPath = window.document.location.href;
+                        var pathName = window.document.location.pathname;
+                        var pos = wwwUrlPath.indexOf(pathName);
+                        var localhostPath = wwwUrlPath.substring(0, pos);
+                        var url = 'TCMAssessment/Delete';
+                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
+                    });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+
+}
+
+jQueryAjaxPostTCMAssessmentHouseComposition = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-Assessmenthouse').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    //$('#MyTable').DataTable({
+                    //    "order": [[1, "asc"]],
+                    //    "pageLength": 100
+                    //});
+                    var item_to_delete;
+                    $('.deleteItem').click((e) => {
+                        item_to_delete = e.currentTarget.dataset.id;
+                    });
+                    $("#btnYesDelete").click(function () {
+                        var wwwUrlPath = window.document.location.href;
+                        var pathName = window.document.location.pathname;
+                        var pos = wwwUrlPath.indexOf(pathName);
+                        var localhostPath = wwwUrlPath.substring(0, pos);
+                        var url = 'TCMAssessment/Delete';
+                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
+                    });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+
+}
+
+jQueryAjaxPostTCMAssessmentPastCurrent = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-AssessmentPast').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    //$('#MyTable').DataTable({
+                    //    "order": [[1, "asc"]],
+                    //    "pageLength": 100
+                    //});
+                    var item_to_delete;
+                    $('.deleteItem').click((e) => {
+                        item_to_delete = e.currentTarget.dataset.id;
+                    });
+                    $("#btnYesDelete").click(function () {
+                        var wwwUrlPath = window.document.location.href;
+                        var pathName = window.document.location.pathname;
+                        var pos = wwwUrlPath.indexOf(pathName);
+                        var localhostPath = wwwUrlPath.substring(0, pos);
+                        var url = 'TCMAssessment/Delete';
+                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
+                    });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+
+}
+
+jQueryAjaxPostTCMAssessmentMedication = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-AssessmentMedication').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    //$('#MyTable').DataTable({
+                    //    "order": [[1, "asc"]],
+                    //    "pageLength": 100
+                    //});
+                    var item_to_delete;
+                    $('.deleteItem').click((e) => {
+                        item_to_delete = e.currentTarget.dataset.id;
+                    });
+                    $("#btnYesDelete").click(function () {
+                        var wwwUrlPath = window.document.location.href;
+                        var pathName = window.document.location.pathname;
+                        var pos = wwwUrlPath.indexOf(pathName);
+                        var localhostPath = wwwUrlPath.substring(0, pos);
+                        var url = 'TCMAssessment/Delete';
+                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
+                    });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+
+}
+
+jQueryAjaxPostTCMAssessmenHospital = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-AssessmentHospital').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    //$('#MyTable').DataTable({
+                    //    "order": [[1, "asc"]],
+                    //    "pageLength": 100
+                    //});
+                    var item_to_delete;
+                    $('.deleteItem').click((e) => {
+                        item_to_delete = e.currentTarget.dataset.id;
+                    });
+                    $("#btnYesDelete").click(function () {
+                        var wwwUrlPath = window.document.location.href;
+                        var pathName = window.document.location.pathname;
+                        var pos = wwwUrlPath.indexOf(pathName);
+                        var localhostPath = wwwUrlPath.substring(0, pos);
+                        var url = 'TCMAssessment/Delete';
+                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
+                    });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+
+}
+
+jQueryAjaxPostTCMAssessmenDrug = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-AssessmentDrug').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    //$('#MyTable').DataTable({
+                    //    "order": [[1, "asc"]],
+                    //    "pageLength": 100
+                    //});
+                    var item_to_delete;
+                    $('.deleteItem').click((e) => {
+                        item_to_delete = e.currentTarget.dataset.id;
+                    });
+                    $("#btnYesDelete").click(function () {
+                        var wwwUrlPath = window.document.location.href;
+                        var pathName = window.document.location.pathname;
+                        var pos = wwwUrlPath.indexOf(pathName);
+                        var localhostPath = wwwUrlPath.substring(0, pos);
+                        var url = 'TCMAssessment/Delete';
+                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
+                    });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+
+}
+
+jQueryAjaxPostTCMAssessmenMedicalProblem = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-AssessmentMedicalProblem').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    //$('#MyTable').DataTable({
+                    //    "order": [[1, "asc"]],
+                    //    "pageLength": 100
+                    //});
+                    var item_to_delete;
+                    $('.deleteItem').click((e) => {
+                        item_to_delete = e.currentTarget.dataset.id;
+                    });
+                    $("#btnYesDelete").click(function () {
+                        var wwwUrlPath = window.document.location.href;
+                        var pathName = window.document.location.pathname;
+                        var pos = wwwUrlPath.indexOf(pathName);
+                        var localhostPath = wwwUrlPath.substring(0, pos);
+                        var url = 'TCMAssessment/Delete';
+                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
+                    });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+
+}
+
+jQueryAjaxPostTCMAssessmenSurgery = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-AssessmentSurgery').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    //$('#MyTable').DataTable({
+                    //    "order": [[1, "asc"]],
+                    //    "pageLength": 100
+                    //});
+                    var item_to_delete;
+                    $('.deleteItem').click((e) => {
+                        item_to_delete = e.currentTarget.dataset.id;
+                    });
+                    $("#btnYesDelete").click(function () {
+                        var wwwUrlPath = window.document.location.href;
+                        var pathName = window.document.location.pathname;
+                        var pos = wwwUrlPath.indexOf(pathName);
+                        var localhostPath = wwwUrlPath.substring(0, pos);
+                        var url = 'TCMAssessment/Delete';
+                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
+                    });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+
+}

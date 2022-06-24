@@ -62,6 +62,6 @@ namespace KyoS.Web.Data.Entities
 
         public List<TCMFarsFormEntity> TCMFarsFormList { get; set; }
 
-        public TCMFarsFormEntity TCMAssessment { get; set; }
+        public TCMAssessmentEntity TCMAssessment { get; set; }
     }
 }

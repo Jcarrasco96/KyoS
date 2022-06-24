@@ -158,5 +158,22 @@ namespace KyoS.Web.Helpers
         TCMFarsFormViewModel ToTCMFarsFormViewModel(TCMFarsFormEntity model);
         Task<TCMAssessmentEntity> ToTCMAssessmentEntity(TCMAssessmentViewModel model, bool isNew, string userId);
         TCMAssessmentViewModel ToTCMAssessmentViewModel(TCMAssessmentEntity model);
+        Task<TCMAssessmentHouseCompositionEntity> ToTCMAssessmentHouseCompositionEntity(TCMAssessmentHouseCompositionViewModel model, bool isNew, string userId);
+        TCMAssessmentHouseCompositionViewModel ToTCMAssessmentHouseCompositionViewModel(TCMAssessmentHouseCompositionEntity model);
+        Task<TCMAssessmentIndividualAgencyEntity> ToTCMAssessmenIndividualAgencyEntity(TCMAssessmentIndividualAgencyViewModel model, bool isNew, string userId);
+        TCMAssessmentIndividualAgencyViewModel ToTCMAssessmentIndividualAgencyViewModel(TCMAssessmentIndividualAgencyEntity model);
+        Task<TCMAssessmentMedicationEntity> ToTCMAssessmenMedicationEntity(TCMAssessmentMedicationViewModel model, bool isNew, string userId);
+        TCMAssessmentMedicationViewModel ToTCMAssessmentMedicationViewModel(TCMAssessmentMedicationEntity model);
+        Task<TCMAssessmentPastCurrentServiceEntity> ToTCMAssessmenPastCurrentServiceEntity(TCMAssessmentPastCurrentServiceViewModel model, bool isNew, string userId);
+        TCMAssessmentPastCurrentServiceViewModel ToTCMAssessmentPastCurrentServiceViewModel(TCMAssessmentPastCurrentServiceEntity model);
+        Task<TCMAssessmentHospitalEntity> ToTCMAssessmentHospitalEntity(TCMAssessmentHospitalViewModel model, bool isNew, string userId);
+        TCMAssessmentHospitalViewModel ToTCMAssessmentHospitalViewModel(TCMAssessmentHospitalEntity model);
+        Task<TCMAssessmentDrugEntity> ToTCMAssessmentDrugEntity(TCMAssessmentDrugViewModel model, bool isNew, string userId);
+        TCMAssessmentDrugViewModel ToTCMAssessmentDrugViewModel(TCMAssessmentDrugEntity model);
+        Task<TCMAssessmentMedicalProblemEntity> ToTCMAssessmentMedicalProblemEntity(TCMAssessmentMedicalProblemViewModel model, bool isNew, string userId);
+        TCMAssessmentMedicalProblemViewModel ToTCMAssessmentMedicalProblemViewModel(TCMAssessmentMedicalProblemEntity model);
+        Task<TCMAssessmentSurgeryEntity> ToTCMAssessmentSurgeryEntity(TCMAssessmentSurgeryViewModel model, bool isNew, string userId);
+        TCMAssessmentSurgeryViewModel ToTCMAssessmentSurgeryViewModel(TCMAssessmentSurgeryEntity model);
+
     }
 }

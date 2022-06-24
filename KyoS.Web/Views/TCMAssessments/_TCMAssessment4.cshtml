@@ -1,0 +1,59 @@
+﻿@model KyoS.Web.Models.TCMAssessmentViewModel
+
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong>Have you ever been to any rehab/detox treatment or program? </strong>
+        <input asp-for="HaveYouEverBeenToAny" class="form-check-input" id="check8"> Yes      <input type="checkbox" class="form-check-input" id="check108"> No  If Yes, complete information below:        
+        </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="WhenWas" class="control-label">When was the first time?</label>
+        <input asp-for="WhenWas" class="form-control">
+        <span asp-validation-for="WhenWas" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="HowManyTimes" class="control-label">How many times since then? </label>
+        <input asp-for="HowManyTimes" class="form-control">
+        <span asp-validation-for="HowManyTimes" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="DateMostRecent" class="control-label">Date of most recent</label>
+        <input asp-for="DateMostRecent" class="form-control">
+        <span asp-validation-for="DateMostRecent" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Outcome" class="control-label">Outcome of treatment</label>
+        <input asp-for="Outcome" class="form-control">
+        <span asp-validation-for="Outcome" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong>Does the client feel that he/she currently has an addiction problem? </strong>
+        <input asp-for="DoesTheClientFeel" class="form-check-input" id="check9"> Yes      <input type="checkbox" class="form-check-input" id="check109"> No  If Yes, complete information below:        
+        Describe any other issues related to client’s mental health: 
+        <textarea asp-for="DescribeAnyOther" rows="3" style="width:90%"> </textarea>
+   </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="TcmClient.Client.Doctor.Name" class="control-label">Primary Care Physician (PCP): </label>
+        <input asp-for="TcmClient.Client.Doctor.Name" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Doctor.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.Doctor.Telephone" class="control-label">Phone No</label>
+        <input asp-for="TcmClient.Client.Doctor.Telephone" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Doctor.Telephone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-7">
+        <label asp-for="TcmClient.Client.Doctor.Address" class="control-label">Address, City, State, Zip</label>
+        <input asp-for="TcmClient.Client.Doctor.Address" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Doctor.Address" class="text-danger"></span>
+    </div>
+</div>

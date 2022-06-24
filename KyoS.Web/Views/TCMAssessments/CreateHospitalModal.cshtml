@@ -1,0 +1,47 @@
+﻿@model KyoS.Web.Models.TCMAssessmentHospitalViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="CreateHospitalModal" onsubmit="return jQueryAjaxPostTCMAssessmenHospital(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IdTCMAssessment" />
+            <input type="hidden" asp-for="TcmAssessment.TcmClient.CaseNumber" />
+            <input type="hidden" asp-for="TcmAssessment.TcmClient.Client.Name" />
+            <div class="container-fluid">
+                <h4 style="font-weight:bold;"> <span class="label label-info"> Client - @Model.TcmAssessment.TcmClient.Client.Name </span></h4>
+            </div>
+            <div>
+                <div class=" col-md-8 form-group">
+                    <label asp-for="Name" class="control-label">Hospital or Institution </label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-4 form-group">
+                    <label asp-for="Date" class="control-label">Date</label>
+                    <input asp-for="Date" class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-12 form-group">
+                    <label asp-for="Reason" class="control-label">Reason</label>
+                    <input asp-for="Reason" class="form-control" />
+                    <span asp-validation-for="Reason" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+

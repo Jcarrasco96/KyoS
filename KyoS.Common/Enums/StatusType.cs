@@ -58,4 +58,10 @@
         Pending,
         Approved
     }
+    public enum TCMDocumentStatus
+    {
+        Edition,
+        Pending,
+        Approved
+    }
 }

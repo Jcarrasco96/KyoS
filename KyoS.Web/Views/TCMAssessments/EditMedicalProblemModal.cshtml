@@ -1,0 +1,57 @@
+﻿@model KyoS.Web.Models.TCMAssessmentMedicalProblemViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="EditMedicalProblemModal" onsubmit="return jQueryAjaxPostTCMAssessmenMedicalProblem(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IdTCMAssessment" />
+            <input type="hidden" asp-for="TcmAssessment.TcmClient.CaseNumber" />
+            <input type="hidden" asp-for="TcmAssessment.TcmClient.Client.Name" />
+            <div class="container-fluid">
+                <h4 style="font-weight:bold;"> <span class="label label-info"> Client - @Model.TcmAssessment.TcmClient.Client.Name </span></h4>
+            </div>
+            <div>
+                <div class=" col-md-8 form-group">
+                    <label asp-for="MedicalProblem" class="control-label">Medical Problem/Condition </label>
+                    <input asp-for="MedicalProblem" class="form-control" />
+                    <span asp-validation-for="MedicalProblem" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-2 form-group">
+                    <label asp-for="Client" class="control-label">Client </label><br />
+                    <input asp-for="Client" />
+                    <span asp-validation-for="Client" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-2 form-group">
+                    <label asp-for="Family" class="control-label">Family</label><br />
+                    <input asp-for="Family"  />
+                    <span asp-validation-for="Family" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-12 form-group">
+                    <label asp-for="Comments" class="control-label">Comments</label>
+                    <input asp-for="Comments" class="form-control" />
+                    <span asp-validation-for="Comments" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+

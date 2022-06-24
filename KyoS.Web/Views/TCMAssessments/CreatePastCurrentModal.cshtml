@@ -1,0 +1,53 @@
+﻿@model KyoS.Web.Models.TCMAssessmentPastCurrentServiceViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="CreatePastCurrentModal" onsubmit="return jQueryAjaxPostTCMAssessmentPastCurrent(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IdTCMAssessment" />
+            <input type="hidden" asp-for="TcmAssessment.TcmClient.CaseNumber" />
+            <input type="hidden" asp-for="TcmAssessment.TcmClient.Client.Name" />
+            <div class="container-fluid">
+                <h4 style="font-weight:bold;"> <span class="label label-info"> Client - @Model.TcmAssessment.TcmClient.Client.Name </span></h4>
+            </div>
+            <div>
+                <div class=" col-md-6 form-group">
+                    <label asp-for="TypeService" class="control-label">Type of service</label>
+                    <input asp-for="TypeService" class="form-control" />
+                    <span asp-validation-for="TypeService" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-6 form-group">
+                    <label asp-for="ProviderAgency" class="control-label">Provider / Agency</label>
+                    <input asp-for="ProviderAgency" class="form-control" />
+                    <span asp-validation-for="ProviderAgency" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-6 form-group">
+                    <label asp-for="DateReceived" class="control-label">Date Received</label>
+                    <input asp-for="DateReceived" class="form-control" />
+                    <span asp-validation-for="DateReceived" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-6 form-group">
+                    <label asp-for="Efectiveness" class="control-label">Effectiveness</label>
+                    <input asp-for="Efectiveness" class="form-control"/>
+                    <span asp-validation-for="Efectiveness" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -76,6 +76,8 @@ namespace KyoS.Web.Controllers
                                                           .Include(n => n.Client.IntakeFeeAgreement)
                                                           .Include(n => n.Client.IntakeMedicalHistory)
                                                           .Include(n => n.Client.MedicationList)
+                                                          .Include(n => n.Client.Psychiatrist)
+                                                          .Include(n => n.Client.Doctor)
                                                           .Include(n => n.TCMIntakeNonClinicalLog)
                                                           .Include(n => n.TCMIntakeMiniMental)
                                                           .Include(n => n.TCMIntakeCoordinationCare)
@@ -88,6 +90,11 @@ namespace KyoS.Web.Controllers
                                                           .Include(n => n.TcmIntakeAppendixJ)
                                                           .Include(n => n.TcmInterventionLog)
                                                           .Include(n => n.TCMFarsFormList)
+                                                          .Include(n => n.TCMAssessment)
+                                                          .ThenInclude(n => n.HouseCompositionList)
+                                                          .ThenInclude(n => n.TcmAssessment.MedicationList)
+                                                          .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
+                                                          .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
                                                           .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
                                                            && n.Casemanager.LinkedUser == user_logged.UserName))
                                                           .ToListAsync();
@@ -377,6 +384,8 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.TCMIntakeWelcome)
                                                             .Include(n => n.Client)
                                                             .ThenInclude(n => n.Documents)
+                                                            .Include(n => n.Client.Psychiatrist)
+                                                            .Include(n => n.Client.Doctor)
                                                             .Include(n => n.Client.IntakeFeeAgreement)
                                                             .Include(n => n.Client.IntakeMedicalHistory)
                                                             .Include(n => n.Client.MedicationList)
@@ -392,6 +401,11 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.TcmIntakeAppendixJ)
                                                             .Include(n => n.TcmInterventionLog)
                                                             .Include(n => n.TCMFarsFormList)
+                                                            .Include(n => n.TCMAssessment)
+                                                            .ThenInclude(n => n.HouseCompositionList)
+                                                            .ThenInclude(n => n.TcmAssessment.MedicationList)
+                                                            .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
+                                                            .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
             List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
@@ -2546,6 +2560,8 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.TCMIntakeWelcome)
                                                             .Include(n => n.Client)
                                                             .ThenInclude(n => n.Documents)
+                                                            .Include(n => n.Client.Psychiatrist)
+                                                            .Include(n => n.Client.Doctor)
                                                             .Include(n => n.Client.IntakeFeeAgreement)
                                                             .Include(n => n.Client.IntakeMedicalHistory)
                                                             .Include(n => n.Client.MedicationList)
@@ -2561,6 +2577,11 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.TcmIntakeAppendixJ)
                                                             .Include(n => n.TcmInterventionLog)
                                                             .Include(n => n.TCMFarsFormList)
+                                                            .Include(n => n.TCMAssessment)
+                                                            .ThenInclude(n => n.HouseCompositionList)
+                                                            .ThenInclude(n => n.TcmAssessment.MedicationList)
+                                                            .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
+                                                            .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
             List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease

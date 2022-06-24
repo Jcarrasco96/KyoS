@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.TCMAssessmentViewModel
 @{
-    ViewData["Title"] = "Create Case Management Assessment";
+    ViewData["Title"] = "Create TCM Assessment";
 }
 
 <!DOCTYPE html>
@@ -8,7 +8,6 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Create Case Management Assessment</title>
 </head>
 <body>
 
@@ -16,30 +15,43 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboard", "TCMAssessments", new { id = @Model.TcmClient.Id, section = 4 })
+                @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.TcmClient_FK, section = 4 })
             </li>
-            <li class="active">Create Case Management Assessment</li>
+            <li class="active">Create TCM Assessment</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Create Case Management Assessment</h4>
+    <h4>Create TCM Assessment</h4>
     <hr />
     <div class="row">
-
-        <div>
-            <form asp-action="Create" asp-route-id="@Model.Id" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="TcmClient_FK" />
-                <partial name="_TCMAssessment" />
-                <div class="form-group col-md-12">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                    <a asp-action="Index" class="btn btn-success">Back</a>
+        <form asp-action="Create" asp-route-id="@Model.Id" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TcmClient_FK" />
+            
+            <partial name="_TCMAssessment" />
+            <div class="col-md-push-12">
+                <div class="">
+                    <div class="col-md-12 form-group">
+                        <a onclick="showInPopup('@Url.Action("CreateIndividualAgencyModal", "TCMAssessments",new { idAssessment = @Model.Id}, Context.Request.Scheme)','Create TCM Assessment')" class="btn btn-success" title="Create TCM Assessment"><i class="glyphicon glyphicon-plus"></i> Add TCM Assessment</a>
+                    </div>
                 </div>
-            </form>
-        </div>
+                <div class="">
+                    <div id="view-AssessmentIndividual">
+                        @await Html.PartialAsync("_ViewIndividualAgency", Model.IndividualAgencyList.ToList())
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmClient.Id" asp-route-section="4" asp-controller="TCMIntakes" class="btn btn-success">Back</a>
+            </div>
+        </form>
     </div>
 </body>
 </html>
+
+<partial name="_ModalPopup" />
+<partial name="_DeleteDialog" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
