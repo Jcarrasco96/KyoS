@@ -1732,7 +1732,7 @@ namespace KyoS.Web.Helpers
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Activities1");
 
                     dataSet = new DataSet();
-                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    dataSet.Tables.Add(GetThemeDS(item.Activity?.Theme));
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Themes1");
 
                     if (item.Objetive != null)
@@ -1754,7 +1754,7 @@ namespace KyoS.Web.Helpers
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Activities2");
 
                     dataSet = new DataSet();
-                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    dataSet.Tables.Add(GetThemeDS(item.Activity?.Theme));
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Themes2");
 
                     if (num_of_goal == string.Empty)
@@ -1779,7 +1779,7 @@ namespace KyoS.Web.Helpers
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Activities3");
 
                     dataSet = new DataSet();
-                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    dataSet.Tables.Add(GetThemeDS(item.Activity?.Theme));
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Themes3");
 
                     if (num_of_goal == string.Empty)
@@ -1804,7 +1804,7 @@ namespace KyoS.Web.Helpers
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Activities4");
 
                     dataSet = new DataSet();
-                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    dataSet.Tables.Add(GetThemeDS(item.Activity?.Theme));
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Themes4");
 
                     if (num_of_goal == string.Empty)
@@ -2074,7 +2074,7 @@ namespace KyoS.Web.Helpers
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Activities1");
 
                     dataSet = new DataSet();
-                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    dataSet.Tables.Add(GetThemeDS(item.Activity?.Theme));
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Themes1");
 
                     if (item.Objetive != null)
@@ -2096,7 +2096,7 @@ namespace KyoS.Web.Helpers
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Activities2");
 
                     dataSet = new DataSet();
-                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    dataSet.Tables.Add(GetThemeDS(item.Activity?.Theme));
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Themes2");
 
                     if (num_of_goal == string.Empty)
@@ -2121,7 +2121,7 @@ namespace KyoS.Web.Helpers
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Activities3");
 
                     dataSet = new DataSet();
-                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    dataSet.Tables.Add(GetThemeDS(item.Activity?.Theme));
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Themes3");
 
                     if (num_of_goal == string.Empty)
@@ -2146,7 +2146,7 @@ namespace KyoS.Web.Helpers
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Activities4");
 
                     dataSet = new DataSet();
-                    dataSet.Tables.Add(GetThemeDS(item.Activity.Theme));
+                    dataSet.Tables.Add(GetThemeDS(item.Activity?.Theme));
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Themes4");
 
                     if (num_of_goal == string.Empty)
@@ -6247,6 +6247,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Setting", typeof(string));
             dt.Columns.Add("MTPId", typeof(int));
             dt.Columns.Add("Schema", typeof(int));
+            dt.Columns.Add("RealUnits", typeof(int));
 
             dt.Rows.Add(new object[]
                                         {
@@ -6293,7 +6294,8 @@ namespace KyoS.Web.Helpers
 
                                             note.Setting,
                                             note.MTPId,
-                                            note.Schema
+                                            note.Schema,
+                                            note.RealUnits
             });
 
             return dt;
@@ -6587,12 +6589,13 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Other", typeof(bool));
 
             dt.Columns.Add("ObjetiveId", typeof(int));
+            dt.Columns.Add("Present", typeof(bool));
 
             dt.Rows.Add(new object[]
                                         {
                                             noteActivity.Id,
                                             noteActivity.NoteP.Id,
-                                            noteActivity.Activity.Id,
+                                            (noteActivity.Activity == null) ? 0 : noteActivity.Activity.Id,
 
                                             noteActivity.Cooperative,
                                             noteActivity.Assertive,
@@ -6606,7 +6609,8 @@ namespace KyoS.Web.Helpers
                                             noteActivity.Resistant,
                                             noteActivity.Other,
 
-                                            (noteActivity.Objetive == null) ? 0 : noteActivity.Objetive.Id
+                                            (noteActivity.Objetive == null) ? 0 : noteActivity.Objetive.Id,
+                                            noteActivity.Present
                                         });
 
             return dt;
@@ -6640,7 +6644,7 @@ namespace KyoS.Web.Helpers
                                         {
                                             workdayActivityFacilitator.Id,
                                             workdayActivityFacilitator.Workday.Id,
-                                            workdayActivityFacilitator.Activity.Id,
+                                            (workdayActivityFacilitator.Activity == null) ? 0 : workdayActivityFacilitator.Activity.Id,
                                             (workdayActivityFacilitator.Facilitator == null) ? 0 : workdayActivityFacilitator.Facilitator.Id,
                                             workdayActivityFacilitator.Schema,
 
@@ -6697,15 +6701,29 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Id", typeof(int));
             dt.Columns.Add("Name", typeof(string));
             dt.Columns.Add("Day", typeof(int));
-            dt.Columns.Add("ClinicId", typeof(int));            
+            dt.Columns.Add("ClinicId", typeof(int));
 
-            dt.Rows.Add(new object[]
+
+            if (theme != null)
+            {
+                dt.Rows.Add(new object[]
                                         {
                                             theme.Id,
                                             theme.Name,
                                             theme.Day,
                                             theme.Clinic.Id
-            });
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            string.Empty,
+                                            Common.Enums.DayOfWeekType.Monday,
+                                            0
+                                        });
+            }            
 
             return dt;
         }
@@ -6727,7 +6745,9 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Status", typeof(int));
             dt.Columns.Add("SupervisorId", typeof(int));
 
-            dt.Rows.Add(new object[]
+            if (activity != null)
+            {
+                dt.Rows.Add(new object[]
                                         {
                                             activity.Id,
                                             activity.Name,
@@ -6737,8 +6757,23 @@ namespace KyoS.Web.Helpers
                                             0,
                                             activity.Status,
                                             0
-            });
-
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            string.Empty,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            0,
+                                            Common.Enums.ActivityStatus.Pending,
+                                            0
+                                        });
+            }
+            
             return dt;
         }
 
