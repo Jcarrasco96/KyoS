@@ -32,6 +32,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdTCMClient" />
             <input type="hidden" asp-for="TcmClient_FK" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="AdmissionedFor" />
             <partial name="_TCMIntakeForeignLanguage" />
             <div class="form-group col-md-12">

@@ -108,6 +108,8 @@ namespace KyoS.Web.Controllers
                         CaseMannagers = _combosHelper.GetComboCasemannagersByClinic(user_logged.Clinic.Id),
                         Clients = _combosHelper.GetComboClientsForTCMCaseNotOpen(user_logged.Clinic.Id),
                         IdStatus = 1,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now,
                         StatusList = _combosHelper.GetComboClientStatus(),
                         DataOpen = DateTime.Today.Date,
                         Period = 6,
@@ -139,7 +141,7 @@ namespace KyoS.Web.Controllers
                     if (tcmClient == null)
                     {
                         model.DataClose = model.DataOpen.AddMonths(model.Period);
-                        tcmClient = await _converterHelper.ToTCMClientEntity(model, true);
+                        tcmClient = await _converterHelper.ToTCMClientEntity(model, true, user_logged.UserName);
                         _context.Add(tcmClient);
                         try
                         {
@@ -301,7 +303,7 @@ namespace KyoS.Web.Controllers
                         else
                             model.DataClose = model.DataOpen.AddMonths(model.Period);
 
-                        TCMClientEntity tcmClient = await _converterHelper.ToTCMClientEntity(model, false);
+                        TCMClientEntity tcmClient = await _converterHelper.ToTCMClientEntity(model, false, user_logged.UserName);
                         _context.TCMClient.Update(tcmClient);
                         try
                         {

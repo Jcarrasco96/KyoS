@@ -10,6 +10,8 @@
             <input type="hidden" asp-for="IdTCMAssessment" />
             <input type="hidden" asp-for="TcmAssessment.TcmClient.CaseNumber" />
             <input type="hidden" asp-for="TcmAssessment.TcmClient.Client.Name" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
             <div class="container-fluid">
                 <h4 style="font-weight:bold;"> <span class="label label-info"> Client - @Model.TcmAssessment.TcmClient.Client.Name </span></h4>
             </div>
@@ -37,7 +39,7 @@
             <div>
                 <div class=" col-md-6 form-group">
                     <label asp-for="Efectiveness" class="control-label">Effectiveness</label>
-                    <input asp-for="Efectiveness" class="form-control"/>
+                    <input asp-for="Efectiveness" class="form-control" />
                     <span asp-validation-for="Efectiveness" class="text-danger"></span>
                 </div>
             </div>

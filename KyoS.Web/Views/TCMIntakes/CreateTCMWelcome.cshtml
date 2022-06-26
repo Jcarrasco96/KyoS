@@ -31,12 +31,14 @@
         <form asp-action="CreateTCMWelcome" asp-route-id="@Model.Id" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdTCMClient" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="TcmClient_FK" />
             <input type="hidden" asp-for="AdmissionedFor" />
             <partial name="_TCMIntakeWelcome" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmClient.Id"  asp-route-section="1" class="btn btn-success">Back</a>
+                <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmClient.Id" asp-route-section="1" class="btn btn-success">Back</a>
             </div>
         </form>
     </div>

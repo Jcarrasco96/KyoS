@@ -488,16 +488,9 @@ namespace KyoS.Web.Controllers
                         VisionImpairment = false,
                         VisionNotDetermined = false,
                         WhatPharmacy = "",
-                        WhenWas = ""
-
-
-
-
-
-
-
-
-
+                        WhenWas = "",
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now
                     };
                     if (model.IndividualAgencyList == null)
                         model.IndividualAgencyList = new List<TCMAssessmentIndividualAgencyEntity>();
@@ -733,7 +726,9 @@ namespace KyoS.Web.Controllers
                         Id = 0,
                         Agency = "",
                         Name = "",
-                        RelationShip =""
+                        RelationShip ="",
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now
                     };
                     if (model.TcmAssessment.IndividualAgencyList == null)
                         model.TcmAssessment.IndividualAgencyList = new List<TCMAssessmentIndividualAgencyEntity>();
@@ -752,7 +747,9 @@ namespace KyoS.Web.Controllers
                 Id = 0,
                 Agency = "",
                 Name = "",
-                RelationShip = ""
+                RelationShip = "",
+                CreatedBy = user_logged.UserName,
+                CreatedOn = DateTime.Now
             };
 
             return View(model);
@@ -912,7 +909,9 @@ namespace KyoS.Web.Controllers
                         Name = "",
                         RelationShip = "",
                         Supporting = "",
-                        Age = 0
+                        Age = 0,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now
                     };
                     if (model.TcmAssessment.HouseCompositionList == null)
                         model.TcmAssessment.HouseCompositionList = new List<TCMAssessmentHouseCompositionEntity>();
@@ -1087,10 +1086,12 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(n => n.Client)
                                                 .FirstOrDefault(n => n.Id == idAssessment),
                         Id = 0,
-                       Efectiveness = "",
-                       DateReceived = DateTime.Now,
-                       ProviderAgency = "",
-                       TypeService = ""
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now,
+                        Efectiveness = "",
+                        DateReceived = DateTime.Now,
+                        ProviderAgency = "",
+                        TypeService = ""
                     };
                     if (model.TcmAssessment.PastCurrentServiceList == null)
                         model.TcmAssessment.PastCurrentServiceList = new List<TCMAssessmentPastCurrentServiceEntity>();
@@ -1107,6 +1108,8 @@ namespace KyoS.Web.Controllers
                                         .ThenInclude(n => n.Client)
                                         .FirstOrDefault(n => n.Id == idAssessment),
                 Id = 0,
+                CreatedBy = user_logged.UserName,
+                CreatedOn = DateTime.Now,
                 Efectiveness = "",
                 DateReceived = DateTime.Now,
                 ProviderAgency = "",
@@ -1268,6 +1271,8 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(n => n.Client)
                                                 .FirstOrDefault(n => n.Id == idAssessment),
                         Id = 0,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now,
                         Name = "",
                         Dosage = "",
                         Prescriber = "",
@@ -1289,6 +1294,8 @@ namespace KyoS.Web.Controllers
                                         .ThenInclude(n => n.Client)
                                         .FirstOrDefault(n => n.Id == idAssessment),
                 Id = 0,
+                CreatedBy = user_logged.UserName,
+                CreatedOn = DateTime.Now,
                 Name = "",
                 Dosage = "",
                 Prescriber = "",
@@ -1452,6 +1459,8 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(n => n.Client)
                                                 .FirstOrDefault(n => n.Id == idAssessment),
                         Id = 0,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now,
                         Name = "",
                         Date = DateTime.Now,
                         Reason = ""
@@ -1471,6 +1480,8 @@ namespace KyoS.Web.Controllers
                                         .ThenInclude(n => n.Client)
                                         .FirstOrDefault(n => n.Id == idAssessment),
                 Id = 0,
+                CreatedBy = user_logged.UserName,
+                CreatedOn = DateTime.Now,
                 Name = "",
                 Date = DateTime.Now,
                 Reason = ""
@@ -1629,6 +1640,8 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(n => n.Client)
                                                 .FirstOrDefault(n => n.Id == idAssessment),
                         Id = 0,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now,
                         Age = 0,
                         Frequency = "",
                         DateBegin = DateTime.Now,
@@ -1650,6 +1663,8 @@ namespace KyoS.Web.Controllers
                                         .ThenInclude(n => n.Client)
                                         .FirstOrDefault(n => n.Id == idAssessment),
                 Id = 0,
+                CreatedBy = user_logged.UserName,
+                CreatedOn = DateTime.Now,
                 Age = 0,
                 Frequency = "",
                 DateBegin = DateTime.Now,
@@ -1812,6 +1827,8 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(n => n.Client)
                                                 .FirstOrDefault(n => n.Id == idAssessment),
                         Id = 0,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now,
                         Client = false,
                         Comments = "",
                         Family = false,
@@ -1832,6 +1849,8 @@ namespace KyoS.Web.Controllers
                                         .ThenInclude(n => n.Client)
                                         .FirstOrDefault(n => n.Id == idAssessment),
                 Id = 0,
+                CreatedBy = user_logged.UserName,
+                CreatedOn = DateTime.Now,
                 Client = false,
                 Comments = "",
                 Family = false,
@@ -1992,6 +2011,8 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(n => n.Client)
                                                 .FirstOrDefault(n => n.Id == idAssessment),
                         Id = 0,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now,
                         Date = DateTime.Now,
                         Hospital = "",
                         Outcome = "",
@@ -2012,6 +2033,8 @@ namespace KyoS.Web.Controllers
                                         .ThenInclude(n => n.Client)
                                         .FirstOrDefault(n => n.Id == idAssessment),
                 Id = 0,
+                CreatedBy = user_logged.UserName,
+                CreatedOn = DateTime.Now,
                 Date = DateTime.Now,
                 Hospital = "",
                 Outcome = "",

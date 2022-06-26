@@ -8,6 +8,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="IdTCMAssessment" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="TcmAssessment.TcmClient.CaseNumber" />
             <input type="hidden" asp-for="TcmAssessment.TcmClient.Client.Name" />
             <div class="container-fluid">

@@ -175,7 +175,9 @@ namespace KyoS.Web.Controllers
                         StatusOther_Explain = "",
                         StatusResident = false,
                         StausCitizen = false,
-                        YearEnterUsa = ""
+                        YearEnterUsa = "",
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now
 
                     };
                     if (model.TcmClient.Client.LegalGuardian == null)
@@ -210,6 +212,8 @@ namespace KyoS.Web.Controllers
                 CaseManagerNotes = "",
                 Elibigility = "",
                 EmploymentStatus = "",
+                CreatedBy = user_logged.UserName,
+                CreatedOn = DateTime.Now,
                 Grade = "",
                 IntakeDate = DateTime.Now,
                 IsClientCurrently = false,
@@ -551,6 +555,8 @@ namespace KyoS.Web.Controllers
                                                 .Include(d => d.Client)
                                                 .ThenInclude(d => d.LegalGuardian)
                                                 .FirstOrDefault(n => n.Id == id),
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             Aggre = true,
                             Aggre1 = true,
                             AuthorizeRelease = true,
@@ -598,7 +604,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeConsentForTreatmentEntity IntakeConsentEntity = await _converterHelper.ToTCMIntakeConsentForTreatmentEntity(IntakeViewModel, false);
+                TCMIntakeConsentForTreatmentEntity IntakeConsentEntity = await _converterHelper.ToTCMIntakeConsentForTreatmentEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeConsentEntity.Id == 0)
                 {
@@ -657,6 +663,8 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(n => n.LegalGuardian)
                                             .FirstOrDefault(n => n.Id == id),
                         IdTCMClient = id,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now,
                         TcmClient_FK = id,
                         Id = 0,
                         ToRelease = true,
@@ -709,7 +717,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeConsentForReleaseEntity IntakeConsentEntity = await _converterHelper.ToTCMIntakeConsentForReleaseEntity(IntakeViewModel, false);
+                TCMIntakeConsentForReleaseEntity IntakeConsentEntity = await _converterHelper.ToTCMIntakeConsentForReleaseEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeConsentEntity.Id == 0)
                 {
@@ -773,6 +781,8 @@ namespace KyoS.Web.Controllers
                                                 .Include(n => n.Client)
                                                 .ThenInclude(n => n.LegalGuardian)
                                                 .FirstOrDefault(n => n.Id == id),
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             IdTCMClient = id,
                             TcmClient_FK = id,
                             Id = 0,
@@ -814,7 +824,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeConsumerRightsEntity IntakeConsumerEntity = await _converterHelper.ToTCMIntakeConsumerRightsEntity(IntakeViewModel, false);
+                TCMIntakeConsumerRightsEntity IntakeConsumerEntity = await _converterHelper.ToTCMIntakeConsumerRightsEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeConsumerEntity.Id == 0)
                 {
@@ -885,6 +895,8 @@ namespace KyoS.Web.Controllers
                             DateSignaturePerson = DateTime.Now,
                             Documents = true,
                             Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             IdTCMClient = id,
                             TcmClient_FK = id,
                             AdmissionedFor = user_logged.FullName
@@ -920,7 +932,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeAcknowledgementHippaEntity IntakeAckNowEntity = await _converterHelper.ToTCMIntakeAcknoewledgementHippaEntity(IntakeViewModel, false);
+                TCMIntakeAcknowledgementHippaEntity IntakeAckNowEntity = await _converterHelper.ToTCMIntakeAcknoewledgementHippaEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeAckNowEntity.Id == 0)
                 {
@@ -985,6 +997,8 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(n => n.LegalGuardian)
                                                 .FirstOrDefault(n => n.Id == id),
                             IdTcmClient = id,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             TcmClient_FK = id,
                             Id = 0,
                             DateSignatureEmployee = DateTime.Now,
@@ -1046,7 +1060,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeOrientationChecklistEntity IntakeOrientationEntity = await _converterHelper.ToTCMIntakeOrientationChecklistEntity(IntakeViewModel, false);
+                TCMIntakeOrientationChecklistEntity IntakeOrientationEntity = await _converterHelper.ToTCMIntakeOrientationChecklistEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeOrientationEntity.Id == 0)
                 {
@@ -1112,6 +1126,8 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(n => n.LegalGuardian)
                                                 .FirstOrDefault(n => n.Id == id),
                             IdTCMClient = id,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             TcmClient_FK = id,
                             Id = 0,
                             Documents = true,
@@ -1151,7 +1167,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeAdvancedDirectiveEntity IntakeConsumerEntity = await _converterHelper.ToTCMIntakeAdvancedDirectiveEntity(IntakeViewModel, false);
+                TCMIntakeAdvancedDirectiveEntity IntakeConsumerEntity = await _converterHelper.ToTCMIntakeAdvancedDirectiveEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeConsumerEntity.Id == 0)
                 {
@@ -1273,7 +1289,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeConsentForReleaseEntity intakeEntity = await _converterHelper.ToTCMIntakeConsentForReleaseEntity(intakeViewModel, false);
+                TCMIntakeConsentForReleaseEntity intakeEntity = await _converterHelper.ToTCMIntakeConsentForReleaseEntity(intakeViewModel, false, user_logged.UserName);
                 _context.TCMIntakeConsentForRelease.Update(intakeEntity);
                 try
                 {
@@ -1344,6 +1360,8 @@ namespace KyoS.Web.Controllers
                             DateSignaturePerson = DateTime.Now,
                             Documents = true,
                             Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             IdTCMClient = id,
                             TcmClient_FK = id,
                             AdmissionedFor = user_logged.FullName
@@ -1379,7 +1397,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeForeignLanguageEntity IntakeForeignEntity = await _converterHelper.ToTCMIntakeForeignLanguageEntity(IntakeViewModel, false);
+                TCMIntakeForeignLanguageEntity IntakeForeignEntity = await _converterHelper.ToTCMIntakeForeignLanguageEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeForeignEntity.Id == 0)
                 {
@@ -1452,6 +1470,8 @@ namespace KyoS.Web.Controllers
                                                 .FirstOrDefault(n => n.Id == id),
                             Date = DateTime.Now,
                             Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             IdTCMClient = id,
                             TcmClient_FK = id,
                             AdmissionedFor = user_logged.FullName
@@ -1487,7 +1507,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeWelcomeEntity IntakeForeignEntity = await _converterHelper.ToTCMIntakeWelcomeEntity(IntakeViewModel, false);
+                TCMIntakeWelcomeEntity IntakeForeignEntity = await _converterHelper.ToTCMIntakeWelcomeEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeForeignEntity.Id == 0)
                 {
@@ -1783,6 +1803,8 @@ namespace KyoS.Web.Controllers
                                                 .FirstOrDefault(n => n.Id == id),
                             Date = DateTime.Now,
                             Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             IdTCMClient = id,
                             TcmClient_FK = id,
                             AdmissionedFor = user_logged.FullName
@@ -1818,7 +1840,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeNonClinicalLogEntity IntakeNonClinicalEntity = await _converterHelper.ToTCMIntakeNonClinicalLogEntity(IntakeViewModel, false);
+                TCMIntakeNonClinicalLogEntity IntakeNonClinicalEntity = await _converterHelper.ToTCMIntakeNonClinicalLogEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeNonClinicalEntity.Id == 0)
                 {
@@ -1891,6 +1913,8 @@ namespace KyoS.Web.Controllers
                                                 .FirstOrDefault(n => n.Id == id),
                             Date = DateTime.Now,
                             Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             IdTCMClient = id,
                             TcmClient_FK = id,
                             AdmissionedFor = user_logged.FullName
@@ -1926,7 +1950,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeMiniMentalEntity IntakeMiniMenatalEntity = await _converterHelper.ToTCMIntakeMiniMenatalEntity(IntakeViewModel, false);
+                TCMIntakeMiniMentalEntity IntakeMiniMenatalEntity = await _converterHelper.ToTCMIntakeMiniMenatalEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeMiniMenatalEntity.Id == 0)
                 {
@@ -2443,6 +2467,8 @@ namespace KyoS.Web.Controllers
                                                 .FirstOrDefault(n => n.Id == id),
                             Date = DateTime.Now,
                             Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             IdTCMClient = id,
                             TcmClient_FK = id,
                             AdmissionedFor = user_logged.FullName,
@@ -2502,7 +2528,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeCoordinationCareEntity IntakeCoordination = await _converterHelper.ToTCMIntakeCoordinationCareEntity(IntakeViewModel, false);
+                TCMIntakeCoordinationCareEntity IntakeCoordination = await _converterHelper.ToTCMIntakeCoordinationCareEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeCoordination.Id == 0)
                 {
@@ -2628,6 +2654,8 @@ namespace KyoS.Web.Controllers
                             IdTCMClient = id,
                             TcmClient_FK = id,
                             Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             AdmissionedFor = user_logged.FullName,
                             Approved = 0,
                             Date = DateTime.Now,
@@ -2667,7 +2695,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeAppendixJEntity AppendixJEntity = await _converterHelper.ToTCMIntakeAppendixJEntity(AppendixJViewModel, false);
+                TCMIntakeAppendixJEntity AppendixJEntity = await _converterHelper.ToTCMIntakeAppendixJEntity(AppendixJViewModel, false, user_logged.UserName);
 
                 if (AppendixJEntity.Id == 0)
                 {
@@ -2736,6 +2764,8 @@ namespace KyoS.Web.Controllers
                             IdTCMClient = id,
                             TcmClient_FK = id,
                             Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             InterventionList = new List<TCMIntakeInterventionEntity>()
                   
                         };
@@ -2766,7 +2796,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeInterventionLogEntity InterventionLogEntity = await _converterHelper.ToTCMIntakeInterventionLogEntity(interventionLogViewModel, true);
+                TCMIntakeInterventionLogEntity InterventionLogEntity = await _converterHelper.ToTCMIntakeInterventionLogEntity(interventionLogViewModel, true, user_logged.UserName);
 
                 InterventionLogEntity.TcmClient = null;
                 _context.TCMIntakeInterventionLog.Add(InterventionLogEntity);
@@ -2837,7 +2867,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeInterventionLogEntity tcmInterLogEntity = await _converterHelper.ToTCMIntakeInterventionLogEntity(tcmInterLogViewModel, false);
+                TCMIntakeInterventionLogEntity tcmInterLogEntity = await _converterHelper.ToTCMIntakeInterventionLogEntity(tcmInterLogViewModel, false, user_logged.UserName);
                 _context.TCMIntakeInterventionLog.Update(tcmInterLogEntity);
                 try
                 {
@@ -2880,6 +2910,8 @@ namespace KyoS.Web.Controllers
                         {
                             TcmInterventionLog = interventionLog,
                             Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             Activity = "",
                             Date = DateTime.Now,
                             IdInterventionLog = id
@@ -2910,7 +2942,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeInterventionEntity InterventionEntity = await _converterHelper.ToTCMIntakeInterventionEntity(interventionViewModel, true);
+                TCMIntakeInterventionEntity InterventionEntity = await _converterHelper.ToTCMIntakeInterventionEntity(interventionViewModel, true, user_logged.UserName);
 
                 _context.TCMIntakeIntervention.Add(InterventionEntity);
                 try

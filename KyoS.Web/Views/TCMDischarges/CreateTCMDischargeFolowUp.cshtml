@@ -9,6 +9,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="IdTCMDischarge" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
             <div class="form-group">
                 <div class="col-md-6">
                     <b>Case number:</b>
@@ -45,17 +47,17 @@
             <div class="form-group">
                 <div class="form-group col-md-6">
                     <label asp-for="PhoneNumber" class="control-label">Phone Number</label>
-                    <input asp-for="PhoneNumber" id="GetCode" class="form-control"  />
+                    <input asp-for="PhoneNumber" id="GetCode" class="form-control" />
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-md-6">
                     <label asp-for="NextAppt" class="control-label">Next Appt</label>
-                    <input asp-for="NextAppt" id="GetName" class="form-control"  />
+                    <input asp-for="NextAppt" id="GetName" class="form-control" />
                     <span asp-validation-for="NextAppt" class="text-danger"></span>
                 </div>
             </div>
-            
+
 
             <div class="col-md-12">
                 &nbsp;

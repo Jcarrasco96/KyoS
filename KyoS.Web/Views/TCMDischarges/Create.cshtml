@@ -30,6 +30,8 @@
             <form asp-action="Create" asp-route-id="@Model.Id" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="IdServicePlan" />
+                <input type="hidden" asp-for="CreatedOn" />
+                <input type="hidden" asp-for="CreatedBy" />
                 <partial name="_TCMDischarges" />
                 <div class="form-group col-md-12">
                     <input type="submit" value="Create" class="btn btn-primary" />

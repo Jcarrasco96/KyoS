@@ -383,11 +383,15 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMSupervisorEntity> ToTCMsupervisorEntity(TCMSupervisorViewModel model, string signaturePath, bool isNew)
+        public async Task<TCMSupervisorEntity> ToTCMsupervisorEntity(TCMSupervisorViewModel model, string signaturePath, bool isNew, string userId)
         {
             return new TCMSupervisorEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Clinic = await _context.Clinics.FindAsync(model.IdClinic),
                 Code = model.Code,
                 LinkedUser = _userHelper.GetUserNameById(model.IdUser),
@@ -1269,11 +1273,15 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMServiceEntity> ToTCMServiceEntity(TCMServiceViewModel model, bool isNew)
+        public async Task<TCMServiceEntity> ToTCMServiceEntity(TCMServiceViewModel model, bool isNew, string userId)
         {
             return new TCMServiceEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Clinic = await _context.Clinics.FindAsync(model.IdClinic),
                 Name = model.Name,
                 Description = model.Description,
@@ -1294,11 +1302,15 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMStageEntity> ToTCMStageEntity(TCMStageViewModel model, bool isNew)
+        public async Task<TCMStageEntity> ToTCMStageEntity(TCMStageViewModel model, bool isNew, string userId)
         {
             return new TCMStageEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 tCMservice = await _context.TCMServices.FindAsync(model.Id_TCMService),
                 Clinic = await _context.Clinics.FindAsync(model.IdClinic),
                 Name = model.Name,
@@ -1324,11 +1336,15 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMClientEntity> ToTCMClientEntity(TCMClientViewModel model, bool isNew)
+        public async Task<TCMClientEntity> ToTCMClientEntity(TCMClientViewModel model, bool isNew, string userId)
         {
             return new TCMClientEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Casemanager = model.Casemanager,
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus),
                 CaseNumber = model.CaseNumber,
@@ -1380,11 +1396,15 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMServicePlanEntity> ToTCMServicePlanEntity(TCMServicePlanViewModel model, bool isNew)
+        public async Task<TCMServicePlanEntity> ToTCMServicePlanEntity(TCMServicePlanViewModel model, bool isNew, string userId)
         {
             return new TCMServicePlanEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 DateIntake = model.Date_Intake,
                 DateServicePlan = model.Date_ServicePlan,
                 DateAssessment = model.Date_Assessment,
@@ -1416,12 +1436,16 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMDomainEntity> ToTCMDomainEntity(TCMDomainViewModel model, bool isNew, string origin = "Service Plan Review")
+        public async Task<TCMDomainEntity> ToTCMDomainEntity(TCMDomainViewModel model, bool isNew, string origin = "Service Plan Review", string userId = "")
         {
            
             return new TCMDomainEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 DateIdentified = model.Date_Identified,
                 NeedsIdentified = model.Needs_Identified,
                 LongTerm = model.Long_Term,
@@ -1749,7 +1773,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMObjetiveEntity> ToTCMObjetiveEntity(TCMObjetiveViewModel model, bool isNew, int origin)
+        public async Task<TCMObjetiveEntity> ToTCMObjetiveEntity(TCMObjetiveViewModel model, bool isNew, int origin, string userId)
         {
             string valor = "Service Plan";
             if (origin == 1)
@@ -1760,6 +1784,10 @@ namespace KyoS.Web.Helpers
             return new TCMObjetiveEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmDomain = await _context.TCMDomains.FindAsync(model.Id_Domain),
                 //Clinic = await _context.Clinics.FindAsync(model.IdClinic),
                 Name = model.name,
@@ -1917,12 +1945,16 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMAdendumEntity> ToTCMAdendumEntity(TCMAdendumViewModel model, bool isNew)
+        public async Task<TCMAdendumEntity> ToTCMAdendumEntity(TCMAdendumViewModel model, bool isNew, string userId)
         {
 
             return new TCMAdendumEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 DateAdendum = model.Date_Identified,
                 TcmServicePlan = model.TcmServicePlan,
                 TcmDomain = model.TcmDomain,
@@ -1968,12 +2000,16 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMServicePlanReviewEntity> ToTCMServicePlanReviewEntity(TCMServicePlanReviewViewModel model, bool isNew)
+        public async Task<TCMServicePlanReviewEntity> ToTCMServicePlanReviewEntity(TCMServicePlanReviewViewModel model, bool isNew, string userId)
         {
             TCMServicePlanEntity tcmServicePlan = await _context.TCMServicePlans.FirstOrDefaultAsync(n => n.Id == model.IdServicePlan);
             return new TCMServicePlanReviewEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 DateOpending = tcmServicePlan.DateIntake,
                 DateServicePlanReview = model.DateServicePlanReview,
                 Recomendation = model.Recomendation,
@@ -1997,11 +2033,15 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMServicePlanReviewDomainEntity> ToTCMServicePlanReviewDomainEntity(TCMServicePlanReviewDomainViewModel model, bool isNew)
+        public async Task<TCMServicePlanReviewDomainEntity> ToTCMServicePlanReviewDomainEntity(TCMServicePlanReviewDomainViewModel model, bool isNew, string userId)
         {
             return new TCMServicePlanReviewDomainEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmDomain = model.TcmDomain,
                 ChangesUpdate = model.ChangesUpdate
                
@@ -2038,11 +2078,15 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMDischargeEntity> ToTCMDischargeEntity(TCMDischargeViewModel model, bool isNew)
+        public async Task<TCMDischargeEntity> ToTCMDischargeEntity(TCMDischargeViewModel model, bool isNew, string userId)
         {
             return new TCMDischargeEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 StaffingDate = model.StaffingDate,
                 DischargeDate = model.DischargeDate,
                 PresentProblems = model.PresentProblems,
@@ -3508,13 +3552,16 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMIntakeConsentForTreatmentEntity> ToTCMIntakeConsentForTreatmentEntity(TCMIntakeConsentForTreatmentViewModel model, bool isNew)
+        public async Task<TCMIntakeConsentForTreatmentEntity> ToTCMIntakeConsentForTreatmentEntity(TCMIntakeConsentForTreatmentViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeConsentForTreatmentEntity
             {
                 Id = isNew ? 0 : model.Id,
                 TcmClient = model.TcmClient,
-
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Aggre = model.Aggre,
                 Aggre1 = model.Aggre1,
                 AuthorizeRelease = model.AuthorizeRelease,
@@ -3551,17 +3598,25 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
                 Underestand = model.Underestand,
-                AdmissionedFor = model.AdmissionedFor
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
 
-        public async Task<TCMIntakeConsentForReleaseEntity> ToTCMIntakeConsentForReleaseEntity(TCMIntakeConsentForReleaseViewModel model, bool isNew)
+        public async Task<TCMIntakeConsentForReleaseEntity> ToTCMIntakeConsentForReleaseEntity(TCMIntakeConsentForReleaseViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeConsentForReleaseEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = await _context.TCMClient.FirstOrDefaultAsync(c => c.Id == model.TcmClient_FK),
                 TcmClient_FK = model.TcmClient_FK,
                 DateSignatureEmployee = model.DateSignatureEmployee,
@@ -3631,17 +3686,25 @@ namespace KyoS.Web.Helpers
                 Address = model.Address,
                 CityStateZip = model.CityStateZip,
                 PhoneNo = model.PhoneNo,
-                FaxNo = model.FaxNo
+                FaxNo = model.FaxNo,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
 
-        public async Task<TCMIntakeConsumerRightsEntity> ToTCMIntakeConsumerRightsEntity(TCMIntakeConsumerRightsViewModel model, bool isNew)
+        public async Task<TCMIntakeConsumerRightsEntity> ToTCMIntakeConsumerRightsEntity(TCMIntakeConsumerRightsViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeConsumerRightsEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 DateSignatureEmployee = model.DateSignatureEmployee,
@@ -3668,17 +3731,25 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 ServedOf = model.ServedOf,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
 
-        public async Task<TCMIntakeAcknowledgementHippaEntity> ToTCMIntakeAcknoewledgementHippaEntity(TCMIntakeAcknoewledgementHippaViewModel model, bool isNew)
+        public async Task<TCMIntakeAcknowledgementHippaEntity> ToTCMIntakeAcknoewledgementHippaEntity(TCMIntakeAcknoewledgementHippaViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeAcknowledgementHippaEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 DateSignatureEmployee = model.DateSignatureEmployee,
@@ -3702,17 +3773,25 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
 
-        public async Task<TCMIntakeOrientationChecklistEntity> ToTCMIntakeOrientationChecklistEntity(TCMIntakeOrientationCheckListViewModel model, bool isNew)
+        public async Task<TCMIntakeOrientationChecklistEntity> ToTCMIntakeOrientationChecklistEntity(TCMIntakeOrientationCheckListViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeOrientationChecklistEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 DateSignatureEmployee = model.DateSignatureEmployee,
@@ -3782,17 +3861,25 @@ namespace KyoS.Web.Helpers
                 Services = model.Services,
                 TheAbove = model.TheAbove,
                 TourFacility = model.TourFacility,
-                AdmissionedFor = model.AdmissionedFor
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
 
-        public async Task<TCMIntakeAdvancedDirectiveEntity> ToTCMIntakeAdvancedDirectiveEntity(TCMIntakeAdvancedDirectiveViewModel model, bool isNew)
+        public async Task<TCMIntakeAdvancedDirectiveEntity> ToTCMIntakeAdvancedDirectiveEntity(TCMIntakeAdvancedDirectiveViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeAdvancedDirectiveEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 DateSignatureEmployee = model.DateSignatureEmployee,
@@ -3820,16 +3907,24 @@ namespace KyoS.Web.Helpers
                 Documents = model.Documents,
                 AdmissionedFor = model.AdmissionedFor,
                 IHave = model.IHave,
-                IHaveNot = model.IHaveNot
+                IHaveNot = model.IHaveNot,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
             };
 
         }
 
-        public async Task<TCMIntakeForeignLanguageEntity> ToTCMIntakeForeignLanguageEntity(TCMIntakeForeignLanguageViewModel model, bool isNew)
+        public async Task<TCMIntakeForeignLanguageEntity> ToTCMIntakeForeignLanguageEntity(TCMIntakeForeignLanguageViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeForeignLanguageEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 DateSignatureEmployee = model.DateSignatureEmployee,
@@ -3853,17 +3948,25 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
 
-        public async Task<TCMIntakeWelcomeEntity> ToTCMIntakeWelcomeEntity(TCMIntakeWelcomeViewModel model, bool isNew)
+        public async Task<TCMIntakeWelcomeEntity> ToTCMIntakeWelcomeEntity(TCMIntakeWelcomeViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeWelcomeEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 AdmissionedFor = model.AdmissionedFor,
@@ -3881,17 +3984,25 @@ namespace KyoS.Web.Helpers
                 IdTCMClient = model.TcmClient.Id,
                 TcmClient_FK = model.TcmClient_FK,
                 AdmissionedFor = model.AdmissionedFor,
-                Date = model.Date
+                Date = model.Date,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
 
-        public async Task<TCMIntakeNonClinicalLogEntity> ToTCMIntakeNonClinicalLogEntity(TCMIntakeNonClinicalLogViewModel model, bool isNew)
+        public async Task<TCMIntakeNonClinicalLogEntity> ToTCMIntakeNonClinicalLogEntity(TCMIntakeNonClinicalLogViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeNonClinicalLogEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 AdmissionedFor = model.AdmissionedFor,
@@ -3911,17 +4022,25 @@ namespace KyoS.Web.Helpers
                 TcmClient_FK = model.TcmClient_FK,
                 AdmissionedFor = model.AdmissionedFor,
                 Date = model.Date,
-                DateActivity = model.DateActivity
+                DateActivity = model.DateActivity,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
 
-        public async Task<TCMIntakeMiniMentalEntity> ToTCMIntakeMiniMenatalEntity(TCMIntakeMiniMentalViewModel model, bool isNew)
+        public async Task<TCMIntakeMiniMentalEntity> ToTCMIntakeMiniMenatalEntity(TCMIntakeMiniMentalViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeMiniMentalEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 AdmissionedFor = model.AdmissionedFor,
@@ -3965,16 +4084,24 @@ namespace KyoS.Web.Helpers
                 Recall = model.Recall,
                 RegistrationName = model.RegistrationName,
                 TotalScore = model.TotalScore,
-                Trials = model.Trials
+                Trials = model.Trials,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
             };
 
         }
 
-        public async Task<TCMIntakeCoordinationCareEntity> ToTCMIntakeCoordinationCareEntity(TCMIntakeCoordinationCareViewModel model, bool isNew)
+        public async Task<TCMIntakeCoordinationCareEntity> ToTCMIntakeCoordinationCareEntity(TCMIntakeCoordinationCareViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeCoordinationCareEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 AdmissionedFor = model.AdmissionedFor,
@@ -4026,18 +4153,26 @@ namespace KyoS.Web.Helpers
                 IRefuse = model.IRefuse,
                 PCP = model.PCP,
                 Specialist = model.Specialist,
-                SpecialistText = model.SpecialistText
+                SpecialistText = model.SpecialistText,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
 
-        public async Task<TCMDischargeFollowUpEntity> ToTCMDischargeFollowUpEntity(TCMDischargeFollowUpViewModel model, bool isNew)
+        public async Task<TCMDischargeFollowUpEntity> ToTCMDischargeFollowUpEntity(TCMDischargeFollowUpViewModel model, bool isNew, string userId)
         {
             TCMDischargeFollowUpEntity salida;
             salida  = new TCMDischargeFollowUpEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Address_Location = model.Address_Location,
                 NextAppt = model.NextAppt,
                 PhoneNumber = model.PhoneNumber,
@@ -4061,18 +4196,26 @@ namespace KyoS.Web.Helpers
                 ProviderAgency = model.ProviderAgency,
                 TcmDischarge = model.TcmDischarge,
                 TypeService = model.TypeService,
-                IdTCMDischarge = model.TcmDischarge.Id
+                IdTCMDischarge = model.TcmDischarge.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
             };
 
         }
 
-        public async Task<TCMIntakeAppendixJEntity> ToTCMIntakeAppendixJEntity(TCMIntakeAppendixJViewModel model, bool isNew)
+        public async Task<TCMIntakeAppendixJEntity> ToTCMIntakeAppendixJEntity(TCMIntakeAppendixJViewModel model, bool isNew, string userId)
         {
             TCMIntakeAppendixJEntity salida;
             salida = new TCMIntakeAppendixJEntity
             {
                 Id = isNew ? 0 : model.Id,
-                TcmClient= await _context.TCMClient.FirstAsync(n => n.Id == model.IdTCMClient),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = await _context.TCMClient.FirstAsync(n => n.Id == model.IdTCMClient),
                 AdmissionedFor = model.AdmissionedFor,
                 Approved = model.Approved,
                 Date = model.Date,
@@ -4107,17 +4250,25 @@ namespace KyoS.Web.Helpers
                 IsExperiencing = model.IsExperiencing,
                 SupervisorSignatureDate = model.SupervisorSignatureDate,
                 TcmClient_FK = model.TcmClient_FK,
-                TcmSupervisor = model.TcmSupervisor
+                TcmSupervisor = model.TcmSupervisor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
             };
 
         }
 
-        public async Task<TCMIntakeInterventionLogEntity> ToTCMIntakeInterventionLogEntity(TCMIntakeInterventionLogViewModel model, bool isNew)
+        public async Task<TCMIntakeInterventionLogEntity> ToTCMIntakeInterventionLogEntity(TCMIntakeInterventionLogViewModel model, bool isNew, string userId)
         {
             TCMIntakeInterventionLogEntity salida;
             salida = new TCMIntakeInterventionLogEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = await _context.TCMClient.FirstAsync(n => n.Id == model.IdTCMClient),
                 TcmClient_FK = model.TcmClient_FK,
                 InterventionList = new System.Collections.Generic.List<TCMIntakeInterventionEntity>()
@@ -4135,17 +4286,25 @@ namespace KyoS.Web.Helpers
                 TcmClient = model.TcmClient,
                 IdTCMClient = model.TcmClient_FK,
                 TcmClient_FK = model.TcmClient_FK,
-                InterventionList = model.InterventionList
+                InterventionList = model.InterventionList,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
             };
 
         }
 
-        public async Task<TCMIntakeInterventionEntity> ToTCMIntakeInterventionEntity(TCMIntakeInterventionViewModel model, bool isNew)
+        public async Task<TCMIntakeInterventionEntity> ToTCMIntakeInterventionEntity(TCMIntakeInterventionViewModel model, bool isNew, string userId)
         {
             TCMIntakeInterventionEntity salida;
             salida = new TCMIntakeInterventionEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Activity = model.Activity,
                 Date = model.Date,
                 TcmInterventionLog = await _context.TCMIntakeInterventionLog.FirstOrDefaultAsync(n => n.Id == model.IdInterventionLog)
@@ -4162,8 +4321,12 @@ namespace KyoS.Web.Helpers
                 Activity = model.Activity,
                 Date = model.Date,
                 TcmInterventionLog = model.TcmInterventionLog,
-                IdInterventionLog = model.TcmInterventionLog.Id
-               
+                IdInterventionLog = model.TcmInterventionLog.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+
             };
 
         }

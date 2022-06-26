@@ -102,6 +102,8 @@ namespace KyoS.Web.Controllers
                 model = new TCMFarsFormViewModel
                 {
                    IdTCMClient = id,
+                   CreatedBy = user_logged.UserName,
+                   CreatedOn = DateTime.Now,
                    TCMClient = TCMClient,
                    Id = 0,
                    AbilityScale = 0,

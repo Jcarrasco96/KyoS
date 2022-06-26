@@ -9,6 +9,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Origin" />
             <input type="hidden" asp-for="Id_Domain" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
             <div class="">
                 <div class="form-group col-md-3">
                     <b>Service code:</b>
@@ -93,7 +95,7 @@
                         <input type="submit" value="Submit" class="btn btn-primary" asp-all-route-id="model.tCMservice.Id" asp-route-Origin="1" />
 
                     }
-                    
+
                     <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
             </div>

@@ -26,6 +26,7 @@
         <form asp-action="CreateTCMMedication" asp-route-id="@Model.Id" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdClient" />
+            
             <input type="hidden" asp-for="IdTCMClient" />
             <partial name="_TCMMedications" />
             <div class="col-md-12">

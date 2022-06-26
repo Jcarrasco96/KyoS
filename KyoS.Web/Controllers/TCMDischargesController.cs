@@ -102,6 +102,8 @@ namespace KyoS.Web.Controllers
                     model = new TCMDischargeViewModel
                     {
                         AdministrativeDischarge = false,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now,
                         AdministrativeDischarge_Explain = "",
                         AllServiceInPlace = false,
                         ClientLeftVoluntarily = false,
@@ -162,7 +164,7 @@ namespace KyoS.Web.Controllers
                 TCMDischargeEntity tcmDischargeEntity = _context.TCMDischarge.Find(tcmDischargeViewModel.Id);
                 if (tcmDischargeEntity == null)
                 {
-                    tcmDischargeEntity = await _converterHelper.ToTCMDischargeEntity(tcmDischargeViewModel, true);
+                    tcmDischargeEntity = await _converterHelper.ToTCMDischargeEntity(tcmDischargeViewModel, true, user_logged.UserName);
                     _context.TCMDischarge.Add(tcmDischargeEntity);
                     try
                     {
@@ -246,7 +248,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                    TCMDischargeEntity tcmDischargeEntity = await _converterHelper.ToTCMDischargeEntity(tcmDischargeViewModel, false);
+                    TCMDischargeEntity tcmDischargeEntity = await _converterHelper.ToTCMDischargeEntity(tcmDischargeViewModel, false, user_logged.UserName);
                     _context.TCMDischarge.Update(tcmDischargeEntity);
                     try
                     {
@@ -379,6 +381,8 @@ namespace KyoS.Web.Controllers
                                                    .ThenInclude(n => n.Client)
                                                    .FirstOrDefault(n => n.Id == idDischarge),
                             Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             IdTCMDischarge = idDischarge,
                             Address_Location = "",
                             NextAppt = "",
@@ -412,7 +416,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMDischargeFollowUpEntity dischargeFollowUpEntity = await _converterHelper.ToTCMDischargeFollowUpEntity(DischargeFollowUpViewModel, false);
+                TCMDischargeFollowUpEntity dischargeFollowUpEntity = await _converterHelper.ToTCMDischargeFollowUpEntity(DischargeFollowUpViewModel, false, user_logged.UserName);
 
                
                     _context.TCMDischargeFollowUp.Add(dischargeFollowUpEntity);
@@ -497,7 +501,7 @@ namespace KyoS.Web.Controllers
                 }
 
                 
-                TCMDischargeFollowUpEntity tcmDischargeFollowUpEntity = await _converterHelper.ToTCMDischargeFollowUpEntity(tcmDischargeFollowUpViewModel, false);
+                TCMDischargeFollowUpEntity tcmDischargeFollowUpEntity = await _converterHelper.ToTCMDischargeFollowUpEntity(tcmDischargeFollowUpViewModel, false, user_logged.UserName);
                
                 if (ModelState.IsValid)
                 {

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using KyoS.Common.Enums;
 using System.ComponentModel.DataAnnotations;
+using KyoS.Web.Data.Contracts;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class TCMStageEntity
+    public class TCMStageEntity : AuditableEntity
     {
         public int Id { get; set; }
 

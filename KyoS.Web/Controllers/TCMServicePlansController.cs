@@ -160,6 +160,8 @@ namespace KyoS.Web.Controllers
                         model = new TCMServicePlanViewModel
                         {
                             ID_TcmClient = id,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             TcmClients = list_Client,
                             ID_Clinic = user_logged.Clinic.Id,
                             Clinics = list_Clinins,
@@ -197,7 +199,7 @@ namespace KyoS.Web.Controllers
                                                                     .FirstOrDefault(n => n.TcmClient.Id == tcmServicePlanViewModel.ID_TcmClient);
                 if (tcmServicePlanEntity == null)
                 {
-                    tcmServicePlanEntity = await _converterHelper.ToTCMServicePlanEntity(tcmServicePlanViewModel, true);
+                    tcmServicePlanEntity = await _converterHelper.ToTCMServicePlanEntity(tcmServicePlanViewModel, true, user_logged.UserName);
                     _context.Add(tcmServicePlanEntity);
                     try
                     {
@@ -301,7 +303,7 @@ namespace KyoS.Web.Controllers
              if (ModelState.IsValid && serviceplanViewModel.Approved != 2)
              {
                  
-                  TCMServicePlanEntity tcmServicePlanEntity = await _converterHelper.ToTCMServicePlanEntity(serviceplanViewModel, false);
+                  TCMServicePlanEntity tcmServicePlanEntity = await _converterHelper.ToTCMServicePlanEntity(serviceplanViewModel, false, user_logged.UserName);
                   _context.Update(tcmServicePlanEntity);
                   try
                   {
@@ -561,7 +563,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMDomainEntity tcmDomainEntity = await _converterHelper.ToTCMDomainEntity(tcmDomainViewModel, false, tcmDomainViewModel.Origin);
+                TCMDomainEntity tcmDomainEntity = await _converterHelper.ToTCMDomainEntity(tcmDomainViewModel, false, tcmDomainViewModel.Origin, user_logged.UserName);
                 _context.Update(tcmDomainEntity);
 
                 try
@@ -623,6 +625,8 @@ namespace KyoS.Web.Controllers
                             Services = list_Services,
                             TcmServicePlan = tcmServicePlan,
                             Id_ServicePlan = id,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now
                         };
                         return View(model);
                     }
@@ -672,7 +676,7 @@ namespace KyoS.Web.Controllers
                 if (tcmDomainEntity == null)
                 {
                     CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
-                    tcmDomainEntity = await _converterHelper.ToTCMDomainEntity(tcmDomainViewModel, true,"Service Plan");
+                    tcmDomainEntity = await _converterHelper.ToTCMDomainEntity(tcmDomainViewModel, true,"Service Plan", user_logged.UserName);
                     _context.Add(tcmDomainEntity);
                     try
                     {
@@ -759,6 +763,8 @@ namespace KyoS.Web.Controllers
                     {
                         TcmDomain = tcmdomain,
                         Id = 0,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now,
                         Id_Stage = 0,
                         Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain),
                         Id_Domain = tcmdomain.Id,
@@ -801,7 +807,7 @@ namespace KyoS.Web.Controllers
                                                         .Include(f => f.TcmServicePlan)
                                                         .ThenInclude(f => f.TcmClient)
                                                         .FirstOrDefault(f => f.Id == tcmObjetiveViewModel.Id_Domain);
-                TCMObjetiveEntity tcmObjetiveEntity = await _converterHelper.ToTCMObjetiveEntity(tcmObjetiveViewModel, true, Origin);
+                TCMObjetiveEntity tcmObjetiveEntity = await _converterHelper.ToTCMObjetiveEntity(tcmObjetiveViewModel, true, Origin, user_logged.UserName);
                 tcmObjetiveEntity.TcmDomain = tcmDomain;
 
                 if (ModelState.IsValid)
@@ -950,7 +956,7 @@ namespace KyoS.Web.Controllers
                                                     .Include(f => f.TcmServicePlan)
                                                     .ThenInclude(f => f.TcmClient)
                                                     .FirstOrDefault(f => f.Id == tcmObjetiveViewModel.Id_Domain);
-                TCMObjetiveEntity tcmObjetiveEntity = await _converterHelper.ToTCMObjetiveEntity(tcmObjetiveViewModel, false,Origin);
+                TCMObjetiveEntity tcmObjetiveEntity = await _converterHelper.ToTCMObjetiveEntity(tcmObjetiveViewModel, false,Origin, user_logged.UserName);
                 tcmObjetiveEntity.TcmDomain = tcmDomain;
                
                 if (ModelState.IsValid)
@@ -1135,6 +1141,8 @@ namespace KyoS.Web.Controllers
                     {
                         Date_Identified = DateTime.Today.Date,
                         ID_TcmDominio = 0,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now,
                         TcmDominio = _combosHelper.GetComboTCMServices(),
                         ID_TcmServicePlan = 0,
                         ListTcmServicePlan = _combosHelper.GetComboServicesPlan(user_logged.Clinic.Id, caseManager.Id, idClient),
@@ -1209,7 +1217,7 @@ namespace KyoS.Web.Controllers
                          tcmAdendumViewModel.TcmServicePlan = tcmServicePlan;
                          tcmAdendumViewModel.TcmDomain = tcmDomain;
 
-                         TCMAdendumEntity tcmAdendum = await _converterHelper.ToTCMAdendumEntity(tcmAdendumViewModel, true);
+                         TCMAdendumEntity tcmAdendum = await _converterHelper.ToTCMAdendumEntity(tcmAdendumViewModel, true, user_logged.UserName);
                             _context.Add(tcmAdendum);
                         try
                         {
@@ -1363,7 +1371,7 @@ namespace KyoS.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    TCMAdendumEntity tcmAdendumEntity = await _converterHelper.ToTCMAdendumEntity(tcmAdendumViewModel, false);
+                    TCMAdendumEntity tcmAdendumEntity = await _converterHelper.ToTCMAdendumEntity(tcmAdendumViewModel, false, user_logged.UserName);
                     _context.Update(tcmAdendumEntity);
 
                     try
