@@ -376,6 +376,14 @@ namespace KyoS.Web.Controllers
                 _context.Discharge.Update(dischargeEntity);
                 try
                 {
+                    //todos los mensajes que tiene el discharge los pongo como leidos
+                    foreach (MessageEntity value in dischargeEntity.Messages)
+                    {
+                        value.Status = MessageStatus.Read;
+                        value.DateRead = DateTime.Now;
+                        _context.Update(value);
+                    }
+
                     await _context.SaveChangesAsync();
 
                     if (dischargeViewModel.Origin == 1)
@@ -385,6 +393,10 @@ namespace KyoS.Web.Controllers
                     if (dischargeViewModel.Origin == 2)
                     {
                         return RedirectToAction("PendingDischarge");
+                    }
+                    if (dischargeViewModel.Origin == 3)
+                    {
+                        return RedirectToAction("MessagesOfDischarges", "Messages");
                     }
 
                     return RedirectToAction("Index");

@@ -1,0 +1,339 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.AdendumEntity>
+@{
+    ViewData["Title"] = "Reviews of Addendums";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Inbox", "Index", "Messages")
+        </li>
+        <li class="active">Reviews of Addendums</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Reviews of Addendums</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1"></th>
+                            <th class="col-md-3">Client</th>
+                            <th class="col-md-2" style="text-align:center;">Identified Date</th>
+                            <th class="col-md-1" style="text-align:center">Unit</th>
+                            <th class="col-md-1" style="text-align:center">Frecuency</th>
+                            <th class="col-md-1" style="text-align:center;">Duration (month)</th>
+                            <th class="col-md-1" style="text-align:center;">Status</th>
+                            <th class="col-md-1" style="text-align:center;">Review</th>
+                            <th class="col-md-1"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var addendum in Model.OrderBy(f => f.Dateidentified))
+                        {
+                            bool read = false;
+                            @foreach (var message in addendum.Messages.OrderBy(m => m.DateCreated))
+                            {
+                                @if (message.Status.ToString() == "NotRead")
+                                {
+                                    read = false;
+                                    break;
+                                }
+                                @if (message.Status.ToString() == "Read")
+                                {
+                                    read = true;
+                                }
+                            }
+
+                            @if (!read)
+                            {
+                                <tr style="font-weight:bold; color:#0072c6;">
+                                    <td align="center">
+                                        @if (addendum.Messages.Count() != 0)
+                                        {
+                                            <a class="icon-plus-sign-alt"></a>
+                                        }
+                                        <div style="display:none">
+                                            <table class="table table-striped">
+                                                <tr>
+                                                    <th class="col-md-2"></th>
+                                                    <th class="col-md-3">Title</th>
+                                                    <th class="col-md-7" style="text-align:center;">Text</th>
+                                                    @*<th class="col-md-1"></th>*@
+                                                    <th></th>
+                                                </tr>
+                                                @foreach (var message in addendum.Messages.OrderBy(m => m.DateCreated))
+                                                {
+
+                                                    @if (message.Status.ToString() == "NotRead")
+                                                    {
+                                                        <tr style="color:#0072c6;">
+                                                            <td>
+                                                                <i class="glyphicon glyphicon-thumbs-down"></i> Not processed
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Title)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Text)
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    @if (message.Status.ToString() == "Read")
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <i class="glyphicon glyphicon-thumbs-up"></i> Processed
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Title)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Text)
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (addendum.Mtp.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (addendum.Mtp.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => addendum.Mtp.Client.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => addendum.Dateidentified)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => addendum.Unit)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => addendum.Frecuency)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => addendum.Duration)
+                                    </td>
+                                    <td align="center">
+                                        @if (addendum.Status == KyoS.Common.Enums.AdendumStatus.Edition)
+                                        {
+                                            <span class="label label-default">
+                                                Edition
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            if (addendum.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                            {
+                                                <span class="label label-info">
+                                                    Pending
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                if (addendum.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                {
+                                                    <span class="label label-success">
+                                                        Approved
+                                                    </span>
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        <i class="glyphicon glyphicon-thumbs-down"></i>
+                                    </td>
+                                    <td align="right">
+                                        @if (User.IsInRole("Facilitator"))
+                                        {
+                                            @if (addendum.Status == KyoS.Common.Enums.AdendumStatus.Edition || addendum.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                            {
+                                                <a asp-action="EditAdendum" asp-controller="MTPs" asp-route-id="@addendum.Id" asp-route-origin="1" class="btn btn-warning" title="Edit Addendum"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-warning disabled" title="Edit Addendum"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td align="center">
+                                        @if (addendum.Messages.Count() != 0)
+                                        {
+                                            <a class="icon-plus-sign-alt"></a>
+                                        }
+                                        <div style="display:none">
+                                            <table class="table table-striped">
+                                                <tr>
+                                                    <th class="col-md-2"></th>
+                                                    <th class="col-md-3">Title</th>
+                                                    <th class="col-md-7" style="text-align:center;">Text</th>
+                                                    @*<th class="col-md-1"></th>*@
+                                                    <th></th>
+                                                </tr>
+                                                @foreach (var message in addendum.Messages.OrderBy(m => m.DateCreated))
+                                                {
+
+                                                    @if (message.Status.ToString() == "NotRead")
+                                                    {
+                                                        <tr style="color:#0072c6;">
+                                                            <td>
+                                                                <i class="glyphicon glyphicon-thumbs-down"></i> Not processed
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Title)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Text)
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    @if (message.Status.ToString() == "Read")
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <i class="glyphicon glyphicon-thumbs-up"></i> Processed
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Title)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Text)
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (addendum.Mtp.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (addendum.Mtp.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => addendum.Mtp.Client.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => addendum.Dateidentified)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => addendum.Unit)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => addendum.Frecuency)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => addendum.Duration)
+                                    </td>
+                                    <td align="center">
+                                        @if (addendum.Status == KyoS.Common.Enums.AdendumStatus.Edition)
+                                        {
+                                            <span class="label label-default">
+                                                Edition
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            if (addendum.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                            {
+                                                <span class="label label-info">
+                                                    Pending
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                if (addendum.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                {
+                                                    <span class="label label-success">
+                                                        Approved
+                                                    </span>
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        <i class="glyphicon glyphicon-thumbs-up"></i>
+                                    </td>
+                                    <td align="right">
+                                        @if (User.IsInRole("Facilitator"))
+                                        {
+                                            @if (addendum.Status == KyoS.Common.Enums.AdendumStatus.Edition || addendum.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                            {
+                                                <a asp-action="EditAdendum" asp-controller="MTPs" asp-route-id="@addendum.Id" asp-route-origin="1" class="btn btn-warning" title="Edit Addendum"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-warning disabled" title="Edit Addendum"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.fn.dataTable.moment('MM/DD/YYYY');
+
+            $('#MyTable').DataTable({
+                "order": [[2, "desc"]],
+                "pageLength": 100
+            });
+        });
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+    </script>
+}
+
+
+

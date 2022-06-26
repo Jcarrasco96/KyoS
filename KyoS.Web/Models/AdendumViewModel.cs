@@ -18,5 +18,7 @@ namespace KyoS.Web.Models
 
         public int IdSupervisor { get; set; }
         public int IdFacilitator { get; set; }
+
+        public int Origin { get; set; }
     }
 }

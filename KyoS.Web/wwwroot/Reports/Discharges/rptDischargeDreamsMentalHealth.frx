@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="06/19/2022 00:03:55" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="06/20/2022 12:49:50" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3/X4oKGxHNK3HOaLvMBBm/Q==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3f3OY9wiWtpj36kqME1Oe9Q==">
       <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -149,7 +149,7 @@
       <TextObject Name="Text194" Left="23.9" Top="276.05" Width="500.85" Height="18.9" Text="Administrative Discharge" VertAlign="Center" Font="Arial, 9pt"/>
       <CheckBoxObject Name="CheckBox27" Left="9.45" Top="300.95" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.Other"/>
       <TextObject Name="Text195" Left="23.9" Top="297.95" Width="47.25" Height="18.9" Text="Other:" VertAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text196" Left="66.15" Top="297.95" Width="708.75" Height="18.9" Text="[Discharge.Other_Explain]" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text196" Left="66.15" Top="297.95" Width="708.75" Height="18.9" CanGrow="true" CanBreak="false" Text="[Discharge.Other_Explain]" Font="Arial, 10pt, style=Underline"/>
       <TextObject Name="Text197" Left="3" Top="334.75" Width="132.3" Height="18.9" Text="Prognosis:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       <CheckBoxObject Name="CheckBox28" Left="141.75" Top="337.75" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Discharge.PrognosisGood"/>
       <TextObject Name="Text198" Left="156.2" Top="333.75" Width="47.25" Height="18.9" Text="Good" VertAlign="Center" Font="Arial, 9pt"/>
