@@ -66,5 +66,7 @@ namespace KyoS.Web.Data.Entities
         public int? MTPId { get; set; }
 
         public SchemaType Schema { get; set; }
+
+        public int RealUnits { get; set; }
     }
 }

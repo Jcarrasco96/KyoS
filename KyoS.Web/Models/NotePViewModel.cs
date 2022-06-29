@@ -19,6 +19,9 @@ namespace KyoS.Web.Models
 
         public string Intervention1 { get; set; }
 
+        //Assistance of client for activity # 1
+        public bool Present1 { get; set; }
+
         //Client's response 1
         public bool Cooperative1 { get; set; }
         public bool Assertive1 { get; set; }
@@ -54,7 +57,10 @@ namespace KyoS.Web.Models
         public IEnumerable<SelectListItem> Objetives2 { get; set; }
 
         public string Intervention2 { get; set; }
-        
+
+        //Assistance of client for activity # 2
+        public bool Present2 { get; set; }
+
         //Client's response 2
         public bool Cooperative2 { get; set; }
         public bool Assertive2 { get; set; }
@@ -90,6 +96,9 @@ namespace KyoS.Web.Models
         public IEnumerable<SelectListItem> Objetives3 { get; set; }
         public string Intervention3 { get; set; }
 
+        //Assistance of client for activity # 3
+        public bool Present3 { get; set; }
+
         //Client's response 3
         public bool Cooperative3 { get; set; }
         public bool Assertive3 { get; set; }
@@ -124,6 +133,9 @@ namespace KyoS.Web.Models
         public int IdObjetive4 { get; set; }
         public IEnumerable<SelectListItem> Objetives4 { get; set; }
         public string Intervention4 { get; set; }
+
+        //Assistance of client for activity # 4
+        public bool Present4 { get; set; }
 
         //Client's response 4
         public bool Cooperative4 { get; set; }
