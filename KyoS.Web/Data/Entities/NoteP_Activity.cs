@@ -10,6 +10,9 @@ namespace KyoS.Web.Data.Entities
 
         public ActivityEntity Activity { get; set; }
 
+        //Assistance of Client
+        public bool Present { get; set; }
+
         //Client's response
         public bool Cooperative { get; set; }
         public bool Assertive { get; set; }

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="05/28/2022 18:33:39" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="06/29/2022 12:11:50" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3GtIgliqwvKrnjmCYrOJkzw==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3xvMCscWFbylu8xOBIVqJPQ==">
       <TableDataSource Name="Themes1" Alias="Themes2" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -34,6 +34,7 @@
         <Column Name="Resistant" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="Other" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="ObjetiveId" DataType="System.Int32"/>
+        <Column Name="Present" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
       <TableDataSource Name="Workdays_Activities_Facilitators1" Alias="Workdays_Activities_Facilitators2" DataType="System.Int32" Enabled="true" TableName="Workdays_Activities_Facilitators">
         <Column Name="Id" DataType="System.Int32"/>
@@ -52,7 +53,7 @@
         <Column Name="stressManagement" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3mOcSmJipYwzzeTfsZbwwhw==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3RSFUnQkpv4nzIOs2MobN+g==">
       <TableDataSource Name="Themes2" Alias="Themes3" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -85,6 +86,7 @@
         <Column Name="Resistant" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="Other" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="ObjetiveId" DataType="System.Int32"/>
+        <Column Name="Present" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
       <TableDataSource Name="Workdays_Activities_Facilitators2" Alias="Workdays_Activities_Facilitators3" DataType="System.Int32" Enabled="true" TableName="Workdays_Activities_Facilitators">
         <Column Name="Id" DataType="System.Int32"/>
@@ -103,7 +105,7 @@
         <Column Name="stressManagement" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3sFN6ey0TqEjLlgT+sW9vPA==">
+    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3M1ftNFxySdWdQOyGn5h0Og==">
       <TableDataSource Name="Themes3" Alias="Themes4" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -136,6 +138,7 @@
         <Column Name="Resistant" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="Other" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="ObjetiveId" DataType="System.Int32"/>
+        <Column Name="Present" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
       <TableDataSource Name="Workdays_Activities_Facilitators3" Alias="Workdays_Activities_Facilitators4" DataType="System.Int32" Enabled="true" TableName="Workdays_Activities_Facilitators">
         <Column Name="Id" DataType="System.Int32"/>
@@ -154,7 +157,7 @@
         <Column Name="stressManagement" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u35bwjtO3KTYR0gIJ6IW5jjg==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3haEJRT1rqUDx3k9RaCMAdw==">
       <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -285,6 +288,7 @@
         <Column Name="MTPId" DataType="System.Int32"/>
         <Column Name="Schema" DataType="System.Int32"/>
         <Column Name="Title" DataType="System.String"/>
+        <Column Name="RealUnits" DataType="System.Int32"/>
       </TableDataSource>
       <TableDataSource Name="NotesP_Activities" Alias="NotesP_Activities1" DataType="System.Int32" Enabled="true" TableName="NotesP_Activities">
         <Column Name="Id" DataType="System.Int32"/>
@@ -302,6 +306,7 @@
         <Column Name="Resistant" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="Other" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="ObjetiveId" DataType="System.Int32"/>
+        <Column Name="Present" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
       <TableDataSource Name="Workdays_Activities_Facilitators" Alias="Workdays_Activities_Facilitators1" DataType="System.Int32" Enabled="true" TableName="Workdays_Activities_Facilitators">
         <Column Name="Id" DataType="System.Int32"/>
@@ -343,7 +348,7 @@
           <TableCell Name="Cell45" Border.Lines="All" Text=" [Clients.Name]" Font="Arial, 10pt" ColSpan="2"/>
           <TableCell Name="Cell46" Border.Lines="All" Font="Arial, 10pt"/>
           <TableCell Name="Cell47" Border.Lines="All" Text="&lt;b&gt;SERVICE CODE:&lt;/b&gt; H2017" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-          <TableCell Name="Cell52" Border.Lines="All" Text="&lt;b&gt;TOTAL UNITS: &lt;/b&gt;16" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell52" Border.Lines="All" Text="&lt;b&gt;TOTAL UNITS: &lt;/b&gt;[NotesP.RealUnits]" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
         </TableRow>
         <TableRow Name="Row11">
           <TableCell Name="Cell48" Border.Lines="All" Text="CLIENT ID #:" HorzAlign="Right" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
@@ -354,15 +359,15 @@
         </TableRow>
         <TableRow Name="Row2">
           <TableCell Name="Cell6" Border.Lines="All" Text="BEGIN-END TIME:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
-          <TableCell Name="Cell7" Border.Lines="All" Text="[IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;8:00 am - 9:00 am&quot;,&quot;1:00 pm - 2:00 pm&quot;)]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
-          <TableCell Name="Cell15" Border.Lines="All" Text="[IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;9:00 am - 10:00 am&quot;,&quot;2:00 pm - 3:00 pm&quot;)]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
-          <TableCell Name="Cell8" Border.Lines="All" Text="[IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;10:15 am - 11:15 am&quot;,&quot;3:15 pm - 4:15 pm&quot;)]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
-          <TableCell Name="Cell55" Border.Lines="All" Text="[IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;11:15 am - 12:15 am&quot;,&quot;4:15 pm - 5:15 pm&quot;)]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell7" Border.Lines="All" Text="[IIf([NotesP_Activities1.Present] == true,IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;8:00 am - 9:00 am&quot;,&quot;1:00 pm - 2:00 pm&quot;),&quot;&quot;)]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+          <TableCell Name="Cell15" Border.Lines="All" Text="[IIf([NotesP_Activities2.Present] == true,IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;9:00 am - 10:00 am&quot;,&quot;2:00 pm - 3:00 pm&quot;),&quot;&quot;)]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+          <TableCell Name="Cell8" Border.Lines="All" Text="[IIf([NotesP_Activities3.Present] == true,IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;10:15 am - 11:15 am&quot;,&quot;3:15 pm - 4:15 pm&quot;),&quot;&quot;)]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+          <TableCell Name="Cell55" Border.Lines="All" Text="[IIf([NotesP_Activities4.Present] == true,IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;11:15 am - 12:15 am&quot;,&quot;4:15 pm - 5:15 pm&quot;),&quot;&quot;)]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
         </TableRow>
       </TableObject>
       <TextObject Name="Text57" Left="217.35" Top="28.25" Width="368.55" Height="18.9" Text="PROGRESS NOTE" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
     </PageHeaderBand>
-    <DataBand Name="Data1" Top="141.87" Width="800.98" Height="1031.25" FirstRowStartsNewPage="true" DataSource="NotesP">
+    <DataBand Name="Data1" Top="141.87" Width="800.98" Height="1135.2" FirstRowStartsNewPage="true" DataSource="NotesP">
       <TextObject Name="Text2" Left="81.05" Top="61.35" Width="708.75" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="[goal_text]" Font="Times New Roman, 10pt"/>
       <TextObject Name="Text4" Left="3.45" Top="61.35" Width="75.6" Height="18.9" Text="[num_of_goal]" HorzAlign="Right" Font="Times New Roman, 10pt, style=Bold"/>
       <TextObject Name="Text5" Left="3.45" Top="80.25" Width="75.6" Height="18.9" Text="[num_of_obj]" HorzAlign="Right" Font="Times New Roman, 10pt, style=Bold"/>
@@ -373,184 +378,184 @@
       <TextObject Name="Text59" Left="3.4" Top="132.5" Width="765.45" Height="18.9" Text="ACTIVITIES PROVIDED BY FACILITATOR TO BUILD CLIENT’S SKILLS" Font="Times New Roman, 11pt, style=Bold, Underline"/>
       <TextObject Name="Text60" Left="3.4" Top="177.75" Width="173.88" Height="18.9" Text="SKILL SETS ADDRESSED:" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold"/>
       <TextObject Name="Text61" Left="195.35" Top="178.75" Width="80.14" Height="18.9" Text="Coping Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox10" Left="182" Top="179.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators1.copingSkills" CheckWidthRatio="2"/>
+      <CheckBoxObject Name="CheckBox10" Left="182" Top="179.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities1.Present] == true,[Workdays_Activities_Facilitators1.copingSkills],false)" CheckWidthRatio="2"/>
       <TextObject Name="Text62" Left="290.3" Top="179.75" Width="113.4" Height="18.9" Text="Stress Management" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox11" Left="276.95" Top="180.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators1.stressManagement" CheckWidthRatio="2"/>
+      <CheckBoxObject Name="CheckBox11" Left="276.95" Top="180.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities1.Present] == true,[Workdays_Activities_Facilitators1.stressManagement],false)" CheckWidthRatio="2"/>
       <TextObject Name="Text63" Left="418.15" Top="178.75" Width="88.83" Height="18.9" Text="Healthy Living" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox12" Left="404.8" Top="179.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators1.healthyLiving" CheckWidthRatio="2"/>
+      <CheckBoxObject Name="CheckBox12" Left="404.8" Top="179.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities1.Present] == true,[Workdays_Activities_Facilitators1.healthyLiving],false)" CheckWidthRatio="2"/>
       <TextObject Name="Text64" Left="523.55" Top="179.1" Width="115.29" Height="18.9" Text="Relaxation Training" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox13" Left="510.2" Top="180.1" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators1.relaxationTraining" CheckWidthRatio="2"/>
+      <CheckBoxObject Name="CheckBox13" Left="510.2" Top="180.1" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities1.Present] == true,[Workdays_Activities_Facilitators1.relaxationTraining],false)" CheckWidthRatio="2"/>
       <TextObject Name="Text65" Left="654.05" Top="178.75" Width="122.85" Height="18.9" Text="Disease Management" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox14" Left="640.7" Top="179.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators1.diseaseManagement" CheckWidthRatio="2"/>
+      <CheckBoxObject Name="CheckBox14" Left="640.7" Top="179.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities1.Present] == true,[Workdays_Activities_Facilitators1.diseaseManagement],false)" CheckWidthRatio="2"/>
       <TextObject Name="Text66" Left="195.9" Top="199.65" Width="132.3" Height="18.9" Text="Community Resources" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox15" Left="182.55" Top="200.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators1.communityResources" CheckWidthRatio="2"/>
+      <CheckBoxObject Name="CheckBox15" Left="182.55" Top="200.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities1.Present] == true,[Workdays_Activities_Facilitators1.communityResources],false)" CheckWidthRatio="2"/>
       <TextObject Name="Text67" Left="344.65" Top="200.65" Width="139.1" Height="18.9" Text="Activity of Daily Living" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox16" Left="331.3" Top="201.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators1.activityDailyLiving" CheckWidthRatio="2"/>
+      <CheckBoxObject Name="CheckBox16" Left="331.3" Top="201.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities1.Present] == true,[Workdays_Activities_Facilitators1.activityDailyLiving],false)" CheckWidthRatio="2"/>
       <TextObject Name="Text68" Left="498.3" Top="201" Width="77.49" Height="18.9" Text="Social Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox17" Left="484.95" Top="202" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators1.socialSkills" CheckWidthRatio="2"/>
+      <CheckBoxObject Name="CheckBox17" Left="484.95" Top="202" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities1.Present] == true,[Workdays_Activities_Facilitators1.socialSkills],false)" CheckWidthRatio="2"/>
       <TextObject Name="Text69" Left="587" Top="200.65" Width="66.15" Height="18.9" Text="Life Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox18" Left="573.65" Top="201.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators1.lifeSkills" CheckWidthRatio="2"/>
-      <TextObject Name="Text70" Left="3.4" Top="257.9" Width="122.85" Height="18.9" Text="Client's response:" Padding="0, 0, 0, 0" Font="Times New Roman, 11pt, style=Bold, Italic"/>
-      <TextObject Name="Text71" Left="148.1" Top="259.9" Width="80.14" Height="18.9" Text="Cooperative" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox19" Left="134.75" Top="260.9" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Cooperative" CheckWidthRatio="2"/>
-      <TextObject Name="Text72" Left="235.05" Top="259.9" Width="56.7" Height="18.9" Text="Assertive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox20" Left="221.7" Top="260.9" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Assertive" CheckWidthRatio="2"/>
-      <TextObject Name="Text73" Left="308.2" Top="259.9" Width="51.03" Height="18.9" Text="Passive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox21" Left="294.85" Top="260.9" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Passive" CheckWidthRatio="2"/>
-      <TextObject Name="Text74" Left="370.8" Top="260.25" Width="58.59" Height="18.9" Text="Variable" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox22" Left="357.45" Top="261.25" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Variable" CheckWidthRatio="2"/>
-      <TextObject Name="Text75" Left="437.6" Top="259.9" Width="75.6" Height="18.9" Text="Uninterested" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox23" Left="424.25" Top="260.9" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Uninterested" CheckWidthRatio="2"/>
-      <TextObject Name="Text76" Left="529.65" Top="259.9" Width="98.28" Height="18.9" Text="Engaged/Active" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox24" Left="516.3" Top="260.9" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.EngagedActive" CheckWidthRatio="2"/>
-      <TextObject Name="Text77" Left="639.5" Top="260.25" Width="77.49" Height="18.9" Text="Distractible" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox25" Left="625.15" Top="261.25" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Distractible" CheckWidthRatio="2"/>
-      <TextObject Name="Text78" Left="723.75" Top="259.9" Width="66.15" Height="18.9" Text="Confused" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox26" Left="710.4" Top="260.9" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Confused" CheckWidthRatio="2"/>
-      <TextObject Name="Text79" Left="147.65" Top="280.8" Width="80.14" Height="18.9" Text="Aggressive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox27" Left="134.3" Top="281.8" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Aggresive" CheckWidthRatio="2"/>
-      <TextObject Name="Text80" Left="235.6" Top="280.8" Width="56.7" Height="18.9" Text="Resistant" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox28" Left="222.25" Top="281.8" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Resistant" CheckWidthRatio="2"/>
-      <TextObject Name="Text81" Left="308.75" Top="280.8" Width="51.03" Height="18.9" Text="Other" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox29" Left="295.4" Top="281.8" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Other" CheckWidthRatio="2"/>
-      <TextObject Name="Text196" Left="3.45" Top="315.5" Width="788.13" Height="18.9" Text="&lt;b&gt;Group 2 Theme: &lt;/b&gt;[Themes2.Name]" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text197" Left="3.45" Top="377.65" Width="786.24" Height="37.8" CanGrow="true" CanShrink="true" Text="&lt;b&gt;Group Facilitator’s Intervention:&lt;/b&gt; [Activities2.Name]" Padding="0, 0, 0, 0" HorzAlign="Justify" Font="Times New Roman, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text198" Left="3.45" Top="336.85" Width="173.88" Height="18.9" Text="SKILL SETS ADDRESSED:" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold"/>
-      <TextObject Name="Text199" Left="195.4" Top="337.85" Width="80.14" Height="18.9" Text="Coping Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox122" Left="182.05" Top="338.85" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators2.copingSkills" CheckWidthRatio="2"/>
-      <TextObject Name="Text200" Left="290.35" Top="338.85" Width="113.4" Height="18.9" Text="Stress Management" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox123" Left="277" Top="339.85" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators2.stressManagement" CheckWidthRatio="2"/>
-      <TextObject Name="Text201" Left="418.2" Top="337.85" Width="88.83" Height="18.9" Text="Healthy Living" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox124" Left="404.85" Top="338.85" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators2.healthyLiving" CheckWidthRatio="2"/>
-      <TextObject Name="Text202" Left="523.6" Top="338.2" Width="115.29" Height="18.9" Text="Relaxation Training" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox125" Left="510.25" Top="339.2" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators2.relaxationTraining" CheckWidthRatio="2"/>
-      <TextObject Name="Text203" Left="654.1" Top="337.85" Width="122.85" Height="18.9" Text="Disease Management" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox126" Left="640.75" Top="338.85" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators2.diseaseManagement" CheckWidthRatio="2"/>
-      <TextObject Name="Text204" Left="195.95" Top="358.75" Width="132.3" Height="18.9" Text="Community Resources" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox127" Left="182.6" Top="359.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators2.communityResources" CheckWidthRatio="2"/>
-      <TextObject Name="Text205" Left="344.7" Top="359.75" Width="139.1" Height="18.9" Text="Activity of Daily Living" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox128" Left="331.35" Top="360.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators2.activityDailyLiving" CheckWidthRatio="2"/>
-      <TextObject Name="Text206" Left="498.35" Top="360.1" Width="77.49" Height="18.9" Text="Social Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox129" Left="485" Top="361.1" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators2.socialSkills" CheckWidthRatio="2"/>
-      <TextObject Name="Text207" Left="587.05" Top="359.75" Width="66.15" Height="18.9" Text="Life Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox130" Left="573.7" Top="360.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators2.lifeSkills" CheckWidthRatio="2"/>
-      <TextObject Name="Text208" Left="3.45" Top="417" Width="122.85" Height="18.9" Text="Client's response:" Padding="0, 0, 0, 0" Font="Times New Roman, 11pt, style=Bold, Italic"/>
-      <TextObject Name="Text209" Left="148.15" Top="419" Width="80.14" Height="18.9" Text="Cooperative" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox131" Left="134.8" Top="420" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Cooperative" CheckWidthRatio="2"/>
-      <TextObject Name="Text210" Left="235.1" Top="419" Width="56.7" Height="18.9" Text="Assertive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox132" Left="221.75" Top="420" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Assertive" CheckWidthRatio="2"/>
-      <TextObject Name="Text211" Left="308.25" Top="419" Width="51.03" Height="18.9" Text="Passive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox133" Left="294.9" Top="420" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Passive" CheckWidthRatio="2"/>
-      <TextObject Name="Text212" Left="370.85" Top="419.35" Width="58.59" Height="18.9" Text="Variable" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox134" Left="357.5" Top="420.35" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Variable" CheckWidthRatio="2"/>
-      <TextObject Name="Text213" Left="437.65" Top="419" Width="75.6" Height="18.9" Text="Uninterested" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox135" Left="424.3" Top="420" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Uninterested" CheckWidthRatio="2"/>
-      <TextObject Name="Text214" Left="529.7" Top="419" Width="98.28" Height="18.9" Text="Engaged/Active" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox136" Left="516.35" Top="420" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.EngagedActive" CheckWidthRatio="2"/>
-      <TextObject Name="Text215" Left="639.55" Top="419.35" Width="77.49" Height="18.9" Text="Distractible" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox137" Left="625.2" Top="420.35" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Distractible" CheckWidthRatio="2"/>
-      <TextObject Name="Text216" Left="723.8" Top="419" Width="66.15" Height="18.9" Text="Confused" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox138" Left="710.45" Top="420" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Confused" CheckWidthRatio="2"/>
-      <TextObject Name="Text217" Left="147.7" Top="439.9" Width="80.14" Height="18.9" Text="Aggressive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox139" Left="134.35" Top="440.9" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Aggresive" CheckWidthRatio="2"/>
-      <TextObject Name="Text218" Left="235.65" Top="439.9" Width="56.7" Height="18.9" Text="Resistant" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox140" Left="222.3" Top="440.9" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Resistant" CheckWidthRatio="2"/>
-      <TextObject Name="Text219" Left="308.8" Top="439.9" Width="51.03" Height="18.9" Text="Other" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox141" Left="295.45" Top="440.9" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Other" CheckWidthRatio="2"/>
-      <TextObject Name="Text220" Left="3.45" Top="474.15" Width="788.13" Height="18.9" Text="&lt;b&gt;Group 3 Theme: &lt;/b&gt;[Themes3.Name]" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text221" Left="3.45" Top="536.3" Width="786.24" Height="37.8" CanGrow="true" CanShrink="true" Text="&lt;b&gt;Group Facilitator’s Intervention:&lt;/b&gt; [Activities3.Name]" Padding="0, 0, 0, 0" HorzAlign="Justify" Font="Times New Roman, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text222" Left="3.45" Top="495.5" Width="173.88" Height="18.9" Text="SKILL SETS ADDRESSED:" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold"/>
-      <TextObject Name="Text223" Left="195.4" Top="496.5" Width="80.14" Height="18.9" Text="Coping Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox142" Left="182.05" Top="497.5" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators3.copingSkills" CheckWidthRatio="2"/>
-      <TextObject Name="Text224" Left="290.35" Top="497.5" Width="113.4" Height="18.9" Text="Stress Management" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox143" Left="277" Top="498.5" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators3.stressManagement" CheckWidthRatio="2"/>
-      <TextObject Name="Text225" Left="418.2" Top="496.5" Width="88.83" Height="18.9" Text="Healthy Living" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox144" Left="404.85" Top="497.5" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators3.healthyLiving" CheckWidthRatio="2"/>
-      <TextObject Name="Text226" Left="523.6" Top="496.85" Width="115.29" Height="18.9" Text="Relaxation Training" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox145" Left="510.25" Top="497.85" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators3.relaxationTraining" CheckWidthRatio="2"/>
-      <TextObject Name="Text227" Left="654.1" Top="496.5" Width="122.85" Height="18.9" Text="Disease Management" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox146" Left="640.75" Top="497.5" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators3.diseaseManagement" CheckWidthRatio="2"/>
-      <TextObject Name="Text228" Left="195.95" Top="517.4" Width="132.3" Height="18.9" Text="Community Resources" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox147" Left="182.6" Top="518.4" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators3.communityResources" CheckWidthRatio="2"/>
-      <TextObject Name="Text229" Left="344.7" Top="518.4" Width="139.1" Height="18.9" Text="Activity of Daily Living" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox148" Left="331.35" Top="519.4" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators3.activityDailyLiving" CheckWidthRatio="2"/>
-      <TextObject Name="Text230" Left="498.35" Top="518.75" Width="77.49" Height="18.9" Text="Social Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox149" Left="485" Top="519.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators3.socialSkills" CheckWidthRatio="2"/>
-      <TextObject Name="Text231" Left="587.05" Top="518.4" Width="66.15" Height="18.9" Text="Life Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox150" Left="573.7" Top="519.4" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators3.lifeSkills" CheckWidthRatio="2"/>
-      <TextObject Name="Text232" Left="3.45" Top="575.65" Width="122.85" Height="18.9" Text="Client's response:" Padding="0, 0, 0, 0" Font="Times New Roman, 11pt, style=Bold, Italic"/>
-      <TextObject Name="Text233" Left="148.15" Top="577.65" Width="80.14" Height="18.9" Text="Cooperative" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox151" Left="134.8" Top="578.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Cooperative" CheckWidthRatio="2"/>
-      <TextObject Name="Text234" Left="235.1" Top="577.65" Width="56.7" Height="18.9" Text="Assertive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox152" Left="221.75" Top="578.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Assertive" CheckWidthRatio="2"/>
-      <TextObject Name="Text235" Left="308.25" Top="577.65" Width="51.03" Height="18.9" Text="Passive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox153" Left="294.9" Top="578.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Passive" CheckWidthRatio="2"/>
-      <TextObject Name="Text236" Left="370.85" Top="578" Width="58.59" Height="18.9" Text="Variable" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox154" Left="357.5" Top="579" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Variable" CheckWidthRatio="2"/>
-      <TextObject Name="Text237" Left="437.65" Top="577.65" Width="75.6" Height="18.9" Text="Uninterested" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox155" Left="424.3" Top="578.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Uninterested" CheckWidthRatio="2"/>
-      <TextObject Name="Text238" Left="529.7" Top="577.65" Width="98.28" Height="18.9" Text="Engaged/Active" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox156" Left="516.35" Top="578.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.EngagedActive" CheckWidthRatio="2"/>
-      <TextObject Name="Text239" Left="639.55" Top="578" Width="77.49" Height="18.9" Text="Distractible" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox157" Left="625.2" Top="579" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Distractible" CheckWidthRatio="2"/>
-      <TextObject Name="Text240" Left="723.8" Top="577.65" Width="66.15" Height="18.9" Text="Confused" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox158" Left="710.45" Top="578.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Confused" CheckWidthRatio="2"/>
-      <TextObject Name="Text241" Left="147.7" Top="598.55" Width="80.14" Height="18.9" Text="Aggressive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox159" Left="134.35" Top="599.55" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Aggresive" CheckWidthRatio="2"/>
-      <TextObject Name="Text242" Left="235.65" Top="598.55" Width="56.7" Height="18.9" Text="Resistant" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox160" Left="222.3" Top="599.55" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Resistant" CheckWidthRatio="2"/>
-      <TextObject Name="Text243" Left="308.8" Top="598.55" Width="51.03" Height="18.9" Text="Other" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox161" Left="295.45" Top="599.55" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Other" CheckWidthRatio="2"/>
-      <TextObject Name="Text244" Left="3" Top="632.8" Width="788.13" Height="18.9" Text="&lt;b&gt;Group 4 Theme: &lt;/b&gt;[Themes4.Name]" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text245" Left="3" Top="694.95" Width="786.24" Height="37.8" CanGrow="true" CanShrink="true" Text="&lt;b&gt;Group Facilitator’s Intervention:&lt;/b&gt; [Activities4.Name]" Padding="0, 0, 0, 0" HorzAlign="Justify" Font="Times New Roman, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text246" Left="3" Top="654.15" Width="173.88" Height="18.9" Text="SKILL SETS ADDRESSED:" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold"/>
-      <TextObject Name="Text247" Left="194.95" Top="655.15" Width="80.14" Height="18.9" Text="Coping Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox162" Left="181.6" Top="656.15" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators4.copingSkills" CheckWidthRatio="2"/>
-      <TextObject Name="Text248" Left="289.9" Top="656.15" Width="113.4" Height="18.9" Text="Stress Management" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox163" Left="276.55" Top="657.15" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators4.stressManagement" CheckWidthRatio="2"/>
-      <TextObject Name="Text249" Left="417.75" Top="655.15" Width="88.83" Height="18.9" Text="Healthy Living" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox164" Left="404.4" Top="656.15" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators4.healthyLiving" CheckWidthRatio="2"/>
-      <TextObject Name="Text250" Left="523.15" Top="655.5" Width="115.29" Height="18.9" Text="Relaxation Training" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox165" Left="509.8" Top="656.5" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators4.relaxationTraining" CheckWidthRatio="2"/>
-      <TextObject Name="Text251" Left="653.65" Top="655.15" Width="122.85" Height="18.9" Text="Disease Management" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox166" Left="640.3" Top="656.15" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators4.diseaseManagement" CheckWidthRatio="2"/>
-      <TextObject Name="Text252" Left="195.5" Top="676.05" Width="132.3" Height="18.9" Text="Community Resources" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox167" Left="182.15" Top="677.05" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators4.communityResources" CheckWidthRatio="2"/>
-      <TextObject Name="Text253" Left="344.25" Top="677.05" Width="139.1" Height="18.9" Text="Activity of Daily Living" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox168" Left="330.9" Top="678.05" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators4.activityDailyLiving" CheckWidthRatio="2"/>
-      <TextObject Name="Text254" Left="497.9" Top="677.4" Width="77.49" Height="18.9" Text="Social Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox169" Left="484.55" Top="678.4" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators4.socialSkills" CheckWidthRatio="2"/>
-      <TextObject Name="Text255" Left="586.6" Top="677.05" Width="66.15" Height="18.9" Text="Life Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox170" Left="573.25" Top="678.05" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="Workdays_Activities_Facilitators4.lifeSkills" CheckWidthRatio="2"/>
-      <TextObject Name="Text256" Left="3" Top="734.3" Width="122.85" Height="18.9" Text="Client's response:" Padding="0, 0, 0, 0" Font="Times New Roman, 11pt, style=Bold, Italic"/>
-      <TextObject Name="Text257" Left="147.7" Top="736.3" Width="80.14" Height="18.9" Text="Cooperative" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox171" Left="134.35" Top="737.3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Cooperative" CheckWidthRatio="2"/>
-      <TextObject Name="Text258" Left="234.65" Top="736.3" Width="56.7" Height="18.9" Text="Assertive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox172" Left="221.3" Top="737.3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Assertive" CheckWidthRatio="2"/>
-      <TextObject Name="Text259" Left="307.8" Top="736.3" Width="51.03" Height="18.9" Text="Passive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox173" Left="294.45" Top="737.3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Passive" CheckWidthRatio="2"/>
-      <TextObject Name="Text260" Left="370.4" Top="736.65" Width="58.59" Height="18.9" Text="Variable" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox174" Left="357.05" Top="737.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Variable" CheckWidthRatio="2"/>
-      <TextObject Name="Text261" Left="437.2" Top="736.3" Width="75.6" Height="18.9" Text="Uninterested" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox175" Left="423.85" Top="737.3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Uninterested" CheckWidthRatio="2"/>
-      <TextObject Name="Text262" Left="529.25" Top="736.3" Width="98.28" Height="18.9" Text="Engaged/Active" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox176" Left="515.9" Top="737.3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.EngagedActive" CheckWidthRatio="2"/>
-      <TextObject Name="Text263" Left="639.1" Top="736.65" Width="77.49" Height="18.9" Text="Distractible" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox177" Left="624.75" Top="737.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Distractible" CheckWidthRatio="2"/>
-      <TextObject Name="Text264" Left="723.35" Top="736.3" Width="66.15" Height="18.9" Text="Confused" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox178" Left="710" Top="737.3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Confused" CheckWidthRatio="2"/>
-      <TextObject Name="Text265" Left="147.25" Top="757.2" Width="80.14" Height="18.9" Text="Aggressive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox179" Left="133.9" Top="758.2" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Aggresive" CheckWidthRatio="2"/>
-      <TextObject Name="Text266" Left="235.2" Top="757.2" Width="56.7" Height="18.9" Text="Resistant" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox180" Left="221.85" Top="758.2" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Resistant" CheckWidthRatio="2"/>
-      <TextObject Name="Text267" Left="308.35" Top="757.2" Width="51.03" Height="18.9" Text="Other" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
-      <CheckBoxObject Name="CheckBox181" Left="295" Top="758.2" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Other" CheckWidthRatio="2"/>
+      <CheckBoxObject Name="CheckBox18" Left="573.65" Top="201.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities1.Present] == true,[Workdays_Activities_Facilitators1.lifeSkills],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text70" Left="3.4" Top="279.25" Width="122.85" Height="18.9" Text="Client's response:" Padding="0, 0, 0, 0" Font="Times New Roman, 11pt, style=Bold, Italic"/>
+      <TextObject Name="Text71" Left="148.1" Top="281.25" Width="80.14" Height="18.9" Text="Cooperative" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox19" Left="134.75" Top="282.25" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Cooperative" CheckWidthRatio="2"/>
+      <TextObject Name="Text72" Left="235.05" Top="281.25" Width="56.7" Height="18.9" Text="Assertive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox20" Left="221.7" Top="282.25" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Assertive" CheckWidthRatio="2"/>
+      <TextObject Name="Text73" Left="308.2" Top="281.25" Width="51.03" Height="18.9" Text="Passive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox21" Left="294.85" Top="282.25" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Passive" CheckWidthRatio="2"/>
+      <TextObject Name="Text74" Left="370.8" Top="281.6" Width="58.59" Height="18.9" Text="Variable" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox22" Left="357.45" Top="282.6" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Variable" CheckWidthRatio="2"/>
+      <TextObject Name="Text75" Left="437.6" Top="281.25" Width="75.6" Height="18.9" Text="Uninterested" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox23" Left="424.25" Top="282.25" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Uninterested" CheckWidthRatio="2"/>
+      <TextObject Name="Text76" Left="529.65" Top="281.25" Width="98.28" Height="18.9" Text="Engaged/Active" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox24" Left="516.3" Top="282.25" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.EngagedActive" CheckWidthRatio="2"/>
+      <TextObject Name="Text77" Left="639.5" Top="281.6" Width="77.49" Height="18.9" Text="Distractible" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox25" Left="625.15" Top="282.6" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Distractible" CheckWidthRatio="2"/>
+      <TextObject Name="Text78" Left="723.75" Top="281.25" Width="66.15" Height="18.9" Text="Confused" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox26" Left="710.4" Top="282.25" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Confused" CheckWidthRatio="2"/>
+      <TextObject Name="Text79" Left="148.65" Top="302.15" Width="80.14" Height="18.9" Text="Aggressive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox27" Left="135.3" Top="303.15" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Aggresive" CheckWidthRatio="2"/>
+      <TextObject Name="Text80" Left="235.6" Top="302.15" Width="56.7" Height="18.9" Text="Resistant" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox28" Left="222.25" Top="303.15" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Resistant" CheckWidthRatio="2"/>
+      <TextObject Name="Text81" Left="308.75" Top="302.15" Width="51.03" Height="18.9" Text="Other" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox29" Left="295.4" Top="303.15" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Other" CheckWidthRatio="2"/>
+      <TextObject Name="Text196" Left="3.45" Top="338.4" Width="788.13" Height="18.9" Text="&lt;b&gt;Group 2 Theme: &lt;/b&gt;[Themes2.Name]" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text197" Left="3.45" Top="400.55" Width="786.24" Height="37.8" CanGrow="true" CanShrink="true" Text="&lt;b&gt;Group Facilitator’s Intervention:&lt;/b&gt; [Activities2.Name]" Padding="0, 0, 0, 0" HorzAlign="Justify" Font="Times New Roman, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text198" Left="3.45" Top="359.75" Width="173.88" Height="18.9" Text="SKILL SETS ADDRESSED:" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text199" Left="195.4" Top="360.75" Width="80.14" Height="18.9" Text="Coping Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox122" Left="182.05" Top="361.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities2.Present] == true,[Workdays_Activities_Facilitators2.copingSkills],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text200" Left="290.35" Top="361.75" Width="113.4" Height="18.9" Text="Stress Management" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox123" Left="277" Top="362.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities2.Present] == true,[Workdays_Activities_Facilitators2.stressManagement],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text201" Left="418.2" Top="360.75" Width="88.83" Height="18.9" Text="Healthy Living" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox124" Left="404.85" Top="361.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities2.Present] == true,[Workdays_Activities_Facilitators2.healthyLiving],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text202" Left="523.6" Top="361.1" Width="115.29" Height="18.9" Text="Relaxation Training" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox125" Left="510.25" Top="362.1" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities2.Present] == true,[Workdays_Activities_Facilitators2.relaxationTraining],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text203" Left="654.1" Top="360.75" Width="122.85" Height="18.9" Text="Disease Management" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox126" Left="640.75" Top="361.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities2.Present] == true,[Workdays_Activities_Facilitators2.diseaseManagement],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text204" Left="195.95" Top="381.65" Width="132.3" Height="18.9" Text="Community Resources" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox127" Left="182.6" Top="382.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities2.Present] == true,[Workdays_Activities_Facilitators2.communityResources],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text205" Left="344.7" Top="382.65" Width="139.1" Height="18.9" Text="Activity of Daily Living" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox128" Left="331.35" Top="383.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities2.Present] == true,[Workdays_Activities_Facilitators2.activityDailyLiving],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text206" Left="498.35" Top="383" Width="77.49" Height="18.9" Text="Social Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox129" Left="485" Top="384" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities2.Present] == true,[Workdays_Activities_Facilitators2.socialSkills],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text207" Left="587.05" Top="382.65" Width="66.15" Height="18.9" Text="Life Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox130" Left="573.7" Top="383.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities2.Present] == true,[Workdays_Activities_Facilitators2.lifeSkills],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text208" Left="3.45" Top="460.8" Width="122.85" Height="18.9" Text="Client's response:" Padding="0, 0, 0, 0" Font="Times New Roman, 11pt, style=Bold, Italic"/>
+      <TextObject Name="Text209" Left="148.15" Top="462.8" Width="80.14" Height="18.9" Text="Cooperative" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox131" Left="134.8" Top="463.8" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Cooperative" CheckWidthRatio="2"/>
+      <TextObject Name="Text210" Left="235.1" Top="462.8" Width="56.7" Height="18.9" Text="Assertive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox132" Left="221.75" Top="463.8" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Assertive" CheckWidthRatio="2"/>
+      <TextObject Name="Text211" Left="308.25" Top="462.8" Width="51.03" Height="18.9" Text="Passive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox133" Left="294.9" Top="463.8" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Passive" CheckWidthRatio="2"/>
+      <TextObject Name="Text212" Left="370.85" Top="463.15" Width="58.59" Height="18.9" Text="Variable" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox134" Left="357.5" Top="464.15" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Variable" CheckWidthRatio="2"/>
+      <TextObject Name="Text213" Left="437.65" Top="462.8" Width="75.6" Height="18.9" Text="Uninterested" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox135" Left="424.3" Top="463.8" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Uninterested" CheckWidthRatio="2"/>
+      <TextObject Name="Text214" Left="529.7" Top="462.8" Width="98.28" Height="18.9" Text="Engaged/Active" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox136" Left="516.35" Top="463.8" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.EngagedActive" CheckWidthRatio="2"/>
+      <TextObject Name="Text215" Left="639.55" Top="463.15" Width="77.49" Height="18.9" Text="Distractible" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox137" Left="625.2" Top="464.15" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Distractible" CheckWidthRatio="2"/>
+      <TextObject Name="Text216" Left="723.8" Top="462.8" Width="66.15" Height="18.9" Text="Confused" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox138" Left="710.45" Top="463.8" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Confused" CheckWidthRatio="2"/>
+      <TextObject Name="Text217" Left="147.7" Top="483.7" Width="80.14" Height="18.9" Text="Aggressive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox139" Left="134.35" Top="484.7" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Aggresive" CheckWidthRatio="2"/>
+      <TextObject Name="Text218" Left="235.65" Top="483.7" Width="56.7" Height="18.9" Text="Resistant" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox140" Left="222.3" Top="484.7" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Resistant" CheckWidthRatio="2"/>
+      <TextObject Name="Text219" Left="308.8" Top="483.7" Width="51.03" Height="18.9" Text="Other" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox141" Left="295.45" Top="484.7" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Other" CheckWidthRatio="2"/>
+      <TextObject Name="Text220" Left="3.45" Top="521.4" Width="788.13" Height="18.9" Text="&lt;b&gt;Group 3 Theme: &lt;/b&gt;[Themes3.Name]" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text221" Left="3.45" Top="583.55" Width="786.24" Height="37.8" CanGrow="true" CanShrink="true" Text="&lt;b&gt;Group Facilitator’s Intervention:&lt;/b&gt; [Activities3.Name]" Padding="0, 0, 0, 0" HorzAlign="Justify" Font="Times New Roman, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text222" Left="3.45" Top="542.75" Width="173.88" Height="18.9" Text="SKILL SETS ADDRESSED:" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text223" Left="195.4" Top="543.75" Width="80.14" Height="18.9" Text="Coping Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox142" Left="182.05" Top="544.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities3.Present] == true,[Workdays_Activities_Facilitators3.copingSkills],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text224" Left="290.35" Top="544.75" Width="113.4" Height="18.9" Text="Stress Management" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox143" Left="277" Top="545.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities3.Present] == true,[Workdays_Activities_Facilitators3.stressManagement],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text225" Left="418.2" Top="543.75" Width="88.83" Height="18.9" Text="Healthy Living" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox144" Left="404.85" Top="544.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities3.Present] == true,[Workdays_Activities_Facilitators3.healthyLiving],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text226" Left="523.6" Top="544.1" Width="115.29" Height="18.9" Text="Relaxation Training" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox145" Left="510.25" Top="545.1" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities3.Present] == true,[Workdays_Activities_Facilitators3.relaxationTraining],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text227" Left="654.1" Top="543.75" Width="122.85" Height="18.9" Text="Disease Management" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox146" Left="640.75" Top="544.75" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities3.Present] == true,[Workdays_Activities_Facilitators3.diseaseManagement],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text228" Left="195.95" Top="564.65" Width="132.3" Height="18.9" Text="Community Resources" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox147" Left="182.6" Top="565.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities3.Present] == true,[Workdays_Activities_Facilitators3.communityResources],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text229" Left="344.7" Top="565.65" Width="139.1" Height="18.9" Text="Activity of Daily Living" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox148" Left="331.35" Top="566.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities3.Present] == true,[Workdays_Activities_Facilitators3.activityDailyLiving],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text230" Left="498.35" Top="566" Width="77.49" Height="18.9" Text="Social Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox149" Left="485" Top="567" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities3.Present] == true,[Workdays_Activities_Facilitators3.socialSkills],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text231" Left="587.05" Top="565.65" Width="66.15" Height="18.9" Text="Life Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox150" Left="573.7" Top="566.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities3.Present] == true,[Workdays_Activities_Facilitators3.lifeSkills],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text232" Left="3.45" Top="644.8" Width="122.85" Height="18.9" Text="Client's response:" Padding="0, 0, 0, 0" Font="Times New Roman, 11pt, style=Bold, Italic"/>
+      <TextObject Name="Text233" Left="148.15" Top="646.8" Width="80.14" Height="18.9" Text="Cooperative" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox151" Left="134.8" Top="647.8" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Cooperative" CheckWidthRatio="2"/>
+      <TextObject Name="Text234" Left="235.1" Top="646.8" Width="56.7" Height="18.9" Text="Assertive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox152" Left="221.75" Top="647.8" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Assertive" CheckWidthRatio="2"/>
+      <TextObject Name="Text235" Left="308.25" Top="646.8" Width="51.03" Height="18.9" Text="Passive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox153" Left="294.9" Top="647.8" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Passive" CheckWidthRatio="2"/>
+      <TextObject Name="Text236" Left="370.85" Top="647.15" Width="58.59" Height="18.9" Text="Variable" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox154" Left="357.5" Top="648.15" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Variable" CheckWidthRatio="2"/>
+      <TextObject Name="Text237" Left="437.65" Top="646.8" Width="75.6" Height="18.9" Text="Uninterested" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox155" Left="424.3" Top="647.8" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Uninterested" CheckWidthRatio="2"/>
+      <TextObject Name="Text238" Left="529.7" Top="646.8" Width="98.28" Height="18.9" Text="Engaged/Active" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox156" Left="516.35" Top="647.8" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.EngagedActive" CheckWidthRatio="2"/>
+      <TextObject Name="Text239" Left="639.55" Top="647.15" Width="77.49" Height="18.9" Text="Distractible" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox157" Left="625.2" Top="648.15" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Distractible" CheckWidthRatio="2"/>
+      <TextObject Name="Text240" Left="723.8" Top="646.8" Width="66.15" Height="18.9" Text="Confused" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox158" Left="710.45" Top="647.8" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Confused" CheckWidthRatio="2"/>
+      <TextObject Name="Text241" Left="147.7" Top="667.7" Width="70.69" Height="18.9" Text="Aggressive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox159" Left="134.35" Top="668.7" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Aggresive" CheckWidthRatio="2"/>
+      <TextObject Name="Text242" Left="235.65" Top="667.7" Width="56.7" Height="18.9" Text="Resistant" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox160" Left="222.3" Top="668.7" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Resistant" CheckWidthRatio="2"/>
+      <TextObject Name="Text243" Left="308.8" Top="667.7" Width="51.03" Height="18.9" Text="Other" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox161" Left="295.45" Top="668.7" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Other" CheckWidthRatio="2"/>
+      <TextObject Name="Text244" Left="3" Top="706.95" Width="788.13" Height="18.9" Text="&lt;b&gt;Group 4 Theme: &lt;/b&gt;[Themes4.Name]" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text245" Left="3" Top="769.1" Width="786.24" Height="37.8" CanGrow="true" CanShrink="true" Text="&lt;b&gt;Group Facilitator’s Intervention:&lt;/b&gt; [Activities4.Name]" Padding="0, 0, 0, 0" HorzAlign="Justify" Font="Times New Roman, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text246" Left="3" Top="728.3" Width="173.88" Height="18.9" Text="SKILL SETS ADDRESSED:" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text247" Left="194.95" Top="729.3" Width="80.14" Height="18.9" Text="Coping Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox162" Left="181.6" Top="730.3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities4.Present] == true,[Workdays_Activities_Facilitators4.copingSkills],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text248" Left="289.9" Top="730.3" Width="113.4" Height="18.9" Text="Stress Management" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox163" Left="276.55" Top="731.3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities4.Present] == true,[Workdays_Activities_Facilitators4.stressManagement],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text249" Left="417.75" Top="729.3" Width="88.83" Height="18.9" Text="Healthy Living" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox164" Left="404.4" Top="730.3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities4.Present] == true,[Workdays_Activities_Facilitators4.healthyLiving],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text250" Left="523.15" Top="729.65" Width="115.29" Height="18.9" Text="Relaxation Training" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox165" Left="509.8" Top="730.65" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities4.Present] == true,[Workdays_Activities_Facilitators4.relaxationTraining],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text251" Left="653.65" Top="729.3" Width="122.85" Height="18.9" Text="Disease Management" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox166" Left="640.3" Top="730.3" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities4.Present] == true,[Workdays_Activities_Facilitators4.diseaseManagement],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text252" Left="195.5" Top="750.2" Width="132.3" Height="18.9" Text="Community Resources" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox167" Left="182.15" Top="751.2" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities4.Present] == true,[Workdays_Activities_Facilitators4.communityResources],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text253" Left="344.25" Top="751.2" Width="139.1" Height="18.9" Text="Activity of Daily Living" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox168" Left="330.9" Top="752.2" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities4.Present] == true,[Workdays_Activities_Facilitators4.activityDailyLiving],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text254" Left="497.9" Top="751.55" Width="77.49" Height="18.9" Text="Social Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox169" Left="484.55" Top="752.55" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities4.Present] == true,[Workdays_Activities_Facilitators4.socialSkills],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text255" Left="586.6" Top="751.2" Width="66.15" Height="18.9" Text="Life Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox170" Left="573.25" Top="752.2" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([NotesP_Activities4.Present] == true,[Workdays_Activities_Facilitators4.lifeSkills],false)" CheckWidthRatio="2"/>
+      <TextObject Name="Text256" Left="3" Top="830.35" Width="122.85" Height="18.9" Text="Client's response:" Padding="0, 0, 0, 0" Font="Times New Roman, 11pt, style=Bold, Italic"/>
+      <TextObject Name="Text257" Left="147.7" Top="832.35" Width="70.69" Height="18.9" Text="Cooperative" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox171" Left="134.35" Top="833.35" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Cooperative" CheckWidthRatio="2"/>
+      <TextObject Name="Text258" Left="234.65" Top="832.35" Width="56.7" Height="18.9" Text="Assertive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox172" Left="221.3" Top="833.35" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Assertive" CheckWidthRatio="2"/>
+      <TextObject Name="Text259" Left="307.8" Top="832.35" Width="51.03" Height="18.9" Text="Passive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox173" Left="294.45" Top="833.35" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Passive" CheckWidthRatio="2"/>
+      <TextObject Name="Text260" Left="370.4" Top="832.7" Width="58.59" Height="18.9" Text="Variable" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox174" Left="357.05" Top="833.7" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Variable" CheckWidthRatio="2"/>
+      <TextObject Name="Text261" Left="437.2" Top="832.35" Width="75.6" Height="18.9" Text="Uninterested" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox175" Left="423.85" Top="833.35" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Uninterested" CheckWidthRatio="2"/>
+      <TextObject Name="Text262" Left="529.25" Top="832.35" Width="98.28" Height="18.9" Text="Engaged/Active" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox176" Left="515.9" Top="833.35" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.EngagedActive" CheckWidthRatio="2"/>
+      <TextObject Name="Text263" Left="639.1" Top="832.7" Width="77.49" Height="18.9" Text="Distractible" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox177" Left="624.75" Top="833.7" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Distractible" CheckWidthRatio="2"/>
+      <TextObject Name="Text264" Left="723.35" Top="832.35" Width="66.15" Height="18.9" Text="Confused" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox178" Left="710" Top="833.35" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Confused" CheckWidthRatio="2"/>
+      <TextObject Name="Text265" Left="147.25" Top="853.25" Width="70.69" Height="18.9" Text="Aggressive" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox179" Left="133.9" Top="854.25" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Aggresive" CheckWidthRatio="2"/>
+      <TextObject Name="Text266" Left="235.2" Top="853.25" Width="56.7" Height="18.9" Text="Resistant" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox180" Left="221.85" Top="854.25" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Resistant" CheckWidthRatio="2"/>
+      <TextObject Name="Text267" Left="308.35" Top="853.25" Width="51.03" Height="18.9" Text="Other" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox181" Left="295" Top="854.25" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Other" CheckWidthRatio="2"/>
       <TextObject Name="Text268" Left="160.65" Top="12.45" Width="472.5" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="[NotesP.Title]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <LineObject Name="Line7" Left="100.4" Top="171.1" Width="-95.6"/>
-      <LineObject Name="Line8" Left="100.95" Top="329.75" Width="-95.6"/>
-      <LineObject Name="Line9" Left="100.95" Top="488.4" Width="-95.6"/>
-      <LineObject Name="Line10" Left="100.5" Top="647.05" Width="-95.6"/>
-      <TableObject Name="Table3" Left="9.45" Top="803.25" Width="784.35" Height="154.98" CanBreak="false">
+      <LineObject Name="Line8" Left="100.95" Top="352.65" Width="-95.6"/>
+      <LineObject Name="Line9" Left="100.95" Top="535.65" Width="-95.6"/>
+      <LineObject Name="Line10" Left="100.5" Top="721.2" Width="-95.6"/>
+      <TableObject Name="Table3" Left="9.45" Top="902.2" Width="784.35" Height="154.98" CanBreak="false">
         <TableColumn Name="Column8" Width="151.2"/>
         <TableColumn Name="Column9" Width="633.15"/>
         <TableRow Name="Row5" Height="68.04">
@@ -628,9 +633,21 @@
           </TableCell>
         </TableRow>
       </TableObject>
-      <TextObject Name="Text46" Left="10.96" Top="983.35" Width="782.46" Height="37.8" CanGrow="true" CanShrink="true" CanBreak="false" Text="&lt;b&gt;Client benefited from the above groups by:&lt;/b&gt; [NotesP.PlanNote]" Padding="0, 0, 0, 0" HorzAlign="Justify" Font="Times New Roman, 10pt" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text46" Left="10.96" Top="1082.85" Width="782.46" Height="37.8" CanGrow="true" CanShrink="true" CanBreak="false" Text="&lt;b&gt;Client benefited from the above groups by:&lt;/b&gt; [NotesP.PlanNote]" Padding="0, 0, 0, 0" HorzAlign="Justify" Font="Times New Roman, 10pt" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text269" Left="3" Top="808.8" Width="132.3" Height="18.9" Text="Client's assistance:" Padding="0, 0, 0, 0" Font="Times New Roman, 11pt, style=Bold, Italic"/>
+      <TextObject Name="Text270" Left="147.65" Top="810.25" Width="70.69" Height="18.9" Text="Present" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox182" Left="134.3" Top="811.25" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Present" CheckWidthRatio="2"/>
+      <TextObject Name="Text271" Left="3" Top="258.15" Width="130.41" Height="18.9" Text="Client's assistance:" Padding="0, 0, 0, 0" Font="Times New Roman, 11pt, style=Bold, Italic"/>
+      <TextObject Name="Text272" Left="148.65" Top="259.6" Width="70.69" Height="18.9" Text="Present" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox183" Left="135.3" Top="260.6" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities1.Present" CheckWidthRatio="2"/>
+      <TextObject Name="Text273" Left="3" Top="440.7" Width="130.41" Height="18.9" Text="Client's assistance:" Padding="0, 0, 0, 0" Font="Times New Roman, 11pt, style=Bold, Italic"/>
+      <TextObject Name="Text274" Left="148.65" Top="442.15" Width="70.69" Height="18.9" Text="Present" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox184" Left="135.3" Top="443.15" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Present" CheckWidthRatio="2"/>
+      <TextObject Name="Text275" Left="3" Top="623.7" Width="130.41" Height="18.9" Text="Client's assistance:" Padding="0, 0, 0, 0" Font="Times New Roman, 11pt, style=Bold, Italic"/>
+      <TextObject Name="Text276" Left="148.65" Top="625.15" Width="70.69" Height="18.9" Text="Present" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
+      <CheckBoxObject Name="CheckBox185" Left="135.3" Top="626.15" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Present" CheckWidthRatio="2"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="1177.25" Width="800.98" Height="69.25">
+    <PageFooterBand Name="PageFooter1" Top="1281.2" Width="800.98" Height="69.25">
       <LineObject Name="Line5" Left="793.8" Top="50.35" Width="-785.45"/>
       <TextObject Name="Text47" Left="9.45" Top="50.35" Width="236.25" Height="18.9" Text="Group Facilitator / Credentials" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
       <TextObject Name="Text49" Left="359.1" Top="50.35" Width="47.25" Height="18.9" Text="Date" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
