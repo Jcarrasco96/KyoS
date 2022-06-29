@@ -11,8 +11,11 @@ namespace KyoS.Web.Data.Entities
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string Name { get; set; }
 
-        [Display(Name = "Code")]
-        public string Codigo { get; set; }
+        [Display(Name = "Provider Number")]
+        public string ProviderNumber { get; set; }
+
+        [Display(Name = "Credentials")]
+        public string Credentials { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public StatusType Status { get; set; }

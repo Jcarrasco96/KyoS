@@ -371,20 +371,20 @@
             </div>
             <div class="col-sm-3 col-md-2">
                 @if (Model.TcmIntakeAppendixJ == null)
-                 {
-                     <div class="thumbnail list-group-item list-group-item-text">
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;">AppendixJ<br>&nbsp;</h4>
                         <p style="text-align:right"><a asp-action="CreateTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.Id" class="btn btn-default " role="button">Go</a></p>
-                     </div>
-                 }
-                 else
-                 {
-                     <div class="thumbnail list-group-item list-group-item-success">
+                    </div>
+                }
+                else
+                {
+                    <div class="thumbnail list-group-item list-group-item-success">
                         <h4 style="align-content:end;">AppendixJ<br>&nbsp;</h4>
                         <p style="text-align:right"><a asp-action="CreateTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
-                     </div>
+                    </div>
 
-                 }
+                }
             </div>
             <div class="col-sm-3 col-md-2">
                 @if (Model.TcmServicePlan == null)
@@ -571,56 +571,91 @@
     }
     @if (ViewData["Section"].ToString() == "5")
     {
-<div class="row">
-    <div class="container-fluid">
-        @*<h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">@Model.Client.Name </span></h4>*@
-        <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">OPEN BINDER SECTION 5 </span></h4>
-    </div>
-    <div class="col-md-12">
-        <hr />
-    </div>
-    <div class="col-md-4">
-        &nbsp;
-    </div>
-    <div class="col-sm-3 col-md-2">
-        @if (@Model.TcmInterventionLog == null)
-        {
-            <div class="thumbnail list-group-item list-group-item-text">
-                <h4 style="align-content:end;">Intervention<br>Log</h4>
-                <p style="text-align:right"><a asp-action="CreateTCMInterventionLog" asp-controller="TCMIntakes" asp-route-id="@Model.Id" class="btn btn-default " role="button">Go</a></p>
+        <div class="row">
+            <div class="container-fluid">
+                @*<h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">@Model.Client.Name </span></h4>*@
+                <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">OPEN BINDER SECTION 5 </span></h4>
             </div>
-        }
-        else
-        {
-            <div class="thumbnail list-group-item list-group-item-success">
-                <h4 style="align-content:end;">Intervention<br>Log</h4>
-                <p style="text-align:right"><a asp-action="EditTCMInterventionLog" asp-controller="TCMIntakes" asp-route-id="@Model.TcmInterventionLog.Id" class="btn btn-success" role="button">Go</a></p>
+            <div class="col-md-12">
+                <hr />
             </div>
+            <div class="col-md-4">
+                &nbsp;
+            </div>
+            <div class="col-sm-3 col-md-2">
+                @if (@Model.TcmInterventionLog == null)
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;">Intervention<br>Log</h4>
+                        <p style="text-align:right"><a asp-action="CreateTCMInterventionLog" asp-controller="TCMIntakes" asp-route-id="@Model.Id" class="btn btn-default " role="button">Go</a></p>
+                    </div>
+                }
+                else
+                {
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;">Intervention<br>Log</h4>
+                        <p style="text-align:right"><a asp-action="EditTCMInterventionLog" asp-controller="TCMIntakes" asp-route-id="@Model.TcmInterventionLog.Id" class="btn btn-success" role="button">Go</a></p>
+                    </div>
 
-        }
+                }
 
-    </div>
-    <div class="col-sm-3 col-md-2">
-        @if (@Model.TCMFarsFormList.Count() == 0)
-        {
-            <div class="thumbnail list-group-item list-group-item-text">
-                <h4 style="align-content:end;">FARS<br>Form</h4>
-                <p style="text-align:right"><a asp-action="Create" asp-controller="TCMFarsForms" asp-route-id="@Model.Id" class="btn btn-default " role="button">Go</a></p>
             </div>
-        }
-        else
-        {
-            <div class="thumbnail list-group-item list-group-item-success">
-                <h4 style="align-content:end;">FARS<br>Form</h4>
-                <p style="text-align:right"><a asp-action="Index" asp-controller="TCMFarsForms" asp-route-idTCMClient="@Model.Id" asp-route-origin="1" class="btn btn-success" role="button">@Model.TCMFarsFormList.Count()</a></p>
-            </div>
+            <div class="col-sm-3 col-md-2">
+                @if (@Model.TCMFarsFormList.Count() == 0)
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;">FARS<br>Form</h4>
+                        <p style="text-align:right"><a asp-action="Create" asp-controller="TCMFarsForms" asp-route-id="@Model.Id" class="btn btn-default " role="button">Go</a></p>
+                    </div>
+                }
+                else
+                {
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;">FARS<br>Form</h4>
+                        <p style="text-align:right"><a asp-action="Index" asp-controller="TCMFarsForms" asp-route-idTCMClient="@Model.Id" asp-route-origin="1" class="btn btn-success" role="button">@Model.TCMFarsFormList.Count()</a></p>
+                    </div>
 
-        }
-    </div>
-    <div class="col-md-4">
-        &nbsp;
-    </div>
-</div>
+                }
+            </div>
+            <div class="col-md-4">
+                &nbsp;
+            </div>
+        </div>
+    }
+    @if (ViewData["Section"].ToString() == "6")
+    {
+        <div class="row">
+            <div class="container-fluid">
+                @*<h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">@Model.Client.Name </span></h4>*@
+                <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">OPEN BINDER SECTION 6 </span></h4>
+            </div>
+            <div class="col-md-12">
+                <hr />
+            </div>
+            <div class="col-md-5">
+                &nbsp;
+            </div>
+            <div class="col-sm-3 col-md-2">
+                @if (@Model.TCMNote.Count() == 0)
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;">Progress<br>Note</h4>
+                        <p style="text-align:right"><a asp-action="TCMNotesForCase" asp-controller="TCMNotes" asp-route-idTCMClient="@Model.Id" class="btn btn-default " role="button">Go</a></p>
+                    </div>
+                }
+                else
+                {
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;">Progress<br>Note</h4>
+                        <p style="text-align:right"><a asp-action="TCMNotesForCase" asp-controller="TCMNotes" asp-route-idTCMClient="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                    </div>
+
+                }
+            </div>
+            <div class="col-md-4">
+                &nbsp;
+            </div>
+        </div>
     }
     else
     {

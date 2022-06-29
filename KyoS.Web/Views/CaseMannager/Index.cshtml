@@ -46,7 +46,7 @@
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
                             <th class="col-md-2">
-                                @Html.DisplayNameFor(model => model.Codigo)
+                                @Html.DisplayNameFor(model => model.ProviderNumber)
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Status
@@ -68,7 +68,7 @@
                                         @Html.DisplayFor(modelItem => item.Name)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Codigo)
+                                        @Html.DisplayFor(modelItem => item.ProviderNumber)
                                     </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -100,7 +100,7 @@
                                         @Html.DisplayFor(modelItem => item.Name)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Codigo)
+                                        @Html.DisplayFor(modelItem => item.ProviderNumber)
                                     </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)

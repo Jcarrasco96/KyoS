@@ -95,6 +95,7 @@ namespace KyoS.Web.Controllers
                                                           .ThenInclude(n => n.TcmAssessment.MedicationList)
                                                           .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
                                                           .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
+                                                          .Include(n => n.TCMNote)
                                                           .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
                                                            && n.Casemanager.LinkedUser == user_logged.UserName))
                                                           .ToListAsync();
@@ -410,6 +411,7 @@ namespace KyoS.Web.Controllers
                                                             .ThenInclude(n => n.TcmAssessment.MedicationList)
                                                             .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
                                                             .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
+                                                            .Include(n => n.TCMNote)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
             List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
@@ -2608,6 +2610,7 @@ namespace KyoS.Web.Controllers
                                                             .ThenInclude(n => n.TcmAssessment.MedicationList)
                                                             .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
                                                             .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
+                                                            .Include(n => n.TCMNote)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
             List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease

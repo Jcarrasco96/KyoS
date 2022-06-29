@@ -174,6 +174,10 @@ namespace KyoS.Web.Helpers
         TCMAssessmentMedicalProblemViewModel ToTCMAssessmentMedicalProblemViewModel(TCMAssessmentMedicalProblemEntity model);
         Task<TCMAssessmentSurgeryEntity> ToTCMAssessmentSurgeryEntity(TCMAssessmentSurgeryViewModel model, bool isNew, string userId);
         TCMAssessmentSurgeryViewModel ToTCMAssessmentSurgeryViewModel(TCMAssessmentSurgeryEntity model);
+        Task<TCMNoteEntity> ToTCMNoteEntity(TCMNoteViewModel model, bool isNew, string userId);
+        TCMNoteViewModel ToTCMNoteViewModel(TCMNoteEntity model);
+        Task<TCMNoteActivityEntity> ToTCMNoteActivityEntity(TCMNoteActivityViewModel model, bool isNew, string userId);
+        TCMNoteActivityViewModel ToTCMNoteActivityViewModel(TCMNoteActivityEntity model);
 
     }
 }

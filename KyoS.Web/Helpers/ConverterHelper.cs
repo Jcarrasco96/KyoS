@@ -193,7 +193,8 @@ namespace KyoS.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 Clinic = await _context.Clinics.FindAsync(model.IdClinic),
-                Codigo = model.Codigo,
+                ProviderNumber = model.ProviderNumber,
+                Credentials = model.Credentials,
                 Name = model.Name,
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus),
                 LinkedUser = _userHelper.GetUserNameById(model.IdUser),
@@ -209,7 +210,8 @@ namespace KyoS.Web.Helpers
             {
                 Id = caseMannagerEntity.Id,
                 Name = caseMannagerEntity.Name,
-                Codigo = caseMannagerEntity.Codigo,
+                ProviderNumber = caseMannagerEntity.ProviderNumber,
+                Credentials = caseMannagerEntity.Credentials,
                 IdClinic = caseMannagerEntity.Clinic.Id,
                 Clinics = _combosHelper.GetComboClinics(),
                 IdStatus = (caseMannagerEntity.Status == StatusType.Open) ? 1 : 2,
@@ -5554,5 +5556,110 @@ namespace KyoS.Web.Helpers
 
             return salida;
         }
+
+        public async Task<TCMNoteEntity> ToTCMNoteEntity(TCMNoteViewModel model, bool isNew, string userId)
+        {
+            return new TCMNoteEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Outcome = model.Outcome,
+                CaseManager = _context.CaseManagers
+                                      .FirstOrDefault(n => n.Id == model.IdCaseManager),
+                TCMNoteActivity = model.TCMNoteActivity,
+                CaseManagerDate = model.CaseManagerDate,
+                DateOfService = model.DateOfService,
+                DocumentationTime = model.DocumentationTime,
+                NextStep = model.NextStep,
+                ServiceCode = model.ServiceCode,
+                Status = model.Status,
+                TotalMinutes = model.TotalMinutes,
+                TotalUnits = model.TotalUnits,
+                TCMClient = _context.TCMClient
+                                    .FirstOrDefault(n => n.Id == model.IdTCMClient),
+                Workday = _context.Workdays.FirstOrDefault(n => n.Id == model.IdTCMWorday)
+
+            };
+        }
+
+        public TCMNoteViewModel ToTCMNoteViewModel(TCMNoteEntity model)
+        {
+            TCMNoteViewModel salida;
+            salida = new TCMNoteViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                Outcome = model.Outcome,
+                CaseManager = model.CaseManager,
+                TCMNoteActivity = model.TCMNoteActivity,
+                CaseManagerDate = model.CaseManagerDate,
+                DateOfService = model.DateOfService,
+                DocumentationTime = model.DocumentationTime,
+                NextStep = model.NextStep,
+                ServiceCode = model.ServiceCode,
+                Status = model.Status,
+                TotalMinutes = model.TotalMinutes,
+                TotalUnits = model.TotalUnits,
+                TCMClient = model.TCMClient,
+                Workday = model.Workday,
+                IdCaseManager = model.CaseManager.Id,
+                IdTCMClient = model.TCMClient.Id,
+                IdTCMNote = model.Id
+            };
+
+            return salida;
+        }
+
+        public async Task<TCMNoteActivityEntity> ToTCMNoteActivityEntity(TCMNoteActivityViewModel model, bool isNew, string userId)
+        {
+            return new TCMNoteActivityEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                DescriptionOfService = model.DescriptionOfService,
+                EndTime = model.EndTime,
+                Minutes = model.Minutes,
+                Setting = model.Setting,
+                StartTime = model.StartTime,
+                TCMDomain = model.TCMDomain,
+                TCMNote = _context.TCMNote.FirstOrDefault(n => n.Id == model.IdTCMNote)
+                
+
+            };
+        }
+
+        public TCMNoteActivityViewModel ToTCMNoteActivityViewModel(TCMNoteActivityEntity model)
+        {
+            TCMNoteActivityViewModel salida;
+            salida = new TCMNoteActivityViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                DescriptionOfService = model.DescriptionOfService,
+                EndTime = model.EndTime,
+                Minutes = model.Minutes,
+                Setting = model.Setting,
+                StartTime = model.StartTime,
+                TCMDomain = model.TCMDomain,
+                TCMNote = model.TCMNote,
+                IdTCMNote = model.TCMNote.Id
+                
+            };
+
+            return salida;
+        }
+
     }
 }

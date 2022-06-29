@@ -116,6 +116,8 @@ namespace KyoS.Web.Data
         public DbSet<TCMAssessmentDrugEntity> TCMAssessmentDrug { get; set; }
         public DbSet<TCMAssessmentMedicalProblemEntity> TCMAssessmentMedicalProblem { get; set; }
         public DbSet<TCMAssessmentSurgeryEntity> TCMAssessmentSurgery { get; set; }
+        public DbSet<TCMNoteEntity> TCMNote { get; set; }
+        public DbSet<TCMNoteActivityEntity> TCMNoteActivity { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -538,6 +540,11 @@ namespace KyoS.Web.Data
             modelBuilder.Entity<TCMAssessmentSurgeryEntity>()
                         .HasOne(g => g.TcmAssessment)
                         .WithMany(m => m.SurgeryList)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMNoteEntity>()
+                        .HasMany(wd => wd.TCMNoteActivity)
+                        .WithOne(n => n.TCMNote)
                         .OnDelete(DeleteBehavior.Cascade);
 
         }

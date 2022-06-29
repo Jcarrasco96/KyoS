@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220628192405_addTCMNotesAndWorkdayTCMClientAndTCMNotesActivity#2")]
+    partial class addTCMNotesAndWorkdayTCMClientAndTCMNotesActivity2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -724,7 +726,7 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Credentials")
+                    b.Property<string>("Codigo")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -739,9 +741,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProviderNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SignaturePath")
@@ -7558,55 +7557,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("TCMIntakeWelcome");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMNoteActivityEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DescriptionOfService")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("EndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Minutes")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Setting")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("StartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("TCMDomainId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TCMNoteId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TCMDomainId");
-
-                    b.HasIndex("TCMNoteId");
-
-                    b.ToTable("TCMNoteActivity");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMNoteEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -7671,7 +7621,56 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("WorkdayId");
 
-                    b.ToTable("TCMNote");
+                    b.ToTable("TCMNOte");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMNote_Activity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DescriptionOfService")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Minutes")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Setting")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("TCMDomainId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TCMNoteId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TCMDomainId");
+
+                    b.HasIndex("TCMNoteId");
+
+                    b.ToTable("TCMNOteActivity");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMObjetiveEntity", b =>
@@ -9608,22 +9607,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TcmClient");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMNoteActivityEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.TCMDomainEntity", "TCMDomain")
-                        .WithMany()
-                        .HasForeignKey("TCMDomainId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.TCMNoteEntity", "TCMNote")
-                        .WithMany("TCMNoteActivity")
-                        .HasForeignKey("TCMNoteId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("TCMDomain");
-
-                    b.Navigation("TCMNote");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMNoteEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.CaseMannagerEntity", "CaseManager")
@@ -9643,6 +9626,22 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TCMClient");
 
                     b.Navigation("Workday");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMNote_Activity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMDomainEntity", "TCMDomain")
+                        .WithMany()
+                        .HasForeignKey("TCMDomainId");
+
+                    b.HasOne("KyoS.Web.Data.Entities.TCMNoteEntity", "TCMNote")
+                        .WithMany("TCMNoteActivity")
+                        .HasForeignKey("TCMNoteId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("TCMDomain");
+
+                    b.Navigation("TCMNote");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMObjetiveEntity", b =>
