@@ -38,6 +38,11 @@
             <partial name="_Discharge" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                @if (User.IsInRole("Supervisor"))
+                {
+                    <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity", "Discharge", new {id = Model.Id, origin = Model.Origin}, Context.Request.Scheme)','Add message to document creator')" title="Not approved document due to problems">Review</a>
+                    <a asp-action="ApproveDischarge" asp-route-id="@Model.Id" asp-route-origin="@Model.Origin" class="btn btn-default" title="Approve Addendum">Approve</a>
+                }
                 @if (Model.Origin == 0)
                 {
                     <a asp-action="Index" class="btn btn-success">Back</a>
@@ -50,11 +55,17 @@
                 {
                     <a asp-action="PendingDischarge" class="btn btn-success">Back</a>
                 }
+                @if (Model.Origin == 3)
+                {
+                    <a asp-action="MessagesOfDischarges" asp-controller="Messages" class="btn btn-success">Back</a>
+                }
             </div>
         </form>       
     </div>
 </body>
 </html>
+
+<partial name="_ModalPopup" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -2326,7 +2326,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Facilitator")]
-        public IActionResult EditAdendum(int id = 0)
+        public IActionResult EditAdendum(int id = 0, int origin = 0)
         {
             AdendumViewModel model;
 
@@ -2365,7 +2365,7 @@ namespace KyoS.Web.Controllers
                     {
 
                         model = _converterHelper.ToAdendumViewModel(Adendum);
-
+                        model.Origin = origin;
                         return View(model);
                     }
 
@@ -2453,8 +2453,20 @@ namespace KyoS.Web.Controllers
                 _context.Adendums.Update(adendumEntity);
                 try
                 {
-                    await _context.SaveChangesAsync();
+                    //todos los mensajes que tiene el mtp review los pongo como leidos
+                    foreach (MessageEntity value in adendumEntity.Messages)
+                    {
+                        value.Status = MessageStatus.Read;
+                        value.DateRead = DateTime.Now;
+                        _context.Update(value);
+                    }
 
+                    await _context.SaveChangesAsync();
+                    
+                    if (adendumViewModel.Origin == 1)
+                    {
+                        return RedirectToAction("MessagesOfAddendums", "Messages");
+                    }
                     return RedirectToAction("IndexAdendum", "MTPs");
                 }
                 catch (System.Exception ex)
@@ -2732,6 +2744,14 @@ namespace KyoS.Web.Controllers
 
                 try
                 {
+                    //todos los mensajes que tiene el mtp review los pongo como leidos
+                    foreach (MessageEntity value in mtpReviewEntity.Messages)
+                    {
+                        value.Status = MessageStatus.Read;
+                        value.DateRead = DateTime.Now;
+                        _context.Update(value);
+                    }
+
                     await _context.SaveChangesAsync();
                     if (mtpReviewViewModel.Origin == 1)
                     {
@@ -2740,6 +2760,10 @@ namespace KyoS.Web.Controllers
                     if (mtpReviewViewModel.Origin == 2)
                     {
                         return RedirectToAction(nameof(MTPRinEdit));
+                    }
+                    if (mtpReviewViewModel.Origin == 3)
+                    {
+                        return RedirectToAction("MessagesOfMTPReviews", "Messages");
                     }
 
                     return RedirectToAction(nameof(Index));

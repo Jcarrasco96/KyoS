@@ -870,6 +870,8 @@ namespace KyoS.Web.Controllers
                             return RedirectToAction(nameof(PendingNotes));
                         if (model.Origin == 4)
                             return RedirectToAction(nameof(NotesWithReview));
+                        if (model.Origin == 5)
+                            return RedirectToAction("MessagesOfNotes", "Messages");
                     }
                     catch (System.Exception ex)
                     {
@@ -1695,6 +1697,8 @@ namespace KyoS.Web.Controllers
                             return RedirectToAction(nameof(PendingNotes));
                         if (model.Origin == 4)
                             return RedirectToAction(nameof(NotesWithReview));
+                        if (model.Origin == 5)
+                            return RedirectToAction("MessagesOfNotes", "Messages");
                     }
                     catch (System.Exception ex)
                     {
@@ -2094,6 +2098,8 @@ namespace KyoS.Web.Controllers
                             return RedirectToAction(nameof(PendingIndNotes));
                         if (model.Origin == 4)
                             return RedirectToAction(nameof(IndNotesWithReview));
+                        if (model.Origin == 5)
+                            return RedirectToAction("MessagesOfNotes", "Messages");
                     }
                     catch (System.Exception ex)
                     {
@@ -2573,6 +2579,8 @@ namespace KyoS.Web.Controllers
                             return RedirectToAction(nameof(PendingGroupNotes));
                         if (model.Origin == 4)
                             return RedirectToAction(nameof(GroupNotesWithReview));
+                        if (model.Origin == 5)
+                            return RedirectToAction("MessagesOfNotes", "Messages");
                     }
                     catch (System.Exception ex)
                     {
@@ -9401,6 +9409,10 @@ namespace KyoS.Web.Controllers
                                       .Include(w => w.Days)
                                       .ThenInclude(d => d.Workdays_Clients)
                                       .ThenInclude(wc => wc.Note)
+
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(wc => wc.NoteP)
 
                                       .Include(w => w.Days)
                                       .ThenInclude(d => d.Workdays_Clients)

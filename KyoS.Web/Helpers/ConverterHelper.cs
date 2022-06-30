@@ -4,6 +4,7 @@ using KyoS.Web.Data.Entities;
 using KyoS.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace KyoS.Web.Helpers
@@ -2530,7 +2531,6 @@ namespace KyoS.Web.Helpers
                 DateReport = model.DateReport,
                 DischargeDiagnosis = model.DischargeDiagnosis,
                 LeftBefore = model.LeftBefore,
-                Messages = model.Messages,
                 NonCompliant = model.NonCompliant,
                 Other = model.Other,
                 Other_Explain = model.Other_Explain,
@@ -2555,7 +2555,8 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TypeService = model.TypeService,
-                DateAdmissionService = model.DateAdmissionService
+                DateAdmissionService = model.DateAdmissionService,
+                Messages = !isNew ? await _context.Messages.Where(m => m.Discharge.Id == model.Id).ToListAsync() : null
             };
         }
 
@@ -2656,7 +2657,7 @@ namespace KyoS.Web.Helpers
                 ActivitiesScale = model.ActivitiesScale,
                 AdmissionedFor = model.AdmissionedFor,
                 AnxietyScale = model.AnxietyScale,
-                CognitiveScale  = model.CognitiveScale,
+                CognitiveScale = model.CognitiveScale,
                 ContID1 = model.ContID1,
                 ContID2 = model.ContID2,
                 ContID3 = model.ContID3,
@@ -2694,7 +2695,8 @@ namespace KyoS.Web.Helpers
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
-                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Messages = !isNew ? await _context.Messages.Where(m => m.FarsForm.Id == model.Id).ToListAsync() : null
             };
         }
 
@@ -3206,8 +3208,8 @@ namespace KyoS.Web.Helpers
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
-                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
-
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Messages = !isNew ? await _context.Messages.Where(m => m.Addendum.Id == model.Id).ToListAsync() : null
             };
         }
 
@@ -3287,8 +3289,8 @@ namespace KyoS.Web.Helpers
                 MonthOfTreatment = model.MonthOfTreatment,
                 Setting = model.Setting,
                 StartTime = model.StartTime,
-                DataOfService = model.DataOfService
-
+                DataOfService = model.DataOfService,
+                Messages = !isNew ? await _context.Messages.Where(m => m.MTPReview.Id == model.Id).ToListAsync() : null
             };
             
             return salida;

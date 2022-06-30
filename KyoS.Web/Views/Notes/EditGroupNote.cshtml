@@ -122,6 +122,10 @@
                     {
                         <a asp-action="GroupNotesWithReview" class="btn btn-success">Back</a>
                     }
+                    @if (Model.Origin == 5) //viene de la pagina MessagesOfNotes
+                    {
+                        <a asp-action="MessagesOfNotes" asp-controller="Messages" class="btn btn-success">Back</a>
+                    }
 
                     @if (Model.Status.ToString() == "Edition")
                     {

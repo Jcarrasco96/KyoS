@@ -147,6 +147,7 @@ namespace KyoS.Web.Controllers
                         DateSignaturePerson = DateTime.Now,
                         DateSignatureSupervisor = DateTime.Now,
                         TypeService = service,
+                        Origin = origin,
                         DateAdmissionService = client.AdmisionDate
                     };
                     if (model.Client.MedicationList == null)
@@ -194,6 +195,7 @@ namespace KyoS.Web.Controllers
                 DateSignaturePerson = DateTime.Now,
                 DateSignatureSupervisor = DateTime.Now,
                 TypeService = service,
+                Origin = origin,
                 DateAdmissionService = client.AdmisionDate
             };
             return View(model);
@@ -278,7 +280,15 @@ namespace KyoS.Web.Controllers
                     {
                         await _context.SaveChangesAsync();
 
-                        return RedirectToAction("DischargeInEdit", "Discharge");
+                        if (DischargeViewModel.Origin == 1)
+                        {
+                            RedirectToAction("ClientswithoutDischarge");                            
+                        }
+                        if (DischargeViewModel.Origin == 2)
+                        {
+                            RedirectToAction("DischargeOfService");
+                        }
+                        return RedirectToAction("Index");
                     }
                     catch (System.Exception ex)
                     {
@@ -366,6 +376,14 @@ namespace KyoS.Web.Controllers
                 _context.Discharge.Update(dischargeEntity);
                 try
                 {
+                    //todos los mensajes que tiene el discharge los pongo como leidos
+                    foreach (MessageEntity value in dischargeEntity.Messages)
+                    {
+                        value.Status = MessageStatus.Read;
+                        value.DateRead = DateTime.Now;
+                        _context.Update(value);
+                    }
+
                     await _context.SaveChangesAsync();
 
                     if (dischargeViewModel.Origin == 1)
@@ -375,6 +393,10 @@ namespace KyoS.Web.Controllers
                     if (dischargeViewModel.Origin == 2)
                     {
                         return RedirectToAction("PendingDischarge");
+                    }
+                    if (dischargeViewModel.Origin == 3)
+                    {
+                        return RedirectToAction("MessagesOfDischarges", "Messages");
                     }
 
                     return RedirectToAction("Index");
@@ -580,7 +602,7 @@ namespace KyoS.Web.Controllers
 
             await _context.SaveChangesAsync();
             
-            if(origin == 1)
+            if(origin == 2)
             {
                 return RedirectToAction(nameof(PendingDischarge));
             }
@@ -750,6 +772,48 @@ namespace KyoS.Web.Controllers
            else
                 return RedirectToAction("NotAuthorized", "Account");
         
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public IActionResult AddMessageEntity(int id = 0, int origin = 0)
+        {
+            if (id == 0)
+            {
+                return View(new MessageViewModel());
+            }
+            else
+            {
+                MessageViewModel model = new MessageViewModel()
+                {
+                    IdDischarge = id,
+                    Origin = origin
+                };
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> AddMessageEntity(MessageViewModel messageViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                MessageEntity model = await _converterHelper.ToMessageEntity(messageViewModel, true);
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                model.From = user_logged.UserName;
+                model.To = model.Discharge.CreatedBy;
+                _context.Add(model);
+                await _context.SaveChangesAsync();
+            }
+
+            if (messageViewModel.Origin == 2)
+                return RedirectToAction("PendingDischarge");
+
+            return RedirectToAction("Index");
         }
     }
 }
