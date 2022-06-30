@@ -545,7 +545,7 @@ namespace KyoS.Web.Controllers
 
             int schema1Count = 0;
             int schema2Count = 0;
-            int schema3Count = 0;
+            List<NotePEntity> list_of_notesP;            
             int schema4Count = 0;
             int notNotesCount = 0;
             //int indNotesCount = 0;
@@ -572,22 +572,26 @@ namespace KyoS.Web.Controllers
                                            .Count();
                     usedUnits = usedUnits + (schema2Count * 16);
 
-                    schema3Count = _context.NotesP
-                                           .Where(n => (n.Schema == Common.Enums.SchemaType.Schema3
-                                                     && n.Workday_Cient.Workday.Date >= entity.ApprovedDate
-                                                     && n.Workday_Cient.Client.Id == idClient))
-                                           .Count();
-                    usedUnits = usedUnits + (schema3Count * 16);
+                    list_of_notesP = await _context.NotesP
+                                                   .Where(n => (n.Schema == Common.Enums.SchemaType.Schema3
+                                                             && n.Workday_Cient.Workday.Date >= entity.ApprovedDate
+                                                             && n.Workday_Cient.Client.Id == idClient))
+                                           .ToListAsync();
+                    foreach (var item in list_of_notesP)
+                    {
+                        usedUnits = usedUnits + item.RealUnits;
+                    }                   
 
                     schema4Count = _context.Notes
                                            .Where(n => (n.Schema == Common.Enums.SchemaType.Schema4
                                                      && n.Workday_Cient.Workday.Date >= entity.ApprovedDate
                                                      && n.Workday_Cient.Client.Id == idClient))
-                                          .Count();
+                                           .Count();
                     usedUnits = usedUnits + (schema4Count * 12);
 
                     notNotesCount = _context.Workdays_Clients
                                             .Where(wc => (wc.Note == null
+                                                       && wc.NoteP == null
                                                        && wc.IndividualNote == null
                                                        && wc.GroupNote == null
                                                        && wc.Workday.Date >= entity.ApprovedDate
@@ -595,7 +599,8 @@ namespace KyoS.Web.Controllers
                                             .Count();
                     int value = (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema1) ? 16 :
                                     (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema2) ? 16 :
-                                        (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema4) ? 12 : 0;
+                                        (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema3) ? 16 :
+                                            (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema4) ? 12 : 0;
                     usedUnits = usedUnits + (notNotesCount * value);
 
                     //indNotesCount = _context.IndividualNotes
@@ -625,13 +630,16 @@ namespace KyoS.Web.Controllers
                                            .Count();
                     usedUnits = usedUnits + (schema2Count * 16);
 
-                    schema3Count = _context.NotesP
-                                           .Where(n => (n.Schema == Common.Enums.SchemaType.Schema3
-                                                     && n.Workday_Cient.Workday.Date >= entity.ApprovedDate && n.Workday_Cient.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
-                                                     && n.Workday_Cient.Workday.Date < nextEntity.ApprovedDate
-                                                     && n.Workday_Cient.Client.Id == idClient))
-                                           .Count();
-                    usedUnits = usedUnits + (schema3Count * 16);
+                    list_of_notesP = await _context.NotesP
+                                                   .Where(n => (n.Schema == Common.Enums.SchemaType.Schema3
+                                                       && n.Workday_Cient.Workday.Date >= entity.ApprovedDate && n.Workday_Cient.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
+                                                       && n.Workday_Cient.Workday.Date < nextEntity.ApprovedDate
+                                                       && n.Workday_Cient.Client.Id == idClient))
+                                                   .ToListAsync();
+                    foreach (var item in list_of_notesP)
+                    {
+                        usedUnits = usedUnits + item.RealUnits;
+                    }
 
                     schema4Count = _context.Notes
                                            .Where(n => (n.Schema == Common.Enums.SchemaType.Schema4
@@ -643,6 +651,7 @@ namespace KyoS.Web.Controllers
 
                     notNotesCount = _context.Workdays_Clients
                                             .Where(wc => (wc.Note == null
+                                                       && wc.NoteP == null
                                                        && wc.IndividualNote == null
                                                        && wc.GroupNote == null
                                                        && wc.Workday.Date >= entity.ApprovedDate && wc.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
@@ -651,7 +660,8 @@ namespace KyoS.Web.Controllers
                                             .Count();
                     int value = (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema1) ? 16 :
                                     (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema2) ? 16 :
-                                        (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema4) ? 12 : 0;
+                                        (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema3) ? 16 :
+                                            (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema4) ? 12 : 0;
                     usedUnits = usedUnits + (notNotesCount * value);
 
                     //indNotesCount = _context.IndividualNotes
@@ -679,7 +689,7 @@ namespace KyoS.Web.Controllers
 
             int schema1Count = 0;
             int schema2Count = 0;
-            int schema3Count = 0;
+            List<NotePEntity> list_of_notesP;
             int schema4Count = 0;
             int notNotesCount = 0;
             //int indNotesCount = 0;
@@ -708,13 +718,16 @@ namespace KyoS.Web.Controllers
                                            .Count();
                     usedUnits = usedUnits + (schema2Count * 16);
 
-                    schema3Count = _context.NotesP
-                                           .Where(n => (n.Schema == Common.Enums.SchemaType.Schema3
-                                                     && n.Workday_Cient.Workday.Date >= entity.ApprovedDate
-                                                     && n.Workday_Cient.Workday.Date < approvedDateNextEntity
-                                                     && n.Workday_Cient.Client.Id == idClient))
-                                           .Count();
-                    usedUnits = usedUnits + (schema3Count * 16);
+                    list_of_notesP = await _context.NotesP
+                                                   .Where(n => (n.Schema == Common.Enums.SchemaType.Schema3
+                                                       && n.Workday_Cient.Workday.Date >= entity.ApprovedDate
+                                                       && n.Workday_Cient.Workday.Date < approvedDateNextEntity
+                                                       && n.Workday_Cient.Client.Id == idClient))
+                                                   .ToListAsync();
+                    foreach (var item in list_of_notesP)
+                    {
+                        usedUnits = usedUnits + item.RealUnits;
+                    }                   
 
                     schema4Count = _context.Notes
                                            .Where(n => (n.Schema == Common.Enums.SchemaType.Schema4
@@ -726,6 +739,7 @@ namespace KyoS.Web.Controllers
 
                     notNotesCount = _context.Workdays_Clients
                                             .Where(wc => (wc.Note == null
+                                                       && wc.NoteP == null
                                                        && wc.IndividualNote == null
                                                        && wc.GroupNote == null
                                                        && wc.Workday.Date >= entity.ApprovedDate
@@ -734,7 +748,8 @@ namespace KyoS.Web.Controllers
                                             .Count();
                     int value = (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema1) ? 16 :
                                     (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema2) ? 16 :
-                                        (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema4) ? 12 : 0;
+                                        (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema3) ? 16 :
+                                            (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema4) ? 12 : 0;
                     usedUnits = usedUnits + (notNotesCount * value);
 
                     //indNotesCount = _context.IndividualNotes
@@ -764,13 +779,16 @@ namespace KyoS.Web.Controllers
                                            .Count();
                     usedUnits = usedUnits + (schema2Count * 16);
 
-                    schema3Count = _context.NotesP
-                                           .Where(n => (n.Schema == Common.Enums.SchemaType.Schema3
-                                                     && n.Workday_Cient.Workday.Date >= entity.ApprovedDate && n.Workday_Cient.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
-                                                     && n.Workday_Cient.Workday.Date < nextEntity.ApprovedDate
-                                                     && n.Workday_Cient.Client.Id == idClient))
-                                           .Count();
-                    usedUnits = usedUnits + (schema3Count * 16);
+                    list_of_notesP = await _context.NotesP
+                                                   .Where(n => (n.Schema == Common.Enums.SchemaType.Schema3
+                                                       && n.Workday_Cient.Workday.Date >= entity.ApprovedDate && n.Workday_Cient.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
+                                                       && n.Workday_Cient.Workday.Date < nextEntity.ApprovedDate
+                                                       && n.Workday_Cient.Client.Id == idClient))
+                                                   .ToListAsync();
+                    foreach (var item in list_of_notesP)
+                    {
+                        usedUnits = usedUnits + item.RealUnits;
+                    }
 
                     schema4Count = _context.Notes
                                            .Where(n => (n.Schema == Common.Enums.SchemaType.Schema4
@@ -782,6 +800,7 @@ namespace KyoS.Web.Controllers
 
                     notNotesCount = _context.Workdays_Clients
                                             .Where(wc => (wc.Note == null
+                                                       && wc.NoteP == null
                                                        && wc.IndividualNote == null
                                                        && wc.GroupNote == null
                                                        && wc.Workday.Date >= entity.ApprovedDate && wc.Workday.Date <= entity.ApprovedDate.AddMonths(entity.DurationTime)
@@ -790,7 +809,8 @@ namespace KyoS.Web.Controllers
                                             .Count();
                     int value = (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema1) ? 16 :
                                     (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema2) ? 16 :
-                                        (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema4) ? 12 : 0;
+                                        (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema3) ? 16 :
+                                            (user_logged.Clinic.Schema == Common.Enums.SchemaType.Schema4) ? 12 : 0;
                     usedUnits = usedUnits + (notNotesCount * value);
 
                     //indNotesCount = _context.IndividualNotes

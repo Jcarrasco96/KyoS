@@ -1029,7 +1029,8 @@ namespace KyoS.Web.Controllers
                     Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
                     Origin = origin,
                     Schema = workday_Client.Client.Clinic.Schema,
-                    
+
+                    Present1 = true,
                     Theme1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
                     FacilitatorIntervention1 = (activities.Count > 0) ? activities[0].Activity.Name : string.Empty,
                     IdActivity1 = (activities.Count > 0) ? activities[0].Activity.Id : 0,
@@ -1045,6 +1046,7 @@ namespace KyoS.Web.Controllers
                     socialSkills1 = activities[0].socialSkills == null ? false : Convert.ToBoolean(activities[0].socialSkills),
                     stressManagement1 = activities[0].stressManagement == null ? false : Convert.ToBoolean(activities[0].stressManagement),
 
+                    Present2 = true,
                     Theme2 = (activities.Count > 1) ? activities[1].Activity.Theme.Name : string.Empty,
                     FacilitatorIntervention2 = (activities.Count > 1) ? activities[1].Activity.Name : string.Empty,
                     IdActivity2 = (activities.Count > 1) ? activities[1].Activity.Id : 0,
@@ -1060,6 +1062,7 @@ namespace KyoS.Web.Controllers
                     socialSkills2 = activities[1].socialSkills == null ? false : Convert.ToBoolean(activities[1].socialSkills),
                     stressManagement2 = activities[1].stressManagement == null ? false : Convert.ToBoolean(activities[1].stressManagement),
 
+                    Present3 = true,
                     Theme3 = (activities.Count > 2) ? activities[2].Activity.Theme.Name : string.Empty,
                     FacilitatorIntervention3 = (activities.Count > 2) ? activities[2].Activity.Name : string.Empty,
                     IdActivity3 = (activities.Count > 2) ? activities[2].Activity.Id : 0,
@@ -1075,6 +1078,7 @@ namespace KyoS.Web.Controllers
                     socialSkills3 = activities[2].socialSkills == null ? false : Convert.ToBoolean(activities[2].socialSkills),
                     stressManagement3 = activities[2].stressManagement == null ? false : Convert.ToBoolean(activities[2].stressManagement),
 
+                    Present4 = true,
                     Theme4 = (activities.Count > 3) ? activities[3].Activity.Theme.Name : string.Empty,
                     FacilitatorIntervention4 = (activities.Count > 3) ? activities[3].Activity.Name : string.Empty,
                     IdActivity4 = (activities.Count > 3) ? activities[3].Activity.Id : 0,
@@ -1172,6 +1176,7 @@ namespace KyoS.Web.Controllers
                     UsesSessions = note.UsesSessions,
                     Variable = note.Variable,
 
+                    Present1 = note_Activity[0].Present,
                     Theme1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
                     FacilitatorIntervention1 = (activities.Count > 0) ? activities[0].Activity.Name : string.Empty,
                     IdActivity1 = (activities.Count > 0) ? activities[0].Activity.Id : 0,
@@ -1206,6 +1211,7 @@ namespace KyoS.Web.Controllers
                     Resistant1 = (note_Activity.Count > 0) ? note_Activity[0].Resistant : false,
                     Other1 = (note_Activity.Count > 0) ? note_Activity[0].Other : false,
 
+                    Present2 = note_Activity[1].Present,
                     Theme2 = (activities.Count > 1) ? activities[1].Activity.Theme.Name : string.Empty,
                     FacilitatorIntervention2 = (activities.Count > 1) ? activities[1].Activity.Name : string.Empty,
                     IdActivity2 = (activities.Count > 1) ? activities[1].Activity.Id : 0,
@@ -1240,6 +1246,7 @@ namespace KyoS.Web.Controllers
                     Resistant2 = (note_Activity.Count > 1) ? note_Activity[1].Resistant : false,
                     Other2 = (note_Activity.Count > 1) ? note_Activity[1].Other : false,
 
+                    Present3 = note_Activity[2].Present,
                     Theme3 = (activities.Count > 2) ? activities[2].Activity.Theme.Name : string.Empty,
                     FacilitatorIntervention3 = (activities.Count > 2) ? activities[2].Activity.Name : string.Empty,
                     IdActivity3 = (activities.Count > 2) ? activities[2].Activity.Id : 0,
@@ -1274,6 +1281,7 @@ namespace KyoS.Web.Controllers
                     Resistant3 = (note_Activity.Count > 2) ? note_Activity[2].Resistant : false,
                     Other3 = (note_Activity.Count > 2) ? note_Activity[2].Other : false,
 
+                    Present4 = note_Activity[3].Present,
                     Theme4 = (activities.Count > 3) ? activities[3].Activity.Theme.Name : string.Empty,
                     FacilitatorIntervention4 = (activities.Count > 3) ? activities[3].Activity.Name : string.Empty,
                     IdActivity4 = (activities.Count > 3) ? activities[3].Activity.Id : 0,
@@ -1341,10 +1349,10 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 //The user must select at least one client response per theme 
-                if ((!model.Cooperative1 && !model.Assertive1 && !model.Passive1 && !model.Variable1 && !model.Uninterested1 && !model.Engaged1 && !model.Distractible1 && !model.Confused1 && !model.Aggresive1 && !model.Resistant1 && !model.Other1)
-                    || (!model.Cooperative2 && !model.Assertive2 && !model.Passive2 && !model.Variable2 && !model.Uninterested2 && !model.Engaged2 && !model.Distractible2 && !model.Confused2 && !model.Aggresive2 && !model.Resistant2 && !model.Other2)
-                    || (!model.Cooperative3 && !model.Assertive3 && !model.Passive3 && !model.Variable3 && !model.Uninterested3 && !model.Engaged3 && !model.Distractible3 && !model.Confused3 && !model.Aggresive3 && !model.Resistant3 && !model.Other3)
-                    || (!model.Cooperative4 && !model.Assertive4 && !model.Passive4 && !model.Variable4 && !model.Uninterested4 && !model.Engaged4 && !model.Distractible4 && !model.Confused4 && !model.Aggresive4 && !model.Resistant4 && !model.Other4))
+                if ((model.Present1 && !model.Cooperative1 && !model.Assertive1 && !model.Passive1 && !model.Variable1 && !model.Uninterested1 && !model.Engaged1 && !model.Distractible1 && !model.Confused1 && !model.Aggresive1 && !model.Resistant1 && !model.Other1)
+                    || (model.Present2 && !model.Cooperative2 && !model.Assertive2 && !model.Passive2 && !model.Variable2 && !model.Uninterested2 && !model.Engaged2 && !model.Distractible2 && !model.Confused2 && !model.Aggresive2 && !model.Resistant2 && !model.Other2)
+                    || (model.Present3 && !model.Cooperative3 && !model.Assertive3 && !model.Passive3 && !model.Variable3 && !model.Uninterested3 && !model.Engaged3 && !model.Distractible3 && !model.Confused3 && !model.Aggresive3 && !model.Resistant3 && !model.Other3)
+                    || (model.Present4 && !model.Cooperative4 && !model.Assertive4 && !model.Passive4 && !model.Variable4 && !model.Uninterested4 && !model.Engaged4 && !model.Distractible4 && !model.Confused4 && !model.Aggresive4 && !model.Resistant4 && !model.Other4))
                 {
                     return RedirectToAction(nameof(EditNoteP), new { id = model.Id, error = 6, origin = model.Origin });
                 }
@@ -1371,82 +1379,94 @@ namespace KyoS.Web.Controllers
                         noteEntity.Setting = mtp.Setting;
                     }
 
+                    //I verify that user selected at least a one progress, if no then I put minimal progress for default
+                    if (!model.Minimal && !model.Slow && !model.Steady && !model.GoodExcelent && !model.IncreasedDifficultiesNoted && !model.Complicated && !model.DevelopingInsight
+                                     && !model.LittleInsight && !model.Aware && !model.AbleToGenerateAlternatives && !model.Initiates && !model.ProblemSolved && !model.DemostratesEmpathy
+                                     && !model.UsesSessions && !model.Variable)
+                    {
+                        noteEntity.Minimal = true;
+                    }
+
                     _context.Add(noteEntity);
 
                     note_Activity = new NoteP_Activity
                     {
                         NoteP = noteEntity,
-                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1),
-                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
+                        Present = model.Present1,
+                        Activity = (model.Present1) ? _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1) : null,
+                        Objetive = (model.Present1) ? _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1) : null,
                         //Client's response
-                        Cooperative = model.Cooperative1,
-                        Assertive = model.Assertive1,
-                        Passive = model.Passive1,
-                        Variable = model.Variable1,
-                        Uninterested = model.Uninterested1,
-                        EngagedActive = model.Engaged1,
-                        Distractible = model.Distractible1,
-                        Confused = model.Confused1,
-                        Aggresive = model.Aggresive1,
-                        Resistant = model.Resistant1,
-                        Other = model.Other1
+                        Cooperative = (model.Present1) ? model.Cooperative1 : false,
+                        Assertive = (model.Present1) ? model.Assertive1 : false,
+                        Passive = (model.Present1) ? model.Passive1 : false,
+                        Variable = (model.Present1) ? model.Variable1 : false,
+                        Uninterested = (model.Present1) ? model.Uninterested1 : false,
+                        EngagedActive = (model.Present1) ? model.Engaged1 : false,
+                        Distractible = (model.Present1) ? model.Distractible1 : false,
+                        Confused = (model.Present1) ? model.Confused1 : false,
+                        Aggresive = (model.Present1) ? model.Aggresive1 : false,
+                        Resistant = (model.Present1) ? model.Resistant1 : false,
+                        Other = (model.Present1) ? model.Other1 : false
                     };
                     _context.Add(note_Activity);
                     note_Activity = new NoteP_Activity
                     {
                         NoteP = noteEntity,
-                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2),
-                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
+                        Present = model.Present2,
+                        Activity = (model.Present2) ? _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2) : null,
+                        Objetive = (model.Present2) ? _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2) : null,
                         //Client's response
-                        Cooperative = model.Cooperative2,
-                        Assertive = model.Assertive2,
-                        Passive = model.Passive2,
-                        Variable = model.Variable2,
-                        Uninterested = model.Uninterested2,
-                        EngagedActive = model.Engaged2,
-                        Distractible = model.Distractible2,
-                        Confused = model.Confused2,
-                        Aggresive = model.Aggresive2,
-                        Resistant = model.Resistant2,
-                        Other = model.Other2
+                        Cooperative = (model.Present2) ? model.Cooperative2 : false,
+                        Assertive = (model.Present2) ? model.Assertive2 : false,
+                        Passive = (model.Present2) ? model.Passive2 : false,
+                        Variable = (model.Present2) ? model.Variable2 : false,
+                        Uninterested = (model.Present2) ? model.Uninterested2 : false,
+                        EngagedActive = (model.Present2) ? model.Engaged2 : false,
+                        Distractible = (model.Present2) ? model.Distractible2 : false,
+                        Confused = (model.Present2) ? model.Confused2 : false,
+                        Aggresive = (model.Present2) ? model.Aggresive2 : false,
+                        Resistant = (model.Present2) ? model.Resistant2 : false,
+                        Other = (model.Present2) ? model.Other2 : false
                     };
                     _context.Add(note_Activity);
                     note_Activity = new NoteP_Activity
                     {
                         NoteP = noteEntity,
-                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity3),
-                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive3),
+                        Present = model.Present3,
+                        Activity = (model.Present3) ? _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity3) : null,
+                        Objetive = (model.Present3) ? _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive3) : null,
                         //Client's response
-                        Cooperative = model.Cooperative3,
-                        Assertive = model.Assertive3,
-                        Passive = model.Passive3,
-                        Variable = model.Variable3,
-                        Uninterested = model.Uninterested3,
-                        EngagedActive = model.Engaged3,
-                        Distractible = model.Distractible3,
-                        Confused = model.Confused3,
-                        Aggresive = model.Aggresive3,
-                        Resistant = model.Resistant3,
-                        Other = model.Other3
+                        Cooperative = (model.Present3) ? model.Cooperative3 : false,
+                        Assertive = (model.Present3) ? model.Assertive3 : false,
+                        Passive = (model.Present3) ? model.Passive3 : false,
+                        Variable = (model.Present3) ? model.Variable3 : false,
+                        Uninterested = (model.Present3) ? model.Uninterested3 : false,
+                        EngagedActive = (model.Present3) ? model.Engaged3 : false,
+                        Distractible = (model.Present3) ? model.Distractible3 : false,
+                        Confused = (model.Present3) ? model.Confused3 : false,
+                        Aggresive = (model.Present3) ? model.Aggresive3 : false,
+                        Resistant = (model.Present3) ? model.Resistant3 : false,
+                        Other = (model.Present3) ? model.Other3 : false
                     };
                     _context.Add(note_Activity);
                     note_Activity = new NoteP_Activity
                     {
                         NoteP = noteEntity,
-                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity4),
-                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4),
+                        Present = model.Present4,
+                        Activity = (model.Present4) ? _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity4) : null,
+                        Objetive = (model.Present4) ? _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4) : null,
                         //Client's response
-                        Cooperative = model.Cooperative4,
-                        Assertive = model.Assertive4,
-                        Passive = model.Passive4,
-                        Variable = model.Variable4,
-                        Uninterested = model.Uninterested4,
-                        EngagedActive = model.Engaged4,
-                        Distractible = model.Distractible4,
-                        Confused = model.Confused4,
-                        Aggresive = model.Aggresive4,
-                        Resistant = model.Resistant4,
-                        Other = model.Other4
+                        Cooperative = (model.Present4) ? model.Cooperative4 : false,
+                        Assertive = (model.Present4) ? model.Assertive4 : false,
+                        Passive = (model.Present4) ? model.Passive4 : false,
+                        Variable = (model.Present4) ? model.Variable4 : false,
+                        Uninterested = (model.Present4) ? model.Uninterested4 : false,
+                        EngagedActive = (model.Present4) ? model.Engaged4 : false,
+                        Distractible = (model.Present4) ? model.Distractible4 : false,
+                        Confused = (model.Present4) ? model.Confused4 : false,
+                        Aggresive = (model.Present4) ? model.Aggresive4 : false,
+                        Resistant = (model.Present4) ? model.Resistant4 : false,
+                        Other = (model.Present4) ? model.Other4 : false
                     };
                     _context.Add(note_Activity);
                     try
@@ -1476,7 +1496,35 @@ namespace KyoS.Web.Controllers
                     {
                         if (model.IdObjetive1 == 0 && model.IdObjetive2 == 0 && model.IdObjetive3 == 0 && model.IdObjetive4 == 0)
                         {
-                            return RedirectToAction(nameof(EditNoteP), new { id = model.Id, error = 1, origin = model.Origin});
+                            return RedirectToAction(nameof(EditNoteP), new { id = model.Id, error = 1, origin = model.Origin });
+                        }
+                        else
+                        {
+                            if (!model.Present1 && model.IdObjetive1 != 0 && model.IdObjetive2 == 0 && model.IdObjetive3 == 0 && model.IdObjetive4 == 0)
+                            {
+                                return RedirectToAction(nameof(EditNoteP), new { id = model.Id, error = 1, origin = model.Origin });
+                            }
+                            else
+                            {
+                                if (!model.Present2 && model.IdObjetive2 != 0 && model.IdObjetive1 == 0 && model.IdObjetive3 == 0 && model.IdObjetive4 == 0)
+                                {
+                                    return RedirectToAction(nameof(EditNoteP), new { id = model.Id, error = 1, origin = model.Origin });
+                                }
+                                else
+                                {
+                                    if (!model.Present3 && model.IdObjetive3 != 0 && model.IdObjetive1 == 0 && model.IdObjetive2 == 0 && model.IdObjetive4 == 0)
+                                    {
+                                        return RedirectToAction(nameof(EditNoteP), new { id = model.Id, error = 1, origin = model.Origin });
+                                    }
+                                    else
+                                    {
+                                        if (!model.Present4 && model.IdObjetive4 != 0 && model.IdObjetive1 == 0 && model.IdObjetive2 == 0 && model.IdObjetive3 == 0)
+                                        {
+                                            return RedirectToAction(nameof(EditNoteP), new { id = model.Id, error = 1, origin = model.Origin });
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -1518,6 +1566,13 @@ namespace KyoS.Web.Controllers
                     note.DemostratesEmpathy = model.DemostratesEmpathy;
                     note.UsesSessions = model.UsesSessions;
                     note.Variable = model.Variable;
+                    //I verify that user selected at least a one progress, if no then I put minimal progress for default
+                    if (!note.Minimal && !note.Slow && !note.Steady && !note.GoodExcelent && !note.IncreasedDifficultiesNoted && !note.Complicated && !note.DevelopingInsight
+                                     && !note.LittleInsight && !note.Aware && !note.AbleToGenerateAlternatives && !note.Initiates && !note.ProblemSolved && !note.DemostratesEmpathy
+                                     && !note.UsesSessions && !note.Variable)
+                    {
+                        note.Minimal = true;
+                    }
 
                     //vinculo el mtp activo del cliente a la nota que se creará
                     MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
@@ -1537,20 +1592,21 @@ namespace KyoS.Web.Controllers
                     note_Activity = new NoteP_Activity
                     {
                         NoteP = note,
-                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1),
-                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
+                        Present = model.Present1,
+                        Activity = (model.Present1) ? _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1) : null,
+                        Objetive = (model.Present1) ? _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1) : null,
                         //Client's response
-                        Cooperative = model.Cooperative1,
-                        Assertive = model.Assertive1,
-                        Passive = model.Passive1,
-                        Variable = model.Variable1,
-                        Uninterested = model.Uninterested1,
-                        EngagedActive = model.Engaged1,
-                        Distractible = model.Distractible1,
-                        Confused = model.Confused1,
-                        Aggresive = model.Aggresive1,
-                        Resistant = model.Resistant1,
-                        Other = model.Other1
+                        Cooperative = (model.Present1) ? model.Cooperative1 : false,
+                        Assertive = (model.Present1) ? model.Assertive1 : false,
+                        Passive = (model.Present1) ? model.Passive1 : false,
+                        Variable = (model.Present1) ? model.Variable1 : false,
+                        Uninterested = (model.Present1) ? model.Uninterested1 : false,
+                        EngagedActive = (model.Present1) ? model.Engaged1 : false,
+                        Distractible = (model.Present1) ? model.Distractible1 : false,
+                        Confused = (model.Present1) ? model.Confused1 : false,
+                        Aggresive = (model.Present1) ? model.Aggresive1 : false,
+                        Resistant = (model.Present1) ? model.Resistant1 : false,
+                        Other = (model.Present1) ? model.Other1 : false
                     };
                     _context.Add(note_Activity);
                     await _context.SaveChangesAsync();
@@ -1558,20 +1614,21 @@ namespace KyoS.Web.Controllers
                     note_Activity = new NoteP_Activity
                     {
                         NoteP = note,
-                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2),
-                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
+                        Present = model.Present2,
+                        Activity = (model.Present2) ? _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2) : null,
+                        Objetive = (model.Present2) ? _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2) : null,
                         //Client's response
-                        Cooperative = model.Cooperative2,
-                        Assertive = model.Assertive2,
-                        Passive = model.Passive2,
-                        Variable = model.Variable2,
-                        Uninterested = model.Uninterested2,
-                        EngagedActive = model.Engaged2,
-                        Distractible = model.Distractible2,
-                        Confused = model.Confused2,
-                        Aggresive = model.Aggresive2,
-                        Resistant = model.Resistant2,
-                        Other = model.Other2
+                        Cooperative = (model.Present2) ? model.Cooperative2 : false, 
+                        Assertive = (model.Present2) ? model.Assertive2 : false,
+                        Passive = (model.Present2) ? model.Passive2 : false,
+                        Variable = (model.Present2) ? model.Variable2 : false,
+                        Uninterested = (model.Present2) ? model.Uninterested2 : false,
+                        EngagedActive = (model.Present2) ? model.Engaged2 : false,
+                        Distractible = (model.Present2) ? model.Distractible2 : false,
+                        Confused = (model.Present2) ? model.Confused2 : false,
+                        Aggresive = (model.Present2) ? model.Aggresive2 : false,
+                        Resistant = (model.Present2) ? model.Resistant2 : false,
+                        Other = (model.Present2) ? model.Other2 : false
                     };
                     _context.Add(note_Activity);
                     await _context.SaveChangesAsync();
@@ -1579,20 +1636,21 @@ namespace KyoS.Web.Controllers
                     note_Activity = new NoteP_Activity
                     {
                         NoteP = note,
-                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity3),
-                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive3),
+                        Present = model.Present3,
+                        Activity = (model.Present3) ? _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity3) : null,
+                        Objetive = (model.Present3) ? _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive3) : null,
                         //Client's response
-                        Cooperative = model.Cooperative3,
-                        Assertive = model.Assertive3,
-                        Passive = model.Passive3,
-                        Variable = model.Variable3,
-                        Uninterested = model.Uninterested3,
-                        EngagedActive = model.Engaged3,
-                        Distractible = model.Distractible3,
-                        Confused = model.Confused3,
-                        Aggresive = model.Aggresive3,
-                        Resistant = model.Resistant3,
-                        Other = model.Other3
+                        Cooperative = (model.Present3) ? model.Cooperative3 : false,
+                        Assertive = (model.Present3) ? model.Assertive3 : false,
+                        Passive = (model.Present3) ? model.Passive3 : false,
+                        Variable = (model.Present3) ? model.Variable3 : false,
+                        Uninterested = (model.Present3) ? model.Uninterested3 : false,
+                        EngagedActive = (model.Present3) ? model.Engaged3 : false,
+                        Distractible = (model.Present3) ? model.Distractible3 : false,
+                        Confused = (model.Present3) ? model.Confused3 : false,
+                        Aggresive = (model.Present3) ? model.Aggresive3 : false,
+                        Resistant = (model.Present3) ? model.Resistant3 : false,
+                        Other = (model.Present3) ? model.Other3 : false
                     };
                     _context.Add(note_Activity);
                     await _context.SaveChangesAsync();
@@ -1600,20 +1658,21 @@ namespace KyoS.Web.Controllers
                     note_Activity = new NoteP_Activity
                     {
                         NoteP = note,
-                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity4),
-                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4),
+                        Present = model.Present4,
+                        Activity = (model.Present4) ? _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity4) : null,
+                        Objetive = (model.Present4) ? _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4) : null,
                         //Client's response
-                        Cooperative = model.Cooperative4,
-                        Assertive = model.Assertive4,
-                        Passive = model.Passive4,
-                        Variable = model.Variable4,
-                        Uninterested = model.Uninterested4,
-                        EngagedActive = model.Engaged4,
-                        Distractible = model.Distractible4,
-                        Confused = model.Confused4,
-                        Aggresive = model.Aggresive4,
-                        Resistant = model.Resistant4,
-                        Other = model.Other4
+                        Cooperative = (model.Present4) ? model.Cooperative4 : false,
+                        Assertive = (model.Present4) ? model.Assertive4 : false,
+                        Passive = (model.Present4) ? model.Passive4 : false,
+                        Variable = (model.Present4) ? model.Variable4 : false,
+                        Uninterested = (model.Present4) ? model.Uninterested4 : false,
+                        EngagedActive = (model.Present4) ? model.Engaged4 : false,
+                        Distractible = (model.Present4) ? model.Distractible4 : false,
+                        Confused = (model.Present4) ? model.Confused4 : false,
+                        Aggresive = (model.Present4) ? model.Aggresive4 : false,
+                        Resistant = (model.Present4) ? model.Resistant4 : false,
+                        Other = (model.Present4) ? model.Other4 : false
                     };
                     _context.Add(note_Activity);
 
@@ -3366,6 +3425,7 @@ namespace KyoS.Web.Controllers
                     UsesSessions = note.UsesSessions,
                     Variable = note.Variable,
 
+                    Present1 = note_Activity[0].Present,
                     Theme1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
                     FacilitatorIntervention1 = (activities.Count > 0) ? activities[0].Activity.Name : string.Empty,                   
                     Goal1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Goal.Number.ToString() : string.Empty,
@@ -3395,6 +3455,7 @@ namespace KyoS.Web.Controllers
                     Resistant1 = (note_Activity.Count > 0) ? note_Activity[0].Resistant : false,
                     Other1 = (note_Activity.Count > 0) ? note_Activity[0].Other : false,
 
+                    Present2 = note_Activity[1].Present,
                     Theme2 = (activities.Count > 1) ? activities[1].Activity.Theme.Name : string.Empty,
                     FacilitatorIntervention2 = (activities.Count > 1) ? activities[1].Activity.Name : string.Empty,
                     Goal2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Goal.Number.ToString() : string.Empty,
@@ -3424,6 +3485,7 @@ namespace KyoS.Web.Controllers
                     Resistant2 = (note_Activity.Count > 1) ? note_Activity[1].Resistant : false,
                     Other2 = (note_Activity.Count > 1) ? note_Activity[1].Other : false,
 
+                    Present3 = note_Activity[2].Present,
                     Theme3 = (activities.Count > 2) ? activities[2].Activity.Theme.Name : string.Empty,
                     FacilitatorIntervention3 = (activities.Count > 2) ? activities[2].Activity.Name : string.Empty,
                     Goal3 = (note_Activity[2].Objetive != null) ? note_Activity[2].Objetive.Goal.Number.ToString() : string.Empty,
@@ -3453,6 +3515,7 @@ namespace KyoS.Web.Controllers
                     Resistant3 = (note_Activity.Count > 2) ? note_Activity[2].Resistant : false,
                     Other3 = (note_Activity.Count > 2) ? note_Activity[2].Other : false,
 
+                    Present4 = note_Activity[3].Present,
                     Theme4 = (activities.Count > 3) ? activities[3].Activity.Theme.Name : string.Empty,
                     FacilitatorIntervention4 = (activities.Count > 3) ? activities[3].Activity.Name : string.Empty,
                     Goal4 = (note_Activity[3].Objetive != null) ? note_Activity[3].Objetive.Goal.Number.ToString() : string.Empty,
@@ -3498,11 +3561,25 @@ namespace KyoS.Web.Controllers
             }
 
             NotePEntity note = await _context.NotesP
+
+                                             .Include(n => n.NotesP_Activities)
+
                                              .FirstOrDefaultAsync(n => n.Id == model.Id);
 
             note.Status = NoteStatus.Approved;
             note.DateOfApprove = DateTime.Now;
             note.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+
+            int realUnits = 0;
+            foreach (var item in note.NotesP_Activities)
+            {
+                if (item.Present)
+                {
+                    realUnits += 4;
+                }
+            }
+            note.RealUnits = realUnits;
+
             _context.Update(note);
 
             await _context.SaveChangesAsync();
@@ -9332,6 +9409,10 @@ namespace KyoS.Web.Controllers
                                       .Include(w => w.Days)
                                       .ThenInclude(d => d.Workdays_Clients)
                                       .ThenInclude(wc => wc.Note)
+
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(wc => wc.NoteP)
 
                                       .Include(w => w.Days)
                                       .ThenInclude(d => d.Workdays_Clients)
