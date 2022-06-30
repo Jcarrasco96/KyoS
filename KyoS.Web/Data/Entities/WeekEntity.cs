@@ -40,7 +40,7 @@ namespace KyoS.Web.Data.Entities
                         {
                             if(workday_client.Note != null)
                             {
-                                if ((workday_client.Note.Schema == Common.Enums.SchemaType.Schema1) || (workday_client.Note.Schema == Common.Enums.SchemaType.Schema2) || (workday_client.Note.Schema == Common.Enums.SchemaType.Schema3))
+                                if ((workday_client.Note.Schema == Common.Enums.SchemaType.Schema1) || (workday_client.Note.Schema == Common.Enums.SchemaType.Schema2))
                                 {
                                     units = units + 16;
                                 }
@@ -51,25 +51,35 @@ namespace KyoS.Web.Data.Entities
                             }
                             else
                             {
-                                if ((workday_client.IndividualNote != null) || (workday_client.Workday.Service == Common.Enums.ServiceType.Individual))
+                                if (workday_client.NoteP != null)
                                 {
-                                    units = units + 4;
+                                    if ((workday_client.NoteP.Schema == Common.Enums.SchemaType.Schema3))
+                                    {
+                                        units = units + workday_client.NoteP.RealUnits;
+                                    }
                                 }
                                 else
-                                {
-                                    if ((workday_client.GroupNote != null) || (workday_client.Workday.Service == Common.Enums.ServiceType.Group))
+                                { 
+                                    if ((workday_client.IndividualNote != null) || (workday_client.Workday.Service == Common.Enums.ServiceType.Individual))
                                     {
-                                        units = units + 8;
+                                        units = units + 4;
                                     }
                                     else
-                                    { 
-                                        if ((workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema1) || (workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema2) || (workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema3))
+                                    {
+                                        if ((workday_client.GroupNote != null) || (workday_client.Workday.Service == Common.Enums.ServiceType.Group))
                                         {
-                                            units = units + 16;
+                                            units = units + 8;
                                         }
-                                        if ((workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema4))
-                                        {
-                                            units = units + 12;
+                                        else
+                                        { 
+                                            if ((workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema1) || (workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema2) || (workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema3))
+                                            {
+                                                units = units + 16;
+                                            }
+                                            if ((workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema4))
+                                            {
+                                                units = units + 12;
+                                            }
                                         }
                                     }
                                 }

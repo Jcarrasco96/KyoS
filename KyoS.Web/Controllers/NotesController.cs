@@ -9412,6 +9412,10 @@ namespace KyoS.Web.Controllers
 
                                       .Include(w => w.Days)
                                       .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(wc => wc.NoteP)
+
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
                                       .ThenInclude(wc => wc.IndividualNote)
 
                                       .Include(w => w.Days)
