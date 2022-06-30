@@ -11,5 +11,10 @@ namespace KyoS.Web.Models
     public class TCMNoteActivityViewModel : TCMNoteActivityEntity
     {
         public int IdTCMNote { get; set; }
+        public int IdTCMDomain { get; set; }
+
+        //[Required(ErrorMessage = "The field {0} is mandatory.")]
+        
+       // public IEnumerable<SelectListItem> Domains { get; set; }
     }
 }

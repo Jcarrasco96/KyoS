@@ -36,7 +36,7 @@
                                 Date Of Service
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                Case Number
+                                Minutes
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Unit
@@ -63,33 +63,51 @@
                                         <i class="glyphicon glyphicon-user btn-primary"></i>
                                     }
                                     &nbsp;
+                                    @Html.DisplayFor(modelItem => item.TCMClient.CaseNumber)
+                                    &nbsp;
                                     @Html.DisplayFor(modelItem => item.TCMClient.Client.Name)
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.DateOfService)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.TCMClient.CaseNumber)
+                                    @Html.DisplayFor(modelItem => item.TotalMinutes)
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.TotalUnits)
                                 </td>
                                 <td align="center">
-                                    @if (item.TCMClient.Status == KyoS.Common.Enums.StatusType.Open)
+                                    @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
                                     {
-                                        <span class="label label-success">
-                                            Open
+                                        <span class="label label-warning">
+                                            Edition
                                         </span>
                                     }
-                                    @if (item.TCMClient.Status == KyoS.Common.Enums.StatusType.Close)
+                                    @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
                                     {
-                                        <span class="label label-default">
-                                            Close
+                                        <span class="label label-info">
+                                            Pending
+                                        </span>
+                                    }
+                                    @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                    {
+                                        <span class="label label-success">
+                                            Approved
                                         </span>
                                     }
                                 </td>
                                 <td align="right">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success" title="Finish Editing TCM Notes"><i class="glyphicon glyphicon-ok"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                    }
+
                                 </td>
                             </tr>
                         }

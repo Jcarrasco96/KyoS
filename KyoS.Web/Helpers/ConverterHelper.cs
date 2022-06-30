@@ -5569,7 +5569,7 @@ namespace KyoS.Web.Helpers
                 Outcome = model.Outcome,
                 CaseManager = _context.CaseManagers
                                       .FirstOrDefault(n => n.Id == model.IdCaseManager),
-                TCMNoteActivity = model.TCMNoteActivity,
+                TCMNoteActivity = await _context.TCMNoteActivity.Where(n => n.TCMNote.Id == model.IdTCMNote).ToListAsync(),
                 CaseManagerDate = model.CaseManagerDate,
                 DateOfService = model.DateOfService,
                 DocumentationTime = model.DocumentationTime,
@@ -5581,6 +5581,7 @@ namespace KyoS.Web.Helpers
                 TCMClient = _context.TCMClient
                                     .FirstOrDefault(n => n.Id == model.IdTCMClient),
                 Workday = _context.Workdays.FirstOrDefault(n => n.Id == model.IdTCMWorday)
+                
 
             };
         }
@@ -5630,7 +5631,7 @@ namespace KyoS.Web.Helpers
                 Minutes = model.Minutes,
                 Setting = model.Setting,
                 StartTime = model.StartTime,
-                TCMDomain = model.TCMDomain,
+                TCMDomain = _context.TCMDomains.FirstOrDefault(n => n.Id == model.IdTCMDomain),
                 TCMNote = _context.TCMNote.FirstOrDefault(n => n.Id == model.IdTCMNote)
                 
 
@@ -5654,7 +5655,8 @@ namespace KyoS.Web.Helpers
                 StartTime = model.StartTime,
                 TCMDomain = model.TCMDomain,
                 TCMNote = model.TCMNote,
-                IdTCMNote = model.TCMNote.Id
+                IdTCMNote = model.TCMNote.Id,
+                IdTCMDomain = model.TCMDomain.Id
                 
             };
 

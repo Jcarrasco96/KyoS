@@ -1226,6 +1226,11 @@ namespace KyoS.Web.Controllers
                                                                                    .ThenInclude(n => n.Client)
                                                                                    .Where(m => m.TcmClient_FK == id)
                                                                                    .ToListAsync();
+                if (listRelease.Count == 0)
+                {
+                    return RedirectToAction("TCMIntakeSectionDashboard", new { id = id, section = 1 });
+                }
+                
                 return View(listRelease);
             }
         }

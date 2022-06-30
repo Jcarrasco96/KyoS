@@ -14,8 +14,7 @@
     <div class="breadcrumbs" id="breadcrumbs">
         <ul class="breadcrumb">
             <li>
-                <i class="icon-home"></i>
-                @Html.ActionLink("TCM Intake Section 6", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 6 })
+                <i class="icon-home"></i> @Html.ActionLink("TCM Notes For Client", "TCMNotesForCase", "TCMNotes", new { idTCMClient = @Model.IdTCMClient})
             </li>
             <li class="active">TCM Notes</li>
         </ul><!--.breadcrumb-->
@@ -41,7 +40,7 @@
                 </div>
                 <div class="form-group col-md-8">
                     <input type="submit" value="Save" class="btn btn-primary" />
-                    <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TCMClient.Id" asp-route-section="6" class="btn btn-success">Back</a>
+                    <a asp-action="TCMNotesForCase" asp-route-idTCMClient="@Model.IdTCMClient" class="btn btn-success">Back</a>
                 </div>
                 <div class="form-group col-md-2">
                     &nbsp;
