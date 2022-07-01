@@ -540,7 +540,8 @@ namespace KyoS.Web.Helpers
                 RationaleForUpdate = mtpEntity.RationaleForUpdate,
                 Substance = mtpEntity.Substance,
                 SubstanceWhere = mtpEntity.SubstanceWhere,
-                Client = mtpEntity.Client
+                Client = mtpEntity.Client,
+                Goals = mtpEntity.Goals
             };
         }        
 
