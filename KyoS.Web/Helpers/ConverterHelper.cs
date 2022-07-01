@@ -37,7 +37,8 @@ namespace KyoS.Web.Helpers
                 Phone = model.Phone,
                 FaxNo = model.FaxNo,
                 ClinicalDirector = model.ClinicalDirector,
-                ProviderId = model.ProviderId
+                ProviderMedicaidId = model.ProviderMedicaidId,
+                ProviderTaxId = model.ProviderTaxId
             };
         }
 
@@ -56,7 +57,8 @@ namespace KyoS.Web.Helpers
                 Phone = clinicEntity.Phone,
                 FaxNo = clinicEntity.FaxNo,
                 ClinicalDirector = clinicEntity.ClinicalDirector,
-                ProviderId = clinicEntity.ProviderId
+                ProviderMedicaidId = clinicEntity.ProviderMedicaidId,
+                ProviderTaxId = clinicEntity.ProviderTaxId
             };
         }
 
