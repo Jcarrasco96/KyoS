@@ -2525,9 +2525,11 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> PendingAdendum(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
-                                                  .Include(u => u.Clinic)
-                                                  .ThenInclude(c => c.Setting)
-                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
@@ -2543,28 +2545,38 @@ namespace KyoS.Web.Controllers
                     if (User.IsInRole("Facilitator"))
                     {
                         return View(await _context.Adendums
-                                              .Include(c => c.Mtp)
-                                              .ThenInclude(c => c.Client)
-                                              .ThenInclude(c => c.Clinic)
-                                              .Include(c => c.Goals)
-                                              .ThenInclude(c => c.Objetives)
-                                              .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
-                                                    && m.Status == AdendumStatus.Pending && (m.Mtp.Client.IdFacilitatorPSR == facilitator.Id
-                                                    || m.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
-                                              .OrderBy(m => m.Mtp.Client.Clinic.Name).ToListAsync());
+
+                                                  .Include(a => a.Mtp)
+                                                  .ThenInclude(a => a.Client)
+                                                  .ThenInclude(a => a.Clinic)
+
+                                                  .Include(a => a.Goals)
+                                                  .ThenInclude(a => a.Objetives)
+
+                                                  .Include(a => a.Messages)
+
+                                                  .Where(a => (a.Mtp.Client.Clinic.Id == clinic.Id)
+                                                            && a.Status == AdendumStatus.Pending && (a.Mtp.Client.IdFacilitatorPSR == facilitator.Id
+                                                            || a.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                  .OrderBy(a => a.Mtp.Client.Clinic.Name).ToListAsync());
 
                     }
                     else
                     {
                         return View(await _context.Adendums
-                                              .Include(c => c.Mtp)
-                                              .ThenInclude(c => c.Client)
-                                              .ThenInclude(c => c.Clinic)
-                                              .Include(c => c.Goals)
-                                              .ThenInclude(c => c.Objetives)
-                                              .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
-                                                    && m.Status == AdendumStatus.Pending)
-                                              .OrderBy(m => m.Mtp.Client.Clinic.Name).ToListAsync());
+
+                                                  .Include(a => a.Mtp)
+                                                  .ThenInclude(a => a.Client)
+                                                  .ThenInclude(a => a.Clinic)
+
+                                                  .Include(a => a.Goals)
+                                                  .ThenInclude(a => a.Objetives)
+
+                                                  .Include(a => a.Messages)
+
+                                                  .Where(a => (a.Mtp.Client.Clinic.Id == clinic.Id)
+                                                            && a.Status == AdendumStatus.Pending)
+                                                  .OrderBy(a => a.Mtp.Client.Clinic.Name).ToListAsync());
 
                     }
 
@@ -2839,9 +2851,11 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> PendingMtpReview(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
-                                                  .Include(u => u.Clinic)
-                                                  .ThenInclude(c => c.Setting)
-                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
@@ -2857,31 +2871,39 @@ namespace KyoS.Web.Controllers
                     if (User.IsInRole("Facilitator"))
                     {
                         return View(await _context.MTPReviews
-                                              .Include(c => c.Mtp)
-                                              .ThenInclude(c => c.Client)
-                                              .ThenInclude(c => c.Clinic)
-                                              .Include(c => c.Mtp.Goals)
-                                              .ThenInclude(c => c.Objetives)
-                                              .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
-                                                    && m.Status == AdendumStatus.Pending && (m.Mtp.Client.IdFacilitatorPSR == facilitator.Id
-                                                        || m.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
-                                              .OrderBy(m => m.Mtp.Client.Clinic.Name).ToListAsync());
+
+                                                  .Include(m => m.Mtp)
+                                                  .ThenInclude(m => m.Client)
+                                                  .ThenInclude(m => m.Clinic)
+
+                                                  .Include(m => m.Mtp.Goals)
+                                                  .ThenInclude(m => m.Objetives)
+
+                                                  .Include(m => m.Messages)
+
+                                                  .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
+                                                            && m.Status == AdendumStatus.Pending && (m.Mtp.Client.IdFacilitatorPSR == facilitator.Id
+                                                            || m.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                  .OrderBy(m => m.Mtp.Client.Clinic.Name).ToListAsync());
 
                     }
                     else
                     {
                         return View(await _context.MTPReviews
-                                              .Include(c => c.Mtp)
-                                              .ThenInclude(c => c.Client)
-                                              .ThenInclude(c => c.Clinic)
-                                              .Include(c => c.Mtp.Goals)
-                                              .ThenInclude(c => c.Objetives)
-                                              .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
-                                                    && m.Status == AdendumStatus.Pending)
-                                              .OrderBy(m => m.Mtp.Client.Clinic.Name).ToListAsync());
 
+                                                  .Include(m => m.Mtp)
+                                                  .ThenInclude(m => m.Client)
+                                                  .ThenInclude(m => m.Clinic)
+
+                                                  .Include(m => m.Mtp.Goals)
+                                                  .ThenInclude(m => m.Objetives)
+
+                                                  .Include(m => m.Messages)
+
+                                                  .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
+                                                      && m.Status == AdendumStatus.Pending)
+                                                  .OrderBy(m => m.Mtp.Client.Clinic.Name).ToListAsync());
                     }
-
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");

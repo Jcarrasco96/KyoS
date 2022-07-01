@@ -489,11 +489,15 @@ namespace KyoS.Web.Controllers
                 if (clinic != null)
                 {
                     return View(await _context.FarsForm
-                                              .Include(c => c.Client)
-                                              .ThenInclude(c => c.Clinic)
-                                              .Where(m => (m.Client.Clinic.Id == clinic.Id)
-                                                    && m.Status == FarsStatus.Pending)
-                                              .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+
+                                              .Include(f => f.Client)
+                                              .ThenInclude(f => f.Clinic)
+
+                                              .Include(f => f.Messages)
+
+                                              .Where(f => (f.Client.Clinic.Id == clinic.Id)
+                                                        && f.Status == FarsStatus.Pending)
+                                              .OrderBy(f => f.Client.Clinic.Name).ToListAsync());
                     
                 }
             }

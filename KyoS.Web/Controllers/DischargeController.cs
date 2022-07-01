@@ -614,9 +614,11 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> PendingDischarge(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
-                                                  .Include(u => u.Clinic)
-                                                  .ThenInclude(c => c.Setting)
-                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
 
@@ -632,25 +634,31 @@ namespace KyoS.Web.Controllers
                     if (User.IsInRole("Facilitator"))
                     {
                         return View(await _context.Discharge
-                                                 .Include(c => c.Client)
-                                                 .ThenInclude(c => c.Clinic)
-                                                 .Where(m => (m.Client.Clinic.Id == clinic.Id)
-                                                       && m.Status == DischargeStatus.Pending
-                                                       && (m.Client.IdFacilitatorPSR == facilitator.Id || m.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
-                                                 .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+
+                                                  .Include(d => d.Client)
+                                                  .ThenInclude(d => d.Clinic)
+
+                                                  .Include(d => d.Messages)
+
+                                                  .Where(d => (d.Client.Clinic.Id == clinic.Id)
+                                                            && d.Status == DischargeStatus.Pending
+                                                            && (d.Client.IdFacilitatorPSR == facilitator.Id || d.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                  .OrderBy(d => d.Client.Clinic.Name).ToListAsync());
                     }
 
                     if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
                     {
                         return View(await _context.Discharge
-                                                  .Include(c => c.Client)
-                                                  .ThenInclude(c => c.Clinic)
-                                                  .Where(m => (m.Client.Clinic.Id == clinic.Id)
-                                                        && m.Status == DischargeStatus.Pending)
-                                                  .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
-                    }
-                    
 
+                                                  .Include(d => d.Client)
+                                                  .ThenInclude(d => d.Clinic)
+
+                                                  .Include(d => d.Messages)
+
+                                                  .Where(d => (d.Client.Clinic.Id == clinic.Id)
+                                                            && d.Status == DischargeStatus.Pending)
+                                                  .OrderBy(d => d.Client.Clinic.Name).ToListAsync());
+                    }
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");

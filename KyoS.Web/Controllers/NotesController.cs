@@ -1387,6 +1387,14 @@ namespace KyoS.Web.Controllers
                         noteEntity.Minimal = true;
                     }
 
+                    //I verify that user selected at least a mental status observations, if no then I put attentive for default
+                    if (!model.Attentive && !model.Depressed && !model.Inattentive && !model.Angry && !model.Sad && !model.FlatAffect && !model.Anxious
+                                     && !model.PositiveEffect && !model.Oriented3x && !model.Oriented2x && !model.Oriented1x && !model.Impulsive && !model.Labile
+                                     && !model.Withdrawn && !model.RelatesWell && !model.DecreasedEyeContact && !model.AppropiateEyeContact)
+                    {
+                        noteEntity.Attentive = true;
+                    }
+
                     _context.Add(noteEntity);
 
                     note_Activity = new NoteP_Activity
@@ -1572,6 +1580,14 @@ namespace KyoS.Web.Controllers
                                      && !note.UsesSessions && !note.Variable)
                     {
                         note.Minimal = true;
+                    }
+
+                    //I verify that user selected at least a mental status observations, if no then I put attentive for default
+                    if (!note.Attentive && !note.Depressed && !note.Inattentive && !note.Angry && !note.Sad && !note.FlatAffect && !note.Anxious
+                                     && !note.PositiveEffect && !note.Oriented3x && !note.Oriented2x && !note.Oriented1x && !note.Impulsive && !note.Labile
+                                     && !note.Withdrawn && !note.RelatesWell && !note.DecreasedEyeContact && !note.AppropiateEyeContact)
+                    {
+                        note.Attentive = true;
                     }
 
                     //vinculo el mtp activo del cliente a la nota que se creará
