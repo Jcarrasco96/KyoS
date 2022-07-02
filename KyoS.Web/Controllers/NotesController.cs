@@ -865,8 +865,8 @@ namespace KyoS.Web.Controllers
                             MTPReview = null,
                             Addendum = null,
                             Discharge = null,
-                            Title = "Update on reviewed note",
-                            Text = $"The note of {workday_Client.ClientName} on {workday_Client.Workday.Date.ToShortDateString()} was rectified",
+                            Title = "Update on reviewed PSR note",
+                            Text = $"The PSR note of {workday_Client.ClientName} on {workday_Client.Workday.Date.ToShortDateString()} was rectified",
                             From = value.To,
                             To = value.From,
                             DateCreated = DateTime.Now,
@@ -1727,8 +1727,8 @@ namespace KyoS.Web.Controllers
                             MTPReview = null,
                             Addendum = null,
                             Discharge = null,
-                            Title = "Update on reviewed note",
-                            Text = $"The note of {workday_Client.ClientName} on {workday_Client.Workday.Date.ToShortDateString()} was rectified",
+                            Title = "Update on reviewed PSR note",
+                            Text = $"The PSR note of {workday_Client.ClientName} on {workday_Client.Workday.Date.ToShortDateString()} was rectified",
                             From = value.To,
                             To = value.From,
                             DateCreated = DateTime.Now,
@@ -2131,12 +2131,31 @@ namespace KyoS.Web.Controllers
                     workday_client.Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient);
                     _context.Update(workday_client);                    
                     
-                    //todos los mensajes que tiene el Workday_Client de la nota los pongo como leidos
-                    foreach (MessageEntity value in note.Workday_Cient.Messages)
+                    List<MessageEntity> messages = note.Workday_Cient.Messages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                    //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
+                    foreach (MessageEntity value in messages)
                     {
                         value.Status = MessageStatus.Read;
                         value.DateRead = DateTime.Now;
                         _context.Update(value);
+
+                        //I generate a notification to supervisor
+                        MessageEntity notification = new MessageEntity
+                        {
+                            Workday_Client = workday_Client,
+                            FarsForm = null,
+                            MTPReview = null,
+                            Addendum = null,
+                            Discharge = null,
+                            Title = "Update on reviewed individual note",
+                            Text = $"The individual note of {workday_Client.ClientName} on {workday_Client.Workday.Date.ToShortDateString()} was rectified",
+                            From = value.To,
+                            To = value.From,
+                            DateCreated = DateTime.Now,
+                            Status = MessageStatus.NotRead,
+                            Notification = true
+                        };
+                        _context.Add(notification);
                     }
 
                     try
@@ -2612,12 +2631,31 @@ namespace KyoS.Web.Controllers
                     };
                     _context.Add(note_Activity);
                     
-                    //todos los mensajes que tiene el Workday_Client de la nota los pongo como leidos
-                    foreach (MessageEntity value in note.Workday_Cient.Messages)
+                    List<MessageEntity> messages = note.Workday_Cient.Messages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                    //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
+                    foreach (MessageEntity value in messages)
                     {
                         value.Status = MessageStatus.Read;
                         value.DateRead = DateTime.Now;
                         _context.Update(value);
+
+                        //I generate a notification to supervisor
+                        MessageEntity notification = new MessageEntity
+                        {
+                            Workday_Client = workday_Client,
+                            FarsForm = null,
+                            MTPReview = null,
+                            Addendum = null,
+                            Discharge = null,
+                            Title = "Update on reviewed group note",
+                            Text = $"The group note of {workday_Client.ClientName} on {workday_Client.Workday.Date.ToShortDateString()} was rectified",
+                            From = value.To,
+                            To = value.From,
+                            DateCreated = DateTime.Now,
+                            Status = MessageStatus.NotRead,
+                            Notification = true
+                        };
+                        _context.Add(notification);
                     }
 
                     try
@@ -8584,7 +8622,7 @@ namespace KyoS.Web.Controllers
                                                            .Include(wc => wc.Workday)
                                                            .ThenInclude(w => w.Week)
 
-                                                           .Include(wc => wc.Messages)
+                                                           .Include(wc => wc.Messages.Where(m => m.Notification == false))
 
                                                            .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                       && wc.IndividualNote.Status == NoteStatus.Pending
@@ -8609,7 +8647,7 @@ namespace KyoS.Web.Controllers
                                                                .Include(wc => wc.Workday)
                                                                .ThenInclude(w => w.Week)
 
-                                                               .Include(wc => wc.Messages)
+                                                               .Include(wc => wc.Messages.Where(m => m.Notification == false))
 
                                                                .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                                           && wc.IndividualNote.Status == NoteStatus.Pending
@@ -8635,7 +8673,7 @@ namespace KyoS.Web.Controllers
                                                            .Include(wc => wc.Workday)
                                                            .ThenInclude(w => w.Week)
 
-                                                           .Include(wc => wc.Messages)
+                                                           .Include(wc => wc.Messages.Where(m => m.Notification == false))
 
                                                            .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                       && wc.GroupNote.Status == NoteStatus.Pending
@@ -8660,7 +8698,7 @@ namespace KyoS.Web.Controllers
                                                                .Include(wc => wc.Workday)
                                                                .ThenInclude(w => w.Week)
 
-                                                               .Include(wc => wc.Messages)
+                                                               .Include(wc => wc.Messages.Where(m => m.Notification == false))
 
                                                                .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                                           && wc.GroupNote.Status == NoteStatus.Pending
@@ -8833,9 +8871,9 @@ namespace KyoS.Web.Controllers
                                                            .Include(wc => wc.Messages.Where(m => m.Notification == false))
 
                                                            .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                                      && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
-                                                                      && wc.Messages.Count() > 0
-                                                                      && (wc.Workday.Service == ServiceType.PSR || wc.Workday.Service == ServiceType.Individual)))
+                                                                     && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
+                                                                     && wc.Messages.Count() > 0
+                                                                     && wc.Workday.Service == ServiceType.PSR))
                                                            .ToListAsync());
             }
 
@@ -8858,9 +8896,9 @@ namespace KyoS.Web.Controllers
                                                                .Include(wc => wc.Messages.Where(m => m.Notification == false))
 
                                                                .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                                   && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
-                                                                      && wc.Messages.Count() > 0
-                                                                      && (wc.Workday.Service == ServiceType.PSR || wc.Workday.Service == ServiceType.Individual)))
+                                                                         && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
+                                                                         && wc.Messages.Count() > 0
+                                                                         && wc.Workday.Service == ServiceType.PSR))
                                                                .ToListAsync());
                 }
             }
@@ -8883,7 +8921,7 @@ namespace KyoS.Web.Controllers
                                           .Include(wc => wc.Workday)
                                           .ThenInclude(w => w.Week)
 
-                                          .Include(wc => wc.Messages)
+                                          .Include(wc => wc.Messages.Where(m => m.Notification == false))
 
                                           .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                      && wc.IndividualNote.Status == NoteStatus.Pending
@@ -8911,7 +8949,7 @@ namespace KyoS.Web.Controllers
                                               .Include(wc => wc.Workday)
                                               .ThenInclude(w => w.Week)
 
-                                              .Include(wc => wc.Messages)
+                                              .Include(wc => wc.Messages.Where(m => m.Notification == false))
 
                                               .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                          && wc.IndividualNote.Status == NoteStatus.Pending
@@ -8940,7 +8978,7 @@ namespace KyoS.Web.Controllers
                                           .Include(wc => wc.Workday)
                                           .ThenInclude(w => w.Week)
 
-                                          .Include(wc => wc.Messages)
+                                          .Include(wc => wc.Messages.Where(m => m.Notification == false))
 
                                           .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                      && wc.GroupNote.Status == NoteStatus.Pending
@@ -8968,7 +9006,7 @@ namespace KyoS.Web.Controllers
                                               .Include(wc => wc.Workday)
                                               .ThenInclude(w => w.Week)
 
-                                              .Include(wc => wc.Messages)
+                                              .Include(wc => wc.Messages.Where(m => m.Notification == false))
 
                                               .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                          && wc.GroupNote.Status == NoteStatus.Pending

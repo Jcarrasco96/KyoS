@@ -16,7 +16,8 @@
     if(user.Clinic != null)
         setting = DataContext.Settings.FirstOrDefault(s => s.Clinic.Id == user.Clinic.Id);
 
-    int counts_of_message = DataContext.Messages.Count(m => (m.To == user.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead));
+    int counts_of_message = DataContext.Messages.Count(m => (m.To == user.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead && m.Notification == false));
+    int counts_of_notification = DataContext.Messages.Count(m => (m.To == user.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead && m.Notification == true));
  }
 
 <!DOCTYPE html>
@@ -749,7 +750,15 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="class=" dropdown open"">
-                            <span class="notifications-counter-cero">0</span>
+                            @if (counts_of_notification == 0)
+                            {
+                                <span class="notifications-counter-cero">@counts_of_notification</span>
+                            }
+                            else
+                            {
+                                <span class="notifications-counter">@counts_of_notification</span>
+                            }
+
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" style="background-color: transparent;">
                                 <i class="icon-bell">&nbsp;</i>
                             </a>

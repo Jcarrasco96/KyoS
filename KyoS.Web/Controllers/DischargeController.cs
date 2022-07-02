@@ -376,12 +376,31 @@ namespace KyoS.Web.Controllers
                 _context.Discharge.Update(dischargeEntity);
                 try
                 {
-                    //todos los mensajes que tiene el discharge los pongo como leidos
-                    foreach (MessageEntity value in dischargeEntity.Messages)
+                    List<MessageEntity> messages = dischargeEntity.Messages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                    //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
+                    foreach (MessageEntity value in messages)
                     {
                         value.Status = MessageStatus.Read;
                         value.DateRead = DateTime.Now;
                         _context.Update(value);
+
+                        //I generate a notification to supervisor
+                        MessageEntity notification = new MessageEntity
+                        {
+                            Workday_Client = null,
+                            FarsForm = null,
+                            MTPReview = null,
+                            Addendum = null,
+                            Discharge = dischargeEntity,
+                            Title = "Update on reviewed discharge",
+                            Text = $"The discharge document of {dischargeEntity.Client.Name} that was discharged on {dischargeEntity.DateDischarge.ToShortDateString()} was rectified",
+                            From = value.To,
+                            To = value.From,
+                            DateCreated = DateTime.Now,
+                            Status = MessageStatus.NotRead,
+                            Notification = true
+                        };
+                        _context.Add(notification);
                     }
 
                     await _context.SaveChangesAsync();
@@ -638,7 +657,7 @@ namespace KyoS.Web.Controllers
                                                   .Include(d => d.Client)
                                                   .ThenInclude(d => d.Clinic)
 
-                                                  .Include(d => d.Messages)
+                                                  .Include(f => f.Messages.Where(m => m.Notification == false))
 
                                                   .Where(d => (d.Client.Clinic.Id == clinic.Id)
                                                             && d.Status == DischargeStatus.Pending
@@ -653,7 +672,7 @@ namespace KyoS.Web.Controllers
                                                   .Include(d => d.Client)
                                                   .ThenInclude(d => d.Clinic)
 
-                                                  .Include(d => d.Messages)
+                                                  .Include(f => f.Messages.Where(m => m.Notification == false))
 
                                                   .Where(d => (d.Client.Clinic.Id == clinic.Id)
                                                             && d.Status == DischargeStatus.Pending)

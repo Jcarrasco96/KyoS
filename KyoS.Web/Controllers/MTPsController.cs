@@ -2453,12 +2453,31 @@ namespace KyoS.Web.Controllers
                 _context.Adendums.Update(adendumEntity);
                 try
                 {
-                    //todos los mensajes que tiene el mtp review los pongo como leidos
-                    foreach (MessageEntity value in adendumEntity.Messages)
+                    List<MessageEntity> messages = adendumEntity.Messages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                    //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
+                    foreach (MessageEntity value in messages)
                     {
                         value.Status = MessageStatus.Read;
                         value.DateRead = DateTime.Now;
                         _context.Update(value);
+
+                        //I generate a notification to supervisor
+                        MessageEntity notification = new MessageEntity
+                        {
+                            Workday_Client = null,
+                            FarsForm = null,
+                            MTPReview = null,
+                            Addendum = adendumEntity,
+                            Discharge = null,
+                            Title = "Update on reviewed addendum",
+                            Text = $"The addendum of {adendumEntity.Mtp.Client.Name} that was created by {adendumEntity.CreatedBy} was rectified",
+                            From = value.To,
+                            To = value.From,
+                            DateCreated = DateTime.Now,
+                            Status = MessageStatus.NotRead,
+                            Notification = true
+                        };
+                        _context.Add(notification);
                     }
 
                     await _context.SaveChangesAsync();
@@ -2553,7 +2572,7 @@ namespace KyoS.Web.Controllers
                                                   .Include(a => a.Goals)
                                                   .ThenInclude(a => a.Objetives)
 
-                                                  .Include(a => a.Messages)
+                                                  .Include(f => f.Messages.Where(m => m.Notification == false))
 
                                                   .Where(a => (a.Mtp.Client.Clinic.Id == clinic.Id)
                                                             && a.Status == AdendumStatus.Pending && (a.Mtp.Client.IdFacilitatorPSR == facilitator.Id
@@ -2572,7 +2591,7 @@ namespace KyoS.Web.Controllers
                                                   .Include(a => a.Goals)
                                                   .ThenInclude(a => a.Objetives)
 
-                                                  .Include(a => a.Messages)
+                                                  .Include(f => f.Messages.Where(m => m.Notification == false))
 
                                                   .Where(a => (a.Mtp.Client.Clinic.Id == clinic.Id)
                                                             && a.Status == AdendumStatus.Pending)
@@ -2756,12 +2775,31 @@ namespace KyoS.Web.Controllers
 
                 try
                 {
-                    //todos los mensajes que tiene el mtp review los pongo como leidos
-                    foreach (MessageEntity value in mtpReviewEntity.Messages)
+                    List<MessageEntity> messages = mtpReviewEntity.Messages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                    //todos los mensajes no leidos que tiene el mtp review los pongo como leidos
+                    foreach (MessageEntity value in messages)
                     {
                         value.Status = MessageStatus.Read;
                         value.DateRead = DateTime.Now;
                         _context.Update(value);
+
+                        //I generate a notification to supervisor
+                        MessageEntity notification = new MessageEntity
+                        {
+                            Workday_Client = null,
+                            FarsForm = null,
+                            MTPReview = mtpReviewEntity,
+                            Addendum = null,
+                            Discharge = null,
+                            Title = "Update on reviewed MTP Review",
+                            Text = $"The MTP review of {mtpReviewEntity.Mtp.Client.Name} that was created by {mtpReviewEntity.CreatedBy} was rectified",
+                            From = value.To,
+                            To = value.From,
+                            DateCreated = DateTime.Now,
+                            Status = MessageStatus.NotRead,
+                            Notification = true
+                        };
+                        _context.Add(notification);
                     }
 
                     await _context.SaveChangesAsync();
@@ -2879,13 +2917,12 @@ namespace KyoS.Web.Controllers
                                                   .Include(m => m.Mtp.Goals)
                                                   .ThenInclude(m => m.Objetives)
 
-                                                  .Include(m => m.Messages)
+                                                  .Include(f => f.Messages.Where(m => m.Notification == false))
 
                                                   .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
                                                             && m.Status == AdendumStatus.Pending && (m.Mtp.Client.IdFacilitatorPSR == facilitator.Id
                                                             || m.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
-                                                  .OrderBy(m => m.Mtp.Client.Clinic.Name).ToListAsync());
-
+                                                  .ToListAsync());
                     }
                     else
                     {
@@ -2898,11 +2935,11 @@ namespace KyoS.Web.Controllers
                                                   .Include(m => m.Mtp.Goals)
                                                   .ThenInclude(m => m.Objetives)
 
-                                                  .Include(m => m.Messages)
+                                                  .Include(f => f.Messages.Where(m => m.Notification == false))
 
                                                   .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
                                                       && m.Status == AdendumStatus.Pending)
-                                                  .OrderBy(m => m.Mtp.Client.Clinic.Name).ToListAsync());
+                                                  .ToListAsync());
                     }
                 }
             }

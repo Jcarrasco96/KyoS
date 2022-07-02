@@ -31,7 +31,7 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.CountsMessagesNotes = _context.Messages
                                                       .Count(m => (m.To == user_logged.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead
-                                                                && m.Workday_Client != null && m.Notification == false))
+                                                                                                && m.Workday_Client != null && m.Notification == false))
                                                       .ToString();
                 
                 ViewBag.CountsMessagesFars = _context.Messages

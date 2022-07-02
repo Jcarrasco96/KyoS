@@ -265,7 +265,7 @@ namespace KyoS.Web.Controllers
                                                       .FirstOrDefault(m => m.Id == id);
                     if (FarsForm == null)
                     {
-                        return RedirectToAction("NotAuthorized", "Account");
+                        return RedirectToAction("Home/Error404");
                     }
                     else
                     {
@@ -297,12 +297,31 @@ namespace KyoS.Web.Controllers
                 _context.FarsForm.Update(farsFormEntity);
                 try
                 {
-                    //todos los mensajes que tiene el Fars los pongo como leidos
-                    foreach (MessageEntity value in farsFormEntity.Messages)
+                    List<MessageEntity> messages = farsFormEntity.Messages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                    //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
+                    foreach (MessageEntity value in messages)
                     {
                         value.Status = MessageStatus.Read;
                         value.DateRead = DateTime.Now;
                         _context.Update(value);
+
+                        //I generate a notification to supervisor
+                        MessageEntity notification = new MessageEntity
+                        {
+                            Workday_Client = null,
+                            FarsForm = farsFormEntity,
+                            MTPReview = null,
+                            Addendum = null,
+                            Discharge = null,
+                            Title = "Update on reviewed FARS Forms",
+                            Text = $"The FARS Forms document of {farsFormEntity.Client.Name} that was evaluated on {farsFormEntity.EvaluationDate.ToShortDateString()} was rectified",
+                            From = value.To,
+                            To = value.From,
+                            DateCreated = DateTime.Now,
+                            Status = MessageStatus.NotRead,
+                            Notification = true
+                        };
+                        _context.Add(notification);
                     }
 
                     await _context.SaveChangesAsync();
@@ -493,12 +512,11 @@ namespace KyoS.Web.Controllers
                                               .Include(f => f.Client)
                                               .ThenInclude(f => f.Clinic)
 
-                                              .Include(f => f.Messages)
+                                              .Include(f => f.Messages.Where(m => m.Notification == false))
 
                                               .Where(f => (f.Client.Clinic.Id == clinic.Id)
                                                         && f.Status == FarsStatus.Pending)
-                                              .OrderBy(f => f.Client.Clinic.Name).ToListAsync());
-                    
+                                              .ToListAsync());                    
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");
