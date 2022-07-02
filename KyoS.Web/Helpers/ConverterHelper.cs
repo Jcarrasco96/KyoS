@@ -901,7 +901,7 @@ namespace KyoS.Web.Helpers
                 Workday_Client = (model.IdWorkdayClient != 0) ? await _context.Workdays_Clients
                                                                               .Include(wc => wc.Facilitator)
                                                                               .FirstOrDefaultAsync(wc => wc.Id == model.IdWorkdayClient) : null,
-                FarsForm = (model.IdFarsForm != 0) ? await _context.FarsForm                                                                   
+                FarsForm = (model.IdFarsForm != 0) ? await _context.FarsForm
                                                                    .FirstOrDefaultAsync(f => f.Id == model.IdFarsForm) : null,
                 MTPReview = (model.IdMTPReview != 0) ? await _context.MTPReviews
                                                                      .FirstOrDefaultAsync(m => m.Id == model.IdMTPReview) : null,
@@ -912,7 +912,8 @@ namespace KyoS.Web.Helpers
                 Title = model.Title,
                 Text = model.Text,
                 DateCreated = DateTime.Now,
-                Status = MessageStatus.NotRead
+                Status = MessageStatus.NotRead,
+                Notification = model.Notification
             };
         }
 

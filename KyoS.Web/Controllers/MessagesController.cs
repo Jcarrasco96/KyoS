@@ -31,27 +31,27 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.CountsMessagesNotes = _context.Messages
                                                       .Count(m => (m.To == user_logged.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead
-                                                                && m.Workday_Client != null))
+                                                                && m.Workday_Client != null && m.Notification == false))
                                                       .ToString();
                 
                 ViewBag.CountsMessagesFars = _context.Messages
                                                      .Count(m => (m.To == user_logged.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead
-                                                                                               && m.FarsForm != null))
+                                                                                               && m.FarsForm != null && m.Notification == false))
                                                      .ToString();
 
                 ViewBag.CountsMessagesMTPReview = _context.Messages
                                                           .Count(m => (m.To == user_logged.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead
-                                                                                                    && m.MTPReview != null))
+                                                                                                    && m.MTPReview != null && m.Notification == false))
                                                           .ToString();
                 
                 ViewBag.CountsMessagesAddendum = _context.Messages
                                                          .Count(m => (m.To == user_logged.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead
-                                                                                                   && m.Addendum != null))
+                                                                                                   && m.Addendum != null && m.Notification == false))
                                                          .ToString();
 
                 ViewBag.CountsMessagesDischarge = _context.Messages
                                                           .Count(m => (m.To == user_logged.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead
-                                                                                                    && m.Discharge != null))
+                                                                                                    && m.Discharge != null && m.Notification == false))
                                                           .ToString();
 
                 ViewBag.Total = Convert.ToInt32(ViewBag.CountsMessagesNotes) + Convert.ToInt32(ViewBag.CountsMessagesFars) + Convert.ToInt32(ViewBag.CountsMessagesMTPReview) + Convert.ToInt32(ViewBag.CountsMessagesAddendum) + Convert.ToInt32(ViewBag.CountsMessagesDischarge);
@@ -81,10 +81,10 @@ namespace KyoS.Web.Controllers
                                           .Include(wc => wc.Workday)
                                           .ThenInclude(w => w.Week)
 
-                                          .Include(wc => wc.Messages)
+                                          .Include(wc => wc.Messages.Where(m => m.Notification == false))
 
                                           .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name                                                                     
-                                                      && wc.Messages.Count() > 0))
+                                                     && wc.Messages.Count() > 0))
                                           .ToListAsync());
             }
 
@@ -131,10 +131,10 @@ namespace KyoS.Web.Controllers
 
                                           .Include(f => f.Client)
 
-                                          .Include(f => f.Messages)
+                                          .Include(f => f.Messages.Where(m => m.Notification == false))
 
                                           .Where(f => (f.AdmissionedFor == user_logged.FullName
-                                                      && f.Messages.Count() > 0))
+                                                    && f.Messages.Count() > 0))
                                           .ToListAsync());
             }
 
@@ -182,7 +182,7 @@ namespace KyoS.Web.Controllers
                                           .Include(m => m.Mtp)
                                           .ThenInclude(m => m.Client)
 
-                                          .Include(m => m.Messages)
+                                          .Include(m => m.Messages.Where(m => m.Notification == false))
 
                                           .Where(m => (m.CreatedBy == user_logged.UserName && m.Messages.Count() > 0))
                                           .ToListAsync());
@@ -232,7 +232,7 @@ namespace KyoS.Web.Controllers
                                           .Include(a => a.Mtp)
                                           .ThenInclude(a => a.Client)
 
-                                          .Include(a => a.Messages)
+                                          .Include(a => a.Messages.Where(m => m.Notification == false))
 
                                           .Where(a => (a.CreatedBy == user_logged.UserName && a.Messages.Count() > 0))
                                           .ToListAsync());
@@ -280,8 +280,8 @@ namespace KyoS.Web.Controllers
                 return View(await _context.Discharge
 
                                           .Include(d => d.Client)
-                                          
-                                          .Include(a => a.Messages)
+
+                                          .Include(d => d.Messages.Where(m => m.Notification == false))
 
                                           .Where(a => (a.CreatedBy == user_logged.UserName && a.Messages.Count() > 0))
                                           .ToListAsync());
