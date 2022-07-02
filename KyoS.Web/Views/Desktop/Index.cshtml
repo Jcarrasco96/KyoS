@@ -483,6 +483,9 @@
                 <div class="col-md-12">
                     &nbsp;
                 </div>
+                <div class="col-md-1">
+                    &nbsp;
+                </div>
                 <div class="col-md-2">
                     @if (ViewBag.MTPMissing == "0")
                     {
@@ -538,6 +541,24 @@
                     }
                 </div>
                 <div class="col-md-2">
+                    @if (ViewBag.MedicalHistoryMissing == "0")
+                    {
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without Medical History</h4>
+                            <span class="message-counter-cero">@ViewBag.MedicalHistoryMissing</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a asp-controller="Intakes" asp-action="ClientswithoutMedicalHistory" asp-route-origin="1" role="button">
+                            <div class="thumbnail list-group-item list-group-item-danger">
+                                <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without Medical History</h4>
+                                <span class="message-counter">@ViewBag.MedicalHistoryMissing</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
                     @if (ViewBag.PendingFars == "0")
                     {
                         <div class="thumbnail list-group-item list-group-item-text">
@@ -554,6 +575,17 @@
                             </div>
                         </a>
                     }
+                </div>
+                <div class="col-md-1">
+                    &nbsp;
+                </div>
+
+                //New line
+                <div class="col-md-12">
+                    &nbsp;
+                </div>
+                <div class="col-md-1">
+                    &nbsp;
                 </div>
                 <div class="col-md-2">
                     @if (ViewBag.PendingAddendum == "0")
@@ -590,13 +622,6 @@
                             </div>
                         </a>
                     }
-                </div>
-                //New line
-                <div class="col-md-12">
-                    &nbsp;
-                </div>
-                <div class="col-sm-3 col-md-1">
-                    &nbsp;
                 </div>
                 <div class="col-md-2">
                     @if (ViewBag.PendingDischarge == "0")
@@ -652,6 +677,17 @@
                         </a>
                     }
                 </div>
+                <div class="col-md-1">
+                    &nbsp;
+                </div>
+
+                //New line
+                <div class="col-md-12">
+                    &nbsp;
+                </div>
+                <div class="col-sm-3 col-md-1">
+                    &nbsp;
+                </div>
                 <div class="col-md-2">
                     @if (ViewBag.PendingIndNotes == "0")
                     {
@@ -687,16 +723,6 @@
                             </div>
                         </a>
                     }
-                </div>
-                <div class="col-sm-3 col-md-1">
-                    &nbsp;
-                </div>
-                //New line
-                <div class="col-md-12">
-                    &nbsp;
-                </div>
-                <div class="col-sm-3 col-md-3">
-                    &nbsp;
                 </div>
                 <div class="col-md-2">
                     @if (ViewBag.NotesWithReview == "0")
@@ -752,7 +778,7 @@
                         </a>
                     }
                 </div>
-                <div class="col-sm-3 col-md-3">
+                <div class="col-sm-3 col-md-1">
                     &nbsp;
                 </div>
             }
@@ -1071,24 +1097,23 @@
                     }
                 </div>
                 <div class="col-md-2">
-                    @if (ViewBag.PendingFars == "0")
+                    @if (ViewBag.MedicalHistoryMissing == "0")
                     {
                         <div class="thumbnail list-group-item list-group-item-text">
-                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FARS</h4>
-                            <span class="message-counter-cero">@ViewBag.PendingFars</span>
+                            <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without Medical History</h4>
+                            <span class="message-counter-cero">@ViewBag.MedicalHistoryMissing</span>
                         </div>
                     }
                     else
                     {
-                        <a asp-controller="FarsForms" asp-action="PendingFARS" role="button">
-                            <div class="thumbnail list-group-item list-group-item-info">
-                                <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FARS</h4>
-                                <span class="message-counter-info">@ViewBag.PendingFars</span>
+                        <a asp-controller="Intakes" asp-action="ClientswithoutMedicalHistory" asp-route-origin="1" role="button">
+                            <div class="thumbnail list-group-item list-group-item-danger">
+                                <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without Medical History</h4>
+                                <span class="message-counter">@ViewBag.MedicalHistoryMissing</span>
                             </div>
                         </a>
                     }
                 </div>
-
             }
         </div>
     </div>
