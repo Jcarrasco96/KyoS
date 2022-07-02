@@ -277,17 +277,17 @@
 
                                             </td>
                                             <td align="center">
-                                                @if (!User.IsInRole("Supervisor"))
-                                                {
-                                                    <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                }
-                                                else
+                                                @if (User.IsInRole("Supervisor") || (@item.CreatedBy == User.Identity.Name))
                                                 {
                                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
                                                 }
+                                                else
+                                                {
+                                                    <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                }
                                                 <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                                @if (User.IsInRole("Supervisor"))
+                                                @if (User.IsInRole("Supervisor") || (@item.CreatedBy == User.Identity.Name))
                                                 {
                                                     <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
                                                 }
@@ -379,17 +379,17 @@
 
                                             </td>
                                             <td align="center">
-                                                @if (!User.IsInRole("Supervisor"))
+                                                @if (User.IsInRole("Supervisor") || (item.CreatedBy == User.Identity.Name))
                                                 {
-                                                    <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
                                                 }
                                                 else
                                                 {
-                                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                    <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>     
                                                 }
                                                 <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                                @if (User.IsInRole("Supervisor"))
+                                                @if (User.IsInRole("Supervisor") || (item.CreatedBy == User.Identity.Name))
                                                 {
                                                     <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
                                                 }

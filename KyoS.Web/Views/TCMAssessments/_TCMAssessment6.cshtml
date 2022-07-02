@@ -1,0 +1,267 @@
+﻿@model KyoS.Web.Models.TCMAssessmentViewModel
+
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong><u><i>Hearing</i></u></strong>                                                                  <strong><u><i>Vision</i></u></strong>
+        <input asp-for="NoHearing" class="form-check-input"> No hearing impairment.                                               <input asp-for="HasNoImpairment" class="form-check-input"> Has no impairment of vision.
+        <input asp-for="HearingImpairment" class="form-check-input"> Hearing impairment managed through assistive devices                 <input asp-for="VisionImpairment" class="form-check-input"> Vision impairment managed through assistive devices
+        <input asp-for="HearingDifficulty" class="form-check-input"> Hearing difficulty at level of conversation.                         <input asp-for="HasDifficultySeeingLevel" class="form-check-input"> Has difficulty seeing at level of print (far-sighted).
+        <input asp-for="Hears" class="form-check-input"> Hears only very loud sounds.                                         <input asp-for="HasDifficultySeeingObjetive" class="form-check-input"> Has difficulty seeing objects in environment (near-sighted).
+        <input asp-for="NoUseful" class="form-check-input"> No useful hearing.                                                   <input asp-for="HasNoUsefull" class="form-check-input"> Has no useful vision.
+        <input asp-for="HearingNotDetermined" class="form-check-input"> Not determined.                                                      <input asp-for="VisionNotDetermined" class="form-check-input"> Not determined.
+
+        <strong><u><i>Pregnancy</i></u></strong>
+        Is client currently pregnant?    <input asp-for="IsClientPregnancy" class="form-check-input" id="check12"> Yes       <input type="checkbox" class="form-check-input" id="check112"> No       <input asp-for="IsClientPregnancyNA" class="form-check-input"> N/A 
+        Is she receiving prenatal care?  <input asp-for="IsSheReceiving" class="form-check-input" id="check13"> Yes       <input type="checkbox" class="form-check-input" id="check113"> No       Does she understand the risks of pregnancy?  <input asp-for="DoesSheUnderstand" class="form-check-input" id="check14"> Yes       <input type="checkbox" class="form-check-input" id="check114"> No      
+        Issues/complications during pregnancy: <input asp-for="Issues" style="width:70%"> 
+
+        <strong><u><i>Preventive Care:</i></u></strong>
+        Are all immunizations/vaccines current?   <input asp-for="AreAllImmunization" class="form-check-input" id="check15"> Yes       <input type="checkbox" class="form-check-input" id="check115"> No    If No, explain: 
+        <textarea asp-for="AreAllImmunizationExplain" rows="2" style="width:90%"></textarea>
+        Are you on a physician ordered special diet?  <input type="checkbox" class="form-check-input" id="check116"> No   <input asp-for="AreYouPhysician" class="form-check-input" id="check16"> Yes     Specify: <input asp-for="AreYouPhysicianSpecify" style="width:50%"> 
+        How active are you? I exercise or engage in physical activities  <input asp-for="HowActive" style="width:60%">
+
+        Please indicate the last time (date) the following preventive procedures were conducted:
+                Physical Exam:   <input asp-for="PhysicalExam">                       Pap and HPV Test:         <input asp-for="PapAndHPV">
+                Dental Exam:     <input asp-for="DentalExam">                       Mammogram:                <input asp-for="Mammogram">
+                Lab Works:       <input asp-for="LabWorks">                       Colon Cancer Screening:   <input asp-for="ColonCancer">
+                Other (specify): <input asp-for="PhysicalOther">
+
+        Additional information about medical problems/conditions: 
+        <textarea asp-for="AdditionalInformation" rows="3"  style="width:90%">></textarea>
+        </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong><i>3. VOCATIONAL / EMPLOYMENT</i></strong>     
+        A. Vocational/Employment history (briefly describe client’s work history indicating previous employers, occupations, vocational goals, etc.): 
+            <textarea asp-for="VocationalEmployment" rows="3" style="width:90%">></textarea> 
+            Is client currently employed? <input asp-for="IsClientCurrentlyEmployed" class="form-check-input" id="check17"> Yes (Indicate Status and complete section B)        <input type="checkbox" class="form-check-input" id="check117"> No (Indicate Status and go to section C)
+            Employment Status: <input asp-for="EmploymentStatus" style="width:20%"/> 
+        B.  Current Employer:  <input asp-for="CurrentEmployer" style="width:20%"/> 
+            Address:           <input asp-for="EmployerAddress" style="width:20%"/>       City, State, Zip  <input asp-for="EmployerCityState" style="width:20%" />
+            Contact Person:    <input asp-for="EmployerContactPerson" style="width:20%"/>       Phone No          <input asp-for="EmployerPhone" style="width:20%"/>
+            <i>*May we leave/send voice/text messages to the above contact if necessary? </i>  <input asp-for="MayWeLeaveSend" class="form-check-input" id="check18"> Yes         <input type="checkbox" class="form-check-input" id="check118"> No
+
+        C.  Is the client able to work or perform any gainful and productive activity? <input asp-for="IsTheClientAbleWork" class="form-check-input" id="check19"> Yes         <input type="checkbox" class="form-check-input" id="check119"> No      <input asp-for="IsTheClientAbleWorkLimitation" class="form-check-input"> Yes but with limitations
+            If Yes, would he/she like to obtain a job? <input asp-for="WouldLikeObtainJob" class="form-check-input" id="check20"> Yes         <input type="checkbox" class="form-check-input" id="check120"> No         <input asp-for="WouldLikeObtainJobNotAtThisTime" class="form-check-input"> Not at this time
+            Does client need assistance or support to seek, obtain and sustain employment? <input asp-for="DoesClientNeedAssistance" class="form-check-input" id="check21"> Yes         <input type="checkbox" class="form-check-input" id="check121"> No   
+            <textarea asp-for="DoesClientNeedAssistanceExplain" rows="3" style="width:90%"></textarea> 
+    </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong><i>4. SCHOOL / EDUCATION</i></strong>     
+        A. CHILDREN ONLY (Go to section B for ADULTS) 
+            Is client currently attending school or any educational program? <input asp-for="IsClientCurrentlySchool" class="form-check-input" id="check22"> Yes        <input type="checkbox" class="form-check-input" id="check122"> No 
+            If No, explain why: <input asp-for="IsClientCurrentlySchoolExplain" style="width:80%" />
+            School: <input asp-for="SchoolName" style="width:25%" />         District:        <input asp-for="SchoolDistrict" style="width:25%" />   Grade:  <input asp-for="SchoolGrade" style="width:25%" />
+            Address <input asp-for="SchoolAddress" style="width:25%" />         City, State, Zip <input asp-for="SchoolCityState" style="width:25%" />
+            School Program:   <input asp-for="SchoolProgramRegular"> Regular        <input asp-for="SchoolProgramESE"> ESE      <input asp-for="SchoolProgramEBD"> EBD      <input asp-for="SchoolProgramESOL"> ESOL        <input asp-for="SchoolProgramHHIP"> HHIP (HomeBound)        <input asp-for="SchoolProgramOther"> Other
+            Teacher or Counselor Name:  <input asp-for="SchoolProgramTeacherName">          Phone No:  <input asp-for="SchoolProgramTeacherPhone">
+
+            Has client ever experienced difficulties in any of the following areas? <i>(Check all that apply and indicate in what school level)</i>
+                                        <strong>Area</strong>                                <strong>Pre-School</strong>            <strong>Elementary</strong>       <strong>Middle School</strong>        <strong>High-School</strong>
+            Academic performance (low grades, failed subjects)      <input asp-for="AcademicPreSchool">                     <input asp-for="AcademicEelementary">                <input asp-for="AcademicMiddle">                   <input asp-for="AcademicHigh">
+            Behavior (misconduct, bullying, suspensions)            <input asp-for="BehaviorPreSchool">                     <input asp-for="BehaviorEelementary">                <input asp-for="BehaviorMiddle">                   <input asp-for="BehaviorHigh">
+            Relationship with students, teachers, school staff      <input asp-for="RelationshipPreSchool">                     <input asp-for="RelationshipEelementary">                <input asp-for="RelationshipMiddle">                   <input asp-for="RelationshipHigh">
+            Attendance and punctuality, skipping classes            <input asp-for="AttendancePreSchool">                     <input asp-for="AttendanceEelementary">                <input asp-for="AttendanceMiddle">                   <input asp-for="AttendanceHigh">
+            Fail to pass the grade, grade retention                 <input asp-for="FailToPreSchool">                     <input asp-for="FailToEelementary">                <input asp-for="FailToMiddle">                   <input asp-for="FailToHigh">
+            Participation in extracurricular activities             <input asp-for="ParticipationPreSchool">                     <input asp-for="ParticipationEelementary">                <input asp-for="ParticipationMiddle">                   <input asp-for="ParticipationHigh">
+            Learning disabilities                                   <input asp-for="LearningPreSchool">                     <input asp-for="LearningEelementary">                <input asp-for="LearningMiddle">                   <input asp-for="LearningHigh">
+            
+            Is client involved in any extra-curricular activities?      <input asp-for="IsClientInvolved" class="form-check-input" id="check23"> Yes        <input type="checkbox" class="form-check-input" id="check123"> No  Specify: <input asp-for="IsClientInvolvedSpecify">
+            Is there any aide, tutor or mentor assigned to the child? <input asp-for="IsThereAnyAide" class="form-check-input" id="check24"> Yes        <input type="checkbox" class="form-check-input" id="check124"> No  If Yes, provide the following information: 
+            Name: <input asp-for="IsThereAnyAideName" style="width:25%">             Phone No: <input asp-for="IsThereAnyAidePhone" style="width:25%">
+            Describe client’s educational strengths: (children only)
+            <textarea asp-for="DescribeClientEducation" style="width:90%"></textarea>
+            Describe any school based weaknesses, adjustment and/or educational placement problems: (children only)
+            <textarea asp-for="DescribeAnySchool" style="width:90%"></textarea>
+        B. ADULTS
+            What is the highest level of education client has completed?
+            <input asp-for="WhatIsNoSchool" /> No School                    <input asp-for="WhatIsGED" /> GED                                   <input asp-for="WhatIsSomeCollege" /> Some College
+            <input asp-for="WhatIsElementary" /> Elementary School            <input asp-for="WhatIsGraduated" /> Graduated Special Education           <input asp-for="WhatIsCollegeGraduated" /> Some College
+            <input asp-for="WhatIsMiddle" /> Middle School                <input asp-for="WhatIsHighSchool" /> High School Graduate                  <input asp-for="WhatIsGraduatedDegree" /> Graduate Degree
+            <input asp-for="WhatIsSomeHigh" /> Some High School             <input asp-for="WhatIsTradeSchool" /> Trade School                          <input asp-for="WhatIsUnknown" /> Unknow
+
+            Is client interested in furthering his/her education?   <input asp-for="IsClientInterested" class="form-check-input" id="check25"> Yes        <input type="checkbox" class="form-check-input" id="check125"> No
+            If yes, what area would client want to further his/her education in?   <input asp-for="IfYesWhatArea" style="width:40%"/>
+            Does client need assistance or support in gaining access to educational services? <input asp-for="DoesClientNeedAssistance" class="form-check-input" id="check26"> Yes        <input type="checkbox" class="form-check-input" id="check126"> No
+            <textarea asp-for="DoesClientNeedAssistanceExplain" style="width:90%"></textarea>
+        </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong><i>5. SOCIAL / SUPPORT SYSTEM / RECREATIONAL</i></strong>     
+            Describe client’s cultural affiliations and/or spiritual/religious beliefs: 
+            <textarea asp-for="DescribeClientCultural" rows="3" style="width:90%">></textarea> 
+            Does the client currently participate in any social activity or program in the community? <input asp-for="DoesClientCurrently" class="form-check-input" id="check27"> Yes     <input type="checkbox" class="form-check-input" id="check127"> No 
+            If Yes provide details:            
+            <textarea asp-for="DoesClientCurrentlyExplain" rows="3" style="width:90%">></textarea> 
+            What activities or things does client enjoy doing or which ones would he/she like to do? 
+            <textarea asp-for="WhatActivityThings" rows="3" style="width:90%">></textarea> 
+            Briefly describe client’s social skills (e.g. ability to interact and get along with others, ability to make and maintain relationships, etc.)
+            <textarea asp-for="Briefly" rows="3" style="width:90%">></textarea> 
+            Describe client’s relationships and support system (family, friends, peers, landlord, neighbors, caretaker, providers, significant others, etc.)
+            <textarea asp-for="DescribeClientRelationship" rows="3" style="width:90%">></textarea> 
+            List any needs or concern related to social functioning:
+            <textarea asp-for="ListAnyNeed" rows="3" style="width:90%">></textarea> 
+        </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong><i>6. ACTIVITIES OF DAILY LIVING</i></strong>     
+           Identify the activities that client has difficulties to perform and indicate level of dependency (check all that apply):
+            <strong>ACTIVITIES OF DAILY LIVING </strong>      <strong>Assistive Technology OF DAILY LIVING </strong>       <strong>INDEPENDENT</strong>       <strong>SUPERVISION AND VERBAL PROMPTS</strong>      <strong>PHYSICAL ASSISTANCE NEEDED</strong>      <strong>TOATAL DEPENDENCE</strong>
+            a. Feeding/eating                                   <input asp-for="FeedingAssistive" />                            <input asp-for="FeedingIndependent" />                          <input asp-for="FeedingSupervision" />                               <input asp-for="FeedingPhysical" />                            <input asp-for="FeedingTotal" />
+            b. Grooming and personal hygiene                    <input asp-for="GroomingAssistive" />                            <input asp-for="GroomingIndependent" />                          <input asp-for="GroomingSupervision" />                               <input asp-for="GroomingPhysical" />                            <input asp-for="GroomingTotal" />
+            c. Bathing/showering                                <input asp-for="BathingAssistive" />                            <input asp-for="BathingIndependent" />                          <input asp-for="BathingSupervision" />                               <input asp-for="BathingPhysical" />                            <input asp-for="BathingTotal" />
+            d. Dressing                                         <input asp-for="DressingAssistive" />                            <input asp-for="DressingIndependent" />                          <input asp-for="DressingSupervision" />                               <input asp-for="DressingPhysical" />                            <input asp-for="DressingTotal" />
+            e. Transferring and mobility                        <input asp-for="TransferringAssistive" />                            <input asp-for="TransferringIndependent" />                          <input asp-for="TransferringSupervision" />                               <input asp-for="TransferringPhysical" />                            <input asp-for="TransferringTotal" />
+            f. Cooking/preparing meals                          <input asp-for="CookingAssistive" />                            <input asp-for="CookingIndependent" />                          <input asp-for="CookingSupervision" />                               <input asp-for="CookingPhysical" />                            <input asp-for="CookingTotal" />
+            g. Doing laundry, housekeeping                      <input asp-for="DoingAssistive" />                            <input asp-for="DoingIndependent" />                          <input asp-for="DoingSupervision" />                               <input asp-for="DoingPhysical" />                            <input asp-for="DoingTotal" />
+            h. Making/answering phone calls                     <input asp-for="MakingAssistive" />                            <input asp-for="MakingIndependent" />                          <input asp-for="MakingSupervision" />                               <input asp-for="MakingPhysical" />                            <input asp-for="MakingTotal" />
+            i. Shopping/errands                                 <input asp-for="ShoppingAssistive" />                            <input asp-for="ShoppingIndependent" />                          <input asp-for="ShoppingSupervision" />                               <input asp-for="ShoppingPhysical" />                            <input asp-for="ShoppingTotal" />
+
+            Describe other needs, concerns or safety risks related to the performing of activities of daily living:
+            <textarea asp-for="DescribeClientLiving" rows="3" style="width:90%">></textarea>
+        </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong>7. HOUSING / LIVING ENVIRONMENT</strong>     
+            Residential Status:  <input asp-for="ResidentStatus" />     Number of person living in the same house: <input asp-for="NumberOfPersonLiving" />      Number of bedrooms in the house: <input asp-for="NumberOfBedrooms" />   Person-per-Bedroom (PPB) ratio: <input asp-for="PersonPorBedrooms" />
+            (According to HUD standards, a PPB above 2 is considered household overcrowding and housing assistance may be needed)
+            Describe client’s living and sleeping arrangements (rent/own, where client sleeps, whether he/she shares bed/bedroom, etc.):
+            <textarea asp-for="DescribeClientLiving" rows="3" style="width:90%">></textarea>
+            Please indicate area(s) where there are potential safety risks or accessibility/mobility barriers: 
+                <input asp-for="Structural" />  Structural damage                        <input asp-for="Tripping" />  Tripping/fall hazards                     <input asp-for="ExcessiveCluter" />  Excessive clutter      
+                <input asp-for="Electrical" />  Electrical hazards                       <input asp-for="Unsanitary" />  Unsanitary conditions                     <input asp-for="Insect" /> Insects or other pests  
+                <input asp-for="Poor" />  Poor lighting                            <input asp-for="Stairs" />  Stairs/steps unsafe                       <input asp-for="Flooring" /> Flooring/carpet loose
+                <input asp-for="NotHot" />  No hot or running water                  <input asp-for="NoAirCondition" />  No air conditioning/heat                  <input asp-for="Bathtub" /> Bathtub/shower unsafe
+                <input asp-for="FireHazards" />  Fire hazards                            <input asp-for="NoTelephone" />  No telephone (or not working)             <input asp-for="Appliances" /> Appliances not working
+            Describe neighborhood (urban/rural, location, crime level, safety, accessibility to community resources and services, etc.): 
+            <textarea asp-for="DescribeNeighborhood" rows="3" style="width:90%">></textarea>
+            Does the client feel safe in the current living arrangement?    <input asp-for="DoesClientFeel" class="form-check-input" id="check28"> Yes     <input type="checkbox" class="form-check-input" id="check128"> No
+            If No, explain: <input asp-for="DoesClientFeelExplain" class="form-check-input" style="width:80%"> 
+            Would the client like to continue to live in the current place, or is there somewhere else he/she would prefer to live?
+                <input asp-for="ContinueToLive" />   Continue to live here                        <input asp-for="ContinueToLiveOnly" />  Continue to live here only if housing condition improves 
+                <input asp-for="PreferToLive" />   Prefer to live elsewhere                     <input asp-for="DoesNotKnow" />  Doesn’t know / not sure
+            If there are any housing needs or concern not listed above, please describe: 
+            <textarea asp-for="IfThereAnyHousing" rows="3" style="width:90%">></textarea>
+        </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong>8. ECONOMIC / FINANCIAL</strong>     
+            Monthly Family Income (include income from all household members): <input asp-for="MonthlyFamilyIncome" />   
+            What is the main source(s) of income for the client and/or family? <input asp-for="WhatIsTheMainSource" /> 
+            Other financial resources available to client:                     <input asp-for="OtherFinancial" /> 
+            Is the client or the client’s family currently having any financial difficulties?  <input asp-for="IsTheClientHavingFinancial" class="form-check-input" id="check29"> Yes     <input type="checkbox" class="form-check-input" id="check129"> No      If Yes, please describe:
+            <textarea asp-for="IsTheClientHavingFinancialExplain" rows="3" style="width:90%">></textarea>
+        </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong>9. BASIC NEEDS (Food, clothing, furniture, etc.)</strong>     
+            Does the client receive or use any of the following types of food assistance?   
+            <strong>Assistance type</strong>                                    <strong>Receive/use?</strong>                   <strong>How often?</strong>                    <strong>Provider?</strong>    
+            Food Stamps/S.N.A.P.                              <input asp-for="FoodStampReceive" class="form-check-input" id="check30"> Yes    <input type="checkbox" class="form-check-input" id="check130"> No           <input asp-for="FoodStampHowOften" />         <input asp-for="FoodStampProvider" />
+            Food Pantry/Food Banks                            <input asp-for="FoodPantryReceive" class="form-check-input" id="check31"> Yes    <input type="checkbox" class="form-check-input" id="check131"> No           <input asp-for="FoodPantryHowOften" />         <input asp-for="FoodPantryProvider" />
+            Home delivered meals                              <input asp-for="HomeDeliveredReceive" class="form-check-input" id="check32"> Yes    <input type="checkbox" class="form-check-input" id="check132"> No           <input asp-for="HomeDeliveredHowOften" />         <input asp-for="HomeDeliveredProvider" />
+            Home delivered meals                              <input asp-for="HomeDeliveredReceive" class="form-check-input" id="check33"> Yes    <input type="checkbox" class="form-check-input" id="check133"> No           <input asp-for="HomeDeliveredHowOften" />         <input asp-for="HomeDeliveredProvider" />
+            Congregate meals (Meals served in community       <input asp-for="CongredatedReceive" class="form-check-input" id="check34"> Yes    <input type="checkbox" class="form-check-input" id="check134"> No           <input asp-for="CongredatedHowOften" />         <input asp-for="CongredatedProvider" />
+            settings such as senior centers, churches, etc.) 
+            Other:  <input asp-for="OtherReceiveExplain" class="form-check-input">                    <input asp-for="OtherReceive" class="form-check-input" id="check35"> Yes    <input type="checkbox" class="form-check-input" id="check135"> No           <input asp-for="OtherHowOften" />         <input asp-for="OtherProvider" />
+
+            Does the client have other basic needs? (e.g. clothing, school uniforms and supplies, furniture, necessary household items, etc.)
+            <textarea asp-for="DoesClientBasicNeed" rows="3" style="width:90%">></textarea>
+        </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong>10. TRANSPORTATION</strong>     
+            How does client get to the places he/she want or need to go? (Check all that apply)
+                <input asp-for="Walks" class="form-check-input"> Walks                        <input asp-for="FriendOrFamily" class="form-check-input"> Friend or family member drives 
+                <input asp-for="Drives" class="form-check-input"> Drives                       <input asp-for="Staff" class="form-check-input"> Staff/Provider  
+                <input asp-for="TakesABus" class="form-check-input"> Takes a bus or taxi          <input asp-for="TransportationOther" class="form-check-input"> Other: <input asp-for="TransportationOtherExplain" style="width:30%"/>       
+            
+            How well is client able to use public transportation or drive to places beyond walking distance? 
+                <input asp-for="NeedNoHelp" class="form-check-input"> Needs no help or supervision                    <input asp-for="NeedALot" class="form-check-input"> Needs a lot of help or constant supervision
+                <input asp-for="NeedSome" class="form-check-input"> Needs some help or occasional supervision       <input asp-for="CantDoItAtAll" class="form-check-input"> Can’t do it at all 
+            
+            Does the client have any other transportation needs?   <input asp-for="DoesClientTranspotation" class="form-check-input" id="check36"> Yes    <input type="checkbox" class="form-check-input" id="check136"> No        If Yes, explain: 
+            <textarea asp-for="DoesClientTranspotationExplain" rows="3" style="width:90%">></textarea>
+        </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong>11. LEGAL / IMMIGRATION</strong>     
+        <strong>A. Court / Department of Juvenile Justice (DJJ) Involvement</strong> 
+            Has client ever been arrested? <input asp-for="HasClientEverArrest" class="form-check-input" id="check37"> Yes    <input type="checkbox" class="form-check-input" id="check137"> No        How many times? <input asp-for="HasClientEverArrestManyTime" style="width:10%" />       Last time arrested: <input asp-for="HasClientEverArrestLastTime" style="width:10%" />
+            If Yes, were there criminal charges pressed against client?        <input asp-for="IfYesWereCriminal" class="form-check-input" id="check38"> Yes    <input type="checkbox" class="form-check-input" id="check138"> No
+            Is there any current and ongoing legal process:                    <input asp-for="IsThereAnyCurrentLegalProcess" class="form-check-input" id="check39"> Yes    <input type="checkbox" class="form-check-input" id="check139"> No      Probation Officer?  <input asp-for="ProbationOfficer" class="form-check-input" id="check40"> Yes    <input type="checkbox" class="form-check-input" id="check140"> No
+            Name of Probation Officer: <input asp-for="ProbationOfficerName" style="width:30%">           Phone No: <input asp-for="ProbationOfficerPhone" style="width:15%">
+        <strong>B. Immigration</strong>           
+            Country of Birth:   <input asp-for="CountryOfBirth" style="width:15%">          Year entered USA:  <input asp-for="YearEnteredUsa" style="width:10%">       Status:  <input asp-for="Citizen"> Citizen         <input asp-for="Resident"> Resident
+            <input asp-for="ImmigrationOther">  Other: <input asp-for="ImmigrationOtherExplain" style="width:80%">         
+            Additional information in reference to legal/immigration status:
+            <textarea asp-for="AdditionalInformationMigration" rows="3" style="width:90%">></textarea>
+          </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong>SECTION VI: SUMMARY OF CLIENT’S STRENGHTS AND WEAKNESS </strong>
+            A. List client’s current and potential strengths, abilities, assets, interests, preferences, resources that may contribute to his/her recovery and wellbeing:
+            <textarea asp-for="ListClientCurrentPotencialStrngths" rows="3" style="width:90%"></textarea>
+            B. List client’s current and potential weakness, needs, barriers, challenges, etc. that may interfere with his/her recovery and wellbeing:
+            <textarea asp-for="ListClientCurrentPotencialWeakness" rows="3" style="width:90%">></textarea>
+        </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong>SECTION VII: RECOMMENDED SERVICES</strong>
+            <input asp-for="RecommendedMentalHealth" class="form-check-input"> Mental Health / Substance Abuse                  <input asp-for="RecommendedHousing" class="form-check-input"> Housing / Shelter
+            <input asp-for="RecommendedPhysicalHealth" class="form-check-input"> Physical Health / Medical / Dental               <input asp-for="RecommendedEconomic" class="form-check-input"> Economic / Financial
+            <input asp-for="RecommendedVocation" class="form-check-input"> Vocational / Employment / Job Training           <input asp-for="RecommendedBasicNeed" class="form-check-input"> Basic Needs (food, clothing, furniture, etc.)
+            <input asp-for="RecommendedSchool" class="form-check-input"> School / Education                               <input asp-for="RecommendedTransportation" class="form-check-input"> Transportation
+            <input asp-for="RecommendedRecreational" class="form-check-input"> Recreational / Social Support                    <input asp-for="RecommendedLegalImmigration" class="form-check-input"> Legal / Immigration
+            <input asp-for="RecommendedActivities" class="form-check-input"> Activities of Daily Living (ADL and IADL)        <input asp-for="RecommendedOther" class="form-check-input"> Other (specify):   <input asp-for="RecommendedOtherSpecify"  style="width:20%">
+        </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong>SECTION VIII: SIGNATURES </strong>
+            I certify that either one of the following requirements was met prior to the completion of client’s Assessment:            
+        <input asp-for="AHomeVisit" class="form-check-input"> A home visit was conducted prior to the completion of this Assessment on: <input asp-for="AHomeVisitOn">
+                                              OR
+        <input asp-for="CaseManagerWas" class="form-check-input"> Case Manager was unable to complete a home visit due to: <input asp-for="CaseManagerWasDueTo" style="width:30%" />    
+            However, a face-to-face interview was conducted on: <input asp-for="HoweverOn" style="width:20%" />  and a required home visit was scheduled for:  <input asp-for="HoweverVisitScheduler" style="width:10%" />
+        </pre>
+    </div>
+</div>

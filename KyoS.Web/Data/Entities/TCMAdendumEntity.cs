@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using KyoS.Common.Enums;
+using KyoS.Web.Data.Contracts;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class TCMAdendumEntity
+    public class TCMAdendumEntity : AuditableEntity
     {
         public int Id { get; set; }
 
@@ -18,5 +19,8 @@ namespace KyoS.Web.Data.Entities
 
         public TCMServicePlanEntity TcmServicePlan{ get; set; }
         public TCMDomainEntity TcmDomain { get; set; }
+         
+        public string NeedsIdentified { get; set; }
+        public string LongTerm { get; set; }
     }
 }

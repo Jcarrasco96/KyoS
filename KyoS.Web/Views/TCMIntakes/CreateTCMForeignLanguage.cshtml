@@ -15,7 +15,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("TCM Intakes", "TCMIntakeDashboard", "TCMIntakes", new { id = Model.TcmClient_FK })
+                @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 1 })
             </li>
             <li class="active">
                 Foreign Language Acknowledgement
@@ -32,11 +32,13 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdTCMClient" />
             <input type="hidden" asp-for="TcmClient_FK" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="AdmissionedFor" />
             <partial name="_TCMIntakeForeignLanguage" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="TCMIntakeDashboard" asp-route-id="@Model.TcmClient.Id" class="btn btn-success">Back</a>
+                <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.IdTCMClient" asp-route-section="1" class="btn btn-success">Back</a>
             </div>
         </form>
     </div>

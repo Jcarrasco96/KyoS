@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using KyoS.Common.Enums;
+using KyoS.Web.Data.Contracts;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class TCMIntakeMiniMentalEntity
+    public class TCMIntakeMiniMentalEntity : AuditableEntity
     {
         public int Id { get; set; }
 

@@ -57,7 +57,7 @@
                         {
                             @if ((item.IntakeScreening == null) && (item.IntakeConsentForTreatment == null) && (item.IntakeConsentForRelease == null) && (item.IntakeConsumerRights == null) && (item.IntakeAcknowledgementHipa == null) && (item.IntakeAccessToServices == null)
                                         && (item.IntakeOrientationChecklist == null) && (item.IntakeTransportation == null) && (item.IntakeConsentPhotograph == null) && (item.IntakeFeeAgreement == null) && (item.IntakeTuberculosis == null)
-                                            && (item.IntakeMedicalHistory == null))
+                                           )
                             {
                                 <tr style="color:orange">
                                     <td>
@@ -106,7 +106,7 @@
                                         }
                                         @if ((item.IntakeScreening != null) && (item.IntakeConsentForTreatment != null) && (item.IntakeConsentForRelease != null) && (item.IntakeConsumerRights != null) && (item.IntakeAcknowledgementHipa != null) && (item.IntakeAccessToServices != null)
                                             && (item.IntakeOrientationChecklist != null) && (item.IntakeTransportation != null) && (item.IntakeConsentPhotograph != null) && (item.IntakeFeeAgreement != null) && (item.IntakeTuberculosis != null)
-                                              && (item.IntakeMedicalHistory != null))
+                                              )
                                         {
                                             <a asp-action="PrintIntake" asp-route-id="@item.IntakeScreening.Id" class="btn btn-success" title="Print Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
@@ -166,7 +166,7 @@
                                         }
                                         @if ((item.IntakeScreening != null) && (item.IntakeConsentForTreatment != null) && (item.IntakeConsentForRelease != null) && (item.IntakeConsumerRights != null) && (item.IntakeAcknowledgementHipa != null) && (item.IntakeAccessToServices != null)
                                            && (item.IntakeOrientationChecklist != null) && (item.IntakeTransportation != null) && (item.IntakeConsentPhotograph != null) && (item.IntakeFeeAgreement != null) && (item.IntakeTuberculosis != null)
-                                            && (item.IntakeMedicalHistory != null))
+                                            )
                                         {
                                             <a asp-action="PrintIntake" asp-route-id="@item.IntakeScreening.Id" class="btn btn-success" title="Print Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }

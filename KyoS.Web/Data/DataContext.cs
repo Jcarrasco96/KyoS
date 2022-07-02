@@ -103,6 +103,22 @@ namespace KyoS.Web.Data
         public DbSet<TCMIntakeNonClinicalLogEntity> TCMIntakeNonClinicalLog { get; set; }
         public DbSet<TCMIntakeMiniMentalEntity> TCMIntakeMiniMental { get; set; }
         public DbSet<TCMIntakeCoordinationCareEntity> TCMIntakeCoordinationCare { get; set; }
+        public DbSet<TCMIntakeAppendixJEntity> TCMIntakeAppendixJ { get; set; }
+        public DbSet<TCMIntakeInterventionLogEntity> TCMIntakeInterventionLog { get; set; }
+        public DbSet<TCMIntakeInterventionEntity> TCMIntakeIntervention { get; set; }
+        public DbSet<TCMFarsFormEntity> TCMFarsForm { get; set; }
+        public DbSet<TCMAssessmentEntity> TCMAssessment { get; set; }
+        public DbSet<TCMAssessmentIndividualAgencyEntity> TCMAssessmentIndividualAgency { get; set; }
+        public DbSet<TCMAssessmentHouseCompositionEntity> TCMAssessmentHouseComposition { get; set; }
+        public DbSet<TCMAssessmentPastCurrentServiceEntity> TCMAssessmentPastCurrentService { get; set; }
+        public DbSet<TCMAssessmentMedicationEntity> TCMAssessmentMedication { get; set; }
+        public DbSet<TCMAssessmentHospitalEntity> TCMAssessmentHospital { get; set; }
+        public DbSet<TCMAssessmentDrugEntity> TCMAssessmentDrug { get; set; }
+        public DbSet<TCMAssessmentMedicalProblemEntity> TCMAssessmentMedicalProblem { get; set; }
+        public DbSet<TCMAssessmentSurgeryEntity> TCMAssessmentSurgery { get; set; }
+        public DbSet<TCMNoteEntity> TCMNote { get; set; }
+        public DbSet<TCMNoteActivityEntity> TCMNoteActivity { get; set; }
+        public DbSet<DocumentsAssistantEntity> DocumentsAssistant { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -256,17 +272,21 @@ namespace KyoS.Web.Data
                                    .HasIndex(s => s.Id)
                                    .IsUnique();
 
-            modelBuilder.Entity<TCMServicePlanReviewEntity>()
-                                   .HasIndex(s => s.Id)
-                                   .IsUnique();
+            modelBuilder.Entity<TCMServicePlanEntity>()
+                        .HasOne(c => c.TCMServicePlanReview)
+                        .WithOne(s => s.TcmServicePlan)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMServicePlanReviewEntity>(s => s.TcmServicePlan_FK);
 
             modelBuilder.Entity<TCMServicePlanReviewDomainObjectiveEntity>()
                                    .HasIndex(s => s.Id)
                                    .IsUnique();
 
-            modelBuilder.Entity<TCMDischargeEntity>()
-                                  .HasIndex(s => s.Id)
-                                  .IsUnique();
+            modelBuilder.Entity<TCMServicePlanEntity>()
+                        .HasOne(c => c.TCMDischarge)
+                        .WithOne(s => s.TcmServicePlan)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMDischargeEntity>(s => s.TcmServicePlan_FK);
 
             modelBuilder.Entity<TCMDischargeFollowUpEntity>()
                        .HasOne(o => o.TcmDischarge)
@@ -454,6 +474,83 @@ namespace KyoS.Web.Data
                         .WithOne(s => s.TcmClient)
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasForeignKey<TCMIntakeCoordinationCareEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TcmIntakeAppendixJ)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMIntakeAppendixJEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TcmInterventionLog)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMIntakeInterventionLogEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMIntakeInterventionEntity>()
+                        .HasOne(g => g.TcmInterventionLog)
+                        .WithMany(m => m.InterventionList)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TCMAssessment)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMAssessmentEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMAssessmentIndividualAgencyEntity>()
+                        .HasOne(g => g.TcmAssessment)
+                        .WithMany(m => m.IndividualAgencyList)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMAssessmentHouseCompositionEntity>()
+                        .HasOne(g => g.TcmAssessment)
+                        .WithMany(m => m.HouseCompositionList)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMAssessmentPastCurrentServiceEntity>()
+                        .HasOne(g => g.TcmAssessment)
+                        .WithMany(m => m.PastCurrentServiceList)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMAssessmentMedicationEntity>()
+                        .HasOne(g => g.TcmAssessment)
+                        .WithMany(m => m.MedicationList)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMFarsFormEntity>()
+                        .HasOne(g => g.TCMClient)
+                        .WithMany(m => m.TCMFarsFormList)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMAssessmentHospitalEntity>()
+                   .HasOne(g => g.TcmAssessment)
+                   .WithMany(m => m.HospitalList)
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMAssessmentDrugEntity>()
+                        .HasOne(g => g.TcmAssessment)
+                        .WithMany(m => m.DrugList)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMAssessmentMedicalProblemEntity>()
+                        .HasOne(g => g.TcmAssessment)
+                        .WithMany(m => m.MedicalProblemList)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMAssessmentSurgeryEntity>()
+                        .HasOne(g => g.TcmAssessment)
+                        .WithMany(m => m.SurgeryList)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMNoteEntity>()
+                        .HasMany(wd => wd.TCMNoteActivity)
+                        .WithOne(n => n.TCMNote)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<DocumentsAssistantEntity>()
+                       .HasIndex(s => s.Name)
+                       .IsUnique();
         }
     }
 }

@@ -1,0 +1,45 @@
+﻿@model KyoS.Web.Models.TCMAssessmentIndividualAgencyViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="CreateIndividualAgencyModal" onsubmit="return jQueryAjaxPostTCMAssessmentIndividualAgency(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdTCMAssessment" />
+            <input type="hidden" asp-for="TcmAssessment.TcmClient.CaseNumber" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <div class="container-fluid">
+                <h4 style="font-weight:bold;"> <span class="label label-info"> Client - @Model.TcmAssessment.TcmClient.Client.Name </span></h4>
+            </div>
+            <div>
+                <div class=" col-md-4 form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-4 form-group">
+                    <label asp-for="Agency" class="control-label"></label>
+                    <input asp-for="Agency" class="form-control" />
+                    <span asp-validation-for="Agency" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-4 form-group">
+                    <label asp-for="RelationShip" class="control-label"></label>
+                    <input asp-for="RelationShip" class="form-control" />
+                    <span asp-validation-for="RelationShip" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

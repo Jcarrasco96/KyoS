@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using KyoS.Web.Data.Contracts;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class TCMDischargeEntity
+    public class TCMDischargeEntity : AuditableEntity
     {
         public int Id { get; set; }
-        
+
+        public int TcmServicePlan_FK { get; set; }
+
         public TCMServicePlanEntity TcmServicePlan { get; set; }
 
         [Display(Name = "Date of Staffing")]

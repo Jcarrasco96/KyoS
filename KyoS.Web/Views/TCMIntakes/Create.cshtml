@@ -15,7 +15,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("Intakes", "Index", "Intakes")
+                @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 1 })
             </li>
             <li class="active">Create TCM Intake Form</li>
         </ul><!--.breadcrumb-->
@@ -28,10 +28,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdTCMClient" />
             <input type="hidden" asp-for="TcmClient_FK" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
             <partial name="_TCMIntakesForm" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmClient.Client.Id" asp-route-section="1" class="btn btn-success">Back</a>
+                <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.IdTCMClient" asp-route-section="1" class="btn btn-success">Back</a>
             </div>
         </form>
     </div>

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using KyoS.Common.Enums;
+using KyoS.Web.Data.Contracts;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class TCMServicePlanReviewDomainObjectiveEntity
+    public class TCMServicePlanReviewDomainObjectiveEntity : AuditableEntity
     {
         public int Id { get; set; }
 
@@ -20,5 +21,11 @@ namespace KyoS.Web.Data.Entities
 
         public StatusType Status { get; set; }
 
+        public string Origin { get; set; }
+
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public string ChangesUpdate { get; set; }
+
+        public TCMServicePlanReviewDomainEntity tcmServicePlanReviewDomain { get; set; }
     }
 }

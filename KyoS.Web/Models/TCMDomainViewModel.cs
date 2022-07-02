@@ -18,9 +18,7 @@ namespace KyoS.Web.Models
 
         public int Id_ServicePlan { get; set; }
 
-        //este campo lo uso para saber de que pagina se viene
-        public int Origin { get; set; }
-
+        
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public int Id_Service { get; set; }
         public IEnumerable<SelectListItem> Services { get; set; }

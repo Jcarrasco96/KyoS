@@ -76,11 +76,26 @@ namespace KyoS.Web.Controllers
                                                           .Include(n => n.Client.IntakeFeeAgreement)
                                                           .Include(n => n.Client.IntakeMedicalHistory)
                                                           .Include(n => n.Client.MedicationList)
+                                                          .Include(n => n.Client.Psychiatrist)
+                                                          .Include(n => n.Client.Doctor)
                                                           .Include(n => n.TCMIntakeNonClinicalLog)
                                                           .Include(n => n.TCMIntakeMiniMental)
                                                           .Include(n => n.TCMIntakeCoordinationCare)
                                                           .Include(n => n.TcmServicePlan)
                                                           .ThenInclude(n => n.TCMAdendum)
+                                                          .Include(n => n.TcmServicePlan)
+                                                          .ThenInclude(n => n.TCMServicePlanReview)
+                                                          .Include(n => n.TcmServicePlan)
+                                                          .ThenInclude(n => n.TCMDischarge)
+                                                          .Include(n => n.TcmIntakeAppendixJ)
+                                                          .Include(n => n.TcmInterventionLog)
+                                                          .Include(n => n.TCMFarsFormList)
+                                                          .Include(n => n.TCMAssessment)
+                                                          .ThenInclude(n => n.HouseCompositionList)
+                                                          .ThenInclude(n => n.TcmAssessment.MedicationList)
+                                                          .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
+                                                          .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
+                                                          .Include(n => n.TCMNote)
                                                           .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
                                                            && n.Casemanager.LinkedUser == user_logged.UserName))
                                                           .ToListAsync();
@@ -161,7 +176,9 @@ namespace KyoS.Web.Controllers
                         StatusOther_Explain = "",
                         StatusResident = false,
                         StausCitizen = false,
-                        YearEnterUsa = ""
+                        YearEnterUsa = "",
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now
 
                     };
                     if (model.TcmClient.Client.LegalGuardian == null)
@@ -196,6 +213,8 @@ namespace KyoS.Web.Controllers
                 CaseManagerNotes = "",
                 Elibigility = "",
                 EmploymentStatus = "",
+                CreatedBy = user_logged.UserName,
+                CreatedOn = DateTime.Now,
                 Grade = "",
                 IntakeDate = DateTime.Now,
                 IsClientCurrently = false,
@@ -265,7 +284,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient , section = 1 });
                     }
                     catch (System.Exception ex)
                     {
@@ -370,6 +389,8 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.TCMIntakeWelcome)
                                                             .Include(n => n.Client)
                                                             .ThenInclude(n => n.Documents)
+                                                            .Include(n => n.Client.Psychiatrist)
+                                                            .Include(n => n.Client.Doctor)
                                                             .Include(n => n.Client.IntakeFeeAgreement)
                                                             .Include(n => n.Client.IntakeMedicalHistory)
                                                             .Include(n => n.Client.MedicationList)
@@ -378,6 +399,19 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.TCMIntakeCoordinationCare)
                                                             .Include(n => n.TcmServicePlan)
                                                             .ThenInclude(n => n.TCMAdendum)
+                                                            .Include(n => n.TcmServicePlan)
+                                                            .ThenInclude(n => n.TCMServicePlanReview)
+                                                            .Include(n => n.TcmServicePlan)
+                                                            .ThenInclude(n => n.TCMDischarge)
+                                                            .Include(n => n.TcmIntakeAppendixJ)
+                                                            .Include(n => n.TcmInterventionLog)
+                                                            .Include(n => n.TCMFarsFormList)
+                                                            .Include(n => n.TCMAssessment)
+                                                            .ThenInclude(n => n.HouseCompositionList)
+                                                            .ThenInclude(n => n.TcmAssessment.MedicationList)
+                                                            .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
+                                                            .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
+                                                            .Include(n => n.TCMNote)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
             List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
@@ -463,7 +497,7 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("TCMIntakeDashboard", new { id = intakeViewModel.IdTCMClient });
+                    return RedirectToAction("TCMIntakeSectionDashboard", new { id = intakeViewModel.IdTCMClient, section = 1});
                 }
                 catch (System.Exception ex)
                 {
@@ -523,6 +557,8 @@ namespace KyoS.Web.Controllers
                                                 .Include(d => d.Client)
                                                 .ThenInclude(d => d.LegalGuardian)
                                                 .FirstOrDefault(n => n.Id == id),
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             Aggre = true,
                             Aggre1 = true,
                             AuthorizeRelease = true,
@@ -570,7 +606,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeConsentForTreatmentEntity IntakeConsentEntity = await _converterHelper.ToTCMIntakeConsentForTreatmentEntity(IntakeViewModel, false);
+                TCMIntakeConsentForTreatmentEntity IntakeConsentEntity = await _converterHelper.ToTCMIntakeConsentForTreatmentEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeConsentEntity.Id == 0)
                 {
@@ -579,7 +615,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1 });
                     }
                     catch (System.Exception ex)
                     {
@@ -594,7 +630,7 @@ namespace KyoS.Web.Controllers
                     {
                         await _context.SaveChangesAsync();
 
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1 });
                     }
                     catch (System.Exception ex)
                     {
@@ -629,6 +665,8 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(n => n.LegalGuardian)
                                             .FirstOrDefault(n => n.Id == id),
                         IdTCMClient = id,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now,
                         TcmClient_FK = id,
                         Id = 0,
                         ToRelease = true,
@@ -681,7 +719,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeConsentForReleaseEntity IntakeConsentEntity = await _converterHelper.ToTCMIntakeConsentForReleaseEntity(IntakeViewModel, false);
+                TCMIntakeConsentForReleaseEntity IntakeConsentEntity = await _converterHelper.ToTCMIntakeConsentForReleaseEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeConsentEntity.Id == 0)
                 {
@@ -690,7 +728,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1 });
                     }
                     catch (System.Exception ex)
                     {
@@ -704,7 +742,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("ListConsentForrelease", new { id = IntakeViewModel.IdTCMClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -745,6 +783,8 @@ namespace KyoS.Web.Controllers
                                                 .Include(n => n.Client)
                                                 .ThenInclude(n => n.LegalGuardian)
                                                 .FirstOrDefault(n => n.Id == id),
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             IdTCMClient = id,
                             TcmClient_FK = id,
                             Id = 0,
@@ -786,7 +826,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeConsumerRightsEntity IntakeConsumerEntity = await _converterHelper.ToTCMIntakeConsumerRightsEntity(IntakeViewModel, false);
+                TCMIntakeConsumerRightsEntity IntakeConsumerEntity = await _converterHelper.ToTCMIntakeConsumerRightsEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeConsumerEntity.Id == 0)
                 {
@@ -795,7 +835,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1 });
                     }
                     catch (System.Exception ex)
                     {
@@ -809,7 +849,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1 });
                     }
                     catch (System.Exception ex)
                     {
@@ -857,6 +897,8 @@ namespace KyoS.Web.Controllers
                             DateSignaturePerson = DateTime.Now,
                             Documents = true,
                             Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             IdTCMClient = id,
                             TcmClient_FK = id,
                             AdmissionedFor = user_logged.FullName
@@ -892,7 +934,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeAcknowledgementHippaEntity IntakeAckNowEntity = await _converterHelper.ToTCMIntakeAcknoewledgementHippaEntity(IntakeViewModel, false);
+                TCMIntakeAcknowledgementHippaEntity IntakeAckNowEntity = await _converterHelper.ToTCMIntakeAcknoewledgementHippaEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeAckNowEntity.Id == 0)
                 {
@@ -901,7 +943,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1 });
                     }
                     catch (System.Exception ex)
                     {
@@ -915,7 +957,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1 });
                     }
                     catch (System.Exception ex)
                     {
@@ -957,6 +999,8 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(n => n.LegalGuardian)
                                                 .FirstOrDefault(n => n.Id == id),
                             IdTcmClient = id,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             TcmClient_FK = id,
                             Id = 0,
                             DateSignatureEmployee = DateTime.Now,
@@ -1018,7 +1062,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeOrientationChecklistEntity IntakeOrientationEntity = await _converterHelper.ToTCMIntakeOrientationChecklistEntity(IntakeViewModel, false);
+                TCMIntakeOrientationChecklistEntity IntakeOrientationEntity = await _converterHelper.ToTCMIntakeOrientationChecklistEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeOrientationEntity.Id == 0)
                 {
@@ -1027,7 +1071,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTcmClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTcmClient, section = 1 });
                     }
                     catch (System.Exception ex)
                     {
@@ -1041,7 +1085,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTcmClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTcmClient, section = 1 });
                     }
                     catch (System.Exception ex)
                     {
@@ -1084,6 +1128,8 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(n => n.LegalGuardian)
                                                 .FirstOrDefault(n => n.Id == id),
                             IdTCMClient = id,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             TcmClient_FK = id,
                             Id = 0,
                             Documents = true,
@@ -1123,7 +1169,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeAdvancedDirectiveEntity IntakeConsumerEntity = await _converterHelper.ToTCMIntakeAdvancedDirectiveEntity(IntakeViewModel, false);
+                TCMIntakeAdvancedDirectiveEntity IntakeConsumerEntity = await _converterHelper.ToTCMIntakeAdvancedDirectiveEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeConsumerEntity.Id == 0)
                 {
@@ -1132,7 +1178,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1 });
                     }
                     catch (System.Exception ex)
                     {
@@ -1146,7 +1192,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient});
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1 });
                     }
                     catch (System.Exception ex)
                     {
@@ -1180,6 +1226,11 @@ namespace KyoS.Web.Controllers
                                                                                    .ThenInclude(n => n.Client)
                                                                                    .Where(m => m.TcmClient_FK == id)
                                                                                    .ToListAsync();
+                if (listRelease.Count == 0)
+                {
+                    return RedirectToAction("TCMIntakeSectionDashboard", new { id = id, section = 1 });
+                }
+                
                 return View(listRelease);
             }
         }
@@ -1245,7 +1296,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeConsentForReleaseEntity intakeEntity = await _converterHelper.ToTCMIntakeConsentForReleaseEntity(intakeViewModel, false);
+                TCMIntakeConsentForReleaseEntity intakeEntity = await _converterHelper.ToTCMIntakeConsentForReleaseEntity(intakeViewModel, false, user_logged.UserName);
                 _context.TCMIntakeConsentForRelease.Update(intakeEntity);
                 try
                 {
@@ -1316,6 +1367,8 @@ namespace KyoS.Web.Controllers
                             DateSignaturePerson = DateTime.Now,
                             Documents = true,
                             Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             IdTCMClient = id,
                             TcmClient_FK = id,
                             AdmissionedFor = user_logged.FullName
@@ -1351,7 +1404,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeForeignLanguageEntity IntakeForeignEntity = await _converterHelper.ToTCMIntakeForeignLanguageEntity(IntakeViewModel, false);
+                TCMIntakeForeignLanguageEntity IntakeForeignEntity = await _converterHelper.ToTCMIntakeForeignLanguageEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeForeignEntity.Id == 0)
                 {
@@ -1360,7 +1413,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1 });
                     }
                     catch (System.Exception ex)
                     {
@@ -1374,7 +1427,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1 });
                     }
                     catch (System.Exception ex)
                     {
@@ -1419,9 +1472,13 @@ namespace KyoS.Web.Controllers
                             TcmClient = _context.TCMClient
                                                 .Include(d => d.Client)
                                                 .ThenInclude(d => d.LegalGuardian)
+                                                .Include(d => d.Casemanager)
+                                                .ThenInclude(d => d.Clinic)
                                                 .FirstOrDefault(n => n.Id == id),
                             Date = DateTime.Now,
                             Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             IdTCMClient = id,
                             TcmClient_FK = id,
                             AdmissionedFor = user_logged.FullName
@@ -1457,7 +1514,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeWelcomeEntity IntakeForeignEntity = await _converterHelper.ToTCMIntakeWelcomeEntity(IntakeViewModel, false);
+                TCMIntakeWelcomeEntity IntakeForeignEntity = await _converterHelper.ToTCMIntakeWelcomeEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeForeignEntity.Id == 0)
                 {
@@ -1466,7 +1523,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1 });
                     }
                     catch (System.Exception ex)
                     {
@@ -1480,7 +1537,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1 });
                     }
                     catch (System.Exception ex)
                     {
@@ -1495,7 +1552,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> ClientsDocuments(int id = 0)
+        public async Task<IActionResult> ClientsDocuments(int id = 0, int idTCMCLient = 0)
         {
            
             UserEntity user_logged = await _context.Users
@@ -1513,7 +1570,9 @@ namespace KyoS.Web.Controllers
                                                        .Include(n => n.Clinic)
                                                        .Include(n => n.Documents)
                                                        .FirstOrDefaultAsync(n => n.Id == id);
-                return View(await _converterHelper.ToClientViewModel(Client,user_logged.Id));
+                ClientViewModel model = await _converterHelper.ToClientViewModel(Client, user_logged.Id);
+                model.IdTCMClient = idTCMCLient;
+                return View(model);
             }
         }
 
@@ -1615,7 +1674,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult CreateTCMFeeAgreement(int id = 0)
+        public IActionResult CreateTCMFeeAgreement(int id = 0, int idTCMCLient = 0)
         {
 
             UserEntity user_logged = _context.Users
@@ -1645,7 +1704,7 @@ namespace KyoS.Web.Controllers
                             DateSignatureLegalGuardian = DateTime.Now,
                             DateSignaturePerson = DateTime.Now,
                             AdmissionedFor = user_logged.FullName,
-
+                            IdTCMClient = idTCMCLient
                         };
                         if (model.Client.LegalGuardian == null)
                             model.Client.LegalGuardian = new LegalGuardianEntity();
@@ -1655,8 +1714,9 @@ namespace KyoS.Web.Controllers
                     {
                         if (intakefeeAgreement.Client.LegalGuardian == null)
                             intakefeeAgreement.Client.LegalGuardian = new LegalGuardianEntity();
-                        model = _converterHelper.ToIntakeFeeAgreementViewModel(intakefeeAgreement);
 
+                        model = _converterHelper.ToIntakeFeeAgreementViewModel(intakefeeAgreement);
+                        model.IdTCMClient = idTCMCLient;
                         return View(model);
                     }
 
@@ -1686,7 +1746,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 2 });
                     }
                     catch (System.Exception ex)
                     {
@@ -1700,7 +1760,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 2 });
                     }
                     catch (System.Exception ex)
                     {
@@ -1750,6 +1810,8 @@ namespace KyoS.Web.Controllers
                                                 .FirstOrDefault(n => n.Id == id),
                             Date = DateTime.Now,
                             Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             IdTCMClient = id,
                             TcmClient_FK = id,
                             AdmissionedFor = user_logged.FullName
@@ -1785,7 +1847,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeNonClinicalLogEntity IntakeNonClinicalEntity = await _converterHelper.ToTCMIntakeNonClinicalLogEntity(IntakeViewModel, false);
+                TCMIntakeNonClinicalLogEntity IntakeNonClinicalEntity = await _converterHelper.ToTCMIntakeNonClinicalLogEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeNonClinicalEntity.Id == 0)
                 {
@@ -1794,7 +1856,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 2 });
                     }
                     catch (System.Exception ex)
                     {
@@ -1808,7 +1870,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 2 });
                     }
                     catch (System.Exception ex)
                     {
@@ -1858,6 +1920,8 @@ namespace KyoS.Web.Controllers
                                                 .FirstOrDefault(n => n.Id == id),
                             Date = DateTime.Now,
                             Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             IdTCMClient = id,
                             TcmClient_FK = id,
                             AdmissionedFor = user_logged.FullName
@@ -1893,7 +1957,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeMiniMentalEntity IntakeMiniMenatalEntity = await _converterHelper.ToTCMIntakeMiniMenatalEntity(IntakeViewModel, false);
+                TCMIntakeMiniMentalEntity IntakeMiniMenatalEntity = await _converterHelper.ToTCMIntakeMiniMenatalEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeMiniMenatalEntity.Id == 0)
                 {
@@ -1931,7 +1995,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult CreateTCMMedicalhistory(int id = 0)
+        public IActionResult CreateTCMMedicalhistory(int id = 0, int idTCMClient = 0)
         {
 
             UserEntity user_logged = _context.Users
@@ -2110,6 +2174,7 @@ namespace KyoS.Web.Controllers
                         };
                         if (model.Client.LegalGuardian == null)
                             model.Client.LegalGuardian = new LegalGuardianEntity();
+                        model.IdTCMClient = idTCMClient;
                         return View(model);
                     }
                     else
@@ -2117,7 +2182,7 @@ namespace KyoS.Web.Controllers
                         if (intakeMedicalHistory.Client.LegalGuardian == null)
                             intakeMedicalHistory.Client.LegalGuardian = new LegalGuardianEntity();
                         model = _converterHelper.ToIntakeMedicalHistoryViewModel(intakeMedicalHistory);
-
+                        model.IdTCMClient = idTCMClient;
                         return View(model);
                     }
 
@@ -2176,7 +2241,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult CreateTCMMedication(int id = 0)
+        public IActionResult CreateTCMMedication(int id = 0, int idTCMClient = 0)
         {
 
             UserEntity user_logged = _context.Users
@@ -2205,6 +2270,7 @@ namespace KyoS.Web.Controllers
                     };
                     if (model.Client.MedicationList == null)
                         model.Client.MedicationList = new List<MedicationEntity>();
+                    model.IdTCMClient = idTCMClient;
                     return View(model);
                 }
             }
@@ -2221,6 +2287,7 @@ namespace KyoS.Web.Controllers
             };
             if (model.Client.MedicationList == null)
                 model.Client.MedicationList = new List<MedicationEntity>();
+            model.IdTCMClient = idTCMClient;
             return View(model);
         }
 
@@ -2244,7 +2311,7 @@ namespace KyoS.Web.Controllers
                     {
                         await _context.SaveChangesAsync();
 
-                        return RedirectToAction("CreateTCMMedication", new { id = MedicationViewModel.IdClient });
+                        return RedirectToAction("CreateTCMMedication", new { id = MedicationViewModel.IdClient, IdTCMClient = MedicationViewModel.IdTCMClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -2407,6 +2474,8 @@ namespace KyoS.Web.Controllers
                                                 .FirstOrDefault(n => n.Id == id),
                             Date = DateTime.Now,
                             Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
                             IdTCMClient = id,
                             TcmClient_FK = id,
                             AdmissionedFor = user_logged.FullName,
@@ -2466,7 +2535,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeCoordinationCareEntity IntakeCoordination = await _converterHelper.ToTCMIntakeCoordinationCareEntity(IntakeViewModel, false);
+                TCMIntakeCoordinationCareEntity IntakeCoordination = await _converterHelper.ToTCMIntakeCoordinationCareEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeCoordination.Id == 0)
                 {
@@ -2475,7 +2544,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 3 });
                     }
                     catch (System.Exception ex)
                     {
@@ -2489,7 +2558,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 3 });
                     }
                     catch (System.Exception ex)
                     {
@@ -2524,6 +2593,8 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.TCMIntakeWelcome)
                                                             .Include(n => n.Client)
                                                             .ThenInclude(n => n.Documents)
+                                                            .Include(n => n.Client.Psychiatrist)
+                                                            .Include(n => n.Client.Doctor)
                                                             .Include(n => n.Client.IntakeFeeAgreement)
                                                             .Include(n => n.Client.IntakeMedicalHistory)
                                                             .Include(n => n.Client.MedicationList)
@@ -2532,6 +2603,19 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.TCMIntakeCoordinationCare)
                                                             .Include(n => n.TcmServicePlan)
                                                             .ThenInclude(n => n.TCMAdendum)
+                                                            .Include(n => n.TcmServicePlan)
+                                                            .ThenInclude(n => n.TCMServicePlanReview)
+                                                            .Include(n => n.TcmServicePlan)
+                                                            .ThenInclude(n => n.TCMDischarge)
+                                                            .Include(n => n.TcmIntakeAppendixJ)
+                                                            .Include(n => n.TcmInterventionLog)
+                                                            .Include(n => n.TCMFarsFormList)
+                                                            .Include(n => n.TCMAssessment)
+                                                            .ThenInclude(n => n.HouseCompositionList)
+                                                            .ThenInclude(n => n.TcmAssessment.MedicationList)
+                                                            .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
+                                                            .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
+                                                            .Include(n => n.TCMNote)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
             List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
@@ -2549,5 +2633,351 @@ namespace KyoS.Web.Controllers
             ViewBag.Section = section.ToString();
             return View(TcmClientEntity);
         }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult CreateTCMAppendixJ(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakeAppendixJViewModel model;
+
+            if (User.IsInRole("CaseManager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakeAppendixJEntity intakeAppendixJ = _context.TCMIntakeAppendixJ
+                                                                     .Include(n => n.TcmClient)
+                                                                     .ThenInclude(n => n.Client)
+                                                                     .FirstOrDefault(n => n.TcmClient.Id == id);
+                    if (intakeAppendixJ == null)
+                    {
+                        model = new TCMIntakeAppendixJViewModel
+                        {
+                            TcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .FirstOrDefault(n => n.Id == id),
+                            IdTCMClient = id,
+                            TcmClient_FK = id,
+                            Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            AdmissionedFor = user_logged.FullName,
+                            Approved = 0,
+                            Date = DateTime.Now,
+                            HasBeen = false,
+                            HasHad = false,
+                            IsAt = false,
+                            IsAwaiting = false,
+                            IsExperiencing = false,
+                            SupervisorSignatureDate = DateTime.Now,
+                            TcmSupervisor = new TCMSupervisorEntity()
+
+                        };
+                       
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToTCMIntakeAppendixJViewModel(intakeAppendixJ);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> CreateTCMAppendixJ(TCMIntakeAppendixJViewModel AppendixJViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMIntakeAppendixJEntity AppendixJEntity = await _converterHelper.ToTCMIntakeAppendixJEntity(AppendixJViewModel, false, user_logged.UserName);
+
+                if (AppendixJEntity.Id == 0)
+                {
+                    AppendixJEntity.TcmClient = null;
+                    _context.TCMIntakeAppendixJ.Add(AppendixJEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = AppendixJViewModel.IdTCMClient, section = 4 });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    AppendixJEntity.TcmClient = null;
+                    _context.TCMIntakeAppendixJ.Update(AppendixJEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = AppendixJViewModel.IdTCMClient , section = 4});
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            AppendixJViewModel.TcmClient = _context.TCMClient.Find(AppendixJViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMAppendixJ", AppendixJViewModel) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult CreateTCMInterventionLog(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakeInterventionLogViewModel model;
+
+            if (User.IsInRole("CaseManager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakeInterventionLogEntity interventionLog = _context.TCMIntakeInterventionLog
+                                                                             .Include(n => n.TcmClient)
+                                                                             .ThenInclude(n => n.Client)
+                                                                             .Include(n => n.TcmClient)
+                                                                             .ThenInclude(n => n.Casemanager)
+                                                                             .Include(n => n.InterventionList)
+                                                                             .FirstOrDefault(n => n.InterventionList.Count() > 0);
+                    if(interventionLog == null)
+                    {
+                        model = new TCMIntakeInterventionLogViewModel
+                        {
+                            TcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .Include(n => n.Casemanager)
+                                                .FirstOrDefault(n => n.Id == id),
+                            IdTCMClient = id,
+                            TcmClient_FK = id,
+                            Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            InterventionList = new List<TCMIntakeInterventionEntity>()
+                  
+                        };
+
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToTCMIntakeInterventionLogViewModel(interventionLog);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("TCMIntakeSectionDashboard", "Intakes", new { id = id, section = 5 });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> CreateTCMInterventionLog(TCMIntakeInterventionLogViewModel interventionLogViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMIntakeInterventionLogEntity InterventionLogEntity = await _converterHelper.ToTCMIntakeInterventionLogEntity(interventionLogViewModel, true, user_logged.UserName);
+
+                InterventionLogEntity.TcmClient = null;
+                _context.TCMIntakeInterventionLog.Add(InterventionLogEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("TCMIntakeSectionDashboard", new { id = interventionLogViewModel.IdTCMClient, section = 5 });
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+
+            }
+
+            interventionLogViewModel.TcmClient = _context.TCMClient.Find(interventionLogViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMInterventionLog", interventionLogViewModel) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult EditTCMInterventionLog(int id = 0)
+        {
+            TCMIntakeInterventionLogViewModel model;
+
+            if (User.IsInRole("CaseManager"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic != null)
+                {
+
+                    TCMIntakeInterventionLogEntity TcmIntervention = _context.TCMIntakeInterventionLog
+                                                                             .Include(b => b.TcmClient)
+                                                                             .ThenInclude(b => b.Client)
+                                                                             .Include(b => b.TcmClient.Casemanager)
+                                                                             .Include(b => b.InterventionList)
+                                                                             .FirstOrDefault(m => m.Id == id);
+                    if (TcmIntervention == null)
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+                    else
+                    {
+
+                        model = _converterHelper.ToTCMIntakeInterventionLogViewModel(TcmIntervention);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            model = new TCMIntakeInterventionLogViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> EditTCMInterventionLog(TCMIntakeInterventionLogViewModel tcmInterLogViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMIntakeInterventionLogEntity tcmInterLogEntity = await _converterHelper.ToTCMIntakeInterventionLogEntity(tcmInterLogViewModel, false, user_logged.UserName);
+                _context.TCMIntakeInterventionLog.Update(tcmInterLogEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("TCMIntakeSectionDashboard", new { id = tcmInterLogEntity.TcmClient_FK, section = 5 });
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditTCMInterventionLog", tcmInterLogViewModel) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult CreateTCMIntervention(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakeInterventionViewModel model;
+
+            if (User.IsInRole("CaseManager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakeInterventionLogEntity interventionLog = _context.TCMIntakeInterventionLog
+                                                                                 .Include(n => n.TcmClient)
+                                                                                 .ThenInclude(n => n.Client)
+                                                                                 .Include(n => n.TcmClient.Casemanager)
+                                                                                 .FirstOrDefault(n => n.Id == id);
+                    if (interventionLog != null)
+                    {
+                        model = new TCMIntakeInterventionViewModel
+                        {
+                            TcmInterventionLog = interventionLog,
+                            Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            Activity = "",
+                            Date = DateTime.Now,
+                            IdInterventionLog = id
+                                                      
+                        };
+
+                        return View(model);
+                    }
+                    else
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+
+                }
+            }
+
+            return RedirectToAction("TCMIntakeSectionDashboard", "Intakes", new { id = id, section = 5 });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> CreateTCMIntervention(TCMIntakeInterventionViewModel interventionViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMIntakeInterventionEntity InterventionEntity = await _converterHelper.ToTCMIntakeInterventionEntity(interventionViewModel, true, user_logged.UserName);
+
+                _context.TCMIntakeIntervention.Add(InterventionEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<TCMIntakeInterventionEntity> salida = await _context.TCMIntakeIntervention
+                                                                             .Include(n => n.TcmInterventionLog)
+                                                                             .Where(m => m.TcmInterventionLog.Id == interventionViewModel.IdInterventionLog)
+                                                                             .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMIntakeInterventionLIst", salida) });
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+
+            }
+
+            //interventionLogViewModel.TcmClient = _context.TCMClient.Find(interventionLogViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMInterventionLog", interventionViewModel) });
+        }
+
+
     }
+
+
 }

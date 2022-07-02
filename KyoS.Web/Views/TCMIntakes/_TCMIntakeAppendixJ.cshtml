@@ -1,0 +1,51 @@
+﻿@model KyoS.Web.Models.TCMIntakeAppendixJViewModel
+<div class="col-md-12">
+    <pre>
+    Recipient's Name: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)</strong>                                Medicaid ID# : <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.MedicaidID)</strong>
+
+    Is hereby certified as meeting all of the following adult mental health targeted case management criteria. 
+        1. Is enrolled in a Department of Children and Families adult mental health target population
+        2. Has a mental health disability (i.e., severe and persistent mental illness) which requires advocacy
+           for and coordination of services to maintain or improve level of functioning;
+        3. Requires services to assist in attaining self sufficiency and satisfaction in the living, learning, work
+           and social environments of choice;
+        4. Lacks a natural support system with the ability to access needed medical, social, educational and
+           other services;
+        5. Requires ongoing assistance to access or maintain needed care consistently within the service
+            delivery system;
+        6. Has a mental health disability (i.e., severe and persistent mental illness) duration that, based upon
+           professional judgment, will last for a minimum of one year;
+        7. Is not receiving duplicate case management services from another provider;
+        8. Meets at least one of the following requirements (check all that apply):
+            a.  <input type="checkbox" asp-for="IsAwaiting" />  Is awaiting admission to or has been discharged from a state mental health treatment facility;
+            b.  <input type="checkbox" asp-for="HasBeen" />  Has been discharged from a mental health residential treatment facility;
+            c.  <input type="checkbox" asp-for="HasHad" />  Has had more than one admission to a crisis stabilization unit (CSU), short-term
+                    residential facility (SRT), inpatient psychiatric unit, or any combination of these
+                    facilities in the past 12 months;
+            d.  <input type="checkbox" asp-for="IsAt" />  Is at risk of institutionalization for mental health reasons (provide explanation);
+            e.  <input type="checkbox" asp-for="IsExperiencing" />  Is experiencing long-term or acute episodes of mental impairment that may put him or
+                    her at risk of requiring more intensive services (provide explanation); or
+
+
+
+        9. Has relocated from a Department of Children and Families district or region where he or she was
+           receiving mental health targeted case management services.
+
+    
+</pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    
+    <strong>Employee signature date</strong>         <input asp-for="Date">     <strong>Legal Guardian signature date</strong>    <input asp-for="SupervisorSignatureDate">
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>      
+    
+    
+                                                                      
+    </pre>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+
+<br />

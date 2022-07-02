@@ -1,0 +1,29 @@
+﻿@model KyoS.Web.Models.TCMNoteViewModel
+    <div class="col-md-12">
+        <div class="col-md-2">
+            &nbsp;
+        </div>
+        <div class="col-md-8">
+            
+            
+                <div class="form-group col-md-6">
+                    <label asp-for="Outcome" class="control-label">Outcome of Service(s):</label>&nbsp;
+                    <textarea asp-for="Outcome" class="form-control" rows="5"></textarea>
+                    <span asp-validation-for="Outcome" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="NextStep" class="control-label">Next Step(s):</label>&nbsp;
+                    <textarea asp-for="NextStep" class="form-control" rows="5"></textarea>
+                    <span asp-validation-for="NextStep" class="text-danger"></span>
+                </div>
+                <pre>
+                 @Html.DisplayFor(modelItem => Model.CaseManager.Name)                                                        @Html.DisplayFor(modelItem => Model.CaseManager.Credentials)                      @Html.DisplayFor(modelItem => Model.CaseManagerDate)
+                <strong>_______________________</strong>         <strong>______________________</strong>         <strong>___________________</strong>         <strong>___________________</strong>   
+                <strong>Case Manager Print Name</strong>         <strong>Case Manager Signature</strong>             <strong>Credentials</strong>                    <strong>Date</strong> 
+            </pre>  
+        </div>
+        <div class="col-md-2">
+            &nbsp;
+        </div>
+    </div>
+    <br />

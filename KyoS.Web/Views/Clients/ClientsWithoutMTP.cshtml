@@ -84,7 +84,7 @@
                                       @Html.DisplayFor(modelItem => item.Service)
                                   </td>
                                   <td align="right">
-                                      @if (User.IsInRole("Supervisor"))
+                                      @if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
                                       {
                                           <a asp-action="Create" asp-route-idClient="@item.Id" asp-controller="MTPs" class="btn btn-primary" title="Create MTP"><i class="glyphicon glyphicon-plus"></i></a>
                                       }

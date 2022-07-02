@@ -1,0 +1,58 @@
+﻿@model KyoS.Web.Models.TCMIntakeInterventionLogViewModel
+@{
+    ViewData["Title"] = "Crear Intervention Log";
+}
+
+<!DOCTYPE html>
+
+<html>
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("TCM Intake Section 5", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.TcmClient.Id, section = 5 })
+            </li>
+            <li class="active">Edit</li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+    <h4>Crear Intervention Log</h4>
+    <hr />
+
+    <div class="row">
+
+        <form asp-action="CreateTCMInterventionLog" enctype="multipart/form-data">
+            <div class="row col-md-12">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="IdTCMClient" />
+                <input type="hidden" asp-for="TcmClient_FK" />
+                <input type="hidden" asp-for="CreatedOn" />
+                <input type="hidden" asp-for="CreatedBy" />
+                <partial name="_TCMInterventionLog" />
+
+                <div class="form-group col-md-12">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.IdTCMClient" asp-route-section="5" asp-controller="TCMIntakes" class="btn btn-success">Back</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+</body>
+</html>
+
+<partial name="_ModalPopup" />
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+}

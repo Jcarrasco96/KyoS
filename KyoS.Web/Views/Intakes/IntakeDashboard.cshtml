@@ -15,10 +15,10 @@
 </div>
 <div>
 
-<div class="row">             
+    <div class="row">
         <div class="container-fluid">
             <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default"> Intake - @Model.Name </span></h4>
-        </div>       
+        </div>
         <div class="col-md-12">
             <hr />
         </div>
@@ -121,6 +121,9 @@
         <div class="col-md-12">
             &nbsp;
         </div>
+        <div class="col-sm-3 col-md-1">
+            &nbsp;
+        </div>
         <div class="col-sm-3 col-md-2">
             @if (Model.IntakeOrientationChecklist == null)
             {
@@ -201,7 +204,10 @@
                 </div>
             }
         </div>
-        <div class="col-sm-3 col-md-2">
+        <div class="col-sm-3 col-md-1">
+            &nbsp;
+        </div>
+        @* <div class="col-sm-3 col-md-2">
             @if (Model.IntakeMedicalHistory == null)
             {
                 <div class="thumbnail list-group-item list-group-item-text">
@@ -216,6 +222,6 @@
                     <p style="text-align:right"><a asp-action="CreateMedicalhistory" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
                 </div>
             }
-        </div>
+        </div>*@
     </div>
 </div>

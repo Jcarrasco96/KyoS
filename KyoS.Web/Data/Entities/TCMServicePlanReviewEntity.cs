@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using KyoS.Web.Data.Contracts;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class TCMServicePlanReviewEntity
+    public class TCMServicePlanReviewEntity : AuditableEntity
     {
         public int Id { get; set; }
+
+        public int TcmServicePlan_FK { get; set; }
 
         [Display(Name = "Start Time")]
         [DataType(DataType.Date)]
