@@ -447,6 +447,44 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction(nameof(Index), "Incidents");
             }
+            if (User.IsInRole("Documents_Assistant"))
+            {
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                List<ClientEntity> client = await _context.Clients
+                                                         .Include(c => c.MTPs)
+                                                         .Where(c => c.Clinic.Id == user_logged.Clinic.Id).ToListAsync();
+                client = client.Where(wc => wc.MTPs.Count == 0).ToList();
+                ViewBag.MTPMissing = client.Count.ToString();
+
+                ViewBag.PendingBIO = _context.Clients
+                                                    .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                               && wc.Bio == null)).ToString();
+
+                ViewBag.PendingInitialFars = _context.Clients
+                                                    .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                               && wc.FarsFormList.Count == 0)).ToString();
+
+                ViewBag.PendingFars = _context.FarsForm
+                                                  .Count(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && m.Status == FarsStatus.Pending)).ToString();
+
+                ViewBag.PendingAddendum = _context.Adendums
+                                                  .Count(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && m.Status == AdendumStatus.Pending)).ToString();
+
+                ViewBag.PendingMTPReview = _context.MTPReviews
+                                                  .Count(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && m.Status == AdendumStatus.Pending)).ToString();
+
+                ViewBag.PendingDischarge = _context.Discharge
+                                                  .Count(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && m.Status == DischargeStatus.Pending)).ToString();
+
+               
+            }
             return View();
         }
     }

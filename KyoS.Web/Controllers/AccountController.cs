@@ -146,7 +146,7 @@ namespace KyoS.Web.Controllers
                         PhoneNumber = string.Empty,
                         Address = string.Empty,
                         Document = string.Empty,
-                        UserType = (model.RoleId == 1) ? UserType.Facilitator : (model.RoleId == 2) ? UserType.Supervisor : (model.RoleId == 3) ? UserType.CaseManager : (model.RoleId == 4) ? UserType.TCMSupervisor : (model.RoleId == 5) ? UserType.Manager : UserType.Admin,
+                        UserType = (model.RoleId == 1) ? UserType.Documents_Assistant : (model.RoleId == 2) ? UserType.Facilitator : (model.RoleId == 3) ? UserType.Supervisor : (model.RoleId == 4) ? UserType.CaseManager : (model.RoleId == 5) ? UserType.TCMSupervisor : (model.RoleId == 6) ? UserType.Manager : UserType.Admin,
                         Active = model.Active,
                         Clinic = (model.IdClinic != 0) ? _context.Clinics.FirstOrDefault(c => c.Id == model.IdClinic) : null                    
                     };
@@ -247,9 +247,9 @@ namespace KyoS.Web.Controllers
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
-                RoleId = (user.UserType == UserType.Facilitator) ? 1 : (user.UserType == UserType.Supervisor) ? 2 : (user.UserType == UserType.CaseManager) ? 3
-                                                                     : (user.UserType == UserType.TCMSupervisor) ? 4 : (user.UserType == UserType.Manager) ? 5
-                                                                     : (user.UserType == UserType.Admin) ? 6 : 0,
+                RoleId = (user.UserType == UserType.Documents_Assistant) ? 1 : (user.UserType == UserType.Facilitator) ? 2 : (user.UserType == UserType.Supervisor) ? 3
+                                                                     : (user.UserType == UserType.CaseManager) ? 4 : (user.UserType == UserType.TCMSupervisor) ? 5
+                                                                     : (user.UserType == UserType.Manager) ? 6 : (user.UserType == UserType.Admin) ? 7 : 0,
                 Roles = _combosHelper.GetComboRoles(),
                 IdClinic = (user.Clinic != null) ? user.Clinic.Id : 0,
                 Clinics = _combosHelper.GetComboClinics(),
@@ -275,7 +275,7 @@ namespace KyoS.Web.Controllers
                     user.PhoneNumber = string.Empty;
                     user.Address = string.Empty;
                     user.Document = string.Empty;
-                    user.UserType = (model.RoleId == 1) ? UserType.Facilitator : (model.RoleId == 2) ? UserType.Supervisor : (model.RoleId == 3) ? UserType.CaseManager : (model.RoleId == 4) ? UserType.TCMSupervisor : (model.RoleId == 5) ? UserType.Manager : UserType.Admin;
+                    user.UserType = (model.RoleId == 1) ? UserType.Documents_Assistant : (model.RoleId == 2) ? UserType.Facilitator : (model.RoleId == 3) ? UserType.Supervisor : (model.RoleId == 4) ? UserType.CaseManager : (model.RoleId == 5) ? UserType.TCMSupervisor : (model.RoleId == 6) ? UserType.Manager : UserType.Admin;
                     user.Active = model.Active;
                     user.Clinic = (model.IdClinic != 0) ? _context.Clinics.FirstOrDefault(c => c.Id == model.IdClinic) : null;
                     

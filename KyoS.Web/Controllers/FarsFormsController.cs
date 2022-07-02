@@ -35,7 +35,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -66,6 +66,15 @@ namespace KyoS.Web.Controllers
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
 
+                if (User.IsInRole("Documents_Assistant"))
+                    return View(await _context.Clients
+
+                                              .Include(f => f.FarsFormList)
+
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id && n.FarsFormList.Where(m => m.CreatedBy == user_logged.UserName).Count()>0)
+                                              .OrderBy(f => f.Name)
+                                              .ToListAsync());
+
                 if (User.IsInRole("Facilitator"))
                 {
                     return View(await _context.Clients
@@ -81,7 +90,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public IActionResult Create(int id = 0)
         {
 
@@ -152,6 +161,20 @@ namespace KyoS.Web.Controllers
                     model.RaterFMHI = supervisor.RaterFMHCertification;
                 }
 
+                DocumentsAssistantEntity documentsAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                if (User.IsInRole("Documents_Assistant") && documentsAssistant != null)
+                {
+                    model.RaterEducation = documentsAssistant.RaterEducation;
+                    model.RaterFMHI = documentsAssistant.RaterFMHCertification;
+                }
+
+                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                if (User.IsInRole("facilitator") && facilitator != null)
+                {
+                    model.RaterEducation = facilitator.RaterEducation;
+                    model.RaterFMHI = facilitator.RaterFMHCertification;
+                }
+
                 if (model.Client.FarsFormList == null)
                     model.Client.FarsFormList = new List<FarsFormEntity>();
                 return View(model);
@@ -162,7 +185,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> Create(FarsFormViewModel FarsFormViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -243,12 +266,12 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", FarsFormViewModel) });
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public IActionResult Edit(int id = 0, int origin = 0)
         {
             FarsFormViewModel model;
 
-            if (User.IsInRole("Supervisor") || User.IsInRole("Facilitator"))
+            if (User.IsInRole("Supervisor") || User.IsInRole("Facilitator") || User.IsInRole("Documents_Assistant"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -284,7 +307,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> Edit(FarsFormViewModel farsFormViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -355,7 +378,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
         public IActionResult PrintFarsForm(int id)
         {
             FarsFormEntity entity = _context.FarsForm
@@ -395,7 +418,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> ClientswithoutFARS(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -434,7 +457,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> FinishEditingFars(int id)
         {
             FarsFormEntity fars = await _context.FarsForm.FirstOrDefaultAsync(n => n.Id == id);

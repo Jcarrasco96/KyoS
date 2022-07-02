@@ -32,7 +32,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Supervisor, Manager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Manager, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -82,6 +82,15 @@ namespace KyoS.Web.Controllers
                                               .Where(m => m.Client.Clinic.Id == clinic.Id)
                                               .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
                     }
+                    if (User.IsInRole("Documents_Assistant"))
+                    {
+                        return View(await _context.MTPs
+                                              .Include(m => m.Client)
+                                              .ThenInclude(c => c.Clinic)
+                                              .Include(m => m.MtpReviewList)
+                                              .Where(m => m.Client.Clinic.Id == clinic.Id && m.CreatedBy == user_logged.UserName)
+                                              .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+                    }
                     return RedirectToAction("Home/Error404");
                 }
                 else
@@ -89,7 +98,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public IActionResult Create(int id = 0, int idClient = 0, bool review = false)
         {
             if (id == 1)
@@ -153,7 +162,8 @@ namespace KyoS.Web.Controllers
                             Client = _context.Clients
                                              .Include(c => c.Clients_Diagnostics)
                                              .ThenInclude(cd => cd.Diagnostic)
-                                             .First(n => n.Id == idClient)
+                                             .First(n => n.Id == idClient),
+                            AdmissionedFor = user_logged.FullName
                         };
                     }
                     else
@@ -183,7 +193,8 @@ namespace KyoS.Web.Controllers
                             Health = false,
                             Paint = false,
                             Other = false,
-                            Client = new ClientEntity()
+                            Client = new ClientEntity(),
+                            AdmissionedFor = user_logged.FullNameWithDocument
 
                         };
                         model.Client.Clients_Diagnostics = new List<Client_Diagnostic>();
@@ -204,7 +215,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> Create(MTPViewModel mtpViewModel, IFormCollection form)
         {
             if (ModelState.IsValid)
@@ -234,13 +245,14 @@ namespace KyoS.Web.Controllers
                             LevelCare = mtpViewModel.LevelCare,
                             InitialDischargeCriteria = mtpViewModel.InitialDischargeCriteria,
                             Setting = form["Setting"].ToString(),
-                            Review = mtpViewModel.Review
+                            Review = mtpViewModel.Review,
+                            AdmissionedFor = user_logged.FullNameWithDocument
                         };
                         return View(model);
                     }
                 }
 
-                MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, true);
+                MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, true, user_logged.UserName);
                 mtpEntity.Setting = form["Setting"].ToString();
 
                 //set all mtps of this client non active
@@ -272,7 +284,7 @@ namespace KyoS.Web.Controllers
             return View(mtpViewModel);
         }
 
-        [Authorize(Roles = "Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager, Documents_Assistant")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -309,7 +321,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -336,7 +348,7 @@ namespace KyoS.Web.Controllers
 
             MTPViewModel mtpViewModel = _converterHelper.ToMTPViewModel(mtpEntity);
 
-            if (User.IsInRole("Supervisor"))
+            if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
             {
 
                 List<SelectListItem> list = new List<SelectListItem>();
@@ -357,7 +369,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> Edit(int id, MTPViewModel mtpViewModel, IFormCollection form)
         {
             if (id != mtpViewModel.Id)
@@ -375,7 +387,7 @@ namespace KyoS.Web.Controllers
                     mtpViewModel.InitialDischargeCriteria = (mtpViewModel.InitialDischargeCriteria.Last() == '.') ? mtpViewModel.InitialDischargeCriteria : $"{mtpViewModel.InitialDischargeCriteria}.";
                 }
 
-                MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, false);
+                MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, false, user_logged.UserName);
 
                 string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
@@ -401,13 +413,14 @@ namespace KyoS.Web.Controllers
                             Frecuency = mtpViewModel.Frecuency,
                             LevelCare = mtpViewModel.LevelCare,
                             InitialDischargeCriteria = mtpViewModel.InitialDischargeCriteria,
-                            Setting = form["Setting"].ToString()
+                            Setting = form["Setting"].ToString(),
+                            AdmissionedFor = mtpViewModel.AdmissionedFor
                         };
                         return View(model);
                     }
                 }
                 // mtpEntity.MtpReview = await _context.MTPReviews.FirstOrDefaultAsync(u => u.MTP_FK == mtpViewModel.Id);
-                if ((User.IsInRole("Supervisor"))) //|| ((mtpEntity.MtpReview != null) && (mtpEntity.MtpReview.CreatedBy == user_logged.Id)))
+                if ((User.IsInRole("Supervisor")) || (User.IsInRole("Documents_Assistant"))) //|| ((mtpEntity.MtpReview != null) && (mtpEntity.MtpReview.CreatedBy == user_logged.Id)))
                 {
                     mtpEntity.Setting = form["Setting"].ToString();
                     _context.Update(mtpEntity);
@@ -432,7 +445,7 @@ namespace KyoS.Web.Controllers
             return View(mtpViewModel);
         }
 
-        [Authorize(Roles = "Supervisor, Manager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Manager, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -460,7 +473,7 @@ namespace KyoS.Web.Controllers
             return View(mtpEntity);
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> UpdateGoals(int? id, int idError = 0)
         {
             if (id == null)
@@ -490,7 +503,7 @@ namespace KyoS.Web.Controllers
             return View(mtpEntity);
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> CreateGoal(int? id, int idAdendum)
         {
             if (id == null)
@@ -522,7 +535,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> CreateGoal(int id, GoalViewModel model)
         {
             if (id != model.Id)
@@ -585,7 +598,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> CreateGoalModal(int? id, int idAdendum)
         {
             if (id == null)
@@ -617,7 +630,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> CreateGoalModal(int id, GoalViewModel model)
         {
             if (id != model.Id)
@@ -781,7 +794,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalMTPReviewModal", model) });
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> DeleteGoal(int? id, int oringin = 0)
         {
             if (id == null)
@@ -813,7 +826,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> EditGoal(int? id)
         {
             if (id == null)
@@ -837,7 +850,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> EditGoal(int id, GoalViewModel model)
         {
             if (id != model.Id)
@@ -900,7 +913,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> EditGoalModal(int? id)
         {
             if (id == null)
@@ -924,7 +937,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> EditGoalModal(int id, GoalViewModel model)
         {
             if (id != model.Id)
@@ -1111,7 +1124,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditGoalMTPReviewModal", model) });
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> UpdateObjectives(int? id, int idError = 0)
         {
             if (id == null)
@@ -1136,7 +1149,7 @@ namespace KyoS.Web.Controllers
             return View(goalEntity);
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> CreateObjective(int? id)
         {
             if (id == null)
@@ -1172,7 +1185,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> CreateObjective(ObjectiveViewModel model, IFormCollection form)
         {
             if (ModelState.IsValid)
@@ -1261,7 +1274,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> CreateObjectiveModal(int? id)
         {
             if (id == null)
@@ -1297,7 +1310,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> CreateObjectiveModal(ObjectiveViewModel model, IFormCollection form)
         {
             if (ModelState.IsValid)
@@ -1411,7 +1424,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjectiveModal", model) });
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> CreateObjectiveMTPReviewModal(int? id, int idReview)
         {
             if (id == null)
@@ -1559,7 +1572,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjectiveMTPReviewModal", model) });
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> DeleteObjective(int? id, int origin = 0)
         {
             if (id == null)
@@ -1636,7 +1649,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> EditObjective(int? id)
         {
             if (id == null)
@@ -1671,7 +1684,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> EditObjective(ObjectiveViewModel model, IFormCollection form)
         {
             GoalEntity goal = await _context.Goals
@@ -1750,7 +1763,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> EditObjectiveModal(int? id)
         {
             if (id == null)
@@ -1777,7 +1790,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> EditObjectiveModal(ObjectiveViewModel model, IFormCollection form)
         {
             GoalEntity goal = await _context.Goals
@@ -2699,7 +2712,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> DeleteGoalOfAddendum(int? id)
         {
             if (id == null)

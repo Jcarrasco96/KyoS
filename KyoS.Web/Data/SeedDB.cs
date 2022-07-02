@@ -80,6 +80,7 @@ namespace KyoS.Web.Data
             await _userHelper.CheckRoleAsync(UserType.Facilitator.ToString());
             await _userHelper.CheckRoleAsync(UserType.CaseManager.ToString());
             await _userHelper.CheckRoleAsync(UserType.TCMSupervisor.ToString());
+            await _userHelper.CheckRoleAsync(UserType.Documents_Assistant.ToString());
         }
 
         private async Task CheckClassificationAsync(string classification)

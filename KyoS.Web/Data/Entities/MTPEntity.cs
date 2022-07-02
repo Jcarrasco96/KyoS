@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using KyoS.Common.Enums;
+using KyoS.Web.Data.Contracts;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class MTPEntity
+    public class MTPEntity : AuditableEntity
     {
         public int Id { get; set; }
 
@@ -116,6 +118,6 @@ namespace KyoS.Web.Data.Entities
         public bool Other { get; set; }
         public string OtherWhere { get; set; }
 
-
+        public string AdmissionedFor { get; set; }
     }
 }

@@ -22,7 +22,7 @@ namespace KyoS.Web.Helpers
         Task<ClientViewModel> ToClientViewModel(ClientEntity model, string userId);
         Task<SupervisorEntity> ToSupervisorEntity(SupervisorViewModel model, string signaturePath, bool isNew);
         SupervisorViewModel ToSupervisorViewModel(SupervisorEntity model, int idClinic);
-        Task<MTPEntity> ToMTPEntity(MTPViewModel model, bool isNew);
+        Task<MTPEntity> ToMTPEntity(MTPViewModel model, bool isNew, string userId);
         MTPViewModel ToMTPViewModel(MTPEntity model);       
         Task<GoalEntity> ToGoalEntity(GoalViewModel model, bool isNew);
         GoalViewModel ToGoalViewModel(GoalEntity model);
@@ -90,7 +90,7 @@ namespace KyoS.Web.Helpers
         MedicationViewModel ToMedicationViewModel(MedicationEntity model);
         Task<FarsFormEntity> ToFarsFormEntity(FarsFormViewModel model, bool isNew, string userId);
         FarsFormViewModel ToFarsFormViewModel(FarsFormEntity model);
-        Task<BioEntity> ToBioEntity(BioViewModel model, bool isNew);
+        Task<BioEntity> ToBioEntity(BioViewModel model, bool isNew, string userId);
         BioViewModel ToBioViewModel(BioEntity model);
         Task<Bio_BehavioralHistoryEntity> ToBio_BehaviorEntity(Bio_BehavioralHistoryViewModel model, bool isNew);
         Bio_BehavioralHistoryViewModel ToBio_BehaviorViewModel(Bio_BehavioralHistoryEntity model);
@@ -178,6 +178,7 @@ namespace KyoS.Web.Helpers
         TCMNoteViewModel ToTCMNoteViewModel(TCMNoteEntity model);
         Task<TCMNoteActivityEntity> ToTCMNoteActivityEntity(TCMNoteActivityViewModel model, bool isNew, string userId);
         TCMNoteActivityViewModel ToTCMNoteActivityViewModel(TCMNoteActivityEntity model);
-
+        Task<DocumentsAssistantEntity> ToDocumentsAssistantEntity(DocumentsAssistantViewModel model, string signaturePath, bool isNew);
+        DocumentsAssistantViewModel ToDocumentsAssistantViewModel(DocumentsAssistantEntity model, int idClinic);
     }
 }

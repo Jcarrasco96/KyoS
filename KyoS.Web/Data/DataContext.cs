@@ -118,6 +118,7 @@ namespace KyoS.Web.Data
         public DbSet<TCMAssessmentSurgeryEntity> TCMAssessmentSurgery { get; set; }
         public DbSet<TCMNoteEntity> TCMNote { get; set; }
         public DbSet<TCMNoteActivityEntity> TCMNoteActivity { get; set; }
+        public DbSet<DocumentsAssistantEntity> DocumentsAssistant { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -547,6 +548,9 @@ namespace KyoS.Web.Data
                         .WithOne(n => n.TCMNote)
                         .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<DocumentsAssistantEntity>()
+                       .HasIndex(s => s.Name)
+                       .IsUnique();
         }
     }
 }

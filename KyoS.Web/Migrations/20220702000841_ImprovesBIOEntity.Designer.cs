@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220702000841_ImprovesBIOEntity")]
+    partial class ImprovesBIOEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1441,49 +1443,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("DocumentsTemp");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.DocumentsAssistantEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ClinicId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Firm")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LinkedUser")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("RaterEducation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RaterFMHCertification")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SignaturePath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClinicId");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("DocumentsAssistant");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.EmergencyContactEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -1560,12 +1519,6 @@ namespace KyoS.Web.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("RaterEducation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RaterFMHCertification")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SignaturePath")
                         .HasColumnType("nvarchar(max)");
@@ -8815,15 +8768,6 @@ namespace KyoS.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Client");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.DocumentsAssistantEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
-                        .WithMany()
-                        .HasForeignKey("ClinicId");
-
-                    b.Navigation("Clinic");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.FacilitatorEntity", b =>

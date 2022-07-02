@@ -423,7 +423,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<MTPEntity> ToMTPEntity(MTPViewModel model, bool isNew)
+        public async Task<MTPEntity> ToMTPEntity(MTPViewModel model, bool isNew, string userId)
         {
             return new MTPEntity
             {
@@ -479,9 +479,14 @@ namespace KyoS.Web.Helpers
                 RationaleForUpdate = model.RationaleForUpdate,
                 Setting = model.Setting,
                 Substance = model.Substance,
-                SubstanceWhere = model.SubstanceWhere
+                SubstanceWhere = model.SubstanceWhere,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
 
-        };
+            };
         }
 
         public MTPViewModel ToMTPViewModel(MTPEntity mtpEntity)
@@ -543,7 +548,11 @@ namespace KyoS.Web.Helpers
                 Substance = mtpEntity.Substance,
                 SubstanceWhere = mtpEntity.SubstanceWhere,
                 Client = mtpEntity.Client,
-                Goals = mtpEntity.Goals
+                Goals = mtpEntity.Goals,
+                CreatedBy = mtpEntity.CreatedBy,
+                CreatedOn = mtpEntity.CreatedOn,
+                LastModifiedBy = mtpEntity.LastModifiedBy,
+                LastModifiedOn = mtpEntity.LastModifiedOn
             };
         }        
 
@@ -2848,7 +2857,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<BioEntity> ToBioEntity(BioViewModel model, bool isNew)
+        public async Task<BioEntity> ToBioEntity(BioViewModel model, bool isNew, string userId)
         {
             return new BioEntity
             {
@@ -3038,8 +3047,13 @@ namespace KyoS.Web.Helpers
                 ClientDenied = model.ClientDenied,
                 StartTime = model.StartTime,
                 EndTime = model.EndTime,
-                ForHowLong = model.ForHowLong
-                
+                ForHowLong = model.ForHowLong,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                AdmissionedFor = model.AdmissionedFor
+
             };
         }
 
@@ -3242,7 +3256,12 @@ namespace KyoS.Web.Helpers
                 IdIfSexuallyActive = Convert.ToInt32(model.IfSexuallyActive) + 1,
                 IfSexuallyActive_Status = _combosHelper.GetComboBio_IfSexuallyActive(),
                 IdRecentWeight = Convert.ToInt32(model.RecentWeight) + 1,
-                RecentWeight_Status = _combosHelper.GetComboBio_RecentWeight()
+                RecentWeight_Status = _combosHelper.GetComboBio_RecentWeight(),
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                AdmissionedFor = model.AdmissionedFor
 
             };
 
@@ -5664,6 +5683,38 @@ namespace KyoS.Web.Helpers
             };
 
             return salida;
+        }
+
+        public async Task<DocumentsAssistantEntity> ToDocumentsAssistantEntity(DocumentsAssistantViewModel model, string signaturePath, bool isNew)
+        {
+            return new DocumentsAssistantEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
+                Code = model.Code,
+                LinkedUser = _userHelper.GetUserNameById(model.IdUser),
+                Name = model.Name,
+                SignaturePath = signaturePath,
+                RaterEducation = model.RaterEducation,
+                RaterFMHCertification = model.RaterFMHCertification
+            };
+        }
+
+        public DocumentsAssistantViewModel ToDocumentsAssistantViewModel(DocumentsAssistantEntity model, int idClinic)
+        {
+            return new DocumentsAssistantViewModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Code = model.Code,
+                IdClinic = model.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics(),
+                IdUser = _userHelper.GetIdByUserName(model.LinkedUser),
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, idClinic),
+                SignaturePath = model.SignaturePath,
+                RaterEducation = model.RaterEducation,
+                RaterFMHCertification = model.RaterFMHCertification
+            };
         }
 
     }

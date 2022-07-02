@@ -35,7 +35,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -67,6 +67,17 @@ namespace KyoS.Web.Controllers
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
 
+                if (User.IsInRole("Documents_Assistant") )
+                    return View(await _context.Clients
+
+                                              .Include(f => f.Clients_Diagnostics)
+                                              .Include(g => g.Bio)
+                                              .Include(g => g.List_BehavioralHistory)
+
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id && n.Bio.CreatedBy == user_logged.UserName)
+                                              .OrderBy(f => f.Name)
+                                              .ToListAsync());
+
                 if (User.IsInRole("Facilitator"))
                 {
                     return View(await _context.Clients
@@ -82,7 +93,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public IActionResult Create(int id = 0)
         {
 
@@ -92,7 +103,7 @@ namespace KyoS.Web.Controllers
 
             BioViewModel model = new BioViewModel();
 
-            if (User.IsInRole("Supervisor"))
+            if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -299,7 +310,10 @@ namespace KyoS.Web.Controllers
                         ClientDenied = false,
                         /*StartTime = DateTime.Now,
                         EndTime = DateTime.Now,*/
-                        ForHowLong = 0
+                        ForHowLong = 0,
+                        CreatedOn = DateTime.Now,
+                        CreatedBy = user_logged.UserName,
+                        AdmissionedFor = user_logged.FullName
                     };
                     if (model.Client.LegalGuardian == null)
                         model.Client.LegalGuardian = new LegalGuardianEntity();
@@ -328,7 +342,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> Create(BioViewModel bioViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -340,7 +354,7 @@ namespace KyoS.Web.Controllers
                 BioEntity bioEntity = _context.Bio.Find(bioViewModel.Id);
                 if (bioEntity == null)
                 {
-                    bioEntity = await _converterHelper.ToBioEntity(bioViewModel, true);
+                    bioEntity = await _converterHelper.ToBioEntity(bioViewModel, true, user_logged.UserName);
                     _context.Bio.Add(bioEntity);
                     try
                     {
@@ -567,7 +581,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public IActionResult Edit(int id = 0)
         {
             BioEntity entity = _context.Bio
@@ -588,7 +602,7 @@ namespace KyoS.Web.Controllers
 
             BioViewModel model;
 
-            if (User.IsInRole("Supervisor"))
+            if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
             {
                 UserEntity user_logged = _context.Users
 
@@ -633,7 +647,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> Edit(BioViewModel bioViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -642,7 +656,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                BioEntity bioEntity = await _converterHelper.ToBioEntity(bioViewModel, false);
+                BioEntity bioEntity = await _converterHelper.ToBioEntity(bioViewModel, false, user_logged.UserName);
                 _context.Bio.Update(bioEntity);
                 try
                 {
@@ -659,7 +673,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", bioViewModel) });
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public IActionResult CreateBehavioral(int id = 0)
         {
 
@@ -669,7 +683,7 @@ namespace KyoS.Web.Controllers
 
             Bio_BehavioralHistoryViewModel model;
 
-            if (User.IsInRole("Supervisor"))
+            if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -700,6 +714,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public IActionResult CreateBehavioralModal(int id = 0)
         {
 
@@ -709,7 +724,7 @@ namespace KyoS.Web.Controllers
 
             Bio_BehavioralHistoryViewModel model;
 
-            if (User.IsInRole("Supervisor"))
+            if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -742,7 +757,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> CreateBehavioral(Bio_BehavioralHistoryViewModel bioViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -788,7 +803,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> CreateBehavioralModal(Bio_BehavioralHistoryViewModel bioViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -885,12 +900,12 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public IActionResult EditBehavioral(int id = 0)
         {
             Bio_BehavioralHistoryViewModel model;
 
-            if (User.IsInRole("Supervisor"))
+            if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -922,12 +937,12 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public IActionResult EditBehavioralModal(int id = 0)
         {
             Bio_BehavioralHistoryViewModel model;
 
-            if (User.IsInRole("Supervisor"))
+            if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -961,7 +976,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> EditBehavioral(Bio_BehavioralHistoryViewModel behavioralViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -990,7 +1005,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> EditBehavioralModal(Bio_BehavioralHistoryViewModel behavioralViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1022,7 +1037,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditBehavioralModal", behavioralViewModel) });
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> DeleteBehavioral(int? id, int origin = 0)
         {
             if (id == null)
@@ -1051,7 +1066,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(IndexBehavioralHealthHistory));            
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
         public IActionResult PrintBio(int id)
         {
             BioEntity entity = _context.Bio
@@ -1104,7 +1119,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> ClientswithoutBIO(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -1128,7 +1143,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public IActionResult CreateMedicationModal(int id = 0)
         {
 
@@ -1138,7 +1153,7 @@ namespace KyoS.Web.Controllers
 
             MedicationViewModel model;
 
-            if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+            if (User.IsInRole("Documents_Assistant") || User.IsInRole("Supervisor"))
             {
 
 
@@ -1179,7 +1194,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> CreateMedicationModal(MedicationViewModel medicationViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1230,12 +1245,12 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMedicationModal", medicationViewModel) });
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public IActionResult EditMedicationModal(int id = 0)
         {
             MedicationViewModel model;
 
-            if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+            if (User.IsInRole("Documents_Assistant") || User.IsInRole("Supervisor"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -1269,7 +1284,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> EditMedicationModal(MedicationViewModel medicationViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1300,7 +1315,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditMedicationModal", medicationViewModel) });
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> DeleteMedication(int? id, int origin = 0)
         {
             if (id == null)

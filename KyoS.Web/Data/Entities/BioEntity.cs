@@ -8,7 +8,7 @@ using KyoS.Web.Data.Contracts;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class BioEntity
+    public class BioEntity : AuditableEntity
     {
         public int Id { get; set; }
 
@@ -291,5 +291,7 @@ namespace KyoS.Web.Data.Entities
         [DataType(DataType.Date)]
 
         public DateTime DateSignatureSupervisor { get; set; }
+
+        public string AdmissionedFor { get; set; }
     }
 }
