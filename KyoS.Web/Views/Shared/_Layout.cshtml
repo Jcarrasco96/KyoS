@@ -908,6 +908,12 @@
                                         Administrator
                                     </span>
                                 }
+                                @if (User.IsInRole("Documents_Assistant"))
+                                {
+                                    <span class="label label-default">
+                                        Documents Assistant
+                                    </span>
+                                }
                             </a>
                         </li>
                         <li class="class=" dropdown open"">
