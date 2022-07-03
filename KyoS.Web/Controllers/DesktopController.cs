@@ -51,11 +51,11 @@ namespace KyoS.Web.Controllers
                 ViewBag.NotStartedNotes = not_started_list.Count.ToString();
 
                 List<Workday_Client> notes_review_list = await _context.Workdays_Clients
-                                                                 .Include(wc => wc.Messages)
-                                                                 .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                                            && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
-                                                                            && wc.Workday.Service == ServiceType.PSR)).ToListAsync();
-                notes_review_list = notes_review_list.Where(wc => wc.Messages.Count() > 0).ToList();
+                                                                       .Include(wc => wc.Messages)
+                                                                       .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                                                 && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
+                                                                                 && wc.Workday.Service == ServiceType.PSR)).ToListAsync();
+                notes_review_list = notes_review_list.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
                 ViewBag.NotesWithReview = notes_review_list.Count.ToString();
 
                 ViewBag.NotPresentNotes = _context.Workdays_Clients
@@ -97,7 +97,7 @@ namespace KyoS.Web.Controllers
                                                   .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                             && wc.IndividualNote.Status == NoteStatus.Pending
                                                                             && wc.Workday.Service == ServiceType.Individual)).ToListAsync();
-                notes_review_list = notes_review_list.Where(wc => wc.Messages.Count() > 0).ToList();
+                notes_review_list = notes_review_list.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
                 ViewBag.IndNotesWithReview = notes_review_list.Count.ToString();
 
                 ViewBag.NotPresentIndNotes = _context.Workdays_Clients
@@ -136,7 +136,7 @@ namespace KyoS.Web.Controllers
                                                   .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                              && wc.GroupNote.Status == NoteStatus.Pending
                                                              && wc.Workday.Service == ServiceType.Group)).ToListAsync();
-                notes_review_list = notes_review_list.Where(wc => wc.Messages.Count() > 0).ToList();
+                notes_review_list = notes_review_list.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
                 ViewBag.GroupNotesWithReview = notes_review_list.Count.ToString();
 
                 ViewBag.NotPresentGroupNotes = _context.Workdays_Clients
@@ -294,7 +294,8 @@ namespace KyoS.Web.Controllers
                                                                        .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                                                && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
                                                                                && wc.Workday.Service == ServiceType.PSR)).ToListAsync();
-                notes_review_list = notes_review_list.Where(wc => wc.Messages.Count() > 0).ToList();
+                notes_review_list = notes_review_list.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
+
                 ViewBag.NotesWithReview = notes_review_list.Count.ToString();
 
                 notes_review_list = await _context.Workdays_Clients
@@ -302,7 +303,7 @@ namespace KyoS.Web.Controllers
                                                   .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                              && wc.IndividualNote.Status == NoteStatus.Pending
                                                              && wc.Workday.Service == ServiceType.Individual)).ToListAsync();
-                notes_review_list = notes_review_list.Where(wc => wc.Messages.Count() > 0).ToList();
+                notes_review_list = notes_review_list.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
                 ViewBag.IndNotesWithReview = notes_review_list.Count.ToString();
 
                 notes_review_list = await _context.Workdays_Clients
@@ -310,7 +311,7 @@ namespace KyoS.Web.Controllers
                                                   .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                              && wc.GroupNote.Status == NoteStatus.Pending
                                                              && wc.Workday.Service == ServiceType.Group)).ToListAsync();
-                notes_review_list = notes_review_list.Where(wc => wc.Messages.Count() > 0).ToList();
+                notes_review_list = notes_review_list.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
                 ViewBag.GroupNotesWithReview = notes_review_list.Count.ToString();
 
                 ViewBag.MedicalHistoryMissing = _context.Clients

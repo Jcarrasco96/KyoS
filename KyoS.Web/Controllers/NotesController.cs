@@ -9136,17 +9136,17 @@ namespace KyoS.Web.Controllers
             {
                 int psr_cant = await _context.Workdays_Clients.CountAsync(wc => (wc.Facilitator.Id == item.Id
                                                                               && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending) 
-                                                                              && wc.Messages.Count() > 0
+                                                                              && wc.Messages.Where(m => m.Notification == false).Count() > 0
                                                                               && wc.Workday.Service == ServiceType.PSR));
 
                 int ind_cant = await _context.Workdays_Clients.CountAsync(wc => (wc.Facilitator.Id == item.Id
                                                                               && wc.IndividualNote.Status == NoteStatus.Pending
-                                                                              && wc.Messages.Count() > 0
+                                                                              && wc.Messages.Where(m => m.Notification == false).Count() > 0
                                                                               && wc.Workday.Service == ServiceType.Individual));
 
                 int group_cant = await _context.Workdays_Clients.CountAsync(wc => (wc.Facilitator.Id == item.Id
                                                                                 && wc.Note.Status == NoteStatus.Pending
-                                                                                && wc.Messages.Count() > 0
+                                                                                && wc.Messages.Where(m => m.Notification == false).Count() > 0
                                                                                 && wc.Workday.Service == ServiceType.Group));
 
                 review.Add(new NotesSummary { FacilitatorName = item.Name, PSRReview = psr_cant, IndReview = ind_cant, GroupReview = group_cant});
