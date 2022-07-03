@@ -17,7 +17,7 @@
 <div class="row">
     <div class="col-md-12">
         @*<strong>Note: </strong> Only closed clients will be displayed, orange color means the client has not discharge documents*@
-    </div>    
+    </div>
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -27,21 +27,16 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-3">
-                                Client
-                            </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.Mtp.Client.Code)
-                            </th>
+                            <th class="col-md-1"></th>
+                            <th class="col-md-2">Client</th>
                             <th class="col-md-2" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Mtp.Client.AdmisionDate)
                             </th>
                             <th class="col-md-1" style="text-align:center">Date</th>
                             <th class="col-md-2" style="text-align:center">Date Review On</th>
                             <th class="col-md-1" style="text-align:center">Month</th>
-                            <th class="col-md-1" style="text-align:center;">
-                                Status
-                            </th>
+                            <th class="col-md-1" style="text-align:center;">Status</th>
+                            <th class="col-md-1" style="text-align:center;">Review</th>
                             <th class="col-md-1">
                             </th>
                         </tr>
@@ -52,6 +47,55 @@
                             @if (item.Mtp.MtpReviewList != null)
                             {
                                 <tr>
+                                    <td align="center">
+                                        @if (item.Messages.Count() != 0)
+                                        {
+                                            <a class="icon-plus-sign-alt"></a>
+                                        }
+                                        <div style="display:none">
+                                            <table class="table table-striped">
+                                                <tr>
+                                                    <th class="col-md-2"></th>
+                                                    <th class="col-md-3">Title</th>
+                                                    <th class="col-md-7" style="text-align:center;">Text</th>
+                                                    @*<th class="col-md-1"></th>*@
+                                                    <th></th>
+                                                </tr>
+                                                @foreach (var message in item.Messages.OrderBy(m => m.DateCreated))
+                                                {
+
+                                                    @if (message.Status.ToString() == "NotRead")
+                                                    {
+                                                        <tr style="color:mediumblue;">
+                                                            <td>
+                                                                <i class="glyphicon glyphicon-thumbs-down"></i> Not processed
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Title)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Text)
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    @if (message.Status.ToString() == "Read")
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <i class="glyphicon glyphicon-thumbs-up"></i> Processed
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Title)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Text)
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </table>
+                                        </div>
+                                    </td>
                                     <td>
                                         @if (item.Mtp.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
@@ -65,9 +109,6 @@
                                         @Html.DisplayFor(modelItem => item.Mtp.Client.Name)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Mtp.Client.Code)
-                                    </td>
-                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.Mtp.Client.AdmisionDate)
                                     </td>
                                     <td align="center">
@@ -78,7 +119,7 @@
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.MonthOfTreatment)
-                                    </td>    
+                                    </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.AdendumStatus.Edition)
                                         {
@@ -102,6 +143,41 @@
                                                         Approved
                                                     </span>
                                                 }
+                                            }
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Messages.Count() == 0)
+                                        {
+                                            <span>
+                                                -
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            bool read = false;
+                                            @foreach (var message in item.Messages.OrderBy(m => m.DateCreated))
+                                            {
+                                                @if (message.Status.ToString() == "NotRead")
+                                                {
+                                                    read = false;
+                                                    break;
+                                                }
+                                                @if (message.Status.ToString() == "Read")
+                                                {
+                                                    read = true;
+                                                }
+                                            }
+                                            @*<span class="label label-warning">
+                                                    Yes &nbsp;
+                                                </span>*@
+                                            if (read)
+                                            {
+                                                <i class="glyphicon glyphicon-thumbs-up"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="glyphicon glyphicon-thumbs-down"></i>
                                             }
                                         }
                                     </td>
@@ -140,11 +216,15 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
+            $.fn.dataTable.moment('MM/DD/YYYY');  
+
             $('#MyTable').DataTable({
-                                "order": [[0, "asc"]],
+                                "order": [[3, "asc"]],
                                 "pageLength": 100
                             });
 
@@ -160,7 +240,20 @@
                 window.location.href = url + '/' + item_to_delete;
             });
         });
-        
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+
     </script>
 }
 

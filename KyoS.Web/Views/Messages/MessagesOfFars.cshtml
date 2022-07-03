@@ -269,7 +269,7 @@
                                         {
                                             @if (fars.Status == KyoS.Common.Enums.FarsStatus.Edition || fars.Status == KyoS.Common.Enums.FarsStatus.Pending)
                                             {
-                                                <a asp-action="Edit" asp-controller="FarsForms" asp-route-id="fars.Id" asp-route-origin="2" class="btn btn-warning" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>                                                
+                                                <a asp-action="Edit" asp-controller="FarsForms" asp-route-id="@fars.Id" asp-route-origin="2" class="btn btn-warning" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>                                                
                                             }
                                             else
                                             {

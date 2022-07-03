@@ -32,5 +32,7 @@ namespace KyoS.Web.Data.Entities
         public string From { get; set; }
 
         public string To { get; set; }
+
+        public bool Notification { get; set; }
     }
 }
