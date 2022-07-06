@@ -41,7 +41,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
-        public async Task<IActionResult> Index(int idError = 0)
+        public async Task<IActionResult> Index(int idError = 0, StatusType status = StatusType.Open)
         {
             if (idError == 1) //Imposible to delete
             {
@@ -97,8 +97,19 @@ namespace KyoS.Web.Controllers
                                                           .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
                                                           .Include(n => n.TCMNote)
                                                           .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
-                                                           && n.Casemanager.LinkedUser == user_logged.UserName))
+                                                           && n.Casemanager.LinkedUser == user_logged.UserName
+                                                           && n.Status == status))
                                                           .ToListAsync();
+
+                if (status == StatusType.Open)
+                {
+                    ViewData["open"] = "0";
+                }
+                else
+                {
+                    ViewData["open"] = "1";
+                }
+
                 return View(tcmClient);
             }
         }

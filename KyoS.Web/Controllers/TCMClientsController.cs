@@ -402,30 +402,15 @@ namespace KyoS.Web.Controllers
 
                 CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
                 List<TCMClientEntity> tcmClientsT = await _context.TCMClient
-                                       .Include(g => g.Casemanager)
-                                       .Include(g => g.Client)
-                                       .Where(g => (g.Casemanager.Id == caseManager.Id
-                                          && g.Status == StatusType.Open))
-                                       .OrderBy(g => g.Client.Name)
-                                       .ToListAsync();
+                                                                  .Include(g => g.Casemanager)
+                                                                  .Include(g => g.Client)
+                                                                  .Where(g => (g.Casemanager.Id == caseManager.Id
+                                                                    && g.Status == StatusType.Open))
+                                                                  .OrderBy(g => g.Client.Name)
+                                                                  .ToListAsync();
+                tcmClientsT = tcmClientsT.Where(wc => wc.TcmServicePlan == null).ToList();
 
-                TCMServicePlanEntity servicePlan = null;
-                List<TCMClientEntity> tcmClientsTemp = await _context.TCMClient
-                                       .Include(g => g.Casemanager)
-                                       .Include(g => g.Client)
-                                       .Where(g => (g.Casemanager.Id == caseManager.Id
-                                          && g.Status == StatusType.Open))
-                                       .OrderBy(g => g.Client.Name)
-                                       .ToListAsync();
-                for (int i = 0; i < tcmClientsT.Count(); i++)
-                {
-                    servicePlan = await _context.TCMServicePlans.FirstOrDefaultAsync(c => c.TcmClient.CaseNumber == tcmClientsT[i].CaseNumber);
-                    if (servicePlan == null)
-                    {
-                        tcmClientsTemp.Remove(tcmClientsT[i]);
-                    }
-                }
-                return View(tcmClientsTemp);
+                return View(tcmClientsT);
             }
             if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "TCMSupervisor")
             {
@@ -440,23 +425,10 @@ namespace KyoS.Web.Controllers
                                                               && s.Status == StatusType.Open))
                                                           .OrderBy(g => g.Casemanager.Name)
                                                           .ToListAsync();
-                TCMServicePlanEntity servicePlan = null;
-                List<TCMClientEntity> tcmClientsTemp = await _context.TCMClient
-                                                          .Include(g => g.Casemanager)
-                                                          .Include(g => g.Client)
-                                                          .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
-                                                              && s.Status == StatusType.Open))
-                                                          .OrderBy(g => g.Casemanager.Name)
-                                                          .ToListAsync();
-                for (int i = 0; i < tcmClient.Count(); i++)
-                {
-                    servicePlan = await _context.TCMServicePlans.FirstOrDefaultAsync(c => c.TcmClient.CaseNumber == tcmClient[i].CaseNumber);
-                    if (servicePlan == null)
-                    {
-                        tcmClientsTemp.Remove(tcmClient[i]);
-                    }
-                }
-                return View(tcmClientsTemp);
+
+                tcmClient = tcmClient.Where(wc => wc.TcmServicePlan == null).ToList();
+
+                return View(tcmClient);
 
             }
             return RedirectToAction("NotAuthorized", "Account");

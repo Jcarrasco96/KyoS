@@ -450,7 +450,35 @@ namespace KyoS.Web.Controllers
             }
             if (User.IsInRole("CaseManager"))
             {
-                return RedirectToAction(nameof(Index), "Incidents");
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
+
+                List<TCMClientEntity> tcmClient = await _context.TCMClient
+                                                                .Include(c => c.TcmServicePlan)
+                                                                .Include(c => c.Client)
+                                                                .Where(c => c.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                     && c.Casemanager.Id == caseManager.Id).ToListAsync();
+                tcmClient = tcmClient.Where(wc => wc.TcmServicePlan == null).ToList();
+                ViewBag.NotStartedCases = tcmClient.Count.ToString();
+
+                ViewBag.OpenBinder = _context.TCMClient
+                                             .Where(g => (g.Casemanager.Id == caseManager.Id
+                                                && g.Status == StatusType.Open
+                                                && g.Client.Clinic.Id == caseManager.Clinic.Id)).Count().ToString();
+
+                ViewBag.CloseCases = _context.TCMClient
+                                             .Where(g => (g.Casemanager.Id == caseManager.Id
+                                                && g.Status == StatusType.Close
+                                                && g.Client.Clinic.Id == caseManager.Clinic.Id)).Count().ToString();
+
+                ViewBag.Billing = _context.TCMClient
+                                          .Where(g => (g.Casemanager.Id == caseManager.Id
+                                             && g.Status == StatusType.Open
+                                             && g.Client.Clinic.Id == caseManager.Clinic.Id)).Count().ToString();
+
             }
             if (User.IsInRole("Documents_Assistant"))
             {

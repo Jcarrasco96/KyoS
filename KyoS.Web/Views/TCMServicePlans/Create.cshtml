@@ -61,7 +61,7 @@
             <partial name="TCMServicePlan" />
             <div class="form-group">
                 <input type="submit" value="Create Service Plan" class="btn btn-primary" />
-                <a asp-action="Index" asp-route-caseNumber="@Model.CaseNumber" class="btn btn-success">Back</a>
+                <a asp-action="TCMIntakeSectionDashboard" asp-controller="TCMIntakes" asp-route-id="@Model.ID_TcmClient" asp-route-section="4" class="btn btn-success">Back</a>
             </div>
         </form>
     </div>
