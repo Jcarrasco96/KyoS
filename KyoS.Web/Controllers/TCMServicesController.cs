@@ -109,7 +109,9 @@ namespace KyoS.Web.Controllers
                     model = new TCMServiceViewModel
                     {
                         Clinics = list,
-                        IdClinic = clinic.Id
+                        IdClinic = clinic.Id,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now
                     };
                     return View(model);
                 }
@@ -136,7 +138,7 @@ namespace KyoS.Web.Controllers
                 TCMServiceEntity tcmServiceEntity = await _context.TCMServices.FirstOrDefaultAsync(s => s.Name == tcmServiceViewModel.Name);
                 if (tcmServiceEntity == null)
                 {
-                    tcmServiceEntity = await _converterHelper.ToTCMServiceEntity(tcmServiceViewModel, true);
+                    tcmServiceEntity = await _converterHelper.ToTCMServiceEntity(tcmServiceViewModel, true, user_logged.UserName);
                     _context.Add(tcmServiceEntity);
                     try
                     {
@@ -280,7 +282,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMServiceEntity tcmServiceEntity = await _converterHelper.ToTCMServiceEntity(tcmServiceViewModel, false);
+                TCMServiceEntity tcmServiceEntity = await _converterHelper.ToTCMServiceEntity(tcmServiceViewModel, false, user_logged.UserName);
                 _context.Update(tcmServiceEntity);
 
                 try
@@ -357,6 +359,8 @@ namespace KyoS.Web.Controllers
                         IdClinic = clinic.Id,
                         Id_TCMService = id,
                         ID_Etapa = tcmservice.Stages.Count() + 1,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now
                     };
 
                     return View(model);
@@ -390,7 +394,7 @@ namespace KyoS.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    TCMStageEntity tcmStageEntity = await _converterHelper.ToTCMStageEntity(tcmStageViewModel, true);
+                    TCMStageEntity tcmStageEntity = await _converterHelper.ToTCMStageEntity(tcmStageViewModel, true, user_logged.UserName);
                     tcmStageEntity.ID_Etapa = tcmservice.Stages.Count() + 1;
                     _context.Add(tcmStageEntity);
                     try
@@ -457,7 +461,7 @@ namespace KyoS.Web.Controllers
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
-            TCMStageEntity tcmStageEntity = await _converterHelper.ToTCMStageEntity(tcmStageViewModel, false);
+            TCMStageEntity tcmStageEntity = await _converterHelper.ToTCMStageEntity(tcmStageViewModel, false, user_logged.UserName);
 
             if (User.IsInRole("Manager"))
             {

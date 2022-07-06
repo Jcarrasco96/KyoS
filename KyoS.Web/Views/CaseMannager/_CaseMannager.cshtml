@@ -6,16 +6,21 @@
     <span asp-validation-for="Name" class="text-danger"></span>
 </div>
 <div class="col-md-3 form-group">
-    <label asp-for="Codigo" class="control-label"></label>
-    <input asp-for="Codigo" class="form-control" />
-    <span asp-validation-for="Codigo" class="text-danger"></span>
-</div>
-<div class="col-md-3 form-group">
     <label asp-for="IdClinic" class="control-label"></label>
     <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control"></select>
     <span asp-validation-for="IdClinic" class="text-danger"></span>
 </div>
-<div class="col-md-3 form-group">
+<div class="col-md-2 form-group">
+    <label asp-for="ProviderNumber" class="control-label"></label>
+    <input asp-for="ProviderNumber" class="form-control" />
+    <span asp-validation-for="ProviderNumber" class="text-danger"></span>
+</div>
+<div class="col-md-2 form-group">
+    <label asp-for="Credentials" class="control-label"></label>
+    <input asp-for="Credentials" class="form-control" />
+    <span asp-validation-for="Credentials" class="text-danger"></span>
+</div>
+<div class="col-md-2 form-group">
     <label asp-for="IdStatus" class="control-label"></label>
     <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
     <span asp-validation-for="IdStatus" class="text-danger"></span>

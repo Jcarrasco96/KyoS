@@ -7,6 +7,7 @@
         Supervisor,
         Facilitator,
         CaseManager,
-        TCMSupervisor
+        TCMSupervisor,
+        Documents_Assistant
     }
 }

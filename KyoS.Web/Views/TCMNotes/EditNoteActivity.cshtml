@@ -1,0 +1,82 @@
+﻿@model KyoS.Web.Models.TCMNoteActivityViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="EditNoteActivity" onsubmit="return jQueryAjaxPostTCMNoteActivity(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IdTCMNote" />
+            <input type="hidden" asp-for="IdTCMDomain" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <div class="container-fluid">
+                <div class=" col-md-6 form-group">
+                    <h4 style="font-weight:bold;"> <span class="label label-info"> Client - @Model.TCMNote.TCMClient.Client.Name </span></h4>
+                </div>
+                <div class=" col-md-6 form-group">
+                    <h4 style="font-weight:bold;"> <span class="label label-info"> @Model.TCMNote.DateOfService</span></h4>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-3 form-group">
+                    <label asp-for="Setting" class="control-label">Setting </label>
+                    <input asp-for="Setting" class="form-control" />
+                    <span asp-validation-for="Setting" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-3 form-group">
+                    <label asp-for="TCMDomain.Code" class="control-label">Domain </label>
+                    <input asp-for="TCMDomain.Code" class="form-control" />
+                    <span asp-validation-for="TCMDomain.Code" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-6 form-group">
+                    <label asp-for="TCMDomain.Name" class="control-label">Domain </label>
+                    <input asp-for="TCMDomain.Name" class="form-control" />
+                    <span asp-validation-for="TCMDomain.Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-4 form-group">
+                    <label asp-for="StartTime" class="control-label">Start Time</label>
+                    <input asp-for="StartTime" class="form-control" />
+                    <span asp-validation-for="StartTime" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-4 form-group">
+                    <label asp-for="EndTime" class="control-label">End Time</label>
+                    <input asp-for="EndTime" class="form-control" />
+                    <span asp-validation-for="EndTime" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-4 form-group">
+                    <label asp-for="Minutes" class="control-label">Minutes</label>
+                    <input asp-for="Minutes" class="form-control" />
+                    <span asp-validation-for="Minutes" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-12 form-group">
+                    <label asp-for="DescriptionOfService" class="control-label">Description of service(s) / Intervention(s)</label>
+                    <textarea asp-for="DescriptionOfService" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="DescriptionOfService" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

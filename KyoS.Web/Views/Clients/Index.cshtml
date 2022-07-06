@@ -15,7 +15,7 @@
     </ul><!--.breadcrumb-->
 </div>
 
-@if (!User.IsInRole("Facilitator"))
+@if (User.IsInRole("Manager"))
 {
     <p>
         <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Client</a>
@@ -114,7 +114,7 @@
                                             </span>
                                         }
                                     </td>
-                                    @if (!User.IsInRole("Facilitator"))
+                                    @if (User.IsInRole("Manager"))
                                     {
                                         <td align="right">
                                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
@@ -173,7 +173,7 @@
                                             </span>
                                         }
                                     </td>
-                                    @if (!User.IsInRole("Facilitator"))
+                                    @if (User.IsInRole("Manager"))
                                     {
                                         <td align="right">
                                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>

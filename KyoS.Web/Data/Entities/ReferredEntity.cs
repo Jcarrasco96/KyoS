@@ -12,5 +12,9 @@ namespace KyoS.Web.Data.Entities
         public string ReferredNote { get; set; }
 
         public ICollection<ClientEntity> Clients { get; set; }
+
+        public string Title { get; set; }
+
+        public string Agency { get; set; }
     }
 }

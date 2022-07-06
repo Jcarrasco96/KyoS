@@ -83,7 +83,7 @@
                                                         <td>@Html.DisplayFor(modelItem => product1.Problem)</td>
                                                         <td align="center">@Html.DisplayFor(modelItem => product1.Date)</td>
                                                         <td align="center">
-                                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Supervisor"))
+                                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant")))
                                                             {
                                                                 <a asp-action="EditBehavioral" asp-route-id="@product1.Id" class="btn btn-warning" title="Edit Behavioral Health History"><i class="glyphicon glyphicon-pencil"></i></a>
                                                             }
@@ -134,7 +134,7 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="right">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Supervisor"))
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant")))
                                         {
                                             <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="Create BIO"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
@@ -171,7 +171,7 @@
                                                         <td>@Html.DisplayFor(modelItem => product1.Problem)</td>
                                                         <td align="center">@Html.DisplayFor(modelItem => product1.Date)</td>
                                                         <td align="center">
-                                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Supervisor"))
+                                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant")))
                                                             {
                                                                 <a asp-action="EditBehavioral" asp-route-id="@product1.Id" class="btn btn-warning" title="Add Behavioral Health History"><i class="glyphicon glyphicon-pencil"></i></a>
                                                             }
@@ -222,9 +222,9 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="right">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Supervisor"))
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant")))
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
                                         else
                                         { 

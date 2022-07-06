@@ -8,6 +8,8 @@
         <form asp-action="Create" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMSupervisor(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Name" class="control-label"></label>&nbsp;*
@@ -45,16 +47,16 @@
                     <input asp-for="SignatureFile" type="file" class="form-control" />
                     <span asp-validation-for="SignatureFile" class="text-danger"></span>
                 </div>
-            </div>      
+            </div>
             <div class="col-md-12">
-                 &nbsp;
+                &nbsp;
             </div>
             <div>
                 <div class="col-md-offset-9">
                     <input type="submit" value="Submit" class="btn btn-primary" />
                     <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
-            </div>            
+            </div>
         </form>
     </div>
 </div>

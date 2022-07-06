@@ -3,162 +3,94 @@
     ViewData["Title"] = "Edit Service Plan Review";
 }
 
-<div class="breadcrumbs" id="breadcrumbs">
-    <ul class="breadcrumb">
-        <li>
-            <i class="icon-home"></i>
-            @Html.ActionLink("TCMServicePlanReviews", "Index", "TCMServicePlanReviews")
-        </li>
-        <li class="active">Create</li>
-    </ul><!--.breadcrumb-->
-</div>
+<!DOCTYPE html>
 
-<h4>Create new service plan review</h4>
-<hr />
+<html>
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.TcmServicePlan.TcmClient.Id, section = 4 })
+            </li>
+            <li class="active">Edit</li>
+        </ul><!--.breadcrumb-->
+    </div>
 
-<div class="row">
-    <div class="col-md-12">
-        <form asp-action="Edit" asp-route-id="@Model.Id">
-            <div class="row">
+    <h4>Edit new service plan review</h4>
+    <hr />
+
+    <div class="row">
+
+        <form asp-action="Edit" asp-route-id="@Model.Id" enctype="multipart/form-data">
+            <div class="row col-md-12">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
                 <input type="hidden" asp-for="IdServicePlan" />
-
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label asp-for="TcmServicePlan.TcmClient.CaseNumber" class="control-label">Case Number</label>
-                        <input asp-for="TcmServicePlan.TcmClient.CaseNumber" class="form-control" readonly />
-                        <span asp-validation-for="TcmServicePlan.TcmClient.CaseNumber" class="text-danger"></span>
+                <partial name="_TCMServicePlanReview" />
+                <div class="col-md-push-12">
+                    <div class="col-md-12 form-group">
+                        <a onclick="showInPopup('@Url.Action("CreateDomain", "TCMServicePlanReviews", new { id = @Model.IdServicePlan}, Context.Request.Scheme)','Create domain of Service Plan Review')" class="btn btn-success" title="Create Domain of this Service Plan Review"><i class="glyphicon glyphicon-plus"></i> Add Domain</a>
+                    </div>
+                    <div class="col-md-12">
+                        <div id="view-tcmServicePlanReview">
+                            @await Html.PartialAsync("_ViewDomainServicePlanReview", Model.TCMServicePlanRevDomain.ToList())
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label asp-for="TcmServicePlan.TcmClient.Client.Name" class="control-label">Client Name</label>
-                        <input asp-for="TcmServicePlan.TcmClient.Client.Name" class="form-control" readonly />
-                        <span asp-validation-for="TcmServicePlan.TcmClient.Client.Name" class="text-danger"></span>
-                    </div>
+                <br />
+                <div class="form-group col-md-12">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmServicePlan.TcmClient.Id" asp-route-section="4" asp-controller="TCMIntakes" class="btn btn-success">Back</a>
                 </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label asp-for="TcmServicePlan.TcmClient.Casemanager.Name" class="control-label">Casemanager Name</label>
-                        <input asp-for="TcmServicePlan.TcmClient.Casemanager.Name" class="form-control" readonly />
-                        <span asp-validation-for="TcmServicePlan.TcmClient.Casemanager.Name" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label asp-for="DateServicePlanReview" class="control-label">Service Plan Review Date</label>
-                        <input asp-for="DateServicePlanReview" class="form-control" readonly />
-                        <span asp-validation-for="DateServicePlanReview" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label asp-for="TcmServicePlan.DateServicePlan" class="control-label">Service Plan Date</label>
-                        <input asp-for="TcmServicePlan.DateServicePlan" class="form-control" readonly />
-                        <span asp-validation-for="TcmServicePlan.DateServicePlan" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label asp-for="TcmServicePlan.DateIntake" class="control-label">Opening Date</label>
-                        <input asp-for="TcmServicePlan.DateIntake" class="form-control" readonly />
-                        <span asp-validation-for="TcmServicePlan.DateIntake" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="Recomendation" class="control-label">Summary of Reipient's Progress and Current Assessment'</label>
-                        <textarea asp-for="Recomendation" class="form-control" rows="4"></textarea>
-                        <span asp-validation-for="Recomendation" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="SummaryProgress" class="control-label">Recommendations/Changes/Update to SERVICE PLAN</label>
-                        <textarea asp-for="SummaryProgress" class="form-control" rows="4"></textarea>
-                        <span asp-validation-for="SummaryProgress" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">TCM Service Plan Review</h3>
-                    </div>
-                    <div class="panel-body">
-                        <table class="table table-hover table-responsive table-striped">
-                            <thead>
-                                <tr>
-                                    <th class="col-md-1" align="center">
-                                        Code
-                                    </th>
-                                    <th class="col-md-2" align="center">
-                                        Name
-                                    </th>
-                                    <th class="col-md-1" align="center">
-                                        Status
-                                    </th>
-                                    <th class="col-md-2" align="center">
-                                        Objectives Status / Objectives Name
-                                    </th>
-                                    <th class="col-md-4" align="center">
-                                        Objectives Changes/Updates
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @for (int i = 0; i < Model.Domain_List.Count(); i++)
-                                {
-                                    <tr>
-                                        <td>
-                                            <input asp-for="@Model.Domain_List[i].Code" class="form-control" readonly />
-                                            @Model.Domain_List[i].Addendum_ServicePlan
-                                        </td>
-                                        <td>
-                                            <input asp-for="@Model.Domain_List[i].Name" class="form-control" readonly />
-                                        </td>
-                                        <td>
-                                            <div class="form-group">
-                                                <select asp-for="@Model.Domain_List[i].Status" asp-items="Model.StatusListDomain" class="form-control"></select>
-                                                <span asp-validation-for="@Model.Domain_List[i].Status" class="text-danger"></span><br />
-                                                <input asp-for="@Model.Domain_List[i].ID" readonly />
-                                            </div>
-                                        </td>
-                                        <td>
-
-                                            @for (int j = 0; j < Model.Domain_List[i].ObjectiveList.Count(); j++)
-                                            {
-                                                <input asp-for="@Model.Domain_List[i].ObjectiveList[j].ID" readonly />
-                                                <select asp-for="@Model.Domain_List[i].ObjectiveList[j].Status" asp-items="Model.StatusListObjetive" class="form-control">@Model.Domain_List[i].ObjectiveList[j].Name</select>
-                                                <span asp-validation-for="@Model.Domain_List[i].ObjectiveList[j].Status" class="text-danger"></span>
-
-                                                <input asp-for="@Model.Domain_List[i].ObjectiveList[j].Name" class="form-control" readonly />
-                                            }
-                                        </td>
-                                        <td><input asp-for="@Model.Domain_List[i].Updates_Changes" class="form-control" /></td>
-
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Add New Domain" class="btn btn-warning" />
-
-                </div>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Edit Service Plan Review" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-success">Back</a>
             </div>
         </form>
-    </div>
-</div>
 
+    </div>
+
+</body>
+</html>
+
+<partial name="_ModalPopup" />
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                                "order": [[1, "asc"]],
+                                "pageLength": 100
+                            });
+
+            var item_to_delete;
+
+            $('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                var url = "@Url.Action("DeleteDomain", "TCMServicePlanReviews")";
+                window.location.href = url + '/' + item_to_delete;
+            });
+        });
+        $(function () {
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+    </script>
+}

@@ -22,12 +22,13 @@ namespace KyoS.Web.Helpers
         public IEnumerable<SelectListItem> GetComboRoles()
         {
             List<SelectListItem> list = new List<SelectListItem>
-                                { new SelectListItem { Text = UserType.Facilitator.ToString(), Value = "1"},
-                                  new SelectListItem { Text = UserType.Supervisor.ToString(), Value = "2"},
-                                  new SelectListItem { Text = UserType.CaseManager.ToString(), Value = "3"},
-                                  new SelectListItem { Text = UserType.TCMSupervisor.ToString(), Value = "4"},
-                                  new SelectListItem { Text = UserType.Manager.ToString(), Value = "5"},
-                                  new SelectListItem { Text = UserType.Admin.ToString(), Value = "6"}
+                                { new SelectListItem { Text = UserType.Documents_Assistant.ToString(), Value = "1"},
+                                  new SelectListItem { Text = UserType.Facilitator.ToString(), Value = "2"},
+                                  new SelectListItem { Text = UserType.Supervisor.ToString(), Value = "3"},
+                                  new SelectListItem { Text = UserType.CaseManager.ToString(), Value = "4"},
+                                  new SelectListItem { Text = UserType.TCMSupervisor.ToString(), Value = "5"},
+                                  new SelectListItem { Text = UserType.Manager.ToString(), Value = "6"},
+                                  new SelectListItem { Text = UserType.Admin.ToString(), Value = "7"}
             };
             
             list.Insert(0, new SelectListItem

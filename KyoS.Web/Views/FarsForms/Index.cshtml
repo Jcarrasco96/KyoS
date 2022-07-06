@@ -121,12 +121,28 @@
                                                                 }
                                                             </td>                                                            
                                                             <td align="center">
-                                                                @if (User.IsInRole("Supervisor"))
+                                                                @if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
                                                                 {
                                                                     @if ((@item.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.FarsStatus.Edition && @element.CreatedBy == User.Identity.Name) || (element.Status == KyoS.Common.Enums.FarsStatus.Pending))
                                                                     {
                                                                         <a asp-action="Edit" asp-route-id="@element.Id" class="btn btn-warning" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                        <a asp-action="ApproveFars" asp-route-id="@element.Id" class="btn btn-success" title="Approve FARS"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        @if (User.IsInRole("Supervisor"))
+                                                                        {
+                                                                            <a asp-action="ApproveFars" asp-route-id="@element.Id" class="btn btn-success" title="Approve FARS"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            @if (@element.Status == KyoS.Common.Enums.FarsStatus.Pending)
+                                                                            {
+                                                                                <a class="btn btn-success disabled" title="Finish Edition FARS"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                            }
+                                                                            else
+                                                                            { 
+                                                                                <a asp-action="FinishEditingFars" asp-route-id="@element.Id" class="btn btn-success" title="Finish edition of FARS"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                            }
+                                                                            
+                                                                        }
+
                                                                         <a class="btn btn-success disabled" title="Print FARS"><i class="glyphicon glyphicon-print"></i></a>
                                                                     }
                                                                     else
@@ -157,8 +173,8 @@
                                                                         {
                                                                             <a asp-action="FinishEditingFars" asp-route-id="@element.Id" class="btn btn-success" title="Finish edition of FARS"><i class="glyphicon glyphicon-ok"></i></a>
                                                                         }
-                                                                            <a class="btn btn-success disabled" title="Print FARS"><i class="glyphicon glyphicon-print"></i></a>
-                                                                        }
+                                                                        <a class="btn btn-success disabled" title="Print FARS"><i class="glyphicon glyphicon-print"></i></a>
+                                                                    }
                                                                     else
                                                                     {
                                                                         <a class="btn btn-warning disabled" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>

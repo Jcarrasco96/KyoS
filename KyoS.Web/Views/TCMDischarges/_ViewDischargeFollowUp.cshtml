@@ -1,0 +1,59 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMDischargeFollowUpEntity>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Discharge Follow-up</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-hover table-responsive table-striped" id="MyTable">
+            <thead>
+                <tr>
+                    <th class="col-md-2" style="text-align:center;">
+                        Provider/Agency
+                    </th>
+                    <th class="col-md-2">
+                        Type of Service
+                    </th>
+                    <th class="col-md-2" style="text-align:left;">
+                        Address/Location
+                    </th>
+                    <th class="col-md-2">
+                        Phone Number
+                    </th>
+                    <th class="col-md-2" style="text-align:left;">
+                        Next Appt.
+                    </th>
+                    <th class="col-md-2" style="text-align:left;">
+                        Next Appt.
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td align="center">
+                            @Html.DisplayFor(modelItem => item.ProviderAgency)
+                        </td>
+                        <td align="left">
+                            @Html.DisplayFor(modelItem => item.TypeService)
+                        </td>
+                        <td align="left">
+                            @Html.DisplayFor(modelItem => item.Address_Location)
+                        </td>
+                        <td align="left">
+                            @Html.DisplayFor(modelItem => item.PhoneNumber)
+                        </td>
+                        <td align="left">
+                            @Html.DisplayFor(modelItem => item.NextAppt)
+                        </td>
+                        <td>
+                            <a onclick="showInPopup('@Url.Action("EditTCMDischargeFolowUp", "TCMDischarges", new { id = item.Id}, Context.Request.Scheme)','Edit Discharge FollowUp')" class="btn btn-warning" title="Edit Discharge FollowUp"><i class="glyphicon glyphicon-pencil"></i> </a>
+                            <a asp-action="DeleteDischargeFollowUp" asp-route-id="@item.Id" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete Follow-up"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

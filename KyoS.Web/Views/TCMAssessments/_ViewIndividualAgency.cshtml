@@ -1,0 +1,52 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMAssessmentIndividualAgencyEntity>
+<div class="col-push-12">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @*<h3 class="panel-title">*@
+                <strong>Please list individuals/agencies providing information other than client:</strong>
+                @*</h3>*@
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-3">
+                                Name
+                            </th>
+                            <th class="col-md-4" style="text-align:center;">
+                                Agency (if applicable)
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Relationship
+                            </th>
+                            <th class="col-md-3">
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Agency)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.RelationShip)
+                                </td>
+                                <td align="right">
+                                    <a onclick="showInPopup('@Url.Action("EditIndividualAgencyModal", "TCMAssessments", new { id = @item.Id }, Context.Request.Scheme)','Edit Behavioral Health')" class="btn btn-warning" title="Edit Behavioral Health"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    @*<a asp-action="DeleteBehavioral" asp-route-origin="2" asp-route-id="@item.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>*@
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

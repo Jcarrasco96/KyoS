@@ -1,0 +1,61 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMAssessmentMedicationEntity>
+<div class="col-push-12">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @*<h3 class="panel-title">*@
+                <strong>SECTION VI: CURRENT MEDICATIONS </strong><br />
+                <i>List any current medication being taking by client including medical, psychiatric and over-the-counter</i>
+                @*</h3>*@
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-2">
+                                MEDICATION
+                            </th>
+                            <th class="col-md-3" style="text-align:center;">
+                                DOSES/FREQUENCY
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                PRESCRIBING PHYSICIAN
+                            </th>
+                            <th class="col-md-3" style="text-align:center;">
+                                REASON/PURPOSE
+                            </th>
+                            <th class="col-md-2">
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Dosage)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Prescriber)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.ReasonPurpose)
+                                </td>
+                                <td align="right">
+                                    <a onclick="showInPopup('@Url.Action("EditMedicationModal", "TCMAssessments", new { id = @item.Id }, Context.Request.Scheme)','Edit Behavioral Health')" class="btn btn-warning" title="Edit Behavioral Health"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    @*<a asp-action="DeleteBehavioral" asp-route-origin="2" asp-route-id="@item.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>*@
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+

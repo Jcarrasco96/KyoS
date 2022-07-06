@@ -1,0 +1,74 @@
+﻿@model KyoS.Web.Models.TCMDischargeFollowUpViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="CreateTCMDischargeFolowUp" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMServicePlanReview(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IdTCMDischarge" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <div class="form-group">
+                <div class="col-md-6">
+                    <b>Case number:</b>
+                    <i>@Html.DisplayFor(modelItem => Model.TcmDischarge.TcmServicePlan.TcmClient.CaseNumber)</i>
+                    <br />
+                    <b>Client name:</b>
+                    <i>@Html.DisplayFor(modelItem => Model.TcmDischarge.TcmServicePlan.TcmClient.Client.Name)</i>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="TypeService" class="control-label">Type Of Service</label>
+                    <input asp-for="TypeService" class="form-control" />
+                    <span asp-validation-for="TypeService" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+            <div class="form-group col-md-12">
+                <div class="">
+                    <label asp-for="ProviderAgency" class="control-label">Provider/Agency</label>
+                    <input asp-for="ProviderAgency" class="form-control" />
+                    <span asp-validation-for="ProviderAgency" class="text-danger"></span>
+                </div>
+            </div>
+            <br />
+            <div class="form-group col-md-12">
+                <div class="">
+                    <label asp-for="Address_Location" class="control-label">Address/Location</label>
+                    <input asp-for="Address_Location" class="form-control" />
+                    <span asp-validation-for="Address_Location" class="text-danger"></span>
+                </div>
+            </div>
+            <br />
+            <div class="form-group">
+                <div class="form-group col-md-6">
+                    <label asp-for="PhoneNumber" class="control-label">Phone Number</label>
+                    <input asp-for="PhoneNumber" id="GetCode" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="NextAppt" class="control-label">Next Appt</label>
+                    <input asp-for="NextAppt" id="GetName" class="form-control" />
+                    <span asp-validation-for="NextAppt" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

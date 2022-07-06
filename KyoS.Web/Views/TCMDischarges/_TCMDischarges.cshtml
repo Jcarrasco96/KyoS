@@ -23,7 +23,7 @@
     </div>
     <div class="form-group col-md-2">
         <label asp-for="DischargeDate" class="control-label">Date of Discharge</label>&nbsp;*
-        <input asp-for="DischargeDate" class="form-control" readonly>
+        <input asp-for="DischargeDate" class="form-control">
         <span asp-validation-for="DischargeDate" class="text-danger"></span>
     </div>
 </div>
@@ -40,114 +40,17 @@
         <span asp-validation-for="ProgressToward" class="text-danger"></span>
     </div>
 </div>
-<div class="container-fluid col-md-12">
-    <h4>&nbsp; Services Provided (Check all that apply according to the services listed in the Service Plan)</h4>
-   @for (int i = 0; i < Model.TcmDischargeServiceStatus.Count(); i++)
-    {
-<div class="form-group col-md-6">
-    <input type="checkbox" asp-for="@Model.TcmDischargeServiceStatus[i].Status" />
-    <input asp-for="@Model.TcmDischargeServiceStatus[i].CodeService" class="form-group" readonly />
-    <input asp-for="@Model.TcmDischargeServiceStatus[i].NameService" class="form-control" readonly />
-    <input asp-for="@Model.TcmDischargeServiceStatus[i].Id" readonly />
-</div>
-    }
 
-</div>
 <div class="container-fluid">
-    <h4>&nbsp; Reason for Discharge (check only one):</h4>
-    <div class="form-group col-md-6">
-        <input type="checkbox" asp-for="AllServiceInPlace" id="AllService">
-        <label for="AllService" class="forgot">All services in place/coordinated</label>
-    </div>
-    <div class="form-group col-md-6">
-        <input type="checkbox" asp-for="NonComplianceWithAgencyRules" class="form-check-input" id="NonCompliance">
-        <label for="NonCompliance" class="forgot">Non-compliance with agency rules</label>
-    </div>
-</div>
-<div class="container-fluid">
-    <div class="form-group col-md-6">
-        <input type="checkbox" asp-for="Referred" class="form-check-input" id="Referred">
-        <label asp-for="Referred" class="forgot">Referred/Transferred to other provider</label>
-    </div>
-    <div class="form-group col-md-6">
-        <input type="checkbox" asp-for="ClientMovedOutArea" class="form-check-input" id="ClientMoved">
-        <label for="ClientMoved" class="forgot">Client moved out of area</label>
+    <div class="form-group col-md-12">
+        <pre>
+        <strong><u>Reason for Discharge </u></strong>(check only one):
+        <input type="checkbox" asp-for="AllServiceInPlace"> All services in place/coordinated                           <input type="checkbox" asp-for="AllServiceInPlace"> Non-compliance with agency rules  
+        <input type="checkbox" asp-for="Referred"> Referred/Transferred to other provider                      <input type="checkbox" asp-for="ClientMovedOutArea"> Client moved out of area
+        <input type="checkbox" asp-for="ClientLeftVoluntarily"> Client left voluntarily/refused services                    <input type="checkbox" asp-for="LackOfProgress">  Lack of progress
+        <input type="checkbox" asp-for="Other"> Other:                     <input asp-for="Other_Explain" style="width:80%">
+        <input type="checkbox" asp-for="AdministrativeDischarge"> <strong>Administrative Discharge:</strong> 
+        <textarea asp-for="AdministrativeDischarge_Explain" style="width:90%"></textarea>
+        </pre>
     </div>
 </div>
-<div class="container-fluid">
-    <div class="form-group col-md-6">
-        <input type="checkbox" asp-for="ClientLeftVoluntarily" class="form-check-input" id="ClientLeft">
-        <label for="ClientLeft" class="forgot">Client left voluntarily/refused services</label>
-    </div>
-    <div class="form-group col-md-6">
-        <input type="checkbox" asp-for="LackOfProgress" class="form-check-input" id="LackOfProg">
-        <label for="LackOfProg" class="forgot">Lack of progress</label>
-    </div>
-</div>
-<div class="container-fluid">
-    <div class="form-group col-md-2">
-        <input type="checkbox" asp-for="Other" class="form-check-input" id="Other">
-        <label for="Other" class="forgot">Other:</label>
-    </div>
-    <div class="form-group col-md-10">
-        <input asp-for="Other_Explain" class="form-control">
-    </div>
-</div>
-<div class="container-fluid">
-    <div class="form-group col-md-2">
-        <input type="checkbox" asp-for="AdministrativeDischarge" class="form-check-input" id="Administrative">
-        <label for="Administrative" class="forgot">Administrative Discharge</label>
-    </div>
-    <div class="form-group col-md-10">
-        <input asp-for="AdministrativeDischarge_Explain" class="form-control">
-    </div>
-</div>
-<div class="container-fluid">
-    <table class="table table-hover table-responsive table-striped" id="MyTable">
-        <thead>
-            <tr>
-                <th class="col-md-3" align="center">
-                    Provider/Agency
-                </th>
-                <th class="col-md-2" align="center">
-                    Type of Service
-                </th>
-                <th class="col-md-3" align="center">
-                    Address/Location
-                </th>
-                <th class="col-md-2" align="center">
-                    Phone Number
-                </th>
-                <th class="col-md-2" align="center">
-                    Next Appt.
-                
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < Model.TcmDischargeFollowUp.Count(); i++)
-            {
-                <tr>
-                    <td>
-                        <input asp-for="@Model.TcmDischargeFollowUp[i].Id" />
-                        <input asp-for="@Model.TcmDischargeFollowUp[i].ProviderAgency" class="form-control" />
-                    </td>
-                    <td>
-                        <input asp-for="@Model.TcmDischargeFollowUp[i].TypeService" class="form-control" />
-                    </td>
-                    <td>
-                        <input asp-for="@Model.TcmDischargeFollowUp[i].Address_Location" class="form-control" />
-                    </td>
-                    <td>
-                        <input asp-for="@Model.TcmDischargeFollowUp[i].PhoneNumber" class="form-control" />
-                    </td>
-                    <td>
-                        <input asp-for="@Model.TcmDischargeFollowUp[i].NextAppt" class="form-control" />
-                        
-                    </td>
-                </tr>
-                
-            }
-        </tbody>
-    </table>
-</div>
-<br />

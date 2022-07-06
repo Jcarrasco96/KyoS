@@ -9,7 +9,22 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("Dashboard", "Index", "Desktop")
+            @if (ViewData["tcmClientId"] != "")
+            {
+                @if (@Model.Count() > 0)
+                {
+                    @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.First().TcmServicePlan.TcmClient.Id, section = 4 })
+                }
+                else
+                {
+                    @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = ViewData["Id"], section = 4 })
+                }
+
+            }
+            else
+            {
+                @Html.ActionLink("TCM Intake", "Index", "TCMIntakes")
+            }
         </li>
         <li class="active">Adendums</li>
     </ul><!--.breadcrumb-->

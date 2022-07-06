@@ -110,7 +110,9 @@ namespace KyoS.Web.Controllers
                          Clinics = list,
                          IdClinic = clinic.Id,
                          StatusList = _combosHelper.GetComboClientStatus(),
-                         UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, user_logged.Clinic.Id)
+                         UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, user_logged.Clinic.Id),
+                         CreatedBy = user_logged.UserName,
+                         CreatedOn = DateTime.Now
                      };
                      return View(model);
                 }
@@ -171,7 +173,7 @@ namespace KyoS.Web.Controllers
                         path = await _imageHelper.UploadImageAsync(tcmSupervisorViewModel.SignatureFile, "Signatures");
                     }
 
-                    tcmSupervisorEntity = await _converterHelper.ToTCMsupervisorEntity(tcmSupervisorViewModel, path, true);
+                    tcmSupervisorEntity = await _converterHelper.ToTCMsupervisorEntity(tcmSupervisorViewModel, path, true, user_logged.UserName);
                     _context.Add(tcmSupervisorEntity);
                     try
                     {
@@ -358,7 +360,7 @@ namespace KyoS.Web.Controllers
                 {
                     path = await _imageHelper.UploadImageAsync(tcmSupervisorViewModel.SignatureFile, "Signatures");
                 }
-                TCMSupervisorEntity tcmSupervisorEntity = await _converterHelper.ToTCMsupervisorEntity(tcmSupervisorViewModel, path, false);
+                TCMSupervisorEntity tcmSupervisorEntity = await _converterHelper.ToTCMsupervisorEntity(tcmSupervisorViewModel, path, false, user_logged.UserName);
                 _context.Update(tcmSupervisorEntity);
 
                 try

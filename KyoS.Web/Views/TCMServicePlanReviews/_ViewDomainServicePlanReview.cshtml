@@ -1,0 +1,130 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMServicePlanReviewDomainEntity>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">TCM Service Plan Review's Domain and Objetive</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-hover table-responsive table-striped" id="MyTable">
+            <thead>
+                <tr>
+                    <th class="col-md-1">
+
+                    </th>
+                    <th class="col-md-1">
+                        Domain Code
+                    </th>
+                    <th class="col-md-5" style="text-align:left;">
+                        Domain Name
+                    </th>
+                    <th class="col-md-3" style="text-align:center;">
+                        Accomplished
+                    </th>
+                    <th class="col-md-2" style="text-align:center;">
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td align="center">
+                            @if (item.TCMServicePlanRevDomainObjectiive.Count() != 0)
+                            {
+                                <a class="icon-plus-sign-alt"></a>
+                            }
+                            else
+                            {
+
+                            }
+                            <div style="display:none">
+                                <table class="table table-striped table-bordered">
+                                    <tr>
+                                        <th class="col-md-1" style="text-align:center">Objective</th>
+                                        <th class="col-md-2" style="text-align:left">Create by</th>
+                                        <th class="col-md-2" style="text-align:center">Status</th>
+                                        <th class="col-md-5" style="text-align:center">Objectives Changes/Updates</th>
+                                        <th class="col-md-2" style="text-align:center"></th>
+                                    </tr>
+                                    @foreach (var value in item.TCMServicePlanRevDomainObjectiive)
+                                    {
+                                        <tr>
+                                            <td align="center">@Html.DisplayFor(modelItem => value.IdObjective)</td>
+                                            <td align="left">@Html.DisplayFor(modelItem => value.Origin)</td>
+                                            <td align="center">
+                                                @if (value.Status == KyoS.Common.Enums.StatusType.Open)
+                                                {
+                                                    <span class="label label-success">
+                                                        Open
+                                                    </span>
+                                                }
+                                                @if (value.Status == KyoS.Common.Enums.StatusType.Close)
+                                                {
+                                                    <span class="label label-default">
+                                                        Close
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td align="left">@Html.DisplayFor(modelItem => value.ChangesUpdate)</td>
+                                            <td align="center">
+
+                                                @if (value.Origin == "Service Plan Review")
+                                                {
+                                                    <a onclick="showInPopup('@Url.Action("EditObjetive", "TCMServicePlanReviews", new { id = value.Id}, Context.Request.Scheme)','Edit Objetive of Service Plan Review')" class="btn btn-warning" title="Edit Objetive of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
+                                                    <a asp-action="DeleteObjetive" asp-route-id="@value.Id" asp-route-idObjetive="@value.IdObjective" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete Objetive"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a onclick="showInPopup('@Url.Action("EditObjetiveReadOnly", "TCMServicePlanReviews", new { id = value.Id}, Context.Request.Scheme)','Edit Objetive of Service Plan Review')" class="btn btn-warning" title="Edit Objetive of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
+                                                    <a asp-action="EditDomain" asp-route-id="@item.Id" class="btn btn-danger disabled"><i class="glyphicon glyphicon-trash" title="Edit Service PLan Review Domain"></i></a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </td>
+                        <td align="left">
+                            @Html.DisplayFor(modelItem => item.TcmDomain.Code)
+                        </td>
+                        <td align="left">
+                            @Html.DisplayFor(modelItem => item.TcmDomain.Name)
+                        </td>
+                        <td align="center">
+                            @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                            {
+                                <span class="label label-success">
+                                    Open
+                                </span>
+                            }
+                            @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                            {
+                                <span class="label label-default">
+                                    Close
+                                </span>
+                            }
+                        </td>
+                        <td align="center">
+                            @if (item.TcmDomain.Origin == "Service Plan Review")
+                            {
+                                <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlanReviews", new { id = item.TcmDomain.Id }, Context.Request.Scheme)','Create Objetive of Service Plan Review')" class="btn btn-warning" title="Create Objetive of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
+                                <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlanReviews", new { id = item.TcmDomain.Id, origen = 1, idServicePlanReview = item.TcmServicePlanReview.Id}, Context.Request.Scheme)','Create Objetive of Service Plan Review')" class="btn btn-info" title="Create Objetive of this Service Plan Review"><i class="glyphicon glyphicon-plus"></i> </a>
+                                <a asp-action="DeleteDomain" asp-route-id="@item.Id" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete Domain"></i></a>
+                            }
+                            else
+                            {
+                                <a onclick="showInPopup('@Url.Action("EditDomainReadOnly", "TCMServicePlanReviews", new { id = item.TcmDomain.Id }, Context.Request.Scheme)','Create Objetive of Service Plan Review')" class="btn btn-warning" title="Create Objetive of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
+                                <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlanReviews", new { id = item.TcmDomain.Id, idServicePlanReview = item.TcmServicePlanReview.Id}, Context.Request.Scheme)','Create Objetive of Service Plan Review')" class="btn btn-info" title="Create Objetive of this Service Plan Review"><i class="glyphicon glyphicon-plus"></i> </a>
+                                <a asp-action="DeleteDomain" asp-route-id="@item.Id" class="btn btn-danger disabled"><i class="glyphicon glyphicon-trash" title="Delete Service PLan Review Domain"></i></a>
+                            }
+
+
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

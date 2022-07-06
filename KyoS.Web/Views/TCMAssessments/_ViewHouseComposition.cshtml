@@ -1,0 +1,60 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMAssessmentHouseCompositionEntity>
+<div class="col-push-12">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @*<h3 class="panel-title">*@
+                <strong>B. Household Composition </strong><br />
+                <i>List all family members living in the same household and indicate their ability to support and take care of the client</i>
+                @*</h3>*@
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-2">
+                                Name
+                            </th>
+                            <th class="col-md-3" style="text-align:center;">
+                                Age
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Relationship
+                            </th>
+                            <th class="col-md-3" style="text-align:center;">
+                                Supporting and Caretaking Ability
+                            </th>
+                            <th class="col-md-2">
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Age)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.RelationShip)
+                                </td>
+                                 <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Supporting)
+                                </td>
+                                <td align="right">
+                                    <a onclick="showInPopup('@Url.Action("EditHouseCompositionModal", "TCMAssessments", new { id = @item.Id }, Context.Request.Scheme)','Edit Behavioral Health')" class="btn btn-warning" title="Edit Behavioral Health"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    @*<a asp-action="DeleteBehavioral" asp-route-origin="2" asp-route-id="@item.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>*@
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

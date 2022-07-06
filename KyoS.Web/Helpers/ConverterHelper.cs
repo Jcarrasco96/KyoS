@@ -37,7 +37,8 @@ namespace KyoS.Web.Helpers
                 Phone = model.Phone,
                 FaxNo = model.FaxNo,
                 ClinicalDirector = model.ClinicalDirector,
-                ProviderId = model.ProviderId
+                ProviderMedicaidId = model.ProviderMedicaidId,
+                ProviderTaxId = model.ProviderTaxId
             };
         }
 
@@ -56,7 +57,8 @@ namespace KyoS.Web.Helpers
                 Phone = clinicEntity.Phone,
                 FaxNo = clinicEntity.FaxNo,
                 ClinicalDirector = clinicEntity.ClinicalDirector,
-                ProviderId = clinicEntity.ProviderId
+                ProviderMedicaidId = clinicEntity.ProviderMedicaidId,
+                ProviderTaxId = clinicEntity.ProviderTaxId
             };
         }
 
@@ -193,7 +195,8 @@ namespace KyoS.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 Clinic = await _context.Clinics.FindAsync(model.IdClinic),
-                Codigo = model.Codigo,
+                ProviderNumber = model.ProviderNumber,
+                Credentials = model.Credentials,
                 Name = model.Name,
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus),
                 LinkedUser = _userHelper.GetUserNameById(model.IdUser),
@@ -209,7 +212,8 @@ namespace KyoS.Web.Helpers
             {
                 Id = caseMannagerEntity.Id,
                 Name = caseMannagerEntity.Name,
-                Codigo = caseMannagerEntity.Codigo,
+                ProviderNumber = caseMannagerEntity.ProviderNumber,
+                Credentials = caseMannagerEntity.Credentials,
                 IdClinic = caseMannagerEntity.Clinic.Id,
                 Clinics = _combosHelper.GetComboClinics(),
                 IdStatus = (caseMannagerEntity.Status == StatusType.Open) ? 1 : 2,
@@ -383,11 +387,15 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMSupervisorEntity> ToTCMsupervisorEntity(TCMSupervisorViewModel model, string signaturePath, bool isNew)
+        public async Task<TCMSupervisorEntity> ToTCMsupervisorEntity(TCMSupervisorViewModel model, string signaturePath, bool isNew, string userId)
         {
             return new TCMSupervisorEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Clinic = await _context.Clinics.FindAsync(model.IdClinic),
                 Code = model.Code,
                 LinkedUser = _userHelper.GetUserNameById(model.IdUser),
@@ -415,7 +423,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<MTPEntity> ToMTPEntity(MTPViewModel model, bool isNew)
+        public async Task<MTPEntity> ToMTPEntity(MTPViewModel model, bool isNew, string userId)
         {
             return new MTPEntity
             {
@@ -471,9 +479,14 @@ namespace KyoS.Web.Helpers
                 RationaleForUpdate = model.RationaleForUpdate,
                 Setting = model.Setting,
                 Substance = model.Substance,
-                SubstanceWhere = model.SubstanceWhere
+                SubstanceWhere = model.SubstanceWhere,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
 
-        };
+            };
         }
 
         public MTPViewModel ToMTPViewModel(MTPEntity mtpEntity)
@@ -534,7 +547,12 @@ namespace KyoS.Web.Helpers
                 RationaleForUpdate = mtpEntity.RationaleForUpdate,
                 Substance = mtpEntity.Substance,
                 SubstanceWhere = mtpEntity.SubstanceWhere,
-                Client = mtpEntity.Client
+                Client = mtpEntity.Client,
+                Goals = mtpEntity.Goals,
+                CreatedBy = mtpEntity.CreatedBy,
+                CreatedOn = mtpEntity.CreatedOn,
+                LastModifiedBy = mtpEntity.LastModifiedBy,
+                LastModifiedOn = mtpEntity.LastModifiedOn
             };
         }        
 
@@ -901,7 +919,7 @@ namespace KyoS.Web.Helpers
                 Workday_Client = (model.IdWorkdayClient != 0) ? await _context.Workdays_Clients
                                                                               .Include(wc => wc.Facilitator)
                                                                               .FirstOrDefaultAsync(wc => wc.Id == model.IdWorkdayClient) : null,
-                FarsForm = (model.IdFarsForm != 0) ? await _context.FarsForm                                                                   
+                FarsForm = (model.IdFarsForm != 0) ? await _context.FarsForm
                                                                    .FirstOrDefaultAsync(f => f.Id == model.IdFarsForm) : null,
                 MTPReview = (model.IdMTPReview != 0) ? await _context.MTPReviews
                                                                      .FirstOrDefaultAsync(m => m.Id == model.IdMTPReview) : null,
@@ -912,7 +930,8 @@ namespace KyoS.Web.Helpers
                 Title = model.Title,
                 Text = model.Text,
                 DateCreated = DateTime.Now,
-                Status = MessageStatus.NotRead
+                Status = MessageStatus.NotRead,
+                Notification = model.Notification
             };
         }
 
@@ -1006,7 +1025,9 @@ namespace KyoS.Web.Helpers
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
-                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Agency = model.Agency,
+                Title = model.Title
             };
         }
 
@@ -1064,7 +1085,9 @@ namespace KyoS.Web.Helpers
                 Email = model.Email,
                 ReferredNote = model.ReferredNote,
                 CreatedBy = model.CreatedBy,
-                CreatedOn = model.CreatedOn
+                CreatedOn = model.CreatedOn,
+                Agency = model.Agency,
+                Title = model.Title
             };
         }
 
@@ -1265,11 +1288,15 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMServiceEntity> ToTCMServiceEntity(TCMServiceViewModel model, bool isNew)
+        public async Task<TCMServiceEntity> ToTCMServiceEntity(TCMServiceViewModel model, bool isNew, string userId)
         {
             return new TCMServiceEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Clinic = await _context.Clinics.FindAsync(model.IdClinic),
                 Name = model.Name,
                 Description = model.Description,
@@ -1290,11 +1317,15 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMStageEntity> ToTCMStageEntity(TCMStageViewModel model, bool isNew)
+        public async Task<TCMStageEntity> ToTCMStageEntity(TCMStageViewModel model, bool isNew, string userId)
         {
             return new TCMStageEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 tCMservice = await _context.TCMServices.FindAsync(model.Id_TCMService),
                 Clinic = await _context.Clinics.FindAsync(model.IdClinic),
                 Name = model.Name,
@@ -1320,11 +1351,15 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMClientEntity> ToTCMClientEntity(TCMClientViewModel model, bool isNew)
+        public async Task<TCMClientEntity> ToTCMClientEntity(TCMClientViewModel model, bool isNew, string userId)
         {
             return new TCMClientEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Casemanager = model.Casemanager,
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus),
                 CaseNumber = model.CaseNumber,
@@ -1376,11 +1411,15 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMServicePlanEntity> ToTCMServicePlanEntity(TCMServicePlanViewModel model, bool isNew)
+        public async Task<TCMServicePlanEntity> ToTCMServicePlanEntity(TCMServicePlanViewModel model, bool isNew, string userId)
         {
             return new TCMServicePlanEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 DateIntake = model.Date_Intake,
                 DateServicePlan = model.Date_ServicePlan,
                 DateAssessment = model.Date_Assessment,
@@ -1406,22 +1445,30 @@ namespace KyoS.Web.Helpers
                 Code = TcmDomainEntity.Code,
                 Name = TcmDomainEntity.Name,
                 TcmServicePlan = TcmDomainEntity.TcmServicePlan,
-                Services = _combosHelper.GetComboServicesNotUsed(TcmDomainEntity.TcmServicePlan.Id)
+                Services = _combosHelper.GetComboServicesNotUsed(TcmDomainEntity.TcmServicePlan.Id),
+                Origin = TcmDomainEntity.Origin
+
             };
         }
 
-        public async Task<TCMDomainEntity> ToTCMDomainEntity(TCMDomainViewModel model, bool isNew)
+        public async Task<TCMDomainEntity> ToTCMDomainEntity(TCMDomainViewModel model, bool isNew, string origin = "Service Plan Review", string userId = "")
         {
+           
             return new TCMDomainEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 DateIdentified = model.Date_Identified,
                 NeedsIdentified = model.Needs_Identified,
                 LongTerm = model.Long_Term,
                 TCMObjetive = model.TCMObjetive,
                 Code = model.Code,
                 Name = model.Name,
-                TcmServicePlan = model.TcmServicePlan
+                TcmServicePlan = model.TcmServicePlan,
+                Origin = origin
             };
         }
 
@@ -1741,30 +1788,44 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMObjetiveEntity> ToTCMObjetiveEntity(TCMObjetiveViewModel model, bool isNew)
-        {            
+        public async Task<TCMObjetiveEntity> ToTCMObjetiveEntity(TCMObjetiveViewModel model, bool isNew, int origin, string userId)
+        {
+            string valor = "Service Plan";
+            if (origin == 1)
+                valor = "Addendum";
+            if (origin == 2)
+                valor = "Service Plan Review";
+
             return new TCMObjetiveEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmDomain = await _context.TCMDomains.FindAsync(model.Id_Domain),
                 //Clinic = await _context.Clinics.FindAsync(model.IdClinic),
                 Name = model.name,
                 Task = model.task,
                 //Long_Term = model.long_Term,
                 StartDate = model.Start_Date,
+                
                 TargetDate = model.Target_Date,
                 EndDate = model.End_Date,
                 Finish = model.Finish,
                 IdObjetive = model.ID_Objetive,
-                Status = model.Status,
-                Responsible = model.Responsible
-                
+                Status = StatusUtils.GetStatusByIndex(model.IdStatus),
+                Responsible = model.Responsible,
+                Origin = valor
+
             };
         }
 
         public TCMObjetiveViewModel ToTCMObjetiveViewModel(TCMObjetiveEntity TcmObjetiveEntity)
         {
-            return new TCMObjetiveViewModel
+            TCMObjetiveViewModel salida;
+
+            salida = new TCMObjetiveViewModel
             {
                 Id = TcmObjetiveEntity.Id,
                 Id_Domain = TcmObjetiveEntity.TcmDomain.Id,
@@ -1780,8 +1841,22 @@ namespace KyoS.Web.Helpers
                 Finish = TcmObjetiveEntity.Finish,
                 TcmDomain = TcmObjetiveEntity.TcmDomain,
                 Stages = _combosHelper.GetComboStagesNotUsed(TcmObjetiveEntity.TcmDomain),
-                Responsible = TcmObjetiveEntity.Responsible
+                Responsible = TcmObjetiveEntity.Responsible,
+                IdStatus = (TcmObjetiveEntity.Status == StatusType.Open) ? 1 : 2,
+                StatusList = _combosHelper.GetComboClientStatus(),
+                ID_Objetive = TcmObjetiveEntity.IdObjetive,
+                IdServicePlanReview = TcmObjetiveEntity.TcmDomain.TcmServicePlan.TCMServicePlanReview.Id,
+                Idd = TcmObjetiveEntity.Id
+
             };
+            if (TcmObjetiveEntity.Origin == "Service Plan")
+                salida.Origin = 0;
+            if (TcmObjetiveEntity.Origin == "Addendum")
+                salida.Origin = 1;
+            if (TcmObjetiveEntity.Origin == "Service Plan Review")
+                salida.Origin = 2;
+
+            return salida;
         }
 
         public IntakeOrientationCheckListViewModel ToIntakeOrientationChecklistViewModel(IntakeOrientationChecklistEntity model)
@@ -1885,15 +1960,21 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMAdendumEntity> ToTCMAdendumEntity(TCMAdendumViewModel model, bool isNew)
+        public async Task<TCMAdendumEntity> ToTCMAdendumEntity(TCMAdendumViewModel model, bool isNew, string userId)
         {
 
             return new TCMAdendumEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 DateAdendum = model.Date_Identified,
                 TcmServicePlan = model.TcmServicePlan,
-                TcmDomain = model.TcmDomain
+                TcmDomain = model.TcmDomain,
+                LongTerm = model.Long_term,
+                NeedsIdentified = model.Needs_Identified
                 
             };
         }
@@ -1907,7 +1988,9 @@ namespace KyoS.Web.Helpers
                 ListTcmServicePlan = _combosHelper.GetComboServicesPlan(TcmAdendumEntity.TcmServicePlan.TcmClient.Casemanager.Clinic.Id, TcmAdendumEntity.TcmServicePlan.TcmClient.Casemanager.Id, TcmAdendumEntity.TcmServicePlan.TcmClient.CaseNumber),
                 TcmDominio = _combosHelper.GetComboTCMServices(),
                 TcmDomain = TcmAdendumEntity.TcmDomain,
-                DateAdendum = TcmAdendumEntity.DateAdendum
+                DateAdendum = TcmAdendumEntity.DateAdendum,
+                LongTerm = TcmAdendumEntity.LongTerm,
+                NeedsIdentified = TcmAdendumEntity.NeedsIdentified
             };
         }
 
@@ -1932,12 +2015,16 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMServicePlanReviewEntity> ToTCMServicePlanReviewEntity(TCMServicePlanReviewViewModel model, bool isNew)
+        public async Task<TCMServicePlanReviewEntity> ToTCMServicePlanReviewEntity(TCMServicePlanReviewViewModel model, bool isNew, string userId)
         {
             TCMServicePlanEntity tcmServicePlan = await _context.TCMServicePlans.FirstOrDefaultAsync(n => n.Id == model.IdServicePlan);
             return new TCMServicePlanReviewEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 DateOpending = tcmServicePlan.DateIntake,
                 DateServicePlanReview = model.DateServicePlanReview,
                 Recomendation = model.Recomendation,
@@ -1961,11 +2048,15 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMServicePlanReviewDomainEntity> ToTCMServicePlanReviewDomainEntity(TCMServicePlanReviewDomainViewModel model, bool isNew)
+        public async Task<TCMServicePlanReviewDomainEntity> ToTCMServicePlanReviewDomainEntity(TCMServicePlanReviewDomainViewModel model, bool isNew, string userId)
         {
             return new TCMServicePlanReviewDomainEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmDomain = model.TcmDomain,
                 ChangesUpdate = model.ChangesUpdate
                
@@ -2002,11 +2093,15 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMDischargeEntity> ToTCMDischargeEntity(TCMDischargeViewModel model, bool isNew)
+        public async Task<TCMDischargeEntity> ToTCMDischargeEntity(TCMDischargeViewModel model, bool isNew, string userId)
         {
             return new TCMDischargeEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 StaffingDate = model.StaffingDate,
                 DischargeDate = model.DischargeDate,
                 PresentProblems = model.PresentProblems,
@@ -2025,7 +2120,9 @@ namespace KyoS.Web.Helpers
                 TcmDischargeFollowUp = model.TcmDischargeFollowUp,
                 StaffSignatureDate = model.StaffSignatureDate,
                 SupervisorSignatureDate = model.SupervisorSignatureDate,
-                TcmServicePlan = _context.TCMServicePlans.Find(model.IdServicePlan)
+                TcmServicePlan = await _context.TCMServicePlans
+                                         .Include(n => n.TcmClient)
+                                         .FirstOrDefaultAsync(m => m.Id == model.IdServicePlan)
 
             };
         }
@@ -2761,7 +2858,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<BioEntity> ToBioEntity(BioViewModel model, bool isNew)
+        public async Task<BioEntity> ToBioEntity(BioViewModel model, bool isNew, string userId)
         {
             return new BioEntity
             {
@@ -2951,8 +3048,13 @@ namespace KyoS.Web.Helpers
                 ClientDenied = model.ClientDenied,
                 StartTime = model.StartTime,
                 EndTime = model.EndTime,
-                ForHowLong = model.ForHowLong
-                
+                ForHowLong = model.ForHowLong,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                AdmissionedFor = model.AdmissionedFor
+
             };
         }
 
@@ -3155,7 +3257,12 @@ namespace KyoS.Web.Helpers
                 IdIfSexuallyActive = Convert.ToInt32(model.IfSexuallyActive) + 1,
                 IfSexuallyActive_Status = _combosHelper.GetComboBio_IfSexuallyActive(),
                 IdRecentWeight = Convert.ToInt32(model.RecentWeight) + 1,
-                RecentWeight_Status = _combosHelper.GetComboBio_RecentWeight()
+                RecentWeight_Status = _combosHelper.GetComboBio_RecentWeight(),
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                AdmissionedFor = model.AdmissionedFor
 
             };
 
@@ -3421,7 +3528,7 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
-                IdTCMClient = model.TcmClient.Client.Id,
+                IdTCMClient = model.TcmClient.Id,
                 
                 TcmClient_FK = model.TcmClient_FK,
                 TcmClient = model.TcmClient,
@@ -3470,13 +3577,16 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMIntakeConsentForTreatmentEntity> ToTCMIntakeConsentForTreatmentEntity(TCMIntakeConsentForTreatmentViewModel model, bool isNew)
+        public async Task<TCMIntakeConsentForTreatmentEntity> ToTCMIntakeConsentForTreatmentEntity(TCMIntakeConsentForTreatmentViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeConsentForTreatmentEntity
             {
                 Id = isNew ? 0 : model.Id,
                 TcmClient = model.TcmClient,
-
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Aggre = model.Aggre,
                 Aggre1 = model.Aggre1,
                 AuthorizeRelease = model.AuthorizeRelease,
@@ -3513,17 +3623,25 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
                 Underestand = model.Underestand,
-                AdmissionedFor = model.AdmissionedFor
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
 
-        public async Task<TCMIntakeConsentForReleaseEntity> ToTCMIntakeConsentForReleaseEntity(TCMIntakeConsentForReleaseViewModel model, bool isNew)
+        public async Task<TCMIntakeConsentForReleaseEntity> ToTCMIntakeConsentForReleaseEntity(TCMIntakeConsentForReleaseViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeConsentForReleaseEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = await _context.TCMClient.FirstOrDefaultAsync(c => c.Id == model.TcmClient_FK),
                 TcmClient_FK = model.TcmClient_FK,
                 DateSignatureEmployee = model.DateSignatureEmployee,
@@ -3593,17 +3711,25 @@ namespace KyoS.Web.Helpers
                 Address = model.Address,
                 CityStateZip = model.CityStateZip,
                 PhoneNo = model.PhoneNo,
-                FaxNo = model.FaxNo
+                FaxNo = model.FaxNo,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
 
-        public async Task<TCMIntakeConsumerRightsEntity> ToTCMIntakeConsumerRightsEntity(TCMIntakeConsumerRightsViewModel model, bool isNew)
+        public async Task<TCMIntakeConsumerRightsEntity> ToTCMIntakeConsumerRightsEntity(TCMIntakeConsumerRightsViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeConsumerRightsEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 DateSignatureEmployee = model.DateSignatureEmployee,
@@ -3630,17 +3756,25 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 ServedOf = model.ServedOf,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
 
-        public async Task<TCMIntakeAcknowledgementHippaEntity> ToTCMIntakeAcknoewledgementHippaEntity(TCMIntakeAcknoewledgementHippaViewModel model, bool isNew)
+        public async Task<TCMIntakeAcknowledgementHippaEntity> ToTCMIntakeAcknoewledgementHippaEntity(TCMIntakeAcknoewledgementHippaViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeAcknowledgementHippaEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 DateSignatureEmployee = model.DateSignatureEmployee,
@@ -3664,17 +3798,25 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
 
-        public async Task<TCMIntakeOrientationChecklistEntity> ToTCMIntakeOrientationChecklistEntity(TCMIntakeOrientationCheckListViewModel model, bool isNew)
+        public async Task<TCMIntakeOrientationChecklistEntity> ToTCMIntakeOrientationChecklistEntity(TCMIntakeOrientationCheckListViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeOrientationChecklistEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 DateSignatureEmployee = model.DateSignatureEmployee,
@@ -3744,17 +3886,25 @@ namespace KyoS.Web.Helpers
                 Services = model.Services,
                 TheAbove = model.TheAbove,
                 TourFacility = model.TourFacility,
-                AdmissionedFor = model.AdmissionedFor
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
 
-        public async Task<TCMIntakeAdvancedDirectiveEntity> ToTCMIntakeAdvancedDirectiveEntity(TCMIntakeAdvancedDirectiveViewModel model, bool isNew)
+        public async Task<TCMIntakeAdvancedDirectiveEntity> ToTCMIntakeAdvancedDirectiveEntity(TCMIntakeAdvancedDirectiveViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeAdvancedDirectiveEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 DateSignatureEmployee = model.DateSignatureEmployee,
@@ -3782,16 +3932,24 @@ namespace KyoS.Web.Helpers
                 Documents = model.Documents,
                 AdmissionedFor = model.AdmissionedFor,
                 IHave = model.IHave,
-                IHaveNot = model.IHaveNot
+                IHaveNot = model.IHaveNot,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
             };
 
         }
 
-        public async Task<TCMIntakeForeignLanguageEntity> ToTCMIntakeForeignLanguageEntity(TCMIntakeForeignLanguageViewModel model, bool isNew)
+        public async Task<TCMIntakeForeignLanguageEntity> ToTCMIntakeForeignLanguageEntity(TCMIntakeForeignLanguageViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeForeignLanguageEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 DateSignatureEmployee = model.DateSignatureEmployee,
@@ -3815,17 +3973,25 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
 
-        public async Task<TCMIntakeWelcomeEntity> ToTCMIntakeWelcomeEntity(TCMIntakeWelcomeViewModel model, bool isNew)
+        public async Task<TCMIntakeWelcomeEntity> ToTCMIntakeWelcomeEntity(TCMIntakeWelcomeViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeWelcomeEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 AdmissionedFor = model.AdmissionedFor,
@@ -3843,17 +4009,25 @@ namespace KyoS.Web.Helpers
                 IdTCMClient = model.TcmClient.Id,
                 TcmClient_FK = model.TcmClient_FK,
                 AdmissionedFor = model.AdmissionedFor,
-                Date = model.Date
+                Date = model.Date,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
 
-        public async Task<TCMIntakeNonClinicalLogEntity> ToTCMIntakeNonClinicalLogEntity(TCMIntakeNonClinicalLogViewModel model, bool isNew)
+        public async Task<TCMIntakeNonClinicalLogEntity> ToTCMIntakeNonClinicalLogEntity(TCMIntakeNonClinicalLogViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeNonClinicalLogEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 AdmissionedFor = model.AdmissionedFor,
@@ -3873,17 +4047,25 @@ namespace KyoS.Web.Helpers
                 TcmClient_FK = model.TcmClient_FK,
                 AdmissionedFor = model.AdmissionedFor,
                 Date = model.Date,
-                DateActivity = model.DateActivity
+                DateActivity = model.DateActivity,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
 
-        public async Task<TCMIntakeMiniMentalEntity> ToTCMIntakeMiniMenatalEntity(TCMIntakeMiniMentalViewModel model, bool isNew)
+        public async Task<TCMIntakeMiniMentalEntity> ToTCMIntakeMiniMenatalEntity(TCMIntakeMiniMentalViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeMiniMentalEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 AdmissionedFor = model.AdmissionedFor,
@@ -3927,16 +4109,24 @@ namespace KyoS.Web.Helpers
                 Recall = model.Recall,
                 RegistrationName = model.RegistrationName,
                 TotalScore = model.TotalScore,
-                Trials = model.Trials
+                Trials = model.Trials,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
             };
 
         }
 
-        public async Task<TCMIntakeCoordinationCareEntity> ToTCMIntakeCoordinationCareEntity(TCMIntakeCoordinationCareViewModel model, bool isNew)
+        public async Task<TCMIntakeCoordinationCareEntity> ToTCMIntakeCoordinationCareEntity(TCMIntakeCoordinationCareViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeCoordinationCareEntity
             {
                 Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient = model.TcmClient,
                 TcmClient_FK = model.TcmClient_FK,
                 AdmissionedFor = model.AdmissionedFor,
@@ -3988,10 +4178,1545 @@ namespace KyoS.Web.Helpers
                 IRefuse = model.IRefuse,
                 PCP = model.PCP,
                 Specialist = model.Specialist,
-                SpecialistText = model.SpecialistText
+                SpecialistText = model.SpecialistText,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
 
             };
 
         }
+
+        public async Task<TCMDischargeFollowUpEntity> ToTCMDischargeFollowUpEntity(TCMDischargeFollowUpViewModel model, bool isNew, string userId)
+        {
+            TCMDischargeFollowUpEntity salida;
+            salida  = new TCMDischargeFollowUpEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Address_Location = model.Address_Location,
+                NextAppt = model.NextAppt,
+                PhoneNumber = model.PhoneNumber,
+                ProviderAgency = model.ProviderAgency,
+                TcmDischarge = await _context.TCMDischarge.FirstAsync(n => n.Id == model.IdTCMDischarge),
+                TypeService = model.TypeService
+
+            };
+
+            return salida;
+        }
+
+        public TCMDischargeFollowUpViewModel ToTCMDischargeFollowUpViewModel(TCMDischargeFollowUpEntity model)
+        {
+            return new TCMDischargeFollowUpViewModel
+            {
+                Id = model.Id,
+                Address_Location = model.Address_Location,
+                NextAppt = model.NextAppt,
+                PhoneNumber = model.PhoneNumber,
+                ProviderAgency = model.ProviderAgency,
+                TcmDischarge = model.TcmDischarge,
+                TypeService = model.TypeService,
+                IdTCMDischarge = model.TcmDischarge.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+            };
+
+        }
+
+        public async Task<TCMIntakeAppendixJEntity> ToTCMIntakeAppendixJEntity(TCMIntakeAppendixJViewModel model, bool isNew, string userId)
+        {
+            TCMIntakeAppendixJEntity salida;
+            salida = new TCMIntakeAppendixJEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = await _context.TCMClient.FirstAsync(n => n.Id == model.IdTCMClient),
+                AdmissionedFor = model.AdmissionedFor,
+                Approved = model.Approved,
+                Date = model.Date,
+                HasBeen = model.HasBeen,
+                HasHad = model.HasHad,
+                IsAt = model.IsAt,
+                IsAwaiting = model.IsAwaiting,
+                IsExperiencing = model.IsExperiencing,
+                SupervisorSignatureDate = model.SupervisorSignatureDate,
+                TcmClient_FK = model.TcmClient_FK,
+                TcmSupervisor = model.TcmSupervisor
+
+            };
+
+            return salida;
+        }
+
+        public TCMIntakeAppendixJViewModel ToTCMIntakeAppendixJViewModel(TCMIntakeAppendixJEntity model)
+        {
+            return new TCMIntakeAppendixJViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Approved = model.Approved,
+                Date = model.Date,
+                HasBeen = model.HasBeen,
+                HasHad = model.HasHad,
+                IsAt = model.IsAt,
+                IsAwaiting = model.IsAwaiting,
+                IsExperiencing = model.IsExperiencing,
+                SupervisorSignatureDate = model.SupervisorSignatureDate,
+                TcmClient_FK = model.TcmClient_FK,
+                TcmSupervisor = model.TcmSupervisor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+            };
+
+        }
+
+        public async Task<TCMIntakeInterventionLogEntity> ToTCMIntakeInterventionLogEntity(TCMIntakeInterventionLogViewModel model, bool isNew, string userId)
+        {
+            TCMIntakeInterventionLogEntity salida;
+            salida = new TCMIntakeInterventionLogEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = await _context.TCMClient.FirstAsync(n => n.Id == model.IdTCMClient),
+                TcmClient_FK = model.TcmClient_FK,
+                InterventionList = new System.Collections.Generic.List<TCMIntakeInterventionEntity>()
+                
+            };
+
+            return salida;
+        }
+
+        public TCMIntakeInterventionLogViewModel ToTCMIntakeInterventionLogViewModel(TCMIntakeInterventionLogEntity model)
+        {
+            return new TCMIntakeInterventionLogViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient_FK,
+                TcmClient_FK = model.TcmClient_FK,
+                InterventionList = model.InterventionList,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+            };
+
+        }
+
+        public async Task<TCMIntakeInterventionEntity> ToTCMIntakeInterventionEntity(TCMIntakeInterventionViewModel model, bool isNew, string userId)
+        {
+            TCMIntakeInterventionEntity salida;
+            salida = new TCMIntakeInterventionEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Activity = model.Activity,
+                Date = model.Date,
+                TcmInterventionLog = await _context.TCMIntakeInterventionLog.FirstOrDefaultAsync(n => n.Id == model.IdInterventionLog)
+        };
+
+            return salida;
+        }
+
+        public TCMIntakeInterventionViewModel ToTCMIntakeInterventionViewModel(TCMIntakeInterventionEntity model)
+        {
+            return new TCMIntakeInterventionViewModel
+            {
+                Id = model.Id,
+                Activity = model.Activity,
+                Date = model.Date,
+                TcmInterventionLog = model.TcmInterventionLog,
+                IdInterventionLog = model.TcmInterventionLog.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+
+            };
+
+        }
+
+        public async Task<TCMFarsFormEntity> ToTCMFarsFormEntity(TCMFarsFormViewModel model, bool isNew, string userId)
+        {
+            return new TCMFarsFormEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TCMClient = await _context.TCMClient.FirstOrDefaultAsync(c => c.Id == model.IdTCMClient),
+                AbilityScale = model.AbilityScale,
+                ActivitiesScale = model.ActivitiesScale,
+                AdmissionedFor = model.AdmissionedFor,
+                AnxietyScale = model.AnxietyScale,
+                CognitiveScale = model.CognitiveScale,
+                ContID1 = model.ContID1,
+                ContID2 = model.ContID2,
+                ContID3 = model.ContID3,
+                ContractorID = model.ContractorID,
+                Country = model.Country,
+                DangerToOtherScale = model.DangerToOtherScale,
+                DangerToSelfScale = model.DangerToSelfScale,
+                DcfEvaluation = model.DcfEvaluation,
+                DepressionScale = model.DepressionScale,
+                EvaluationDate = model.EvaluationDate,
+                FamilyEnvironmentScale = model.FamilyEnvironmentScale,
+                FamilyRelationShipsScale = model.FamilyRelationShipsScale,
+                HyperAffectScale = model.HyperAffectScale,
+                InterpersonalScale = model.InterpersonalScale,
+                MCOID = model.MCOID,
+                MedicaidProviderID = model.MedicaidProviderID,
+                MedicaidRecipientID = model.MedicaidRecipientID,
+                MedicalScale = model.MedicalScale,
+                M_GafScore = model.M_GafScore,
+                ProgramEvaluation = model.ProgramEvaluation,
+                ProviderId = model.ProviderId,
+                ProviderLocal = model.ProviderLocal,
+                RaterEducation = model.RaterEducation,
+                RaterFMHI = model.RaterFMHI,
+                SecurityScale = model.SecurityScale,
+                SignatureDate = model.SignatureDate,
+                SocialScale = model.SocialScale,
+                SubstanceAbusoHistory = model.SubstanceAbusoHistory,
+                SubstanceScale = model.SubstanceScale,
+                ThoughtProcessScale = model.ThoughtProcessScale,
+                TraumaticsScale = model.TraumaticsScale,
+                WorkScale = model.WorkScale,
+                Status = model.Status,
+                TCMSupervisor = await _context.TCMSupervisors.FirstOrDefaultAsync(n => n.Id == model.IdTCMSupervisor),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+            };
+        }
+
+        public TCMFarsFormViewModel ToTCMFarsFormViewModel(TCMFarsFormEntity model)
+        {
+            TCMFarsFormViewModel salida;
+            salida = new TCMFarsFormViewModel
+            {
+                Id = model.Id,
+                TCMClient = model.TCMClient,
+                IdTCMClient = model.TCMClient.Id,
+                AbilityScale = model.AbilityScale,
+                ActivitiesScale = model.ActivitiesScale,
+                AdmissionedFor = model.AdmissionedFor,
+                AnxietyScale = model.AnxietyScale,
+                CognitiveScale = model.CognitiveScale,
+                ContID1 = model.ContID1,
+                ContID2 = model.ContID2,
+                ContID3 = model.ContID3,
+                ContractorID = model.ContractorID,
+                Country = model.Country,
+                DangerToOtherScale = model.DangerToOtherScale,
+                DangerToSelfScale = model.DangerToSelfScale,
+                DcfEvaluation = model.DcfEvaluation,
+                DepressionScale = model.DepressionScale,
+                EvaluationDate = model.EvaluationDate,
+                FamilyEnvironmentScale = model.FamilyEnvironmentScale,
+                FamilyRelationShipsScale = model.FamilyRelationShipsScale,
+                HyperAffectScale = model.HyperAffectScale,
+                InterpersonalScale = model.InterpersonalScale,
+                MCOID = model.MCOID,
+                MedicaidProviderID = model.MedicaidProviderID,
+                MedicaidRecipientID = model.MedicaidRecipientID,
+                MedicalScale = model.MedicalScale,
+                M_GafScore = model.M_GafScore,
+                ProgramEvaluation = model.ProgramEvaluation,
+                ProviderId = model.ProviderId,
+                ProviderLocal = model.ProviderLocal,
+                RaterEducation = model.RaterEducation,
+                RaterFMHI = model.RaterFMHI,
+                SecurityScale = model.SecurityScale,
+                SignatureDate = model.SignatureDate,
+                SocialScale = model.SocialScale,
+                SubstanceAbusoHistory = model.SubstanceAbusoHistory,
+                SubstanceScale = model.SubstanceScale,
+                ThoughtProcessScale = model.ThoughtProcessScale,
+                TraumaticsScale = model.TraumaticsScale,
+                WorkScale = model.WorkScale,
+                Status = model.Status,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+
+            };
+
+            if (model.TCMSupervisor != null)
+                salida.IdTCMSupervisor = model.TCMSupervisor.Id;
+            else
+                salida.IdTCMSupervisor = 0;
+            return salida;
+
+        }
+
+        public async Task<TCMAssessmentEntity> ToTCMAssessmentEntity(TCMAssessmentViewModel model, bool isNew, string userId)
+        {
+            return new TCMAssessmentEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TcmClient = await _context.TCMClient.FirstOrDefaultAsync(c => c.Id == model.TcmClient_FK),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Approved = model.Approved,
+                AreChild = model.AreChild,
+                AreChildAddress = model.AreChildAddress,
+                TcmClient_FK = model.TcmClient_FK,
+                AreChildCity = model.AreChildCity,
+                AreChildName = model.AreChildName,
+                AreChildPhone = model.AreChildPhone,
+                Caregiver = model.Caregiver,
+                ChildFather = model.ChildFather,
+                ChildMother = model.ChildMother,
+                ClientInput = model.ClientInput,
+                DateAssessment = model.DateAssessment,
+                Divorced = model.Divorced,
+                Family = model.Family,
+                Married = model.Married,
+                MayWe = model.MayWe,
+                MayWeNA = model.MayWeNA,
+                NeverMarried = model.NeverMarried,
+                Other = model.Other,
+                OtherExplain = model.OtherExplain,
+                PresentingProblems = model.PresentingProblems,
+                Referring = model.Referring,
+                Review = model.Review,
+                School = model.School,
+                Separated = model.Separated,
+                Treating = model.Treating,
+                
+                MedicationList = model.MedicationList,
+                PastCurrentServiceList = model.PastCurrentServiceList,
+                AnyOther = model.AnyOther,
+                DateOfOnSetPresentingProblem = model.DateOfOnSetPresentingProblem,
+                HasTheClient = model.HasTheClient,
+                HouseCompositionList = model.HouseCompositionList,
+                HowDoesByFollowing = model.HowDoesByFollowing,
+                HowDoesCalendar = model.HowDoesCalendar,
+                HowDoesDaily = model.HowDoesDaily,
+                HowDoesElectronic = model.HowDoesElectronic,
+                HowDoesFamily = model.HowDoesFamily,
+                HowDoesKeeping = model.HowDoesKeeping,
+                HowDoesOther = model.HowDoesOther,
+                HowDoesOtherExplain = model.HowDoesOtherExplain,
+                HowDoesPill = model.HowDoesPill,
+                HowDoesRNHHA = model.HowDoesRNHHA,
+                HowWeelEnable = model.HowWeelEnable,
+                HowWeelWithALot = model.HowWeelWithALot,
+                HowWeelWithNo = model.HowWeelWithNo,
+                HowWeelWithSome = model.HowWeelWithSome,
+                IndividualAgencyList = model.IndividualAgencyList,
+                PharmacyPhone = model.PharmacyPhone,
+                PresentingProblemPrevious = model.PresentingProblemPrevious,
+                WhatPharmacy = model.WhatPharmacy,
+
+                HospitalList = model.HospitalList,
+                AbuseViolence = model.AbuseViolence,
+                Allergy = model.Allergy,
+                AllergySpecify = model.AllergySpecify,
+                AreAllImmunization = model.AreAllImmunization,
+                AreAllImmunizationExplain = model.AreAllImmunizationExplain,
+                AreYouPhysician = model.AreYouPhysician,
+                AreYouPhysicianSpecify = model.AreYouPhysicianSpecify,
+                DateMostRecent = model.DateMostRecent,
+                DescribeAnyOther = model.DescribeAnyOther,
+                DescribeAnyRisk = model.DescribeAnyRisk,
+                DoesAggressiveness = model.DoesAggressiveness,
+                DoesAnxiety = model.DoesAnxiety,
+                DoesDelusions = model.DoesDelusions,
+                DoesDepression = model.DoesDepression,
+                DoesFearfulness = model.DoesFearfulness,
+                DoesHallucinations = model.DoesHallucinations,
+                DoesHelplessness = model.DoesHelplessness,
+                DoesHopelessness = model.DoesHopelessness,
+                DoesHyperactivity = model.DoesHyperactivity,
+                DoesImpulsivity = model.DoesImpulsivity,
+                DoesIrritability = model.DoesIrritability,
+                DoesLoss = model.DoesLoss,
+                DoesLow = model.DoesLow,
+                DoesMood = model.DoesMood,
+                DoesNegative = model.DoesNegative,
+                DoesNervousness = model.DoesNervousness,
+                DoesObsessive = model.DoesObsessive,
+                DoesPanic = model.DoesPanic,
+                DoesParanoia = model.DoesParanoia,
+                DoesPoor = model.DoesPoor,
+                DoesSadness = model.DoesSadness,
+                DoesSelfNeglect = model.DoesSelfNeglect,
+                DoesSheUnderstand = model.DoesSheUnderstand,
+                DoesSleep = model.DoesSleep,
+                DoesTheClientFeel = model.DoesTheClientFeel,
+                DoesWithdrawal = model.DoesWithdrawal,
+                DrugList = model.DrugList,
+                HasClientUndergone = model.HasClientUndergone,
+                HasDifficultySeeingLevel = model.HasDifficultySeeingLevel,
+                HasDifficultySeeingObjetive = model.HasDifficultySeeingObjetive,
+                HasNoImpairment = model.HasNoImpairment,
+                HasNoUsefull = model.HasNoUsefull,
+                HaveYouEverBeenToAny = model.HaveYouEverBeenToAny,
+                HaveYouEverUsedAlcohol = model.HaveYouEverUsedAlcohol,
+                HearingDifficulty = model.HearingDifficulty,
+                HearingImpairment = model.HearingImpairment,
+                HearingNotDetermined = model.HearingNotDetermined,
+                Hears = model.Hears,
+                Homicidal = model.Homicidal,
+                HowActive = model.HowActive,
+                HowManyTimes = model.HowManyTimes,
+                IsClientCurrently = model.IsClientCurrently,
+                IsClientPregnancy = model.IsClientPregnancy,
+                IsClientPregnancyNA = model.IsClientPregnancyNA,
+                IsSheReceiving = model.IsSheReceiving,
+                Issues = model.Issues,
+                LegalDecisionAddress = model.LegalDecisionAddress,
+                LegalDecisionAdLitem = model.LegalDecisionAdLitem,
+                LegalDecisionAttomey = model.LegalDecisionAttomey,
+                LegalDecisionCityStateZip = model.LegalDecisionCityStateZip,
+                LegalDecisionLegal = model.LegalDecisionLegal,
+                LegalDecisionName = model.LegalDecisionName,
+                LegalDecisionNone = model.LegalDecisionNone,
+                LegalDecisionOther = model.LegalDecisionOther,
+                LegalDecisionOtherExplain = model.LegalDecisionOtherExplain,
+                LegalDecisionParent = model.LegalDecisionParent,
+                LegalDecisionPhone = model.LegalDecisionPhone,
+                MedicalProblemList = model.MedicalProblemList,
+                MentalHealth = model.MentalHealth,
+                NeedOfSpecial = model.NeedOfSpecial,
+                NeedOfSpecialSpecify = model.NeedOfSpecialSpecify,
+                NoHearing = model.NoHearing,
+                NoUseful = model.NoUseful,
+                Outcome = model.Outcome,
+                Provider = model.Provider,
+                Suicidal = model.Suicidal,
+                SurgeryList = model.SurgeryList,
+                TypeOfAssessmentAnnual = model.TypeOfAssessmentAnnual,
+                TypeOfAssessmentInitial = model.TypeOfAssessmentInitial,
+                TypeOfAssessmentOther = model.TypeOfAssessmentOther,
+                TypeOfAssessmentOtherExplain = model.TypeOfAssessmentOtherExplain,
+                TypeOfAssessmentSignificant = model.TypeOfAssessmentSignificant,
+                VisionImpairment = model.VisionImpairment,
+                VisionNotDetermined = model.VisionNotDetermined,
+                WhenWas = model.WhenWas,
+
+                AcademicEelementary = model.AcademicEelementary,
+                AcademicHigh = model.AcademicHigh,
+                AcademicMiddle = model.AcademicMiddle,
+                AcademicPreSchool = model.AcademicPreSchool,
+                AdditionalInformation = model.AdditionalInformation,
+                AdditionalInformationMigration = model.AdditionalInformationMigration,
+                AHomeVisit = model.AHomeVisit,
+                AHomeVisitOn = model.AHomeVisitOn,
+                Appliances = model.Appliances,
+                AttendanceEelementary = model.AttendanceEelementary,
+                AttendanceHigh = model.AttendanceHigh,
+                AttendanceMiddle = model.AttendanceMiddle,
+                AttendancePreSchool = model.AttendancePreSchool,
+                BathingAssistive = model.BathingAssistive,
+                BathingIndependent = model.BathingIndependent,
+                BathingPhysical = model.BathingPhysical,
+                BathingSupervision = model.BathingSupervision,
+                BathingTotal = model.BathingTotal,
+                Bathtub = model.Bathtub,
+                BehaviorEelementary = model.BehaviorEelementary,
+                BehaviorHigh = model.BehaviorHigh,
+                BehaviorMiddle = model.BehaviorMiddle,
+                BehaviorPreSchool = model.BehaviorPreSchool,
+                Briefly = model.Briefly,
+                CaseManagerWas = model.CaseManagerWas,
+                CaseManagerWasDueTo = model.CaseManagerWasDueTo,
+                Citizen = model.Citizen,
+                ColonCancer = model.ColonCancer,
+                CongredatedHowOften = model.CongredatedHowOften,
+                CongredatedProvider = model.CongredatedProvider,
+                CongredatedReceive = model.CongredatedReceive,
+                ContinueToLive = model.ContinueToLive,
+                ContinueToLiveOnly = model.ContinueToLiveOnly,
+                CookingAssistive = model.CookingAssistive,
+                CookingIndependent = model.CookingIndependent,
+                CookingPhysical = model.CookingPhysical,
+                CookingSupervision = model.CookingSupervision,
+                CookingTotal = model.CookingTotal,
+                CountryOfBirth = model.CountryOfBirth,
+                CurrentEmployer = model.CurrentEmployer,
+                DentalExam = model.DentalExam,
+                DescribeAnySchool = model.DescribeAnySchool,
+                DescribeClientCultural = model.DescribeClientCultural,
+                DescribeClientEducation = model.DescribeClientEducation,
+                DescribeClientLiving = model.DescribeClientLiving,
+                DescribeClientRelationship = model.DescribeClientRelationship,
+                DescribeNeighborhood = model.DescribeNeighborhood,
+                DescribeOtherNeedConcerns = model.DescribeOtherNeedConcerns,
+                DoesClientBasicNeed = model.DoesClientBasicNeed,
+                DoesClientCurrently = model.DoesClientCurrently,
+                DoesClientCurrentlyExplain = model.DoesClientCurrentlyExplain,
+                DoesClientFeel = model.DoesClientFeel,
+                DoesClientFeelExplain = model.DoesClientFeelExplain,
+                DoesClientNeedAssistance = model.DoesClientNeedAssistance,
+                DoesClientNeedAssistanceEducational = model.DoesClientNeedAssistanceEducational,
+                DoesClientNeedAssistanceEducationalExplain = model.DoesClientNeedAssistanceEducationalExplain,
+                DoesClientNeedAssistanceExplain = model.DoesClientNeedAssistanceExplain,
+                DoesNotKnow = model.DoesNotKnow,
+                DoingAssistive = model.DoingAssistive,
+                DoingIndependent = model.DoingIndependent,
+                DoingPhysical = model.DoingPhysical,
+                DoingSupervision = model.DoingSupervision,
+                DoingTotal = model.DoingTotal,
+                DressingAssistive = model.DressingAssistive,
+                DressingIndependent = model.DressingIndependent,
+                DressingPhysical = model.DressingPhysical,
+                DressingSupervision = model.DressingSupervision,
+                DressingTotal = model.DressingTotal,
+                Drives = model.Drives,
+                Electrical = model.Electrical,
+                EmployerAddress = model.EmployerAddress,
+                EmployerCityState = model.EmployerCityState,
+                EmployerContactPerson = model.EmployerContactPerson,
+                EmployerPhone = model.EmployerPhone,
+                EmploymentStatus = model.EmploymentStatus,
+                ExcessiveCluter = model.ExcessiveCluter,
+                FailToEelementary = model.FailToEelementary,
+                FailToHigh = model.FailToHigh,
+                FailToMiddle = model.FailToMiddle,
+                FailToPreSchool = model.FailToPreSchool,
+                FeedingAssistive = model.FeedingAssistive,
+                FeedingIndependent = model.FeedingIndependent,
+                FeedingPhysical = model.FeedingPhysical,
+                FeedingSupervision = model.FeedingSupervision,
+                FeedingTotal = model.FeedingTotal,
+                FireHazards = model.FireHazards,
+                Flooring = model.Flooring,
+                FoodPantryHowOften = model.FoodPantryHowOften,
+                FoodPantryProvider = model.FoodPantryProvider,
+                FoodPantryReceive = model.FoodPantryReceive,
+                FoodStampHowOften = model.FoodStampHowOften,
+                FoodStampProvider = model.FoodStampProvider,
+                FoodStampReceive = model.FoodStampReceive,
+                FriendOrFamily = model.FriendOrFamily,
+                GroomingAssistive = model.GroomingAssistive,
+                GroomingIndependent = model.GroomingIndependent,
+                GroomingPhysical = model.GroomingPhysical,
+                GroomingSupervision = model.GroomingSupervision,
+                GroomingTotal = model.GroomingTotal,
+                HasClientEverArrest = model.HasClientEverArrest,
+                HasClientEverArrestLastTime = model.HasClientEverArrestLastTime,
+                HasClientEverArrestManyTime = model.HasClientEverArrestManyTime,
+                HomeDeliveredHowOften = model.HomeDeliveredHowOften,
+                HomeDeliveredProvider = model.HomeDeliveredProvider,
+                HomeDeliveredReceive = model.HomeDeliveredReceive,
+                IfThereAnyHousing = model.IfThereAnyHousing,
+                IfYesWereCriminal = model.IfYesWereCriminal,
+                IfYesWhatArea = model.IfYesWhatArea,
+                ImmigrationOther = model.ImmigrationOther, 
+                ImmigrationOtherExplain = model.ImmigrationOtherExplain,
+                Insect = model.Insect,
+                IsClientCurrentlyEmployed = model.IsClientCurrentlyEmployed,
+                IsClientCurrentlySchool = model.IsClientCurrentlySchool,
+                IsClientCurrentlySchoolExplain = model.IsClientCurrentlySchoolExplain,
+                IsClientInterested = model.IsClientInterested,
+                IsClientInvolved = model.IsClientInvolved,
+                IsClientInvolvedSpecify = model.IsClientInvolvedSpecify,
+                IsTheClientAbleWork = model.IsTheClientAbleWork,
+                IsTheClientAbleWorkLimitation = model.IsTheClientAbleWorkLimitation,
+                IsTheClientHavingFinancial = model.IsTheClientHavingFinancial,
+                IsTheClientHavingFinancialExplain = model.IsTheClientHavingFinancialExplain,
+                IsThereAnyAide = model.IsThereAnyAide,
+                IsThereAnyAideName = model.IsThereAnyAideName,
+                IsThereAnyAidePhone = model.IsThereAnyAidePhone,
+                IsThereAnyCurrentLegalProcess = model.IsThereAnyCurrentLegalProcess,
+                LabWorks = model.LabWorks,
+                LearningEelementary = model.LearningEelementary,
+                LearningHigh = model.LearningHigh,
+                LearningMiddle = model.LearningMiddle,
+                LearningPreSchool = model.LearningPreSchool,
+                ListAnyNeed = model.ListAnyNeed,
+                ListClientCurrentPotencialStrngths = model.ListClientCurrentPotencialStrngths,
+                ListClientCurrentPotencialWeakness = model.ListClientCurrentPotencialWeakness,
+                MakingAssistive = model.MakingAssistive,
+                MakingIndependent = model.MakingIndependent,
+                MakingPhysical = model.MakingPhysical,
+                MakingSupervision = model.MakingSupervision,
+                MakingTotal = model.MakingTotal,
+                Mammogram = model.Mammogram,
+                MayWeLeaveSend = model.MayWeLeaveSend,
+                MonthlyFamilyIncome = model.MonthlyFamilyIncome,
+                NoAirCondition = model.NoAirCondition,
+                NoTelephone = model.NoTelephone,
+                NotHot = model.NotHot,
+                NumberOfBedrooms = model.NumberOfBedrooms,
+                NumberOfPersonLiving = model.NumberOfPersonLiving,
+                OtherFinancial = model.OtherFinancial,
+                OtherHowOften = model.OtherHowOften,
+                OtherProvider = model.OtherProvider,
+                OtherReceive = model.OtherReceive,
+                PapAndHPV = model.PapAndHPV,
+                ParticipationEelementary = model.ParticipationEelementary,
+                ParticipationHigh = model.ParticipationHigh,
+                ParticipationMiddle = model.ParticipationMiddle,
+                ParticipationPreSchool = model.ParticipationPreSchool,
+                PersonPorBedrooms = model.PersonPorBedrooms,
+                PhysicalExam = model.PhysicalExam,
+                PhysicalOther = model.PhysicalOther,
+                PreferToLive = model.PreferToLive,
+                Poor = model.Poor,
+                ProbationOfficer = model.ProbationOfficer,
+                ProbationOfficerName = model.ProbationOfficerName,
+                ProbationOfficerPhone = model.ProbationOfficerPhone,
+                RecommendedActivities = model.RecommendedActivities,
+                RecommendedBasicNeed = model.RecommendedBasicNeed,
+                RecommendedEconomic = model.RecommendedEconomic,
+                RecommendedHousing = model.RecommendedHousing,
+                RecommendedLegalImmigration = model.RecommendedLegalImmigration,
+                RecommendedMentalHealth = model.RecommendedMentalHealth,
+                RecommendedOther = model.RecommendedOther,
+                RecommendedOtherSpecify = model.RecommendedOtherSpecify,
+                RecommendedPhysicalHealth = model.RecommendedPhysicalHealth,
+                RecommendedRecreational = model.RecommendedRecreational,
+                RecommendedSchool = model.RecommendedSchool,
+                RecommendedTransportation = model.RecommendedTransportation,
+                RecommendedVocation = model.RecommendedVocation,
+                RelationshipEelementary = model.RelationshipEelementary,
+                RelationshipHigh =model.RelationshipHigh,
+                RelationshipMiddle = model.RelationshipMiddle,
+                RelationshipPreSchool = model.RelationshipPreSchool,
+                Resident = model.Resident,
+                ResidentStatus = model.ResidentStatus,
+                SchoolAddress = model.SchoolAddress,
+                SchoolCityState = model.SchoolCityState,
+                SchoolDistrict = model.SchoolDistrict,
+                SchoolGrade = model.SchoolGrade,
+                SchoolName = model.SchoolName,
+                SchoolProgramEBD = model.SchoolProgramEBD,
+                SchoolProgramESE = model.SchoolProgramESE,
+                SchoolProgramESOL = model.SchoolProgramESOL,
+                SchoolProgramHHIP = model.SchoolProgramHHIP,
+                SchoolProgramOther = model.SchoolProgramOther,
+                SchoolProgramRegular = model.SchoolProgramRegular,
+                SchoolProgramTeacherName = model.SchoolProgramTeacherName,
+                SchoolProgramTeacherPhone = model.SchoolProgramTeacherPhone,
+                ShoppingAssistive = model.ShoppingAssistive,
+                ShoppingIndependent = model.ShoppingIndependent,
+                ShoppingPhysical = model.ShoppingPhysical,
+                ShoppingSupervision = model.ShoppingSupervision,
+                ShoppingTotal = model.ShoppingTotal,
+                Staff = model.Staff,
+                Stairs = model.Stairs,
+                Structural = model.Structural,
+                TakesABus = model.TakesABus,
+                TransferringAssistive = model.TransferringAssistive,
+                TransferringIndependent = model.TransferringIndependent,
+                TransferringPhysical = model.TransferringPhysical,
+                TransferringSupervision = model.TransferringSupervision,
+                TransferringTotal = model.TransferringTotal,
+                TransportationOther = model.TransportationOther,
+                TransportationOtherExplain = model.TransportationOtherExplain,
+                Tripping = model.Tripping,
+                Unsanitary = model.Unsanitary,
+                VocationalEmployment = model.VocationalEmployment,
+                Walks = model.Walks,
+                WhatActivityThings = model.WhatActivityThings,
+                WhatIsCollegeGraduated = model.WhatIsCollegeGraduated,
+                WhatIsElementary = model.WhatIsElementary,
+                WhatIsGED = model.WhatIsGED,
+                WhatIsGraduated = model.WhatIsGraduated,
+                WhatIsGraduatedDegree = model.WhatIsGraduatedDegree,
+                WhatIsHighSchool = model.WhatIsHighSchool,
+                WhatIsMiddle = model.WhatIsMiddle,
+                WhatIsNoSchool = model.WhatIsNoSchool,
+                WhatIsSomeCollege = model.WhatIsSomeCollege,
+                WhatIsSomeHigh = model.WhatIsSomeHigh,
+                WhatIsTheMainSource = model.WhatIsTheMainSource,
+                WhatIsTradeSchool = model.WhatIsTradeSchool,
+                WhatIsUnknown = model.WhatIsUnknown,
+                WouldLikeObtainJob = model.WouldLikeObtainJob,
+                WouldLikeObtainJobNotAtThisTime = model.WouldLikeObtainJobNotAtThisTime,
+                YearEnteredUsa = model.YearEnteredUsa,
+
+                CantDoItAtAll = model.CantDoItAtAll,
+                DateSignatureCaseManager = model.DateSignatureCaseManager,
+                DateSignatureTCMSupervisor = model.DateSignatureTCMSupervisor,
+                DoesClientTranspotation = model.DoesClientTranspotation,
+                DoesClientTranspotationExplain = model.DoesClientTranspotationExplain,
+                HoweverOn = model.HoweverOn,
+                HoweverVisitScheduler = model.HoweverVisitScheduler,
+                NeedALot = model.NeedALot,
+                NeedNoHelp = model.NeedNoHelp,
+                NeedSome = model.NeedSome,
+                OtherReceiveExplain = model.OtherReceiveExplain,
+                Status = TCMDocumentStatus.Approved,
+                TCMSupervisor = model.TCMSupervisor
+                
+
+            };
+        }
+
+        public TCMAssessmentViewModel ToTCMAssessmentViewModel(TCMAssessmentEntity model)
+        {
+            TCMAssessmentViewModel salida;
+            salida = new TCMAssessmentViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                Approved = model.Approved,
+                AreChild = model.AreChild,
+                AreChildAddress = model.AreChildAddress,
+                TcmClient_FK = model.TcmClient_FK,
+                AreChildCity = model.AreChildCity,
+                AreChildName = model.AreChildName,
+                AreChildPhone = model.AreChildPhone,
+                Caregiver = model.Caregiver,
+                ChildFather = model.ChildFather,
+                ChildMother = model.ChildMother,
+                ClientInput = model.ClientInput,
+                DateAssessment = model.DateAssessment,
+                Divorced = model.Divorced,
+                Family = model.Family,
+                Married = model.Married,
+                MayWe = model.MayWe,
+                MayWeNA = model.MayWeNA,
+                NeverMarried = model.NeverMarried,
+                Other = model.Other,
+                OtherExplain = model.OtherExplain,
+                PresentingProblems = model.PresentingProblems,
+                Referring = model.Referring,
+                Review = model.Review,
+                School = model.School,
+                Separated = model.Separated,
+                Treating = model.Treating,
+                MedicationList = model.MedicationList,
+                PastCurrentServiceList = model.PastCurrentServiceList,
+                AnyOther = model.AnyOther,
+                DateOfOnSetPresentingProblem = model.DateOfOnSetPresentingProblem,
+                HasTheClient = model.HasTheClient,
+                HouseCompositionList = model.HouseCompositionList,
+                HowDoesByFollowing = model.HowDoesByFollowing,
+                HowDoesCalendar = model.HowDoesCalendar,
+                HowDoesDaily = model.HowDoesDaily,
+                HowDoesElectronic = model.HowDoesElectronic,
+                HowDoesFamily = model.HowDoesFamily,
+                HowDoesKeeping = model.HowDoesKeeping,
+                HowDoesOther = model.HowDoesOther,
+                HowDoesOtherExplain = model.HowDoesOtherExplain,
+                HowDoesPill = model.HowDoesPill,
+                HowDoesRNHHA = model.HowDoesRNHHA,
+                HowWeelEnable = model.HowWeelEnable,
+                HowWeelWithALot = model.HowWeelWithALot,
+                HowWeelWithNo = model.HowWeelWithNo,
+                HowWeelWithSome = model.HowWeelWithSome,
+                IndividualAgencyList = model.IndividualAgencyList,
+                PharmacyPhone = model.PharmacyPhone,
+                PresentingProblemPrevious = model.PresentingProblemPrevious,
+                WhatPharmacy = model.WhatPharmacy,
+
+                HospitalList = model.HospitalList,
+                AbuseViolence = model.AbuseViolence,
+                Allergy = model.Allergy,
+                AllergySpecify = model.AllergySpecify,
+                AreAllImmunization = model.AreAllImmunization,
+                AreAllImmunizationExplain = model.AreAllImmunizationExplain,
+                AreYouPhysician = model.AreYouPhysician,
+                AreYouPhysicianSpecify = model.AreYouPhysicianSpecify,
+                DateMostRecent = model.DateMostRecent,
+                DescribeAnyOther = model.DescribeAnyOther,
+                DescribeAnyRisk = model.DescribeAnyRisk,
+                DoesAggressiveness = model.DoesAggressiveness,
+                DoesAnxiety = model.DoesAnxiety,
+                DoesDelusions = model.DoesDelusions,
+                DoesDepression = model.DoesDepression,
+                DoesFearfulness = model.DoesFearfulness,
+                DoesHallucinations = model.DoesHallucinations,
+                DoesHelplessness = model.DoesHelplessness,
+                DoesHopelessness = model.DoesHopelessness,
+                DoesHyperactivity = model.DoesHyperactivity,
+                DoesImpulsivity = model.DoesImpulsivity,
+                DoesIrritability = model.DoesIrritability,
+                DoesLoss = model.DoesLoss,
+                DoesLow = model.DoesLow,
+                DoesMood = model.DoesMood,
+                DoesNegative = model.DoesNegative,
+                DoesNervousness = model.DoesNervousness,
+                DoesObsessive = model.DoesObsessive,
+                DoesPanic = model.DoesPanic,
+                DoesParanoia = model.DoesParanoia,
+                DoesPoor = model.DoesPoor,
+                DoesSadness = model.DoesSadness,
+                DoesSelfNeglect = model.DoesSelfNeglect,
+                DoesSheUnderstand = model.DoesSheUnderstand,
+                DoesSleep = model.DoesSleep,
+                DoesTheClientFeel = model.DoesTheClientFeel,
+                DoesWithdrawal = model.DoesWithdrawal,
+                DrugList = model.DrugList,
+                HasClientUndergone = model.HasClientUndergone,
+                HasDifficultySeeingLevel = model.HasDifficultySeeingLevel,
+                HasDifficultySeeingObjetive = model.HasDifficultySeeingObjetive,
+                HasNoImpairment = model.HasNoImpairment,
+                HasNoUsefull = model.HasNoUsefull,
+                HaveYouEverBeenToAny = model.HaveYouEverBeenToAny,
+                HaveYouEverUsedAlcohol = model.HaveYouEverUsedAlcohol,
+                HearingDifficulty = model.HearingDifficulty,
+                HearingImpairment = model.HearingImpairment,
+                HearingNotDetermined = model.HearingNotDetermined,
+                Hears = model.Hears,
+                Homicidal = model.Homicidal,
+                HowActive = model.HowActive,
+                HowManyTimes = model.HowManyTimes,
+                IsClientCurrently = model.IsClientCurrently,
+                IsClientPregnancy = model.IsClientPregnancy,
+                IsClientPregnancyNA = model.IsClientPregnancyNA,
+                IsSheReceiving = model.IsSheReceiving,
+                Issues = model.Issues,
+                LegalDecisionAddress = model.LegalDecisionAddress, 
+                LegalDecisionAdLitem = model.LegalDecisionAdLitem,
+                LegalDecisionAttomey = model.LegalDecisionAttomey, 
+                LegalDecisionCityStateZip = model.LegalDecisionCityStateZip, 
+                LegalDecisionLegal = model.LegalDecisionLegal, 
+                LegalDecisionName = model.LegalDecisionName,
+                LegalDecisionNone = model.LegalDecisionNone,
+                LegalDecisionOther = model.LegalDecisionOther, 
+                LegalDecisionOtherExplain = model.LegalDecisionOtherExplain, 
+                LegalDecisionParent = model.LegalDecisionParent,
+                LegalDecisionPhone = model.LegalDecisionPhone,
+                MedicalProblemList = model.MedicalProblemList,
+                MentalHealth = model.MentalHealth,
+                NeedOfSpecial = model.NeedOfSpecial,
+                NeedOfSpecialSpecify = model.NeedOfSpecialSpecify,
+                NoHearing = model.NoHearing,
+                NoUseful = model.NoUseful,
+                Outcome = model.Outcome,
+                Provider = model.Provider,
+                Suicidal = model.Suicidal,
+                SurgeryList = model.SurgeryList,
+                TypeOfAssessmentAnnual = model.TypeOfAssessmentAnnual,
+                TypeOfAssessmentInitial = model.TypeOfAssessmentInitial,
+                TypeOfAssessmentOther = model.TypeOfAssessmentOther,
+                TypeOfAssessmentOtherExplain = model.TypeOfAssessmentOtherExplain,
+                TypeOfAssessmentSignificant = model.TypeOfAssessmentSignificant,
+                VisionImpairment = model.VisionImpairment,
+                VisionNotDetermined = model.VisionNotDetermined,
+                WhenWas = model.WhenWas,
+
+                AcademicEelementary = model.AcademicEelementary,
+                AcademicHigh = model.AcademicHigh,
+                AcademicMiddle = model.AcademicMiddle,
+                AcademicPreSchool = model.AcademicPreSchool,
+                AdditionalInformation = model.AdditionalInformation,
+                AdditionalInformationMigration = model.AdditionalInformationMigration,
+                AHomeVisit = model.AHomeVisit,
+                AHomeVisitOn = model.AHomeVisitOn,
+                Appliances = model.Appliances,
+                AttendanceEelementary = model.AttendanceEelementary,
+                AttendanceHigh = model.AttendanceHigh,
+                AttendanceMiddle = model.AttendanceMiddle,
+                AttendancePreSchool = model.AttendancePreSchool,
+                BathingAssistive = model.BathingAssistive,
+                BathingIndependent = model.BathingIndependent,
+                BathingPhysical = model.BathingPhysical,
+                BathingSupervision = model.BathingSupervision,
+                BathingTotal = model.BathingTotal,
+                Bathtub = model.Bathtub,
+                BehaviorEelementary = model.BehaviorEelementary,
+                BehaviorHigh = model.BehaviorHigh,
+                BehaviorMiddle = model.BehaviorMiddle,
+                BehaviorPreSchool = model.BehaviorPreSchool,
+                Briefly = model.Briefly,
+                CaseManagerWas = model.CaseManagerWas,
+                CaseManagerWasDueTo = model.CaseManagerWasDueTo,
+                Citizen = model.Citizen,
+                ColonCancer = model.ColonCancer,
+                CongredatedHowOften = model.CongredatedHowOften,
+                CongredatedProvider = model.CongredatedProvider,
+                CongredatedReceive = model.CongredatedReceive,
+                ContinueToLive = model.ContinueToLive,
+                ContinueToLiveOnly = model.ContinueToLiveOnly,
+                CookingAssistive = model.CookingAssistive,
+                CookingIndependent = model.CookingIndependent,
+                CookingPhysical = model.CookingPhysical,
+                CookingSupervision = model.CookingSupervision,
+                CookingTotal = model.CookingTotal,
+                CountryOfBirth = model.CountryOfBirth,
+                CurrentEmployer = model.CurrentEmployer,
+                DentalExam = model.DentalExam,
+                DescribeAnySchool = model.DescribeAnySchool,
+                DescribeClientCultural = model.DescribeClientCultural,
+                DescribeClientEducation = model.DescribeClientEducation,
+                DescribeClientLiving = model.DescribeClientLiving,
+                DescribeClientRelationship = model.DescribeClientRelationship,
+                DescribeNeighborhood = model.DescribeNeighborhood,
+                DescribeOtherNeedConcerns = model.DescribeOtherNeedConcerns,
+                DoesClientBasicNeed = model.DoesClientBasicNeed,
+                DoesClientCurrently = model.DoesClientCurrently,
+                DoesClientCurrentlyExplain = model.DoesClientCurrentlyExplain,
+                DoesClientFeel = model.DoesClientFeel,
+                DoesClientFeelExplain = model.DoesClientFeelExplain,
+                DoesClientNeedAssistance = model.DoesClientNeedAssistance,
+                DoesClientNeedAssistanceEducational = model.DoesClientNeedAssistanceEducational,
+                DoesClientNeedAssistanceEducationalExplain = model.DoesClientNeedAssistanceEducationalExplain,
+                DoesClientNeedAssistanceExplain = model.DoesClientNeedAssistanceExplain,
+                DoesNotKnow = model.DoesNotKnow,
+                DoingAssistive = model.DoingAssistive,
+                DoingIndependent = model.DoingIndependent,
+                DoingPhysical = model.DoingPhysical,
+                DoingSupervision = model.DoingSupervision,
+                DoingTotal = model.DoingTotal,
+                DressingAssistive = model.DressingAssistive,
+                DressingIndependent = model.DressingIndependent,
+                DressingPhysical = model.DressingPhysical,
+                DressingSupervision = model.DressingSupervision,
+                DressingTotal = model.DressingTotal,
+                Drives = model.Drives,
+                Electrical = model.Electrical,
+                EmployerAddress = model.EmployerAddress,
+                EmployerCityState = model.EmployerCityState,
+                EmployerContactPerson = model.EmployerContactPerson,
+                EmployerPhone = model.EmployerPhone,
+                EmploymentStatus = model.EmploymentStatus,
+                ExcessiveCluter = model.ExcessiveCluter,
+                FailToEelementary = model.FailToEelementary,
+                FailToHigh = model.FailToHigh,
+                FailToMiddle = model.FailToMiddle,
+                FailToPreSchool = model.FailToPreSchool,
+                FeedingAssistive = model.FeedingAssistive,
+                FeedingIndependent = model.FeedingIndependent,
+                FeedingPhysical = model.FeedingPhysical,
+                FeedingSupervision = model.FeedingSupervision,
+                FeedingTotal = model.FeedingTotal,
+                FireHazards = model.FireHazards,
+                Flooring = model.Flooring,
+                FoodPantryHowOften = model.FoodPantryHowOften,
+                FoodPantryProvider = model.FoodPantryProvider,
+                FoodPantryReceive = model.FoodPantryReceive,
+                FoodStampHowOften = model.FoodStampHowOften,
+                FoodStampProvider = model.FoodStampProvider,
+                FoodStampReceive = model.FoodStampReceive,
+                FriendOrFamily = model.FriendOrFamily,
+                GroomingAssistive = model.GroomingAssistive,
+                GroomingIndependent = model.GroomingIndependent,
+                GroomingPhysical = model.GroomingPhysical,
+                GroomingSupervision = model.GroomingSupervision,
+                GroomingTotal = model.GroomingTotal,
+                HasClientEverArrest = model.HasClientEverArrest,
+                HasClientEverArrestLastTime = model.HasClientEverArrestLastTime,
+                HasClientEverArrestManyTime = model.HasClientEverArrestManyTime,
+                HomeDeliveredHowOften = model.HomeDeliveredHowOften,
+                HomeDeliveredProvider = model.HomeDeliveredProvider,
+                HomeDeliveredReceive = model.HomeDeliveredReceive,
+                IfThereAnyHousing = model.IfThereAnyHousing,
+                IfYesWereCriminal = model.IfYesWereCriminal,
+                IfYesWhatArea = model.IfYesWhatArea,
+                ImmigrationOther = model.ImmigrationOther,
+                ImmigrationOtherExplain = model.ImmigrationOtherExplain,
+                Insect = model.Insect,
+                IsClientCurrentlyEmployed = model.IsClientCurrentlyEmployed,
+                IsClientCurrentlySchool = model.IsClientCurrentlySchool,
+                IsClientCurrentlySchoolExplain = model.IsClientCurrentlySchoolExplain,
+                IsClientInterested = model.IsClientInterested,
+                IsClientInvolved = model.IsClientInvolved,
+                IsClientInvolvedSpecify = model.IsClientInvolvedSpecify,
+                IsTheClientAbleWork = model.IsTheClientAbleWork,
+                IsTheClientAbleWorkLimitation = model.IsTheClientAbleWorkLimitation,
+                IsTheClientHavingFinancial = model.IsTheClientHavingFinancial,
+                IsTheClientHavingFinancialExplain = model.IsTheClientHavingFinancialExplain,
+                IsThereAnyAide = model.IsThereAnyAide,
+                IsThereAnyAideName = model.IsThereAnyAideName,
+                IsThereAnyAidePhone = model.IsThereAnyAidePhone,
+                IsThereAnyCurrentLegalProcess = model.IsThereAnyCurrentLegalProcess,
+                LabWorks = model.LabWorks,
+                LearningEelementary = model.LearningEelementary,
+                LearningHigh = model.LearningHigh,
+                LearningMiddle = model.LearningMiddle,
+                LearningPreSchool = model.LearningPreSchool,
+                ListAnyNeed = model.ListAnyNeed,
+                ListClientCurrentPotencialStrngths = model.ListClientCurrentPotencialStrngths,
+                ListClientCurrentPotencialWeakness = model.ListClientCurrentPotencialWeakness,
+                MakingAssistive = model.MakingAssistive,
+                MakingIndependent = model.MakingIndependent,
+                MakingPhysical = model.MakingPhysical,
+                MakingSupervision = model.MakingSupervision,
+                MakingTotal = model.MakingTotal,
+                Mammogram = model.Mammogram,
+                MayWeLeaveSend = model.MayWeLeaveSend,
+                MonthlyFamilyIncome = model.MonthlyFamilyIncome,
+                NoAirCondition = model.NoAirCondition,
+                NoTelephone = model.NoTelephone,
+                NotHot = model.NotHot,
+                NumberOfBedrooms = model.NumberOfBedrooms,
+                NumberOfPersonLiving = model.NumberOfPersonLiving,
+                OtherFinancial = model.OtherFinancial,
+                OtherHowOften = model.OtherHowOften,
+                OtherProvider = model.OtherProvider,
+                OtherReceive = model.OtherReceive,
+                PapAndHPV = model.PapAndHPV,
+                ParticipationEelementary = model.ParticipationEelementary,
+                ParticipationHigh = model.ParticipationHigh,
+                ParticipationMiddle = model.ParticipationMiddle,
+                ParticipationPreSchool = model.ParticipationPreSchool,
+                PersonPorBedrooms = model.PersonPorBedrooms,
+                PhysicalExam = model.PhysicalExam,
+                PhysicalOther = model.PhysicalOther,
+                PreferToLive = model.PreferToLive,
+                Poor = model.Poor,
+                ProbationOfficer = model.ProbationOfficer,
+                ProbationOfficerName = model.ProbationOfficerName,
+                ProbationOfficerPhone = model.ProbationOfficerPhone,
+                RecommendedActivities = model.RecommendedActivities,
+                RecommendedBasicNeed = model.RecommendedBasicNeed,
+                RecommendedEconomic = model.RecommendedEconomic,
+                RecommendedHousing = model.RecommendedHousing,
+                RecommendedLegalImmigration = model.RecommendedLegalImmigration,
+                RecommendedMentalHealth = model.RecommendedMentalHealth,
+                RecommendedOther = model.RecommendedOther,
+                RecommendedOtherSpecify = model.RecommendedOtherSpecify,
+                RecommendedPhysicalHealth = model.RecommendedPhysicalHealth,
+                RecommendedRecreational = model.RecommendedRecreational,
+                RecommendedSchool = model.RecommendedSchool,
+                RecommendedTransportation = model.RecommendedTransportation,
+                RecommendedVocation = model.RecommendedVocation,
+                RelationshipEelementary = model.RelationshipEelementary,
+                RelationshipHigh = model.RelationshipHigh,
+                RelationshipMiddle = model.RelationshipMiddle,
+                RelationshipPreSchool = model.RelationshipPreSchool,
+                Resident = model.Resident,
+                ResidentStatus = model.ResidentStatus,
+                SchoolAddress = model.SchoolAddress,
+                SchoolCityState = model.SchoolCityState,
+                SchoolDistrict = model.SchoolDistrict,
+                SchoolGrade = model.SchoolGrade,
+                SchoolName = model.SchoolName,
+                SchoolProgramEBD = model.SchoolProgramEBD,
+                SchoolProgramESE = model.SchoolProgramESE,
+                SchoolProgramESOL = model.SchoolProgramESOL,
+                SchoolProgramHHIP = model.SchoolProgramHHIP,
+                SchoolProgramOther = model.SchoolProgramOther,
+                SchoolProgramRegular = model.SchoolProgramRegular,
+                SchoolProgramTeacherName = model.SchoolProgramTeacherName,
+                SchoolProgramTeacherPhone = model.SchoolProgramTeacherPhone,
+                ShoppingAssistive = model.ShoppingAssistive,
+                ShoppingIndependent = model.ShoppingIndependent,
+                ShoppingPhysical = model.ShoppingPhysical,
+                ShoppingSupervision = model.ShoppingSupervision,
+                ShoppingTotal = model.ShoppingTotal,
+                Staff = model.Staff,
+                Stairs = model.Stairs,
+                Structural = model.Structural,
+                TakesABus = model.TakesABus,
+                TransferringAssistive = model.TransferringAssistive,
+                TransferringIndependent = model.TransferringIndependent,
+                TransferringPhysical = model.TransferringPhysical,
+                TransferringSupervision = model.TransferringSupervision,
+                TransferringTotal = model.TransferringTotal,
+                TransportationOther = model.TransportationOther,
+                TransportationOtherExplain = model.TransportationOtherExplain,
+                Tripping = model.Tripping,
+                Unsanitary = model.Unsanitary,
+                VocationalEmployment = model.VocationalEmployment,
+                Walks = model.Walks,
+                WhatActivityThings = model.WhatActivityThings,
+                WhatIsCollegeGraduated = model.WhatIsCollegeGraduated,
+                WhatIsElementary = model.WhatIsElementary,
+                WhatIsGED = model.WhatIsGED,
+                WhatIsGraduated = model.WhatIsGraduated,
+                WhatIsGraduatedDegree = model.WhatIsGraduatedDegree,
+                WhatIsHighSchool = model.WhatIsHighSchool,
+                WhatIsMiddle = model.WhatIsMiddle,
+                WhatIsNoSchool = model.WhatIsNoSchool,
+                WhatIsSomeCollege = model.WhatIsSomeCollege,
+                WhatIsSomeHigh = model.WhatIsSomeHigh,
+                WhatIsTheMainSource = model.WhatIsTheMainSource,
+                WhatIsTradeSchool = model.WhatIsTradeSchool,
+                WhatIsUnknown = model.WhatIsUnknown,
+                WouldLikeObtainJob = model.WouldLikeObtainJob,
+                WouldLikeObtainJobNotAtThisTime = model.WouldLikeObtainJobNotAtThisTime,
+                YearEnteredUsa = model.YearEnteredUsa,
+               
+                CantDoItAtAll = model.CantDoItAtAll,
+                DateSignatureCaseManager = model.DateSignatureCaseManager,
+                DateSignatureTCMSupervisor = model.DateSignatureTCMSupervisor,
+                DoesClientTranspotation = model.DoesClientTranspotation,
+                DoesClientTranspotationExplain = model.DoesClientTranspotationExplain,
+                HoweverOn = model.HoweverOn,
+                HoweverVisitScheduler = model.HoweverVisitScheduler,
+                NeedALot = model.NeedALot,
+                NeedNoHelp = model.NeedNoHelp,
+                NeedSome = model.NeedSome,
+                OtherReceiveExplain = model.OtherReceiveExplain,
+                Status = TCMDocumentStatus.Approved,
+                TCMSupervisor = model.TCMSupervisor
+
+            };
+
+            return salida;
+
+        }
+
+        public async Task<TCMAssessmentHouseCompositionEntity> ToTCMAssessmentHouseCompositionEntity(TCMAssessmentHouseCompositionViewModel model, bool isNew, string userId)
+        {
+            return new TCMAssessmentHouseCompositionEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Age = model.Age,
+                Name = model.Name,
+                RelationShip = model.RelationShip,
+                Supporting = model.Supporting,
+                TcmAssessment = await _context.TCMAssessment.FirstOrDefaultAsync(c => c.Id == model.IdTCMAssessment)
+
+            };
+        }
+
+        public TCMAssessmentHouseCompositionViewModel ToTCMAssessmentHouseCompositionViewModel(TCMAssessmentHouseCompositionEntity model)
+        {
+            TCMAssessmentHouseCompositionViewModel salida;
+            salida = new TCMAssessmentHouseCompositionViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                Age = model.Age,
+                Name = model.Name,
+                RelationShip = model.RelationShip,
+                Supporting = model.Supporting,
+                TcmAssessment = model.TcmAssessment,
+                IdTCMAssessment = model.TcmAssessment.Id
+            };
+
+            return salida;
+
+        }
+
+        public async Task<TCMAssessmentIndividualAgencyEntity> ToTCMAssessmenIndividualAgencyEntity(TCMAssessmentIndividualAgencyViewModel model, bool isNew, string userId)
+        {
+            return new TCMAssessmentIndividualAgencyEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Name = model.Name,
+                RelationShip = model.RelationShip,
+                TcmAssessment = await _context.TCMAssessment.FirstOrDefaultAsync(c => c.Id == model.IdTCMAssessment),
+                Agency = model.Agency
+
+            };
+        }
+
+        public TCMAssessmentIndividualAgencyViewModel ToTCMAssessmentIndividualAgencyViewModel(TCMAssessmentIndividualAgencyEntity model)
+        {
+            TCMAssessmentIndividualAgencyViewModel salida;
+            salida = new TCMAssessmentIndividualAgencyViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                Name = model.Name,
+                RelationShip = model.RelationShip,
+                TcmAssessment = model.TcmAssessment,
+                Agency = model.Agency,
+                IdTCMAssessment = model.TcmAssessment.Id
+                
+            };
+
+            return salida;
+        }
+
+        public async Task<TCMAssessmentMedicationEntity> ToTCMAssessmenMedicationEntity(TCMAssessmentMedicationViewModel model, bool isNew, string userId)
+        {
+            return new TCMAssessmentMedicationEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Name = model.Name,
+                TcmAssessment = await _context.TCMAssessment.FirstOrDefaultAsync(c => c.Id == model.IdTCMAssessment),
+                Dosage = model.Dosage,
+                Frequency = model.Frequency,
+                Prescriber = model.Prescriber,
+                ReasonPurpose = model.ReasonPurpose
+          
+            };
+        }
+
+        public TCMAssessmentMedicationViewModel ToTCMAssessmentMedicationViewModel(TCMAssessmentMedicationEntity model)
+        {
+            TCMAssessmentMedicationViewModel salida;
+            salida = new TCMAssessmentMedicationViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                Name = model.Name,
+                TcmAssessment = model.TcmAssessment,
+                Dosage = model.Dosage,
+                Frequency = model.Frequency,
+                Prescriber = model.Prescriber,
+                ReasonPurpose = model.ReasonPurpose,
+                IdTCMAssessment = model.TcmAssessment.Id
+            };
+
+            return salida;
+        }
+
+        public async Task<TCMAssessmentPastCurrentServiceEntity> ToTCMAssessmenPastCurrentServiceEntity(TCMAssessmentPastCurrentServiceViewModel model, bool isNew, string userId)
+        {
+            return new TCMAssessmentPastCurrentServiceEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmAssessment = await _context.TCMAssessment.FirstOrDefaultAsync(c => c.Id == model.IdTCMAssessment),
+                DateReceived = model.DateReceived,
+                Efectiveness = model.Efectiveness,
+                ProviderAgency = model.ProviderAgency,
+                TypeService = model.TypeService
+            };
+        }
+
+        public TCMAssessmentPastCurrentServiceViewModel ToTCMAssessmentPastCurrentServiceViewModel(TCMAssessmentPastCurrentServiceEntity model)
+        {
+            TCMAssessmentPastCurrentServiceViewModel salida;
+            salida = new TCMAssessmentPastCurrentServiceViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                TcmAssessment = model.TcmAssessment,
+                TypeService = model.TypeService,
+                ProviderAgency = model.ProviderAgency,
+                Efectiveness = model.Efectiveness,
+                DateReceived = model.DateReceived,
+                IdTCMAssessment = model.TcmAssessment.Id
+            };
+
+            return salida;
+        }
+
+        public async Task<TCMAssessmentHospitalEntity> ToTCMAssessmentHospitalEntity(TCMAssessmentHospitalViewModel model, bool isNew, string userId)
+        {
+            return new TCMAssessmentHospitalEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmAssessment = await _context.TCMAssessment.FirstOrDefaultAsync(c => c.Id == model.IdTCMAssessment),
+                Date = model.Date,
+                Name = model.Name,
+                Reason = model.Reason
+            };
+        }
+
+        public TCMAssessmentHospitalViewModel ToTCMAssessmentHospitalViewModel(TCMAssessmentHospitalEntity model)
+        {
+            TCMAssessmentHospitalViewModel salida;
+            salida = new TCMAssessmentHospitalViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                TcmAssessment = model.TcmAssessment,
+                Date = model.Date,
+                Name = model.Name,
+                Reason = model.Reason,
+                IdTCMAssessment = model.TcmAssessment.Id
+            };
+
+            return salida;
+        }
+
+        public async Task<TCMAssessmentDrugEntity> ToTCMAssessmentDrugEntity(TCMAssessmentDrugViewModel model, bool isNew, string userId)
+        {
+            return new TCMAssessmentDrugEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmAssessment = await _context.TCMAssessment.FirstOrDefaultAsync(c => c.Id == model.IdTCMAssessment),
+                Age = model.Age,
+                DateBegin = model.DateBegin,
+                Frequency = model.Frequency,
+                LastTimeUsed = model.LastTimeUsed,
+                SustanceName = model.SustanceName
+            };
+        }
+
+        public TCMAssessmentDrugViewModel ToTCMAssessmentDrugViewModel(TCMAssessmentDrugEntity model)
+        {
+            TCMAssessmentDrugViewModel salida;
+            salida = new TCMAssessmentDrugViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                TcmAssessment = model.TcmAssessment,
+                Age = model.Age,
+                DateBegin = model.DateBegin,
+                Frequency = model.Frequency,
+                LastTimeUsed = model.LastTimeUsed,
+                SustanceName = model.SustanceName,
+                IdTCMAssessment = model.TcmAssessment.Id
+            };
+
+            return salida;
+        }
+
+        public async Task<TCMAssessmentMedicalProblemEntity> ToTCMAssessmentMedicalProblemEntity(TCMAssessmentMedicalProblemViewModel model, bool isNew, string userId)
+        {
+            return new TCMAssessmentMedicalProblemEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmAssessment = await _context.TCMAssessment.FirstOrDefaultAsync(c => c.Id == model.IdTCMAssessment),
+                Client = model.Client,
+                Comments = model.Comments,
+                Family = model.Family,
+                MedicalProblem = model.MedicalProblem
+            };
+        }
+
+        public TCMAssessmentMedicalProblemViewModel ToTCMAssessmentMedicalProblemViewModel(TCMAssessmentMedicalProblemEntity model)
+        {
+            TCMAssessmentMedicalProblemViewModel salida;
+            salida = new TCMAssessmentMedicalProblemViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                TcmAssessment = model.TcmAssessment,
+                Client = model.Client,
+                Comments = model.Comments,
+                Family = model.Family,
+                MedicalProblem = model.MedicalProblem,
+                IdTCMAssessment = model.TcmAssessment.Id
+            };
+
+            return salida;
+        }
+
+        public async Task<TCMAssessmentSurgeryEntity> ToTCMAssessmentSurgeryEntity (TCMAssessmentSurgeryViewModel model, bool isNew, string userId)
+        {
+            return new TCMAssessmentSurgeryEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmAssessment = await _context.TCMAssessment.FirstOrDefaultAsync(c => c.Id == model.IdTCMAssessment),
+                Date = model.Date,
+                Hospital =model.Hospital,
+                Outcome = model.Outcome,
+                TypeSurgery = model.TypeSurgery
+            };
+        }
+
+        public TCMAssessmentSurgeryViewModel ToTCMAssessmentSurgeryViewModel(TCMAssessmentSurgeryEntity model)
+        {
+            TCMAssessmentSurgeryViewModel salida;
+            salida = new TCMAssessmentSurgeryViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                TcmAssessment = model.TcmAssessment,
+                Date = model.Date,
+                Hospital = model.Hospital,
+                Outcome = model.Outcome,
+                TypeSurgery = model.TypeSurgery,
+                IdTCMAssessment = model.TcmAssessment.Id
+            };
+
+            return salida;
+        }
+
+        public async Task<TCMNoteEntity> ToTCMNoteEntity(TCMNoteViewModel model, bool isNew, string userId)
+        {
+            return new TCMNoteEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Outcome = model.Outcome,
+                CaseManager = _context.CaseManagers
+                                      .FirstOrDefault(n => n.Id == model.IdCaseManager),
+                TCMNoteActivity = await _context.TCMNoteActivity.Where(n => n.TCMNote.Id == model.IdTCMNote).ToListAsync(),
+                CaseManagerDate = model.CaseManagerDate,
+                DateOfService = model.DateOfService,
+                DocumentationTime = model.DocumentationTime,
+                NextStep = model.NextStep,
+                ServiceCode = model.ServiceCode,
+                Status = model.Status,
+                TotalMinutes = model.TotalMinutes,
+                TotalUnits = model.TotalUnits,
+                TCMClient = _context.TCMClient
+                                    .FirstOrDefault(n => n.Id == model.IdTCMClient),
+                Workday = _context.Workdays.FirstOrDefault(n => n.Id == model.IdTCMWorday)
+                
+
+            };
+        }
+
+        public TCMNoteViewModel ToTCMNoteViewModel(TCMNoteEntity model)
+        {
+            TCMNoteViewModel salida;
+            salida = new TCMNoteViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                Outcome = model.Outcome,
+                CaseManager = model.CaseManager,
+                TCMNoteActivity = model.TCMNoteActivity,
+                CaseManagerDate = model.CaseManagerDate,
+                DateOfService = model.DateOfService,
+                DocumentationTime = model.DocumentationTime,
+                NextStep = model.NextStep,
+                ServiceCode = model.ServiceCode,
+                Status = model.Status,
+                TotalMinutes = model.TotalMinutes,
+                TotalUnits = model.TotalUnits,
+                TCMClient = model.TCMClient,
+                Workday = model.Workday,
+                IdCaseManager = model.CaseManager.Id,
+                IdTCMClient = model.TCMClient.Id,
+                IdTCMNote = model.Id
+            };
+
+            return salida;
+        }
+
+        public async Task<TCMNoteActivityEntity> ToTCMNoteActivityEntity(TCMNoteActivityViewModel model, bool isNew, string userId)
+        {
+            return new TCMNoteActivityEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                DescriptionOfService = model.DescriptionOfService,
+                EndTime = model.EndTime,
+                Minutes = model.Minutes,
+                Setting = model.Setting,
+                StartTime = model.StartTime,
+                TCMDomain = _context.TCMDomains.FirstOrDefault(n => n.Id == model.IdTCMDomain),
+                TCMNote = _context.TCMNote.FirstOrDefault(n => n.Id == model.IdTCMNote)
+                
+
+            };
+        }
+
+        public TCMNoteActivityViewModel ToTCMNoteActivityViewModel(TCMNoteActivityEntity model)
+        {
+            TCMNoteActivityViewModel salida;
+            salida = new TCMNoteActivityViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                DescriptionOfService = model.DescriptionOfService,
+                EndTime = model.EndTime,
+                Minutes = model.Minutes,
+                Setting = model.Setting,
+                StartTime = model.StartTime,
+                TCMDomain = model.TCMDomain,
+                TCMNote = model.TCMNote,
+                IdTCMNote = model.TCMNote.Id,
+                IdTCMDomain = model.TCMDomain.Id
+                
+            };
+
+            return salida;
+        }
+
+        public async Task<DocumentsAssistantEntity> ToDocumentsAssistantEntity(DocumentsAssistantViewModel model, string signaturePath, bool isNew)
+        {
+            return new DocumentsAssistantEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
+                Code = model.Code,
+                LinkedUser = _userHelper.GetUserNameById(model.IdUser),
+                Name = model.Name,
+                SignaturePath = signaturePath,
+                RaterEducation = model.RaterEducation,
+                RaterFMHCertification = model.RaterFMHCertification
+            };
+        }
+
+        public DocumentsAssistantViewModel ToDocumentsAssistantViewModel(DocumentsAssistantEntity model, int idClinic)
+        {
+            return new DocumentsAssistantViewModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Code = model.Code,
+                IdClinic = model.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics(),
+                IdUser = _userHelper.GetIdByUserName(model.LinkedUser),
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, idClinic),
+                SignaturePath = model.SignaturePath,
+                RaterEducation = model.RaterEducation,
+                RaterFMHCertification = model.RaterFMHCertification
+            };
+        }
+
     }
 }

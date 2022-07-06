@@ -35,7 +35,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -66,6 +66,15 @@ namespace KyoS.Web.Controllers
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
 
+                if (User.IsInRole("Documents_Assistant"))
+                    return View(await _context.Clients
+
+                                              .Include(f => f.FarsFormList)
+
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id && n.FarsFormList.Where(m => m.CreatedBy == user_logged.UserName).Count()>0)
+                                              .OrderBy(f => f.Name)
+                                              .ToListAsync());
+
                 if (User.IsInRole("Facilitator"))
                 {
                     return View(await _context.Clients
@@ -81,7 +90,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public IActionResult Create(int id = 0)
         {
 
@@ -105,7 +114,7 @@ namespace KyoS.Web.Controllers
                    ActivitiesScale = 0,
                    AnxietyScale = 0,
                    CognitiveScale = 0,
-                   ContractorID = client.Clinic.ProviderId,
+                   ContractorID = client.Clinic.ProviderTaxId,
                    Country = "13",
                    DangerToOtherScale = 0,
                    DangerToSelfScale = 0,
@@ -117,11 +126,11 @@ namespace KyoS.Web.Controllers
                    HyperAffectScale = 0,
                    InterpersonalScale = 0,
                    MCOID = "",
-                   MedicaidProviderID = client.Clinic.ProviderId,
+                   MedicaidProviderID = client.Clinic.ProviderMedicaidId,
                    MedicaidRecipientID = client.MedicaidID,
                    MedicalScale = 0,
                    M_GafScore = "",
-                   ProviderId = client.Clinic.ProviderId,
+                   ProviderId = client.Clinic.ProviderTaxId,
                    ProviderLocal = client.Clinic.Address + ", " + client.Clinic.City + ", " + client.Clinic.State + ", "+ client.Clinic.ZipCode,
                    RaterEducation = "",
                    RaterFMHI = "",
@@ -134,7 +143,7 @@ namespace KyoS.Web.Controllers
                    TraumaticsScale = 0,
                    WorkScale = 0,
                      
-                   ContID1 = client.Clinic.ProviderId,
+                   ContID1 = client.Clinic.ProviderTaxId,
                    ContID2 = "",
                    ContID3 = "",
                    ProgramEvaluation = "",
@@ -152,6 +161,20 @@ namespace KyoS.Web.Controllers
                     model.RaterFMHI = supervisor.RaterFMHCertification;
                 }
 
+                DocumentsAssistantEntity documentsAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                if (User.IsInRole("Documents_Assistant") && documentsAssistant != null)
+                {
+                    model.RaterEducation = documentsAssistant.RaterEducation;
+                    model.RaterFMHI = documentsAssistant.RaterFMHCertification;
+                }
+
+                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                if (User.IsInRole("facilitator") && facilitator != null)
+                {
+                    model.RaterEducation = facilitator.RaterEducation;
+                    model.RaterFMHI = facilitator.RaterFMHCertification;
+                }
+
                 if (model.Client.FarsFormList == null)
                     model.Client.FarsFormList = new List<FarsFormEntity>();
                 return View(model);
@@ -162,7 +185,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> Create(FarsFormViewModel FarsFormViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -243,12 +266,12 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", FarsFormViewModel) });
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public IActionResult Edit(int id = 0, int origin = 0)
         {
             FarsFormViewModel model;
 
-            if (User.IsInRole("Supervisor") || User.IsInRole("Facilitator"))
+            if (User.IsInRole("Supervisor") || User.IsInRole("Facilitator") || User.IsInRole("Documents_Assistant"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -265,7 +288,7 @@ namespace KyoS.Web.Controllers
                                                       .FirstOrDefault(m => m.Id == id);
                     if (FarsForm == null)
                     {
-                        return RedirectToAction("NotAuthorized", "Account");
+                        return RedirectToAction("Home/Error404");
                     }
                     else
                     {
@@ -284,7 +307,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> Edit(FarsFormViewModel farsFormViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -297,12 +320,31 @@ namespace KyoS.Web.Controllers
                 _context.FarsForm.Update(farsFormEntity);
                 try
                 {
-                    //todos los mensajes que tiene el Fars los pongo como leidos
-                    foreach (MessageEntity value in farsFormEntity.Messages)
+                    List<MessageEntity> messages = farsFormEntity.Messages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                    //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
+                    foreach (MessageEntity value in messages)
                     {
                         value.Status = MessageStatus.Read;
                         value.DateRead = DateTime.Now;
                         _context.Update(value);
+
+                        //I generate a notification to supervisor
+                        MessageEntity notification = new MessageEntity
+                        {
+                            Workday_Client = null,
+                            FarsForm = farsFormEntity,
+                            MTPReview = null,
+                            Addendum = null,
+                            Discharge = null,
+                            Title = "Update on reviewed FARS Forms",
+                            Text = $"The FARS Forms document of {farsFormEntity.Client.Name} that was evaluated on {farsFormEntity.EvaluationDate.ToShortDateString()} was rectified",
+                            From = value.To,
+                            To = value.From,
+                            DateCreated = DateTime.Now,
+                            Status = MessageStatus.NotRead,
+                            Notification = true
+                        };
+                        _context.Add(notification);
                     }
 
                     await _context.SaveChangesAsync();
@@ -355,7 +397,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
         public IActionResult PrintFarsForm(int id)
         {
             FarsFormEntity entity = _context.FarsForm
@@ -395,7 +437,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> ClientswithoutFARS(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -434,7 +476,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> FinishEditingFars(int id)
         {
             FarsFormEntity fars = await _context.FarsForm.FirstOrDefaultAsync(n => n.Id == id);
@@ -489,12 +531,15 @@ namespace KyoS.Web.Controllers
                 if (clinic != null)
                 {
                     return View(await _context.FarsForm
-                                              .Include(c => c.Client)
-                                              .ThenInclude(c => c.Clinic)
-                                              .Where(m => (m.Client.Clinic.Id == clinic.Id)
-                                                    && m.Status == FarsStatus.Pending)
-                                              .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
-                    
+
+                                              .Include(f => f.Client)
+                                              .ThenInclude(f => f.Clinic)
+
+                                              .Include(f => f.Messages.Where(m => m.Notification == false))
+
+                                              .Where(f => (f.Client.Clinic.Id == clinic.Id)
+                                                        && f.Status == FarsStatus.Pending)
+                                              .ToListAsync());                    
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");

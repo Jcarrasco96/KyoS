@@ -61,14 +61,7 @@
             </div>
             <div>
                 <div class="col-md-offset-9">
-                    @if (Model.Origin == 0) //viene de la pagina Index de las notas
-                    {
-                        <input type="submit" value="Submit" class="btn btn-primary" asp-route-Origin="0"/>
-                    }
-                    @if (Model.Origin == 1) //viene de la pagina Index de las notas
-                    {
-                        <input type="submit" value="Submit" class="btn btn-primary" asp-route-Origin="1"/>
-                    }
+                    <input type="submit" value="Submit" class="btn btn-primary" />
                     <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
             </div>

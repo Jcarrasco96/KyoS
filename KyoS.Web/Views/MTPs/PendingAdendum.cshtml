@@ -27,22 +27,24 @@
                             <th class="col-md-1">
 
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-3">
                                 MTP
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Mtp.Client.Code)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Mtp.Client.AdmisionDate)
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 Status
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Review
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 MH Therapy
                             </th>
-                            
                         </tr>
                     </thead>
                     <tbody>
@@ -187,9 +189,44 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Mtp.Client.Service)
-                                    </td>                                    
-                                </tr>
+                                        @if (item.Messages.Count() == 0)
+                                        {
+                                            <span>
+                                                -
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            bool read = false;
+                                            @foreach (var message in item.Messages.OrderBy(m => m.DateCreated))
+                                            {
+                                                @if (message.Status.ToString() == "NotRead")
+                                                {
+                                                    read = false;
+                                                    break;
+                                                }
+                                                @if (message.Status.ToString() == "Read")
+                                                {
+                                                    read = true;
+                                                }
+                                            }
+                                            @*<span class="label label-warning">
+                                                    Yes &nbsp;
+                                                </span>*@
+                                            if (read)
+                                            {
+                                                <i class="glyphicon glyphicon-thumbs-up"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="glyphicon glyphicon-thumbs-down"></i>
+                                            }
+                                        }
+                                    </td>
+                                        <td align="center">
+                                            @Html.DisplayFor(modelItem => item.Mtp.Client.Service)
+                                        </td>                                    
+                                    </tr>
                             }                         
 
                         }

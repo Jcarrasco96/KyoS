@@ -15,7 +15,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("TCM Medications", "Index", "TCMIntakes")
+                @Html.ActionLink("TCM Intake Section 3", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 3 })
             </li>
             <li class="active">Create Medications List</li>
         </ul><!--.breadcrumb-->
@@ -26,10 +26,12 @@
         <form asp-action="CreateTCMMedication" asp-route-id="@Model.Id" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdClient" />
+            
+            <input type="hidden" asp-for="IdTCMClient" />
             <partial name="_TCMMedications" />
             <div class="col-md-12">
                 <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="TCMIntakeDashboard" asp-route-id="@Model.IdClient" class="btn btn-success">Back</a>
+                <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.IdTCMClient" asp-route-section="3" class="btn btn-success">Back</a>
             </div>
         </form>
     </div>

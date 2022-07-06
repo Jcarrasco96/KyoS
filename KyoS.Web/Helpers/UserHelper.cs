@@ -142,6 +142,8 @@ namespace KyoS.Web.Helpers
                 await _userManager.RemoveFromRoleAsync(user, UserType.CaseManager.ToString());
             if (await this.IsUserInRoleAsync(user, UserType.TCMSupervisor.ToString()))
                 await _userManager.RemoveFromRoleAsync(user, UserType.TCMSupervisor.ToString());
+            if (await this.IsUserInRoleAsync(user, UserType.Documents_Assistant.ToString()))
+                await _userManager.RemoveFromRoleAsync(user, UserType.Documents_Assistant.ToString());
             return await _userManager.DeleteAsync(user);
         }
 

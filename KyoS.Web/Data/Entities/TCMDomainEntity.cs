@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using KyoS.Web.Data.Contracts;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class TCMDomainEntity
+    public class TCMDomainEntity : AuditableEntity
     {
         public int Id { get; set; }
 
@@ -24,6 +25,11 @@ namespace KyoS.Web.Data.Entities
         
         public TCMServicePlanEntity TcmServicePlan { get; set; }
         public List <TCMObjetiveEntity> TCMObjetive { get; set; }
+
+        public string Origin { get; set; }
+
+        public bool Used { get; set; }
+        public bool Status { get; set; }
 
     }
 }

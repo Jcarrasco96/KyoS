@@ -55,11 +55,11 @@
                                         <table class="table table-striped">
                                             <tr>
                                                 <th class="col-md-2">Name</th>
-                                                <th class="col-md-1" style="text-align:center;">Clients</th>
-                                                <th class="col-md-2" style="text-align:center;">Not Started</th>
-                                                <th class="col-md-2" style="text-align:center;">Editing</th>
-                                                <th class="col-md-2" style="text-align:center;">Pending</th>
-                                                <th class="col-md-2" style="text-align:center;">Approved</th>
+                                                <th class="col-md-2" style="text-align:center;">Clients/Present</th>
+                                                <th class="col-md-1" style="text-align:center;">Not Started</th>
+                                                <th class="col-md-1" style="text-align:center;">Editing</th>
+                                                <th class="col-md-1" style="text-align:center;">Pending</th>
+                                                <th class="col-md-1" style="text-align:center;">Approved</th>
                                                 <th class="col-md-1" style="text-align:center;">Absent</th>
                                             </tr>
                                            @foreach (var facilitator in item.Clinic.Facilitators.OrderByDescending(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id)).Count()))
@@ -69,7 +69,8 @@
                                                         @Html.DisplayFor(modelItem => facilitator.Name)
                                                     </td>
                                                     <td align="center">
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Workday.Week.Id == item.Id)  && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).GroupBy(w => w.Client).Count()
+                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Workday.Week.Id == item.Id) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).GroupBy(w => w.Client).Count() / 
+                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Workday.Week.Id == item.Id) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR) && (wc.Present == true)).GroupBy(w => w.Client).Count()
                                                     </td>
                                                     <td align="center">
                                                         @if (@facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Note == null && wc.NoteP == null && wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).Count() > 0)

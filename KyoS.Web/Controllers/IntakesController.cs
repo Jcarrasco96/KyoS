@@ -35,7 +35,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -1496,8 +1496,8 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTuberculosis", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Manager")]
-        public IActionResult CreateMedicalhistory(int id = 0)
+        [Authorize(Roles = "Documents_Assistant, Supervisor")]
+        public IActionResult CreateMedicalhistory(int id = 0, int origin = 0)
         {
 
             UserEntity user_logged = _context.Users
@@ -1506,7 +1506,7 @@ namespace KyoS.Web.Controllers
 
             IntakeMedicalHistoryViewModel model;
 
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Documents_Assistant") || User.IsInRole("Supervisor"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1676,6 +1676,7 @@ namespace KyoS.Web.Controllers
                         };
                         if (model.Client.LegalGuardian == null)
                             model.Client.LegalGuardian = new LegalGuardianEntity();
+                        ViewData["origin"] = origin;
                         return View(model);
                     }
                     else
@@ -1683,20 +1684,20 @@ namespace KyoS.Web.Controllers
                         if (intakeMedicalHistory.Client.LegalGuardian == null)
                             intakeMedicalHistory.Client.LegalGuardian = new LegalGuardianEntity();
                         model = _converterHelper.ToIntakeMedicalHistoryViewModel(intakeMedicalHistory);
-
+                        ViewData["origin"] = origin;
                         return View(model);
                     }
 
                 }
             }
 
-            return RedirectToAction("Index", "Intakes");
+            return RedirectToAction("Index", "Desktop");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> CreateMedicalhistory(IntakeMedicalHistoryViewModel IntakeViewModel)
+        [Authorize(Roles = "Documents_Assistant, Supervisor")]
+        public async Task<IActionResult> CreateMedicalhistory(IntakeMedicalHistoryViewModel IntakeViewModel, int origin = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -1713,7 +1714,15 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
+                        if (origin == 1)
+                        {
+                            return RedirectToAction("ClientswithoutMedicalHistory");
+                        }
+                        else
+                        {
+                            return RedirectToAction("MedicalHistory");
+                        }
+                        
                     }
                     catch (System.Exception ex)
                     {
@@ -1727,7 +1736,14 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
+                        if (origin == 1)
+                        {
+                            return RedirectToAction("ClientswithoutMedicalHistory");
+                        }
+                        else
+                        {
+                            return RedirectToAction("MedicalHistory");
+                        }
                     }
                     catch (System.Exception ex)
                     {
@@ -1773,5 +1789,66 @@ namespace KyoS.Web.Controllers
             
             return View(clientEntity);                    
         }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        public async Task<IActionResult> ClientswithoutMedicalHistory(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<ClientEntity> ClientList = await _context.Clients
+                                                          .Include(n => n.IntakeMedicalHistory)
+                                                          .Where(n => n.IntakeMedicalHistory == null && n.Clinic.Id == user_logged.Clinic.Id)
+                                                          .ToListAsync();
+
+            return View(ClientList);
+
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> MedicalHistory(int idError = 0)
+        {
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+                if(User.IsInRole("Documents_Assistant"))
+                {
+                    return View(await _context.Clients
+                                          .Include(n => n.IntakeMedicalHistory)
+                                          .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                            && n.IntakeMedicalHistory.AdmissionedFor == user_logged.FullName)
+                                          .ToListAsync());
+                }
+                else
+                    return View(await _context.Clients
+                                          .Include(n => n.IntakeMedicalHistory)
+                                          .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                          .ToListAsync());
+
+            }
+        }
+
     }
 }

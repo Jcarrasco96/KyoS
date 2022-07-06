@@ -15,7 +15,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("Bios", "Index", "Bios")
+                @Html.ActionLink("Clients without BIO", "ClientswithoutBIO", "Bios")
             </li>
             <li class="active">Create</li>
         </ul><!--.breadcrumb-->
@@ -28,6 +28,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdClient" />
             <input type="hidden" asp-for="Client_FK" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="AdmissionedFor" />
+            <input type="hidden" asp-for="CreatedOn" />
             <partial name="_Bios1" />
             <div class="col-md-push-12">
                 <div class="">
@@ -56,7 +59,7 @@
             <partial name="_Bios2" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="Index" asp-route-id="@Model.Client.Id" class="btn btn-success">Back</a>
+                <a asp-action="ClientswithoutBIO" class="btn btn-success">Back</a>
             </div>
         </form>
     </div>
