@@ -18,6 +18,11 @@
 
     int counts_of_message = DataContext.Messages.Count(m => (m.To == user.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead && m.Notification == false));
     int counts_of_notification = DataContext.Messages.Count(m => (m.To == user.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead && m.Notification == true));
+    IEnumerable<MessageEntity> last3_notifications = DataContext.Messages
+                                                                .Where(m => (m.To == user.UserName && m.Notification == true))
+                                                                .OrderByDescending(m => m.Id)
+                                                                .Take(3)
+                                                                .ToList();
  }
 
 <!DOCTYPE html>
@@ -83,6 +88,22 @@
             top: 70%;
             margin-left: -150px;
             margin-top: -150px;
+        }
+
+        .list-info { 
+            margin-bottom: 0px; 
+            display: block; 
+            position: relative; 
+            padding-left: 0; 
+            list-style: none; 
+        }
+
+        .overflow-y-auto { 
+            overflow-y: auto; 
+        }
+
+        .relative { 
+            position: relative; 
         }
 
         .spinner {
@@ -187,6 +208,31 @@
 
         }
 
+        .notice-footer { 
+            text-align: left; 
+            padding: 15px 20px; 
+            border-top: 1px solid #e6ecf5; 
+        }
+
+        .notice-footer a { 
+            display: block; 
+        }
+
+        a.text-gray:hover, a.text-gray:focus, a.text-gray.active { 
+            color: #515365 !important; 
+        }
+
+        .text-gray { 
+            color: #888da8 !important; 
+        }
+
+        .sub-title { 
+            display: block; 
+            font-size: 12px; 
+            color: #b4b7c8; 
+            max-width: 90%; 
+        }  
+        
         .loader {
             margin: auto;
             border: 8px solid #f3f3f3;
@@ -797,86 +843,66 @@
                             <ul class="dropdown-menu ">
                                 <li class="notice-header">
                                     <i class="icon-bell pdd-right-10"></i>
-                                    <span>Notifications</span>
+                                    <b><span class="text-gray">Last 3 notifications</span></b>
                                 </li>
-                                <li class="notice-header">
-                                    <span>&nbsp;&nbsp; In Construction</span>
+                                @foreach (var item in last3_notifications)
+                                {
+                                    <li>
+                                        <a href="#">
+                                            <div class="info">
+                                                <span class="title">
+                                                    @if (item.Status == KyoS.Common.Enums.MessageStatus.NotRead)
+                                                    {
+                                                        <span style="color:#0072c6;">@item.Title</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@item.Title</span>
+                                                    }
+                                                </span>
+                                                @{
+                                                    TimeSpan sustract = DateTime.Now.Subtract(item.DateCreated);
+                                                }
+                                                @if (sustract.Days > 0)
+                                                {
+                                                    <span class="sub-title">
+                                                        @sustract.Days days ago
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    if (sustract.Hours > 0)
+                                                    {
+                                                        <span class="sub-title">
+                                                            @sustract.Hours hours ago
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="sub-title">
+                                                            @sustract.Minutes minutes ago
+                                                        </span>
+                                                    }
+                                                }
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                                @if (last3_notifications.Count() == 0)
+                                {
+                                    <li>
+                                        <a asp-controller="Messages" asp-action="Notifications">
+                                            <div class="info">
+                                                <span style="color:#0072c6;">No notifications for you &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                                <li class="notice-footer">
+                                    <span>
+                                        <a asp-controller="Messages" asp-action="Notifications" class="text-gray">View all notifications &nbsp;<i class="icon-chevron-right pdd-left-5 font-size-10"></i></a>
+                                    </span>
                                 </li>
-                                @*<li>
-                        <ul class="list-info overflow-y-auto relative scrollable">
-                            <li>
-                                <a href="#">
-                                    <img class="thumb-img" src="assets/images/avatars/thumb-5.jpg" alt="">
-                                    <div class="info">
-                                        <span class="title">
-                                            <span class="font-size-14 text-semibold">Jennifer Watkins</span>
-                                            <span class="text-gray">commented on your <span class="text-dark">post</span></span>
-                                        </span>
-                                        <span class="sub-title">5 mins ago</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img class="thumb-img" src="assets/images/avatars/thumb-4.jpg" alt="">
-                                    <div class="info">
-                                        <span class="title">
-                                            <span class="font-size-14 text-semibold">Samuel Field</span>
-                                            <span class="text-gray">likes your <span class="text-dark">photo</span></span>
-                                        </span>
-                                        <span class="sub-title">8 hours ago</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="thumb-img bg-primary">
-                                        <span class="text-white">M</span>
-                                    </span>
-                                    <div class="info">
-                                        <span class="title">
-                                            <span class="font-size-14 text-semibold">Michael Birch</span>
-                                            <span class="text-gray">likes your <span class="text-dark">photo</span></span>
-                                        </span>
-                                        <span class="sub-title">5 hours ago</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="thumb-img bg-success">
-                                        <span class="text-white"><i class="fa fa-paper-plane-o"></i></span>
-                                    </span>
-                                    <div class="info">
-                                        <span class="title">
-                                            <span class="font-size-14 text-semibold">Message sent</span>
-                                        </span>
-                                        <span class="sub-title">8 hours ago</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="thumb-img bg-info">
-                                        <span class="text-white"><i class="ti-user"></i></span>
-                                    </span>
-                                    <div class="info">
-                                        <span class="title">
-                                            <span class="font-size-14 text-semibold">Admin</span>
-                                            <span class="text-gray">Welcome on board</span>
-                                        </span>
-                                        <span class="sub-title">8 hours ago</span>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="notice-footer">
-                        <span>
-                            <a href="#" class="text-gray">Check all notifications <i class="ei-right-chevron pdd-left-5 font-size-10"></i></a>
-                        </span>
-                    </li>*@
                             </ul>
                         </li>
                         <li>

@@ -315,5 +315,34 @@ namespace KyoS.Web.Controllers
 
             return View();
         }
+
+        [Authorize(Roles = "Facilitator, Supervisor, Manager")]
+        public async Task<IActionResult> Notifications(int id = 0)
+        {            
+            return View(await _context.Messages
+
+                                      .Include(m => m.Workday_Client)
+                                      .ThenInclude(wc => wc.Note)
+
+                                      .Include(m => m.Workday_Client)
+                                      .ThenInclude(wc => wc.NoteP)
+
+                                      .Include(m => m.Workday_Client)
+                                      .ThenInclude(wc => wc.IndividualNote)
+
+                                      .Include(m => m.Workday_Client)
+                                      .ThenInclude(wc => wc.GroupNote)
+
+                                      .Include(m => m.FarsForm)
+
+                                      .Include(m => m.MTPReview)
+
+                                      .Include(m => m.Addendum)
+
+                                      .Include(m => m.Discharge)
+
+                                      .Where(m => (m.To == User.Identity.Name && m.Notification == true))
+                                      .ToListAsync());            
+        }
     }
 }
