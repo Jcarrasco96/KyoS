@@ -513,7 +513,10 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction(nameof(PendingFars));
             }
-
+            if (origin == 3)
+            {
+                return RedirectToAction("Notifications", "Messages");
+            }
             return RedirectToAction(nameof(Index));
         }
 

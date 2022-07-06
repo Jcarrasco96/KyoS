@@ -2905,6 +2905,10 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction("MessagesOfMTPReviews", "Messages");
                     }
+                    if (mtpReviewViewModel.Origin == 4)
+                    {
+                        return RedirectToAction("Notifications", "Messages");
+                    }
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -2970,6 +2974,10 @@ namespace KyoS.Web.Controllers
             if (origin == 2)
             {
                 return RedirectToAction(nameof(MTPRinEdit));
+            }
+            if (origin == 4)
+            {
+                return RedirectToAction("Notifications", "Messages");
             }
 
             return RedirectToAction(nameof(Index));

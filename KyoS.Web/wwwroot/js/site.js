@@ -17,6 +17,22 @@ showInPopup = (url, title) => {
     })
 }
 
+showInPopupLg = (url, title) => {
+    $.ajax({
+        type: 'GET',
+        url: url,
+        success: function (res) {
+            $('#form-modal-lg .modal-body').html(res);
+            $('#form-modal-lg .modal-title').html(title);
+            $('#form-modal-lg').modal('show');
+            // to make popup draggable
+            $('.modal-dialog-lg').draggable({
+                handle: ".modal-header"
+            });
+        }
+    })
+}
+
 jQueryAjaxPost = form => {
     try {
         $.ajax({

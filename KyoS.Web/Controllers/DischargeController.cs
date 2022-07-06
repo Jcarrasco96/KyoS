@@ -629,6 +629,10 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction(nameof(PendingDischarge));
             }
+            if (origin == 4)
+            {
+                return RedirectToAction("Notifications", "Messages");
+            }
 
             return RedirectToAction(nameof(Index));
         }
