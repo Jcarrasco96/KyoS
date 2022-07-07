@@ -7,7 +7,7 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("Clients Without MTP", "ClientsWithoutMTP", "Clients")
+            @Html.ActionLink("MTPs", "Index", "MTPs")
         </li>
         <li class="active">Create</li>
     </ul><!--.breadcrumb-->
@@ -55,14 +55,14 @@
             </div>
         }
     </div>
-    <div>
+    <div class="row">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Review" />
             <input type="hidden" asp-for="Client.Name" />
             <input type="hidden" asp-for="AdmissionedFor" />
             <partial name="_MTPs" />
-            <div class="form-group">
+            <div class="form-group col-md-12">
                 <input type="submit" value="Create MTP" class="btn btn-primary" />
                 <a asp-action="ClientsWithoutMTP" asp-controller="Clients" class="btn btn-success">Back</a>
             </div>

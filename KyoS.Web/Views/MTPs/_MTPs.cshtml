@@ -1,5 +1,5 @@
 ﻿@model KyoS.Web.Models.MTPViewModel
-<div class="row">
+<div class="col-md-push-12">
     <div class="col-md-4">
         <div class="form-group">
             <label asp-for="IdClient" class="control-label"></label>&nbsp;*
@@ -33,7 +33,7 @@
         }
     </div>    
 </div>
-<div class="row">
+<div class="col-md-push-12">
     <div class="col-md-2">
         <div class="form-group">
             <label asp-for="AdmissionDateMTP" class="control-label">MTP Creation Date</label>
@@ -88,7 +88,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="col-md-push-12">
     <div class="col-md-6">
         <div class="form-group">
             <label asp-for="ClientStrengths" class="control-label">Client’s Strengths</label>
@@ -104,7 +104,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="col-md-push-12">
     <div class="col-md-2">
         <div class="form-group">
             <label asp-for="DateOfUpdate" class="control-label">MTP Update Date</label>
@@ -112,8 +112,11 @@
             <span asp-validation-for="DateOfUpdate" class="text-danger"></span>
         </div>
     </div>
+    <div class="container-fluid">
+        &nbsp;
+    </div>
 </div>
-<div class="row">
+<div class="col-md-push-12">
     <div class="col-md-12">
         <div class="form-group">
             <label asp-for="RationaleForUpdate" class="control-label">Rationale for Update</label>
@@ -122,7 +125,7 @@
         </div>
     </div>    
 </div>
-<div class="row">
+<div class="col-md-push-12">
     <div class="col-md-12">
         <div class="form-group">
             <pre>
@@ -142,7 +145,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="col-md-push-12">
     <div class="col-md-12">
         <div class="form-group">
             <label asp-for="AdditionalRecommended" class="control-label">Additional recommended services outside of clinic (indicate the service and referrals necessary and where client was referred to. Please have client sign a release of information for each service) </label>
@@ -151,7 +154,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="col-md-push-12">
     <div class="col-md-12">
         <div class="form-group">
             <pre>
@@ -169,7 +172,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="col-md-push-12">
     <div class="col-md-12">
         <div class="form-group">
             <label asp-for="InitialDischargeCriteria" class="control-label">Transition or discontinuation of services criteria and plan (Initial discharge criteria)</label>
