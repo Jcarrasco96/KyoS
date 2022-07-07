@@ -16,7 +16,18 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.TcmServicePlan.TcmClient.Id, section = 4 })
+                @if (@ViewData["origin"].ToString() == "0")
+                {
+                    @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.TcmServicePlan.TcmClient.Id, section = 4 })
+                }
+                @if (@ViewData["origin"].ToString() == "1")
+                {
+                    @Html.ActionLink("TCM Discharge", "TCMDischargeApproved", "TCMDischarges", new { approved = 0 })
+                }
+                @if (@ViewData["origin"].ToString() == "2")
+                {
+                    @Html.ActionLink("TCM Discharge", "TCMDischargeApproved", "TCMDischarges", new { approved = 1 })
+                }
             </li>
             <li class="active">Edit</li>
         </ul><!--.breadcrumb-->
@@ -29,9 +40,10 @@
 
         </div>
         <div>
-            <form asp-action="Edit" asp-route-id="@Model.Id" enctype="multipart/form-data">
+            <form asp-action="Edit" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="IdServicePlan" />
+                <input type="hidden" asp-for="Approved" />
                 <partial name="_TCMDischarges" />
                 <div class="col-md-push-12">
                     <div class="col-md-12 form-group">
@@ -54,7 +66,20 @@
                 <br />
                 <div class="form-group col-md-12">
                     <input type="submit" value="Save" class="btn btn-primary" />
-                    <a asp-action="Index" class="btn btn-success">Back</a>
+                    @if (@ViewData["origin"].ToString() == "0")
+                    {
+                        <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmServicePlan.TcmClient.Id" asp-route-section="4" asp-controller="TCMIntakes" class="btn btn-success">Back</a>
+                    }
+                    @if (@ViewData["origin"].ToString() == "1")
+                    {
+
+                        <a asp-action="TCMDischargeApproved" asp-route-approved="0" class="btn btn-success">Back</a>
+                    }
+                    @if (@ViewData["origin"].ToString() == "2")
+                    {
+
+                        <a asp-action="TCMDischargeApproved" asp-route-approved="1" class="btn btn-success">Back</a>
+                    }
                 </div>
             </form>
         </div>

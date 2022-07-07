@@ -206,21 +206,24 @@
                                     {
                                         @if (item.Approved == 0)
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-warning" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
                                             <a onclick="showInPopup('@Url.Action("CreateDomain", "TCMServiceplans", new { id = item.Id }, Context.Request.Scheme)','Create TCM Domain')" class="btn btn-info" title="Create TCM Domain"><i class="glyphicon glyphicon-plus"></i></a>
-                                            <a asp-action="FinishEditing" asp-route-id="@item.Id" class="btn btn-success" title="Finish Editing TCM Service Plan"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a asp-action="FinishEditing" asp-route-id="@item.Id"  asp-route-origin="1" class="btn btn-success" title="Finish Editing TCM Service Plan"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }
                                         @if (item.Approved == 1)
                                         {
-                                            <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-info disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-plus"></i></a>
-                                            <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-warning" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("CreateDomain", "TCMServiceplans", new { id = item.Id }, Context.Request.Scheme)','Create TCM Domain')" class="btn btn-info" title="Create TCM Domain"><i class="glyphicon glyphicon-plus"></i></a>
+                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }
                                         @if (item.Approved == 2)
                                         {
-                                            <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-info disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-plus"></i></a>
-                                            <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                            <i title="Approved" class="btn btn-info disabled glyphicon glyphicon-plus"></i>
+                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                            <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     }
                                 </td>
