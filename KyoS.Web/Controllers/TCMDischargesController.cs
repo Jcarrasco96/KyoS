@@ -196,7 +196,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult Edit(int id = 0)
+        public IActionResult Edit(int id = 0, int origin  = 0)
         {
             TCMDischargeViewModel model;
 
@@ -224,10 +224,10 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-                        
+                        ViewData["origin"] = origin;
                         model = _converterHelper.ToTCMDischargeViewModel(TcmDischarge);
-                        
                         return View(model);
+                       
                     }
                    
                 }
@@ -240,7 +240,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> Edit(TCMDischargeViewModel tcmDischargeViewModel)
+        public async Task<IActionResult> Edit(TCMDischargeViewModel tcmDischargeViewModel, int origin  = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -248,19 +248,25 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                    TCMDischargeEntity tcmDischargeEntity = await _converterHelper.ToTCMDischargeEntity(tcmDischargeViewModel, false, user_logged.UserName);
-                    _context.TCMDischarge.Update(tcmDischargeEntity);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
+                TCMDischargeEntity tcmDischargeEntity = await _converterHelper.ToTCMDischargeEntity(tcmDischargeViewModel, false, user_logged.UserName);
+                _context.TCMDischarge.Update(tcmDischargeEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Index", "TCMDischarges", new { idTCMClient = tcmDischargeEntity.TcmServicePlan.TcmClient.Id });
-                }
-                    catch (System.Exception ex)
+                    if (origin == 0)
                     {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        return RedirectToAction("Index", "TCMDischarges", new { idTCMClient = tcmDischargeEntity.TcmServicePlan.TcmClient.Id });
                     }
-               
+                    else
+                    {
+                        return RedirectToAction("TCMDischargeApproved", "TCMDischarges", new { approved = (origin - 1) });
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
             }
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", tcmDischargeViewModel) });
@@ -317,7 +323,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> FinishEditing(int id)
+        public async Task<IActionResult> FinishEditing(int id, int origin = 0)
         {
             TCMDischargeEntity tcmDischarge = _context.TCMDischarge.FirstOrDefault(u => u.Id == id);
 
@@ -336,7 +342,15 @@ namespace KyoS.Web.Controllers
                         {
                             await _context.SaveChangesAsync();
 
-                            return RedirectToAction("Index", "TCMDischarges");
+                            if (origin == 0)
+                            {
+                                return RedirectToAction("Index", "TCMDischarges");
+                            }
+                            else
+                            {
+                                return RedirectToAction("TCMDischargeApproved", "TCMDischarges", new { approved = 1 });
+                            }
+                            
                         }
                         catch (System.Exception ex)
                         {
@@ -569,6 +583,58 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("Edit", new { id = tcmDischargeFollowUpEntity.Id });
         }
+
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
+        public async Task<IActionResult> TCMDischargeApproved(int approved = 0, int idTCMClient = 0)
+        {
+
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (User.IsInRole("Manager") || (User.IsInRole("TCMSupervisor")))
+            {
+                List<TCMDischargeEntity> tcmDischarge = await _context.TCMDischarge
+                                                                       .Include(m => m.TcmServicePlan)
+                                                                       .ThenInclude(m => m.TcmClient)
+                                                                       .ThenInclude(m => m.Client)
+                                                                       .Include(n => n.TcmDischargeFollowUp)
+                                                                       .Where(m => m.Approved == approved
+                                                                            && m.TcmServicePlan.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)
+                                                                       .OrderBy(m => m.TcmServicePlan.TcmClient.CaseNumber)
+                                                                       .ToListAsync();
+
+                return View(tcmDischarge);
+            }
+
+            if (User.IsInRole("CaseManager"))
+            {
+
+                List<TCMDischargeEntity> tcmDischarge = await _context.TCMDischarge
+                                                                       .Include(m => m.TcmServicePlan)
+                                                                       .ThenInclude(m => m.TcmClient)
+                                                                       .ThenInclude(m => m.Client)
+                                                                       .Include(n => n.TcmDischargeFollowUp)
+                                                                       .Where(m => m.TcmServicePlan.TcmClient.Casemanager.LinkedUser == user_logged.UserName
+                                                                            && m.Approved == approved
+                                                                            && m.TcmServicePlan.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)
+                                                                       .OrderBy(m => m.TcmServicePlan.TcmClient.CaseNumber)
+                                                                       .ToListAsync();
+
+                ViewData["idTCMClient"] = idTCMClient;
+                return View(tcmDischarge);
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
 
     }
 }

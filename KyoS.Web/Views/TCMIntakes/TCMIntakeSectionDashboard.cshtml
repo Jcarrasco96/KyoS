@@ -8,9 +8,16 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("TCM Intake", "TCMIntakeDashboard", "TCMIntakes", new { id = @Model.Id})
+            @Html.ActionLink("TCM Intake", "TCMIntakeDashboard", "TCMIntakes", new { id = @Model.Id })
         </li>
-        <li class="active">TCM OPEN BINDER of @Model.Client.Name</li>
+        @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
+        {
+            <li class="active">TCM OPEN BINDER of @Model.Client.Name</li>
+        }
+        else
+        {
+            <li class="active">TCM CLOSE BINDER of @Model.Client.Name</li>
+        }
     </ul><!--.breadcrumb-->
 </div>
 <div>
@@ -19,8 +26,14 @@
     {
         <div class="row">
             <div class="container-fluid">
-                @*<h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">@Model.Client.Name </span></h4>*@
-                <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">OPEN BINDER SECTION 1 </span></h4>
+                @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
+                {
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-success">OPEN BINDER SECTION 1</span></h4>
+                }
+                else
+                {
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">CLOSE BINDER SECTION 1</span></h4>
+                }
             </div>
             <div class="col-md-12">
                 <hr />
@@ -190,8 +203,14 @@
     {
         <div class="row">
             <div class="container-fluid">
-                @*<h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">@Model.Client.Name </span></h4>*@
-                <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">OPEN BINDER SECTION 2 </span></h4>
+                @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
+                {
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-success">OPEN BINDER SECTION 2</span></h4>
+                }
+                else
+                {
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">CLOSE BINDER SECTION 2</span></h4>
+                }
             </div>
             <div class="col-md-12">
                 <hr />
@@ -256,8 +275,14 @@
     {
         <div class="row">
             <div class="container-fluid">
-                @*<h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">@Model.Client.Name </span></h4>*@
-                <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">OPEN BINDER SECTION 3 </span></h4>
+                @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
+                {
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-success">OPEN BINDER SECTION 3</span></h4>
+                }
+                else
+                {
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">CLOSE BINDER SECTION 3</span></h4>
+                }
             </div>
             <div class="col-md-12">
                 <hr />
@@ -343,8 +368,14 @@
     {
         <div class="row">
             <div class="container-fluid">
-                @*<h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">@Model.Client.Name </span></h4>*@
-                <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">OPEN BINDER SECTION 4 </span></h4>
+                @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
+                {
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-success">OPEN BINDER SECTION 4</span></h4>
+                }
+                else
+                {
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">CLOSE BINDER SECTION 4</span></h4>
+                }
             </div>
             <div class="col-md-12">
                 <hr />
@@ -573,8 +604,14 @@
     {
         <div class="row">
             <div class="container-fluid">
-                @*<h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">@Model.Client.Name </span></h4>*@
-                <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">OPEN BINDER SECTION 5 </span></h4>
+                @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
+                {
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-success">OPEN BINDER SECTION 5</span></h4>
+                }
+                else
+                {
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">CLOSE BINDER SECTION 5</span></h4>
+                }
             </div>
             <div class="col-md-12">
                 <hr />
@@ -626,8 +663,14 @@
     {
         <div class="row">
             <div class="container-fluid">
-                @*<h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">@Model.Client.Name </span></h4>*@
-                <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">OPEN BINDER SECTION 6 </span></h4>
+                @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
+                {
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-success">OPEN BINDER SECTION 6</span></h4>
+                }
+                else
+                {
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">CLOSE BINDER SECTION 6</span></h4>
+                }
             </div>
             <div class="col-md-12">
                 <hr />

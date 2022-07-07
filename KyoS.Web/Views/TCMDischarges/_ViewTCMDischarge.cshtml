@@ -25,22 +25,22 @@
                  <table class="table table-hover table-responsive table-striped" id="MyTable">
                      <thead>
                          <tr>
-                             <th class="col-md-3">
+                             <th class="col-md-2">
                                  Case Number
                              </th>
-                             <th class="col-md-3">
+                             <th class="col-md-2">
                                  Client Name
                              </th>
                              <th class="col-md-2" style="text-align: center;">
-                                 Open Date
+                                 Open/Close
                              </th>
                              <th class="col-md-2" style="text-align: center;">
-                                 Close Date
-                             </th>
-                             <th class="col-md-1" style="text-align: center;">
                                  Discharge Date
                              </th>
-                             <th class="col-md-1" style="text-align: center;">
+                             <th class="col-md-2" style="text-align: center;">
+                                 Approved
+                             </th>
+                             <th class="col-md-2" style="text-align: center;">
                              </th>
                          </tr>
                      </thead>
@@ -63,41 +63,73 @@
                                  &nbsp;
                                  @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Client.Name)
                              <td align="center">
-                                 @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.DataOpen)
-                             </td>
-                             <td align="center">
-                                 @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.DataClose)
+                                 @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.DataOpen)--@Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.DataClose)
                              </td>
                              <td align="center">
                                  @Html.DisplayFor(modelItem => item.DischargeDate)
                              </td>
                              <td align="center">
-                                @if (User.IsInRole("CaseManager"))
+                                 @if (item.Approved == 0)
                                  {
-                                    @if (@item.Approved == 0)
+                                     <span class="label label-warning">
+                                         Edition
+                                     </span>
+                                 }
+                                 @if (item.Approved == 1)
+                                 {
+                                     <span class="label label-info">
+                                         Pending
+                                     </span>
+                                 }
+                                 @if (item.Approved == 2)
+                                 {
+                                     <span class="label label-info">
+                                         Approved
+                                     </span>
+                                 }
+                             </td>
+                             <td align="right">
+                                 @if (User.IsInRole("CaseManager"))
+                                 {
+                                     @if (@item.Approved == 0)
                                      {
-                                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit TCM Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
-                                         <a asp-action="FinishEditing" asp-route-id="@item.Id" class="btn btn-success" title="Finish Editing TCM Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                         <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-warning" title="Edit TCM Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                         <a asp-action="FinishEditing" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Finish Editing TCM Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                         <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                      }
-                                    @if (item.Approved == 1)
+                                     @if (item.Approved == 1)
                                      {
-                                         <i title="In Review" class="btn btn-warning glyphicon glyphicon-search"></i>
+                                         <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-warning" title="Edit TCM Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                         <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                         <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                      }
-                                    @if (item.Approved == 2)
+                                     @if (item.Approved == 2)
                                      {
-                                         <i title="Approved" class="btn btn-success glyphicon glyphicon-flag"></i>
+                                         <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                         <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                         <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Edit TCM Discharge"><i class="glyphicon glyphicon-print"></i></a>
                                      }
                                  }
-                                @if (User.IsInRole("TCMSupervisor"))
+                                 @if (User.IsInRole("TCMSupervisor"))
                                  {
-                                    
-                                    @if (item.Approved == 1)
+                                     @if (@item.Approved == 0)
                                      {
-                                        <a asp-action="Approved" asp-route-id="@item.Id" class="btn btn-success" title="Pending Approval"><i class="glyphicon glyphicon-ok"></i></a>
+                                         <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                         <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                         <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                      }
-                                    @if (item.Approved == 2)
+
+                                     @if (item.Approved == 1)
                                      {
-                                         <i title="Approved" class="btn btn-success glyphicon glyphicon-flag"></i>
+                                         <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                         <a asp-action="Approved" asp-route-id="@item.Id" class="btn btn-success" title="Pending Approval"><i class="glyphicon glyphicon-ok"></i></a>
+                                         <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                     }
+                                     @if (item.Approved == 2)
+                                     {
+                                         <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                         <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                         <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Edit TCM Discharge"><i class="glyphicon glyphicon-print"></i></a>
                                      }
                                  }
                              </td>
