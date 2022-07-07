@@ -1233,24 +1233,6 @@
                     }
                 </div>
                 <div class="col-md-2">
-                    @if (ViewBag.ServicePlanPending == "0")
-                    {
-                        <div class="thumbnail list-group-item list-group-item-text">
-                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service Plan</h4>
-                            <span class="message-counter-cero">@ViewBag.ServicePlanPending</span>
-                        </div>
-                    }
-                    else
-                    {
-                        <a asp-controller="TCMServicePlans" asp-action="ServicePlanApproved" asp-route-approved="1" role="button">
-                            <div class="thumbnail list-group-item list-group-item-info">
-                                <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service Plan</h4>
-                                <span class="message-counter-info">@ViewBag.ServicePlanPending</span>
-                            </div>
-                        </a>
-                    }
-                </div>
-                <div class="col-md-2">
                     @if (ViewBag.AdendumEdition == "0")
                     {
                         <div class="thumbnail list-group-item list-group-item-text">
@@ -1264,6 +1246,66 @@
                             <div class="thumbnail list-group-item list-group-item-warning">
                                 <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                                 <span class="message-counter-warning">@ViewBag.AdendumEdition</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.ServicePlanReviewEdition == "0")
+                    {
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service Plan Review<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                            <span class="message-counter-cero">@ViewBag.ServicePlanReviewEdition</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a asp-controller="TCMServicePlanReviews" asp-action="ServicePlanReviewApproved" role="button">
+                            <div class="thumbnail list-group-item list-group-item-warning">
+                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service Plan Review<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                                <span class="message-counter-warning">@ViewBag.ServicePlanReviewEdition</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.DischargeEdition == "0")
+                    {
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Discharge<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                            <span class="message-counter-cero">@ViewBag.DischargeEdition</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a asp-controller="TCMDischarges" asp-action="TCMDischargeApproved" role="button">
+                            <div class="thumbnail list-group-item list-group-item-warning">
+                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Discharge<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                                <span class="message-counter-warning">@ViewBag.DischargeEdition</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                //New line
+                <div class="col-md-12">
+                    &nbsp;
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.ServicePlanPending == "0")
+                    {
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service Plan</h4>
+                            <span class="message-counter-cero">@ViewBag.ServicePlanPending</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a asp-controller="TCMServicePlans" asp-action="ServicePlanApproved" asp-route-approved="1" role="button">
+                            <div class="thumbnail list-group-item list-group-item-info">
+                                <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service Plan</h4>
+                                <span class="message-counter-info">@ViewBag.ServicePlanPending</span>
                             </div>
                         </a>
                     }
@@ -1286,30 +1328,6 @@
                         </a>
                     }
                 </div>
-                //New line
-                <div class="col-md-12">
-                    &nbsp;
-                </div>
-                <div class="col-md-2">
-                </div>
-                <div class="col-md-2">
-                    @if (ViewBag.ServicePlanReviewEdition == "0")
-                    {
-                        <div class="thumbnail list-group-item list-group-item-text">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service Plan Review<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
-                            <span class="message-counter-cero">@ViewBag.ServicePlanReviewEdition</span>
-                        </div>
-                    }
-                    else
-                    {
-                        <a asp-controller="TCMServicePlanReviews" asp-action="ServicePlanReviewApproved" role="button">
-                            <div class="thumbnail list-group-item list-group-item-warning">
-                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service Plan Review<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
-                                <span class="message-counter-warning">@ViewBag.ServicePlanReviewEdition</span>
-                            </div>
-                        </a>
-                    }
-                </div>
                 <div class="col-md-2">
                     @if (ViewBag.ServicePlanReviewPending == "0")
                     {
@@ -1324,24 +1342,6 @@
                             <div class="thumbnail list-group-item list-group-item-info">
                                 <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service Plan Review</h4>
                                 <span class="message-counter-info">@ViewBag.ServicePlanReviewPending</span>
-                            </div>
-                        </a>
-                    }
-                </div>
-                <div class="col-md-2">
-                    @if (ViewBag.DischargeEdition == "0")
-                    {
-                        <div class="thumbnail list-group-item list-group-item-text">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Discharge<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
-                            <span class="message-counter-cero">@ViewBag.DischargeEdition</span>
-                        </div>
-                    }
-                    else
-                    {
-                        <a asp-controller="TCMDischarges" asp-action="TCMDischargeApproved" role="button">
-                            <div class="thumbnail list-group-item list-group-item-warning">
-                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Discharge<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
-                                <span class="message-counter-warning">@ViewBag.DischargeEdition</span>
                             </div>
                         </a>
                     }
