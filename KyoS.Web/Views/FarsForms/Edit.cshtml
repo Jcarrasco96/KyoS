@@ -47,6 +47,10 @@
             {
                 <a asp-action="MessagesOfFars" asp-controller="Messages" class="btn btn-success">Back</a>
             }
+            @if (Model.Origin == 3)
+            {
+                <a asp-action="Notifications" asp-controller="Messages" class="btn btn-success">Back</a>
+            }
         </div>
     </form>        
 </div>

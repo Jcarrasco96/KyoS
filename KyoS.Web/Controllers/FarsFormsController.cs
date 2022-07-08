@@ -357,6 +357,10 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction("MessagesOfFars", "Messages");
                     }
+                    if (farsFormViewModel.Origin == 3)
+                    {
+                        return RedirectToAction("Notifications", "Messages");
+                    }
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -509,7 +513,10 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction(nameof(PendingFars));
             }
-
+            if (origin == 3)
+            {
+                return RedirectToAction("Notifications", "Messages");
+            }
             return RedirectToAction(nameof(Index));
         }
 

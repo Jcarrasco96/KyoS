@@ -1,0 +1,86 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.MessageEntity>
+@{
+    Layout = null;
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Reviews</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-3" style="text-align:center;">Date</th>
+                            <th class="col-md-3" style="text-align:left;">Title</th>
+                            <th class="col-md-6" style="text-align:left;">Review</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var review in Model)
+                        {
+
+                            @if (review.Status == KyoS.Common.Enums.MessageStatus.NotRead)
+                            {
+                                <tr style="font-weight:bold; color:#0072c6;">
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => review.DateCreated)
+                                    </td>
+                                    <td align="left">
+                                        @Html.DisplayFor(modelItem => review.Title)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => review.Text)
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => review.DateCreated)
+                                    </td>
+                                    <td align="left">
+                                        @Html.DisplayFor(modelItem => review.Title)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => review.Text)
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="col-md-offset-11">            
+            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.fn.dataTable.moment('MM/DD/YYYY');
+
+            $('#MyTable').DataTable({
+                "order": [[0, "desc"]],
+                "pageLength": 100
+            });
+        });        
+    </script>
+}

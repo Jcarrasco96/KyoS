@@ -55,11 +55,15 @@
                     {
                         <a asp-action="GroupNotesWithReview" class="btn btn-success">Back</a>
                     }
+                    @if (Model.Origin == 9) //viene de la pagina Notifications
+                    {
+                        <a asp-controller="Messages" asp-action="Notifications" class="btn btn-success">Back</a>
+                    }
                 }
                 @if (User.IsInRole("Facilitator"))
                 {
                     <a asp-action="GroupNotes" class="btn btn-success">Back</a>
-                }                
+                }
             </div>
         </form>
     </div>

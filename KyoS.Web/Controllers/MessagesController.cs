@@ -315,5 +315,93 @@ namespace KyoS.Web.Controllers
 
             return View();
         }
+
+        [Authorize(Roles = "Facilitator, Supervisor, Manager")]
+        public async Task<IActionResult> Notifications(int id = 0)
+        {            
+            return View(await _context.Messages
+
+                                      .Include(m => m.Workday_Client)
+                                      .ThenInclude(wc => wc.Note)
+
+                                      .Include(m => m.Workday_Client)
+                                      .ThenInclude(wc => wc.NoteP)
+
+                                      .Include(m => m.Workday_Client)
+                                      .ThenInclude(wc => wc.IndividualNote)
+
+                                      .Include(m => m.Workday_Client)
+                                      .ThenInclude(wc => wc.GroupNote)
+
+                                      .Include(m => m.FarsForm)
+
+                                      .Include(m => m.MTPReview)
+
+                                      .Include(m => m.Addendum)
+
+                                      .Include(m => m.Discharge)
+
+                                      .Where(m => (m.To == User.Identity.Name && m.Notification == true))
+                                      .ToListAsync());            
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> Reviews(int id = 0)
+        {
+            MessageEntity notification = await _context.Messages
+
+                                                       .Include(m => m.Workday_Client)
+                                                       .Include(m => m.FarsForm)
+                                                       .Include(m => m.MTPReview)
+                                                       .Include(m => m.Addendum)
+                                                       .Include(m => m.Discharge)
+
+                                                       .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (notification == null)
+            {
+                return null;
+            }
+
+            if (notification.Workday_Client != null)
+            {
+                return View(await _context.Messages
+                                          .Where(m => (m.Workday_Client.Id == notification.Workday_Client.Id && m.Notification == false))
+                                          .ToListAsync());
+            }
+            
+            if (notification.FarsForm != null)
+            {
+                return View(await _context.Messages
+                                          .Where(m => (m.FarsForm.Id == notification.FarsForm.Id && m.Notification == false))
+                                          .ToListAsync());
+            }
+
+            if (notification.MTPReview != null)
+            {
+                return View(await _context.Messages
+
+                                          .Where(m => (m.MTPReview.Id == notification.MTPReview.Id && m.Notification == false))
+                                          .ToListAsync());
+            }
+
+            if (notification.Addendum != null)
+            {
+                return View(await _context.Messages
+
+                                          .Where(m => (m.Addendum.Id == notification.Addendum.Id && m.Notification == false))
+                                          .ToListAsync());
+            }
+
+            if (notification.Discharge != null)
+            {
+                return View(await _context.Messages
+
+                                          .Where(m => (m.Discharge.Id == notification.Discharge.Id && m.Notification == false))
+                                          .ToListAsync());
+            }
+
+            return null;
+        }
     }
 }

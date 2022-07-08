@@ -3420,6 +3420,8 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction(nameof(PendingNotes));
             if (model.Origin == 4)  ///viene de la pagina NotesWithReview
                 return RedirectToAction(nameof(NotesWithReview));
+            if (model.Origin == 5)  ///viene de la pagina Notifications
+                return RedirectToAction("Notifications", "Messages");
 
             return RedirectToAction(nameof(NotesSupervision));
         }
@@ -3680,6 +3682,8 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction(nameof(PendingNotes));
             if (model.Origin == 4)  ///viene de la pagina NotesWithReview
                 return RedirectToAction(nameof(NotesWithReview));
+            if (model.Origin == 5)  ///viene de la pagina Notifications
+                return RedirectToAction("Notifications", "Messages");
 
             return RedirectToAction(nameof(NotesSupervision));
         }
@@ -3803,6 +3807,8 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction(nameof(PendingIndNotes));
             if (model.Origin == 6)  ///viene de la pagina NotesWithReview
                 return RedirectToAction(nameof(IndNotesWithReview));
+            if (model.Origin == 7)  ///viene de la pagina Notifications
+                return RedirectToAction("Notifications", "Messages");
 
             return RedirectToAction(nameof(IndNotesSupervision));
         }
@@ -3944,6 +3950,8 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction(nameof(PendingGroupNotes));
             if (model.Origin == 8)  //viene de la pagina GroupNotesWithReview
                 return RedirectToAction(nameof(GroupNotesWithReview));
+            if (model.Origin == 9)  ///viene de la pagina Notifications
+                return RedirectToAction("Notifications", "Messages");
 
             return RedirectToAction(nameof(GroupNotesSupervision));
         }

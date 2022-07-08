@@ -141,19 +141,19 @@
                                         {
                                             @if ((day_client.Note != null && day_client.Note.Status.ToString() == "Pending") || (day_client.NoteP != null && day_client.NoteP.Status.ToString() == "Pending"))
                                             {
-                                                <a asp-action="EditNote" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-origin="5" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
+                                                <a asp-action="EditNote" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-origin="5" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-pencil"></i></a>
                                             }
                                             else
                                             {
                                                 @if (day_client.IndividualNote != null && day_client.IndividualNote.Status.ToString() == "Pending")
                                                 {
-                                                    <a asp-action="EditIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-origin="5" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
+                                                    <a asp-action="EditIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-origin="5" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-pencil"></i></a>
                                                 }
                                                 else
                                                 {
                                                     @if (day_client.GroupNote != null && day_client.GroupNote.Status.ToString() == "Pending")
                                                     {
-                                                        <a asp-action="EditGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-origin="5" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
+                                                        <a asp-action="EditGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-origin="5" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-pencil"></i></a>
                                                     }
                                                     else
                                                     {
@@ -258,11 +258,11 @@
                                         {                                            
                                             @if ((day_client.Note != null && day_client.Note.Status.ToString() == "Pending") || (day_client.NoteP != null && day_client.NoteP.Status.ToString() == "Pending") || (day_client.IndividualNote != null && day_client.IndividualNote.Status.ToString() == "Pending") || (day_client.GroupNote != null && day_client.GroupNote.Status.ToString() == "Pending"))
                                             {
-                                                <a asp-action="EditNote" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-origin="5" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
+                                                <a asp-action="EditNote" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-origin="5" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-pencil"></i></a>
                                             }
                                             else
                                             {
-                                                <a asp-action="EditNote" asp-controller="Notes" class="btn btn-warning disabled" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
+                                                <a asp-action="EditNote" asp-controller="Notes" class="btn btn-warning disabled" title="Edit note"><i class="glyphicon glyphicon-pencil"></i></a>
                                             }
                                         }
                                         @if (User.IsInRole("Supervisor"))

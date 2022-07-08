@@ -2088,7 +2088,8 @@ namespace KyoS.Web.Helpers
                 SupervisorSignatureDate = DateTime.Now,
                 TcmDischargeFollowUp = TcmDischargeEntity.TcmDischargeFollowUp,
                 TcmDischargeServiceStatus = TcmDischargeEntity.TcmDischargeServiceStatus,
-                TcmServices = TcmDischargeEntity.TcmServicePlan.TCMService
+                TcmServices = TcmDischargeEntity.TcmServicePlan.TCMService,
+                Approved = TcmDischargeEntity.Approved
 
             };
         }
@@ -2122,7 +2123,8 @@ namespace KyoS.Web.Helpers
                 SupervisorSignatureDate = model.SupervisorSignatureDate,
                 TcmServicePlan = await _context.TCMServicePlans
                                          .Include(n => n.TcmClient)
-                                         .FirstOrDefaultAsync(m => m.Id == model.IdServicePlan)
+                                         .FirstOrDefaultAsync(m => m.Id == model.IdServicePlan),
+                 Approved = model.Approved
 
             };
         }
@@ -5711,7 +5713,7 @@ namespace KyoS.Web.Helpers
                 IdClinic = model.Clinic.Id,
                 Clinics = _combosHelper.GetComboClinics(),
                 IdUser = _userHelper.GetIdByUserName(model.LinkedUser),
-                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, idClinic),
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Documents_Assistant, idClinic),
                 SignaturePath = model.SignaturePath,
                 RaterEducation = model.RaterEducation,
                 RaterFMHCertification = model.RaterFMHCertification

@@ -38,7 +38,7 @@
             <input type="hidden" asp-for="Origin" />
             <partial name="_IndividualMCSReadOnly" />
             <partial name="_IndividualNotesReadOnly" />            
-            <div class="form-group col-md-12">                
+            <div class="form-group col-md-12">
                 @if (User.IsInRole("Supervisor"))
                 {
                     <input type="submit" value="Approve" class="btn btn-primary" title="Approve note and enable it to print" />
@@ -54,6 +54,10 @@
                     @if (Model.Origin == 6) //viene de la pagina IndNotesWithReview
                     {
                         <a asp-action="IndNotesWithReview" class="btn btn-success">Back</a>
+                    }
+                    @if (Model.Origin == 7) //viene de la pagina Notifications
+                    {
+                        <a asp-controller="Messages" asp-action="Notifications" class="btn btn-success">Back</a>
                     }
                 }
                 @if (User.IsInRole("Facilitator"))

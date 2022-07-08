@@ -417,6 +417,10 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction("MessagesOfDischarges", "Messages");
                     }
+                    if (dischargeViewModel.Origin == 4)
+                    {
+                        return RedirectToAction("Notifications", "Messages");
+                    }
 
                     return RedirectToAction("Index");
                 }
@@ -624,6 +628,10 @@ namespace KyoS.Web.Controllers
             if(origin == 2)
             {
                 return RedirectToAction(nameof(PendingDischarge));
+            }
+            if (origin == 4)
+            {
+                return RedirectToAction("Notifications", "Messages");
             }
 
             return RedirectToAction(nameof(Index));

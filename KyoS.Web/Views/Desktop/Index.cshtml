@@ -26,8 +26,8 @@
                     <div class="col-md-3">
                     </div>
                     <div class="col-md-6">
-                        <h4 style="text-align:center;">@user.Clinic.Name</h4>
-                        <h5 style="text-align:center;">@DateTime.Now.ToLongDateString()</h5>
+                        <h4 style="text-align:center;display: block;font-size: 18px;color: #888da8;max-width: 100%;">@user.Clinic.Name</h4>
+                        <h5 style="text-align:center;display: block;font-size: 15px;color: #b4b7c8;max-width: 100%;">@DateTime.Now.ToLongDateString()</h5>
                     </div>
                     <div class="col-md-3">
                     </div>
@@ -45,7 +45,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="NotStartedNotes" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="NotStartedNotes" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
                                 <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Not Started<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PSR Notes</h4>
                                 <span class="message-counter">@ViewBag.NotStartedNotes</span>
@@ -63,7 +63,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="NotesInEdit" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="NotesInEdit" role="button">
                             <div class="thumbnail list-group-item list-group-item-warning">
                                 <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>PSR Notes<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in Edit</h4>
                                 <span class="message-counter-warning">@ViewBag.InProgressNotes</span>
@@ -81,7 +81,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="PendingNotes" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="PendingNotes" role="button">
                             <div class="thumbnail list-group-item list-group-item-info">
                                 <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PSR Notes</h4>
                                 <span class="message-counter-info">@ViewBag.PendingNotes</span>
@@ -99,7 +99,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="NotesWithReview" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="NotesWithReview" role="button">
                             <div class="thumbnail list-group-item list-group-item-warning">
                                 <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>PSR Notes<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with review</h4>
                                 <span class="message-counter-warning">@ViewBag.NotesWithReview</span>
@@ -117,7 +117,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="ApprovedNotes" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="ApprovedNotes" role="button">
                             <div class="thumbnail list-group-item list-group-item-success">
                                 <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Approved<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PSR Notes</h4>
                                 <span class="message-counter-success">@ViewBag.ApprovedNotes</span>
@@ -135,7 +135,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="NotPresentNotes" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="NotPresentNotes" role="button">
                             <div class="thumbnail list-group-item list-group-item-text">
                                 <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Absence<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PSR Notes</h4>
                                 <span class="message-counter-cero">@ViewBag.NotPresentNotes</span>
@@ -157,7 +157,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="NotStartedIndNotes" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="NotStartedIndNotes" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
                                 <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Not Started<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ind. Notes</h4>
                                 <span class="message-counter">@ViewBag.NotStartedIndNotes</span>
@@ -175,7 +175,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="IndNotesInEdit" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="IndNotesInEdit" role="button">
                             <div class="thumbnail list-group-item list-group-item-warning">
                                 <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Ind. Notes<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in Edit</h4>
                                 <span class="message-counter-warning">@ViewBag.InProgressIndNotes</span>
@@ -193,7 +193,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="PendingIndNotes" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="PendingIndNotes" role="button">
                             <div class="thumbnail list-group-item list-group-item-info">
                                 <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ind. Notes</h4>
                                 <span class="message-counter-info">@ViewBag.PendingIndNotes</span>
@@ -211,7 +211,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="IndNotesWithReview" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="IndNotesWithReview" role="button">
                             <div class="thumbnail list-group-item list-group-item-warning">
                                 <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Ind. Notes<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with review</h4>
                                 <span class="message-counter-warning">@ViewBag.IndNotesWithReview</span>
@@ -229,7 +229,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="ApprovedIndNotes" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="ApprovedIndNotes" role="button">
                             <div class="thumbnail list-group-item list-group-item-success">
                                 <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Approved<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ind. Notes</h4>
                                 <span class="message-counter-success">@ViewBag.ApprovedIndNotes</span>
@@ -247,7 +247,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="NotPresentIndNotes" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="NotPresentIndNotes" role="button">
                             <div class="thumbnail list-group-item list-group-item-text">
                                 <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Absence<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ind. Notes</h4>
                                 <span class="message-counter-cero">@ViewBag.NotPresentIndNotes</span>
@@ -269,7 +269,7 @@
                     }
                     else
                     {
-                        <a asp-controller="MTPs" asp-action="ExpiredMTP" role="button">
+                        <a style="text-decoration: none;" asp-controller="MTPs" asp-action="ExpiredMTP" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
                                 <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Expired<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MTPs</h4>
                                 <span class="message-counter">@ViewBag.ExpiredMTPsFacilitator</span>
@@ -287,7 +287,7 @@
                     }
                     else
                     {
-                        <a asp-controller="MTPs" asp-action="MTPRinEdit" role="button">
+                        <a style="text-decoration: none;" asp-controller="MTPs" asp-action="MTPRinEdit" role="button">
                             <div class="thumbnail list-group-item list-group-item-warning">
                                 <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>MTP Reviews<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in Edit</h4>
                                 <span class="message-counter-warning">@ViewBag.MTPReviewEdition</span>
@@ -305,7 +305,7 @@
                     }
                     else
                     {
-                        <a asp-controller="MTPs" asp-action="PendingMtpReview" role="button">
+                        <a style="text-decoration: none;" asp-controller="MTPs" asp-action="PendingMtpReview" role="button">
                             <div class="thumbnail list-group-item list-group-item-info">
                                 <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MTP Reviews</h4>
                                 <span class="message-counter-info">@ViewBag.MTPReviewPending</span>
@@ -323,7 +323,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Discharge" asp-action="ClientswithoutDischarge" role="button">
+                        <a style="text-decoration: none;" asp-controller="Discharge" asp-action="ClientswithoutDischarge" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
                                 <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharge</h4>
                                 <span class="message-counter">@ViewBag.ClientDischarge</span>
@@ -341,7 +341,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Discharge" asp-action="DischargeInEdit" role="button">
+                        <a style="text-decoration: none;" asp-controller="Discharge" asp-action="DischargeInEdit" role="button">
                             <div class="thumbnail list-group-item list-group-item-warning">
                                 <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Discharges<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in Edit</h4>
                                 <span class="message-counter-warning">@ViewBag.DischargeEdition</span>
@@ -359,7 +359,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Discharge" asp-action="PendingDischarge" role="button">
+                        <a style="text-decoration: none;" asp-controller="Discharge" asp-action="PendingDischarge" role="button">
                             <div class="thumbnail list-group-item list-group-item-info">
                                 <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharges</h4>
                                 <span class="message-counter-info">@ViewBag.DischargePending</span>
@@ -474,8 +474,8 @@
                     <div class="col-md-3">
                     </div>
                     <div class="col-md-6">
-                        <h4 style="text-align:center;">@user.Clinic.Name</h4>
-                        <h5 style="text-align:center;">@DateTime.Now.ToLongDateString()</h5>
+                        <h4 style="text-align:center;display: block;font-size: 18px;color: #888da8;max-width: 100%;">@user.Clinic.Name</h4>
+                        <h5 style="text-align:center;display: block;font-size: 15px;color: #b4b7c8;max-width: 100%;">@DateTime.Now.ToLongDateString()</h5>
                     </div>
                     <div class="col-md-3">
                     </div>
@@ -496,7 +496,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Clients" asp-action="ClientsWithoutMTP" role="button">
+                        <a style="text-decoration: none;" asp-controller="Clients" asp-action="ClientsWithoutMTP" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
                                 <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without MTP</h4>
                                 <span class="message-counter">@ViewBag.MTPMissing</span>
@@ -514,7 +514,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Bios" asp-action="ClientswithoutBIO" role="button">
+                        <a style="text-decoration: none;" asp-controller="Bios" asp-action="ClientswithoutBIO" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
                                 <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without BIO</h4>
                                 <span class="message-counter">@ViewBag.PendingBIO</span>
@@ -532,7 +532,7 @@
                     }
                     else
                     {
-                        <a asp-controller="FarsForms" asp-action="ClientswithoutFARS" role="button">
+                        <a style="text-decoration: none;" asp-controller="FarsForms" asp-action="ClientswithoutFARS" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
                                 <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without FARS</h4>
                                 <span class="message-counter">@ViewBag.PendingInitialFars</span>
@@ -550,7 +550,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Intakes" asp-action="ClientswithoutMedicalHistory" asp-route-origin="1" role="button">
+                        <a style="text-decoration: none;" asp-controller="Intakes" asp-action="ClientswithoutMedicalHistory" asp-route-origin="1" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
                                 <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Medical History</h4>
                                 <span class="message-counter">@ViewBag.MedicalHistoryMissing</span>
@@ -568,7 +568,7 @@
                     }
                     else
                     {
-                        <a asp-controller="FarsForms" asp-action="PendingFARS" role="button">
+                        <a style="text-decoration: none;" asp-controller="FarsForms" asp-action="PendingFARS" role="button">
                             <div class="thumbnail list-group-item list-group-item-info">
                                 <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FARS</h4>
                                 <span class="message-counter-info">@ViewBag.PendingFars</span>
@@ -597,7 +597,7 @@
                     }
                     else
                     {
-                        <a asp-controller="MTPs" asp-action="PendingAdendum" role="button">
+                        <a style="text-decoration: none;" asp-controller="MTPs" asp-action="PendingAdendum" role="button">
                             <div class="thumbnail list-group-item list-group-item-info">
                                 <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Addendums</h4>
                                 <span class="message-counter-info">@ViewBag.PendingAddendum</span>
@@ -615,7 +615,7 @@
                     }
                     else
                     {
-                        <a asp-controller="MTPs" asp-action="PendingMTPReview" role="button">
+                        <a style="text-decoration: none;" asp-controller="MTPs" asp-action="PendingMTPReview" role="button">
                             <div class="thumbnail list-group-item list-group-item-info">
                                 <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MTP Reviews</h4>
                                 <span class="message-counter-info">@ViewBag.PendingMTPReview</span>
@@ -633,7 +633,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Discharge" asp-action="PendingDischarge" role="button">
+                        <a style="text-decoration: none;" asp-controller="Discharge" asp-action="PendingDischarge" role="button">
                             <div class="thumbnail list-group-item list-group-item-info">
                                 <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharges</h4>
                                 <span class="message-counter-info">@ViewBag.PendingDischarge</span>
@@ -651,7 +651,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Activities" asp-action="ActivitiesSupervision" role="button">
+                        <a style="text-decoration: none;" asp-controller="Activities" asp-action="ActivitiesSupervision" role="button">
                             <div class="thumbnail list-group-item list-group-item-info">
                                 <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Activities</h4>
                                 <span class="message-counter-info">@ViewBag.PendingActivities</span>
@@ -669,7 +669,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="PendingNotes" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="PendingNotes" role="button">
                             <div class="thumbnail list-group-item list-group-item-info">
                                 <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PSR Notes</h4>
                                 <span class="message-counter-info">@ViewBag.PendingNotes</span>
@@ -698,7 +698,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="PendingIndNotes" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="PendingIndNotes" role="button">
                             <div class="thumbnail list-group-item list-group-item-info">
                                 <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ind. Notes</h4>
                                 <span class="message-counter-info">@ViewBag.PendingIndNotes</span>
@@ -716,7 +716,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="PendingGroupNotes" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="PendingGroupNotes" role="button">
                             <div class="thumbnail list-group-item list-group-item-info">
                                 <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Group Notes</h4>
                                 <span class="message-counter-info">@ViewBag.PendingGroupNotes</span>
@@ -734,7 +734,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="NotesWithReview" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="NotesWithReview" role="button">
                             <div class="thumbnail list-group-item list-group-item-warning">
                                 <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>PSR Notes<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with review</h4>
                                 <span class="message-counter-warning">@ViewBag.NotesWithReview</span>
@@ -752,7 +752,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="IndNotesWithReview" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="IndNotesWithReview" role="button">
                             <div class="thumbnail list-group-item list-group-item-warning">
                                 <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Ind. Notes<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with review</h4>
                                 <span class="message-counter-warning">@ViewBag.IndNotesWithReview</span>
@@ -770,7 +770,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Notes" asp-action="GroupNotesWithReview" role="button">
+                        <a style="text-decoration: none;" asp-controller="Notes" asp-action="GroupNotesWithReview" role="button">
                             <div class="thumbnail list-group-item list-group-item-warning">
                                 <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Group Notes<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with review</h4>
                                 <span class="message-counter-warning">@ViewBag.GroupNotesWithReview</span>
@@ -828,7 +828,7 @@
                                 }
                                 else
                                 {
-                                    <a asp-controller="Notes" asp-action="NotNotesSummary" role="button">
+                                    <a style="text-decoration: none;" asp-controller="Notes" asp-action="NotNotesSummary" role="button">
                                         <div class="thumbnail list-group-item list-group-item-danger">
                                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Not Started<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes</h4>
                                             <span class="message-counter">@ViewBag.NotStartedNotes</span>
@@ -846,7 +846,7 @@
                                 }
                                 else
                                 {
-                                    <a asp-controller="Notes" asp-action="EditingSummary" role="button">
+                                    <a style="text-decoration: none;" asp-controller="Notes" asp-action="EditingSummary" role="button">
                                         <div class="thumbnail list-group-item list-group-item-warning">
                                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Notes in<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit</h4>
                                             <span class="message-counter-warning">@ViewBag.InProgressNotes</span>
@@ -864,7 +864,7 @@
                                 }
                                 else
                                 {
-                                    <a asp-controller="Notes" asp-action="PendingSummary" role="button">
+                                    <a style="text-decoration: none;" asp-controller="Notes" asp-action="PendingSummary" role="button">
                                         <div class="thumbnail list-group-item list-group-item-info">
                                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes</h4>
                                             <span class="message-counter-info">@ViewBag.PendingNotes</span>
@@ -882,7 +882,7 @@
                                 }
                                 else
                                 {
-                                    <a asp-controller="Notes" asp-action="ReviewSummary" role="button">
+                                    <a style="text-decoration: none;" asp-controller="Notes" asp-action="ReviewSummary" role="button">
                                         <div class="thumbnail list-group-item list-group-item-warning">
                                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Notes<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with review</h4>
                                             <span class="message-counter-warning">@ViewBag.NotesWithReview</span>
@@ -900,7 +900,7 @@
                                 }
                                 else
                                 {
-                                    <a asp-controller="Notes" asp-action="ApprovedNotesClinic" role="button">
+                                    <a style="text-decoration: none;" asp-controller="Notes" asp-action="ApprovedNotesClinic" role="button">
                                         <div class="thumbnail list-group-item list-group-item-success">
                                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Approved<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes</h4>
                                             <span class="message-counter-success">@ViewBag.ApprovedNotes</span>
@@ -918,7 +918,7 @@
                                 }
                                 else
                                 {
-                                    <a asp-controller="Notes" asp-action="NotPresentNotesClinic" role="button">
+                                    <a style="text-decoration: none;" asp-controller="Notes" asp-action="NotPresentNotesClinic" role="button">
                                         <div class="thumbnail list-group-item list-group-item-text">
                                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Absence<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes</h4>
                                             <span class="message-counter-cero">@ViewBag.NotPresentNotes</span>
@@ -944,7 +944,7 @@
                                 }
                                 else
                                 {
-                                    <a asp-controller="Clients" asp-action="ClientsWithoutMTP" role="button">
+                                    <a style="text-decoration: none;" asp-controller="Clients" asp-action="ClientsWithoutMTP" role="button">
                                         <div class="thumbnail list-group-item list-group-item-danger">
                                             <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without MTP</h4>
                                             <span class="message-counter">@ViewBag.MTPMissing</span>
@@ -962,7 +962,7 @@
                                 }
                                 else
                                 {
-                                    <a asp-controller="MTPs" asp-action="ExpiredMTP" role="button">
+                                    <a style="text-decoration: none;" asp-controller="MTPs" asp-action="ExpiredMTP" role="button">
                                         <div class="thumbnail list-group-item list-group-item-warning">
                                             <h4 style="align-content:end;"><i class="icon-warning-sign" style="padding-right: 10px !important;"></i>Expired<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MTPs</h4>
                                             <span class="message-counter-warning">@ViewBag.ExpiredMTPs</span>
@@ -980,7 +980,7 @@
                                 }
                                 else
                                 {
-                                    <a asp-controller="Clients" asp-action="ClientsWithoutDOC" role="button">
+                                    <a style="text-decoration: none;" asp-controller="Clients" asp-action="ClientsWithoutDOC" role="button">
                                         <div class="thumbnail list-group-item list-group-item-text">
                                             <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without DOC.</h4>
                                             <span class="message-counter-cero">@ViewBag.ClientsWithoutDoc</span>
@@ -989,7 +989,7 @@
                                 }
                             </div>
                             <div class="col-md-2">
-                                <a asp-controller="Notes" asp-action="BillingReport" role="button">
+                                <a style="text-decoration: none;" asp-controller="Notes" asp-action="BillingReport" role="button">
                                     <div class="thumbnail list-group-item list-group-item-success">
                                         <h4 style="align-content:end;"><i class="icon-usd" style="padding-right: 10px !important;"></i>Billing<br>&nbsp;&nbsp;&nbsp;&nbsp;Report</h4>
                                         <span class="message-counter-success">$</span>
@@ -997,7 +997,7 @@
                                 </a>
                             </div>
                             <div class="col-md-2">
-                                <a asp-controller="HealthInsurances" asp-action="UnitsPerClientsInsurances" role="button">
+                                <a style="text-decoration: none;" asp-controller="HealthInsurances" asp-action="UnitsPerClientsInsurances" role="button">
                                     <div class="thumbnail list-group-item list-group-item-info">
                                         <h4 style="align-content:end;"><i class="icon-magnet" style="padding-right: 10px !important;"></i>Units<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;per Clients</h4>
                                         <span class="message-counter-info">U</span>
@@ -1031,8 +1031,8 @@
                     <div class="col-md-3">
                     </div>
                     <div class="col-md-6">
-                        <h4 style="text-align:center;">@user.Clinic.Name</h4>
-                        <h5 style="text-align:center;">@DateTime.Now.ToLongDateString()</h5>
+                        <h4 style="text-align:center;display: block;font-size: 18px;color: #888da8;max-width: 100%;">@user.Clinic.Name</h4>
+                        <h5 style="text-align:center;display: block;font-size: 15px;color: #b4b7c8;max-width: 100%;">@DateTime.Now.ToLongDateString()</h5>
                     </div>
                     <div class="col-md-3">
                     </div>
@@ -1052,7 +1052,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Clients" asp-action="ClientsWithoutMTP" role="button">
+                        <a style="text-decoration: none;" asp-controller="Clients" asp-action="ClientsWithoutMTP" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
                                 <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without MTP</h4>
                                 <span class="message-counter">@ViewBag.MTPMissing</span>
@@ -1070,7 +1070,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Bios" asp-action="ClientswithoutBIO" role="button">
+                        <a style="text-decoration: none;" asp-controller="Bios" asp-action="ClientswithoutBIO" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
                                 <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without BIO</h4>
                                 <span class="message-counter">@ViewBag.PendingBIO</span>
@@ -1088,7 +1088,7 @@
                     }
                     else
                     {
-                        <a asp-controller="FarsForms" asp-action="ClientswithoutFARS" role="button">
+                        <a style="text-decoration: none;" asp-controller="FarsForms" asp-action="ClientswithoutFARS" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
                                 <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without FARS</h4>
                                 <span class="message-counter">@ViewBag.PendingInitialFars</span>
@@ -1106,10 +1106,260 @@
                     }
                     else
                     {
-                        <a asp-controller="Intakes" asp-action="ClientswithoutMedicalHistory" asp-route-origin="1" role="button">
+                        <a style="text-decoration: none;" asp-controller="Intakes" asp-action="ClientswithoutMedicalHistory" asp-route-origin="1" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
                                 <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Medical History</h4>
                                 <span class="message-counter">@ViewBag.MedicalHistoryMissing</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+            }
+            @if (User.IsInRole("CaseManager"))
+            {
+                <div class="col-md-12">
+                    &nbsp;
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-6">
+                        <h4 style="text-align:center;display: block;font-size: 18px;color: #888da8;max-width: 100%;">@user.Clinic.Name</h4>
+                        <h5 style="text-align:center;display: block;font-size: 15px;color: #b4b7c8;max-width: 100%;">@DateTime.Now.ToLongDateString()</h5>
+                    </div>
+                    <div class="col-md-3">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    &nbsp;
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.NotStartedCases == "0")
+                    {
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Not Started<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cases</h4>
+                            <span class="message-counter-cero">@ViewBag.NotStartedCases</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMClients" asp-action="GetCaseNotServicePlan" role="button">
+                            <div class="thumbnail list-group-item list-group-item-danger">
+                                <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Not Started<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cases</h4>
+                                <span class="message-counter">@ViewBag.NotStartedCases</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.OpenBinder == "0")
+                    {
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Open<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Binder</h4>
+                            <span class="message-counter-cero">@ViewBag.OpenBinder</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMIntakes" asp-action="index" role="button">
+                            <div class="thumbnail list-group-item list-group-item-danger">
+                                <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Open<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Binder</h4>
+                                <span class="message-counter">@ViewBag.OpenBinder</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.CloseCases == "0")
+                    {
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Close<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Binder</h4>
+                            <span class="message-counter-cero">@ViewBag.CloseCases</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMIntakes" asp-action="index" asp-route-status="@KyoS.Common.Enums.StatusType.Close" role="button">
+                            <div class="thumbnail list-group-item list-group-item-danger">
+                                <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Close<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Binder</h4>
+                                <span class="message-counter">@ViewBag.CloseCases</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.Billing == "0")
+                    {
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-usd" style="padding-right: 10px !important;"></i>Billing<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                            <span class="message-counter-cero">@ViewBag.Billing</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMClients" asp-action="Index" role="button">
+                            <div class="thumbnail list-group-item list-group-item-danger">
+                                <h4 style="align-content:end;"><i class="icon-usd" style="padding-right: 10px !important;"></i>Billing<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                <span class="message-counter">@ViewBag.Billing</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <br />
+                //New line
+                <div class="col-md-12">
+                    &nbsp;
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.ServicePlanEdition == "0")
+                    {
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service Plan<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                            <span class="message-counter-cero">@ViewBag.ServicePlanEdition</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="ServicePlanApproved" role="button">
+                            <div class="thumbnail list-group-item list-group-item-warning">
+                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service Plan<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                                <span class="message-counter-warning">@ViewBag.ServicePlanEdition</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.AdendumEdition == "0")
+                    {
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                            <span class="message-counter-cero">@ViewBag.AdendumEdition</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="AdendumApproved" role="button">
+                            <div class="thumbnail list-group-item list-group-item-warning">
+                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                                <span class="message-counter-warning">@ViewBag.AdendumEdition</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.ServicePlanReviewEdition == "0")
+                    {
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service Plan R.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                            <span class="message-counter-cero">@ViewBag.ServicePlanReviewEdition</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMServicePlanReviews" asp-action="ServicePlanReviewApproved" role="button">
+                            <div class="thumbnail list-group-item list-group-item-warning">
+                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service Plan R.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                                <span class="message-counter-warning">@ViewBag.ServicePlanReviewEdition</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.DischargeEdition == "0")
+                    {
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Discharge<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                            <span class="message-counter-cero">@ViewBag.DischargeEdition</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMDischarges" asp-action="TCMDischargeApproved" role="button">
+                            <div class="thumbnail list-group-item list-group-item-warning">
+                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Discharge<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                                <span class="message-counter-warning">@ViewBag.DischargeEdition</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                //New line
+                <div class="col-md-12">
+                    &nbsp;
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.ServicePlanPending == "0")
+                    {
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service Plan</h4>
+                            <span class="message-counter-cero">@ViewBag.ServicePlanPending</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="ServicePlanApproved" asp-route-approved="1" role="button">
+                            <div class="thumbnail list-group-item list-group-item-info">
+                                <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service Plan</h4>
+                                <span class="message-counter-info">@ViewBag.ServicePlanPending</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.AdendumPending == "0")
+                    {
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Addendum</h4>
+                            <span class="message-counter-cero">@ViewBag.AdendumPending</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="AdendumApproved" asp-route-approved="1" role="button">
+                            <div class="thumbnail list-group-item list-group-item-info">
+                                <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Addendum</h4>
+                                <span class="message-counter-info">@ViewBag.AdendumPending</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.ServicePlanReviewPending == "0")
+                    {
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service Plan R.</h4>
+                            <span class="message-counter-cero">@ViewBag.ServicePlanReviewPending</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMServicePlanReviews" asp-action="ServicePlanReviewApproved" asp-route-approved="1" role="button">
+                            <div class="thumbnail list-group-item list-group-item-info">
+                                <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service Plan R.</h4>
+                                <span class="message-counter-info">@ViewBag.ServicePlanReviewPending</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.DischargePending == "0")
+                    {
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharge</h4>
+                            <span class="message-counter-cero">@ViewBag.DischargePending</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMDischarges" asp-action="AdendumApproved" asp-route-approved="1" role="button">
+                            <div class="thumbnail list-group-item list-group-item-info">
+                                <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharge</h4>
+                                <span class="message-counter-info">@ViewBag.DischargePending</span>
                             </div>
                         </a>
                     }
