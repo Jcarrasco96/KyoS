@@ -59,59 +59,120 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                List<TCMClientEntity> tcmClient = await _context.TCMClient
-                                                          .Include(n => n.TCMIntakeForm)
-                                                          .Include(n => n.TcmIntakeConsentForTreatment)
-                                                          .Include(n => n.TcmIntakeConsentForRelease)
-                                                          .Include(n => n.TcmIntakeConsumerRights)
-                                                          .Include(n => n.TcmIntakeAcknowledgementHipa)
-                                                          .Include(n => n.TCMIntakeOrientationChecklist)
-                                                          .Include(n => n.TCMIntakeAdvancedDirective)
-                                                          .Include(n => n.TCMIntakeForeignLanguage)
-                                                          .Include(n => n.TCMIntakeWelcome)
-                                                          .Include(n => n.Client)
-                                                          .ThenInclude(n => n.Clinic)
-                                                          .Include(n => n.Client)
-                                                          .ThenInclude(n => n.Documents)
-                                                          .Include(n => n.Client.IntakeFeeAgreement)
-                                                          .Include(n => n.Client.IntakeMedicalHistory)
-                                                          .Include(n => n.Client.MedicationList)
-                                                          .Include(n => n.Client.Psychiatrist)
-                                                          .Include(n => n.Client.Doctor)
-                                                          .Include(n => n.TCMIntakeNonClinicalLog)
-                                                          .Include(n => n.TCMIntakeMiniMental)
-                                                          .Include(n => n.TCMIntakeCoordinationCare)
-                                                          .Include(n => n.TcmServicePlan)
-                                                          .ThenInclude(n => n.TCMAdendum)
-                                                          .Include(n => n.TcmServicePlan)
-                                                          .ThenInclude(n => n.TCMServicePlanReview)
-                                                          .Include(n => n.TcmServicePlan)
-                                                          .ThenInclude(n => n.TCMDischarge)
-                                                          .Include(n => n.TcmIntakeAppendixJ)
-                                                          .Include(n => n.TcmInterventionLog)
-                                                          .Include(n => n.TCMFarsFormList)
-                                                          .Include(n => n.TCMAssessment)
-                                                          .ThenInclude(n => n.HouseCompositionList)
-                                                          .ThenInclude(n => n.TcmAssessment.MedicationList)
-                                                          .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
-                                                          .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
-                                                          .Include(n => n.TCMNote)
-                                                          .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
-                                                           && n.Casemanager.LinkedUser == user_logged.UserName
-                                                           && n.Status == status))
-                                                          .ToListAsync();
-
-                if (status == StatusType.Open)
+                if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
                 {
-                    ViewData["open"] = "0";
+                    List<TCMClientEntity> tcmClient = await _context.TCMClient
+                                                                    .Include(n => n.TCMIntakeForm)
+                                                                    .Include(n => n.TcmIntakeConsentForTreatment)
+                                                                    .Include(n => n.TcmIntakeConsentForRelease)
+                                                                    .Include(n => n.TcmIntakeConsumerRights)
+                                                                    .Include(n => n.TcmIntakeAcknowledgementHipa)
+                                                                    .Include(n => n.TCMIntakeOrientationChecklist)
+                                                                    .Include(n => n.TCMIntakeAdvancedDirective)
+                                                                    .Include(n => n.TCMIntakeForeignLanguage)
+                                                                    .Include(n => n.TCMIntakeWelcome)
+                                                                    .Include(n => n.Client)
+                                                                    .ThenInclude(n => n.Clinic)
+                                                                    .Include(n => n.Client)
+                                                                    .ThenInclude(n => n.Documents)
+                                                                    .Include(n => n.Client.IntakeFeeAgreement)
+                                                                    .Include(n => n.Client.IntakeMedicalHistory)
+                                                                    .Include(n => n.Client.MedicationList)
+                                                                    .Include(n => n.Client.Psychiatrist)
+                                                                    .Include(n => n.Client.Doctor)
+                                                                    .Include(n => n.TCMIntakeNonClinicalLog)
+                                                                    .Include(n => n.TCMIntakeMiniMental)
+                                                                    .Include(n => n.TCMIntakeCoordinationCare)
+                                                                    .Include(n => n.TcmServicePlan)
+                                                                    .ThenInclude(n => n.TCMAdendum)
+                                                                    .Include(n => n.TcmServicePlan)
+                                                                    .ThenInclude(n => n.TCMServicePlanReview)
+                                                                    .Include(n => n.TcmServicePlan)
+                                                                    .ThenInclude(n => n.TCMDischarge)
+                                                                    .Include(n => n.TcmIntakeAppendixJ)
+                                                                    .Include(n => n.TcmInterventionLog)
+                                                                    .Include(n => n.TCMFarsFormList)
+                                                                    .Include(n => n.TCMAssessment)
+                                                                    .ThenInclude(n => n.HouseCompositionList)
+                                                                    .ThenInclude(n => n.TcmAssessment.MedicationList)
+                                                                    .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
+                                                                    .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
+                                                                    .Include(n => n.TCMNote)
+                                                                    .Include(n => n.Casemanager)
+                                                                    .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                       && n.Status == status))
+                                                                    .ToListAsync();
+
+                    if (status == StatusType.Open)
+                    {
+                        ViewData["open"] = "0";
+                    }
+                    else
+                    {
+                        ViewData["open"] = "1";
+                    }
+
+                    return View(tcmClient);
                 }
-                else
+                if (User.IsInRole("CaseManager"))
                 {
-                    ViewData["open"] = "1";
+                    List<TCMClientEntity> tcmClient = await _context.TCMClient
+                                                                    .Include(n => n.TCMIntakeForm)
+                                                                    .Include(n => n.TcmIntakeConsentForTreatment)
+                                                                    .Include(n => n.TcmIntakeConsentForRelease)
+                                                                    .Include(n => n.TcmIntakeConsumerRights)
+                                                                    .Include(n => n.TcmIntakeAcknowledgementHipa)
+                                                                    .Include(n => n.TCMIntakeOrientationChecklist)
+                                                                    .Include(n => n.TCMIntakeAdvancedDirective)
+                                                                    .Include(n => n.TCMIntakeForeignLanguage)
+                                                                    .Include(n => n.TCMIntakeWelcome)
+                                                                    .Include(n => n.Client)
+                                                                    .ThenInclude(n => n.Clinic)
+                                                                    .Include(n => n.Client)
+                                                                    .ThenInclude(n => n.Documents)
+                                                                    .Include(n => n.Client.IntakeFeeAgreement)
+                                                                    .Include(n => n.Client.IntakeMedicalHistory)
+                                                                    .Include(n => n.Client.MedicationList)
+                                                                    .Include(n => n.Client.Psychiatrist)
+                                                                    .Include(n => n.Client.Doctor)
+                                                                    .Include(n => n.TCMIntakeNonClinicalLog)
+                                                                    .Include(n => n.TCMIntakeMiniMental)
+                                                                    .Include(n => n.TCMIntakeCoordinationCare)
+                                                                    .Include(n => n.TcmServicePlan)
+                                                                    .ThenInclude(n => n.TCMAdendum)
+                                                                    .Include(n => n.TcmServicePlan)
+                                                                    .ThenInclude(n => n.TCMServicePlanReview)
+                                                                    .Include(n => n.TcmServicePlan)
+                                                                    .ThenInclude(n => n.TCMDischarge)
+                                                                    .Include(n => n.TcmIntakeAppendixJ)
+                                                                    .Include(n => n.TcmInterventionLog)
+                                                                    .Include(n => n.TCMFarsFormList)
+                                                                    .Include(n => n.TCMAssessment)
+                                                                    .ThenInclude(n => n.HouseCompositionList)
+                                                                    .ThenInclude(n => n.TcmAssessment.MedicationList)
+                                                                    .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
+                                                                    .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
+                                                                    .Include(n => n.TCMNote)
+                                                                    .Include(n => n.Casemanager)
+                                                                    .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                     && n.Casemanager.LinkedUser == user_logged.UserName
+                                                                     && n.Status == status))
+                                                                    .ToListAsync();
+
+                    if (status == StatusType.Open)
+                    {
+                        ViewData["open"] = "0";
+                    }
+                    else
+                    {
+                        ViewData["open"] = "1";
+                    }
+
+                    return View(tcmClient);
                 }
 
-                return View(tcmClient);
             }
+            return RedirectToAction("NotAuthorized", "Account");
         }
 
         [Authorize(Roles = "CaseManager")]
