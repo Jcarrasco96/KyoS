@@ -1413,6 +1413,14 @@ namespace KyoS.Web.Controllers
                     {
                         noteEntity.Attentive = true;
                     }
+                                        
+                    // I will calculate teh real units of the note
+                    int realUnits = 0;
+                    realUnits = (model.Present1) ? realUnits + 4 : realUnits;
+                    realUnits = (model.Present2) ? realUnits + 4 : realUnits;
+                    realUnits = (model.Present3) ? realUnits + 4 : realUnits;
+                    realUnits = (model.Present4) ? realUnits + 4 : realUnits;
+                    noteEntity.RealUnits = realUnits;
 
                     _context.Add(noteEntity);
 
@@ -1496,6 +1504,7 @@ namespace KyoS.Web.Controllers
                         Other = (model.Present4) ? model.Other4 : false
                     };
                     _context.Add(note_Activity);
+                    
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -1617,11 +1626,18 @@ namespace KyoS.Web.Controllers
                         note.Setting = mtp.Setting;
                     }
 
+                    // I will calculate the real units of the note
+                    int realUnits = 0;
+                    realUnits = (model.Present1) ? realUnits + 4 : realUnits;
+                    realUnits = (model.Present2) ? realUnits + 4 : realUnits;
+                    realUnits = (model.Present3) ? realUnits + 4 : realUnits;
+                    realUnits = (model.Present4) ? realUnits + 4 : realUnits;
+                    note.RealUnits = realUnits;
+
                     _context.Update(note);
-                    List<NoteP_Activity> noteActivities_list = await _context.NotesP_Activities
-                                                                            
-                                                                            .Where(na => na.NoteP.Id == note.Id)
-                                                                            .ToListAsync();
+                    List<NoteP_Activity> noteActivities_list = await _context.NotesP_Activities                                                                            
+                                                                             .Where(na => na.NoteP.Id == note.Id)
+                                                                             .ToListAsync();
                     _context.RemoveRange(noteActivities_list);
 
                     note_Activity = new NoteP_Activity
@@ -3663,16 +3679,6 @@ namespace KyoS.Web.Controllers
             note.Status = NoteStatus.Approved;
             note.DateOfApprove = DateTime.Now;
             note.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
-
-            int realUnits = 0;
-            foreach (var item in note.NotesP_Activities)
-            {
-                if (item.Present)
-                {
-                    realUnits += 4;
-                }
-            }
-            note.RealUnits = realUnits;
 
             _context.Update(note);
 
