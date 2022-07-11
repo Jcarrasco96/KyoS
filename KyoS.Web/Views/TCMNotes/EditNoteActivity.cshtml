@@ -11,6 +11,8 @@
             <input type="hidden" asp-for="IdTCMDomain" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="Setting" />
+            <input type="hidden" asp-for="IdTCMClient" />
             <div class="container-fluid">
                 <div class=" col-md-6 form-group">
                     <h4 style="font-weight:bold;"> <span class="label label-info"> Client - @Model.TCMNote.TCMClient.Client.Name </span></h4>
@@ -20,22 +22,29 @@
                 </div>
             </div>
             <div>
-                <div class=" col-md-3 form-group">
-                    <label asp-for="Setting" class="control-label">Setting </label>
-                    <input asp-for="Setting" class="form-control" />
-                    <span asp-validation-for="Setting" class="text-danger"></span>
+                <div class=" col-md-6 form-group">
+                    <label asp-for="IdSetting" class="control-label"></label>&nbsp;*
+                    <select asp-for="IdSetting" asp-items="Model.SettingList" class="form-control"></select>
+                    <span asp-validation-for="IdSetting" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-6 form-group">
+                    <label asp-for="IdTCMDomain" class="control-label"></label>&nbsp;*
+                    <select asp-for="IdTCMDomain" asp-items="Model.DomainList" class="form-control"></select>
+                    <span asp-validation-for="IdTCMDomain" class="text-danger"></span>
                 </div>
             </div>
             <div>
                 <div class=" col-md-3 form-group">
-                    <label asp-for="TCMDomain.Code" class="control-label">Domain </label>
+                    <label asp-for="TCMDomain.Code" class="control-label">Domain Name</label>
                     <input asp-for="TCMDomain.Code" class="form-control" />
                     <span asp-validation-for="TCMDomain.Code" class="text-danger"></span>
                 </div>
             </div>
             <div>
-                <div class=" col-md-6 form-group">
-                    <label asp-for="TCMDomain.Name" class="control-label">Domain </label>
+                <div class=" col-md-9 form-group">
+                    <label asp-for="TCMDomain.Name" class="control-label">Domain Name</label>
                     <input asp-for="TCMDomain.Name" class="form-control" />
                     <span asp-validation-for="TCMDomain.Name" class="text-danger"></span>
                 </div>
@@ -43,21 +52,21 @@
             <div>
                 <div class=" col-md-4 form-group">
                     <label asp-for="StartTime" class="control-label">Start Time</label>
-                    <input asp-for="StartTime" class="form-control" />
+                    <input asp-for="StartTime" class="form-control" id="Time_Start" onchange="getMinute();" />
                     <span asp-validation-for="StartTime" class="text-danger"></span>
                 </div>
             </div>
             <div>
                 <div class=" col-md-4 form-group">
                     <label asp-for="EndTime" class="control-label">End Time</label>
-                    <input asp-for="EndTime" class="form-control" />
+                    <input asp-for="EndTime" class="form-control" id="Time_End" onchange="getMinute();" />
                     <span asp-validation-for="EndTime" class="text-danger"></span>
                 </div>
             </div>
             <div>
                 <div class=" col-md-4 form-group">
                     <label asp-for="Minutes" class="control-label">Minutes</label>
-                    <input asp-for="Minutes" class="form-control" />
+                    <textarea asp-for="Minutes" id="lbMinutes" class="form-control" rows="1" readonly></textarea>
                     <span asp-validation-for="Minutes" class="text-danger"></span>
                 </div>
             </div>
@@ -77,6 +86,11 @@
         </form>
     </div>
 </div>
+<script>
+    function getMinute() {
+            var url = "@Url.Action("CalcularMinutes", "TCMNotes")";
+            $.get(url, { start: $("#Time_Start").val(),  end: $("#Time_End").val() }, function (data) {$("#lbMinutes").text(data);});
+        }
 
-
+</script>
 

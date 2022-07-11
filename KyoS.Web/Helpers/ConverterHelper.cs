@@ -5653,8 +5653,8 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 DescriptionOfService = model.DescriptionOfService,
                 EndTime = model.EndTime,
-                Minutes = model.Minutes,
-                Setting = model.Setting,
+                Minutes = Int16.Parse(model.Minutes),
+                Setting = ServiceTCMNotesUtils.GetCodeByIndex(model.IdSetting),
                 StartTime = model.StartTime,
                 TCMDomain = _context.TCMDomains.FirstOrDefault(n => n.Id == model.IdTCMDomain),
                 TCMNote = _context.TCMNote.FirstOrDefault(n => n.Id == model.IdTCMNote)
@@ -5675,14 +5675,18 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = model.LastModifiedOn,
                 DescriptionOfService = model.DescriptionOfService,
                 EndTime = model.EndTime,
-                Minutes = model.Minutes,
+                Minutes = model.Minutes.ToString(),
                 Setting = model.Setting,
                 StartTime = model.StartTime,
                 TCMDomain = model.TCMDomain,
                 TCMNote = model.TCMNote,
                 IdTCMNote = model.TCMNote.Id,
-                IdTCMDomain = model.TCMDomain.Id
-                
+                IdTCMDomain = model.TCMDomain.Id,
+                IdSetting = ServiceTCMNotesUtils.GetIndexByCode(model.Setting),
+                SettingList = _combosHelper.GetComboTCMNoteSetting(),
+                DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == model.TCMNote.TCMClient.Id).Id),
+                IdTCMClient = model.TCMNote.TCMClient.Id
+
             };
 
             return salida;
