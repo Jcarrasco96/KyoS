@@ -25,7 +25,7 @@ namespace KyoS.Web.Data.Entities
         
         public TCMServicePlanEntity TcmServicePlan { get; set; }
         public List <TCMObjetiveEntity> TCMObjetive { get; set; }
-
+        
         public string Origin { get; set; }
 
         public bool Used { get; set; }

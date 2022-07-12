@@ -119,6 +119,7 @@ namespace KyoS.Web.Data
         public DbSet<TCMNoteEntity> TCMNote { get; set; }
         public DbSet<TCMNoteActivityEntity> TCMNoteActivity { get; set; }
         public DbSet<DocumentsAssistantEntity> DocumentsAssistant { get; set; }
+        public DbSet<TCMServiceActivityEntity> TCMServiceActivity { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -551,6 +552,11 @@ namespace KyoS.Web.Data
             modelBuilder.Entity<DocumentsAssistantEntity>()
                        .HasIndex(s => s.Name)
                        .IsUnique();
+
+            modelBuilder.Entity<TCMServiceEntity>()
+                        .HasMany(c => c.TCMServiceActivity)
+                        .WithOne(s => s.TcmService)
+                        .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -5724,5 +5724,45 @@ namespace KyoS.Web.Helpers
             };
         }
 
+        public async Task<TCMServiceActivityEntity> ToTCMServiceActivityEntity(TCMServiceActivityViewModel model, bool isNew, string userId)
+        {
+            return new TCMServiceActivityEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmService = await _context.TCMServices.FindAsync(model.IdService),
+                Name = model.Name,
+                Description = model.Description,
+                Unit = model.Unit,
+                Status = model.Status,
+                Approved = model.Approved
+            };
+        }
+
+        public TCMServiceActivityViewModel ToTCMServiceActivityViewModel(TCMServiceActivityEntity TcmStageEntity)
+        {
+            return new TCMServiceActivityViewModel
+            {
+                Id = TcmStageEntity.Id,
+                CreatedBy = TcmStageEntity.CreatedBy,
+                CreatedOn = TcmStageEntity.CreatedOn,
+                LastModifiedBy = TcmStageEntity.LastModifiedBy,
+                LastModifiedOn = TcmStageEntity.LastModifiedOn,
+                Name = TcmStageEntity.Name,
+                IdService = TcmStageEntity.TcmService.Id,
+                IdClinic = TcmStageEntity.TcmService.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics(),
+                Description = TcmStageEntity.Description,
+                Unit = TcmStageEntity.Unit,
+                TcmService = TcmStageEntity.TcmService,
+                Status = TcmStageEntity.Status,
+                Approved = TcmStageEntity.Approved
+            };
+        }
+
+
     }
 }
