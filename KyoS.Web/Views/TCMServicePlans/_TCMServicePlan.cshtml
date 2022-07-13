@@ -27,20 +27,17 @@
                             <th class="col-md-1">
 
                             </th>
-                            <th class="col-md-2" style="text-align:left;">
+                            <th class="col-md-3" style="text-align:left;">
                                 Name
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                Case number
-                            </th>
                             <th class="col-md-2" style="text-align:center;">
-                                Casemanager
-                            </th>
+                                Case number
+                            </th>                            
                             <th class="col-md-2" style="text-align:center;">
                                 Services Plan Date
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                Approved
+                                Status
                             </th>
                             <th class="col-md-2" >
                             </th>
@@ -174,10 +171,7 @@
                                         </span>
                                     }
                                     
-                                </td>
-                                <td  align="center">
-                                    @Html.DisplayFor(modelItem => item.TcmClient.Casemanager.Name)
-                                </td>
+                                </td>                               
                                 <td  align="center">
                                     @Html.DisplayFor(modelItem => item.DateServicePlan)
                                 </td>
