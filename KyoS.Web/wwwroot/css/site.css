@@ -226,11 +226,11 @@ body {
 }
 
 .dropdown-submenu.pull-left > .dropdown-menu {
-left: -100%;
-margin-left: 10px;
--webkit-border-radius: 6px 0 6px 6px;
--moz-border-radius: 6px 0 6px 6px;
-border-radius: 6px 0 6px 6px;
+    left: -100%;
+    margin-left: 10px;
+    -webkit-border-radius: 6px 0 6px 6px;
+    -moz-border-radius: 6px 0 6px 6px;
+    border-radius: 6px 0 6px 6px;
 }
 
 .center-div {
@@ -546,9 +546,9 @@ a.text-gray:hover, a.text-gray:focus, a.text-gray.active {
     border-bottom: 2px solid #0f9aee;
 }
 
-    .tab-info .nav-tabs > li > a.active:hover, .tab-info .nav-tabs > li > a.active:focus {
-        border-bottom: 2px solid #0f9aee;
-    }
+.tab-info .nav-tabs > li > a.active:hover, .tab-info .nav-tabs > li > a.active:focus {
+    border-bottom: 2px solid #0f9aee;
+}
 
 .tab-content {
     height: 100%;
