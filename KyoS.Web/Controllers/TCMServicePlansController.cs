@@ -119,7 +119,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult Create(int id)
+        public IActionResult Create(int id, int origin = 0)
         {
             TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans.Include(u => u.TcmClient)
                                                          .FirstOrDefault(u => u.TcmClient.Id == id);
@@ -174,6 +174,7 @@ namespace KyoS.Web.Controllers
                             Date_Certification = DateTime.Today.Date,
                             
                         };
+                        ViewData["origin"] = origin;
                         return View(model);
                     }
                     return RedirectToAction("NotAuthorized", "Account");
@@ -186,7 +187,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> Create(TCMServicePlanViewModel tcmServicePlanViewModel)
+        public async Task<IActionResult> Create(TCMServicePlanViewModel tcmServicePlanViewModel, int origin = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic) 
@@ -204,8 +205,15 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                       
-                        return RedirectToAction("Index", "TCMServicePlans", new { caseNumber = tcmServicePlanEntity.TcmClient.CaseNumber});
+                        if (origin == 0)
+                        {
+                            return RedirectToAction("Index", "TCMServicePlans", new { caseNumber = tcmServicePlanEntity.TcmClient.CaseNumber });
+                        }
+                        else
+                        {
+                            return RedirectToAction("ServicePlanApproved", "TCMServicePlans", new { approved = (origin - 1) });
+                        }
+                        
                     }
                     catch (System.Exception ex)
                     {
@@ -1843,5 +1851,6 @@ namespace KyoS.Web.Controllers
 
         }
 
+       
     }
 }

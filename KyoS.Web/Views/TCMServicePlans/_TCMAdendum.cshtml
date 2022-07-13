@@ -194,19 +194,34 @@
                                     @if (item.Approved == 0)
                                     {
                                         <a onclick="showInPopup('@Url.Action("EditAdendum", "TCMServicePlans", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Adendum')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a asp-action="FinishEditingAdendum" asp-route-id="@item.Id" asp-route-origin="1"  class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></a>
+                                        <a asp-action="FinishEditingAdendum" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></a>
                                         <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                     }
                                     @if (item.Approved == 1)
                                     {
                                         <a onclick="showInPopup('@Url.Action("EditAdendum", "TCMServicePlans", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Adendum')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-ok"></i></a>
+                                        <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
                                         <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                     }
                                     @if (item.Approved == 2)
                                     {
-                                        <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-ok"></i></a>
+                                        <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                        <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                        <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Edit TCM Discharge"><i class="glyphicon glyphicon-print"></i></a>
+                                    }
+                                }
+                                @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                                {
+                                    @if (item.Approved < 2)
+                                    {
+                                        <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                        <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                        <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                    }
+                                    @if (item.Approved == 2)
+                                    {
+                                        <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                        <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
                                         <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Edit TCM Discharge"><i class="glyphicon glyphicon-print"></i></a>
                                     }
                                 }

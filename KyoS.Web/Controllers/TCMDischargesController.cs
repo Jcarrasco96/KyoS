@@ -611,7 +611,7 @@ namespace KyoS.Web.Controllers
                                                                             && m.TcmServicePlan.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)
                                                                        .OrderBy(m => m.TcmServicePlan.TcmClient.CaseNumber)
                                                                        .ToListAsync();
-
+                ViewData["idTCMClient"] = idTCMClient;
                 return View(tcmDischarge);
             }
 

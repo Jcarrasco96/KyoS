@@ -64,5 +64,8 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboBio_Hydration();
         IEnumerable<SelectListItem> GetComboBio_RecentWeight();
         IEnumerable<SelectListItem> GetComboBio_IfSexuallyActive();
+        IEnumerable<SelectListItem> GetComboTCMNoteSetting();
+        IEnumerable<SelectListItem> GetComboServicesUsed(int idServicePlan);
+        IEnumerable<SelectListItem> GetComboTCMNoteActivity(string codeDomain);
     }
 }

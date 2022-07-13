@@ -7,7 +7,18 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.ID_TcmClient, section = 4 })
+            @if (@ViewData["origin"].ToString() == "0")
+            {
+                @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.ID_TcmClient, section = 4 })
+            }
+            @if (@ViewData["origin"].ToString() == "1")
+            {
+                @Html.ActionLink("TCM Services Plan", "GetCaseNotServicePlan", "TCMClients")
+            }
+            @if (@ViewData["origin"].ToString() == "2")
+            {
+                @Html.ActionLink("TCM Services Plan", "GetCaseNotServicePlan", "TCMClients")
+            }
         </li>
         <li class="active">Create</li>
     </ul><!--.breadcrumb-->
@@ -61,7 +72,20 @@
             <partial name="TCMServicePlan" />
             <div class="form-group">
                 <input type="submit" value="Create Service Plan" class="btn btn-primary" />
-                <a asp-action="TCMIntakeSectionDashboard" asp-controller="TCMIntakes" asp-route-id="@Model.ID_TcmClient" asp-route-section="4" class="btn btn-success">Back</a>
+                @if (@ViewData["origin"].ToString() == "0")
+                {
+                    <a asp-action="TCMIntakeSectionDashboard" asp-route-id=" @Model.ID_TcmClient" asp-route-section="4" asp-controller="TCMIntakes" class="btn btn-success">Back</a>
+                }
+                @if (@ViewData["origin"].ToString() == "1")
+                {
+
+                    <a asp-action="GetCaseNotServicePlan" asp-controller="TCMClients" class="btn btn-success">Back</a>
+                }
+                @if (@ViewData["origin"].ToString() == "2")
+                {
+
+                    <a asp-action="GetCaseNotServicePlan" asp-controller="TCMClients" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>

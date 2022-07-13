@@ -466,6 +466,83 @@ namespace KyoS.Web.Controllers
                 }
 
                 ViewBag.ExpiredMTPs = count.ToString();
+
+                //TCM Dashboard
+
+                List<TCMClientEntity> tcmClient = await _context.TCMClient
+                                                               .Include(c => c.TcmServicePlan)
+                                                               .Include(c => c.Client)
+                                                               .Where(c => c.Client.Clinic.Id == user_logged.Clinic.Id).ToListAsync();
+                tcmClient = tcmClient.Where(wc => wc.TcmServicePlan == null).ToList();
+                ViewBag.NotStartedCases = tcmClient.Count.ToString();
+
+                ViewBag.OpenBinder = _context.TCMClient
+                                             .Where(g => (g.Status == StatusType.Open
+                                                && g.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+
+                ViewBag.CloseCases = _context.TCMClient
+                                             .Where(g => (g.Status == StatusType.Close
+                                                && g.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+
+                ViewBag.Billing = _context.TCMClient
+                                          .Where(g => (g.Status == StatusType.Open
+                                             && g.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+
+                ViewBag.ServicePlanEdition = _context.TCMClient
+                                                     .Include(n => n.TcmServicePlan)
+                                                     .Where(g => (g.Status == StatusType.Open
+                                                        && g.Client.Clinic.Id == user_logged.Clinic.Id
+                                                        && g.TcmServicePlan.Approved == 0)).Count().ToString();
+
+                ViewBag.ServicePlanPending = _context.TCMClient
+                                                     .Include(n => n.TcmServicePlan)
+                                                     .Where(g => (g.Status == StatusType.Open
+                                                        && g.Client.Clinic.Id == user_logged.Clinic.Id
+                                                        && g.TcmServicePlan.Approved == 1)).Count().ToString();
+
+                ViewBag.AdendumEdition = _context.TCMClient
+                                                 .Include(n => n.TcmServicePlan)
+                                                 .ThenInclude(n => n.TCMAdendum)
+                                                 .Where(g => (g.Status == StatusType.Open
+                                                    && g.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && g.TcmServicePlan.TCMAdendum.Where(n => n.Approved == 0).Count() > 0)).Count().ToString();
+
+                ViewBag.AdendumPending = _context.TCMClient
+                                                 .Include(n => n.TcmServicePlan)
+                                                 .ThenInclude(n => n.TCMAdendum)
+                                                 .Where(g => (g.Status == StatusType.Open
+                                                    && g.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && g.TcmServicePlan.TCMAdendum.Where(n => n.Approved == 1).Count() > 0)).Count().ToString();
+
+                ViewBag.ServicePlanReviewEdition = _context.TCMClient
+                                                           .Include(n => n.TcmServicePlan)
+                                                           .ThenInclude(n => n.TCMServicePlanReview)
+                                                           .Where(g => (g.Status == StatusType.Open
+                                                                && g.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                && g.TcmServicePlan.TCMServicePlanReview.Approved == 0)).Count().ToString();
+
+                ViewBag.ServicePlanReviewPending = _context.TCMClient
+                                                           .Include(n => n.TcmServicePlan)
+                                                           .ThenInclude(n => n.TCMServicePlanReview)
+                                                           .Where(g => (g.Status == StatusType.Open
+                                                                && g.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                && g.TcmServicePlan.TCMServicePlanReview.Approved == 1)).Count().ToString();
+
+                ViewBag.DischargeEdition = _context.TCMClient
+                                                   .Include(n => n.TcmServicePlan)
+                                                   .ThenInclude(n => n.TCMDischarge)
+                                                   .Where(g => (g.Status == StatusType.Open
+                                                       && g.Client.Clinic.Id == user_logged.Clinic.Id
+                                                       && g.TcmServicePlan.TCMDischarge.Approved == 0)).Count().ToString();
+
+                ViewBag.DischargePending = _context.TCMClient
+                                                   .Include(n => n.TcmServicePlan)
+                                                   .ThenInclude(n => n.TCMDischarge)
+                                                   .Where(g => (g.Status == StatusType.Open
+                                                       && g.Client.Clinic.Id == user_logged.Clinic.Id
+                                                       && g.TcmServicePlan.TCMDischarge.Approved == 1)).Count().ToString();
+
+
             }
             if (User.IsInRole("Admin"))
             {

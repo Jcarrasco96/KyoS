@@ -5601,8 +5601,6 @@ namespace KyoS.Web.Helpers
                 NextStep = model.NextStep,
                 ServiceCode = model.ServiceCode,
                 Status = model.Status,
-                TotalMinutes = model.TotalMinutes,
-                TotalUnits = model.TotalUnits,
                 TCMClient = _context.TCMClient
                                     .FirstOrDefault(n => n.Id == model.IdTCMClient),
                 Workday = _context.Workdays.FirstOrDefault(n => n.Id == model.IdTCMWorday)
@@ -5630,8 +5628,6 @@ namespace KyoS.Web.Helpers
                 NextStep = model.NextStep,
                 ServiceCode = model.ServiceCode,
                 Status = model.Status,
-                TotalMinutes = model.TotalMinutes,
-                TotalUnits = model.TotalUnits,
                 TCMClient = model.TCMClient,
                 Workday = model.Workday,
                 IdCaseManager = model.CaseManager.Id,
@@ -5653,10 +5649,10 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 DescriptionOfService = model.DescriptionOfService,
                 EndTime = model.EndTime,
-                Minutes = model.Minutes,
-                Setting = model.Setting,
+                Minutes = Int16.Parse(model.Minutes),
+                Setting = ServiceTCMNotesUtils.GetCodeByIndex(model.IdSetting),
                 StartTime = model.StartTime,
-                TCMDomain = _context.TCMDomains.FirstOrDefault(n => n.Id == model.IdTCMDomain),
+                TCMDomain = model.TCMDomain,
                 TCMNote = _context.TCMNote.FirstOrDefault(n => n.Id == model.IdTCMNote)
                 
 
@@ -5675,15 +5671,20 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = model.LastModifiedOn,
                 DescriptionOfService = model.DescriptionOfService,
                 EndTime = model.EndTime,
-                Minutes = model.Minutes,
+                Minutes = model.Minutes.ToString(),
                 Setting = model.Setting,
                 StartTime = model.StartTime,
                 TCMDomain = model.TCMDomain,
                 TCMNote = model.TCMNote,
                 IdTCMNote = model.TCMNote.Id,
-                IdTCMDomain = model.TCMDomain.Id
-                
-            };
+                IdTCMDomain = model.TCMDomain.Id,
+                IdSetting = ServiceTCMNotesUtils.GetIndexByCode(model.Setting),
+                SettingList = _combosHelper.GetComboTCMNoteSetting(),
+                DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == model.TCMNote.TCMClient.Id).Id),
+                IdTCMClient = model.TCMNote.TCMClient.Id,
+                ActivityList = _combosHelper.GetComboTCMNoteActivity(model.TCMDomain.Code)
+
+        };
 
             return salida;
         }
@@ -5719,6 +5720,49 @@ namespace KyoS.Web.Helpers
                 RaterFMHCertification = model.RaterFMHCertification
             };
         }
+
+        public async Task<TCMServiceActivityEntity> ToTCMServiceActivityEntity(TCMServiceActivityViewModel model, bool isNew, string userId)
+        {
+            return new TCMServiceActivityEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmService = await _context.TCMServices.FindAsync(model.IdService),
+                Name = model.Name,
+                Description = model.Description,
+                Unit = model.Unit,
+                Status = model.Status,
+                Approved = model.Approved,
+                Frecuency = model.Frecuency
+                
+            };
+        }
+
+        public TCMServiceActivityViewModel ToTCMServiceActivityViewModel(TCMServiceActivityEntity TcmStageEntity)
+        {
+            return new TCMServiceActivityViewModel
+            {
+                Id = TcmStageEntity.Id,
+                CreatedBy = TcmStageEntity.CreatedBy,
+                CreatedOn = TcmStageEntity.CreatedOn,
+                LastModifiedBy = TcmStageEntity.LastModifiedBy,
+                LastModifiedOn = TcmStageEntity.LastModifiedOn,
+                Name = TcmStageEntity.Name,
+                IdService = TcmStageEntity.TcmService.Id,
+                IdClinic = TcmStageEntity.TcmService.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics(),
+                Description = TcmStageEntity.Description,
+                Unit = TcmStageEntity.Unit,
+                TcmService = TcmStageEntity.TcmService,
+                Status = TcmStageEntity.Status,
+                Approved = TcmStageEntity.Approved,
+                Frecuency = TcmStageEntity.Frecuency
+            };
+        }
+
 
     }
 }

@@ -12,6 +12,8 @@ namespace KyoS.Web.Models
         public int IdTCMNote { get; set; }
         public int IdTCMWorday { get; set; }
 
+        public int TotalMinutes { get; set; }
+        public int TotalUnits { get; set; }
         //este campo lo uso para saber de que pagina se viene
         public int Origin { get; set; }
 

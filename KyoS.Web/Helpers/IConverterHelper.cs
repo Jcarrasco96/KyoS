@@ -180,5 +180,7 @@ namespace KyoS.Web.Helpers
         TCMNoteActivityViewModel ToTCMNoteActivityViewModel(TCMNoteActivityEntity model);
         Task<DocumentsAssistantEntity> ToDocumentsAssistantEntity(DocumentsAssistantViewModel model, string signaturePath, bool isNew);
         DocumentsAssistantViewModel ToDocumentsAssistantViewModel(DocumentsAssistantEntity model, int idClinic);
+        Task<TCMServiceActivityEntity> ToTCMServiceActivityEntity(TCMServiceActivityViewModel model, bool isNew, string userId);
+        TCMServiceActivityViewModel ToTCMServiceActivityViewModel(TCMServiceActivityEntity model);
     }
 }
