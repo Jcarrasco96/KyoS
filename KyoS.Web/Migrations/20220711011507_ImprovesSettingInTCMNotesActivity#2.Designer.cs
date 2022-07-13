@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220711011507_ImprovesSettingInTCMNotesActivity#2")]
+    partial class ImprovesSettingInTCMNotesActivity2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -7662,7 +7664,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DescriptionOfService")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndTime")
@@ -7825,55 +7826,6 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("TcmDomainId");
 
                     b.ToTable("TCMObjetives");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServiceActivityEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("Approved")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Frecuency")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("TcmServiceId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Unit")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TcmServiceId");
-
-                    b.ToTable("TCMServiceActivity");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServiceEntity", b =>
@@ -9805,16 +9757,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TcmDomain");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServiceActivityEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.TCMServiceEntity", "TcmService")
-                        .WithMany("TCMServiceActivity")
-                        .HasForeignKey("TcmServiceId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("TcmService");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServiceEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
@@ -10329,8 +10271,6 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServiceEntity", b =>
                 {
                     b.Navigation("Stages");
-
-                    b.Navigation("TCMServiceActivity");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServicePlanEntity", b =>

@@ -1289,5 +1289,64 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboTCMNoteSetting()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = "03", Value = "1"},
+                                  new SelectListItem { Text = "11", Value = "2"},
+                                  new SelectListItem { Text = "12", Value = "3"},
+                                  new SelectListItem { Text = "33", Value = "4"},
+                                  new SelectListItem { Text = "99", Value = "5"}};
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Setting...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboServicesUsed(int idServicePlan)
+        {
+           
+            List<TCMDomainEntity> Services_Domain = _context.TCMDomains
+                                                            .Include(d => d.TcmServicePlan)
+                                                            .Where(d => d.TcmServicePlan.Id == idServicePlan)
+                                                            .ToList();
+            
+            List<SelectListItem> list = Services_Domain.Select(c => new SelectListItem
+            {
+                Text = $"{c.Code + "-" + c.Name}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select service...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboTCMNoteActivity(string codeDomain)
+        {
+
+            List<TCMServiceActivityEntity> activity = _context.TCMServiceActivity.Where(n => n.TcmService.Code == codeDomain).ToList();
+            
+            List<SelectListItem> list = activity.Select(c => new SelectListItem
+            {
+                Text = $"{c.Name}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            return list;
+
+        }
+
     }
 }

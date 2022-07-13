@@ -26,9 +26,6 @@ namespace KyoS.Web.Data.Entities
 
         public string NextStep { get; set; }
 
-        public int TotalMinutes { get; set; }
-        public int TotalUnits { get; set; }
-
         [DataType(DataType.Date)]
         public DateTime? CaseManagerDate { get; set; }
 

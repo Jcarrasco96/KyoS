@@ -52,6 +52,9 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
+                            var @valor = (@item.TCMNoteActivity.ToList().Sum(n => n.Minutes) / 15);
+                            var @residuo = (@item.TCMNoteActivity.ToList().Sum(n => n.Minutes) % 15);
+                            var @valorAumentado = valor + 1;
                             <tr>
                                 <td>
                                     @if (item.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
@@ -71,10 +74,17 @@
                                     @Html.DisplayFor(modelItem => item.DateOfService)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.TotalMinutes)
+                                   @item.TCMNoteActivity.ToList().Sum(n => n.Minutes)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.TotalUnits)
+                                    @if (@residuo > 7)
+                                    {
+                                        @valorAumentado
+                                    }
+                                    else
+                                    {
+                                        @valor
+                                    }
                                 </td>
                                 <td align="center">
                                     @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
