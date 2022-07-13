@@ -5601,8 +5601,6 @@ namespace KyoS.Web.Helpers
                 NextStep = model.NextStep,
                 ServiceCode = model.ServiceCode,
                 Status = model.Status,
-                TotalMinutes = model.TotalMinutes,
-                TotalUnits = model.TotalUnits,
                 TCMClient = _context.TCMClient
                                     .FirstOrDefault(n => n.Id == model.IdTCMClient),
                 Workday = _context.Workdays.FirstOrDefault(n => n.Id == model.IdTCMWorday)
@@ -5630,8 +5628,6 @@ namespace KyoS.Web.Helpers
                 NextStep = model.NextStep,
                 ServiceCode = model.ServiceCode,
                 Status = model.Status,
-                TotalMinutes = model.TotalMinutes,
-                TotalUnits = model.TotalUnits,
                 TCMClient = model.TCMClient,
                 Workday = model.Workday,
                 IdCaseManager = model.CaseManager.Id,
@@ -5656,7 +5652,7 @@ namespace KyoS.Web.Helpers
                 Minutes = Int16.Parse(model.Minutes),
                 Setting = ServiceTCMNotesUtils.GetCodeByIndex(model.IdSetting),
                 StartTime = model.StartTime,
-                TCMDomain = _context.TCMDomains.FirstOrDefault(n => n.Id == model.IdTCMDomain),
+                TCMDomain = model.TCMDomain,
                 TCMNote = _context.TCMNote.FirstOrDefault(n => n.Id == model.IdTCMNote)
                 
 
@@ -5685,9 +5681,10 @@ namespace KyoS.Web.Helpers
                 IdSetting = ServiceTCMNotesUtils.GetIndexByCode(model.Setting),
                 SettingList = _combosHelper.GetComboTCMNoteSetting(),
                 DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == model.TCMNote.TCMClient.Id).Id),
-                IdTCMClient = model.TCMNote.TCMClient.Id
+                IdTCMClient = model.TCMNote.TCMClient.Id,
+                ActivityList = _combosHelper.GetComboTCMNoteActivity(model.TCMDomain.Code)
 
-            };
+        };
 
             return salida;
         }
@@ -5738,7 +5735,9 @@ namespace KyoS.Web.Helpers
                 Description = model.Description,
                 Unit = model.Unit,
                 Status = model.Status,
-                Approved = model.Approved
+                Approved = model.Approved,
+                Frecuency = model.Frecuency
+                
             };
         }
 
@@ -5759,7 +5758,8 @@ namespace KyoS.Web.Helpers
                 Unit = TcmStageEntity.Unit,
                 TcmService = TcmStageEntity.TcmService,
                 Status = TcmStageEntity.Status,
-                Approved = TcmStageEntity.Approved
+                Approved = TcmStageEntity.Approved,
+                Frecuency = TcmStageEntity.Frecuency
             };
         }
 

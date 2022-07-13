@@ -66,5 +66,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboBio_IfSexuallyActive();
         IEnumerable<SelectListItem> GetComboTCMNoteSetting();
         IEnumerable<SelectListItem> GetComboServicesUsed(int idServicePlan);
+        IEnumerable<SelectListItem> GetComboTCMNoteActivity(string codeDomain);
     }
 }

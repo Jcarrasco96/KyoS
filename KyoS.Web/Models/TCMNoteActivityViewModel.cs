@@ -29,5 +29,10 @@ namespace KyoS.Web.Models
         [Range(1, int.MaxValue, ErrorMessage = "You must select a domain.")]
         public int IdTCMDomain { get; set; }
         public IEnumerable<SelectListItem> DomainList { get; set; }
+
+        public int IdTCMActivity { get; set; }
+        public IEnumerable<SelectListItem> ActivityList { get; set; }
+
+        public string DescriptionTemp { get; set; }
     }
 }

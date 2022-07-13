@@ -66,18 +66,22 @@
                                         <table class="table table-striped table-bordered">
                                             <tr>
                                                 <th class="col-md-3">Name</th>
-                                                <th class="col-md-5">Description</th>
-                                                <th class="col-md-1" style="text-align:center;">Approved</th>
+                                                <th class="col-md-4">Description</th>
                                                 <th class="col-md-1" style="text-align:center;">Units</th>
+                                                <th class="col-md-1" style="text-align:center;">Frecuency</th>
                                                 <th class="col-md-1" style="text-align:center;">Status</th>
+                                                <th class="col-md-1" style="text-align:center;">Approved</th>
                                                 <th class="col-md-1" style="text-align:center;"></th>
                                             </tr>
                                             @foreach (var product in item.TCMServiceActivity)
                                             {
                                                  <tr>
-                                                    <td>@Html.DisplayFor(modelItem => product.Name)</td>
-                                                    <td>@Html.DisplayFor(modelItem => product.Description)</td>
-                                                    <td align="center">
+                                                     <td>@Html.DisplayFor(modelItem => product.Name)</td>
+                                                     <td>@Html.DisplayFor(modelItem => product.Description)</td>
+                                                     <td align="center">@Html.DisplayFor(modelItem => product.Unit)</td>
+                                                     <td align="center">@Html.DisplayFor(modelItem => product.Frecuency) (days)</td>
+                                                     <td align="center">@Html.DisplayFor(modelItem => product.Status)</td>
+                                                     <td align="center">
                                                         @if (product.Approved < 2)
                                                         {
                                                             <span class="label label-info">
@@ -91,8 +95,6 @@
                                                             </span>
                                                         }
                                                     </td>
-                                                    <td align="center">@Html.DisplayFor(modelItem => product.Unit)</td>
-                                                    <td align="center">@Html.DisplayFor(modelItem => product.Status)</td>
                                                     <td align="center">
                                                         @if (User.Identity.Name == product.CreatedBy && product.Approved < 2 && !User.IsInRole("TCMSupervisor"))
                                                         {

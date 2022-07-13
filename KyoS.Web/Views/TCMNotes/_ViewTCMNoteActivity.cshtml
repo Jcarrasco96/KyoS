@@ -2,6 +2,7 @@
 
 @if (Model != null)
 {
+    var @minutes = 0;
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -14,23 +15,24 @@
                             <th class="col-md-2">
                                 Setting
                             </th>
-                            <th class="col-md-2" >
+                            <th class="col-md-2">
                                 Domain
                             </th>
                             <th class="col-md-4" style="text-align:center;">
                                 Description
                             </th>
-                            <th class="col-md-2"  style="text-align:center;">
+                            <th class="col-md-2" style="text-align:center;">
                                 Minutes
                             </th>
                             <th class="col-md-2">
-                                
+
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
+                            minutes = minutes + item.Minutes;
                             <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Setting)
@@ -55,5 +57,18 @@
             </div>
         </div>
     </div>
+    var @valor = minutes / 15;
+    var @residuo = minutes % 15;
+    var @valorAumentado = valor + 1;
+    
+<div class="col-md-12">
+    <pre>
+    <strong>Reminder</strong>                                                                                       <strong>Setting Codes</strong>                  <strong>Total</strong>           <strong>Total</strong>
+    Reimbursable Case Management activities must be clearly documented in sufficient detail.    03-School   33-ALF               <strong>Minutes</strong>          <strong>Units</strong>
+    The note should clearly reflect how the case manager’s efforts are linked to the            11-Office   99-Other                      
+    services or goals specified in the Service Plan.                                            12-Home                            <span class="label label-info">@minutes</span>             @if (@residuo > 7) { <span class="label label-info">@valorAumentado</span>} else { <span class="label label-info">@valor</span>}
+    </pre>
+</div>
+   
 }
 

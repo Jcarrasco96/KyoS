@@ -24,6 +24,7 @@ namespace KyoS.Web.Data.Entities
         public bool Status { get; set; }
 
         public int Approved { get; set; }
+        public int Frecuency { get; set; }
 
         public TCMServiceEntity TcmService { get; set; }
     }

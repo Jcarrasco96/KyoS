@@ -32,17 +32,20 @@
                                 <th class="col-md-2">
                                     Activity Name
                                 </th>
-                                <th class="col-md-4">
+                                <th class="col-md-3">
                                     Activity Description
-                                </th>
-                                <th class="col-md-1" style="text-align:center;">
-                                    Status
                                 </th>
                                 <th class="col-md-1" style="text-align:center;">
                                     Units
                                 </th>
                                 <th class="col-md-1" style="text-align:center;">
-                                    Status
+                                    Frecuency
+                                </th>
+                                <th class="col-md-1" style="text-align:center;">
+                                    Active
+                                </th>
+                                <th class="col-md-1" style="text-align:center;">
+                                    Approved
                                 </th>
                                 <th class="col-md-2" style="text-align:center;">
                                 </th>
@@ -62,6 +65,15 @@
                                         @Html.DisplayFor(modelItem => item.Description)
                                     </td>
                                     <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Unit)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Frecuency)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Status)
+                                    </td>
+                                    <td align="center">
                                         @if (item.Approved < 2)
                                         {
                                             <span class="label label-info">
@@ -74,12 +86,6 @@
                                                 Approved
                                             </span>
                                         }
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Unit)
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Status)
                                     </td>
                                     <td align="right">
                                         @if (User.IsInRole("TCMSupervisor"))

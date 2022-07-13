@@ -17,6 +17,7 @@ namespace KyoS.Web.Data.Entities
        
         public TCMDomainEntity TCMDomain { get; set; }
 
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string DescriptionOfService { get; set; }
 
         [Display(Name = "Start Time")]
