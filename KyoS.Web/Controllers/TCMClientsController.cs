@@ -496,16 +496,14 @@ namespace KyoS.Web.Controllers
                 List<TCMClientEntity> tcmClientsT = await _context.TCMClient
                                        .Include(g => g.Casemanager)
                                        .Include(g => g.Client)
-                                       .Where(g => (g.Casemanager.Id == caseManager.Id
-                                          && g.Status == StatusType.Open))
+                                       .Where(g => (g.Casemanager.Id == caseManager.Id))
                                        .OrderBy(g => g.Client.Name)
                                        .ToListAsync();
                 TCMServicePlanEntity servicePlan = null;
                 List<TCMClientEntity> tcmClientsTemp = await _context.TCMClient
                                        .Include(g => g.Casemanager)
                                        .Include(g => g.Client)
-                                       .Where(g => (g.Casemanager.Id == caseManager.Id
-                                          && g.Status == StatusType.Open))
+                                       .Where(g => (g.Casemanager.Id == caseManager.Id))
                                        .OrderBy(g => g.Client.Name)
                                        .ToListAsync();
                 for (int i = 0; i < tcmClientsT.Count(); i++)
