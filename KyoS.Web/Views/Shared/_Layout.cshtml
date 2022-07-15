@@ -559,10 +559,10 @@
                                 Services Plan <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Started", "Index", "TCMServiceplans")</li>
-                                <li>@Html.ActionLink("Closed", "ClosedServicePlan", "TCMServiceplans")</li>
+                                <li>@Html.ActionLink("Started", "ServicePlanStarted", "TCMServiceplans", new { approved = 1 })</li>
+                                <li>@Html.ActionLink("Approved", "ApprovedServicePlan", "TCMServiceplans")</li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Adendums", "Adendum", "TCMServicePlans")</li>
+                                <li>@Html.ActionLink("Adendums", "Adendum", "TCMServicePlans", new { aview = 1 })</li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Service Plan Review", "Index", "TCMServicePlanReviews")</li>
                                 <li role="separator" class="divider"></li>

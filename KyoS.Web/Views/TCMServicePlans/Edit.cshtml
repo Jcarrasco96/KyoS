@@ -13,11 +13,11 @@
             }
             @if (@ViewData["origin"].ToString() == "1")
             {
-                @Html.ActionLink("TCM Services Plan", "ServicePlanApproved", "TCMServicePlans", new { approved = 0 })
+                @Html.ActionLink("TCM Services Plan", "ServicePlanStarted", "TCMServicePlans", new { approved = 0 })
             }
             @if (@ViewData["origin"].ToString() == "2")
             {
-                @Html.ActionLink("TCM Services Plan", "ServicePlanApproved", "TCMServicePlans", new { approved = 1 })
+                @Html.ActionLink("TCM Services Plan", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })
             }
 
         </li>
@@ -68,10 +68,22 @@
         }
     </div>
     <div>
-        <form asp-action="Edit"  asp-route-origin="@ViewData["origin"]" >
+        <form asp-action="Edit" asp-route-origin="@ViewData["origin"]">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Approved" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CreatedOn" />
             <partial name="TCMServicePlan" />
+            <div class="col-md-push-12">
+                <div class="col-md-12 form-group">
+                    <a onclick="showInPopup('@Url.Action("CreateDomain", "TCMServicePlans", new {id = Model.Id}, Context.Request.Scheme)','Create domain of service plan')" class="btn btn-success" title="Create domain of this service plan"><i class="glyphicon glyphicon-plus"></i> Add Domain</a>
+                </div>
+                <div class="col-md-12">
+                    <div id="view-TCMdomain">
+                        @await Html.PartialAsync("_ViewDomains", Model.TCMDomain.ToList())
+                    </div>
+                </div>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
                 @if (@ViewData["origin"].ToString() == "0")
@@ -81,19 +93,55 @@
                 @if (@ViewData["origin"].ToString() == "1")
                 {
 
-                    <a asp-action="ServicePlanApproved" asp-route-approved="0" class="btn btn-success">Back</a>
+                    <a asp-action="ServicePlanStarted" asp-route-approved="0" class="btn btn-success">Back</a>
                 }
                 @if (@ViewData["origin"].ToString() == "2")
                 {
 
-                    <a asp-action="ServicePlanApproved" asp-route-approved="1" class="btn btn-success">Back</a>
+                    <a asp-action="ServicePlanStarted" asp-route-approved="1" class="btn btn-success">Back</a>
                 }
             </div>
         </form>
     </div>
 </div>
 
+<partial name="_ModalPopup" />
+<partial name="_DeleteDialog" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                                "order": [[0, "asc"]],
+                                "pageLength": 100
+                            });
+
+            var item_to_delete;
+
+            $('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                var url = "@Url.Action("DeleteDomain", "TCMServicePlan")";
+                window.location.href = url + '/' + item_to_delete;
+            });
+        });
+        $(function () {
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+    </script>
 }
+

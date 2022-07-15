@@ -26,8 +26,19 @@ namespace KyoS.Web.Data.Entities
        
 
         public bool Finish { get; set; }
+
+        [Display(Name = "Start Date")]
+        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime StartDate{ get; set; }
+
+        [Display(Name = "Target Date")]
+        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime TargetDate { get; set; }
+
+        [Display(Name = "End Date")]
+        [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
 
         public TCMDomainEntity TcmDomain { get; set; }

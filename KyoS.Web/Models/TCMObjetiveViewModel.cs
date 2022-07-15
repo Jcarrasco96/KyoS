@@ -36,7 +36,7 @@ namespace KyoS.Web.Models
         public string descriptionStages { get; set; }
 
         //este campo lo uso para saber de que pagina se viene
-        public int Origin { get; set; }
+        public int Origi { get; set; }
 
         public int Id_Domain { get; set; }
         // public IEnumerable<SelectListItem> Clinics { get; set; }

@@ -119,11 +119,11 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("CaseManager"))
             {
                 TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
-                                                             .Include(b => b.TCMDomain)
-                                                             .Include(f => f.TcmClient)
-                                                             .Include(f => f.TcmClient.Casemanager)
-                                                             .Include(f => f.TcmClient.Client)
-                                                             .FirstOrDefault(f => (f.Id == IdServicePlan && f.Approved == 2));
+                                                              .Include(b => b.TCMDomain)
+                                                              .Include(f => f.TcmClient)
+                                                              .Include(f => f.TcmClient.Casemanager)
+                                                              .Include(f => f.TcmClient.Client)
+                                                              .FirstOrDefault(f => (f.Id == IdServicePlan && f.Approved == 2));
                
                 if (tcmServicePlan != null)
                 {
@@ -157,7 +157,7 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("TCMIntakeSectionDashboard", "Account");
+                    return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = _context.TCMClient.FirstOrDefault(n => n.TcmServicePlan.Id == IdServicePlan).Id, section = 4 });
                 }
 
             }
@@ -606,7 +606,7 @@ namespace KyoS.Web.Controllers
                         Target_Date = DateTime.Today.Date,
                         End_Date = DateTime.Today.Date,
                         task = "es para que veas el problema del textarea",
-                        Origin = 2,
+                        Origi = 2,
                         IdServicePlanReview = idServicePlanReview
                     };
 
@@ -1054,7 +1054,7 @@ namespace KyoS.Web.Controllers
                                                     .Include(f => f.TcmServicePlan)
                                                     .ThenInclude(f => f.TcmClient)
                                                     .FirstOrDefault(f => f.Id == tcmObjetiveViewModel.Id_Domain);
-                TCMObjetiveEntity tcmObjetiveEntity = await _converterHelper.ToTCMObjetiveEntity(tcmObjetiveViewModel, false, tcmObjetiveViewModel.Origin, user_logged.UserName);
+                TCMObjetiveEntity tcmObjetiveEntity = await _converterHelper.ToTCMObjetiveEntity(tcmObjetiveViewModel, false, tcmObjetiveViewModel.Origi, user_logged.UserName);
                 tcmObjetiveEntity.TcmDomain = tcmDomain;
 
                 if (ModelState.IsValid)
@@ -1257,7 +1257,7 @@ namespace KyoS.Web.Controllers
                                                     .Include(f => f.TcmServicePlan)
                                                     .ThenInclude(f => f.TcmClient)
                                                     .FirstOrDefault(f => f.Id == tcmObjetiveViewModel.Id_Domain);
-                TCMObjetiveEntity tcmObjetiveEntity = await _converterHelper.ToTCMObjetiveEntity(tcmObjetiveViewModel, false, tcmObjetiveViewModel.Origin, user_logged.UserName);
+                TCMObjetiveEntity tcmObjetiveEntity = await _converterHelper.ToTCMObjetiveEntity(tcmObjetiveViewModel, false, tcmObjetiveViewModel.Origi, user_logged.UserName);
                 tcmObjetiveEntity.TcmDomain = tcmDomain;
 
                 if (ModelState.IsValid)

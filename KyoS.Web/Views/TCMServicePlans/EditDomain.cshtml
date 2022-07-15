@@ -5,30 +5,33 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="EditDomain" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMAdendum(this);">
+        <form asp-action="EditDomain" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMDomain(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Origin" />
             <input type="hidden" asp-for="Id_ServicePlan" />
-            <div class="form-group">
-                <div class="col-md-6">
-                    <b>Case number:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.CaseNumber)</i>
-                    <br />
-                    <b>Client name:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Client.Name)</i>
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <div class="container-fluid">
+                <div class=" col-md-6 form-group">
+                    <h4 style="font-weight:bold;"> <span class="label label-info">Case number - @Model.TcmServicePlan.TcmClient.CaseNumber </span></h4>
                 </div>
-                <div class="col-md-6">
+                <div class=" col-md-6 form-group">
+                    <h4 style="font-weight:bold;"> <span class="label label-info">Client name - @Model.TcmServicePlan.TcmClient.Client.Name</span></h4>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
                     <label asp-for="Date_Identified" class="control-label">Identified Date</label>
                     <input asp-for="Date_Identified" class="form-control" />
                     <span asp-validation-for="Date_Identified" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-md-12">
-                &nbsp;
+            <div class="form-group">
+                <div class="col-md-12">
+                    &nbsp;
+                </div>
             </div>
-
-            <br />
             <div class="form-group">
                 <div class="col-md-3">
                     <label asp-for="Code" class="control-label"></label>&nbsp;*
@@ -40,6 +43,10 @@
                     <label asp-for="Name" class="control-label"></label>&nbsp;*
                     <input asp-for="Name" class="form-control" readonly />
                     <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div><div class="form-group">
+                <div class="col-md-12">
+                    &nbsp;
                 </div>
             </div>
             <div class="col-md-12">
