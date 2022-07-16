@@ -1429,6 +1429,7 @@ namespace KyoS.Web.Helpers
                 Weakness = model.weakness,
                 Strengths = model.strengths,
                 Status = StatusUtils.GetStatusByIndex(model.ID_Status),
+                Approved = model.Approved
                
             };
         }
@@ -1446,7 +1447,11 @@ namespace KyoS.Web.Helpers
                 Name = TcmDomainEntity.Name,
                 TcmServicePlan = TcmDomainEntity.TcmServicePlan,
                 Services = _combosHelper.GetComboServicesNotUsed(TcmDomainEntity.TcmServicePlan.Id),
-                Origin = TcmDomainEntity.Origin
+                Origin = TcmDomainEntity.Origin,
+                CreatedBy = TcmDomainEntity.CreatedBy,
+                CreatedOn = TcmDomainEntity.CreatedOn,
+                LastModifiedBy = TcmDomainEntity.LastModifiedBy,
+                LastModifiedOn = TcmDomainEntity.LastModifiedOn
 
             };
         }
@@ -1846,15 +1851,25 @@ namespace KyoS.Web.Helpers
                 StatusList = _combosHelper.GetComboClientStatus(),
                 ID_Objetive = TcmObjetiveEntity.IdObjetive,
                 IdServicePlanReview = TcmObjetiveEntity.TcmDomain.TcmServicePlan.TCMServicePlanReview.Id,
-                Idd = TcmObjetiveEntity.Id
+                Idd = TcmObjetiveEntity.Id,
+                CreatedBy = TcmObjetiveEntity.CreatedBy,
+                CreatedOn = TcmObjetiveEntity.CreatedOn,
+                LastModifiedBy = TcmObjetiveEntity.LastModifiedBy,
+                LastModifiedOn = TcmObjetiveEntity.LastModifiedOn,
+                Name = TcmObjetiveEntity.Name,
+                Task = TcmObjetiveEntity.Task,
+                EndDate = TcmObjetiveEntity.EndDate,
+                StartDate = TcmObjetiveEntity.StartDate,
+                TargetDate = TcmObjetiveEntity.TargetDate,
+                
 
             };
             if (TcmObjetiveEntity.Origin == "Service Plan")
-                salida.Origin = 0;
+                salida.Origi = 0;
             if (TcmObjetiveEntity.Origin == "Addendum")
-                salida.Origin = 1;
+                salida.Origi = 1;
             if (TcmObjetiveEntity.Origin == "Service Plan Review")
-                salida.Origin = 2;
+                salida.Origi = 2;
 
             return salida;
         }
@@ -2089,7 +2104,9 @@ namespace KyoS.Web.Helpers
                 TcmDischargeFollowUp = TcmDischargeEntity.TcmDischargeFollowUp,
                 TcmDischargeServiceStatus = TcmDischargeEntity.TcmDischargeServiceStatus,
                 TcmServices = TcmDischargeEntity.TcmServicePlan.TCMService,
-                Approved = TcmDischargeEntity.Approved
+                Approved = TcmDischargeEntity.Approved,
+                CreatedBy = TcmDischargeEntity.CreatedBy,
+                CreatedOn = TcmDischargeEntity.CreatedOn
 
             };
         }

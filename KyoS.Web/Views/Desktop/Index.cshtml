@@ -1283,7 +1283,7 @@
                 }
                 else
                 {
-                    <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="ServicePlanApproved" role="button">
+                    <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="ServicePlanStarted" role="button">
                         <div class="thumbnail list-group-item list-group-item-warning">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service Plan<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                             <span class="message-counter-warning">@ViewBag.ServicePlanEdition</span>
@@ -1361,7 +1361,7 @@
                 }
                 else
                 {
-                    <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="ServicePlanApproved" asp-route-approved="1" role="button">
+                    <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="ServicePlanStarted" asp-route-approved="1" role="button">
                         <div class="thumbnail list-group-item list-group-item-info">
                             <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service Plan</h4>
                             <span class="message-counter-info">@ViewBag.ServicePlanPending</span>

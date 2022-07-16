@@ -5,46 +5,42 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="CreateDomain" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMServicePlan(this);">
+        <form asp-action="CreateDomain" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMDomain(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Id_ServicePlan" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
+            <div class="container-fluid">
+                <div class=" col-md-6 form-group">
+                    <h4 style="font-weight:bold;"> <span class="label label-info">Case number - @Model.TcmServicePlan.TcmClient.CaseNumber </span></h4>
+                </div>
+                <div class=" col-md-6 form-group">
+                    <h4 style="font-weight:bold;"> <span class="label label-info">Client name - @Model.TcmServicePlan.TcmClient.Client.Name</span></h4>
+                </div>
+            </div>
             <div class="form-group">
-                <div class="col-md-6">
-                    <b>Case number:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.CaseNumber)</i>
-                    <br />
-                    <b>Client name:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Client.Name)</i>
-                </div>
-                <div class="col-md-6">
-                    <label asp-for="Date_Identified" class="control-label">Identified Date</label>
-                    <input asp-for="Date_Identified" class="form-control" />
-                    <span asp-validation-for="Date_Identified" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-12">
-                &nbsp;
-            </div>
-            <div class="form-group col-md-12">
-                <div class="">
-                    <label asp-for="Id_Service" class="control-label">Service Code</label>&nbsp;*
+                <div class="form-group col-md-8">
+                    <label asp-for="Id_Service" class="control-label">Service</label>&nbsp;*
                     <select asp-for="Id_Service" asp-items="Model.Services" class="form-control" id="Code_Name" onchange="getCode();"></select>
                     <span asp-validation-for="Id_Service" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Date_Identified" class="control-label">Date Identified</label>&nbsp;*
+                    <input asp-for="Date_Identified" class="form-control" />
+                    <span asp-validation-for="Date_Identified" class="text-danger"></span>
                 </div>
             </div>
             <br />
             <div class="form-group">
                 <div class="form-group col-md-3">
-                    <label asp-for="Code" class="control-label">Service Code</label>&nbsp;*
+                    <label asp-for="Code" class="control-label">Service Code</label>
                     <input asp-for="Code" id="GetCode" class="form-control" readonly />
                     <span asp-validation-for="Code" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-md-9">
-                    <label asp-for="Name" class="control-label">Service Name</label>&nbsp;*
+                    <label asp-for="Name" class="control-label">Service Name</label>
                     <input asp-for="Name" id="GetName" class="form-control" readonly />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>

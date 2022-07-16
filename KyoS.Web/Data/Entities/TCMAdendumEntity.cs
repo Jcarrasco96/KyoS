@@ -12,10 +12,11 @@ namespace KyoS.Web.Data.Entities
     {
         public int Id { get; set; }
 
+        [DataType(DataType.Date)]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime DateAdendum { get; set; }
+        
         public int Approved { get; set; }
-
 
         public TCMServicePlanEntity TcmServicePlan{ get; set; }
         public TCMDomainEntity TcmDomain { get; set; }
