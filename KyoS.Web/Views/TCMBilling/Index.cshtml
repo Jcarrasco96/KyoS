@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Billing";
+}
+<link rel="stylesheet" href="~/lib/fullcalendar/lib/main.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Billing</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div id='calendar'></div>
+    </div>
+</div>
+
+<partial name="_ModalPopup" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/fullcalendar/lib/main.js"></script>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridWeek',
+                slotDuration: '00:15:00',
+                slotLabelFormat: {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      omitZeroMinute: false,
+                      meridiem: 'large'
+                },
+                slotLabelInterval: '00:15:00',
+                slotMinTime: '06:00:00',
+                slotMaxTime: '20:00:00',
+                firstDay: 1,
+                hiddenDays: [6],
+                dateClick: function(info) {
+                    //alert('Clicked on: ' + info.dateStr);
+                    // change the day's background color just for fun
+                    //info.dateEI.style.backgroundColor = 'red';   
+                    $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("AddProgressNote","TCMBilling", null, Context.Request.Scheme)' + '?date=' + info.dateStr,
+                        success: function (res) {
+                            $('#form-modal .modal-body').html(res);
+                            $('#form-modal .modal-title').html('Add Progress Note');
+                            $('#form-modal').modal('show');
+                            // to make popup draggable
+                            $('.modal-dialog').draggable({
+                                handle: ".modal-header"
+                            });
+                        }                               
+                    })              
+                },
+                eventClick: function(info) {
+                    alert('Event: ' + info.event.title);
+                    /*('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+                    alert('View: ' + info.view.type);*/                    
+                },
+                events: [
+                    {
+                      title: 'My Event',
+                      start: '2022-07-14 06:35:00',
+                      end: '2022-07-14 07:00:00'/*,*/
+                      /*url: 'http://google.com/'*/
+                    }    
+                ]
+            });
+            calendar.render();
+        });
+    </script>
+}
+
+

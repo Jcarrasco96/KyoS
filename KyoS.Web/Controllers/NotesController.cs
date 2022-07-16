@@ -8816,7 +8816,7 @@ namespace KyoS.Web.Controllers
                                       .ToListAsync());
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, CaseManager")]
         public IActionResult AddMessageEntity(int id = 0, int origin = 0)
         {
             if (id == 0)
