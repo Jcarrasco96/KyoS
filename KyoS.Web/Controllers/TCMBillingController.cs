@@ -3,10 +3,12 @@ using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
@@ -16,12 +18,14 @@ namespace KyoS.Web.Controllers
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
+        private readonly IRenderHelper _renderHelper;
 
-        public TCMBillingController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
+        public TCMBillingController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
+            _renderHelper = renderHelper;
         }
 
         public IActionResult Index()
@@ -44,5 +48,24 @@ namespace KyoS.Web.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddProgressNote(AddProgressNoteViewModel model, IFormCollection form)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                if (form["Billable"] == "Value1")
+                {
+                    return RedirectToAction("Create", "TCMNotes", new { dateTime = model.Date, IdTCMClient = model.IdClient });                          
+                }
+            }
+
+            return RedirectToAction("Index");
+        }            
     }
 }

@@ -117,12 +117,15 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult Create(DateTime dateTime, int IdTCMClient = 15, int IdCaseManager = 1)
+        public IActionResult Create(DateTime dateTime, int IdTCMClient)
         {
 
             UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            CaseMannagerEntity caseManager = _context.CaseManagers
+                                                     .FirstOrDefault(cm => cm.LinkedUser == user_logged.UserName);
 
             TCMNoteViewModel model;
 
@@ -130,7 +133,7 @@ namespace KyoS.Web.Controllers
             {
                 if (user_logged.Clinic != null)
                 {
-                   
+
                     model = new TCMNoteViewModel
                     {
                         CaseManagerDate = DateTime.Now,
@@ -148,16 +151,13 @@ namespace KyoS.Web.Controllers
                         TCMNoteActivity = new List<TCMNoteActivityEntity>(),
                         TotalMinutes = 0,
                         TotalUnits = 0,
-                        IdCaseManager = IdCaseManager,
+                        IdCaseManager = caseManager.Id,
                         IdTCMNote = 0,
-                       
-                        TCMClient =  _context.TCMClient
+
+                        TCMClient = _context.TCMClient
                                              .Include(n => n.Client)
-                                             .FirstOrDefault(n => n.Id == IdTCMClient),
-                        CaseManager = _context.CaseManagers
-                                              .FirstOrDefault(n => n.Id == IdCaseManager)
-
-
+                                             .FirstOrDefault(n => n.Client.Id == IdTCMClient),
+                        CaseManager = caseManager
                     };
                        
                         return View(model);
@@ -675,6 +675,6 @@ namespace KyoS.Web.Controllers
                 text = activity.Description;
             }
             return Json(text);
-        }
+        }        
     }
 }
