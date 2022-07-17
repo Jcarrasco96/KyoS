@@ -285,17 +285,17 @@
                                         </ul>
                                     </li>
                                     <li class="dropdown-submenu">
-                                        <a class="test" tabindex="-1" href="#">Adendums</a>
+                                        <a class="test" tabindex="-1" href="#">Addendums</a>
                                         <ul class="dropdown-menu">
-                                            <li><a asp-area="" asp-controller="TCMAdendums" asp-action="Index">Adendums all</a></li>
+                                            <li><a asp-area="" asp-controller="TCMAdendums" asp-action="Index">All Addendums</a></li>
                                             <li><a asp-area="" asp-controller="TCMAdendums" asp-action="AproveAdendum">Pending approval</a></li>
                                         </ul>
                                     </li>
                                     <li role="separator" class="divider"></li>
                                     <li class="dropdown-submenu">
-                                        <a class="test" tabindex="-1" href="#">Activity</a>
+                                        <a class="test" tabindex="-1" href="#">Activities</a>
                                         <ul class="dropdown-menu">
-                                            <li><a asp-area="" asp-controller="TCMServices" asp-action="ServiceActivity">Activity all</a></li>
+                                            <li><a asp-area="" asp-controller="TCMServices" asp-action="ServiceActivity">All Activities</a></li>
                                             <li><a asp-area="" asp-controller="TCMServices" asp-action="PendingActivity">Pending approval</a></li>
                                         </ul>
                                     </li>
@@ -518,7 +518,7 @@
                                 Adendums <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Adendums all", "Adendum", "TCMServicePlans")</li>
+                                <li>@Html.ActionLink("All Addendums", "Adendum", "TCMServicePlans")</li>
                                 <li>@Html.ActionLink("Pending approval", "AproveAdendum", "TCMAdendums")</li>
                             </ul>
                         </li>
@@ -562,7 +562,7 @@
                                 <li>@Html.ActionLink("Started", "ServicePlanStarted", "TCMServiceplans", new { approved = 1 })</li>
                                 <li>@Html.ActionLink("Approved", "ApprovedServicePlan", "TCMServiceplans")</li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Adendums", "Adendum", "TCMServicePlans", new { aview = 1 })</li>
+                                <li>@Html.ActionLink("Addendums", "Adendum", "TCMServicePlans", new { aview = 1 })</li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Service Plan Review", "Index", "TCMServicePlanReviews")</li>
                                 <li role="separator" class="divider"></li>
@@ -574,10 +574,10 @@
                         </li>
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="TCMServices" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Activity <span class="caret"></span>
+                                Activities <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Activity for service", "ServiceActivity", "TCMServices")</li>
+                                <li>@Html.ActionLink("Activities for services", "ServiceActivity", "TCMServices")</li>
                             </ul>
                         </li>
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
