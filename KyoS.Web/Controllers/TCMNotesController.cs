@@ -218,7 +218,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult Edit(int id = 0)
+        public IActionResult Edit(int id = 0, int origin = 0)
         {
             TCMNoteViewModel model;
 
@@ -248,6 +248,7 @@ namespace KyoS.Web.Controllers
 
                         model = _converterHelper.ToTCMNoteViewModel(TcmNote);
                         model.TCMClient = TcmNote.TCMClient;
+                        ViewData["origin"] = origin;
                         return View(model);
                     }
 
@@ -261,7 +262,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> Edit(TCMNoteViewModel tcmNotesViewModel)
+        public async Task<IActionResult> Edit(TCMNoteViewModel tcmNotesViewModel, int origin = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -276,8 +277,16 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                   
-                    return RedirectToAction("TCMNotesForCase", new { idTCMClient = tcmNotesViewModel.IdTCMClient });
+
+                    if (origin == 0)
+                    {
+                        return RedirectToAction("TCMNotesForCase", new { idTCMClient = tcmNotesViewModel.IdTCMClient });
+                    }
+                    if (origin == 1)
+                    {
+                        return RedirectToAction("NotesStatus", new { status = NoteStatus.Edition });
+                    }
+                    
                 }
                 catch (System.Exception ex)
                 {
@@ -546,7 +555,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> FinishEditingNote(int id)
+        public async Task<IActionResult> FinishEditingNote(int id, int origin = 0)
         {
             TCMNoteEntity tcmNote = _context.TCMNote
                                             .Include(u => u.TCMClient)
@@ -569,7 +578,15 @@ namespace KyoS.Web.Controllers
                         {
                             await _context.SaveChangesAsync();
 
-                            return RedirectToAction("TCMNotesForCase", new { idTCMClient = tcmNote.TCMClient.Id });
+                            if (origin == 0)
+                            {
+                                return RedirectToAction("TCMNotesForCase", new { idTCMClient = tcmNote.TCMClient.Id });
+                            }
+                            if (origin == 1)
+                            {
+                                return RedirectToAction("NotesStatus", new { status = NoteStatus.Edition });
+                            }
+
                         }
                         catch (System.Exception ex)
                         {
@@ -677,6 +694,54 @@ namespace KyoS.Web.Controllers
                 text = activity.Description;
             }
             return Json(text);
-        }        
+        }
+
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> NotesStatus(NoteStatus status = NoteStatus.Approved)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<TCMNoteEntity> note = new List<TCMNoteEntity>();
+
+            if (User.IsInRole("Casemanager"))
+            {
+                note = await _context.TCMNote
+                                     .Include(w => w.TCMClient)
+                                     .ThenInclude(d => d.Client)
+                                     .ThenInclude(d => d.Clinic)
+                                     .Include(w => w.TCMClient)
+                                     .ThenInclude(d => d.Casemanager)
+                                     .Include(w => w.TCMNoteActivity)
+                                     .Where(w => (w.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                        && w.Status == status
+                                        && w.TCMClient.Casemanager.LinkedUser == user_logged.UserName))
+                                     .ToListAsync();
+            }
+            else
+            {
+                note = await _context.TCMNote
+                                    .Include(w => w.TCMClient)
+                                    .ThenInclude(d => d.Client)
+                                    .ThenInclude(d => d.Clinic)
+                                    .Include(w => w.TCMClient)
+                                    .ThenInclude(d => d.Casemanager)
+                                    .Include(w => w.TCMNoteActivity)
+                                    .Where(w => (w.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                       && w.Status == status))
+                                    .ToListAsync();
+            }
+
+            return View(note);
+        }
     }
 }

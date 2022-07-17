@@ -641,6 +641,21 @@ namespace KyoS.Web.Controllers
                                                        && g.Client.Clinic.Id == caseManager.Clinic.Id
                                                        && g.TcmServicePlan.TCMDischarge.Approved == 1)).Count().ToString();
 
+                ViewBag.NotesEdition = _context.TCMNote
+                                               .Where(g => (g.TCMClient.Casemanager.Id == caseManager.Id
+                                                      && g.Status == NoteStatus.Edition
+                                                      && g.TCMClient.Client.Clinic.Id == caseManager.Clinic.Id)).Count().ToString();
+
+                ViewBag.NotesPending = _context.TCMNote
+                                               .Where(g => (g.TCMClient.Casemanager.Id == caseManager.Id
+                                                     && g.Status == NoteStatus.Pending
+                                                     && g.TCMClient.Client.Clinic.Id == caseManager.Clinic.Id)).Count().ToString();
+
+                ViewBag.NotesApproved = _context.TCMNote
+                                                .Where(g => (g.TCMClient.Casemanager.Id == caseManager.Id
+                                                    && g.Status == NoteStatus.Approved
+                                                    && g.TCMClient.Client.Clinic.Id == caseManager.Clinic.Id)).Count().ToString();
+
             }
             if (User.IsInRole("Documents_Assistant"))
             {

@@ -812,8 +812,8 @@
         {
             <div class="col-md-12">
                 &nbsp;
-            </div>            
-            <!-- Nav tabs -->            
+            </div>
+            <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
                 @if (setting != null && setting.MentalHealthClinic)
                 {
@@ -1079,7 +1079,7 @@
                     </div>
                 }
             </div>
-                    
+
         }
         @if (User.IsInRole("Documents_Assistant"))
         {
@@ -1277,7 +1277,7 @@
                 @if (ViewBag.ServicePlanEdition == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service Plan<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Service Plan<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                         <span class="message-counter-cero">@ViewBag.ServicePlanEdition</span>
                     </div>
                 }
@@ -1285,7 +1285,7 @@
                 {
                     <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="ServicePlanStarted" role="button">
                         <div class="thumbnail list-group-item list-group-item-warning">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service Plan<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                            <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Service Plan<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                             <span class="message-counter-warning">@ViewBag.ServicePlanEdition</span>
                         </div>
                     </a>
@@ -1295,7 +1295,7 @@
                 @if (ViewBag.AdendumEdition == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                         <span class="message-counter-cero">@ViewBag.AdendumEdition</span>
                     </div>
                 }
@@ -1303,7 +1303,7 @@
                 {
                     <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="AdendumApproved" role="button">
                         <div class="thumbnail list-group-item list-group-item-warning">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                            <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                             <span class="message-counter-warning">@ViewBag.AdendumEdition</span>
                         </div>
                     </a>
@@ -1313,7 +1313,7 @@
                 @if (ViewBag.ServicePlanReviewEdition == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service Plan R.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Service Plan R.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                         <span class="message-counter-cero">@ViewBag.ServicePlanReviewEdition</span>
                     </div>
                 }
@@ -1321,7 +1321,7 @@
                 {
                     <a style="text-decoration: none;" asp-controller="TCMServicePlanReviews" asp-action="ServicePlanReviewApproved" role="button">
                         <div class="thumbnail list-group-item list-group-item-warning">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service Plan R.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                            <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Service Plan R.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                             <span class="message-counter-warning">@ViewBag.ServicePlanReviewEdition</span>
                         </div>
                     </a>
@@ -1331,7 +1331,7 @@
                 @if (ViewBag.DischargeEdition == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Discharge<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Discharge<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                         <span class="message-counter-cero">@ViewBag.DischargeEdition</span>
                     </div>
                 }
@@ -1339,7 +1339,7 @@
                 {
                     <a style="text-decoration: none;" asp-controller="TCMDischarges" asp-action="TCMDischargeApproved" role="button">
                         <div class="thumbnail list-group-item list-group-item-warning">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Discharge<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                            <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Discharge<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                             <span class="message-counter-warning">@ViewBag.DischargeEdition</span>
                         </div>
                     </a>
@@ -1423,6 +1423,67 @@
                     </a>
                 }
             </div>
+            //New line
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-2">
+                @if (ViewBag.NotesEdition == "0")
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Notes<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in Edition</h4>
+                        <span class="message-counter-cero">@ViewBag.NotesEdition</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="TCMNotes" asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Edition" role="button">
+                        <div class="thumbnail list-group-item list-group-item-warning">
+                            <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Notes<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in Edition</h4>
+                            <span class="message-counter-warning">@ViewBag.NotesEdition</span>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="col-md-2">
+                @if (ViewBag.NotesPending == "0")
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes</h4>
+                        <span class="message-counter-cero">@ViewBag.NotesPending</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="TCMNotes" asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Pending" role="button">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes</h4>
+                            <span class="message-counter-info">@ViewBag.NotesPending</span>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="col-md-2">
+                @if (ViewBag.NotesApproved == "0")
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Approved<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes</h4>
+                        <span class="message-counter-cero">@ViewBag.ServicePlanReviewPending</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="TCMNotes" asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Approved" role="button">
+                        <div class="thumbnail list-group-item list-group-item-success">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Approved<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes</h4>
+                            <span class="message-counter-success">@ViewBag.NotesApproved</span>
+                        </div>
+                    </a>
+                }
+            </div>
+            
         }
     </div>
 </div>
