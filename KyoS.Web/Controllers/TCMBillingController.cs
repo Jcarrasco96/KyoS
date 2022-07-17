@@ -48,8 +48,7 @@ namespace KyoS.Web.Controllers
                     IdClient = 0,
                     Clients = _combosHelper.GetComboTCMClientsByCasemanager(user_logged.UserName)
                 };
-            }
-            
+            }            
 
             return View(model);
         }
