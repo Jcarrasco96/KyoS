@@ -10,7 +10,7 @@ namespace KyoS.Web.Data.Entities
     {
         public int Id { get; set; }
 
-        [DataType(DataType.Date)]
+        
         public DateTime? DateOfService { get; set; }
 
         [Display(Name = "Service Code:")]

@@ -1348,5 +1348,26 @@ namespace KyoS.Web.Helpers
 
         }
 
+        public IEnumerable<SelectListItem> GetComboTCMClientsByCasemanager(string user)
+        {
+            List<SelectListItem> list = _context.TCMServicePlans
+                                                .Include(c => c.TcmClient)
+                                                .ThenInclude(c => c.Client)
+                                                .Where(c => (c.Approved == 2 && c.Status ==0
+                                                        && c.TcmClient.Casemanager.LinkedUser == user))
+                                                .Select(c => new SelectListItem
+            {
+                Text = $"{c.TcmClient.Client.Name}",
+                Value = $"{c.TcmClient.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select client...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }
