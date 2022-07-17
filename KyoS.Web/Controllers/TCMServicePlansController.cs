@@ -844,7 +844,8 @@ namespace KyoS.Web.Controllers
                         Target_Date = DateTime.Today.Date,
                         End_Date = DateTime.Today.Date,
                         task = "es para que veas el problema del textarea",
-                        Origi = Origin
+                        Origi = Origin,
+                        Origin = ""
                     };
 
                     return View(model);

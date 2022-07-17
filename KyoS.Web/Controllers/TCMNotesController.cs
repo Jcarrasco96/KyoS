@@ -156,7 +156,8 @@ namespace KyoS.Web.Controllers
 
                         TCMClient = _context.TCMClient
                                              .Include(n => n.Client)
-                                             .FirstOrDefault(n => n.Client.Id == IdTCMClient),
+                                             .ThenInclude(n => n.Clinic)
+                                             .FirstOrDefault(n => n.Id == IdTCMClient),
                         CaseManager = caseManager
                     };
                        
@@ -318,7 +319,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult CreateNoteActivity(int idNote = 0, int idTCMClient = 0)
+        public IActionResult CreateNoteActivity(DateTime startTime, int idNote = 0, int idTCMClient = 0)
         {
 
             UserEntity user_logged = _context.Users
@@ -352,7 +353,8 @@ namespace KyoS.Web.Controllers
                         CreatedBy = user_logged.UserName,
                         CreatedOn = DateTime.Now,
                         IdTCMClient = idTCMClient,
-                        DescriptionTemp = ""
+                        DescriptionTemp = "",
+                        StartTime = startTime.Date
                     };
                     if (model.TCMNote.TCMNoteActivity == null)
                         model.TCMNote.TCMNoteActivity = new List<TCMNoteActivityEntity>();

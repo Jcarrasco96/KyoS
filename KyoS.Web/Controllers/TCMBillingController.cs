@@ -38,13 +38,18 @@ namespace KyoS.Web.Controllers
              UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
-            
-            AddProgressNoteViewModel model = new AddProgressNoteViewModel
+            AddProgressNoteViewModel model = new AddProgressNoteViewModel();
+
+            if (User.IsInRole("CaseManager"))
             {
-                Date = (date != null) ? Convert.ToDateTime(date) : new DateTime(),
-                IdClient = 0,
-                Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id)
-            };
+                model = new AddProgressNoteViewModel
+                {
+                    Date = (date != null) ? Convert.ToDateTime(date) : new DateTime(),
+                    IdClient = 0,
+                    Clients = _combosHelper.GetComboTCMClientsByCasemanager(user_logged.UserName)
+                };
+            }
+            
 
             return View(model);
         }
