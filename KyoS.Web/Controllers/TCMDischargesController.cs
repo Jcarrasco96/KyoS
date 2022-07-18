@@ -643,6 +643,83 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
+        [Authorize(Roles = "TCMSupervisor")]
+        public IActionResult EditReadOnly(int id = 0)
+        {
+            TCMDischargeViewModel model;
 
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic != null)
+                {
+
+                    TCMDischargeEntity TcmDischarge = _context.TCMDischarge
+                                                              .Include(m => m.TcmDischargeFollowUp)
+                                                              .Include(n => n.TcmDischargeServiceStatus)
+                                                              .Include(b => b.TcmServicePlan)
+                                                              .ThenInclude(b => b.TcmClient)
+                                                              .ThenInclude(b => b.Client)
+                                                              .Include(b => b.TcmServicePlan)
+                                                              .ThenInclude(b => b.TCMDomain)
+                                                              .FirstOrDefault(m => m.Id == id);
+                    if (TcmDischarge == null)
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToTCMDischargeViewModel(TcmDischarge);
+                        return View(model);
+
+                    }
+
+                }
+            }
+
+            model = new TCMDischargeViewModel();
+            return View(model);
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> ApproveDischarge(int id)
+        {
+            TCMDischargeEntity tcmDischarge = _context.TCMDischarge
+                                                   .Include(u => u.TcmServicePlan)
+                                                   .ThenInclude(u => u.TcmClient)
+                                                   .ThenInclude(u => u.Client)
+                                                   .FirstOrDefault(u => u.Id == id);
+
+            if (tcmDischarge != null)
+            {
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    if (user_logged.Clinic != null)
+                    {
+                        tcmDischarge.Approved = 2;
+                        _context.Update(tcmDischarge);
+                        try
+                        {
+                            await _context.SaveChangesAsync();
+
+                            return RedirectToAction("TCMDischargeApproved", new { approved = 1 });
+                        }
+                        catch (System.Exception ex)
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+            }
+
+            return RedirectToAction("Index", "TCMServicePlans");
+        }
     }
 }

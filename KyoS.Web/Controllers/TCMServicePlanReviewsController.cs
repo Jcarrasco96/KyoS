@@ -1395,5 +1395,86 @@ namespace KyoS.Web.Controllers
             return View(null);
 
         }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> EditReadOnly(int Id, int IdServicePlan)
+        {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                        .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                TCMServicePlanReviewEntity tcmServicePlanReview = _context.TCMServicePlanReviews
+                                                                          .Include(b => b.TCMServicePlanRevDomain)
+                                                                          .ThenInclude(f => f.TCMServicePlanRevDomainObjectiive)
+                                                                          .Include(f => f.TcmServicePlan)
+                                                                          .ThenInclude(f => f.TcmClient)
+                                                                          .ThenInclude(f => f.Casemanager)
+                                                                          .Include(f => f.TcmServicePlan.TcmClient.Client)
+                                                                          .Include(f => f.TcmServicePlan.TCMDomain)
+                                                                          .FirstOrDefault(f => (f.TcmServicePlan_FK == IdServicePlan
+                                                                             && f.TcmServicePlan.Approved == 2
+                                                                             && f.Id == Id));
+
+                if (tcmServicePlanReview != null)
+                {
+                    TCMServicePlanReviewViewModel model = _converterHelper.ToTCMServicePlanReviewViewModel(tcmServicePlanReview);
+                    model.TCMServicePlanRevDomain = tcmServicePlanReview.TCMServicePlanRevDomain;
+                    try
+                    {
+                        return View(model);
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+
+                }
+                else
+                {
+                    return RedirectToAction("ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 1 });
+                }
+
+
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> ApproveTCMServicePlanReview(int id)
+        {
+            TCMServicePlanReviewEntity tcmServicePlanReview = _context.TCMServicePlanReviews
+                                                                      .Include(n => n.TcmServicePlan)
+                                                                      .ThenInclude(n => n.TcmClient)
+                                                                      .FirstOrDefault(u => u.Id == id);
+
+            if (tcmServicePlanReview != null)
+            {
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    if (user_logged.Clinic != null)
+                    {
+                        tcmServicePlanReview.Approved = 2;
+                        _context.Update(tcmServicePlanReview);
+                        try
+                        {
+                            await _context.SaveChangesAsync();
+                            return RedirectToAction("ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 1 });
+                        }
+                        catch (System.Exception ex)
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+            }
+
+            return RedirectToAction("Index", "TCMServicePlanReviews");
+        }
+
     }
 }

@@ -1946,6 +1946,152 @@ namespace KyoS.Web.Controllers
 
         }
 
-       
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> EditReadOnly(int Id = 0)
+        {
+            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
+                                                          .Include(f => f.TCMDomain)
+                                                          .ThenInclude(f => f.TCMObjetive)
+                                                          .Include(f => f.TcmClient)
+                                                          .FirstOrDefault(u => u.Id == Id);
+            TCMServicePlanViewModel model;
+
+            if (tcmServicePlan != null && tcmServicePlan.Approved != 2)
+            {
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    if (user_logged.Clinic != null)
+                    {
+                        List<TCMClientEntity> tcmClient = _context.TCMClient
+                                                       .Include(u => u.Client)
+                                                       .Where(u => u.Id == tcmServicePlan.TcmClient.Id)
+                                                       .ToList();
+
+                        List<SelectListItem> list_Client = tcmClient.Select(c => new SelectListItem
+                        {
+                            Text = $"{c.Client.Name}",
+                            Value = $"{c.Id}"
+                        })
+                            .ToList();
+
+                        List<ClinicEntity> clinic = _context.Clinics
+                                                         .Where(u => u.Id == user_logged.Clinic.Id)
+                                                         .ToList();
+
+                        List<SelectListItem> list_Clinins = clinic.Select(c => new SelectListItem
+                        {
+                            Text = $"{c.Name}",
+                            Value = $"{c.Id}"
+                        })
+                            .ToList();
+
+                        model = new TCMServicePlanViewModel
+                        {
+                            ID_TcmClient = tcmServicePlan.TcmClient.Id,
+                            TcmClients = list_Client,
+                            ID_Clinic = user_logged.Clinic.Id,
+                            Clinics = list_Clinins,
+                            Status = tcmServicePlan.Status,
+                            ID_Status = (tcmServicePlan.Status == StatusType.Open) ? 1 : 2,
+                            status = _combosHelper.GetComboClientStatus(),
+                            CaseNumber = _context.TCMClient.FirstOrDefault(u => u.Id == tcmServicePlan.TcmClient.Id).CaseNumber,
+                            Date_ServicePlan = tcmServicePlan.DateServicePlan,
+                            Date_Intake = tcmServicePlan.DateIntake,
+                            Date_Assessment = tcmServicePlan.DateAssessment,
+                            Date_Certification = tcmServicePlan.DateCertification,
+                            strengths = tcmServicePlan.Strengths,
+                            weakness = tcmServicePlan.Weakness,
+                            dischargerCriteria = tcmServicePlan.DischargerCriteria,
+                            Id = Id,
+                            TCMDomain = tcmServicePlan.TCMDomain,
+                            Approved = tcmServicePlan.Approved,
+                            CreatedBy = tcmServicePlan.CreatedBy,
+                            CreatedOn = tcmServicePlan.CreatedOn
+
+                        };
+
+                        model.TCMDomain = model.TCMDomain.Where(n => (n.Origin == "Service Plan")).ToList();
+                        return View(model);
+                    }
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+            }
+
+            return RedirectToAction("Index", "TCMServicePlans", new { caseNumber = tcmServicePlan.TcmClient.CaseNumber });
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> EditAdendumReadOnly(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMAdendumEntity tcmadendumEntity = await _context.TCMAdendums
+                                                            .Include(u => u.TcmDomain)
+                                                            .Include(u => u.TcmServicePlan)
+                                                            .ThenInclude(g => g.TcmClient)
+                                                            .ThenInclude(g => g.Client)
+                                                            .FirstOrDefaultAsync(s => s.Id == id);
+            if (tcmadendumEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMAdendumViewModel tcmAdendumViewModel = null;
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                List<TCMServicePlanEntity> tcmSerivicePlan = _context.TCMServicePlans
+                                                .Include(g => g.TcmClient)
+                                                .ThenInclude(g => g.Client)
+                                                .Where(c => c.Id == tcmadendumEntity.TcmServicePlan.Id)
+                                                .ToList();
+
+                List<SelectListItem> list_servicePlan = tcmSerivicePlan.Select(c => new SelectListItem
+                {
+                    Text = $"{c.TcmClient.CaseNumber}",
+                    Value = $"{c.Id}"
+                })
+                .ToList();
+
+                List<TCMDomainEntity> tcmDomain = _context.TCMDomains
+                                                .Include(g => g.TCMObjetive)
+                                                .Where(c => c.Id == tcmadendumEntity.TcmDomain.Id)
+                                                .ToList();
+                List<SelectListItem> list_domain = tcmDomain.Select(c => new SelectListItem
+                {
+                    Text = $"{c.Code + "-" + c.Name}",
+                    Value = $"{c.Id}"
+                })
+                .ToList();
+
+                tcmAdendumViewModel = new TCMAdendumViewModel
+                {
+                    Id = tcmadendumEntity.Id,
+                    TcmServicePlan = tcmadendumEntity.TcmServicePlan,
+                    ID_TcmServicePlan = 0,
+                    ListTcmServicePlan = list_servicePlan,
+                    ID_TcmDominio = 0,
+                    TcmDominio = list_domain,
+                    TcmDomain = tcmadendumEntity.TcmDomain,
+                    Date_Identified = tcmadendumEntity.TcmDomain.DateIdentified,
+                    Long_term = tcmadendumEntity.TcmDomain.LongTerm,
+                    Needs_Identified = tcmadendumEntity.TcmDomain.NeedsIdentified
+                };
+
+                return View(tcmAdendumViewModel);
+            }
+
+            return View(tcmAdendumViewModel);
+        }
     }
 }

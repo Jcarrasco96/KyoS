@@ -63,8 +63,16 @@
                                                     <td align="center">@Html.DisplayFor(modelItem => value.TargetDate)</td>
                                                     <td align="center">@Html.DisplayFor(modelItem => value.EndDate)</td>
                                                     <td align="center">
-                                                        <a onclick="showInPopup('@Url.Action("EditObjetive", "TCMServicePlans", new { id = value.Id, origi = 0 }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning" title="Edit TCM Objective"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                        <a asp-action="DeleteObjetive" asp-route-id="@value.Id" asp-route-origin="1" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete TCM objective"></i></a>
+                                                        @if (User.IsInRole("CaseManager"))
+                                                        {
+                                                            <a onclick="showInPopup('@Url.Action("EditObjetive", "TCMServicePlans", new { id = value.Id, origi = 0 }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning" title="Edit TCM Objective"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                            <a asp-action="DeleteObjetive" asp-route-id="@value.Id" asp-route-origin="1" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete TCM objective"></i></a>
+                                                        }
+                                                        @if (User.IsInRole("TCMSupervisor"))
+                                                        {
+                                                            <a onclick="showInPopup('@Url.Action("EditObjetive", "TCMServicePlans", new { id = value.Id, origi = 0 }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning disabled" title="Edit TCM Objective"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                            <a asp-action="DeleteObjetive" asp-route-id="@value.Id" asp-route-origin="1" class="btn btn-danger disabled"><i class="glyphicon glyphicon-trash" title="Delete TCM objective"></i></a>
+                                                        }
                                                     </td>
                                                 </tr>
                                             }
@@ -86,11 +94,18 @@
                                 @Html.DisplayFor(modelItem => item.DateIdentified)
                             </td>
                             <td align="center">
-                                @*<a asp-action="EditGoal" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Goal"><i class="glyphicon glyphicon-pencil"></i></a>*@
-                                <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlans", new { id = item.Id, origi = 0 }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning" title="Edit TCM Domain"><i class="glyphicon glyphicon-pencil"></i></a>
-                                <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlans", new { id = @item.Id, origin = 0 }, Context.Request.Scheme)','Create TCM Objetive')" class="btn btn-info" title="Create TCM Objective"><i class="glyphicon glyphicon-plus"></i></a>
-                                <a asp-action="DeleteDomain" asp-route-id="@item.Id" asp-route-origin="0" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete Domain"></i></a>
-                                @*<button type="button" data-id="@item.Id" data-origin="1" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete goal"><i class="glyphicon glyphicon-trash"></i></button>*@
+                                @if (User.IsInRole("CaseManager"))
+                                {
+                                    <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlans", new { id = item.Id, origi = 0 }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning" title="Edit TCM Domain"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlans", new { id = @item.Id, origin = 0 }, Context.Request.Scheme)','Create TCM Objetive')" class="btn btn-info" title="Create TCM Objective"><i class="glyphicon glyphicon-plus"></i></a>
+                                    <a asp-action="DeleteDomain" asp-route-id="@item.Id" asp-route-origin="0" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete Domain"></i></a>
+                                }
+                                @if (User.IsInRole("TCMSupervisor"))
+                                {
+                                    <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlans", new { id = item.Id, origi = 0 }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning disabled" title="Edit TCM Domain"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlans", new { id = @item.Id, origin = 0 }, Context.Request.Scheme)','Create TCM Objetive')" class="btn btn-info disabled" title="Create TCM Objective"><i class="glyphicon glyphicon-plus"></i></a>
+                                    <a asp-action="DeleteDomain" asp-route-id="@item.Id" asp-route-origin="0" class="btn btn-danger disabled"><i class="glyphicon glyphicon-trash" title="Delete Domain"></i></a>
+                                }
                             </td>
                         </tr>
                     }
