@@ -457,7 +457,6 @@ namespace KyoS.Web.Controllers
 
         }
 
-
         [Authorize(Roles = "CaseManager")]
         public IActionResult EditNoteActivity(int id = 0)
         {
@@ -601,7 +600,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> ApprovedNote(int id)
+        public async Task<IActionResult> ApprovedNote(int id, int origin = 0)
         {
             TCMNoteEntity tcmNote = _context.TCMNote
                                             .Include(u => u.TCMClient)
@@ -623,8 +622,15 @@ namespace KyoS.Web.Controllers
                         try
                         {
                             await _context.SaveChangesAsync();
-
-                            return RedirectToAction("TCMNotesForCase", new { idTCMClient = tcmNote.TCMClient.Id });
+                            if (origin == 0)
+                            {
+                                return RedirectToAction("TCMNotesForCase", new { idTCMClient = tcmNote.TCMClient.Id });
+                            }
+                            else
+                            {
+                                return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending});
+                            }
+                            
                         }
                         catch (System.Exception ex)
                         {
@@ -742,6 +748,77 @@ namespace KyoS.Web.Controllers
             }
 
             return View(note);
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public IActionResult EditReadOnly(int id = 0)
+        {
+            TCMNoteViewModel model;
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic != null)
+                {
+
+                    TCMNoteEntity TcmNote = _context.TCMNote
+                                                    .Include(b => b.TCMClient)
+                                                    .ThenInclude(b => b.Client)
+                                                    .Include(b => b.TCMClient)
+                                                    .ThenInclude(b => b.Casemanager)
+                                                    .Include(b => b.TCMNoteActivity)
+                                                    .ThenInclude(b => b.TCMDomain)
+                                                    .FirstOrDefault(m => m.Id == id);
+                    if (TcmNote == null)
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+                    else
+                    {
+
+                        model = _converterHelper.ToTCMNoteViewModel(TcmNote);
+                        model.TCMClient = TcmNote.TCMClient;
+                        return View(model);
+                    }
+
+                }
+            }
+
+            model = new TCMNoteViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> EditReadOnly(TCMNoteViewModel tcmNotesViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMNoteEntity tcmNotesEntity = await _converterHelper.ToTCMNoteEntity(tcmNotesViewModel, false, user_logged.UserName);
+                _context.TCMNote.Update(tcmNotesEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending });
+                    
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditReadOnly", tcmNotesViewModel) });
         }
     }
 }

@@ -47,8 +47,17 @@
                                     @Html.DisplayFor(modelItem => item.Minutes)
                                 </td>
                                 <td align="right">
-                                    <a onclick="showInPopup('@Url.Action("EditNoteActivity", "TCMNotes",new { id= item.Id}, Context.Request.Scheme)','Edit TCM Note')" class="btn btn-warning" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <a asp-action="DeleteTCMNoteActivity" asp-route-id="@item.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>
+                                    @if (User.IsInRole("CaseManager"))
+                                    {
+                                        <a onclick="showInPopup('@Url.Action("EditNoteActivity", "TCMNotes", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Note')" class="btn btn-warning" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="DeleteTCMNoteActivity" asp-route-id="@item.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a onclick="showInPopup('@Url.Action("EditNoteActivity", "TCMNotes",new { id= item.Id}, Context.Request.Scheme)','Edit TCM Note')" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="DeleteTCMNoteActivity" asp-route-id="@item.Id" class="btn btn-danger disabled" title="Delete element"><i class="glyphicon glyphicon-trash disabled"></i></a>
+                                    }
+
                                 </td>
                             </tr>
                         }
