@@ -5,7 +5,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="CreateObjetive" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMDomain(this);">
+        <form asp-action="CreateObjetive" asp-route-id="@Model.Id" asp-route-idAddendum="@ViewData["idAddendum"]" onsubmit="return jQueryAjaxPostTCMDomain(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Origin" />
             <input type="hidden" asp-for="Id_Domain" />
@@ -87,7 +87,7 @@
                     }
                     @if (Model.Origi == 1) //viene de la pagina Index de las notas
                     {
-                        <input type="submit" value="Submit" class="btn btn-primary" asp-all-route-id="model.tCMservice.Id" asp-route-Origin="1" />
+                        <input type="submit" value="Submit" class="btn btn-primary" asp-route-id="model.tCMservice.Id" asp-route-idAddendum="@ViewData["idAddendum"]" asp-route-Origin="1" />
 
                     }
 

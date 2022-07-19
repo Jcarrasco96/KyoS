@@ -2005,7 +2005,9 @@ namespace KyoS.Web.Helpers
                 TcmDomain = TcmAdendumEntity.TcmDomain,
                 DateAdendum = TcmAdendumEntity.DateAdendum,
                 LongTerm = TcmAdendumEntity.LongTerm,
-                NeedsIdentified = TcmAdendumEntity.NeedsIdentified
+                NeedsIdentified = TcmAdendumEntity.NeedsIdentified,
+                CreatedOn = TcmAdendumEntity.CreatedOn,
+                CreatedBy = TcmAdendumEntity.CreatedBy
             };
         }
 

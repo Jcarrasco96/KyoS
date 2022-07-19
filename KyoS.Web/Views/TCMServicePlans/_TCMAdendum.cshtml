@@ -19,7 +19,15 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">TCM Adendum</h3>
+                @if (User.IsInRole("TCMSupervisor"))
+                {
+                    <h3 class="panel-title">Pending TCM Adendum</h3>
+                }
+                else
+                { 
+                    <h3 class="panel-title">TCM Adendum</h3>
+                }
+
             </div>
             <div class="panel-body" id="view-tcmAdendum">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -68,9 +76,9 @@
                                         <tr>
                                             <th class="col-md-1"></th>
                                             <th class="col-md-1" style="text-align:center;">Code</th>
-                                            <th class="col-md-2">Name</th>
-                                            <th class="col-md-6" style="text-align:left;">Need Identified</th>
-                                            <th class="col-md-1"></th>
+                                            <th class="col-md-3">Name</th>
+                                            <th class="col-md-7" style="text-align:left;">Need Identified</th>
+                                           
                                         </tr>
                                         <tr>
                                             <td align="center">
@@ -86,11 +94,10 @@
                                                     <table class="table table-striped table-bordered">
                                                         <tr>
                                                             <th class="col-md-1" style="text-align:center;">Objetive</th>
-                                                            <th class="col-md-7">Task</th>
+                                                            <th class="col-md-8">Task</th>
                                                             <th class="col-md-1" style="text-align:center;">Start Date</th>
                                                             <th class="col-md-1" style="text-align:center;">Target Date</th>
                                                             <th class="col-md-1" style="text-align:center;">End Date</th>
-                                                            <th class="col-md-1"></th>
                                                         </tr>
                                                         @foreach (var product in item.TcmDomain.TCMObjetive)
                                                         {
@@ -102,19 +109,6 @@
                                                                     <td align="center">@Html.DisplayFor(modelItem => product.StartDate)</td>
                                                                     <td align="center">@Html.DisplayFor(modelItem => product.TargetDate)</td>
                                                                     <td align="center">@Html.DisplayFor(modelItem => product.EndDate)</td>
-                                                                    <td align="center">
-                                                                        @if (item.TcmServicePlan.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("CaseManager"))
-                                                                        {
-                                                                            @if (item.Approved <= 1)
-                                                                            {
-                                                                                <a onclick="showInPopup('@Url.Action("EditObjetive", "TCMServicePlans", new { id = product.Id, origi = 1 }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning" title="Edit objetive"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                            }
-                                                                        }
-                                                                    </td>
                                                                 </tr>
                                                             }
 
@@ -125,26 +119,6 @@
                                             <td align="center">@Html.DisplayFor(modelItem => item.TcmDomain.Code)</td>
                                             <td>@Html.DisplayFor(modelItem => item.TcmDomain.Name)</td>
                                             <td>@Html.DisplayFor(modelItem => item.NeedsIdentified)</td>
-                                            <td align="center">
-                                                @if (User.IsInRole("CaseManager") && item.Approved <= 1)
-                                                {
-                                                    @if (item.TcmDomain.Origin == "Addendum")
-                                                    {
-                                                        <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlans", new { id = item.TcmDomain.Id, Origin = 1 }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning" title="Edit domain"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                    }
-                                                    else
-                                                    {
-                                                        <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Addendum"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                    }
-
-                                                    <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlans", new { id = item.TcmDomain.Id, Origin = 1 }, Context.Request.Scheme)','Create TCM Objetive')" class="btn btn-info" title="Create objetive"><i class="glyphicon glyphicon-plus"></i></a>
-                                                }
-                                                else
-                                                {
-                                                    <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                    <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-info disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-plus"></i></a>
-                                                }
-                                            </td>
                                         </tr>
                                     </table>
                                 </div>
@@ -209,8 +183,8 @@
                                 {
                                     @if (item.Approved == 0)
                                     {
-                                        <a onclick="showInPopup('@Url.Action("EditAdendum", "TCMServicePlans", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Adendum')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a asp-action="FinishEditingAdendum" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></a>
+                                        <a asp-action="EditAdendum" asp-route-id="@item.Id" asp-route-aview="@ViewData["aview"]" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="FinishEditingAdendum" asp-route-id="@item.Id" asp-route-origin="@ViewData["aview"]" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></a>
                                         <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                     }
                                     @if (item.Approved == 1)
@@ -237,7 +211,7 @@
                                     @if (item.Approved == 1)
                                     {
                                         <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
-                                        <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Approve TCM Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                        <a asp-action="EditAdendumReadOnly" asp-route-id="@item.Id" asp-route-aview="@ViewData["aview"]" class="btn btn-success" title="Approve TCM Addendum"><i class="glyphicon glyphicon-ok"></i></a>
                                         <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Discharge"><i class="glyphicon glyphicon-print"></i></a>
                                     }
                                     @if (item.Approved == 2)

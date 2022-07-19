@@ -42,15 +42,15 @@
 </div>
 
 <div class="container-fluid">
-    <div class="form-group col-md-12" >
+    <div class="form-group col-md-12 " >
         <pre>
         <strong><u>Reason for Discharge </u></strong>(check only one):
-        <input type="checkbox" asp-for="AllServiceInPlace" readonly> All services in place/coordinated                           <input type="checkbox" asp-for="AllServiceInPlace" readonly> Non-compliance with agency rules  
-        <input type="checkbox" asp-for="Referred" readonly> Referred/Transferred to other provider                      <input type="checkbox" asp-for="ClientMovedOutArea" readonly> Client moved out of area
-        <input type="checkbox" asp-for="ClientLeftVoluntarily" readonly> Client left voluntarily/refused services                    <input type="checkbox" asp-for="LackOfProgress" readonly>  Lack of progress
-        <input type="checkbox" asp-for="Other" readonly> Other:                     <input asp-for="Other_Explain" style="width:80%" readonly>
-        <input type="checkbox" asp-for="AdministrativeDischarge" readonly> <strong>Administrative Discharge:</strong> 
-        <textarea asp-for="AdministrativeDischarge_Explain" style="width:90%" readonly></textarea>
+        <input type="checkbox" asp-for="AllServiceInPlace" disabled> All services in place/coordinated                           <input type="checkbox" asp-for="AllServiceInPlace" disabled> Non-compliance with agency rules  
+        <input type="checkbox" asp-for="Referred" disabled> Referred/Transferred to other provider                      <input type="checkbox" asp-for="ClientMovedOutArea" disabled> Client moved out of area
+        <input type="checkbox" asp-for="ClientLeftVoluntarily" disabled> Client left voluntarily/refused services                    <input type="checkbox" asp-for="LackOfProgress" disabled>  Lack of progress
+        <input type="checkbox" asp-for="Other" disabled> Other:                     <input asp-for="Other_Explain" style="width:80%" disabled>
+        <input type="checkbox" asp-for="AdministrativeDischarge" disabled> <strong>Administrative Discharge:</strong> 
+        <textarea asp-for="AdministrativeDischarge_Explain" style="width:90%" disabled></textarea>
         </pre>
     </div>
 </div>

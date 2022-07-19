@@ -593,13 +593,11 @@ namespace KyoS.Web.Controllers
                                                         && g.Client.Clinic.Id == caseManager.Clinic.Id
                                                         && g.TcmServicePlan.Approved == 1)).Count().ToString();
 
-                ViewBag.AdendumEdition = _context.TCMClient
+                ViewBag.AdendumEdition = _context.TCMAdendums
                                                  .Include(n => n.TcmServicePlan)
-                                                 .ThenInclude(n => n.TCMAdendum)
-                                                 .Where(g => (g.Casemanager.Id == caseManager.Id
-                                                    && g.Status == StatusType.Open
-                                                    && g.Client.Clinic.Id == caseManager.Clinic.Id
-                                                    && g.TcmServicePlan.TCMAdendum.Where(n => n.Approved == 0).Count()>0)).Count().ToString();
+                                                 .Where(g => (g.Approved == 0
+                                                    && g.TcmServicePlan.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count()
+                                                 .ToString();
 
                 ViewBag.AdendumPending = _context.TCMClient
                                                  .Include(n => n.TcmServicePlan)
