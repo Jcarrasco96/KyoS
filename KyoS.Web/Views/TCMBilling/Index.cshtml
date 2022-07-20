@@ -60,19 +60,12 @@
                         }                               
                     })              
                 },
-                eventClick: function(info) {
-                    alert('Event: ' + info.event.title);
-                    /*('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-                    alert('View: ' + info.view.type);*/                    
-                },
-                events: [
-                    {
-                      title: 'My Event',
-                      start: '2022-07-14 06:35:00',
-                      end: '2022-07-14 07:00:00'/*,*/
-                      /*url: 'http://google.com/'*/
-                    }    
-                ]
+                //eventClick: function(info) {
+                //    alert('Event: ' + info.event.title);
+                //    /*('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+                //    alert('View: ' + info.view.type);*/                    
+                //},                
+                events: '@Url.Action("Events", "TCMBilling")'
             });
             calendar.render();
         });
