@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -70,6 +71,27 @@ namespace KyoS.Web.Controllers
             }
 
             return RedirectToAction("Index");
-        }            
+        }
+
+        public IActionResult Events()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            var events = _context.TCMNoteActivity
+                                 .Where(t => (t.TCMNote.CaseManager.LinkedUser == user_logged.UserName))
+                                 .Select(t => new
+                                 {
+                                           //id = t.TCMNote.Id,
+                                           title = t.DescriptionOfService,                                           
+                                           start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                           end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                           url = Url.Action("Edit", "TCMNotes", new {id = t.TCMNote.Id })
+                                 }).ToList();
+
+            //return Json(events);
+            return new JsonResult(events);
+        }
     }
 }
