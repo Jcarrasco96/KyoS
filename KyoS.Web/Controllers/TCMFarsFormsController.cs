@@ -454,20 +454,22 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> ApproveFars(int id, int origin = 0)
+        public async Task<IActionResult> ApproveFars(int id)
         {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
             TCMFarsFormEntity tcmfars = await _context.TCMFarsForm.FirstOrDefaultAsync(n => n.Id == id);
             tcmfars.Status = FarsStatus.Approved;
+            tcmfars.TCMSupervisor = await _context.TCMSupervisors.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
             _context.Update(tcmfars);
 
             await _context.SaveChangesAsync();
             
-            if (origin == 1)
-            {
-                return RedirectToAction(nameof(PendingFars));
-            }
-
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("TCMFarsApproved", "TCMFarsForms", new { status = FarsStatus.Pending });
+           
         }
 
         [Authorize(Roles = "TCMSupervisor, CaseManager")]
@@ -541,5 +543,92 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
+        public async Task<IActionResult> TCMFarsApproved(FarsStatus status)
+        {
+
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (User.IsInRole("Manager") || (User.IsInRole("TCMSupervisor")))
+            {
+                List<TCMFarsFormEntity> tcmFars = await _context.TCMFarsForm
+                                                                .Include(m => m.TCMClient)
+                                                                .ThenInclude(m => m.Client)
+                                                                .Where(m => m.Status == status
+                                                                            && m.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id)
+                                                                       .OrderBy(m => m.TCMClient.CaseNumber)
+                                                                       .ToListAsync();
+               
+                return View(tcmFars);
+            }
+
+            if (User.IsInRole("CaseManager"))
+            {
+                List<TCMFarsFormEntity> tcmFars = await _context.TCMFarsForm
+                                                                                .Include(m => m.TCMClient)
+                                                                                .ThenInclude(m => m.Client)
+                                                                                .Where(m => m.Status == status
+                                                                                            && m.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id)
+                                                                                       .OrderBy(m => m.TCMClient.CaseNumber)
+                                                                                       .ToListAsync();
+
+                return View(tcmFars);
+
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public IActionResult EditReadOnly(int id = 0)
+        {
+            TCMFarsFormViewModel model;
+
+            if (User.IsInRole("TCMSupervisor") || User.IsInRole("CaseManager"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic != null)
+                {
+
+                    TCMFarsFormEntity tcmFarsForm = _context.TCMFarsForm
+
+                                                      .Include(m => m.TCMClient)
+                                                      .ThenInclude(m => m.TCMFarsFormList)
+
+                                                      .Include(m => m.TCMClient)
+                                                      .ThenInclude(m => m.Client)
+
+                                                      .FirstOrDefault(m => m.Id == id);
+                    if (tcmFarsForm == null)
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+                    else
+                    {
+
+                        model = _converterHelper.ToTCMFarsFormViewModel(tcmFarsForm);
+                        return View(model);
+                    }
+
+                }
+            }
+
+            model = new TCMFarsFormViewModel();
+            return View(model);
+        }
+
     }
 }

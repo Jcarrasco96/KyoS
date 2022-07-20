@@ -527,8 +527,7 @@ namespace KyoS.Web.Controllers
                 List<TCMClientEntity> tcmClients = await _context.TCMClient
                                                           .Include(g => g.Casemanager)
                                                           .Include(g => g.Client)
-                                                          .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
-                                                              && s.Status == StatusType.Open))
+                                                          .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id))
                                                           .OrderBy(g => g.Casemanager.Name)
                                                           .ToListAsync();
 
@@ -536,8 +535,7 @@ namespace KyoS.Web.Controllers
                 List<TCMClientEntity> tcmClientsTemp = await _context.TCMClient
                                                           .Include(g => g.Casemanager)
                                                           .Include(g => g.Client)
-                                                          .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
-                                                              && s.Status == StatusType.Open))
+                                                          .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id))
                                                           .OrderBy(g => g.Casemanager.Name)
                                                           .ToListAsync();
                 for (int i = 0; i < tcmClients.Count(); i++)

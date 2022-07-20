@@ -1510,7 +1510,7 @@
             <div class="col-md-12">
                 &nbsp;
             </div>
-            <div class="col-md-2">
+            <div class="col-md-4">
             </div>
             <div class="col-md-2">
                 @if (ViewBag.NotStartedCases == "0")
@@ -1548,28 +1548,13 @@
                     </a>
                 }
             </div>
-
+            <div class="col-md-4">
+            </div>
             //New line
             <div class="col-md-12">
                 &nbsp;
             </div>
             <div class="col-md-2">
-                @if (ViewBag.NotesPending == "0")
-                {
-                    <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes</h4>
-                        <span class="message-counter-cero">@ViewBag.NotesPending</span>
-                    </div>
-                }
-                else
-                {
-                    <a style="text-decoration: none;" asp-controller="TCMNotes" asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Pending" role="button">
-                        <div class="thumbnail list-group-item list-group-item-info">
-                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes</h4>
-                            <span class="message-counter-info">@ViewBag.NotesPending</span>
-                        </div>
-                    </a>
-                }
             </div>
             <div class="col-md-2">
                 @if (ViewBag.ServicePlanPending == "0")
@@ -1626,19 +1611,47 @@
                 }
             </div>
             <div class="col-md-2">
-                @if (ViewBag.DischargePending == "0")
+                @if (ViewBag.TCMFarsPending == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharge</h4>
-                        <span class="message-counter-cero">@ViewBag.DischargePending</span>
+                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FARS Form.</h4>
+                        <span class="message-counter-cero">@ViewBag.TCMFarsPending</span>
                     </div>
                 }
                 else
                 {
-                    <a style="text-decoration: none;" asp-controller="TCMDischarges" asp-action="TCMDischargeApproved" asp-route-approved="1" role="button">
+                    <a style="text-decoration: none;" asp-controller="TCMFarsForms" asp-action="TCMFarsApproved" asp-route-status="@KyoS.Common.Enums.FarsStatus.Pending" role="button">
                         <div class="thumbnail list-group-item list-group-item-info">
-                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharge</h4>
-                            <span class="message-counter-info">@ViewBag.DischargePending</span>
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FARS Form.</h4>
+                            <span class="message-counter-info">@ViewBag.TCMFarsPending</span>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="col-md-2">
+
+            </div>
+            //New Line
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+            <div class="col-md-3">
+
+            </div>
+            <div class="col-md-2">
+                @if (ViewBag.NotesPending == "0")
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes</h4>
+                        <span class="message-counter-cero">@ViewBag.NotesPending</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="TCMNotes" asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Pending" role="button">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes</h4>
+                            <span class="message-counter-info">@ViewBag.NotesPending</span>
                         </div>
                     </a>
                 }
@@ -1661,12 +1674,32 @@
                     </a>
                 }
             </div>
+            <div class="col-md-2">
+                @if (ViewBag.DischargePending == "0")
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharge</h4>
+                        <span class="message-counter-cero">@ViewBag.DischargePending</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="TCMDischarges" asp-action="TCMDischargeApproved" asp-route-approved="1" role="button">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharge</h4>
+                            <span class="message-counter-info">@ViewBag.DischargePending</span>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="col-md-3">
 
+            </div>
             //New line
             <div class="col-md-12">
                 &nbsp;
             </div>
-            <div class="col-md-3">
+            <div class="col-md-5">
             </div>
             <div class="col-md-2">
                 @if (ViewBag.NotesApproved == "0")
@@ -1686,7 +1719,8 @@
                     </a>
                 }
             </div>
-
+            <div class="col-md-5">
+            </div>
         }
     </div>
 </div>

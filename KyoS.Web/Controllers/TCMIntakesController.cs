@@ -503,6 +503,69 @@ namespace KyoS.Web.Controllers
             return View(TcmClientEntity);
         }
 
+        [Authorize(Roles = "TCMSupervisor, Manager")]
+        public async Task<IActionResult> TCMIntakeDashboardReadOnly(int id = 0)
+        {
+            if (id == 0)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMClientEntity TcmClientEntity = await _context.TCMClient
+                                                            .Include(c => c.TCMIntakeForm)
+                                                            .Include(c => c.Client)
+                                                            .Include(c => c.TcmIntakeConsentForTreatment)
+                                                            .Include(n => n.TcmIntakeConsentForRelease.Where(m => m.TcmClient_FK == id))
+                                                            .Include(n => n.TcmIntakeConsumerRights)
+                                                            .Include(n => n.TcmIntakeAcknowledgementHipa)
+                                                            .Include(n => n.TCMIntakeOrientationChecklist)
+                                                            .Include(n => n.TCMIntakeAdvancedDirective)
+                                                            .Include(n => n.TCMIntakeForeignLanguage)
+                                                            .Include(n => n.TCMIntakeWelcome)
+                                                            .Include(n => n.Client)
+                                                            .ThenInclude(n => n.Documents)
+                                                            .Include(n => n.Client.Psychiatrist)
+                                                            .Include(n => n.Client.Doctor)
+                                                            .Include(n => n.Client.IntakeFeeAgreement)
+                                                            .Include(n => n.Client.IntakeMedicalHistory)
+                                                            .Include(n => n.Client.MedicationList)
+                                                            .Include(n => n.TCMIntakeNonClinicalLog)
+                                                            .Include(n => n.TCMIntakeMiniMental)
+                                                            .Include(n => n.TCMIntakeCoordinationCare)
+                                                            .Include(n => n.TcmServicePlan)
+                                                            .ThenInclude(n => n.TCMAdendum)
+                                                            .Include(n => n.TcmServicePlan)
+                                                            .ThenInclude(n => n.TCMServicePlanReview)
+                                                            .Include(n => n.TcmServicePlan)
+                                                            .ThenInclude(n => n.TCMDischarge)
+                                                            .Include(n => n.TcmIntakeAppendixJ)
+                                                            .Include(n => n.TcmInterventionLog)
+                                                            .Include(n => n.TCMFarsFormList)
+                                                            .Include(n => n.TCMAssessment)
+                                                            .ThenInclude(n => n.HouseCompositionList)
+                                                            .ThenInclude(n => n.TcmAssessment.MedicationList)
+                                                            .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
+                                                            .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
+                                                            .Include(n => n.TCMNote)
+                                                            .FirstOrDefaultAsync(c => c.Id == id);
+
+            List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
+                                                                               .Where(m => m.TcmClient_FK == id).ToListAsync();
+            List<DocumentEntity> listDocument = await _context.Documents
+                                                              .Where(m => m.Client.Id == TcmClientEntity.Client.Id).ToListAsync();
+
+            TcmClientEntity.TcmIntakeConsentForRelease = listRelease;
+            TcmClientEntity.Client.Documents = listDocument;
+
+
+            if (TcmClientEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            return View(TcmClientEntity);
+        }
+
         [Authorize(Roles = "CaseManager")]
         public IActionResult Edit(int id = 0)
         {
@@ -2646,6 +2709,68 @@ namespace KyoS.Web.Controllers
 
         [Authorize(Roles = "CaseManager")]
         public async Task<IActionResult> TCMIntakeSectionDashboard(int id = 0, int section = 0)
+        {
+            if (id == 0)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMClientEntity TcmClientEntity = await _context.TCMClient
+                                                            .Include(c => c.TCMIntakeForm)
+                                                            .Include(c => c.Client)
+                                                            .Include(c => c.TcmIntakeConsentForTreatment)
+                                                            .Include(n => n.TcmIntakeConsentForRelease.Where(m => m.TcmClient_FK == id))
+                                                            .Include(n => n.TcmIntakeConsumerRights)
+                                                            .Include(n => n.TcmIntakeAcknowledgementHipa)
+                                                            .Include(n => n.TCMIntakeOrientationChecklist)
+                                                            .Include(n => n.TCMIntakeAdvancedDirective)
+                                                            .Include(n => n.TCMIntakeForeignLanguage)
+                                                            .Include(n => n.TCMIntakeWelcome)
+                                                            .Include(n => n.Client)
+                                                            .ThenInclude(n => n.Documents)
+                                                            .Include(n => n.Client.Psychiatrist)
+                                                            .Include(n => n.Client.Doctor)
+                                                            .Include(n => n.Client.IntakeFeeAgreement)
+                                                            .Include(n => n.Client.IntakeMedicalHistory)
+                                                            .Include(n => n.Client.MedicationList)
+                                                            .Include(n => n.TCMIntakeNonClinicalLog)
+                                                            .Include(n => n.TCMIntakeMiniMental)
+                                                            .Include(n => n.TCMIntakeCoordinationCare)
+                                                            .Include(n => n.TcmServicePlan)
+                                                            .ThenInclude(n => n.TCMAdendum)
+                                                            .Include(n => n.TcmServicePlan)
+                                                            .ThenInclude(n => n.TCMServicePlanReview)
+                                                            .Include(n => n.TcmServicePlan)
+                                                            .ThenInclude(n => n.TCMDischarge)
+                                                            .Include(n => n.TcmIntakeAppendixJ)
+                                                            .Include(n => n.TcmInterventionLog)
+                                                            .Include(n => n.TCMFarsFormList)
+                                                            .Include(n => n.TCMAssessment)
+                                                            .ThenInclude(n => n.HouseCompositionList)
+                                                            .ThenInclude(n => n.TcmAssessment.MedicationList)
+                                                            .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
+                                                            .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
+                                                            .Include(n => n.TCMNote)
+                                                            .FirstOrDefaultAsync(c => c.Id == id);
+
+            List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
+                                                                               .Where(m => m.TcmClient_FK == id).ToListAsync();
+            List<DocumentEntity> listDocument = await _context.Documents
+                                                              .Where(m => m.Client.Id == TcmClientEntity.Client.Id).ToListAsync();
+
+            TcmClientEntity.TcmIntakeConsentForRelease = listRelease;
+            TcmClientEntity.Client.Documents = listDocument;
+
+            if (TcmClientEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+            ViewBag.Section = section.ToString();
+            return View(TcmClientEntity);
+        }
+
+        [Authorize(Roles = "TCMSupervisor, Manager")]
+        public async Task<IActionResult> TCMIntakeSectionDashboardReadOnly(int id = 0, int section = 0)
         {
             if (id == 0)
             {

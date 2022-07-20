@@ -117,7 +117,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult Create(DateTime dateTime, int IdTCMClient)
+        public IActionResult Create(DateTime dateTime, int IdTCMClient, int origin = 0)
         {
 
             UserEntity user_logged = _context.Users
@@ -160,8 +160,8 @@ namespace KyoS.Web.Controllers
                                              .FirstOrDefault(n => n.Id == IdTCMClient),
                         CaseManager = caseManager
                     };
-                       
-                        return View(model);
+                    ViewData["origin"] = origin;
+                    return View(model);
                 }
             }
 
@@ -171,7 +171,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> Create(TCMNoteViewModel TcmNoteViewModel)
+        public async Task<IActionResult> Create(TCMNoteViewModel TcmNoteViewModel, int origin = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -188,7 +188,15 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMNotesForCase", new { idTCMClient = TcmNoteViewModel.IdTCMClient});
+                        if (origin == 0)
+                        {
+                            return RedirectToAction("TCMNotesForCase", new { idTCMClient = TcmNoteViewModel.IdTCMClient });
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", "TCMBilling");
+                        }
+                        
                     }
                     catch (System.Exception ex)
                     {
@@ -202,8 +210,14 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("TCMIntakeSectionDashboard", new { idTCMClient = TcmNoteViewModel.IdTCMClient });
+                        if (origin == 0)
+                        {
+                            return RedirectToAction("TCMIntakeSectionDashboard", new { idTCMClient = TcmNoteViewModel.IdTCMClient });
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", "TCMBilling");
+                        }
                     }
                     catch (System.Exception ex)
                     {
@@ -286,7 +300,10 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction("NotesStatus", new { status = NoteStatus.Edition });
                     }
-                    
+                    if (origin == 2)
+                    {
+                        return RedirectToAction("Index","TCMBilling");
+                    }
                 }
                 catch (System.Exception ex)
                 {

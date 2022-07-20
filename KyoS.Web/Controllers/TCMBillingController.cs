@@ -66,7 +66,7 @@ namespace KyoS.Web.Controllers
             {
                 if (form["Billable"] == "Value1")
                 {
-                    return RedirectToAction("Create", "TCMNotes", new { dateTime = model.Date, IdTCMClient = model.IdClient });                          
+                    return RedirectToAction("Create", "TCMNotes", new { dateTime = model.Date, IdTCMClient = model.IdClient, origin = 1 });                          
                 }
             }
 
@@ -87,7 +87,7 @@ namespace KyoS.Web.Controllers
                                            title = t.DescriptionOfService,                                           
                                            start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                            end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
-                                           url = Url.Action("Edit", "TCMNotes", new {id = t.TCMNote.Id })
+                                           url = Url.Action("Edit", "TCMNotes", new {id = t.TCMNote.Id, origin = 2 })
                                  }).ToList();
 
             //return Json(events);

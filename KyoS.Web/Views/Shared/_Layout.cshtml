@@ -499,36 +499,73 @@
                         </li>
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Services Plan <span class="caret"></span>
+                                Documents <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Started", "Index", "TCMServiceplans")</li>
-                                <li>@Html.ActionLink("Closed", "ClosedServicePlan", "TCMServiceplans")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Service Plan</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Started", "ServicePlanStarted", "TCMServiceplans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Pending Approval", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "ApprovedServicePlan", "TCMServiceplans")</li>
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Pending Approval", "AproveServicePlan", "TCMServicePlans")</li>
-                                <li>@Html.ActionLink("In Review", "Index", "TCMServicePlans")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Addendum</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending", "AdendumApproved", "TCMServicePlans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("All Addendums", "Adendum", "TCMServicePlans", new { aview = 1 })</li>
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Service Plan Review", "AproveServicePlanReview", "TCMServicePlanReviews")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Service Plan Review</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Started", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 0 })</li>
+                                        <li>@Html.ActionLink("Pending Approval", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 2 })</li>
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Discharge", "Index", "TCMDischarges")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">FARS Form</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Started", "TCMFarsApproved", "TCMFarsForms", new { status = @KyoS.Common.Enums.FarsStatus.Edition })</li>
+                                        <li>@Html.ActionLink("Pending Approval", "TCMFarsApproved", "TCMFarsForms", new { status = @KyoS.Common.Enums.FarsStatus.Pending })</li>
+                                        <li>@Html.ActionLink("Approved", "TCMFarsApproved", "TCMFarsForms", new { status = @KyoS.Common.Enums.FarsStatus.Approved })</li>
+                                    </ul>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Discharge</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending", "TCMDischargeApproved", "TCMDischarges", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Discharge all", "Index", "TCMDischarges")</li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Adendums <span class="caret"></span>
+                                Notes <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("All Addendums", "Adendum", "TCMServicePlans")</li>
-                                <li>@Html.ActionLink("Pending approval", "AproveAdendum", "TCMAdendums")</li>
-                            </ul>
-                        </li>
-                        <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="TCMServices" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Activity <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Pending Activity", "PendingActivity", "TCMServices")</li>
-                                <li>@Html.ActionLink("Activity for service", "ServiceActivity", "TCMServices")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Notes</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Started", "NotesStatus", "TCMNotes", new { status = @KyoS.Common.Enums.NoteStatus.Edition })</li>
+                                        <li>@Html.ActionLink("Pending Approval", "NotesStatus", "TCMNotes", new { status = @KyoS.Common.Enums.NoteStatus.Pending })</li>
+                                        <li>@Html.ActionLink("Approved", "NotesStatus", "TCMNotes", new { status = @KyoS.Common.Enums.NoteStatus.Approved })</li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Activity</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending Activity", "PendingActivity", "TCMServices")</li>
+                                        <li>@Html.ActionLink("Activity for service", "ServiceActivity", "TCMServices")</li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>

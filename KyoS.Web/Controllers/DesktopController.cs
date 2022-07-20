@@ -732,6 +732,13 @@ namespace KyoS.Web.Controllers
                                                        && g.Client.Clinic.Id == user_logged.Clinic.Id
                                                        && g.TcmServicePlan.TCMDischarge.Approved == 1)).Count().ToString();
 
+                ViewBag.TCMFarsPending = _context.TCMFarsForm
+                                                 .Include(m =>m.TCMClient)
+                                                 .ThenInclude(m => m.Client)
+                                                 .ThenInclude(m => m.Clinic)
+                                                 .Where(g => (g.Status == FarsStatus.Pending
+                                                      && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+
                 ViewBag.NotesPending = _context.TCMNote
                                                .Where(g => (g.Status == NoteStatus.Pending
                                                      && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();

@@ -63,6 +63,7 @@ namespace KyoS.Web.Controllers
                                                                        .OrderBy(m => m.TcmServicePlan.TcmClient.CaseNumber)
                                                                        .ToListAsync();
 
+                ViewData["idTCMClient"] = idTCMClient;
                 return View(tcmDischarge);
             }
 

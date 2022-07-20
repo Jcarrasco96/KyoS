@@ -1218,6 +1218,7 @@ namespace KyoS.Web.Controllers
                     ViewData["tcmClientId"] = caseNumber;
                     if (tcmClient != null)
                         ViewData["Id"] = 0;
+                    ViewData["aview"] = aview;
                     return View(adendum);
                 }
                 
@@ -1903,8 +1904,7 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(h => (h.Client))
                                             .Where(h => (h.TcmServicePlan.TcmClient.Casemanager.Id == caseManager.Id
                                                && h.TcmServicePlan.TcmClient.Casemanager.Clinic.Id == clinic.Id
-                                               && h.Approved == approved
-                                               && h.TcmDomain.TCMObjetive.Where( m => m.Origin == "Addendum").Count() > 0))
+                                               && h.Approved == approved))
                                             .ToListAsync();
                 }
                 else
@@ -2041,6 +2041,81 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Index", "TCMServicePlans", new { caseNumber = tcmServicePlan.TcmClient.CaseNumber });
         }
 
-       
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> EditAdendumReadOnly(int? id, int aview = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMAdendumEntity tcmadendumEntity = await _context.TCMAdendums
+                                                              .Include(u => u.TcmServicePlan)
+                                                              .ThenInclude(u => u.TCMDomain)
+                                                              .ThenInclude(g => g.TCMObjetive.Where(m => m.Origin == "Addendum"))
+                                                              .Include(u => u.TcmServicePlan)
+                                                              .ThenInclude(g => g.TcmClient)
+                                                              .ThenInclude(g => g.Client)
+                                                              .FirstOrDefaultAsync(s => s.Id == id);
+            if (tcmadendumEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMAdendumViewModel tcmAdendumViewModel = null;
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                List<TCMServicePlanEntity> tcmSerivicePlan = _context.TCMServicePlans
+                                                                     .Include(g => g.TcmClient)
+                                                                     .ThenInclude(g => g.Client)
+                                                                     .Where(c => c.Id == tcmadendumEntity.TcmServicePlan.Id)
+                                                                     .ToList();
+
+                List<SelectListItem> list_servicePlan = tcmSerivicePlan.Select(c => new SelectListItem
+                {
+                    Text = $"{c.TcmClient.CaseNumber}",
+                    Value = $"{c.Id}"
+                })
+                .ToList();
+
+                List<TCMDomainEntity> tcmDomain = _context.TCMDomains
+                                                          .Include(g => g.TCMObjetive)
+                                                          .Where(c => c.Id == tcmadendumEntity.TcmDomain.Id)
+                                                          .ToList();
+                List<SelectListItem> list_domain = tcmDomain.Select(c => new SelectListItem
+                {
+                    Text = $"{c.Code + "-" + c.Name}",
+                    Value = $"{c.Id}"
+                })
+                .ToList();
+
+                tcmAdendumViewModel = new TCMAdendumViewModel
+                {
+                    Id = tcmadendumEntity.Id,
+                    TcmServicePlan = tcmadendumEntity.TcmServicePlan,
+                    ID_TcmServicePlan = 0,
+                    ListTcmServicePlan = list_servicePlan,
+                    ID_TcmDominio = 0,
+                    TcmDominio = list_domain,
+                    TcmDomain = tcmadendumEntity.TcmDomain,
+                    Date_Identified = tcmadendumEntity.TcmDomain.DateIdentified,
+                    Long_term = tcmadendumEntity.LongTerm,
+                    Needs_Identified = tcmadendumEntity.NeedsIdentified,
+                    CreatedBy = tcmadendumEntity.CreatedBy,
+                    CreatedOn = tcmadendumEntity.CreatedOn
+                };
+                ViewData["aview"] = aview;
+                return View(tcmAdendumViewModel);
+            }
+
+            ViewData["aview"] = aview;
+            return View(tcmAdendumViewModel);
+        }
+
     }
 }

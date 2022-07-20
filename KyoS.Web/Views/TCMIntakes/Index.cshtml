@@ -123,7 +123,7 @@
                                         }
                                         else
                                         {
-                                            <a class="btn btn-warning disabled" title="New Intake"><i class="glyphicon glyphicon-plus"></i></a>
+                                            <a asp-action="TCMIntakeDashboardReadOnly" asp-route-id="@item.Id" class="btn btn-warning" title="New TCM Intake"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
                                         @if ((item.TCMIntakeForm != null) && (item.TcmIntakeConsentForTreatment != null) && (item.TcmIntakeConsentForRelease != null) && (item.TcmIntakeConsumerRights != null)
                                          && (item.TcmIntakeAcknowledgementHipa != null) && (item.TCMIntakeOrientationChecklist != null) && (item.TCMIntakeAdvancedDirective != null)
@@ -192,11 +192,11 @@
                                     <td align="right">
                                         @if (User.IsInRole("CaseManager"))
                                         {
-                                            <a asp-action="TCMIntakeDashboard" asp-route-id="@item.Id" class="btn btn-success" title="Edit TCM Intake"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="TCMIntakeDashboard" asp-route-id="@item.Id" class="btn btn-warning" title="Edit TCM Intake"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
                                         else
                                         {
-                                            <a class="btn btn-success disabled" title="Edit TCM Intake"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="TCMIntakeDashboardReadOnly" asp-route-id="@item.Id" class="btn btn-warning" title="Edit TCM Intake"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
                                         @if ((item.TCMIntakeForm != null) && (item.TcmIntakeConsentForTreatment != null) && (item.TcmIntakeConsentForRelease != null) && (item.TcmIntakeConsumerRights != null)
                                       && (item.TcmIntakeAcknowledgementHipa != null) && (item.TCMIntakeOrientationChecklist != null) && (item.TCMIntakeAdvancedDirective != null)
