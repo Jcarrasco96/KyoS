@@ -5283,7 +5283,7 @@ namespace KyoS.Web.Helpers
                 NeedNoHelp = model.NeedNoHelp,
                 NeedSome = model.NeedSome,
                 OtherReceiveExplain = model.OtherReceiveExplain,
-                Status = TCMDocumentStatus.Approved,
+                Status = TCMDocumentStatus.Edition,
                 TCMSupervisor = model.TCMSupervisor
 
             };

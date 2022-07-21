@@ -654,6 +654,21 @@ namespace KyoS.Web.Controllers
                                                     && g.Status == NoteStatus.Approved
                                                     && g.TCMClient.Client.Clinic.Id == caseManager.Clinic.Id)).Count().ToString();
 
+                ViewBag.AppendiceJPending = _context.TCMIntakeAppendixJ
+                                                    .Where(g => (g.TcmClient.Casemanager.Id == caseManager.Id
+                                                         && g.Approved == 1
+                                                         && g.TcmClient.Client.Clinic.Id == caseManager.Clinic.Id)).Count().ToString();
+
+                ViewBag.FarsPending = _context.TCMFarsForm
+                                              .Where(g => (g.TCMClient.Casemanager.Id == caseManager.Id
+                                                         && g.Status == FarsStatus.Pending
+                                                         && g.TCMClient.Client.Clinic.Id == caseManager.Clinic.Id)).Count().ToString();
+
+                ViewBag.AssesmentPending = _context.TCMAssessment
+                                              .Where(g => (g.TcmClient.Casemanager.Id == caseManager.Id
+                                                         && g.Approved == 1
+                                                         && g.TcmClient.Client.Clinic.Id == caseManager.Clinic.Id)).Count().ToString();
+
             }
             if (User.IsInRole("Documents_Assistant"))
             {
@@ -750,6 +765,22 @@ namespace KyoS.Web.Controllers
                 ViewBag.ActivityPending = _context.TCMServiceActivity
                                                   .Where(g => (g.Approved < 2
                                                                && g.TcmService.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+
+                ViewBag.AppendiceJPending = _context.TCMIntakeAppendixJ
+                                                   .Where(g => (g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                        && g.Approved == 1
+                                                        && g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+
+                ViewBag.FarsPending = _context.TCMFarsForm
+                                              .Where(g => (g.TCMClient.Casemanager.Id == user_logged.Clinic.Id
+                                                         && g.Status == FarsStatus.Pending
+                                                         && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+
+                ViewBag.AssesmentPending = _context.TCMAssessment
+                                              .Where(g => (g.TcmClient.Casemanager.Id == user_logged.Clinic.Id
+                                                         && g.Approved == 1
+                                                         && g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+
 
             }
             return View();

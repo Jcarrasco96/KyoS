@@ -1458,6 +1458,7 @@ namespace KyoS.Web.Controllers
                     if (user_logged.Clinic != null)
                     {
                         tcmServicePlanReview.Approved = 2;
+                        tcmServicePlanReview.TCMSupervisor = await _context.TCMSupervisors.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
                         _context.Update(tcmServicePlanReview);
                         try
                         {

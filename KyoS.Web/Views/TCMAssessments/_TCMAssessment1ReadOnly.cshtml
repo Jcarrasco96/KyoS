@@ -1,0 +1,54 @@
+﻿@model KyoS.Web.Models.TCMAssessmentViewModel
+
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong>SECTION III: PRESENTING PROBLEMS </strong>
+        <textarea asp-for="PresentingProblems" rows="4" style="width:90%" disabled> </textarea>
+
+        Date of onset of present problem(s): <input asp-for="DateOfOnSetPresentingProblem" disabled>        Previous psychiatric problem(s):   <input type="checkbox" class="form-check-input" id="check103" disabled> No        <input asp-for="PresentingProblemPrevious" class="form-check-input" id="check3" disabled> Yes
+    </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        <strong>SECTION IV: FAMILY INFORMATION </strong>
+        A. <strong>Parents Information </strong>(children only)
+        What are the child’s parent’s names?    <input asp-for="ChildMother" style="width:20%" disabled/> Child’s Mother                 <input asp-for="ChildFather" style="width:20%" disabled/> Child’s Father 
+        Parent’s marital status: <input asp-for="Married" class="form-check-input" disabled> Married         <input asp-for="Divorced" class="form-check-input" disabled> Divorced        <input asp-for="Separated" class="form-check-input" disabled> Separated       <input asp-for="NeverMarried" class="form-check-input"disabled > Never married
+        Are child’s parents living together?        <input asp-for="AreChild" class="form-check-input" id="check4" disabled> Yes       <input type="checkbox" class="form-check-input" id="check104" disabled> No       If No, provide the following information for the non-custodial parent:
+        </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="AreChildName" class="control-label">Name</label>
+        <input asp-for="AreChildName" class="form-control" disabled>
+        <span asp-validation-for="AreChildName" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="AreChildPhone" class="control-label">Phone No</label>
+        <input asp-for="AreChildPhone" class="form-control" disabled>
+        <span asp-validation-for="AreChildPhone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="AreChildAddress" class="control-label">Address</label>
+        <input asp-for="AreChildAddress" class="form-control" disabled>
+        <span asp-validation-for="AreChildAddress" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="AreChildCity" class="control-label">City, State, Zip</label>
+        <input asp-for="AreChildCity" class="form-control" disabled>
+        <span asp-validation-for="AreChildCity" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <pre>
+        *May we contact the non-custodial parent if necessary?  <input asp-for="MayWe" class="form-check-input" id="check5" disabled> Yes       <input type="checkbox" class="form-check-input" id="check105" disabled> No        <input asp-for="MayWeNA" class="form-check-input" disabled> N/A
+        </pre>
+    </div>
+</div>
+
+

@@ -529,11 +529,26 @@
                                 </li>
                                 <li role="separator" class="divider"></li>
                                 <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">FARS Form</a>
+                                    <a class="test" tabindex="-1" href="#">Assessments</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Started", "TCMFarsApproved", "TCMFarsForms", new { status = @KyoS.Common.Enums.FarsStatus.Edition })</li>
-                                        <li>@Html.ActionLink("Pending Approval", "TCMFarsApproved", "TCMFarsForms", new { status = @KyoS.Common.Enums.FarsStatus.Pending })</li>
-                                        <li>@Html.ActionLink("Approved", "TCMFarsApproved", "TCMFarsForms", new { status = @KyoS.Common.Enums.FarsStatus.Approved })</li>
+                                        <li>@Html.ActionLink("Pending Approval", "TCMAssessmentApproved", "TCMAssessments", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "TCMAssessmentApproved", "TCMAssessments", new { approved = 2 })</li>
+                                    </ul>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">FARS Forms</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending Approval", "TCMFarsApproved", "TCMFarsForms", new { status = KyoS.Common.Enums.FarsStatus.Pending })</li>
+                                        <li>@Html.ActionLink("Approved", "TCMFarsApproved", "TCMFarsForms", new { status = KyoS.Common.Enums.FarsStatus.Approved })</li>
+                                    </ul>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Appendix J</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending Approval", "ApendiceJStatus", "TCMIntakes", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "ApendiceJStatus", "TCMIntakes", new { approved = 2 })</li>
                                     </ul>
                                 </li>
                                 <li role="separator" class="divider"></li>
@@ -593,17 +608,66 @@
                         </li>
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Services Plan <span class="caret"></span>
+                                Documents <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Started", "ServicePlanStarted", "TCMServiceplans", new { approved = 1 })</li>
-                                <li>@Html.ActionLink("Approved", "ApprovedServicePlan", "TCMServiceplans")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Service Plan</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Started", "ServicePlanStarted", "TCMServiceplans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Pending Approval", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "ApprovedServicePlan", "TCMServiceplans")</li>
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Addendums", "Adendum", "TCMServicePlans", new { aview = 1 })</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Addendum</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending", "AdendumApproved", "TCMServicePlans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("All Addendums", "Adendum", "TCMServicePlans", new { aview = 1 })</li>
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Service Plan Review", "Index", "TCMServicePlanReviews")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Service Plan Review</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Started", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 0 })</li>
+                                        <li>@Html.ActionLink("Pending Approval", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 2 })</li>
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Discharge", "Index", "TCMDischarges")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Assessments</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending Approval", "TCMAssessmentApproved", "TCMAssessments", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "TCMAssessmentApproved", "TCMAssessments", new { approved = 2 })</li>
+                                    </ul>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">FARS Forms</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending Approval", "TCMFarsApproved", "TCMFarsForms", new { status = KyoS.Common.Enums.FarsStatus.Pending })</li>
+                                        <li>@Html.ActionLink("Approved", "TCMFarsApproved", "TCMFarsForms", new { status = KyoS.Common.Enums.FarsStatus.Approved })</li>
+                                    </ul>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Appendix J</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending Approval", "ApendiceJStatus", "TCMIntakes", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "ApendiceJStatus", "TCMIntakes", new { approved = 2 })</li>
+                                    </ul>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Discharge</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending", "TCMDischargeApproved", "TCMDischarges", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("All Discharge", "Index", "TCMDischarges")</li>
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Domain/Objetives", "Domains", "TCMServicePlans")</li>
                                 <li>@Html.ActionLink("Objetives", "Objectives", "TCMServicePlans")</li>

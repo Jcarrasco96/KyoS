@@ -70,16 +70,31 @@ namespace KyoS.Web.Controllers
                 {
 
                     ViewData["origin"] = origin.ToString();
+                    if (idTCMClient == 0)
+                    {
+                         List<TCMClientEntity> farsList = await _context.TCMClient
+                                                                        .Include(f => f.Client)
+                                                                        .Include(f => f.TCMFarsFormList)
+                                                                        .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                            && (n.Casemanager.Id == caseManager.Id))
+                                                                        .OrderBy(f => f.Client.Name)
+                                                                        .ToListAsync();
+                        return View(farsList);
 
-                    return View(await _context.TCMClient
-                                              .Include(f => f.Client)
-                                              .Include(f => f.TCMFarsFormList)
+                    }
+                    else
+                    {
+                        List<TCMClientEntity> farsList = await _context.TCMClient
+                                                                       .Include(f => f.Client)
+                                                                       .Include(f => f.TCMFarsFormList)
+                                                                       .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                         && (n.Casemanager.Id == caseManager.Id)
+                                                                         && (n.Id == idTCMClient))
+                                                                       .OrderBy(f => f.Client.Name)
+                                                                       .ToListAsync();
+                        return View(farsList);
 
-                                              .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
-                                                && (n.Casemanager.Id == caseManager.Id)
-                                                 && (n.Id == idTCMClient))
-                                              .OrderBy(f => f.Client.Name)
-                                              .ToListAsync());
+                    }
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");
@@ -567,8 +582,8 @@ namespace KyoS.Web.Controllers
                                                                 .ThenInclude(m => m.Client)
                                                                 .Where(m => m.Status == status
                                                                             && m.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id)
-                                                                       .OrderBy(m => m.TCMClient.CaseNumber)
-                                                                       .ToListAsync();
+                                                                .OrderBy(m => m.TCMClient.CaseNumber)
+                                                                .ToListAsync();
                
                 return View(tcmFars);
             }
@@ -576,12 +591,13 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("CaseManager"))
             {
                 List<TCMFarsFormEntity> tcmFars = await _context.TCMFarsForm
-                                                                                .Include(m => m.TCMClient)
-                                                                                .ThenInclude(m => m.Client)
-                                                                                .Where(m => m.Status == status
-                                                                                            && m.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id)
-                                                                                       .OrderBy(m => m.TCMClient.CaseNumber)
-                                                                                       .ToListAsync();
+                                                                .Include(m => m.TCMClient)
+                                                                .ThenInclude(m => m.Client)
+                                                                .Where(m => m.Status == status
+                                                                    && m.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                    && m.TCMClient.Casemanager.LinkedUser == user_logged.UserName)
+                                                                .OrderBy(m => m.TCMClient.CaseNumber)
+                                                                .ToListAsync();
 
                 return View(tcmFars);
 

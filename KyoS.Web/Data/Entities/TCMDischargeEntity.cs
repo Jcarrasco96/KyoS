@@ -54,6 +54,8 @@ namespace KyoS.Web.Data.Entities
         public bool AdministrativeDischarge { get; set; }
         public string AdministrativeDischarge_Explain { get; set; }
 
+        public TCMSupervisorEntity TCMSupervisor { get; set; }
+
         public List <TCMDischargeFollowUpEntity> TcmDischargeFollowUp { get; set; }
         public List<TCMDischargeServiceStatusEntity> TcmDischargeServiceStatus { get; set; }
     }

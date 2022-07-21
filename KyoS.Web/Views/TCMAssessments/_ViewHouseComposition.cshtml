@@ -45,10 +45,12 @@
                                  <td align="center">
                                     @Html.DisplayFor(modelItem => item.Supporting)
                                 </td>
-                                <td align="right">
-                                    <a onclick="showInPopup('@Url.Action("EditHouseCompositionModal", "TCMAssessments", new { id = @item.Id }, Context.Request.Scheme)','Edit Behavioral Health')" class="btn btn-warning" title="Edit Behavioral Health"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    @*<a asp-action="DeleteBehavioral" asp-route-origin="2" asp-route-id="@item.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>*@
-                                </td>
+                                 <td align="right">
+                                     @if (User.IsInRole("CaseManager"))
+                                     {
+                                         <a onclick="showInPopup('@Url.Action("EditHouseCompositionModal", "TCMAssessments", new { id = @item.Id }, Context.Request.Scheme)','Edit Behavioral Health')" class="btn btn-warning" title="Edit Behavioral Health"><i class="glyphicon glyphicon-pencil"></i></a>
+                                     }
+                                 </td>
                             </tr>
                         }
                     </tbody>
