@@ -199,7 +199,7 @@ namespace KyoS.Web.Data.Entities
         public bool DoesTheClientExperience { get; set; }
         public string DoesTheClientExperience_Where { get; set; }
 
-        public int ForHowLong { get; set; }
+        public string ForHowLong { get; set; }
         public int PleaseRatePain { get; set; }
         public bool HasClientBeenTreatedPain { get; set; }
         public string HasClientBeenTreatedPain_PleaseIncludeService { get; set; }

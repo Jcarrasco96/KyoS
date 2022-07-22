@@ -310,7 +310,7 @@ namespace KyoS.Web.Controllers
                         ClientDenied = false,
                         /*StartTime = DateTime.Now,
                         EndTime = DateTime.Now,*/
-                        ForHowLong = 0,
+                        ForHowLong = "",
                         CreatedOn = DateTime.Now,
                         CreatedBy = user_logged.UserName,
                         AdmissionedFor = user_logged.FullName
@@ -575,7 +575,7 @@ namespace KyoS.Web.Controllers
                 ClientDenied = false,
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now,
-                ForHowLong = 0
+                ForHowLong = ""
             };
             
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
@@ -766,28 +766,19 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                Bio_BehavioralHistoryEntity bioEntity = _context.Bio_BehavioralHistory.Find(bioViewModel.Id);
-                if (bioEntity == null)
+                Bio_BehavioralHistoryEntity bioEntity = await _converterHelper.ToBio_BehaviorEntity(bioViewModel, true);
+                _context.Bio_BehavioralHistory.Add(bioEntity);
+                try
                 {
-                    bioEntity = await _converterHelper.ToBio_BehaviorEntity(bioViewModel, true);
-                    _context.Bio_BehavioralHistory.Add(bioEntity);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
                         
-                        return RedirectToAction("CreateBehavioral", new { id = bioViewModel.IdClient });
-                    }
-                    catch (System.Exception ex)
-                    {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                    }
+                    return RedirectToAction("CreateBehavioral", new { id = bioViewModel.IdClient });
                 }
-                else
+                catch (System.Exception ex)
                 {
-                    ModelState.AddModelError(string.Empty, "Already exists the BIO.");
-
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateBehavioral", bioViewModel) });
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                 }
+                
             }
             Bio_BehavioralHistoryEntity model;
             model = new Bio_BehavioralHistoryEntity
@@ -812,34 +803,26 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                Bio_BehavioralHistoryEntity bioEntity = _context.Bio_BehavioralHistory.Find(bioViewModel.Id);
-                if (bioEntity == null)
+                
+                Bio_BehavioralHistoryEntity bioEntity = await _converterHelper.ToBio_BehaviorEntity(bioViewModel, true);
+                _context.Bio_BehavioralHistory.Add(bioEntity);
+                try
                 {
-                    bioEntity = await _converterHelper.ToBio_BehaviorEntity(bioViewModel, true);
-                    _context.Bio_BehavioralHistory.Add(bioEntity);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
 
-                        List<Bio_BehavioralHistoryEntity> bio = await _context.Bio_BehavioralHistory
-                                                                                .Include(g => g.Client)
-                                                                                .Where(g => g.Client.Id == bioViewModel.IdClient)
-                                                                                .ToListAsync();
+                    List<Bio_BehavioralHistoryEntity> bio = await _context.Bio_BehavioralHistory
+                                                                          .Include(g => g.Client)
+                                                                          .Where(g => g.Client.Id == bioViewModel.IdClient)
+                                                                          .ToListAsync();
 
-                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewBehavioralHealth", bio) });
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewBehavioralHealth", bio) });
                         
-                    }
-                    catch (System.Exception ex)
-                    {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                    }
                 }
-                else
+                catch (System.Exception ex)
                 {
-                    ModelState.AddModelError(string.Empty, "Already exists the BIO.");
-
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateBehavioral", bioViewModel) });
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                 }
+               
             }
             Bio_BehavioralHistoryEntity model;
             model = new Bio_BehavioralHistoryEntity
@@ -1203,32 +1186,24 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                MedicationEntity medicationEntity = _context.Medication.Find(medicationViewModel.Id);
-                if (medicationEntity == null)
+                
+                MedicationEntity medicationEntity = await _converterHelper.ToMedicationEntity(medicationViewModel, true);
+                _context.Medication.Add(medicationEntity);
+                try
                 {
-                    medicationEntity = await _converterHelper.ToMedicationEntity(medicationViewModel, true);
-                    _context.Medication.Add(medicationEntity);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-                        List<MedicationEntity> medication = await _context.Medication
-                                                                          .Include(g => g.Client)
-                                                                          .Where(g => g.Client.Id == medicationViewModel.IdClient)
-                                                                          .ToListAsync();
+                    await _context.SaveChangesAsync();
+                    List<MedicationEntity> medication = await _context.Medication
+                                                                      .Include(g => g.Client)
+                                                                      .Where(g => g.Client.Id == medicationViewModel.IdClient)
+                                                                      .ToListAsync();
 
-                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", medication) });
-                    }
-                    catch (System.Exception ex)
-                    {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                    }
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", medication) });
                 }
-                else
+                catch (System.Exception ex)
                 {
-                    ModelState.AddModelError(string.Empty, "Already exists the Medication.");
-
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMedicationModal", medicationViewModel) });
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                 }
+                
             }
             MedicationViewModel model;
             model = new MedicationViewModel
