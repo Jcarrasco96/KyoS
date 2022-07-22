@@ -19,7 +19,7 @@
                            <input type="checkbox" asp-for="ThoughtProcess_Obsessive" class="form-check-input"> Obsessive              <input type="checkbox" asp-for="ThoughtProcess_Tangential" class="form-check-input"> Tangential                    <input type="checkbox" asp-for="ThoughtProcess_Circumstantial" class="form-check-input"> Circumstantial           <input type="checkbox" asp-for="ThoughtProcess_Preoccupied" class="form-check-input"> Preoccupied            <input type="checkbox" asp-for="ThoughtProcess_Blocking" class="form-check-input"> Blocking       
                            <input type="checkbox" asp-for="ThoughtProcess_FightIdeas" class="form-check-input"> Fight of ideas         <input type="checkbox" asp-for="ThoughtProcess_LooseAssociations" class="form-check-input"> Loose Associations            <input type="checkbox" asp-for="ThoughtProcess_Other" class="form-check-input"> Other  
     
-    <strong>Mood</strong>                   <input type="checkbox" asp-for="Mood_Euthymic" class="form-check-input"> Euthymic               <input type="checkbox" asp-for="Mood_Depressed" class="form-check-input">  Depressed                    <input type="checkbox" asp-for="Mood_Euphoric" class="form-check-input"> Euphoric                 <input type="checkbox" asp-for="Mood_Angry" class="form-check-input"> Angry                  <input type="checkbox" asp-for="Mood_Maniac" class="form-check-input"> Maniac  <input type="checkbox" asp-for="Mood_Other" class="form-check-input"> Other
+    <strong>Mood</strong>                   <input type="checkbox" asp-for="Mood_Euthymic" class="form-check-input"> Euthymic               <input type="checkbox" asp-for="Mood_Depressed" class="form-check-input">  Depressed <input type="checkbox" asp-for="Mood_Anxious" class="form-check-input">  Anxious        <input type="checkbox" asp-for="Mood_Euphoric" class="form-check-input"> Euphoric                 <input type="checkbox" asp-for="Mood_Angry" class="form-check-input"> Angry                  <input type="checkbox" asp-for="Mood_Maniac" class="form-check-input"> Maniac  <input type="checkbox" asp-for="Mood_Other" class="form-check-input"> Other
     
     <strong>Judgment</strong>               <input type="checkbox" asp-for="Judgment_Good" class="form-check-input"> Good                   <input type="checkbox" asp-for="Judgment_Fair" class="form-check-input">  Fair                         <input type="checkbox" asp-for="Judgment_Poor" class="form-check-input"> Poor                     <input type="checkbox" asp-for="Judgment_Other" class="form-check-input"> Other
     
@@ -111,7 +111,7 @@
     Takes 3 or more different prescribed or over-the-counter drugs a day.           <input type="checkbox" asp-for="Takes3OrMore" class="form-check-input" id="check18"> YES  <input type="checkbox" class="form-check-input" id="check118"> NO
     Without wanting to. Has lost or gained 10 pounds in the last 6 months.          <input type="checkbox" asp-for="WithoutWanting" class="form-check-input" id="check19"> YES  <input type="checkbox" class="form-check-input" id="check119"> NO
     Not always physically able to shop, cook and/or feed self.                      <input type="checkbox" asp-for="NotAlwaysPhysically" class="form-check-input" id="check20"> YES  <input type="checkbox" class="form-check-input" id="check120"> NO
-        
+    <strong>Total: </strong>   
     <strong>0-2 GOOD. </strong>As appropriate reassess and/or provide information based on situation.
     <strong>3-5 Moderate risk. </strong>Educate, refer, monitor and reevaluate based on patient situation and organization policy.
     <strong>6> High risk. Coordinate. </strong>with physician, dietitian, social service professional or RN about how to improve nutritional health 
@@ -180,7 +180,7 @@
         1.  Do you have any religious/cultural practice that may hinder your educational goals?                  <input type="checkbox" asp-for="DoYouHaveAnyReligious" class="form-check-input" id="check21"> YES  <input type="checkbox" class="form-check-input" id="check121"> NO
         2.  What is your language of preference: <strong><u>@Html.DisplayFor(modelItem => Model.Client.PreferredLanguage)</u></strong> 
         3.  Do you have any visual, hearing or other sensory impairment that may affect your ability to learn?   <input type="checkbox" asp-for="DoYouHaveAnyVisual" class="form-check-input" id="check22"> YES  <input type="checkbox" class="form-check-input" id="check122"> NO 
-        4.  Highest educational level:  
+        4.  Highest educational level:  <input asp-for="HigHestEducation" style="width:30%">
         5.  Do you have any physical limitations that may hinder your ability to learn?                          <input type="checkbox" asp-for="DoYouHaveAnyPhysical" class="form-check-input" id="check23"> YES  <input type="checkbox" class="form-check-input" id="check123"> NO
         6.  Can client follow/understand directions (ask client to print name and sign on Treatment Plan)?       <input type="checkbox" asp-for="CanClientFollow" class="form-check-input" id="check24"> YES  <input type="checkbox" class="form-check-input" id="check124"> NO
     </pre>
