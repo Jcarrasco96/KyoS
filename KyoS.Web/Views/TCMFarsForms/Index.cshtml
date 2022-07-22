@@ -8,13 +8,21 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @if (ViewData["origin"] != "")
+            @if (ViewData["origin"].ToString() == "1")
             {
                 @Html.ActionLink("TCM Intake Section 5", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.ElementAt(0).Id, section = 5 })
             }
             else
             {
-                @Html.ActionLink("Dashboard", "Index", "Desktop")
+                @if (ViewData["origin"].ToString() == "2")
+                {
+                    @Html.ActionLink("TCM All Documents", "AllDocuments", "TCMClients")
+                }
+                else
+                {
+                    @Html.ActionLink("Dashboard", "Index", "Desktop")
+                }
+                
             }
 
         </li>

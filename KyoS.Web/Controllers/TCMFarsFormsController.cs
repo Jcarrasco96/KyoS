@@ -57,6 +57,7 @@ namespace KyoS.Web.Controllers
             else
             {
                 CaseMannagerEntity caseManager = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                ViewData["origin"] = origin.ToString();
                 if (User.IsInRole("Manager")|| User.IsInRole("TCMSupervisor"))
                     return View(await _context.TCMClient
 

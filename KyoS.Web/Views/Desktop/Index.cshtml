@@ -1495,7 +1495,7 @@
             <div class="col-md-12">
                 &nbsp;
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
             </div>
             <div class="col-md-2">
                 @if (ViewBag.NotesApproved == "0")
@@ -1551,7 +1551,25 @@
                     </a>
                 }
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
+                @if (ViewBag.AllDocuments == "0")
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-print" style="padding-right: 10px !important;"></i>Close<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Binder</h4>
+                        <span class="message-counter-cero">@ViewBag.AllDocuments</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="TCMClients" asp-action="AllDocuments" role="button">
+                        <div class="thumbnail list-group-item list-group-item-success">
+                            <h4 style="align-content:end;"><i class="icon-print" style="padding-right: 10px !important;"></i>All<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Documents</h4>
+                            <span class="message-counter-success">@ViewBag.AllDocuments</span>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="col-md-2">
             </div>
         }
         @if (User.IsInRole("TCMSupervisor"))
@@ -1792,7 +1810,7 @@
             </div>
             <div class="col-md-1">
             </div>
-          //New line
+            //New line
             <div class="col-md-12">
                 &nbsp;
             </div>

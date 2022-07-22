@@ -22,9 +22,17 @@
             }
             else
             {
-                @Html.ActionLink("Dashboard", "Index", "Desktop")
+                @if (ViewData["aview"].ToString() == "2")
+                {
+                    @Html.ActionLink("TCM All Documents", "AllDocuments", "TCMClients")
+                }
+                else
+                {
+                    @Html.ActionLink("Dashboard", "Index", "Desktop")
+                }
+
             }
-   
+
         </li>
         <li class="active">Adendums</li>
     </ul><!--.breadcrumb-->

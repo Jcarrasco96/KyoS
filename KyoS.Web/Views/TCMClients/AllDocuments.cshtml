@@ -1,0 +1,317 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMClientEntity>
+@{
+    ViewData["Title"] = "TCM All Documents";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">TCM All Documents</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+@if (Model != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            @if (ViewBag.Delete == "N")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <strong class="red">
+                        Error. It is not posible delete the TCM case
+                    </strong>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">TCM All Documents</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover table-responsive table-striped" id="MyTable">
+                        <thead>
+                            <tr>
+                                <th class="col-md-2">
+                                    Client Name
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    Open Date
+                                </th>
+                                <th class="col-md-2" style="text-align: center;">
+                                    Consent
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    Service PLan
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    Addendum
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    Service P. Review
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    Assessment
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    Appendix J
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    FARS Forms
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    Discharge
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-success">
+                                                @Html.DisplayFor(modelItem => item.CaseNumber)
+                                            </span>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                @Html.DisplayFor(modelItem => item.CaseNumber)
+                                            </span>
+                                        }
+                                        &nbsp;
+                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Client.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.DataOpen)
+                                    </td>
+                                    <td align="center">
+                                        @if ((item.TCMIntakeForm != null) || (item.TcmIntakeConsentForTreatment != null) || (item.TcmIntakeConsentForRelease != null) || (item.TcmIntakeConsumerRights != null)
+                                          || (item.TcmIntakeAcknowledgementHipa != null) || (item.TCMIntakeOrientationChecklist != null) || (item.TCMIntakeAdvancedDirective != null)
+                                          || (item.TCMIntakeForeignLanguage != null) || (item.TCMIntakeWelcome != null))
+                                        {
+                                            <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-section="1" asp-route-origin="1" class="btn btn-default" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                            <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                    <a      asp-action="TCMIntakeSectionDashboard" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-section="1" asp-route-origin="1" class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                            <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.TcmServicePlan == null)
+                                        {
+                                            <span class="label label-default">
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @if (item.TcmServicePlan.Approved == 0)
+                                            {
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.TcmServicePlan.Approved == 1)
+                                            {
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-info disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.TcmServicePlan.Approved == 2)
+                                            {
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                        }
+
+                                    </td>
+                                    <td align="center">
+                                        @if (item.TcmServicePlan.TCMAdendum == null)
+                                        {
+                                                <a asp-action="Adendum" asp-route-id="@item.Id" asp-controller="TCMServicePlans" asp-route-caseNumber="@item.CaseNumber" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            @if (item.TcmServicePlan.TCMAdendum.Count() == 0)
+                                            {
+                                                <a asp-action="Adendum" asp-route-id="@item.Id" asp-controller="TCMServicePlans" asp-route-caseNumber="@item.CaseNumber" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="Adendum" asp-route-id="@item.Id" asp-controller="TCMServicePlans" asp-route-caseNumber="@item.CaseNumber" asp-route-aview="2" class="btn btn-default" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.TcmServicePlan.TCMServicePlanReview == null)
+                                        {
+                                            <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            @if (item.TcmServicePlan.TCMServicePlanReview.Approved == 0)
+                                            {
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.TcmServicePlan.TCMServicePlanReview.Approved == 1)
+                                            {
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-info disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.TcmServicePlan.TCMServicePlanReview.Approved == 2)
+                                            {
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                        }
+
+                                    </td>
+                                    <td align="center">
+                                        @if (item.TCMAssessment == null)
+                                        {
+                                            <span class="label label-default">
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @if (item.TCMAssessment.Approved == 0)
+                                            {
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.TCMAssessment.Approved == 1)
+                                            {
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-info disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.TCMAssessment.Approved == 2)
+                                            {
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                        }
+
+                                    </td>
+                                    <td align="center">
+                                        @if (item.TcmIntakeAppendixJ == null)
+                                        {
+                                            <span class="label label-default">
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @if (item.TcmIntakeAppendixJ.Approved == 0)
+                                            {
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.TcmIntakeAppendixJ.Approved == 1)
+                                            {
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-info disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.TcmIntakeAppendixJ.Approved == 2)
+                                            {
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                        }
+
+                                    </td>
+                                    <td align="center">
+                                        @if (item.TCMFarsFormList == null)
+                                        {
+                                            <a asp-action="Index" asp-route-id="@item.Id" asp-controller="TCMFarsForms" asp-route-idTCMClient="@item.CaseNumber" asp-route-origin="2" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                            <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            @if (item.TCMFarsFormList.Count() == 0)
+                                            {
+                                                <a asp-action="Index" asp-route-id="@item.Id" asp-controller="TCMFarsForms" asp-route-idTCMClient="@item.CaseNumber" asp-route-origin="2" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="Index" asp-route-id="@item.Id" asp-controller="TCMFarsForms" asp-route-idTCMClient="@item.Id" asp-route-origin="2" class="btn btn-default" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.TcmServicePlan.TCMDischarge == null)
+                                        {
+                                            <span class="label label-default">
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @if (item.TcmServicePlan.TCMDischarge.Approved == 0)
+                                            {
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.TcmServicePlan.TCMDischarge.Approved == 1)
+                                            {
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-info disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.TcmServicePlan.TCMDischarge.Approved == 2)
+                                            {
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                        }
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#MyTable').DataTable({
+               "pageLength": 100
+            });
+
+            // Delete item
+            //var item_to_delete;
+
+            @*$('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                var url = "@Url.Action("Delete", "WorkDays")";
+                window.location.href = url + '/' + item_to_delete;
+            });*@
+        });
+    </script>
+}
+
+

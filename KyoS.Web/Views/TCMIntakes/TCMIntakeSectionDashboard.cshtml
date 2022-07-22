@@ -8,7 +8,14 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("TCM Intake", "TCMIntakeDashboard", "TCMIntakes", new { id = @Model.Id })
+            @if (ViewData["origin"].ToString() == "0")
+            {
+                @Html.ActionLink("TCM Intake", "TCMIntakeDashboard", "TCMIntakes", new { id = @Model.Id })
+            }
+            else
+            {
+                @Html.ActionLink("TCM All Documents", "AllDocuments", "TCMClients")
+            }
         </li>
         @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
         {
