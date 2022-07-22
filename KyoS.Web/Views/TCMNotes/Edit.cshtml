@@ -27,7 +27,7 @@
                     }
                     else
                     {
-                        @Html.ActionLink("Calendar", "Index", "TCMBilling")
+                        @Html.ActionLink("Billing", "Index", "TCMBilling")
                     }
 
                 }
@@ -50,47 +50,38 @@
             <partial name="_TCMNotes" />
             <div class="col-md-push-12">                
                 <div class="col-md-12 form-group">
-                    <a onclick="showInPopup('@Url.Action("CreateNoteActivity", "TCMNotes",new {startTime = @Model.DateOfService, idNote = @Model.Id, idDomain = 103, idTCMClient = Model.IdTCMClient}, Context.Request.Scheme)','Create TCM Note')" class="btn btn-success" title="Create TCM Note"><i class="glyphicon glyphicon-plus"></i> Add Service</a>
+                    <a onclick="showInPopupLg('@Url.Action("CreateNoteActivity", "TCMNotes",new {startTime = @Model.DateOfService, idNote = @Model.Id, idDomain = 103, idTCMClient = Model.IdTCMClient}, Context.Request.Scheme)','Add Service')" class="btn btn-success" title="Add service"><i class="glyphicon glyphicon-plus"></i> Add Service</a>
                 </div>
                 <div id="view-NoteActivity">
                     @await Html.PartialAsync("_ViewTCMNoteActivity", Model.TCMNoteActivity.ToList())
                 </div>                               
             </div>
             <partial name="_TCMNotes1" />
-            <div class="form-group col-md-12">
-                <div class="form-group col-md-2">
-                    &nbsp;
-                </div>
-                <div class="form-group col-md-8">
-                    <input type="submit" value="Save" asp-route-origin="@ViewData["origin"]" class="btn btn-primary" />
-                    @if (@ViewData["origin"].ToString() == "0")
+            <div class="col-md-12">                
+                <input type="submit" value="Save" asp-route-origin="@ViewData["origin"]" class="btn btn-primary" />
+                @if (@ViewData["origin"].ToString() == "0")
+                {
+                    <a asp-action="TCMNotesForCase" asp-route-idTCMClient="@Model.IdTCMClient" class="btn btn-success">Back</a>
+                }
+                else
+                {
+                    @if (@ViewData["origin"].ToString() == "1")
                     {
-                        <a asp-action="TCMNotesForCase" asp-route-idTCMClient="@Model.IdTCMClient" class="btn btn-success">Back</a>
+                        <a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Edition" class="btn btn-success">Back</a>
                     }
                     else
                     {
-                        @if (@ViewData["origin"].ToString() == "1")
-                        {
-                            <a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Edition" class="btn btn-success">Back</a>
-                        }
-                        else
-                        {
-                            <a asp-action="Index" asp-controller="TCMBilling" class="btn btn-success">Back</a>
-                        }
-
+                        <a asp-action="Index" asp-controller="TCMBilling" class="btn btn-success">Back</a>
                     }
 
-                </div>
-                <div class="form-group col-md-2">
-                    &nbsp;
-                </div>
+                }             
             </div>
         </form>
     </div>
 </body>
 </html>
 
-<partial name="_ModalPopup" />
+<partial name="_ModalPopupLg" />
 <partial name="_DeleteDialog" />
 
 @section Scripts {
