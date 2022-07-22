@@ -6,7 +6,6 @@
     <div class="col-md-12">
         <form asp-action="EditMedicationModal" onsubmit="return jQueryAjaxPostMedication(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="IdClient" />
             <input type="hidden" asp-for="Client.Name" />
             <div class="container-fluid">

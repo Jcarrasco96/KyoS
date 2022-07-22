@@ -148,20 +148,18 @@ namespace KyoS.Web.Data.Entities
         public string UsualDurationOfPeriods { get; set; }
         
         [Display(Name = "Date of last pelvic exam (PAP)")]
-        [DataType(DataType.Date)]
-
-        public DateTime DateOfLastPelvic { get; set; }
+        
+        public string DateOfLastPelvic { get; set; }
 
         public string UsualIntervalBetweenPeriods { get; set; }
 
         [Display(Name = "Date of last period")]
-        [DataType(DataType.Date)]
-
-        public DateTime DateOfLastPeriod { get; set; }
+       
+        public string DateOfLastPeriod { get; set; }
 
         [Display(Name = "Date of last breast exam")]
-        [DataType(DataType.Date)]
-        public DateTime DateOfLastBreastExam { get; set; }
+        
+        public string DateOfLastBreastExam { get; set; }
 
         public string AdmissionedFor { get; set; }        
 
