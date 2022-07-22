@@ -29,7 +29,13 @@
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                  start: 'timeGridWeek,timeGridDay',                  
+                  center: 'title',
+                  end: 'today prev,next'
+                },
                 initialView: 'timeGridWeek',
+                allDaySlot: false,
                 slotDuration: '00:15:00',
                 slotLabelFormat: {
                       hour: 'numeric',
@@ -40,12 +46,10 @@
                 slotLabelInterval: '00:15:00',
                 slotMinTime: '06:00:00',
                 slotMaxTime: '20:00:00',
+                navLinks: true,
                 firstDay: 1,
                 hiddenDays: [0],
                 dateClick: function(info) {
-                    //alert('Clicked on: ' + info.dateStr);
-                    // change the day's background color just for fun
-                    //info.dateEI.style.backgroundColor = 'red';   
                     $.ajax({
                         type: 'GET',
                         url: '@Url.Action("AddProgressNote","TCMBilling", null, Context.Request.Scheme)' + '?date=' + info.dateStr,
@@ -60,14 +64,14 @@
                         }                               
                     })              
                 },
-                //eventClick: function(info) {
-                //    alert('Event: ' + info.event.title);
-                //    /*('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-                //    alert('View: ' + info.view.type);*/                    
-                //},                
-                events: '@Url.Action("Events", "TCMBilling")'
+                events: '@Url.Action("Events", "TCMBilling")',
+                eventTimeFormat: { // like '14:30:00'
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    meridiem: true
+                }
             });
-            calendar.render();
+            calendar.render();            
         });
     </script>
 }

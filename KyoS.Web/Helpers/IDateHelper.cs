@@ -9,5 +9,6 @@ namespace KyoS.Web.Helpers
     {
         int GetWeekOfYear(DateTime date);
         DateTime FirstDateOfWeek(int year, int weekOfYear, System.Globalization.CultureInfo ci);
+        void InitDateFinalDateOfWeekFromDate(DateTime date, ref DateTime initDate, ref DateTime finalDate);
     }        
 }
