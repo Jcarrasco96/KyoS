@@ -663,7 +663,8 @@ namespace KyoS.Web.Controllers
                 {
                     ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
                     model.Services = _combosHelper.GetComboServices();
-                    return View(model);
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalModal", model) });
+                    //return View(model);
                 }
 
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, true);
@@ -766,7 +767,8 @@ namespace KyoS.Web.Controllers
                 {
                     ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
                     model.Services = _combosHelper.GetComboServices();
-                    return View(model);
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalMTPReviewModal", model) });
+                    //return View(model);
                 }
 
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, true);
@@ -970,7 +972,8 @@ namespace KyoS.Web.Controllers
                 {
                     ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
                     model.Services = _combosHelper.GetComboServices();
-                    return View(model);
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditGoalModal", model) });
+                    //return View(model);
                 }
 
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, false);
@@ -1077,7 +1080,8 @@ namespace KyoS.Web.Controllers
                 {
                     ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
                     model.Services = _combosHelper.GetComboServices();
-                    return View(model);
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditGoalMTPReviewModal", model) });
+                    //return View(model);
                 }
 
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, false);
@@ -1357,7 +1361,8 @@ namespace KyoS.Web.Controllers
                         Description = model.Description,
                         Intervention = model.Intervention
                     };
-                    return View(newmodel);
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjectiveModal", newmodel) });
+                    //return View(newmodel);
                 }
 
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, true);
@@ -1514,7 +1519,8 @@ namespace KyoS.Web.Controllers
                         IdMTPReview = model.IdMTPReview
 
                     };
-                    return View(newmodel);
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjectiveMTPReviewModal", model) });
+                    //return View(newmodel);
                 }
 
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, true);
@@ -1824,6 +1830,7 @@ namespace KyoS.Web.Controllers
                 {
                     ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
                     model.Goal = goal;
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveModal", model) });
                     return View(model);
                 }
 
@@ -1956,7 +1963,8 @@ namespace KyoS.Web.Controllers
                 {
                     ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
                     model.Goal = goal;
-                    return View(model);
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveMTPReviewModal", model) });
+                    //return View(model);
                 }
 
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, false);
