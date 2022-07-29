@@ -193,9 +193,7 @@ namespace KyoS.Web.Data.Entities
         public bool HasTheClientVisitedPhysician { get; set; }
         public string HasTheClientVisitedPhysician_Reason { get; set; }
 
-        [Display(Name = "Date of Visited Physician")]
-        [DataType(DataType.Date)]
-        public DateTime HasTheClientVisitedPhysician_Date { get; set; }
+        public string HasTheClientVisitedPhysician_Date { get; set; }
         public bool DoesTheClientExperience { get; set; }
         public string DoesTheClientExperience_Where { get; set; }
 
