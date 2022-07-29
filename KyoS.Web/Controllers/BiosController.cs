@@ -182,7 +182,7 @@ namespace KyoS.Web.Controllers
                         HasClientBeenTreatedPain_Where = "",
                         HasTheClient = false,
                         HasTheClientVisitedPhysician = false,
-                        HasTheClientVisitedPhysician_Date = DateTime.Now,
+                        HasTheClientVisitedPhysician_Date = "",
                         HasTheClientVisitedPhysician_Reason = "",
                         HasTheClient_Explain = "",
                         HasTooth = false,
@@ -447,7 +447,7 @@ namespace KyoS.Web.Controllers
                 HasClientBeenTreatedPain_Where = "",
                 HasTheClient = false,
                 HasTheClientVisitedPhysician = false,
-                HasTheClientVisitedPhysician_Date = DateTime.Now,
+                HasTheClientVisitedPhysician_Date = "",
                 HasTheClientVisitedPhysician_Reason = "",
                 HasTheClient_Explain = "",
                 HasTooth = false,
@@ -692,7 +692,7 @@ namespace KyoS.Web.Controllers
                     {
                         IdClient = id,
                         Client = _context.Clients.Include(n => n.List_BehavioralHistory).FirstOrDefault(n => n.Id == id),
-                        Date = DateTime.Now,
+                        Date = "",
                         Id = 0,
                         Problem = ""
                     };
@@ -706,7 +706,7 @@ namespace KyoS.Web.Controllers
             {
                 IdClient = id,
                 Client = _context.Clients.Include(n => n.List_BehavioralHistory).FirstOrDefault(n => n.Id == id),
-                Date = DateTime.Now,
+                Date = "",
                 Id = 0,
                 Problem = ""
             };
@@ -733,7 +733,7 @@ namespace KyoS.Web.Controllers
                     {
                         IdClient = id,
                         Client = _context.Clients.Include(n => n.List_BehavioralHistory).FirstOrDefault(n => n.Id == id),
-                        Date = DateTime.Now,
+                        Date = "",
                         Id = 0,
                         Problem = ""
                     };
@@ -747,7 +747,7 @@ namespace KyoS.Web.Controllers
             {
                 IdClient = id,
                 Client = _context.Clients.Include(n => n.List_BehavioralHistory).FirstOrDefault(n => n.Id == id),
-                Date = DateTime.Now,
+                Date = "",
                 Id = 0,
                 Problem = ""
             };
@@ -784,7 +784,7 @@ namespace KyoS.Web.Controllers
             model = new Bio_BehavioralHistoryEntity
             {
                
-                Date = DateTime.Now,
+                Date = "",
                 Id = 0,
                 Problem = ""
             };
@@ -828,7 +828,7 @@ namespace KyoS.Web.Controllers
             model = new Bio_BehavioralHistoryEntity
             {
 
-                Date = DateTime.Now,
+                Date = "",
                 Id = 0,
                 Problem = ""
             };
@@ -1151,7 +1151,7 @@ namespace KyoS.Web.Controllers
                         Dosage = "",
                         Frequency = "",
                         Name = "",
-                        Prescriber = user_logged.FullName
+                        Prescriber = ""
 
                     };
                     if (model.Client.MedicationList == null)
