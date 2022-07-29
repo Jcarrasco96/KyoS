@@ -1,13 +1,10 @@
-﻿using AspNetCore.Reporting;
-using KyoS.Common.Enums;
-using KyoS.Common.Helpers;
+﻿using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
@@ -81,7 +76,7 @@ namespace KyoS.Web.Controllers
 
                                       .Include(w => w.Days)
                                       .ThenInclude(d => d.TCMNote)
-                                      
+
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                 && w.Days.Where(d => (d.Service == ServiceType.PSR && d.TCMNote.Where(wc => wc.CaseManager.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))
                                       .ToListAsync());
@@ -183,7 +178,7 @@ namespace KyoS.Web.Controllers
 
                 if (NoteEntity.Id == 0)
                 {
-                   
+
                     _context.TCMNote.Add(NoteEntity);
                     try
                     {
@@ -196,7 +191,7 @@ namespace KyoS.Web.Controllers
                         {
                             return RedirectToAction("Index", "TCMBilling");
                         }
-                        
+
                     }
                     catch (System.Exception ex)
                     {
@@ -302,7 +297,7 @@ namespace KyoS.Web.Controllers
                     }
                     if (origin == 2)
                     {
-                        return RedirectToAction("Index","TCMBilling");
+                        return RedirectToAction("Index", "TCMBilling");
                     }
                 }
                 catch (System.Exception ex)
@@ -318,7 +313,7 @@ namespace KyoS.Web.Controllers
         public int GetTotalMinutes(TCMNoteEntity Note)
         {
             int minutes = 0;
-            
+
             if (Note != null)
             {
                 foreach (var item in Note.TCMNoteActivity)
@@ -405,7 +400,7 @@ namespace KyoS.Web.Controllers
                 IdSetting = 1,
                 SettingList = _combosHelper.GetComboTCMNoteSetting(),
                 StartTime = DateTime.Now,
-               
+
                 CreatedBy = user_logged.UserName,
                 CreatedOn = DateTime.Now,
                 IdTCMClient = idTCMClient
@@ -645,9 +640,9 @@ namespace KyoS.Web.Controllers
                             }
                             else
                             {
-                                return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending});
+                                return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending });
                             }
-                            
+
                         }
                         catch (System.Exception ex)
                         {
@@ -679,24 +674,24 @@ namespace KyoS.Web.Controllers
             }
             catch (Exception)
             {
-               
+
             }
 
-            return RedirectToAction("Edit", new { id = tcmNotesActivity.TCMNote.Id});
-            
+            return RedirectToAction("Edit", new { id = tcmNotesActivity.TCMNote.Id });
+
         }
 
         public JsonResult CalcularMinutes(DateTime start, DateTime end)
         {
             int hora = (end - start).Hours;
-            int minutes = (end - start).Minutes + (hora*60);
+            int minutes = (end - start).Minutes + (hora * 60);
             return Json(minutes);
         }
 
         public JsonResult GetListActivity(string codeDomain = "")
         {
-            List <TCMServiceActivityEntity> activity = _context.TCMServiceActivity.Where(n => n.TcmService.Code == codeDomain).ToList();
-            
+            List<TCMServiceActivityEntity> activity = _context.TCMServiceActivity.Where(n => n.TcmService.Code == codeDomain).ToList();
+
             if (activity.Count == 0)
             {
                 activity.Insert(0, new TCMServiceActivityEntity
@@ -826,7 +821,7 @@ namespace KyoS.Web.Controllers
                     await _context.SaveChangesAsync();
 
                     return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending });
-                    
+
                 }
                 catch (System.Exception ex)
                 {
@@ -836,6 +831,41 @@ namespace KyoS.Web.Controllers
             }
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditReadOnly", tcmNotesViewModel) });
+        }
+
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public IActionResult PrintNote(int id)
+        {
+            TCMNoteEntity note = _context.TCMNote
+                                         
+                                         .Include(n => n.CaseManager)
+                                         .ThenInclude(cm => cm.Clinic)
+
+                                         .Include(n => n.TCMClient)
+                                         .ThenInclude(c => c.Client)
+
+                                         .Include(n => n.TCMNoteActivity)
+                                         .ThenInclude(na => na.TCMDomain)
+
+                                         .FirstOrDefault(n => (n.Id == id && n.Status == NoteStatus.Approved));
+            if (note == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (note.CaseManager.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            {                
+                Stream stream = _reportHelper.FloridaSocialHSTCMNoteReportSchema1(note);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);               
+            }
+
+            if (note.CaseManager.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+            {
+                Stream stream = _reportHelper.DreamsMentalHealthTCMNoteReportSchema1(note);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
+            return null;
         }
     }
 }
