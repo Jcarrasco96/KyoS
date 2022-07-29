@@ -4185,7 +4185,7 @@ namespace KyoS.Web.Controllers
                                         .Include(wc => wc.Workday)
                                         .ThenInclude(w => w.Workdays_Activities_Facilitators)
 
-                                        .FirstOrDefault(wc => (wc.Id == item.Id && wc.NoteP.Status == NoteStatus.Approved));
+                                        .FirstOrDefault(wc => (wc.Id == item.Id));
 
                 if ((workdayClient.NoteP != null) && (workdayClient.NoteP.Status == NoteStatus.Approved))
                 {                                      
@@ -4196,7 +4196,15 @@ namespace KyoS.Web.Controllers
                             Stream stream = _reportHelper.FloridaSocialHSNoteReportSchema3(workdayClient);
                             fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));
                         }
-                    }                                
+                    }
+                    if (workdayClient.NoteP.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+                    {
+                        if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
+                        {
+                            Stream stream = _reportHelper.DreamsMentalHealthNoteReportSchema3(workdayClient);
+                            fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));
+                        }
+                    }
                 }
             }
 
@@ -4247,15 +4255,25 @@ namespace KyoS.Web.Controllers
 
                                         .Include(wc => wc.Workday)
 
-                                        .FirstOrDefault(wc => (wc.Id == item.Id && wc.IndividualNote.Status == NoteStatus.Approved));
+                                        .FirstOrDefault(wc => (wc.Id == item.Id));
 
-                if (workdayClient != null)
+                if ((workdayClient.IndividualNote != null) && (workdayClient.IndividualNote.Status == NoteStatus.Approved))
                 {
                     if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DAVILA")
                     {                       
                        Stream stream = _reportHelper.DavilaIndNoteReportSchema1(workdayClient);
                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));                        
-                    }                    
+                    }
+                    if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+                    {
+                        Stream stream = _reportHelper.FloridaSocialHSIndNoteReportSchema1(workdayClient);
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));
+                    }
+                    if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+                    {
+                        Stream stream = _reportHelper.DreamsMentalHealthIndNoteReportSchema1(workdayClient);
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));
+                    }
                 }
             }
 
@@ -4310,13 +4328,23 @@ namespace KyoS.Web.Controllers
 
                                         .Include(wc => wc.Workday)
 
-                                        .FirstOrDefault(wc => (wc.Id == item.Id && wc.GroupNote.Status == NoteStatus.Approved));               
+                                        .FirstOrDefault(wc => (wc.Id == item.Id));               
 
-                if (workdayClient != null)
+                if ((workdayClient.GroupNote != null) && (workdayClient.GroupNote.Status == NoteStatus.Approved))
                 {
                     if (workdayClient.GroupNote.Supervisor.Clinic.Name == "DAVILA")
                     {
                         Stream stream = _reportHelper.DavilaGroupNoteReportSchema1(workdayClient);
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));
+                    }
+                    if (workdayClient.GroupNote.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+                    {
+                        Stream stream = _reportHelper.FloridaSocialHSGroupNoteReportSchema1(workdayClient);
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));
+                    }
+                    if (workdayClient.GroupNote.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+                    {
+                        Stream stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema1(workdayClient);
                         fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));
                     }
                 }

@@ -17,9 +17,6 @@ namespace KyoS.Web.Data.Entities
 
         public string Problem { get; set; }
 
-        [Display(Name = "Date of the problem")]
-        [DataType(DataType.Date)]
-
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
     }
 }
