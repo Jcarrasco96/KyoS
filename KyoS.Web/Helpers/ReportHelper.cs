@@ -7801,7 +7801,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Id", typeof(int));
             dt.Columns.Add("TCMNoteId", typeof(int));
             dt.Columns.Add("Setting", typeof(string));
-            dt.Columns.Add("TCMDomainId", typeof(int));
+            dt.Columns.Add("TCMDomainId", typeof(string));
             dt.Columns.Add("DescriptionOfService", typeof(string));
             dt.Columns.Add("StartTime", typeof(DateTime));
             dt.Columns.Add("EndTime", typeof(DateTime));
@@ -7819,7 +7819,7 @@ namespace KyoS.Web.Helpers
                                             item.Id,
                                             0,
                                             item.Setting,
-                                            0,
+                                            item.TCMDomain.Code,
                                             item.DescriptionOfService,
                                             item.StartTime,
                                             item.EndTime,
@@ -7866,10 +7866,6 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetTCMNoteActivityListDS(note.TCMNoteActivity.ToList()));
             WebReport.Report.RegisterData(dataSet.Tables[0], "TCMNoteActivity");
 
-            /*var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
-            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
-            var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();*/
-
             //signatures images 
             byte[] stream1 = null;
             //byte[] stream2 = null;
@@ -7884,14 +7880,6 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetSignaturesDS(null, stream1));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
 
-            /*WebReport.Report.SetParameterValue("datenote", date);
-            WebReport.Report.SetParameterValue("dateFacilitator", dateFacilitator);
-            WebReport.Report.SetParameterValue("dateSupervisor", dateSupervisor);
-            WebReport.Report.SetParameterValue("num_of_goal", num_of_goal);
-            WebReport.Report.SetParameterValue("goal_text", goal_text);
-            WebReport.Report.SetParameterValue("num_of_obj", num_of_obj);
-            WebReport.Report.SetParameterValue("obj_text", obj_text);*/
-
             WebReport.Report.Prepare();
 
             Stream stream = new MemoryStream();
@@ -7903,7 +7891,54 @@ namespace KyoS.Web.Helpers
 
         public Stream DreamsMentalHealthTCMNoteReportSchema1(TCMNoteEntity note)
         {
-            throw new NotImplementedException();
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMApprovedNotes\\rptDreamsMentalHealthTCMNote1.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMNoteDS(note));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMNote");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(note.CaseManager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(note.TCMClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(note.TCMClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMNoteActivityListDS(note.TCMNoteActivity.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMNoteActivity");
+
+            //signatures images 
+            byte[] stream1 = null;
+            //byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(note.CaseManager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(note.CaseManager.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(null, stream1));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
         }
         #endregion
     }

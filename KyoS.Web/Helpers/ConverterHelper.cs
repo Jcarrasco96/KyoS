@@ -5623,8 +5623,6 @@ namespace KyoS.Web.Helpers
                 TCMClient = _context.TCMClient
                                     .FirstOrDefault(n => n.Id == model.IdTCMClient),
                 Workday = _context.Workdays.FirstOrDefault(n => n.Id == model.IdTCMWorday)
-                
-
             };
         }
 
