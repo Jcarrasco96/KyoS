@@ -60,7 +60,7 @@ namespace KyoS.Web.Controllers
                 ViewData["origin"] = origin.ToString();
                 if (User.IsInRole("Manager")|| User.IsInRole("TCMSupervisor"))
                     return View(await _context.TCMClient
-
+                                              .Include(f => f.Client)
                                               .Include(f => f.TCMFarsFormList)
 
                                               .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id)
@@ -647,5 +647,58 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
+        public async Task<IActionResult> TCMFarsForTCMClient(int idTCMClient = 0)
+        {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+                CaseMannagerEntity caseManager = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                {
+                    List<TCMFarsFormEntity> farsList = await _context.TCMFarsForm
+                                                                     .Include(f => f.TCMClient)
+                                                                     .ThenInclude(f => f.Client)
+                                                                     .Include(f => f.TCMClient)
+                                                                     .ThenInclude(f => f.Casemanager)
+                                                                     .Include(f => f.TCMClient)
+                                                                     .ThenInclude(f => f.TCMFarsFormList)
+
+                                                                     .Where(n => (n.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                        && n.TCMClient.Id == idTCMClient))
+                                                                     .OrderBy(f => f.TCMClient.Client.Name)
+                                                                     .ToListAsync();
+                    return View(farsList);
+
+                }
+                if (User.IsInRole("CaseManager"))
+                {
+                    List<TCMFarsFormEntity> farsList = await _context.TCMFarsForm
+                                                                     .Include(f => f.TCMClient)
+                                                                     .ThenInclude(f => f.Client)
+                                                                     .Include(f => f.TCMClient)
+                                                                     .ThenInclude(f => f.Casemanager)
+                                                                     .Include(f => f.TCMClient)
+                                                                     .ThenInclude(f => f.TCMFarsFormList)
+                                                                     .Where(n => n.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                        && (n.TCMClient.Casemanager.Id == caseManager.Id)
+                                                                        && (n.TCMClient.Id == idTCMClient))
+                                                                     .OrderBy(f => f.TCMClient.Client.Name)
+                                                                     .ToListAsync();
+                        return View(farsList);
+                }
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
     }
 }

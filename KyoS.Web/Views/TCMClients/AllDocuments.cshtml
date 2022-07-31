@@ -41,13 +41,13 @@
                     <table class="table table-hover table-responsive table-striped" id="MyTable">
                         <thead>
                             <tr>
-                                <th class="col-md-2">
+                                <th class="col-md-3">
                                     Client Name
                                 </th>
                                 <th class="col-md-1" style="text-align: center;">
                                     Open Date
                                 </th>
-                                <th class="col-md-2" style="text-align: center;">
+                                <th class="col-md-1" style="text-align: center;">
                                     Consent
                                 </th>
                                 <th class="col-md-1" style="text-align: center;">
@@ -107,18 +107,37 @@
                                         @Html.DisplayFor(modelItem => item.DataOpen)
                                     </td>
                                     <td align="center">
-                                        @if ((item.TCMIntakeForm != null) || (item.TcmIntakeConsentForTreatment != null) || (item.TcmIntakeConsentForRelease != null) || (item.TcmIntakeConsumerRights != null)
-                                          || (item.TcmIntakeAcknowledgementHipa != null) || (item.TCMIntakeOrientationChecklist != null) || (item.TCMIntakeAdvancedDirective != null)
-                                          || (item.TCMIntakeForeignLanguage != null) || (item.TCMIntakeWelcome != null))
+                                        @if (User.IsInRole("CaseManager"))
                                         {
-                                            <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-section="1" asp-route-origin="1" class="btn btn-default" title="Print"><i class="glyphicon glyphicon-share"></i></a>
-                                            <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            @if ((item.TCMIntakeForm != null) || (item.TcmIntakeConsentForTreatment != null) || (item.TcmIntakeConsentForRelease != null) || (item.TcmIntakeConsumerRights != null)
+                                    || (item.TcmIntakeAcknowledgementHipa != null) || (item.TCMIntakeOrientationChecklist != null) || (item.TCMIntakeAdvancedDirective != null)
+                                    || (item.TCMIntakeForeignLanguage != null) || (item.TCMIntakeWelcome != null))
+                                            {
+                                                <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-section="1" asp-route-origin="1" class="btn btn-default" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                                @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-section="1" asp-route-origin="1" class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                                @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
+                                            }
                                         }
                                         else
                                         {
-                                    <a      asp-action="TCMIntakeSectionDashboard" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-section="1" asp-route-origin="1" class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
-                                            <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            @if ((item.TCMIntakeForm != null) || (item.TcmIntakeConsentForTreatment != null) || (item.TcmIntakeConsentForRelease != null) || (item.TcmIntakeConsumerRights != null)
+                                           || (item.TcmIntakeAcknowledgementHipa != null) || (item.TCMIntakeOrientationChecklist != null) || (item.TCMIntakeAdvancedDirective != null)
+                                           || (item.TCMIntakeForeignLanguage != null) || (item.TCMIntakeWelcome != null))
+                                            {
+                                                <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-section="1" class="btn btn-default" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                                @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-section="1" class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                                @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
+                                            }
                                         }
+
                                     </td>
                                     <td align="center">
                                         @if (item.TcmServicePlan == null)
@@ -147,20 +166,20 @@
                                     <td align="center">
                                         @if (item.TcmServicePlan.TCMAdendum == null)
                                         {
-                                                <a asp-action="Adendum" asp-route-id="@item.Id" asp-controller="TCMServicePlans" asp-route-caseNumber="@item.CaseNumber" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
-                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="Adendum" asp-route-id="@item.Id" asp-controller="TCMServicePlans" asp-route-caseNumber="@item.CaseNumber" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                            @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
                                         }
                                         else
                                         {
                                             @if (item.TcmServicePlan.TCMAdendum.Count() == 0)
                                             {
                                                 <a asp-action="Adendum" asp-route-id="@item.Id" asp-controller="TCMServicePlans" asp-route-caseNumber="@item.CaseNumber" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
-                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                                @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
                                             }
                                             else
                                             {
                                                 <a asp-action="Adendum" asp-route-id="@item.Id" asp-controller="TCMServicePlans" asp-route-caseNumber="@item.CaseNumber" asp-route-aview="2" class="btn btn-default" title="Print"><i class="glyphicon glyphicon-share"></i></a>
-                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                                @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
                                             }
                                         }
                                     </td>
@@ -237,20 +256,20 @@
                                     <td align="center">
                                         @if (item.TCMFarsFormList == null)
                                         {
-                                            <a asp-action="Index" asp-route-id="@item.Id" asp-controller="TCMFarsForms" asp-route-idTCMClient="@item.CaseNumber" asp-route-origin="2" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
-                                            <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="TCMFarsForTCMClient" asp-route-id="@item.Id" asp-controller="TCMFarsForms" asp-route-idTCMClient="@item.CaseNumber" asp-route-origin="2" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                            @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
                                         }
                                         else
                                         {
                                             @if (item.TCMFarsFormList.Count() == 0)
                                             {
-                                                <a asp-action="Index" asp-route-id="@item.Id" asp-controller="TCMFarsForms" asp-route-idTCMClient="@item.CaseNumber" asp-route-origin="2" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
-                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                                <a asp-action="TCMFarsForTCMClient" asp-route-id="@item.Id" asp-controller="TCMFarsForms" asp-route-idTCMClient="@item.CaseNumber" asp-route-origin="2" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                                @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
                                             }
                                             else
                                             {
-                                                <a asp-action="Index" asp-route-id="@item.Id" asp-controller="TCMFarsForms" asp-route-idTCMClient="@item.Id" asp-route-origin="2" class="btn btn-default" title="Print"><i class="glyphicon glyphicon-share"></i></a>
-                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                                <a asp-action="TCMFarsForTCMClient" asp-route-id="@item.Id" asp-controller="TCMFarsForms" asp-route-idTCMClient="@item.Id" asp-route-origin="2" class="btn btn-default" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                                @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
                                             }
 
                                         }

@@ -8,7 +8,8 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("TCM Intake", "TCMIntakeDashboardReadOnly", "TCMIntakes", new { id = @Model.Id })
+            @*@Html.ActionLink("TCM Intake", "TCMIntakeDashboardReadOnly", "TCMIntakes", new { id = @Model.Id })*@
+            @Html.ActionLink("TCM All Documents", "AllDocuments", "TCMClients")
         </li>
         @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
         {
@@ -46,14 +47,14 @@
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;">Intake<br>Intake Form</h4>
-                        <p style="text-align:right"><a asp-action="Create" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="Print" asp-route-id="@Model.Id" class="btn btn-default disabled" role="button">Print</a></p>
                     </div>
                 }
                 else
                 {
                     <div class="thumbnail list-group-item list-group-item-success">
                         <h4 style="align-content:end;">Intake<br>Intake Form</h4>
-                        <p style="text-align:right"><a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="Print" asp-route-id="@Model.Id" class="btn btn-success" role="button">Print</a></p>
                     </div>
                 }
             </div>
@@ -62,14 +63,14 @@
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;">Consent for<br>Treatment</h4>
-                        <p style="text-align:right"><a asp-action="CreateTCMConsentForTreatment" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="PrintTCMConsentForTreatment" asp-route-id="@Model.Id" class="btn btn-default disabled" role="button">Print</a></p>
                     </div>
                 }
                 else
                 {
                     <div class="thumbnail list-group-item list-group-item-success">
                         <h4 style="align-content:end;">Consent for<br>Treatment</h4>
-                        <p style="text-align:right"><a asp-action="CreateTCMConsentForTreatment" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="PrintTCMConsentForTreatment" asp-route-id="@Model.Id" class="btn btn-success" role="button">Print</a></p>
                     </div>
                 }
             </div>
@@ -78,14 +79,14 @@
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;">Consent for<br>Release</h4>
-                        <p style="text-align:right"><a asp-action="CreateTCMConsentForRelease" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="PrintTCMConsentForRelease" asp-route-id="@Model.Id" class="btn btn-default disabled" role="button">Print</a></p>
                     </div>
                 }
                 else
                 {
                     <div class="thumbnail list-group-item list-group-item-success">
                         <h4 style="align-content:end;">Consent for<br>Release</h4>
-                        <p style="text-align:right"><a asp-action="ListConsentForrelease" asp-route-id="@Model.Id" class="btn btn-success" role="button">@Model.TcmIntakeConsentForRelease.Count()</a></p>
+                        <p style="text-align:right"><a asp-action="PrintConsentForrelease" asp-route-id="@Model.Id" class="btn btn-success" role="button">@Model.TcmIntakeConsentForRelease.Count()</a></p>
                     </div>
                 }
             </div>
@@ -94,14 +95,14 @@
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;">Consumer<br>Rights</h4>
-                        <p style="text-align:right"><a asp-action="CreateTCMConsumerRights" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="PrintTCMConsumerRights" asp-route-id="@Model.Id" class="btn btn-default disabled" role="button">Print</a></p>
                     </div>
                 }
                 else
                 {
                     <div class="thumbnail list-group-item list-group-item-success">
                         <h4 style="align-content:end;">Consumer<br>Rights</h4>
-                        <p style="text-align:right"><a asp-action="CreateTCMConsumerRights" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="PrintTCMConsumerRights" asp-route-id="@Model.Id" class="btn btn-success" role="button">Print</a></p>
                     </div>
                 }
             </div>
@@ -110,14 +111,14 @@
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;">Acknowledgement<br>Hippa</h4>
-                        <p style="text-align:right"><a asp-action="CreateTCMAcknowledgementHippa" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="PrintTCMAcknowledgementHippa" asp-route-id="@Model.Id" class="btn btn-default disabled" role="button">Print</a></p>
                     </div>
                 }
                 else
                 {
                     <div class="thumbnail list-group-item list-group-item-success">
                         <h4 style="align-content:end;">Acknowledgement<br>Hippa</h4>
-                        <p style="text-align:right"><a asp-action="CreateTCMAcknowledgementHippa" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="PrintTCMAcknowledgementHippa" asp-route-id="@Model.Id" class="btn btn-success" role="button">Print</a></p>
                     </div>
                 }
             </div>
@@ -135,14 +136,14 @@
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;">Orientation<br>Checklist</h4>
-                        <p style="text-align:right"><a asp-action="CreateTCMOrientationCheckList" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="PrintTCMOrientationCheckList" asp-route-id="@Model.Id" class="btn btn-default disabled" role="button">Print</a></p>
                     </div>
                 }
                 else
                 {
                     <div class="thumbnail list-group-item list-group-item-success">
                         <h4 style="align-content:end;">Orientation<br>Checklist</h4>
-                        <p style="text-align:right"><a asp-action="CreateTCMOrientationCheckList" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="PrintTCMOrientationCheckList" asp-route-id="@Model.Id" class="btn btn-success" role="button">Print</a></p>
                     </div>
                 }
             </div>
@@ -151,14 +152,14 @@
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;">Advance<br>Directive</h4>
-                        <p style="text-align:right"><a asp-action="CreateTCMIntakeAdvenceDirective" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="PrintTCMIntakeAdvenceDirective" asp-route-id="@Model.Id" class="btn btn-default disabled" role="button">Print</a></p>
                     </div>
                 }
                 else
                 {
                     <div class="thumbnail list-group-item list-group-item-success">
                         <h4 style="align-content:end;">Advance<br>Directive</h4>
-                        <p style="text-align:right"><a asp-action="CreateTCMIntakeAdvenceDirective" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="PrintTCMIntakeAdvenceDirective" asp-route-id="@Model.Id" class="btn btn-success" role="button">Print</a></p>
                     </div>
                 }
             </div>
@@ -167,14 +168,14 @@
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;">Foreign Language<br>Acknowledgement</h4>
-                        <p style="text-align:right"><a asp-action="CreateTCMForeignLanguage" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="PrintTCMForeignLanguage" asp-route-id="@Model.Id" class="btn btn-default disabled" role="button">Print</a></p>
                     </div>
                 }
                 else
                 {
                     <div class="thumbnail list-group-item list-group-item-success">
                         <h4 style="align-content:end;">Foreign Language<br>Acknowledgement</h4>
-                        <p style="text-align:right"><a asp-action="CreateTCMForeignLanguage" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="PrintTCMForeignLanguage" asp-route-id="@Model.Id" class="btn btn-success" role="button">Print</a></p>
                     </div>
                 }
             </div>
@@ -183,14 +184,14 @@
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;">Correspondence<br>&nbsp;</h4>
-                        <p style="text-align:right"><a asp-action="CreateTCMWelcome" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="PrintTCMWelcome" asp-route-id="@Model.Id" class="btn btn-default disabled" role="button">Print</a></p>
                     </div>
                 }
                 else
                 {
                     <div class="thumbnail list-group-item list-group-item-success">
                         <h4 style="align-content:end;">Correspondence<br>&nbsp;</h4>
-                        <p style="text-align:right"><a asp-action="CreateTCMWelcome" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="PrintTCMWelcome" asp-route-id="@Model.Id" class="btn btn-success" role="button">Print</a></p>
                     </div>
                 }
             </div>

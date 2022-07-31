@@ -230,7 +230,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor")]
-        public async Task<IActionResult> Edit(int? id, int error = 0, int idFacilitator = 0, int idClient = 0)
+        public async Task<IActionResult> Edit(int? id, int error = 0, int idFacilitator = 0, int idClient = 0, int origin = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -275,6 +275,7 @@ namespace KyoS.Web.Controllers
                 }).ToList();
 
                 tcmClientViewModel.CaseMannagers = listCaseManager;
+                ViewData["origin"] = origin;
                 return View(tcmClientViewModel);
             }
             return RedirectToAction("NotAuthorized", "Account");
@@ -283,7 +284,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [Authorize(Roles = "Manager, TCMSupervisor")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(TCMClientViewModel model)
+        public async Task<IActionResult> Edit(TCMClientViewModel model, int origin = 0)
         {
             UserEntity user_logged = _context.Users
                                            .Include(u => u.Clinic)
@@ -308,13 +309,28 @@ namespace KyoS.Web.Controllers
                         try
                         {
                             await _context.SaveChangesAsync();
-                            List<TCMClientEntity> tcmClients = await _context.TCMClient
+                            if (origin == 0)
+                            {
+                                List<TCMClientEntity> tcmClients = await _context.TCMClient
+                                                             .Include(g => g.Casemanager)
+                                                             .Include(g => g.Client)
+                                                             .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id)
+                                                             .OrderBy(g => g.Casemanager.Name)
+                                                             .ToListAsync();
+                                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMClient", tcmClients) });
+
+                            }
+                            else
+                            {
+                                List<TCMClientEntity> tcmClients = await _context.TCMClient
                                                          .Include(g => g.Casemanager)
                                                          .Include(g => g.Client)
                                                          .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id)
                                                          .OrderBy(g => g.Casemanager.Name)
                                                          .ToListAsync();
-                            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMClient", tcmClients) });
+                                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "GetCaseOpen", tcmClients) });
+
+                            }
 
                         }
                         catch (System.Exception ex)
@@ -610,28 +626,11 @@ namespace KyoS.Web.Controllers
                         item.TCMAssessment = new TCMAssessmentEntity();
                     if (item.TcmIntakeAppendixJ == null)
                         item.TcmIntakeAppendixJ = new TCMIntakeAppendixJEntity();
-                    /*if (item.TCMIntakeForm == null)
-                        item.TCMIntakeForm = new TCMIntakeFormEntity();
-                    if (item.TcmIntakeConsentForTreatment == null)
-                        item.TcmIntakeConsentForTreatment = new TCMIntakeConsentForTreatmentEntity();
-                    if (item.TcmIntakeConsentForRelease == null)
-                        item.TcmIntakeConsentForRelease = new List<TCMIntakeConsentForReleaseEntity>();
-                    if (item.TcmIntakeConsumerRights == null)
-                        item.TcmIntakeConsumerRights = new TCMIntakeConsumerRightsEntity();
-                    if (item.TcmIntakeAcknowledgementHipa == null)
-                        item.TcmIntakeAcknowledgementHipa = new TCMIntakeAcknowledgementHippaEntity();
-                    if (item.TCMIntakeOrientationChecklist == null)
-                        item.TCMIntakeOrientationChecklist = new TCMIntakeOrientationChecklistEntity();
-                    if (item.TCMIntakeAdvancedDirective == null)
-                        item.TCMIntakeAdvancedDirective = new TCMIntakeAdvancedDirectiveEntity();
-                    if (item.TCMIntakeForeignLanguage == null)
-                        item.TCMIntakeForeignLanguage = new TCMIntakeForeignLanguageEntity();
-                    if (item.TCMIntakeWelcome == null)
-                        item.TCMIntakeWelcome = new TCMIntakeWelcomeEntity();*/
+                    
                     salida.Add(item);
                 }
 
-                return View(tcmClientList);
+                return View(salida);
             }
             if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "TCMSupervisor")
             {
@@ -639,13 +638,50 @@ namespace KyoS.Web.Controllers
                 {
                     return RedirectToAction("NotAuthorized", "Account");
                 }
-                List<TCMClientEntity> tcmClient = await _context.TCMClient
-                                                                .Include(g => g.Casemanager)
-                                                                .Include(g => g.Client)
-                                                                .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id))
-                                                                .OrderBy(g => g.Casemanager.Name)
-                                                                .ToListAsync();
-                return View(tcmClient);
+                List<TCMClientEntity> tcmClientList = await _context.TCMClient
+                                                                    .Include(g => g.Casemanager)
+                                                                    .Include(g => g.Client)
+                                                                    .Include(g => g.TcmServicePlan)
+                                                                    .Include(g => g.TcmServicePlan.TCMServicePlanReview)
+                                                                    .Include(g => g.TcmServicePlan.TCMAdendum)
+                                                                    .Include(g => g.TCMFarsFormList)
+                                                                    .Include(g => g.TcmServicePlan.TCMDischarge)
+                                                                    .Include(g => g.TcmIntakeAppendixJ)
+                                                                    .Include(g => g.TCMAssessment)
+                                                                    .Include(g => g.TCMIntakeForm)
+                                                                    .Include(g => g.TcmIntakeConsentForTreatment)
+                                                                    .Include(g => g.TcmIntakeConsentForRelease)
+                                                                    .Include(g => g.TcmIntakeConsumerRights)
+                                                                    .Include(g => g.TcmIntakeAcknowledgementHipa)
+                                                                    .Include(g => g.TCMIntakeOrientationChecklist)
+                                                                    .Include(g => g.TCMIntakeAdvancedDirective)
+                                                                    .Include(g => g.TCMIntakeForeignLanguage)
+                                                                    .Include(g => g.TCMIntakeWelcome)
+                                                                    .Where(g => (g.Client.Clinic.Id == user_logged.Clinic.Id))
+                                                                    .OrderBy(g => g.Client.Name)
+                                                                    .ToListAsync();
+                List<TCMClientEntity> salida = new List<TCMClientEntity>();
+                foreach (var item in tcmClientList)
+                {
+                    if (item.TcmServicePlan == null)
+                        item.TcmServicePlan = new TCMServicePlanEntity();
+                    if (item.TcmServicePlan.TCMAdendum == null)
+                        item.TcmServicePlan.TCMAdendum = new List<TCMAdendumEntity>();
+                    if (item.TcmServicePlan.TCMServicePlanReview == null)
+                        item.TcmServicePlan.TCMServicePlanReview = new TCMServicePlanReviewEntity();
+                    if (item.TcmServicePlan.TCMDischarge == null)
+                        item.TcmServicePlan.TCMDischarge = new TCMDischargeEntity();
+                    if (item.TCMFarsFormList == null)
+                        item.TCMFarsFormList = new List<TCMFarsFormEntity>();
+                    if (item.TCMAssessment == null)
+                        item.TCMAssessment = new TCMAssessmentEntity();
+                    if (item.TcmIntakeAppendixJ == null)
+                        item.TcmIntakeAppendixJ = new TCMIntakeAppendixJEntity();
+
+                    salida.Add(item);
+                }
+
+                return View(salida);
 
             }
             return RedirectToAction("NotAuthorized", "Account");

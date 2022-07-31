@@ -936,13 +936,14 @@ namespace KyoS.Web.Helpers
         public IEnumerable<SelectListItem> GetComboClientsForTCMCaseNotOpen(int idClinic)
         {
             List<ClientEntity> clients_Total = _context.Clients
-                                                   .Where(c => (c.Clinic.Id == idClinic
-                                                   && c.Status == StatusType.Open))
-                                                 .ToList();
-            List<TCMClientEntity> clients_Open = _context.TCMClient
-                                                 .Where(c => (c.Client.Clinic.Id == idClinic
+                                                       .Where(c => (c.Clinic.Id == idClinic
                                                             && c.Status == StatusType.Open))
-                                                 .ToList();
+                                                       .ToList();
+            List<TCMClientEntity> clients_Open = _context.TCMClient
+                                                         .Include(n => n.Client)
+                                                         .Where(c => (c.Client.Clinic.Id == idClinic
+                                                            && c.Status == StatusType.Open))
+                                                         .ToList();
             
             foreach (var item in clients_Open)
             {

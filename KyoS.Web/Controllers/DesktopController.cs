@@ -542,7 +542,32 @@ namespace KyoS.Web.Controllers
                                                        && g.Client.Clinic.Id == user_logged.Clinic.Id
                                                        && g.TcmServicePlan.TCMDischarge.Approved == 1)).Count().ToString();
 
+                ViewBag.TCMCaseManager = _context.CaseManagers
+                                                 .Where(g => (g.Status == StatusType.Open
+                                                    && g.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
 
+                ViewBag.TCMFarsPending = _context.TCMFarsForm
+                                              .Where(g => (g.Status == FarsStatus.Pending
+                                                        && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+
+                ViewBag.AssesmentPending = _context.TCMAssessment
+                                                   .Where(g => (g.Approved == 1
+                                                         && g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+
+                ViewBag.AllDocuments = _context.TCMClient
+                                               .Where(g => g.Client.Clinic.Id == user_logged.Clinic.Id).Count().ToString();
+
+                ViewBag.TCMNotesEdition = _context.TCMNote
+                                                  .Where(g => (g.Status == NoteStatus.Edition
+                                                     && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+
+                ViewBag.TCMNotesPending = _context.TCMNote
+                                                  .Where(g => (g.Status == NoteStatus.Pending
+                                                     && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+
+                ViewBag.TCMNotesApproved = _context.TCMNote
+                                                .Where(g => (g.Status == NoteStatus.Approved
+                                                    && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
             }
             if (User.IsInRole("Admin"))
             {
