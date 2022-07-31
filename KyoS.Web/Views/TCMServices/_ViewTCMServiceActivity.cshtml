@@ -95,35 +95,43 @@
                                                             </span>
                                                         }
                                                     </td>
-                                                    <td align="center">
-                                                        @if (User.Identity.Name == product.CreatedBy && product.Approved < 2 && !User.IsInRole("TCMSupervisor"))
-                                                        {
-                                                            <a onclick="showInPopup('@Url.Action("EditServiceActivity", "TCMServices", new { id = product.Id }, Context.Request.Scheme)','Edit TCM Activity')" class="btn btn-warning" title="Edit stage"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                            <a class="btn btn-success disabled" title="Approved Activity"><i class="glyphicon glyphicon-ok"></i></a>
-                                                        }
-                                                        else
-                                                        {
-                                                            @if (User.IsInRole("TCMSupervisor"))
-                                                            {
-                                                                <a onclick="showInPopup('@Url.Action("EditServiceActivity", "TCMServices", new { id = product.Id }, Context.Request.Scheme)','Edit TCM Activity')" class="btn btn-warning" title="Edit stage"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                @if (product.Approved < 2)
-                                                                {
-                                                                    <a asp-action="ApprovedActivity" asp-route-id="@product.Id" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></a>
-                                                                }
-                                                                else
-                                                                { 
-                                                                    <a class="btn btn-success disabled" title="Approved Activity"><i class="glyphicon glyphicon-ok"></i></a>
-                                                                }
+                                                     <td align="center">
+                                                         @if (User.Identity.Name == product.CreatedBy && product.Approved < 2 && !User.IsInRole("TCMSupervisor"))
+                                                         {
+                                                             <a onclick="showInPopup('@Url.Action("EditServiceActivity", "TCMServices", new { id = product.Id }, Context.Request.Scheme)','Edit TCM Activity')" class="btn btn-warning" title="Edit stage"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                             @if (User.IsInRole("Manager"))
+                                                             {
+                                                                 <a asp-action="ApprovedActivity" asp-route-id="@product.Id" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></a>
+                                                             }
+                                                             else
+                                                             {
+                                                                 <a class="btn btn-success disabled" title="Approved Activity"><i class="glyphicon glyphicon-ok"></i></a>
+                                                             }
 
-                                                            }
-                                                            else
-                                                            {
-                                                                <a class="btn btn-warning disabled" title="Edit Activity"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                <a class="btn btn-success disabled" title="Approved Activity"><i class="glyphicon glyphicon-ok"></i></a>
-                                                            }
+                                                         }
+                                                         else
+                                                         {
+                                                             @if (User.IsInRole("TCMSupervisor"))
+                                                             {
+                                                                 <a onclick="showInPopup('@Url.Action("EditServiceActivity", "TCMServices", new { id = product.Id }, Context.Request.Scheme)','Edit TCM Activity')" class="btn btn-warning" title="Edit activity"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                 @if (product.Approved < 2)
+                                                                 {
+                                                                     <a asp-action="ApprovedActivity" asp-route-id="@product.Id" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                 }
+                                                                 else
+                                                                 {
+                                                                     <a class="btn btn-success disabled" title="Approved Activity"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                 }
 
-                                                        }
-                                                    </td>
+                                                             }
+                                                             else
+                                                             {
+                                                                 <a class="btn btn-warning disabled" title="Edit Activity"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                 <a class="btn btn-success disabled" title="Approved Activity"><i class="glyphicon glyphicon-ok"></i></a>
+                                                             }
+
+                                                         }
+                                                     </td>
                                                  </tr>
                                                 cant_unit = cant_unit + product.Unit;
                                             }

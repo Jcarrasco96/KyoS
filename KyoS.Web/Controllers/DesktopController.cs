@@ -692,6 +692,11 @@ namespace KyoS.Web.Controllers
                                                .Where(g => (g.Casemanager.Id == caseManager.Id
                                                          && g.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
 
+                ViewBag.ActivityPending = _context.TCMServiceActivity
+                                                  .Where(g => (g.Approved < 2
+                                                               && g.CreatedBy == user_logged.UserName
+                                                               && g.TcmService.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+
             }
             if (User.IsInRole("Documents_Assistant"))
             {

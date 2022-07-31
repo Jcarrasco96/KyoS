@@ -1,0 +1,133 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMClientEntity>
+@{
+    ViewData["Title"] = "CasesForCaseManager";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Case Manager' cases</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @if (ViewBag.Delete == "N")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <strong class="red">
+                    Error. It is not posible delete the case
+                </strong>
+            </div>
+        }
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"> @Html.DisplayFor(modelItem => Model.ElementAtOrDefault(0).Casemanager.Name)' cases</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-4">
+                                Client Name
+                            </th>
+                            <th class="col-md-2" style="text-align: center;">
+                                Open Date
+                            </th>
+                            <th class="col-md-2" style="text-align: center;">
+                                Notes
+                            </th>
+                            <th class="col-md-2" style="text-align: center;">
+                                Units
+                            </th>
+                            <th class="col-md-2" style="text-align: center;">
+                                Close Date
+                            </th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                   @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                    {
+                                        <span class="label label-success">
+                                            @Html.DisplayFor(modelItem => item.CaseNumber)
+                                        </span>
+                                    }
+                                    @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                    {
+                                        <span class="label label-default">
+                                            @Html.DisplayFor(modelItem => item.CaseNumber)
+                                        </span>
+                                    }
+                                    &nbsp;
+                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => item.Client.Name)
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DataOpen)
+                                </td>
+                                <td align="center">
+                                    @item.TCMNote.Count()
+                                </td>
+                                 <td align="center">
+                                    @item.TCMNote.Sum(n => n.TCMNoteActivity.Sum(m => m.Minutes))
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DataClose)
+                                </td>
+                                
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+                        $(document).ready(function () {
+                            $('#MyTable').DataTable();
+
+                            // Delete item
+                            var item_to_delete;
+
+                            $('.deleteItem').click((e) => {
+                                item_to_delete = e.currentTarget.dataset.id;
+                            });
+
+                            $("#btnYesDelete").click(function () {
+                                var url = "@Url.Action("Delete", "CaseMannager")";
+                                window.location.href = url + '/' + item_to_delete;
+                            });
+                        });
+    </script>
+}
+

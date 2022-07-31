@@ -38,7 +38,6 @@
                                     <div style="display:none">
                                         <table class="table table-striped">
                                             <tr>
-                                                <th class="col-md-1"></th>
                                                 <th class="col-md-3">Date</th>
                                                 <th class="col-md-3">Day</th>
                                                 <th class="col-md-2" style="text-align:center;">AM Session</th>
@@ -49,70 +48,7 @@
                                             {
                                                 <tr>
                                                     <td align="center">
-                                                        @if (day.TCMNote.Where(wc => wc.CaseManager.LinkedUser == User.Identity.Name).Count() != 0)
-                                                        {
-                                                            <a class="icon-plus-sign-alt"></a>
-                                                        }
-                                                        <div style="display:none">
-                                                            <table class="table table-striped">
-                                                                <tr>
-                                                                    <th class="col-md-1" style="text-align:center;">Status</th>
-                                                                    <th class="col-md-3">Name</th>
-                                                                    <th class="col-md-2" style="text-align:center;">CaseManager</th>
-                                                                    <th class="col-md-2"></th>
-                                                                    <th></th>
-                                                                </tr>
-                                                                @foreach (var Note in day.TCMNote.Where(dc => dc.CaseManager.LinkedUser == User.Identity.Name))
-                                                                {
-                                                                   
-                                                                        <tr>
-                                                                            <td align="center">
-                                                                                @Html.DisplayFor(modelItem => Note.Status)
-                                                                            </td>
-                                                                            <td>
-                                                                                @Html.DisplayFor(modelItem => Note.TCMClient.Client.Name)
-                                                                            </td>
-                                                                            <td align="center">
-                                                                                @Html.DisplayFor(modelItem => Note.TCMClient.CaseNumber)
-                                                                            
-                                                                            <td align="right">
-                                                                                @if (Note == null )
-                                                                                {
-                                                                                    <a asp-action="EditNote" asp-route-id="@Note.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
-                                                                                    <a asp-action="Present" asp-route-id="@Note.Id" class="btn btn-danger" title="Present or not present"><i class="glyphicon glyphicon-remove"></i></a>
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    if ((Note != null && Note.Status.ToString() == "Edition") )
-                                                                                    {
-                                                                                        <a asp-action="EditNote" asp-route-id="@Note.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
-                                                                                        <a asp-action="Present" asp-route-id="@Note.Id" class="btn btn-danger" title="Present or not present"><i class="glyphicon glyphicon-remove"></i></a>
-                                                                                        @if (Note != null && Note.Status.ToString() == "Edition")
-                                                                                        {
-                                                                                            <a asp-action="FinishEditing" class="btn btn-success" asp-route-id="@Note.Id" title="Finish edition of note"><i class="glyphicon glyphicon-ok"></i></a>
-                                                                                        }
-                                                                                       
-                                                                                    }
-                                                                                    else
-                                                                                        if ((Note != null && Note.Status.ToString() == "Pending") )
-                                                                                    {
-                                                                                        <a asp-action="EditNote" asp-route-id="@Note.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        if ((Note != null && Note.Status.ToString() == "Approved") )
-                                                                                        {
-                                                                                            <a asp-action="ApproveNote" asp-route-id="@Note.Id" class="btn btn-primary" title="View of note"><i class="glyphicon glyphicon-file"></i></a>
-                                                                                            <a asp-action="PrintNote" asp-route-id="@Note.Id" class="btn btn-success" title="Print note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            </td>
-                                                                        </tr>
-                                                                }
-                                                            </table>
-                                                        </div>
-                                                    </td>
+                                                      
                                                     <td>
                                                         @Html.DisplayFor(modelItem => day.Date)
                                                     </td>

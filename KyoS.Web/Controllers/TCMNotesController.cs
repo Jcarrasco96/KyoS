@@ -65,20 +65,12 @@ namespace KyoS.Web.Controllers
             }
 
             return View(await _context.Weeks
-
                                       .Include(w => w.Days)
-                                      .ThenInclude(d => d.TCMNote)
-                                      .ThenInclude(wc => wc.TCMClient)
-
                                       .Include(w => w.Days)
-                                      .ThenInclude(d => d.TCMNote)
-                                      .ThenInclude(g => g.CaseManager)
-
                                       .Include(w => w.Days)
-                                      .ThenInclude(d => d.TCMNote)
-
+                                     
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
-                                                && w.Days.Where(d => (d.Service == ServiceType.PSR && d.TCMNote.Where(wc => wc.CaseManager.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))
+                                                && w.Days.Where(d => (d.Service == ServiceType.PSR)).Count() > 0))
                                       .ToListAsync());
         }
 

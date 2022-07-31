@@ -727,7 +727,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditServiceActivity", tcmServiceActivityViewModel) });
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "TCMSupervisor, Manager")]
         public async Task<IActionResult> ApprovedActivity(int id, int origin = 0)
         {
             TCMServiceActivityEntity activity = await _context.TCMServiceActivity
@@ -745,15 +745,33 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(PendingActivity));
         }
         
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "TCMSupervisor, Manager, CaseManager")]
         public async Task<IActionResult> PendingActivity()
         {
-            List<TCMServiceActivityEntity> listActivity = await _context.TCMServiceActivity
-                                                                        .Include(n => n.TcmService)
-                                                                        .Where(n => n.Approved < 2)
-                                                                        .ToListAsync();
+            UserEntity user_logged = _context.Users
+                                            .Include(u => u.Clinic)
+                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            return View(listActivity);
+            if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+            {
+                List<TCMServiceActivityEntity> listActivity = await _context.TCMServiceActivity
+                                                                            .Include(n => n.TcmService)
+                                                                            .Where(n => n.Approved < 2)
+                                                                            .ToListAsync();
+
+                return View(listActivity);
+            }
+            else
+            {
+                List<TCMServiceActivityEntity> listActivity = await _context.TCMServiceActivity
+                                                                            .Include(n => n.TcmService)
+                                                                            .Where(n => n.Approved < 2
+                                                                                && n.CreatedBy == user_logged.UserName)
+                                                                            .ToListAsync();
+
+                return View(listActivity);
+            }
+            
         }
 
         [Authorize(Roles = "TCMSupervisor, Manager")]
