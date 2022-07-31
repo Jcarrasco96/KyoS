@@ -1169,7 +1169,7 @@ namespace KyoS.Web.Controllers
                     ViewData["aview"] = aview;
                     return View(adendum);
                 }
-                if (user_logged.UserType.ToString() == "Manager")
+                if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "TCMSupervisor")
                 {
                     List<TCMAdendumEntity> adendum = await _context.TCMAdendums
                                                        .Include(h => h.TcmDomain)
@@ -1180,23 +1180,13 @@ namespace KyoS.Web.Controllers
                                                        .Include(h => h.TcmServicePlan.TcmClient.Casemanager)
                                                        .Where(h => h.TcmServicePlan.TcmClient.Casemanager.Clinic.Id == clinic.Id)
                                                        .ToListAsync();
-
+                    ViewData["tcmClientId"] = caseNumber;
+                    if (tcmClient != null)
+                        ViewData["Id"] = tcmClient.Id;
+                    ViewData["aview"] = aview;
                     return View(adendum);
                 }
-                if (user_logged.UserType.ToString() == "TCMSupervisor")
-                {
-                    List<TCMAdendumEntity> adendum = await _context.TCMAdendums
-                                                       .Include(h => h.TcmDomain)
-                                                       .ThenInclude(h => h.TCMObjetive)
-                                                       .Include(h => h.TcmServicePlan)
-                                                       .ThenInclude(h => (h.TcmClient))
-                                                       .Include(h => h.TcmServicePlan.TcmClient.Client)
-                                                       .Include(h => h.TcmServicePlan.TcmClient.Casemanager)
-                                                       .Where(h => h.TcmServicePlan.TcmClient.Casemanager.Clinic.Id == clinic.Id)
-                                                       .ToListAsync();
-
-                    return View(adendum);
-                }
+               
             }
             else
             {
@@ -1557,72 +1547,6 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Adendum", "TCMServicePlans");
         }
 
-       /* [Authorize(Roles = "Manager, CaseManager, TCMSupervisor")]
-        public async Task<IActionResult> AprovedAdendum()
-        {
-            UserEntity user_logged = _context.Users
-
-                                             .Include(u => u.Clinic)
-                                             .ThenInclude(c => c.Setting)
-                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
-            {
-                return RedirectToAction("NotAuthorized", "Account");
-            }
-
-            ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
-            TCMAdendumEntity tcmAdendum = await _context.TCMAdendums
-                                            .FirstOrDefaultAsync(c => c.TcmServicePlan.TcmClient.Casemanager.LinkedUser == user_logged.UserName);
-
-            if (user_logged.UserType.ToString() == "TCMSupervisor")
-            {
-
-                List<TCMAdendumEntity> adendum = await _context.TCMAdendums
-                                                               .Include(h => h.TcmDomain)
-                                                               .ThenInclude(h => h.TCMObjetive)
-                                                               .Include(g => g.TcmServicePlan.TcmClient)
-                                                               .ThenInclude(f => f.Client)
-                                                               .Include(t => t.TcmServicePlan.TcmClient.Casemanager)
-                                                               .Where(g => (g.Approved == 1
-                                                                && g.TcmServicePlan.TcmClient.Client.Clinic.Id == clinic.Id))
-                                                               .ToListAsync();
-
-                return View(adendum);
-            }
-            if (user_logged.UserType.ToString() == "Manager")
-            {
-                List<TCMAdendumEntity> tcmAdendums = await _context.TCMAdendums
-                                                                   .Include(h => h.TcmDomain)
-                                                                   .ThenInclude(h => h.TCMObjetive)
-                                                                   .Include(g => g.TcmServicePlan.TcmClient)
-                                                                   .ThenInclude(f => f.Client)
-                                                                   .Include(t => t.TcmServicePlan.TcmClient.Casemanager)
-                                                                   .Where(g => (g.Approved == 1
-                                                                   && g.TcmServicePlan.TcmClient.Client.Clinic.Id == clinic.Id))
-                                                                   .ToListAsync();
-                return View(tcmAdendums);
-            }
-
-            if (user_logged.UserType.ToString() == "CaseManager")
-            {
-                List<TCMAdendumEntity> tcmAdendums = await _context.TCMAdendums
-                                                                   .Include(h => h.TcmDomain)
-                                                                   .ThenInclude(h => h.TCMObjetive)
-                                                                   .Include(g => g.TcmServicePlan.TcmClient)
-                                                                   .ThenInclude(f => f.Client)
-                                                                   .Include(t => t.TcmServicePlan.TcmClient.Casemanager)
-                                                                   .Where(g => (g.Approved == 1
-                                                                    && g.TcmServicePlan.TcmClient.Client.Clinic.Id == clinic.Id
-                                                                    && g.TcmServicePlan.TcmClient.Casemanager.LinkedUser == user_logged.UserName))
-                                                                   .ToListAsync();
-                return View(tcmAdendums);
-            }
-            return View(null);
-
-        }*/
-
-      
         [Authorize(Roles = "TCMSupervisor")]
         public async Task<IActionResult> AproveAdendum(int id)
         {

@@ -11,7 +11,6 @@ namespace KyoS.Web.Data.Entities
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
         public WeekEntity Week { get; set; }
-        public List<TCMNoteEntity >TCMNote { get; set; }
         public ICollection<Workday_Client> Workdays_Clients { get; set; }
         public ICollection<Workday_Activity_Facilitator> Workdays_Activities_Facilitators { get; set; }
         public string Day => Date.DayOfWeek.ToString();

@@ -29,7 +29,6 @@ namespace KyoS.Web.Data.Entities
         [DataType(DataType.Date)]
         public DateTime? CaseManagerDate { get; set; }
 
-        public WorkdayEntity Workday { get; set; }
         public TCMClientEntity TCMClient { get; set; }
         public CaseMannagerEntity CaseManager { get; set; }
 

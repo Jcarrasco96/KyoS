@@ -5621,8 +5621,8 @@ namespace KyoS.Web.Helpers
                 ServiceCode = model.ServiceCode,
                 Status = model.Status,
                 TCMClient = _context.TCMClient
-                                    .FirstOrDefault(n => n.Id == model.IdTCMClient),
-                Workday = _context.Workdays.FirstOrDefault(n => n.Id == model.IdTCMWorday)
+                                    .FirstOrDefault(n => n.Id == model.IdTCMClient)
+               
             };
         }
 
@@ -5646,7 +5646,6 @@ namespace KyoS.Web.Helpers
                 ServiceCode = model.ServiceCode,
                 Status = model.Status,
                 TCMClient = model.TCMClient,
-                Workday = model.Workday,
                 IdCaseManager = model.CaseManager.Id,
                 IdTCMClient = model.TCMClient.Id,
                 IdTCMNote = model.Id
