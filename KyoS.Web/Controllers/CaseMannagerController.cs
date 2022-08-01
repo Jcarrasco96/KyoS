@@ -286,6 +286,7 @@ namespace KyoS.Web.Controllers
                                                                 .Include(n => n.Client)
                                                                 .Include(n => n.TCMNote)
                                                                 .ThenInclude(n => n.TCMNoteActivity)
+                                                                .ThenInclude(n => n.TCMDomain)
                                                                 .Where(n => n.Casemanager.Id == idCaseManager
                                                                     && n.Status == status)
                                                                 .ToListAsync();
