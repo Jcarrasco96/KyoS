@@ -7755,36 +7755,30 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Id", typeof(int));
             dt.Columns.Add("DateOfService", typeof(DateTime));
             dt.Columns.Add("ServiceCode", typeof(string));
-            dt.Columns.Add("Status", typeof(int));
-            dt.Columns.Add("DocumentationTime", typeof(DateTime));
+            dt.Columns.Add("Status", typeof(int));            
             dt.Columns.Add("Outcome", typeof(string));
             dt.Columns.Add("NextStep", typeof(string));
-            dt.Columns.Add("CaseManagerId", typeof(int));
-            dt.Columns.Add("CaseManagerDate", typeof(DateTime));
+            dt.Columns.Add("CaseManagerId", typeof(int));            
             dt.Columns.Add("CreatedBy", typeof(string));
             dt.Columns.Add("CreatedOn", typeof(DateTime));
             dt.Columns.Add("LastModifiedBy", typeof(string));
             dt.Columns.Add("LastModifiedOn", typeof(DateTime));
-            dt.Columns.Add("TCMClientId", typeof(int));
-            dt.Columns.Add("WorkdayId", typeof(int));
+            dt.Columns.Add("TCMClientId", typeof(int));            
 
             dt.Rows.Add(new object[]
                                         {
                                             note.Id,
                                             note.DateOfService,
                                             note.ServiceCode,
-                                            note.Status,
-                                            note.DocumentationTime,
+                                            note.Status,                                            
                                             note.Outcome,
                                             note.NextStep,
-                                            0,
-                                            note.CaseManagerDate,
+                                            0,                                           
                                             note.CreatedBy,
                                             note.CreatedOn,
                                             note.LastModifiedBy,
                                             note.LastModifiedOn,
-                                            0,
-                                            0
+                                            0                                           
             });
 
             return dt;

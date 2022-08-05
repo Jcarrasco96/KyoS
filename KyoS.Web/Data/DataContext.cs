@@ -120,6 +120,7 @@ namespace KyoS.Web.Data
         public DbSet<TCMNoteActivityEntity> TCMNoteActivity { get; set; }
         public DbSet<DocumentsAssistantEntity> DocumentsAssistant { get; set; }
         public DbSet<TCMServiceActivityEntity> TCMServiceActivity { get; set; }
+        public DbSet<TCMNoteActivityTempEntity> TCMNoteActivityTemp { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

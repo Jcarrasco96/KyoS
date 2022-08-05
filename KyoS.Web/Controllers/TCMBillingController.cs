@@ -86,7 +86,7 @@ namespace KyoS.Web.Controllers
 
             var events = _context.TCMNoteActivity
                                  .Where(t => (t.TCMNote.CaseManager.LinkedUser == user_logged.UserName
-                                           && t.StartTime >= initDate && t.StartTime <= finalDate))
+                                           && t.TCMNote.DateOfService >= initDate && t.TCMNote.DateOfService <= finalDate))
                                  .Select(t => new
                                  {
                                            //id = t.TCMNote.Id,

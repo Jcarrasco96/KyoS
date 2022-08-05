@@ -1082,9 +1082,9 @@ jQueryAjaxPostTCMNoteActivity = form => {
             success: function (res) {
                 if (res.isValid) {
                     $('#view-NoteActivity').html(res.html)
-                    $('#form-modal .modal-body').html('');
-                    $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
+                    $('#form-modal-lg .modal-body').html('');
+                    $('#form-modal-lg .modal-title').html('');
+                    $('#form-modal-lg').modal('hide');
 
                     //$('#MyTable').DataTable({
                     //    "order": [[1, "asc"]],
@@ -1104,7 +1104,7 @@ jQueryAjaxPostTCMNoteActivity = form => {
                     });
                 }
                 else
-                    $('#form-modal .modal-body').html(res.html);
+                    $('#form-modal-lg .modal-body').html(res.html);
             },
             error: function (err) {
                 console.log(err)
@@ -1117,7 +1117,52 @@ jQueryAjaxPostTCMNoteActivity = form => {
     }
 
 }
+jQueryAjaxPostTCMNoteActivityTemp = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-NoteActivityTemp').html(res.html)
+                    $('#form-modal-lg .modal-body').html('');
+                    $('#form-modal-lg .modal-title').html('');
+                    $('#form-modal-lg').modal('hide');
 
+                    //$('#MyTable').DataTable({
+                    //    "order": [[1, "asc"]],
+                    //    "pageLength": 100
+                    //});
+                    var item_to_delete;
+                    $('.deleteItem').click((e) => {
+                        item_to_delete = e.currentTarget.dataset.id;
+                    });
+                    $("#btnYesDelete").click(function () {
+                        var wwwUrlPath = window.document.location.href;
+                        var pathName = window.document.location.pathname;
+                        var pos = wwwUrlPath.indexOf(pathName);
+                        var localhostPath = wwwUrlPath.substring(0, pos);
+                        var url = 'TCMNotes/Delete';
+                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
+                    });
+                }
+                else
+                    $('#form-modal-lg .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+
+}
 jQueryAjaxPostTCMDomain = form => {
     try {
         $.ajax({

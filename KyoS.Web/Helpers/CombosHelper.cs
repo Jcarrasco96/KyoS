@@ -1294,11 +1294,11 @@ namespace KyoS.Web.Helpers
         public IEnumerable<SelectListItem> GetComboTCMNoteSetting()
         {
             List<SelectListItem> list = new List<SelectListItem>
-                                { new SelectListItem { Text = "03", Value = "1"},
-                                  new SelectListItem { Text = "11", Value = "2"},
-                                  new SelectListItem { Text = "12", Value = "3"},
-                                  new SelectListItem { Text = "33", Value = "4"},
-                                  new SelectListItem { Text = "99", Value = "5"}};
+                                { new SelectListItem { Text = "03 - School", Value = "1"},
+                                  new SelectListItem { Text = "11 - Office", Value = "2"},
+                                  new SelectListItem { Text = "12 - Home", Value = "3"},
+                                  new SelectListItem { Text = "33 - ALF", Value = "4"},
+                                  new SelectListItem { Text = "99 - Other", Value = "5"}};
 
             list.Insert(0, new SelectListItem
             {
@@ -1319,7 +1319,7 @@ namespace KyoS.Web.Helpers
             
             List<SelectListItem> list = Services_Domain.Select(c => new SelectListItem
             {
-                Text = $"{c.Code + "-" + c.Name}",
+                Text = $"{c.Code + " - " + c.Name}",
                 Value = $"{c.Id}"
             })
                                                 .ToList();
@@ -1345,8 +1345,13 @@ namespace KyoS.Web.Helpers
             })
                                                 .ToList();
 
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select activity...]",
+                Value = "0"
+            });
+            
             return list;
-
         }
 
         public IEnumerable<SelectListItem> GetComboTCMClientsByCasemanager(string user)

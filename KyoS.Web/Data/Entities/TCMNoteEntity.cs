@@ -10,8 +10,9 @@ namespace KyoS.Web.Data.Entities
     {
         public int Id { get; set; }
 
-        
-        public DateTime? DateOfService { get; set; }
+        [DataType(DataType.Date)]
+        [Display(Name = "Date of Service")]
+        public DateTime DateOfService { get; set; }
 
         [Display(Name = "Service Code:")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
@@ -19,17 +20,12 @@ namespace KyoS.Web.Data.Entities
 
         public NoteStatus Status { get; set; }
 
-        [DataType(DataType.Time)]
-        public DateTime? DocumentationTime { get; set; }
-
         public string Outcome { get; set; }
 
         public string NextStep { get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime? CaseManagerDate { get; set; }
-
         public TCMClientEntity TCMClient { get; set; }
+
         public CaseMannagerEntity CaseManager { get; set; }
 
         public List<TCMNoteActivityEntity> TCMNoteActivity { get; set; }

@@ -3,17 +3,17 @@
     Layout = null;
 }
 <div class="row">
-    <form asp-action="CreateNoteActivity" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMNoteActivity(this);">
+    <form asp-action="CreateNoteActivityTemp" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMNoteActivityTemp(this);">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
-        <input type="hidden" asp-for="IdTCMNote" />
         <input type="hidden" asp-for="CreatedOn" />
         <input type="hidden" asp-for="CreatedBy" />
         <input type="hidden" asp-for="Setting" />
         <input type="hidden" asp-for="IdTCMClient" />
+        <input type="hidden" asp-for="DateOfServiceNote" />
         <div>
             <div class="container-fluid">
-                <h4 style="font-weight:bold; text-align:left"> <span class="label label-info"> @Model.TCMNote.DateOfService.ToShortDateString() - @Model.TCMNote.TCMClient.Client.Name  </span></h4>
+                <h4 style="font-weight:bold; text-align:left"> <span class="label label-info"> @Model.StartTime.ToShortDateString()  </span></h4>
             </div>
         </div>
         <div>
@@ -120,9 +120,10 @@
         $.get(url, { idActivity: $("#listActivity").val() }, function (data) {
             $("#Description").text(data);
         });
-    })   
-        
+    })
+
 </script>
+
 
 
 

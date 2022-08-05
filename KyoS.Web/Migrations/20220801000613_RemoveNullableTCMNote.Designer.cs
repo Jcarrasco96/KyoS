@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220801000613_RemoveNullableTCMNote")]
+    partial class RemoveNullableTCMNote
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -7684,6 +7686,7 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Setting")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartTime")
@@ -7702,51 +7705,6 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("TCMNoteId");
 
                     b.ToTable("TCMNoteActivity");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMNoteActivityTempEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("DateOfServiceOfNote")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DescriptionOfService")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IdSetting")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdTCMClient")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdTCMDomain")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Minutes")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Setting")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TCMDomainCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TCMNoteActivityTemp");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMNoteEntity", b =>

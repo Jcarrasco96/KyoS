@@ -5613,10 +5613,8 @@ namespace KyoS.Web.Helpers
                 Outcome = model.Outcome,
                 CaseManager = _context.CaseManagers
                                       .FirstOrDefault(n => n.Id == model.IdCaseManager),
-                TCMNoteActivity = await _context.TCMNoteActivity.Where(n => n.TCMNote.Id == model.IdTCMNote).ToListAsync(),
-                CaseManagerDate = model.CaseManagerDate,
-                DateOfService = model.DateOfService,
-                DocumentationTime = model.DocumentationTime,
+                TCMNoteActivity = await _context.TCMNoteActivity.Where(n => n.TCMNote.Id == model.IdTCMNote).ToListAsync(),                
+                DateOfService = model.DateOfService,                
                 NextStep = model.NextStep,
                 ServiceCode = model.ServiceCode,
                 Status = model.Status,
@@ -5638,10 +5636,8 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = model.LastModifiedOn,
                 Outcome = model.Outcome,
                 CaseManager = model.CaseManager,
-                TCMNoteActivity = model.TCMNoteActivity,
-                CaseManagerDate = model.CaseManagerDate,
-                DateOfService = model.DateOfService,
-                DocumentationTime = model.DocumentationTime,
+                TCMNoteActivity = model.TCMNoteActivity,                
+                DateOfService = model.DateOfService,               
                 NextStep = model.NextStep,
                 ServiceCode = model.ServiceCode,
                 Status = model.Status,
@@ -5665,13 +5661,11 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 DescriptionOfService = model.DescriptionOfService,
                 EndTime = model.EndTime,
-                Minutes = Int16.Parse(model.Minutes),
+                Minutes = model.Minutes,
                 Setting = ServiceTCMNotesUtils.GetCodeByIndex(model.IdSetting),
                 StartTime = model.StartTime,
                 TCMDomain = model.TCMDomain,
                 TCMNote = _context.TCMNote.FirstOrDefault(n => n.Id == model.IdTCMNote)
-                
-
             };
         }
 
@@ -5687,7 +5681,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = model.LastModifiedOn,
                 DescriptionOfService = model.DescriptionOfService,
                 EndTime = model.EndTime,
-                Minutes = model.Minutes.ToString(),
+                Minutes = model.Minutes,
                 Setting = model.Setting,
                 StartTime = model.StartTime,
                 TCMDomain = model.TCMDomain,
@@ -5699,7 +5693,6 @@ namespace KyoS.Web.Helpers
                 DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == model.TCMNote.TCMClient.Id).Id),
                 IdTCMClient = model.TCMNote.TCMClient.Id,
                 ActivityList = _combosHelper.GetComboTCMNoteActivity(model.TCMDomain.Code)
-
         };
 
             return salida;
@@ -5779,6 +5772,23 @@ namespace KyoS.Web.Helpers
             };
         }
 
-
+        public TCMNoteActivityTempEntity ToTCMNoteActivityTempEntity(TCMNoteActivityViewModel model, bool isNew, string userId)
+        {
+            return new TCMNoteActivityTempEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                DescriptionOfService = model.DescriptionOfService,
+                EndTime = model.EndTime,
+                Minutes = model.Minutes,
+                IdSetting = model.IdSetting,
+                Setting = ServiceTCMNotesUtils.GetCodeByIndex(model.IdSetting),
+                IdTCMDomain = model.IdTCMDomain,
+                TCMDomainCode = model.TCMDomain.Code,
+                StartTime = model.StartTime,
+                UserName = userId,
+                IdTCMClient = model.IdTCMClient,
+                DateOfServiceOfNote = model.StartTime
+            };
+        }        
     }
 }
