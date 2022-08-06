@@ -68,7 +68,7 @@ namespace KyoS.Web.Controllers
                                       .Include(w => w.Days)
                                       .Include(w => w.Days)
                                       .Include(w => w.Days)
-                                     
+
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                 && w.Days.Where(d => (d.Service == ServiceType.PSR)).Count() > 0))
                                       .ToListAsync());
@@ -123,11 +123,9 @@ namespace KyoS.Web.Controllers
 
                     model = new TCMNoteViewModel
                     {
-                        CaseManagerDate = DateTime.Now,
                         CreatedBy = user_logged.UserName,
                         CreatedOn = DateTime.Now,
                         DateOfService = dateTime,
-                        DocumentationTime = DateTime.Now,
                         Id = 0,
                         IdTCMClient = IdTCMClient,
                         NextStep = "",
@@ -145,7 +143,9 @@ namespace KyoS.Web.Controllers
                                              .Include(n => n.Client)
                                              .ThenInclude(n => n.Clinic)
                                              .FirstOrDefault(n => n.Id == IdTCMClient),
-                        CaseManager = caseManager
+                        CaseManager = caseManager,
+                        TCMNoteActivityTemp = _context.TCMNoteActivityTemp
+                                                      .Where(na => na.UserName == user_logged.UserName)
                     };
                     ViewData["origin"] = origin;
                     return View(model);
@@ -172,18 +172,37 @@ namespace KyoS.Web.Controllers
                 {
 
                     _context.TCMNote.Add(NoteEntity);
+                    List<TCMNoteActivityTempEntity> noteActivities = await _context.TCMNoteActivityTemp
+                                                                                   .Where(na => na.UserName == user_logged.UserName)
+                                                                                   .ToListAsync();
+                    TCMNoteActivityEntity noteActivity;
+                    foreach (var item in noteActivities)
+                    {
+                        noteActivity = new TCMNoteActivityEntity()
+                        {
+                            TCMDomain = await _context.TCMDomains.FirstOrDefaultAsync(n => n.Code == item.TCMDomainCode),
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = Convert.ToDateTime(null),
+                            DescriptionOfService = item.DescriptionOfService,
+                            EndTime = item.EndTime,
+                            Minutes = item.Minutes,
+                            Setting = ServiceTCMNotesUtils.GetCodeByIndex(item.IdSetting),
+                            StartTime = item.StartTime,
+                            TCMNote = NoteEntity
+                        };
+                        _context.TCMNoteActivity.Add(noteActivity);                   
+                    }
+
+                    //delete all temporaly items
+                    _context.RemoveRange(noteActivities);
+
                     try
                     {
                         await _context.SaveChangesAsync();
-                        if (origin == 0)
-                        {
-                            return RedirectToAction("TCMNotesForCase", new { idTCMClient = TcmNoteViewModel.IdTCMClient });
-                        }
-                        else
-                        {
-                            return RedirectToAction("Index", "TCMBilling");
-                        }
 
+                        return RedirectToAction("Index", "TCMBilling");    
                     }
                     catch (System.Exception ex)
                     {
@@ -246,6 +265,11 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
+                        //redirect to note print report
+                        if (TcmNote.Status == NoteStatus.Approved)
+                        {
+                            return RedirectToAction("PrintNote", new { id = TcmNote.Id });
+                        }
 
                         model = _converterHelper.ToTCMNoteViewModel(TcmNote);
                         model.TCMClient = TcmNote.TCMClient;
@@ -332,73 +356,62 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult CreateNoteActivity(DateTime startTime, int idNote = 0, int idTCMClient = 0)
+        public IActionResult CreateNoteActivity(int idNote = 0, int idTCMClient = 0)
         {
-
             UserEntity user_logged = _context.Users
+
                                              .Include(u => u.Clinic)
+
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMNoteActivityViewModel model;
             IEnumerable<SelectListItem> list_Services = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == idTCMClient).Id);
-            if (User.IsInRole("CaseManager"))
-            {
-                if (user_logged.Clinic != null)
-                {
 
-                    model = new TCMNoteActivityViewModel
-                    {
-                        IdTCMNote = idNote,
-                        TCMNote = _context.TCMNote
-                                                .Include(n => n.TCMNoteActivity)
-                                                .Include(n => n.TCMClient)
-                                                .ThenInclude(n => n.Client)
-                                                .FirstOrDefault(n => n.Id == idNote),
-                        Id = 0,
-                        IdTCMDomain = 0,
-                        DomainList = list_Services,
-                        DescriptionOfService = "",
-                        Minutes = "",
-                        IdSetting = 1,
-                        SettingList = _combosHelper.GetComboTCMNoteSetting(),
-                        Setting = "99",
-                        TCMDomain = new TCMDomainEntity(),
-                        CreatedBy = user_logged.UserName,
-                        CreatedOn = DateTime.Now,
-                        IdTCMClient = idTCMClient,
-                        DescriptionTemp = "",
-                        StartTime = startTime.Date
-                    };
-                    if (model.TCMNote.TCMNoteActivity == null)
-                        model.TCMNote.TCMNoteActivity = new List<TCMNoteActivityEntity>();
-                    return View(model);
-                }
+            TCMNoteEntity note = _context.TCMNote
+
+                                         .Include(n => n.TCMNoteActivity)
+
+                                         .Include(n => n.TCMClient)
+                                         .ThenInclude(n => n.Client)
+
+                                         .FirstOrDefault(n => n.Id == idNote);
+
+            DateTime StartTime = note.DateOfService;
+
+            if (note.TCMNoteActivity.Count() > 0)
+            {
+                StartTime = note.TCMNoteActivity.Last().EndTime.AddMinutes(5);
             }
 
-
-            model = new TCMNoteActivityViewModel
+            if (user_logged.Clinic != null)
             {
-                IdTCMNote = idNote,
-                TCMNote = _context.TCMNote
-                                  .Include(n => n.TCMNoteActivity)
-                                  .Include(n => n.TCMClient)
-                                  .ThenInclude(n => n.Client)
-                                  .FirstOrDefault(n => n.Id == idNote),
-                Id = 0,
-                DescriptionOfService = "",
-                EndTime = DateTime.Now,
-                Minutes = "",
-                Setting = "99",
-                IdSetting = 1,
-                SettingList = _combosHelper.GetComboTCMNoteSetting(),
-                StartTime = DateTime.Now,
+                model = new TCMNoteActivityViewModel
+                {
+                    IdTCMNote = idNote,
+                    TCMNote = note,
+                    Id = 0,
+                    IdTCMDomain = 0,
+                    DomainList = list_Services,
+                    DescriptionOfService = "",
+                    Minutes = 15,
+                    IdSetting = 1,
+                    SettingList = _combosHelper.GetComboTCMNoteSetting(),
+                    Setting = "99",
+                    TCMDomain = new TCMDomainEntity(),
+                    CreatedBy = user_logged.UserName,
+                    CreatedOn = DateTime.Now,
+                    IdTCMClient = idTCMClient,
+                    DescriptionTemp = "",
+                    StartTime = StartTime,
+                    EndTime = StartTime.AddMinutes(15)
+                };
+                if (model.TCMNote.TCMNoteActivity == null)
+                    model.TCMNote.TCMNoteActivity = new List<TCMNoteActivityEntity>();
 
-                CreatedBy = user_logged.UserName,
-                CreatedOn = DateTime.Now,
-                IdTCMClient = idTCMClient
-            };
+                return View(model);
+            }
 
-            return View(model);
+            return View(null);
         }
 
         [HttpPost]
@@ -415,7 +428,13 @@ namespace KyoS.Web.Controllers
                 TCMNoteActivityEntity IndividualEntity = _context.TCMNoteActivity.Find(TcmNotesViewModel.Id);
                 if (IndividualEntity == null)
                 {
-                    TcmNotesViewModel.TCMDomain = await _context.TCMDomains.FirstOrDefaultAsync(n => n.Code == TcmNotesViewModel.TCMDomain.Code);
+                    TcmNotesViewModel.TCMDomain = await _context.TCMDomains.FirstOrDefaultAsync(n => n.Code == _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain).Code);
+
+                    TCMNoteEntity note = await _context.TCMNote
+                                                       .FirstOrDefaultAsync(n => n.Id == TcmNotesViewModel.IdTCMNote);
+                    TcmNotesViewModel.StartTime = new DateTime(note.DateOfService.Year, note.DateOfService.Month, note.DateOfService.Day, TcmNotesViewModel.StartTime.Hour, TcmNotesViewModel.StartTime.Minute, 0);
+                    TcmNotesViewModel.EndTime = new DateTime(note.DateOfService.Year, note.DateOfService.Month, note.DateOfService.Day, TcmNotesViewModel.EndTime.Hour, TcmNotesViewModel.EndTime.Minute, 0);
+
                     IndividualEntity = await _converterHelper.ToTCMNoteActivityEntity(TcmNotesViewModel, true, user_logged.UserName);
                     _context.TCMNoteActivity.Add(IndividualEntity);
                     try
@@ -449,16 +468,104 @@ namespace KyoS.Web.Controllers
                 }
             }
             TCMNoteEntity tcmNote = await _context.TCMNote
-                                                     .Include(n => n.TCMClient)
-                                                     .ThenInclude(n => n.Client)
-                                                     .FirstOrDefaultAsync(m => m.Id == TcmNotesViewModel.IdTCMNote);
+                                                  .Include(n => n.TCMClient)
+                                                  .ThenInclude(n => n.Client)
+                                                  .FirstOrDefaultAsync(m => m.Id == TcmNotesViewModel.IdTCMNote);
 
             TcmNotesViewModel.TCMNote = tcmNote;
             TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-            TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(TcmNotesViewModel.TCMDomain.Code);
             TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+            if (TcmNotesViewModel.IdTCMDomain != 0)
+            {
+                TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain);
+                TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
+            }
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivity", TcmNotesViewModel) });
+        }
 
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult CreateNoteActivityTemp(DateTime initDate, int idTCMClient = 0)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMNoteActivityViewModel model;
+            IEnumerable<SelectListItem> list_Services = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == idTCMClient).Id);
+
+            if (user_logged.Clinic != null)
+            {
+                model = new TCMNoteActivityViewModel
+                {
+                    Id = 0,
+                    IdTCMDomain = 0,
+                    DomainList = list_Services,
+                    DescriptionOfService = "",
+                    Minutes = 15,
+                    IdSetting = 1,
+                    SettingList = _combosHelper.GetComboTCMNoteSetting(),
+                    TCMDomain = new TCMDomainEntity(),
+                    CreatedBy = user_logged.UserName,
+                    CreatedOn = DateTime.Now,
+                    IdTCMClient = idTCMClient,
+                    DescriptionTemp = "",
+                    StartTime = initDate,
+                    EndTime = initDate.AddMinutes(15),
+                    DateOfServiceNote = initDate
+                };
+
+                return View(model);
+            }
+
+            return View(null);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> CreateNoteActivityTemp(TCMNoteActivityViewModel TcmNotesViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TcmNotesViewModel.TCMDomain = await _context.TCMDomains.FirstOrDefaultAsync(n => n.Code == _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain).Code);
+
+                TcmNotesViewModel.StartTime = new DateTime(TcmNotesViewModel.DateOfServiceNote.Year, TcmNotesViewModel.DateOfServiceNote.Month, TcmNotesViewModel.DateOfServiceNote.Day, TcmNotesViewModel.StartTime.Hour, TcmNotesViewModel.StartTime.Minute, 0);
+                TcmNotesViewModel.EndTime = new DateTime(TcmNotesViewModel.DateOfServiceNote.Year, TcmNotesViewModel.DateOfServiceNote.Month, TcmNotesViewModel.DateOfServiceNote.Day, TcmNotesViewModel.EndTime.Hour, TcmNotesViewModel.EndTime.Minute, 0);
+
+                TCMNoteActivityTempEntity entity = _converterHelper.ToTCMNoteActivityTempEntity(TcmNotesViewModel, true, user_logged.UserName);
+                _context.TCMNoteActivityTemp.Add(entity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    IEnumerable<TCMNoteActivityTempEntity> NotesActivityList = await _context.TCMNoteActivityTemp
+
+                                                                                             .Where(g => g.UserName == user_logged.UserName)
+                                                                                             .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMNoteActivityTemp", NotesActivityList) });
+
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+            }
+
+            TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
+            TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+            if (TcmNotesViewModel.IdTCMDomain != 0)
+            {
+                TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain);
+                TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivityTemp", TcmNotesViewModel) });
         }
 
         [Authorize(Roles = "CaseManager")]
@@ -503,7 +610,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> EditNoteActivity(TCMNoteActivityViewModel IndividualAgencyViewModel)
+        public async Task<IActionResult> EditNoteActivity(TCMNoteActivityViewModel NoteActivityViewModel)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -511,23 +618,33 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IndividualAgencyViewModel.TCMDomain = await _context.TCMDomains.FirstOrDefaultAsync(n => n.Code == IndividualAgencyViewModel.TCMDomain.Code);
-                TCMNoteActivityEntity IndividualAgencyEntity = await _converterHelper.ToTCMNoteActivityEntity(IndividualAgencyViewModel, false, user_logged.UserName);
+                NoteActivityViewModel.TCMDomain = await _context.TCMDomains.FirstOrDefaultAsync(n => n.Code == _context.TCMDomains.FirstOrDefault(d => d.Id == NoteActivityViewModel.IdTCMDomain).Code);
+
+                TCMNoteEntity note = await _context.TCMNote
+                                                   .FirstOrDefaultAsync(n => n.Id == NoteActivityViewModel.IdTCMNote);
+                NoteActivityViewModel.StartTime = new DateTime(note.DateOfService.Year, note.DateOfService.Month, note.DateOfService.Day, NoteActivityViewModel.StartTime.Hour, NoteActivityViewModel.StartTime.Minute, 0);
+                NoteActivityViewModel.EndTime = new DateTime(note.DateOfService.Year, note.DateOfService.Month, note.DateOfService.Day, NoteActivityViewModel.EndTime.Hour, NoteActivityViewModel.EndTime.Minute, 0);
+                                               
+                TCMNoteActivityEntity IndividualAgencyEntity = await _converterHelper.ToTCMNoteActivityEntity(NoteActivityViewModel, false, user_logged.UserName);
                 _context.TCMNoteActivity.Update(IndividualAgencyEntity);
                 try
                 {
                     await _context.SaveChangesAsync();
 
                     List<TCMNoteActivityEntity> NotesActivityList = await _context.TCMNoteActivity
-                                                                                    .Include(g => g.TCMNote)
-                                                                                    .ThenInclude(g => g.TCMClient)
-                                                                                    .ThenInclude(g => g.Client)
-                                                                                    .Include(g => g.TCMNote)
-                                                                                    .ThenInclude(g => g.TCMClient)
-                                                                                    .ThenInclude(g => g.Casemanager)
-                                                                                    .Include(g => g.TCMDomain)
-                                                                                    .Where(g => g.TCMNote.Id == IndividualAgencyViewModel.IdTCMNote)
-                                                                                    .ToListAsync();
+
+                                                                                  .Include(g => g.TCMNote)
+                                                                                  .ThenInclude(g => g.TCMClient)
+                                                                                  .ThenInclude(g => g.Client)
+
+                                                                                  .Include(g => g.TCMNote)
+                                                                                  .ThenInclude(g => g.TCMClient)
+                                                                                  .ThenInclude(g => g.Casemanager)
+
+                                                                                  .Include(g => g.TCMDomain)
+
+                                                                                  .Where(g => g.TCMNote.Id == NoteActivityViewModel.IdTCMNote)
+                                                                                  .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMNoteActivity", NotesActivityList) });
                 }
@@ -535,26 +652,22 @@ namespace KyoS.Web.Controllers
                 {
                     ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                 }
-
             }
-            else
+            
+            TCMNoteEntity tcmNote = await _context.TCMNote
+                                                .Include(n => n.TCMClient)
+                                                .ThenInclude(n => n.Client)
+                                                .FirstOrDefaultAsync(m => m.Id == NoteActivityViewModel.IdTCMNote);
+
+            NoteActivityViewModel.TCMNote = tcmNote;
+            NoteActivityViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
+            NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id);
+            if (NoteActivityViewModel.IdTCMDomain != 0)
             {
-                TCMNoteEntity tcmNote = await _context.TCMNote
-                                                      .Include(n => n.TCMClient)
-                                                      .ThenInclude(n => n.Client)
-                                                      .Include(n => n.TCMClient)
-                                                      .ThenInclude(n => n.TcmServicePlan)
-                                                      .ThenInclude(n => n.TCMDomain)
-                                                      .FirstOrDefaultAsync(m => m.Id == IndividualAgencyViewModel.IdTCMNote);
-
-                IndividualAgencyViewModel.TCMNote = tcmNote;
-                IndividualAgencyViewModel.IdSetting = 0;
-                IndividualAgencyViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                IndividualAgencyViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(IndividualAgencyViewModel.TCMDomain.Code);
-                IndividualAgencyViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == IndividualAgencyViewModel.IdTCMClient).Id);
-                return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNoteActivity", IndividualAgencyViewModel) });
+                TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == NoteActivityViewModel.IdTCMDomain);
+                NoteActivityViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
             }
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNoteActivity", IndividualAgencyViewModel) });
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNoteActivity", NoteActivityViewModel) });                                 
         }
 
         [Authorize(Roles = "CaseManager")]
@@ -669,8 +782,30 @@ namespace KyoS.Web.Controllers
 
             }
 
-            return RedirectToAction("Edit", new { id = tcmNotesActivity.TCMNote.Id });
+            return RedirectToAction("Edit", new { id = tcmNotesActivity.TCMNote.Id, origin = 2});
+        }
 
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> DeleteTCMNoteActivityTemp(int id = 0)
+        {
+            TCMNoteActivityTempEntity tcmNotesActivity = _context.TCMNoteActivityTemp
+                                                                 .FirstOrDefault(m => m.Id == id);
+            if (tcmNotesActivity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.TCMNoteActivityTemp.Remove(tcmNotesActivity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return RedirectToAction("Create", new { dateTime = tcmNotesActivity.DateOfServiceOfNote, tcmNotesActivity.IdTCMClient });
         }
 
         public JsonResult CalcularMinutes(DateTime start, DateTime end)
@@ -680,9 +815,15 @@ namespace KyoS.Web.Controllers
             return Json(minutes);
         }
 
-        public JsonResult GetListActivity(string codeDomain = "")
+        public JsonResult GetListActivity(int idDomain)
         {
-            List<TCMServiceActivityEntity> activity = _context.TCMServiceActivity.Where(n => n.TcmService.Code == codeDomain).ToList();
+            TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == idDomain);
+            List<TCMServiceActivityEntity> activity = new List<TCMServiceActivityEntity>();
+
+            if (domain != null)
+            {
+                activity = _context.TCMServiceActivity.Where(n => n.TcmService.Code == domain.Code).ToList();
+            }
 
             if (activity.Count == 0)
             {
@@ -695,10 +836,10 @@ namespace KyoS.Web.Controllers
             return Json(new SelectList(activity, "Id", "Name"));
         }
 
-        public JsonResult GetIntervention(int idActivity)
+        public JsonResult GetSuggestion(int idActivity)
         {
             TCMServiceActivityEntity activity = _context.TCMServiceActivity.FirstOrDefault(o => o.Id == idActivity);
-            string text = "Select Service and Acivity";
+            string text = "Select Service and activity";
             if (activity != null)
             {
                 text = activity.Description;
@@ -829,7 +970,7 @@ namespace KyoS.Web.Controllers
         public IActionResult PrintNote(int id)
         {
             TCMNoteEntity note = _context.TCMNote
-                                         
+
                                          .Include(n => n.CaseManager)
                                          .ThenInclude(cm => cm.Clinic)
 
@@ -846,9 +987,9 @@ namespace KyoS.Web.Controllers
             }
 
             if (note.CaseManager.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
-            {                
+            {
                 Stream stream = _reportHelper.FloridaSocialHSTCMNoteReportSchema1(note);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);               
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
             if (note.CaseManager.Clinic.Name == "DREAMS MENTAL HEALTH INC")

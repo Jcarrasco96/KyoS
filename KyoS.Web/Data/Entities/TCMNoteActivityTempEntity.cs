@@ -1,33 +1,36 @@
-﻿using KyoS.Web.Data.Contracts;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class TCMNoteActivityEntity : AuditableEntity
+    public class TCMNoteActivityTempEntity
     {
         public int Id { get; set; }
 
-        public TCMNoteEntity TCMNote { get; set; }
+        public int IdTCMClient { get; set; }
+
+        public int IdSetting { get; set; }
 
         public string Setting { get; set; }
 
-        public TCMDomainEntity TCMDomain { get; set; }
+        public int IdTCMDomain { get; set; }
 
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public string TCMDomainCode { get; set; }
+
         public string DescriptionOfService { get; set; }
 
-        [Display(Name = "Start Time")]
         [DataType(DataType.Time)]
         [DisplayFormat(DataFormatString = "{0:hh:mm tt}", ApplyFormatInEditMode = false)]
         public DateTime StartTime { get; set; }
 
-        [Display(Name = "End Time")]
         [DataType(DataType.Time)]
         [DisplayFormat(DataFormatString = "{0:hh:mm tt}", ApplyFormatInEditMode = false)]
         public DateTime EndTime { get; set; }
 
+        public DateTime DateOfServiceOfNote { get; set; }
+
         public int Minutes { get; set; }
 
+        public string UserName { get; set; }
     }
 }

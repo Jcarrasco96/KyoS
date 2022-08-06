@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="07/30/2022 17:27:07" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="07/31/2022 19:45:40" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u354irxx0f59ZSb2G0+TikJA==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3kB6bfVs/z/HU/PFVjymOyg==">
       <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -68,17 +68,17 @@
         <Column Name="DateOfService" DataType="System.DateTime"/>
         <Column Name="ServiceCode" DataType="System.String"/>
         <Column Name="Status" DataType="System.Int32"/>
-        <Column Name="DocumentationTime" DataType="System.DateTime"/>
+        <Column Name="DocumentationTime" Enabled="false" DataType="System.DateTime"/>
         <Column Name="Outcome" DataType="System.String"/>
         <Column Name="NextStep" DataType="System.String"/>
         <Column Name="CaseManagerId" DataType="System.Int32"/>
-        <Column Name="CaseManagerDate" DataType="System.DateTime"/>
+        <Column Name="CaseManagerDate" Enabled="false" DataType="System.DateTime"/>
         <Column Name="CreatedBy" DataType="System.String"/>
         <Column Name="CreatedOn" DataType="System.DateTime"/>
         <Column Name="LastModifiedBy" DataType="System.String"/>
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
         <Column Name="TCMClientId" DataType="System.Int32"/>
-        <Column Name="WorkdayId" DataType="System.Int32"/>
+        <Column Name="WorkdayId" Enabled="false" DataType="System.Int32"/>
       </TableDataSource>
       <TableDataSource Name="TCMNoteActivity" DataType="System.Int32" Enabled="true" TableName="TCMNoteActivity">
         <Column Name="Id" DataType="System.Int32"/>

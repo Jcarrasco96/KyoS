@@ -1,12 +1,14 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMNoteActivityEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMNoteActivityTempEntity>
 
-@if (Model != null)
-{
-    var @minutes = Model.Sum(m => m.Minutes);
-    var @value = minutes / 15;
-    var @mod = minutes % 15;
-    var @value1 = value + 1;
-    
+@*@if (Model != null)
+{*@
+    @{
+        int minutes = Model.Sum(m => m.Minutes);
+        var @value = minutes / 15;
+        var @mod = minutes % 15;
+        var @value1 = value + 1;
+    }
+
     <div class="col-md-12">
         <div class="col-md-3">
             &nbsp;
@@ -86,7 +88,7 @@
                                     @Html.DisplayFor(modelItem => item.Setting)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.TCMDomain.Code)
+                                    @Html.DisplayFor(modelItem => item.TCMDomainCode)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.DescriptionOfService)
@@ -101,8 +103,7 @@
                                     @Html.DisplayFor(modelItem => item.Minutes)
                                 </td>
                                 <td align="right">                                    
-                                    <a onclick="showInPopupLg('@Url.Action("EditNoteActivity", "TCMNotes", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Note')" class="btn btn-warning" title="Edit activity"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <a asp-action="DeleteTCMNoteActivity" asp-route-id="@item.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>
+                                    <a asp-action="DeleteTCMNoteActivityTemp" asp-route-id="@item.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>
                                 </td>
                             </tr>
                         }
@@ -111,5 +112,5 @@
             </div>
         </div>
     </div>   
-}
+@*}*@
 

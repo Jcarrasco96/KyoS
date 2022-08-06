@@ -3,153 +3,124 @@
     Layout = null;
 }
 <div class="row">
-    <div class="col-md-12">
-        <form asp-action="EditNoteActivity" onsubmit="return jQueryAjaxPostTCMNoteActivity(this);">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="IdTCMNote" />
-            <input type="hidden" asp-for="IdTCMDomain" />
-            <input type="hidden" asp-for="CreatedOn" />
-            <input type="hidden" asp-for="CreatedBy" />
-            <input type="hidden" asp-for="Setting" />
-            <input type="hidden" asp-for="IdTCMClient" />
-            <input type="hidden" asp-for="DomainList" />
+    <form asp-action="EditNoteActivity" onsubmit="return jQueryAjaxPostTCMNoteActivity(this);">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="IdTCMNote" />
+        <input type="hidden" asp-for="IdTCMDomain" />
+        <input type="hidden" asp-for="CreatedOn" />
+        <input type="hidden" asp-for="CreatedBy" />
+        <input type="hidden" asp-for="Setting" />
+        <input type="hidden" asp-for="IdTCMClient" />
+        <input type="hidden" asp-for="DomainList" />
+        <div>
             <div class="container-fluid">
-                <div class=" col-md-6 form-group">
-                    <h4 style="font-weight:bold;"> <span class="label label-info"> Client - @Model.TCMNote.TCMClient.Client.Name </span></h4>
-                </div>
-                <div class=" col-md-6 form-group">
-                    <h4 style="font-weight:bold;"> <span class="label label-info"> @Model.TCMNote.DateOfService</span></h4>
-                </div>
+                <h4 style="font-weight:bold; text-align:left"> <span class="label label-info"> @Model.TCMNote.DateOfService.ToShortDateString() - @Model.TCMNote.TCMClient.Client.Name  </span></h4>
             </div>
-            <div>
-                <div class=" col-md-4 form-group">
-                    <label asp-for="StartTime" class="control-label">Start Time</label>
-                    <input asp-for="StartTime" class="form-control" id="Time_Start" onchange="getMinute();" />
-                    <span asp-validation-for="StartTime" class="text-danger"></span>
-                </div>
+        </div>
+        <div>
+            <div class=" col-md-3 form-group">
+                <label asp-for="StartTime" class="control-label">Start Time</label>&nbsp;*
+                <input asp-for="StartTime" class="form-control" id="Time_Start" onchange="getMinute();" />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
             </div>
-            <div>
-                <div class=" col-md-4 form-group">
-                    <label asp-for="EndTime" class="control-label">End Time</label>
-                    <input asp-for="EndTime" class="form-control" id="Time_End" onchange="getMinute();" />
-                    <span asp-validation-for="EndTime" class="text-danger"></span>
-                </div>
+        </div>
+        <div>
+            <div class=" col-md-3 form-group">
+                <label asp-for="EndTime" class="control-label">End Time</label>&nbsp;*
+                <input asp-for="EndTime" class="form-control" id="Time_End" onchange="getMinute();" />
+                <span asp-validation-for="EndTime" class="text-danger"></span>
             </div>
-            <div>
-                <div class=" col-md-4 form-group">
-                    <label asp-for="Minutes" class="control-label">Minutes</label>
-                    <textarea asp-for="Minutes" id="lbMinutes" class="form-control" rows="1" readonly></textarea>
-                    <span asp-validation-for="Minutes" class="text-danger"></span>
-                </div>
+        </div>
+        <div>
+            <div class=" col-md-2 form-group">
+                <label asp-for="Minutes" class="control-label">Minutes</label>
+                <textarea asp-for="Minutes" id="lbMinutes" class="form-control" rows="1" readonly></textarea>
+                <span asp-validation-for="Minutes" class="text-danger"></span>
             </div>
-            <div>
-                <div class=" col-md-4 form-group">
-                    <label asp-for="IdSetting" class="control-label"></label>&nbsp;*
-                    <select asp-for="IdSetting" asp-items="Model.SettingList" class="form-control"></select>
-                    <span asp-validation-for="IdSetting" class="text-danger"></span>
-                </div>
+        </div>
+        <div>
+            <div class=" col-md-4 form-group">
+                <label asp-for="IdSetting" class="control-label"></label>&nbsp;*
+                <select asp-for="IdSetting" asp-items="Model.SettingList" class="form-control"></select>
+                <span asp-validation-for="IdSetting" class="text-danger"></span>
             </div>
-            <div>
-                <div class=" col-md-8 form-group">
-                    <label asp-for="IdTCMDomain" class="control-label"></label>&nbsp;*
-                    <select asp-for="IdTCMDomain" asp-items="Model.DomainList" class="form-control" id="Code_Name" onchange="getCode();"></select>
-                    <span asp-validation-for="IdTCMDomain" class="text-danger"></span>
-                </div>
+        </div>
+        <div>
+            <div class=" col-md-6 form-group">
+                <label asp-for="IdTCMDomain" class="control-label"></label>&nbsp;*
+                <select asp-for="IdTCMDomain" asp-items="Model.DomainList" class="form-control" id="cbDomain"></select>
+                <span asp-validation-for="IdTCMDomain" class="text-danger"></span>
             </div>
-            <div>
-                <div class=" col-md-3 form-group">
-                    <label asp-for="TCMDomain.Code" class="control-label">Domain Name</label>
-                    <input asp-for="TCMDomain.Code" id="GetCode" class="form-control" readonly />
-                    <span asp-validation-for="TCMDomain.Code" class="text-danger"></span>
-                </div>
+        </div>
+        <div>
+            <div class=" col-md-6 form-group">
+                <label asp-for="IdTCMActivity" class="control-label"></label>&nbsp;*
+                <select asp-for="IdTCMActivity" asp-items="Model.ActivityList" class="form-control" id="cbActivities"></select>
+                <span asp-validation-for="IdTCMActivity" class="text-danger"></span>
             </div>
-            <div>
-                <div class=" col-md-9 form-group">
-                    <label asp-for="TCMDomain.Name" class="control-label">Domain Name</label>
-                    <input asp-for="TCMDomain.Name" id="GetName" class="form-control" readonly />
-                    <span asp-validation-for="TCMDomain.Name" class="text-danger"></span>
-                </div>
+        </div>
+        <div>
+            <div class=" col-md-12 form-group">
+                <label asp-for="DescriptionTemp" class="control-label">Activity suggestion</label>
+                <textarea asp-for="DescriptionTemp" class="form-control" rows="2" readonly id="Description"></textarea>
+                <span asp-validation-for="DescriptionTemp" class="text-danger"></span>
             </div>
-            <div>
-                <div class=" col-md-12 form-group">
-                    <label asp-for="IdTCMActivity" class="control-label">Activity</label>
-                    <select asp-for="IdTCMActivity" asp-items="Model.ActivityList" class="form-control" id="listActivity"></select>
-                    <span asp-validation-for="IdTCMActivity" class="text-danger"></span>
-                </div>
+        </div>
+        <div>
+            <div class=" col-md-12 form-group">
+                <label asp-for="DescriptionOfService" class="control-label">Description of service(s) &nbsp;*</label>
+                <textarea asp-for="DescriptionOfService" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="DescriptionOfService" class="text-danger"></span>
             </div>
-            <div>
-                <div class=" col-md-12 form-group">
-                    <label asp-for="DescriptionTemp" class="control-label">Suggestion</label>
-                    <textarea asp-for="DescriptionTemp" class="form-control" rows="4" readonly id="Description"></textarea>
-                    <span asp-validation-for="DescriptionTemp" class="text-danger"></span>
-                </div>
+        </div>
+        <div>
+            <div class="col-md-offset-10">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                &nbsp;
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
             </div>
-            <div>
-                <div class=" col-md-12 form-group">
-                    <label asp-for="DescriptionOfService" class="control-label">Description of service(s) / Intervention(s)&nbsp;*</label>
-                    <textarea asp-for="DescriptionOfService" class="form-control" rows="4"></textarea>
-                    <span asp-validation-for="DescriptionOfService" class="text-danger"></span>
-                </div>
-            </div>
-            <div>
-                <div class="col-md-offset-9">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
-<script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script type="text/javascript">
+
     function getMinute() {
             var url = "@Url.Action("CalcularMinutes", "TCMNotes")";
-        $.get(url, { start: $("#Time_Start").val(), end: $("#Time_End").val() }, function (data) { $("#lbMinutes").text(data); });
-        }
-            $("#Code_Name").change(function () {
-                var url = "@Url.Action("GetListActivity", "TCMNotes")";
-                $.get(url, { codeDomain: $("#GetCode").val() }, function (data) {
-                    $("#listActivity").empty();
-                    $.each(data, function (index, row) {
-                        $("#listActivity").append("<option value='" + row.value + "'>" + row.text + "</option>")
-                    });
+            $.get(url, { start: $("#Time_Start").val(), end: $("#Time_End").val() }, function (data) { $("#lbMinutes").text(data); });
+    }
 
-                    //actualizo el label con la intervention que corresponde al obj seleccionado
-                    urll = "@Url.Action("GetIntervention", "TCMNotes")";
-                    $.get(urll, { idActivity: $("#listActivity").val() }, function (data) {
-                        $("#Description").text(data);
-                    });
-                });
-            })
-            $("#listActivity").change(function () {
-                var url = "@Url.Action("GetIntervention", "TCMNotes")";
-                $.get(url, { idActivity: $("#listActivity").val() }, function (data) {
-                    $("#Description").text(data);
-                });
-            })
     function getActivity() {
             var url = "@Url.Action("CalcularMinutes", "TCMNotes")";
-        $.get(url, { codeDomain: $("#GetCode").val() }, function (data) { $("#lblDomain").text(data);});
-        }
-
-     function getCode() {
-        var x = document.getElementById('Code_Name');
-        var y = x.options[x.selectedIndex].text;
-        var code = y[0] + y[1];
-        var name = y[3];
-        if (y[0] != '[') {
-            for (var i = 4; i < y.length; i++) {
-                name = name + y[i];
-            }
-            document.getElementById('GetCode').value = code;
-            document.getElementById('GetName').value = name;
-        }
-        else
-        {
-            document.getElementById('GetCode').value = "";
-            document.getElementById('GetName').value = "";
-        }
-
-
+            $.get(url, { codeDomain: $("#GetCode").val() }, function (data) { $("#lblDomain").text(data); });
     }
+
+    $("#cbDomain").change(function () {
+        var url = "@Url.Action("GetListActivity", "TCMNotes")";
+        $.get(url, { idDomain: $("#cbDomain").val() }, function (data) {
+            $("#cbActivities").empty();
+            $.each(data, function (index, row) {
+                $("#cbActivities").append("<option value='" + row.value + "'>" + row.text + "</option>")
+            });
+
+            //actualizo el label con la sugerencia de la actividad
+            url = "@Url.Action("GetSuggestion", "TCMNotes")";
+            $.get(url, { idActivity: $("#cbActivities").val() }, function (data) {
+                $("#Description").text(data);
+            });
+        });
+    })
+
+    $("#listActivity").change(function () {
+        var url = "@Url.Action("GetIntervention", "TCMNotes")";
+        $.get(url, { idActivity: $("#listActivity").val() }, function (data) {
+            $("#Description").text(data);
+        });
+    })
+
 </script>

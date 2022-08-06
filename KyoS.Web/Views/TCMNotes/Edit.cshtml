@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.TCMNoteViewModel
 @{
-    ViewData["Title"] = "TCM Notes";
+    ViewData["Title"] = "Edit TCM Note";
 }
 
 <!DOCTYPE html>
@@ -37,20 +37,18 @@
         </ul><!--.breadcrumb-->
     </div>
 
-
     <div class="row">
         <form asp-action="Edit" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdTCMClient" />
-            <input type="hidden" asp-for="IdTCMNote" />
-            <input type="hidden" asp-for="CaseManagerDate" />
+            <input type="hidden" asp-for="IdTCMNote" />            
             <input type="hidden" asp-for="TCMClient.Casemanager.Name" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
             <partial name="_TCMNotes" />
             <div class="col-md-push-12">                
                 <div class="col-md-12 form-group">
-                    <a onclick="showInPopupLg('@Url.Action("CreateNoteActivity", "TCMNotes",new {startTime = @Model.DateOfService, idNote = @Model.Id, idDomain = 103, idTCMClient = Model.IdTCMClient}, Context.Request.Scheme)','Add Service')" class="btn btn-success" title="Add service"><i class="glyphicon glyphicon-plus"></i> Add Service</a>
+                    <a onclick="showInPopupLg('@Url.Action("CreateNoteActivity", "TCMNotes", new { idNote = Model.Id, idTCMClient = Model.IdTCMClient}, Context.Request.Scheme)','Add Service')" class="btn btn-success" title="Add service"><i class="glyphicon glyphicon-plus"></i> Add Service</a>
                 </div>
                 <div id="view-NoteActivity">
                     @await Html.PartialAsync("_ViewTCMNoteActivity", Model.TCMNoteActivity.ToList())

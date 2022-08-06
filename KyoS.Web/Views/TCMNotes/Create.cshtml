@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.TCMNoteViewModel
 @{
-    ViewData["Title"] = "TCM Notes";
+    ViewData["Title"] = "Create TCM Note";
 }
 
 <!DOCTYPE html>
@@ -25,23 +25,29 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdTCMClient" />
             <input type="hidden" asp-for="IdCaseManager" />
-            <input type="hidden" asp-for="IdTCMWorday" />
-            <input type="hidden" asp-for="CaseManagerDate" />
             <input type="hidden" asp-for="TCMClient.Casemanager.Name" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
             <partial name="_TCMNotes" />
+            <div class="col-md-push-12">
+                <div class="col-md-12 form-group">
+                    <a onclick="showInPopupLg('@Url.Action("CreateNoteActivityTemp", "TCMNotes", new { initDate = Model.DateOfService, idTCMClient = Model.IdTCMClient}, Context.Request.Scheme)','Add Service')" class="btn btn-success" title="Add service"><i class="glyphicon glyphicon-plus"></i> Add Service</a>
+                </div>
+                <div id="view-NoteActivityTemp">
+                    @await Html.PartialAsync("_ViewTCMNoteActivityTemp", Model.TCMNoteActivityTemp)
+                </div>
+            </div>
             <partial name="_TCMNotes1" />
-            <div class="col-md-12 form-group">              
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                    <a asp-action="TCMNotesForCase" asp-route-idTCMClient="@Model.IdTCMClient" class="btn btn-success">Back</a>               
+            <div class="col-md-12 form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="TCMNotesForCase" asp-route-idTCMClient="@Model.IdTCMClient" class="btn btn-success">Back</a>
             </div>
         </form>
     </div>
 </body>
 </html>
 
-<partial name="_ModalPopup" />
+<partial name="_ModalPopupLg" />
 <partial name="_DeleteDialog" />
 
 @section Scripts {
