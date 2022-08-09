@@ -53,6 +53,7 @@ namespace KyoS.Web.Controllers
             if (count > 0)
             {
                 ViewBag.Message = "1";
+                ViewData["count"] = count;
             }
 
             if (user_logged.UserType.ToString() == "Manager")

@@ -7,12 +7,10 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="IdTCMNote" />
-        <input type="hidden" asp-for="IdTCMDomain" />
         <input type="hidden" asp-for="CreatedOn" />
         <input type="hidden" asp-for="CreatedBy" />
         <input type="hidden" asp-for="Setting" />
         <input type="hidden" asp-for="IdTCMClient" />
-        <input type="hidden" asp-for="DomainList" />
         <input type="hidden" asp-for="DateOfServiceNote" />
         <div>
             <div class="container-fluid">
@@ -117,11 +115,11 @@
         });
     })
 
-    $("#listActivity").change(function () {
-        var url = "@Url.Action("GetIntervention", "TCMNotes")";
-        $.get(url, { idActivity: $("#listActivity").val() }, function (data) {
-            $("#Description").text(data);
-        });
+    $("#cbActivities").change(function () {
+        var url = "@Url.Action("GetSuggestion", "TCMNotes")";
+            $.get(url, { idActivity: $("#cbActivities").val() }, function (data) {
+                $("#Description").text(data);
+            });
     })
 
 </script>

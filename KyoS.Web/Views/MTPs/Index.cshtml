@@ -61,10 +61,10 @@
                                     Client
                                 </th>
                                 <th class="col-md-1" style="text-align:center;">
-                                    Code
+                                    Date MTP
                                 </th>
                                 <th class="col-md-1" style="text-align:center;">
-                                    Therapy
+                                    Month
                                 </th>
                                 <th class="col-md-1" style="text-align:center;">
                                     Status
@@ -212,13 +212,15 @@
                                                     <i class="glyphicon glyphicon-user btn-primary"></i>
                                                 }
                                                 &nbsp;
+                                                @Html.DisplayFor(modelItem => item.Client.Code)
+                                                &nbsp;
                                                 @Html.DisplayFor(modelItem => item.Client.Name)
                                             </td>
                                             <td align="center">
-                                                @Html.DisplayFor(modelItem => item.Client.Code)
+                                                @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).MTPDevelopedDate)
                                             </td>
                                             <td align="center">
-                                                @Html.DisplayFor(modelItem => item.Client.Service)
+                                                @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).NumberOfMonths)
                                             </td>
                                             <td align="center">
                                                 @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
@@ -314,13 +316,15 @@
                                                     <i class="glyphicon glyphicon-user btn-primary"></i>
                                                 }
                                                 &nbsp;
+                                                @Html.DisplayFor(modelItem => item.Client.Code)
+                                                &nbsp;
                                                 @Html.DisplayFor(modelItem => item.Client.Name)
                                             </td>
                                             <td align="center">
-                                                @Html.DisplayFor(modelItem => item.Client.Code)
+                                                @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).MTPDevelopedDate)
                                             </td>
                                             <td align="center">
-                                                @Html.DisplayFor(modelItem => item.Client.Service)
+                                                @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).NumberOfMonths)
                                             </td>
                                             <td align="center">
                                                 @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
@@ -522,13 +526,15 @@
                                                     <i class="glyphicon glyphicon-user btn-primary"></i>
                                                 }
                                                 &nbsp;
+                                                @Html.DisplayFor(modelItem => item.Client.Code)
+                                                &nbsp;
                                                 @Html.DisplayFor(modelItem => item.Client.Name)
                                             </td>
                                             <td align="center">
-                                                @Html.DisplayFor(modelItem => item.Client.Code)
+                                                @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).MTPDevelopedDate)
                                             </td>
                                             <td align="center">
-                                                @Html.DisplayFor(modelItem => item.Client.Service)
+                                                @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).NumberOfMonths)
                                             </td>
                                             <td align="center">
                                                 @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
@@ -603,14 +609,16 @@
                                                 {
                                                     <i class="glyphicon glyphicon-user btn-primary"></i>
                                                 }
+                                                 &nbsp;
+                                                @Html.DisplayFor(modelItem => item.Client.Code)
                                                 &nbsp;
                                                 @Html.DisplayFor(modelItem => item.Client.Name)
                                             </td>
                                             <td align="center">
-                                                @Html.DisplayFor(modelItem => item.Client.Code)
+                                                @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).MTPDevelopedDate)
                                             </td>
                                             <td align="center">
-                                                @Html.DisplayFor(modelItem => item.Client.Service)
+                                                @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).NumberOfMonths)
                                             </td>
                                             <td align="center">
                                                 @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
