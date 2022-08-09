@@ -5692,7 +5692,8 @@ namespace KyoS.Web.Helpers
                 SettingList = _combosHelper.GetComboTCMNoteSetting(),
                 DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == model.TCMNote.TCMClient.Id).Id),
                 IdTCMClient = model.TCMNote.TCMClient.Id,
-                ActivityList = _combosHelper.GetComboTCMNoteActivity(model.TCMDomain.Code)
+                ActivityList = _combosHelper.GetComboTCMNoteActivity(model.TCMDomain.Code),
+                DateOfServiceNote = model.TCMNote.DateOfService
         };
 
             return salida;

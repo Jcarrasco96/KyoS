@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "CaseManager")]
+    [Authorize(Roles = "CaseManager, Manager")]
     public class TCMBillingController : Controller
     {
         private readonly DataContext _context;        
@@ -154,5 +154,11 @@ namespace KyoS.Web.Controllers
 
             return Json(totalUnits);
         }
+
+        public IActionResult BillingForWeek()
+        {
+            return View();
+        }
+
     }
 }

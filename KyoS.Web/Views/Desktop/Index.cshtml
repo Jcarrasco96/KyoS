@@ -1052,7 +1052,7 @@
                             @if (ViewBag.TCMCaseManager == "0")
                             {
                                 <div class="thumbnail list-group-item list-group-item-text">
-                                    <h4 style="align-content:end;"><i class="icon-user" style="padding-right: 10px !important;"></i>Case Managers<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                    <h4 style="align-content:end;"><i class="icon-user" style="padding-right: 10px !important;"></i>Case Managers's<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cases</h4>
                                     <span class="message-counter-cero">@ViewBag.TCMCaseManager</span>
                                 </div>
                             }
@@ -1060,7 +1060,7 @@
                             {
                                 <a style="text-decoration: none;" asp-controller="CaseMannager" asp-action="Index" role="button">
                                     <div class="thumbnail list-group-item list-group-item-success">
-                                        <h4 style="align-content:end;"><i class="icon-user" style="padding-right: 10px !important;"></i>Case Managers<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                        <h4 style="align-content:end;"><i class="icon-user" style="padding-right: 10px !important;"></i>Case Managers's<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cases</h4>
                                         <span class="message-counter-success">@ViewBag.TCMCaseManager</span>
                                     </div>
                                 </a>
@@ -1069,14 +1069,16 @@
                         <div class="col-md-2">
                             @if (ViewBag.TCMCaseManager == "0")
                             {
-                                <div class="thumbnail list-group-item list-group-item-text">
-                                    <h4 style="align-content:end;"><i class="icon-dollar" style="padding-right: 10px !important;"></i>Billing<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                                    <span class="message-counter-cero">@ViewBag.TCMCaseManager</span>
-                                </div>
+                                <a style="text-decoration: none;" asp-controller="TCMBilling" asp-action="BillingForWeek" role="button">
+                                    <div class="thumbnail list-group-item list-group-item-success">
+                                        <h4 style="align-content:end;"><i class="icon-dollar" style="padding-right: 10px !important;"></i>Billing<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                        <span class="message-counter-success">@ViewBag.TCMCaseManager</span>
+                                    </div>
+                                </a>
                             }
                             else
                             {
-                                <a style="text-decoration: none;" asp-controller="CaseMannager" asp-action="Index" role="button">
+                                <a style="text-decoration: none;" asp-controller="TCMBilling" asp-action="BillingForWeek" role="button">
                                     <div class="thumbnail list-group-item list-group-item-success">
                                         <h4 style="align-content:end;"><i class="icon-dollar" style="padding-right: 10px !important;"></i>Billing<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                                         <span class="message-counter-success">@ViewBag.TCMCaseManager</span>
