@@ -13,6 +13,36 @@
     </ul><!--.breadcrumb-->
 </div>
 
+<div class="col-md-12">
+    <div class="col-md-5">
+        &nbsp;
+    </div>
+    <div class="col-md-1">
+        <div class="thumbnail list-group-item list-group-item-success">
+            <p style="text-align:center">Notes</p>
+            <h4 style="text-align:center; font-weight:bold;"><label id="lbNotes"></label></h4>
+        </div>
+    </div>
+    <div class="col-md-1">
+        <div class="thumbnail list-group-item list-group-item-success">
+            <p style="text-align:center">Units</p>
+            <h4 style="text-align:center; font-weight:bold;"><label id="lbUnits"></label></h4>
+        </div>
+    </div>
+    @*<div class="col-md-2">
+        <div class="thumbnail list-group-item list-group-item-success">
+            <p style="text-align:center">Estimated Income</p>
+            <h4 style="text-align:center; font-weight:bold;"></h4>
+        </div>
+    </div>*@
+    <div class="col-md-5">
+        &nbsp;
+    </div>
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+
 <div class="row">
     <div class="col-md-12">
         <div id='calendar'></div>
@@ -30,7 +60,7 @@
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 headerToolbar: {
-                  start: 'timeGridWeek,timeGridDay',                  
+                  start: 'timeGridWeek,timeGridDay',
                   center: 'title',
                   end: 'today prev,next'
                 },
@@ -61,17 +91,31 @@
                             $('.modal-dialog').draggable({
                                 handle: ".modal-header"
                             });
-                        }                               
-                    })              
+                        }
+                    })
                 },
-                events: '@Url.Action("Events", "TCMBilling")',
                 eventTimeFormat: { // like '14:30:00'
                     hour: 'numeric',
                     minute: '2-digit',
                     meridiem: true
+                },
+                @*events: '@Url.Action("Events", "TCMBilling")'*@
+                events: {
+                            url: '@Url.Action("Events", "TCMBilling")',
+                            success: function() {
+                                url = "@Url.Action("GetTotalNotes", "TCMBilling")";
+                                $.get(url, { }, function (data) {
+                                    $("#lbNotes").text(data);
+                                });
+
+                                url = "@Url.Action("GetTotalUnits", "TCMBilling")";
+                                $.get(url, { }, function (data) {
+                                    $("#lbUnits").text(data);
+                                });
+                            }
                 }
             });
-            calendar.render();            
+            calendar.render();
         });
     </script>
 }

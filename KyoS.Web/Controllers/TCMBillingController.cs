@@ -16,19 +16,13 @@ namespace KyoS.Web.Controllers
     [Authorize(Roles = "CaseManager")]
     public class TCMBillingController : Controller
     {
-        private readonly DataContext _context;
-        private readonly IConverterHelper _converterHelper;
-        private readonly ICombosHelper _combosHelper;
-        private readonly IRenderHelper _renderHelper;
-        private readonly IDateHelper _dateHelper;
+        private readonly DataContext _context;        
+        private readonly ICombosHelper _combosHelper;        
 
-        public TCMBillingController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IDateHelper dateHelper)
+        public TCMBillingController(DataContext context, ICombosHelper combosHelper)
         {
             _context = context;
-            _combosHelper = combosHelper;
-            _converterHelper = converterHelper;
-            _renderHelper = renderHelper;
-            _dateHelper = dateHelper;
+            _combosHelper = combosHelper;            
         }
 
         public IActionResult Index()
@@ -77,6 +71,9 @@ namespace KyoS.Web.Controllers
 
         public IActionResult Events(string start, string end)
         {
+            HttpContext.Session.SetString("initDate", start);
+            HttpContext.Session.SetString("finalDate", end);
+
             DateTime initDate = Convert.ToDateTime(start);
             DateTime finalDate = Convert.ToDateTime(end);            
 
@@ -106,8 +103,56 @@ namespace KyoS.Web.Controllers
                                  })
                                  .ToList();
 
-            //return Json(events);
-            return new JsonResult(events);
+           return new JsonResult(events);
+        }
+
+        public JsonResult GetTotalNotes()
+        {
+            DateTime initDate = Convert.ToDateTime(HttpContext.Session.GetString("initDate"));
+            DateTime finalDate = Convert.ToDateTime(HttpContext.Session.GetString("finalDate"));
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            int count = _context.TCMNote
+                                 .Where(t => (t.CaseManager.LinkedUser == user_logged.UserName
+                                           && t.DateOfService >= initDate && t.DateOfService <= finalDate))
+                                 .ToList()
+                                 .Count();
+
+            return Json(count);
+        }
+
+        public JsonResult GetTotalUnits()
+        {
+            DateTime initDate = Convert.ToDateTime(HttpContext.Session.GetString("initDate"));
+            DateTime finalDate = Convert.ToDateTime(HttpContext.Session.GetString("finalDate"));
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            IEnumerable<TCMNoteEntity> notes = _context.TCMNote
+
+                                                       .Include(t => t.TCMNoteActivity)
+
+                                                       .Where(t => (t.CaseManager.LinkedUser == user_logged.UserName
+                                                                 && t.DateOfService >= initDate && t.DateOfService <= finalDate));
+
+            int minutes;
+            int totalUnits = 0;
+            int value;
+            int mod;
+            foreach (TCMNoteEntity item in notes)
+            {                
+                minutes = item.TCMNoteActivity.Sum(t => t.Minutes);
+                value = minutes / 15;
+                mod = minutes % 15;
+                totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
+            }                                
+
+            return Json(totalUnits);
         }
     }
 }
