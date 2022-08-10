@@ -430,6 +430,8 @@ namespace KyoS.Web.Controllers
                 }
                 ViewBag.ClientsWithoutDoc = clients_without_doc.ToString();
 
+                ViewBag.AllDocumentsForClient = _context.Clients.Count(n => n.Clinic.Id == user_logged.Clinic.Id).ToString();
+
                 ViewBag.ApprovedNotes = _context.Workdays_Clients
 
                                                 .Include(wc => wc.Note)

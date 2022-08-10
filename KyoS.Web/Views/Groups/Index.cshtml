@@ -101,7 +101,17 @@
                                     @Html.DisplayFor(modelItem => item.Service)
                                 </td>
                                 <td align="center">
-                                    @item.Clients.Count()
+                                    @if (@item.Clients.Count() > 12)
+                                    {
+                                        <span class="label label-danger">
+                                            @item.Clients.Count()
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                       @item.Clients.Count()
+                                    }
+
                                 </td>
                                 <td align="center">
                                     @if (item.Am)
