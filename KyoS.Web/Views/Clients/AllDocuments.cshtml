@@ -17,25 +17,11 @@
 
 @if (Model != null)
 {
-    <div class="row">
-        <div class="col-md-12">
-            @if (ViewBag.Delete == "N")
-            {
-                <div class="alert alert-block alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <i class="icon-remove"></i>
-                    </button>
-                    <strong class="red">
-                        Error. It is not posible delete the Client
-                    </strong>
-                </div>
-            }
-        </div>
-
+    <div class="row">        
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">TCM All Documents</h3>
+                    <h3 class="panel-title">All Documents</h3>
                 </div>
                 <div class="panel-body">
                     <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -49,6 +35,9 @@
                                 </th>
                                 <th class="col-md-1" style="text-align: center;">
                                     Open Date
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    Status
                                 </th>
                                 <th class="col-md-1" style="text-align: center;">
                                     Consent
@@ -70,9 +59,6 @@
                                 </th>
                                 <th class="col-md-1" style="text-align: center;">
                                     Discharge
-                                </th>
-                                <th class="col-md-1" style="text-align: center;">
-                                    Status
                                 </th>
                             </tr>
                         </thead>
@@ -97,6 +83,20 @@
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-success">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                        }
                                     </td>
                                     <td align="center">
                                           @if ((item.IntakeConsentForTreatment != null) && (item.IntakeConsentForRelease != null) && (item.IntakeConsumerRights != null)
@@ -163,8 +163,7 @@
                                             <a asp-action="MedicationForClient" asp-route-idClient="@item.Id" asp-controller="Medications" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-share"></i></a>
                                         }
 
-                                    </td>
-                                   
+                                    </td>                                   
                                     <td align="center">
                                         @if (item.DischargeList.Count == 0)
                                         {
@@ -175,21 +174,7 @@
                                             <a asp-action="DischargeForClient" asp-route-idClient="@item.Id" asp-controller="Discharge" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-share"></i></a>
                                         }
 
-                                    </td>
-                                    <td align="center">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                                        {
-                                            <span class="label label-success">
-                                                Open
-                                            </span>
-                                        }
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                                        {
-                                            <span class="label label-default">
-                                                Close
-                                            </span>
-                                        }
-                                    </td>
+                                    </td>                                    
                                 </tr>
                             }
                         </tbody>
