@@ -116,11 +116,11 @@
         });
     })
 
-    $("#listActivity").change(function () {
-        var url = "@Url.Action("GetIntervention", "TCMNotes")";
-        $.get(url, { idActivity: $("#listActivity").val() }, function (data) {
-            $("#Description").text(data);
-        });
+    $("#cbActivities").change(function () {
+        var url = "@Url.Action("GetSuggestion", "TCMNotes")";
+            $.get(url, { idActivity: $("#cbActivities").val() }, function (data) {
+                $("#Description").text(data);
+            });
     })   
         
 </script>

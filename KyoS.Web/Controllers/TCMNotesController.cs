@@ -443,7 +443,8 @@ namespace KyoS.Web.Controllers
                                                                                  && ((na.StartTime <= TcmNotesViewModel.StartTime && na.EndTime > TcmNotesViewModel.StartTime)
                                                                                     || (na.StartTime < TcmNotesViewModel.EndTime && na.EndTime >= TcmNotesViewModel.EndTime))))
                                                                                .ToListAsync();
-                    if (noteActivities.Count() > 0)
+
+                    if (noteActivities.Count() > 0 || CheckOverlappingMH(TcmNotesViewModel.DateOfServiceNote, TcmNotesViewModel.DateOfServiceNote, _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == TcmNotesViewModel.IdTCMClient).Client.Id) == true)
                     {
                         TCMNoteEntity tcmNote1 = await _context.TCMNote
                                                     .Include(n => n.TCMClient)
@@ -582,7 +583,8 @@ namespace KyoS.Web.Controllers
                                                                                         && ((na.StartTime <= TcmNotesViewModel.StartTime && na.EndTime > TcmNotesViewModel.StartTime)
                                                                                             || (na.StartTime < TcmNotesViewModel.EndTime && na.EndTime >= TcmNotesViewModel.EndTime))))
                                                                                    .ToListAsync();
-                if (noteActivities.Count() > 0 || noteActivitiesTemp.Count() > 0)
+
+                if (noteActivities.Count() > 0 || noteActivitiesTemp.Count() > 0 || CheckOverlappingMH(TcmNotesViewModel.DateOfServiceNote, TcmNotesViewModel.DateOfServiceNote, _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == TcmNotesViewModel.IdTCMClient).Client.Id) == true)
                 {
                     TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
                     TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
@@ -691,7 +693,7 @@ namespace KyoS.Web.Controllers
                                                                              && ((na.StartTime <= NoteActivityViewModel.StartTime && na.EndTime > NoteActivityViewModel.StartTime)
                                                                                 || (na.StartTime < NoteActivityViewModel.EndTime && na.EndTime >= NoteActivityViewModel.EndTime))))
                                                                            .ToListAsync();
-                if (noteActivities.Count() > 0)
+                if (noteActivities.Count() > 0 || CheckOverlappingMH(NoteActivityViewModel.DateOfServiceNote, NoteActivityViewModel.DateOfServiceNote, _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == NoteActivityViewModel.IdTCMClient).Client.Id) == true)
                 {
                     TCMNoteEntity tcmNote1 = await _context.TCMNote
                                                 .Include(n => n.TCMClient)
@@ -1086,6 +1088,26 @@ namespace KyoS.Web.Controllers
             }
 
             return null;
+        }
+        
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public bool CheckOverlappingMH(DateTime start, DateTime end, int idClient)
+        {
+            List<WorkdayEntity> workday = _context.Workdays
+                                                  .Where(n => n.Date == start.Date)
+                                                  .ToList();
+
+            List<Workday_Client> workday_Client = _context.Workdays_Clients
+                                                          .Where(n => (n.Workday.Date == start.Date
+                                                            && n.Client.Id == idClient))
+                                                          .ToList();
+
+            if (workday_Client.Count > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
