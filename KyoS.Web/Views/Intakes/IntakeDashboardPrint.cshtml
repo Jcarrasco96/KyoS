@@ -1,0 +1,235 @@
+﻿@model KyoS.Web.Data.Entities.ClientEntity
+
+@{
+    ViewData["Title"] = "IntakeDashboardPrint";
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("All Documents", "Alldocuments", "Clients")
+        </li>
+        <li class="active">Binder of @Model.Name</li>
+    </ul><!--.breadcrumb-->
+</div>
+<div>
+
+    <div class="row">
+        <div class="container-fluid">
+            <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default"> Binder - @Model.Name </span></h4>
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeScreening == null)
+            {
+                <a style="text-decoration: none;"  asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Intake <br>&nbsp;&nbsp;&nbsp;&nbsp;Screening</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a style="text-decoration: none;"  asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Intake <br>&nbsp;&nbsp;&nbsp;&nbsp;Screening</h4>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeConsentForTreatment == null)
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consent for<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treatment</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a style="text-decoration: none;"  asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consent for<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treatment</h4>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeConsentForRelease == null)
+            {
+                <a style="text-decoration: none;"  asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consent for<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Release</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a style="text-decoration: none;"  asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consent for<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Release</h4>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeConsumerRights == null)
+            {
+                <a style="text-decoration: none;"  asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consumer<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rights</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consumer<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rights</h4>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeAcknowledgementHipa == null)
+            {
+                <a style="text-decoration: none;"  asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Acknowled.<br>&nbsp;&nbsp;&nbsp;&nbsp;Hippa</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Acknowled.<br>&nbsp;&nbsp;&nbsp;&nbsp;Hippa</h4>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeAccessToServices == null)
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Access<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To Services</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Access<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To Services</h4>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="col-md-12">
+            &nbsp;
+        </div>
+        <div class="col-sm-3 col-md-1">
+            &nbsp;
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeOrientationChecklist == null)
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Orientation<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checklist</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Orientation<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checklist</h4>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeTransportation == null)
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Transportation &<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Food</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Transportation &<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Food</h4>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeConsentPhotograph == null)
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consent for<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Photograph</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consent for<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Photograph</h4>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeFeeAgreement == null)
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Fee<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Agreement</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Fee<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Agreement</h4>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeTuberculosis == null)
+            {
+                <a style="text-decoration: none;"  asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Tuberculosis (TB)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Screening Tool</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Tuberculosis (TB)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Screening Tool</h4>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="col-sm-3 col-md-1">
+            &nbsp;
+        </div>
+       
+    </div>
+</div>
+

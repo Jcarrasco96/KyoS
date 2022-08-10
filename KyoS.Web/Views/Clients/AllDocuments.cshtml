@@ -1,0 +1,228 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
+@{
+    ViewData["Title"] = "All Documents";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">All Documents</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+@if (Model != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            @if (ViewBag.Delete == "N")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <strong class="red">
+                        Error. It is not posible delete the Client
+                    </strong>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">TCM All Documents</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover table-responsive table-striped" id="MyTable">
+                        <thead>
+                            <tr>
+                                <th class="col-md-2">
+                                    Client Name
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    Code
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    Open Date
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    Consent
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    MTP
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    Addendum
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    BIO
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    FARS
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    Medication
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    Discharge
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    Status
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    </td>
+                                    <td align="center">
+                                          @if ((item.IntakeConsentForTreatment != null) && (item.IntakeConsentForRelease != null) && (item.IntakeConsumerRights != null)
+                                          && (item.IntakeAcknowledgementHipa != null) && (item.IntakeOrientationChecklist != null) && (item.IntakeAccessToServices != null)
+                                          && (item.IntakeFeeAgreement != null) && (item.IntakeOrientationChecklist != null) && (item.IntakeScreening != null)
+                                          && (item.IntakeTransportation != null) && (item.IntakeTuberculosis != null))
+                                            {
+                                                <a asp-action="IntakeDashboardPrint" asp-route-id="@item.Id" asp-controller="Intakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="IntakeDashboardPrint" asp-route-id="@item.Id" asp-controller="Intakes" class="btn btn-default" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                            }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.MTPs.Count == 0)
+                                        {
+                                            <a asp-action="MTPForClient" asp-route-idClient="@item.Id" asp-controller="MTPs" class="btn btn-default disabled" title="Go"><i class="glyphicon glyphicon-share"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="MTPForClient" asp-route-idClient="@item.Id" asp-controller="MTPs" class="btn btn-success" title="Go"><i class="glyphicon glyphicon-share"></i></a>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.MTPs.Where(n => n.AdendumList.Count > 0).ToList().Count() > 0)
+                                        {
+                                            <a asp-action="AddendumForClient" asp-route-idClient="@item.Id" asp-controller="MTPs" class="btn btn-success " title="Go"><i class="glyphicon glyphicon-share"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="AddendumForClient" asp-route-idClient="@item.Id" asp-controller="MTPs" class="btn btn-default disabled" title="Go"><i class="glyphicon glyphicon-share"></i></a>
+                                        }
+                                    </td>
+                                     <td align="center">
+                                        @if (item.Bio == null)
+                                        {
+                                            <a asp-action="PrintBio" asp-controller="Bios" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                           <a asp-action="PrintBio" asp-route-id="@item.Bio.Id" asp-controller="Bios" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+
+                                    </td>
+                                    <td align="center">
+                                        @if (item.FarsFormList.Count == 0)
+                                        {
+                                            <a asp-action="FarsForClient" asp-route-idClient="@item.Id" asp-controller="FarsForms" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="FarsForClient" asp-route-idClient="@item.Id" asp-controller="FarsForms" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                        }
+
+                                    </td>
+                                    <td align="center">
+                                        @if (item.MedicationList.Count == 0)
+                                        {
+                                            <a asp-action="MedicationForClient" asp-route-idClient="@item.Id" asp-controller="Medications" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="MedicationForClient" asp-route-idClient="@item.Id" asp-controller="Medications" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                        }
+
+                                    </td>
+                                   
+                                    <td align="center">
+                                        @if (item.DischargeList.Count == 0)
+                                        {
+                                            <a asp-action="DischargeForClient" asp-route-idClient="@item.Id" asp-controller="Discharge" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="DischargeForClient" asp-route-idClient="@item.Id" asp-controller="Discharge" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                        }
+
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-success">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#MyTable').DataTable({
+               "pageLength": 100
+            });
+
+            // Delete item
+            //var item_to_delete;
+
+            @*$('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                var url = "@Url.Action("Delete", "WorkDays")";
+                window.location.href = url + '/' + item_to_delete;
+            });*@
+        });
+    </script>
+}
+
+
