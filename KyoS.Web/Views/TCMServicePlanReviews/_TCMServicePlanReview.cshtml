@@ -50,21 +50,41 @@
                     <span asp-validation-for="TcmServicePlan.DateIntake" class="text-danger"></span>
                 </div>
             </div>
+            @if (User.IsInRole("CaseManager"))
+            {
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Recomendation" class="control-label">Summary of Reipient's Progress and Current Assessment'</label>
+                        <textarea asp-for="Recomendation" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Recomendation" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="SummaryProgress" class="control-label">Recommendations/Changes/Update to SERVICE PLAN</label>
+                        <textarea asp-for="SummaryProgress" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="SummaryProgress" class="text-danger"></span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Recomendation" class="control-label">Summary of Reipient's Progress and Current Assessment'</label>
+                        <textarea asp-for="Recomendation" class="form-control" rows="4" readonly></textarea>
+                        <span asp-validation-for="Recomendation" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="SummaryProgress" class="control-label">Recommendations/Changes/Update to SERVICE PLAN</label>
+                        <textarea asp-for="SummaryProgress" class="form-control" rows="4" readonly></textarea>
+                        <span asp-validation-for="SummaryProgress" class="text-danger"></span>
+                    </div>
+                </div>
+            }
 
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="Recomendation" class="control-label">Summary of Reipient's Progress and Current Assessment'</label>
-                    <textarea asp-for="Recomendation" class="form-control" rows="4"></textarea>
-                    <span asp-validation-for="Recomendation" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="SummaryProgress" class="control-label">Recommendations/Changes/Update to SERVICE PLAN</label>
-                    <textarea asp-for="SummaryProgress" class="form-control" rows="4"></textarea>
-                    <span asp-validation-for="SummaryProgress" class="text-danger"></span>
-                </div>
-            </div>
         </form>
     </div>
 </div>

@@ -593,5 +593,59 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        public async Task<IActionResult> FarsForClient(int idClient = 0)
+        {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+                    return View(await _context.FarsForm
+
+                                              .Include(f => f.Client)
+
+                                              .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && n.Client.Id == idClient))
+                                              .OrderBy(f => f.Client.Name)
+                                              .ToListAsync());
+
+                if (User.IsInRole("Documents_Assistant"))
+                    return View(await _context.FarsForm
+
+                                              .Include(f => f.Client)
+
+                                              .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id 
+                                                    && n.Client.Id == idClient)
+                                              .OrderBy(f => f.Client.Name)
+                                              .ToListAsync());
+
+                if (User.IsInRole("Facilitator"))
+                {
+                    return View(await _context.FarsForm
+
+                                              .Include(f => f.Client)
+
+                                              .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                && n.Client.Id == idClient
+                                                && (n.Client.IdFacilitatorPSR == facilitator.Id || n.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                              .OrderBy(f => f.Client.Name)
+                                              .ToListAsync());
+                }
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
     }
 }

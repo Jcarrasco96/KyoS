@@ -1,0 +1,124 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMServiceActivityEntity>
+
+@if (Model != null)
+{
+    <div class="col-md-12">
+        @if (ViewBag.Delete == "N")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <strong class="red">
+                    Error. It is not posible delete the TCM Activity
+                </strong>
+            </div>
+        }
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">TCM Activity</h3>
+                </div>
+                <div class="panel-body" id="view-tcmservices">
+                    <table class="table table-hover table-responsive table-striped" id="MyTable">
+                        <thead>
+                            <tr>
+                                <th class="col-md-1" style="text-align:center;">
+                                    Service Code
+                                </th>
+                                <th class="col-md-2">
+                                    Activity Name
+                                </th>
+                                <th class="col-md-3">
+                                    Activity Description
+                                </th>
+                                <th class="col-md-1" style="text-align:center;">
+                                    Units
+                                </th>
+                                <th class="col-md-1" style="text-align:center;">
+                                    Frecuency
+                                </th>
+                                <th class="col-md-1" style="text-align:center;">
+                                    Active
+                                </th>
+                                <th class="col-md-1" style="text-align:center;">
+                                    Approved
+                                </th>
+                                <th class="col-md-2" style="text-align:center;">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.TcmService.Code)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Unit)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Frecuency)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Status)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Approved < 2)
+                                        {
+                                            <span class="label label-info">
+                                                Pending
+                                            </span>
+                                        }
+                                        @if (item.Approved == 2)
+                                        {
+                                            <span class="label label-success">
+                                                Approved
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="right">
+                                        @if (User.IsInRole("TCMSupervisor"))
+                                        {
+                                            @if (@item.Approved < 2)
+                                            {
+                                                <a onclick="showInPopup('@Url.Action("EditServiceActivity", "TCMServices", new { id = item.Id, origin = 1 }, Context.Request.Scheme)','Edit TCM Activity')" class="btn btn-warning" title="Edit stage"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="ApprovedActivity" asp-route-id="@item.Id" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete"><i class="glyphicon glyphicon-trash"></i></button>
+                                            }
+                                            else
+                                            {
+                                                <a onclick="showInPopup('@Url.Action("EditServiceActivity", "TCMServices", new { id = item.Id, origin = 1 }, Context.Request.Scheme)','Edit TCM Activity')" class="btn btn-warning" title="Edit stage"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a class="btn btn-success disabled" title="Approved Activity"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete"><i class="glyphicon glyphicon-trash"></i></button>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-warning disabled" title="Approved Activity"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a class="btn btn-success disabled" title="Approved Activity"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a class="btn btn-danger disabled" title="Delete Activity"><i class="glyphicon glyphicon-trash"></i></a>
+                                        }
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+

@@ -69,8 +69,30 @@
                                                         @Html.DisplayFor(modelItem => facilitator.Name)
                                                     </td>
                                                     <td align="center">
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Workday.Week.Id == item.Id) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).GroupBy(w => w.Client).Count() / 
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Workday.Week.Id == item.Id) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR) && (wc.Present == true)).GroupBy(w => w.Client).Count()
+                                                        @if (@facilitator.Workdays_Clients.Where(wc => (wc.Workday.Week.Id == item.Id) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR) && (wc.Present == true)).GroupBy(w => w.Client).Count() > 24)
+                                                        {
+                                                            <span class="label label-danger">
+                                                                @facilitator.Workdays_Clients.Where(wc => (wc.Workday.Week.Id == item.Id) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).GroupBy(w => w.Client).Count() /
+                                                                @facilitator.Workdays_Clients.Where(wc => (wc.Workday.Week.Id == item.Id) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR) && (wc.Present == true)).GroupBy(w => w.Client).Count()
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            @if (@facilitator.Workdays_Clients.Where(wc => (wc.Workday.Week.Id == item.Id) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).GroupBy(w => w.Client).Count() > 24)
+                                                            {
+                                                                <span class="label label-warning">
+                                                                    @facilitator.Workdays_Clients.Where(wc => (wc.Workday.Week.Id == item.Id) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).GroupBy(w => w.Client).Count() /
+                                                                    @facilitator.Workdays_Clients.Where(wc => (wc.Workday.Week.Id == item.Id) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR) && (wc.Present == true)).GroupBy(w => w.Client).Count()
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="label label-success">
+                                                                    @facilitator.Workdays_Clients.Where(wc => (wc.Workday.Week.Id == item.Id) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).GroupBy(w => w.Client).Count() /
+                                                                    @facilitator.Workdays_Clients.Where(wc => (wc.Workday.Week.Id == item.Id) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR) && (wc.Present == true)).GroupBy(w => w.Client).Count()
+                                                                </span>
+                                                            }
+                                                        }
                                                     </td>
                                                     <td align="center">
                                                         @if (@facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Note == null && wc.NoteP == null && wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)).Count() > 0)

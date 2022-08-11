@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace KyoS.Web.Helpers
 {
@@ -30,6 +27,12 @@ namespace KyoS.Web.Helpers
             }
 
             return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+        }
+
+        public void InitDateFinalDateOfWeekFromDate(DateTime date, ref DateTime initDate, ref DateTime finalDate)
+        {
+            initDate = date.AddDays(1 - (int)date.DayOfWeek);
+            finalDate = date.AddDays(6 - (int)date.DayOfWeek);
         }
     }
 }

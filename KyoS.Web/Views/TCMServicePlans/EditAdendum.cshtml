@@ -1,93 +1,101 @@
 ﻿@model KyoS.Web.Models.TCMAdendumViewModel
 @{
-    Layout = null;
+    ViewData["Title"] = "Edit Addendum";
+    ViewData["idAddendum"] = Model.Id;
+   
 }
 
-<div class="row">
-    <div class="col-md-12">
-        <form asp-action="EditAdendum" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMAdendums(this);">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <div class="col-md-6">
-                    <label asp-for="ID_TcmServicePlan" class="control-label">Case Number</label>&nbsp;*
-                    <select asp-for="ID_TcmServicePlan" asp-items="Model.ListTcmServicePlan" class="form-control" readonly></select>
-                    <span asp-validation-for="ID_TcmServicePlan" class="text-danger"></span>
+<!DOCTYPE html>
+
+<html>
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("TCM Addendum", "Adendum", "TCMServicePlans", new { approved = 0, caseNumber = Model.TcmServicePlan.TcmClient.CaseNumber, aview = ViewData["aview"] })
+            </li>
+            <li class="active">Edit</li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+    <h4>Edit new Addendum</h4>
+    <hr />
+
+    <div class="row">
+
+        <form asp-action="EditAdendum" asp-route-id="@Model.Id" >
+            <div class="row col-md-12">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Approved" />
+                <input type="hidden" asp-for="CreatedBy" />
+                <input type="hidden" asp-for="CreatedOn" />
+                <partial name="TCMAddendum" />
+                <div class="col-md-push-12">
+                    <div class="col-md-12 form-group">
+                       @* <a onclick="showInPopup('@Url.Action("CreateDomain", "TCMServicePlans", new {id = Model.Id}, Context.Request.Scheme)','Create domain of service plan')" class="btn btn-success" title="Create domain of this service plan"><i class="glyphicon glyphicon-plus"></i> Add Domain</a>*@
+                    </div>
+                    <div class="col-md-12">
+                        <div id="view-TCMdomain">
+                            @await Html.PartialAsync("_ViewDomainsAddendum", Model.TcmDomain, ViewData)
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label asp-for="Date_Identified" class="control-label">Identified Date</label>
-                    <input asp-for="Date_Identified" class="form-control" />
-                    <span asp-validation-for="Date_Identified" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
+                <br />
                 <div class="form-group col-md-12">
-                    <label asp-for="ID_TcmDominio" class="control-label">Service Code</label>&nbsp;*
-                    <select asp-for="ID_TcmDominio" asp-items="Model.TcmDominio" class="form-control" readonly></select>
-                    <span asp-validation-for="ID_TcmDominio" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label asp-for="Needs_Identified" class="control-label">Identified Needs</label>
-                    <input asp-for="Needs_Identified" class="form-control" />
-                    <span asp-validation-for="Needs_Identified" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label asp-for="Long_term" class="control-label">Long Term</label>
-                    <input asp-for="Long_term" class="form-control" />
-                    <span asp-validation-for="Long_term" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-12">
-                &nbsp;
-            </div>
-            <div>
-                <div class="col-md-offset-9">
-                    <input type="submit" value="Submit" class="btn btn-primary" />
-                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="Adendum" asp-route-approved="0" asp-route-caseNumber="@Model.TcmServicePlan.TcmClient.CaseNumber" asp-route-aview="@ViewData["aview"]" class="btn btn-success">Back</a>
                 </div>
             </div>
         </form>
-    </div>
-</div>
 
+    </div>
+
+</body>
+</html>
+
+
+<partial name="_ModalPopup" />
+<partial name="_DeleteDialog" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
-            //    jQueryAjaxPost = form => {
-            //        try {
-            //            $.ajax({
-            //                type: 'POST',
-            //                url: form.action,
-            //                data: new FormData(form),
-            //                contentType: false,
-            //                processData: false,
-            //                success: function (res) {
-            //                    if (res.isValid) {
-            //                        $('#view-all').html(res.html)
-            //                        $('#form-modal .modal-body').html('');
-            //                        $('#form-modal .modal-title').html('');
-            //                        $('#form-modal').modal('hide');
-            //                    }
-            //                    else
-            //                        $('#form-modal .modal-body').html(res.html);
-            //                },
-            //                error: function (err) {
-            //                    console.log(err)
-            //                }
-            //            })
-            //            //to prevent default form submit event
-            //            return false;
-            //        } catch (ex) {
-            //            console.log(ex)
-            //        }
-            //}
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                                "order": [[0, "asc"]],
+                                "pageLength": 100
+                            });
+
+            var item_to_delete;
+
+            $('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                var url = "@Url.Action("DeleteDomain", "TCMServicePlan")";
+                window.location.href = url + '/' + item_to_delete;
+            });
+        });
+        $(function () {
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
     </script>
 }
 

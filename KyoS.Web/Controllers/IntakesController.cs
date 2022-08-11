@@ -1850,5 +1850,38 @@ namespace KyoS.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "Manager, Supervisor, Documents_Assistant, Facilitator")]
+        public async Task<IActionResult> IntakeDashboardPrint(int id = 0)
+        {
+            if (id == 0)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ClientEntity clientEntity = await _context.Clients
+
+                                                      .Include(c => c.IntakeConsentForTreatment)
+                                                      .Include(c => c.IntakeAccessToServices)
+                                                      .Include(c => c.IntakeAcknowledgementHipa)
+                                                      .Include(c => c.IntakeConsentForRelease)
+                                                      .Include(c => c.IntakeConsentPhotograph)
+                                                      .Include(c => c.IntakeConsumerRights)
+                                                      .Include(c => c.IntakeFeeAgreement)
+                                                      .Include(c => c.IntakeOrientationChecklist)
+                                                      .Include(c => c.IntakeScreening)
+                                                      .Include(c => c.IntakeTransportation)
+                                                      .Include(c => c.IntakeTuberculosis)
+                                                      .Include(c => c.IntakeMedicalHistory)
+                                                      .Include(c => c.Clinic)
+
+                                                      .FirstOrDefaultAsync(c => c.Id == id);
+            if (clientEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            return View(clientEntity);
+        }
+
     }
 }

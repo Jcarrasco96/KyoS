@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMClientEntity>
 @{
-    @if (@ViewData["open"] == "0")
+    @if (@ViewData["open"].ToString() == "0")
     {
         ViewData["Title"] = "TCM OPEN BINDER";
     }
@@ -28,7 +28,7 @@
     <div class="col-md-12">
         @*<div class="alert alert-warning" role="alert">
             <span class="sr-only"></span>*@
-        <strong>Note: </strong> All clients will be displayed, orange color means the client has not intake documents
+        <strong>Note: </strong> All clients will be displayed, orange color means the client has not open binder
         @*</div>*@
     </div>
     <div class="col-md-12">
@@ -37,26 +37,23 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                    <h3 class="panel-title">@ViewData["Title"]</h3>
+                <h3 class="panel-title">@ViewData["Title"]&nbsp;&nbsp;(@Model.Count())</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-3">
+                            <th class="col-md-5">
                                 @Html.DisplayNameFor(model => model.Client.Name)
-                            </th>
+                            </th>                            
                             <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.Client.Code)
-                            </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.Client.AdmisionDate)
+                                Date Open
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Status
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                MH Therapy
+                                Program
                             </th>
                             <th class="col-md-1" align="right">
                             </th>
@@ -73,6 +70,8 @@
                             {
                                 <tr style="color:orange">
                                     <td>
+                                        @Html.DisplayFor(modelItem => item.CaseNumber)
+                                        &nbsp;
                                         @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
                                             <i class="glyphicon glyphicon-user btn-warning"></i>
@@ -83,12 +82,9 @@
                                         }
                                         &nbsp;
                                         @Html.DisplayFor(modelItem => item.Client.Name)
-                                    </td>
+                                    </td>                                    
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Client.Code)
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Client.AdmisionDate)
+                                        @Html.DisplayFor(modelItem => item.DataOpen)
                                     </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -105,8 +101,21 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Client.Service)
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-info">
+                                                TCM
+                                            </span>
+                                        }
+                                        &nbsp;
+                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-default">
+                                                CMH
+                                            </span>
+                                        }
                                     </td>
+                                    
                                     <td align="right">
                                         @if (User.IsInRole("CaseManager"))
                                         {
@@ -114,7 +123,7 @@
                                         }
                                         else
                                         {
-                                            <a class="btn btn-warning disabled" title="New Intake"><i class="glyphicon glyphicon-plus"></i></a>
+                                            <a asp-action="TCMIntakeDashboardReadOnly" asp-route-id="@item.Id" class="btn btn-warning" title="New TCM Intake"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
                                         @if ((item.TCMIntakeForm != null) && (item.TcmIntakeConsentForTreatment != null) && (item.TcmIntakeConsentForRelease != null) && (item.TcmIntakeConsumerRights != null)
                                          && (item.TcmIntakeAcknowledgementHipa != null) && (item.TCMIntakeOrientationChecklist != null) && (item.TCMIntakeAdvancedDirective != null)
@@ -135,6 +144,8 @@
                             {
                                 <tr>
                                     <td>
+                                        @Html.DisplayFor(modelItem => item.CaseNumber)
+                                        &nbsp;
                                         @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
                                             <i class="glyphicon glyphicon-user btn-danger"></i>
@@ -145,12 +156,9 @@
                                         }
                                         &nbsp;
                                         @Html.DisplayFor(modelItem => item.Client.Name)
-                                    </td>
+                                    </td>                                    
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Client.Code)
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Client.AdmisionDate)
+                                        @Html.DisplayFor(modelItem => item.DataOpen)
                                     </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -167,16 +175,28 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Client.Service)
+                                        @if (item != null)
+                                        {
+                                            <span class="label label-info">
+                                                TCM
+                                            </span>
+                                        }
+                                        &nbsp;
+                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-default">
+                                                CMH
+                                            </span>
+                                        }
                                     </td>
                                     <td align="right">
                                         @if (User.IsInRole("CaseManager"))
                                         {
-                                            <a asp-action="TCMIntakeDashboard" asp-route-id="@item.Id" class="btn btn-success" title="Edit TCM Intake"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="TCMIntakeDashboard" asp-route-id="@item.Id" class="btn btn-warning" title="Edit TCM Intake"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
                                         else
                                         {
-                                            <a class="btn btn-success disabled" title="Edit TCM Intake"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="TCMIntakeDashboardReadOnly" asp-route-id="@item.Id" class="btn btn-warning" title="Edit TCM Intake"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
                                         @if ((item.TCMIntakeForm != null) && (item.TcmIntakeConsentForTreatment != null) && (item.TcmIntakeConsentForRelease != null) && (item.TcmIntakeConsumerRights != null)
                                       && (item.TcmIntakeAcknowledgementHipa != null) && (item.TCMIntakeOrientationChecklist != null) && (item.TCMIntakeAdvancedDirective != null)

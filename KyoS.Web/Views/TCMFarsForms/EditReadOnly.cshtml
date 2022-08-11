@@ -1,0 +1,48 @@
+﻿@model KyoS.Web.Models.TCMFarsFormViewModel
+@{
+    ViewData["Title"] = "Edit TCM Fars Form";
+}
+
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Pending Fars Forms", "TCMFarsApproved", "TCMFarsForms", new { status = @KyoS.Common.Enums.FarsStatus.Pending })
+        </li>
+        <li class="active">Approve Fars Form</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<h4>Approve Fars Form</h4>
+<hr />
+<div class="row">
+    <form asp-action="ApproveFars" asp-route-id="@Model.Id" asp-route-origin="2"  enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="IdTCMClient" />
+        <input type="hidden" asp-for="AdmissionedFor" />
+        <input type="hidden" asp-for="Status" />
+        <input type="hidden" asp-for="CreatedBy" />
+        <input type="hidden" asp-for="CreatedOn" />
+        <input type="hidden" asp-for="LastModifiedBy" />
+        <input type="hidden" asp-for="LastModifiedOn" />
+        <input type="hidden" asp-for="TCMClient.CaseNumber" />
+        <input type="hidden" asp-for="Origin" />
+        <partial name="_TCMFarsFormsReadOnly" />
+        <div class="form-group col-md-12">
+            <input type="submit" value="Approve" class="btn btn-primary" title="Save it and back" />
+            <a asp-action="Review"  class="btn btn-warning disabled" title="Approve FARS">Review</a>
+            <a asp-action="TCMFarsApproved" asp-route-status="@KyoS.Common.Enums.FarsStatus.Pending" class="btn btn-success" title="Approve FARS">Back</a>
+        </div>
+    </form>
+</div>
+
+<partial name="_ModalPopup" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+
+

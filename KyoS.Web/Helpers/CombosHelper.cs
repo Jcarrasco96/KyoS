@@ -936,13 +936,14 @@ namespace KyoS.Web.Helpers
         public IEnumerable<SelectListItem> GetComboClientsForTCMCaseNotOpen(int idClinic)
         {
             List<ClientEntity> clients_Total = _context.Clients
-                                                   .Where(c => (c.Clinic.Id == idClinic
-                                                   && c.Status == StatusType.Open))
-                                                 .ToList();
-            List<TCMClientEntity> clients_Open = _context.TCMClient
-                                                 .Where(c => (c.Client.Clinic.Id == idClinic
+                                                       .Where(c => (c.Clinic.Id == idClinic
                                                             && c.Status == StatusType.Open))
-                                                 .ToList();
+                                                       .ToList();
+            List<TCMClientEntity> clients_Open = _context.TCMClient
+                                                         .Include(n => n.Client)
+                                                         .Where(c => (c.Client.Clinic.Id == idClinic
+                                                            && c.Status == StatusType.Open))
+                                                         .ToList();
             
             foreach (var item in clients_Open)
             {
@@ -1286,6 +1287,91 @@ namespace KyoS.Web.Helpers
                 new SelectListItem { Text = Bio_IfSexuallyActive.NO.ToString(), Value = "2"},
                 new SelectListItem { Text = Bio_IfSexuallyActive.N_A.ToString(), Value = "3"}
             };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboTCMNoteSetting()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = "03 - School", Value = "1"},
+                                  new SelectListItem { Text = "11 - Office", Value = "2"},
+                                  new SelectListItem { Text = "12 - Home", Value = "3"},
+                                  new SelectListItem { Text = "33 - ALF", Value = "4"},
+                                  new SelectListItem { Text = "99 - Other", Value = "5"}};
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Setting...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboServicesUsed(int idServicePlan)
+        {
+           
+            List<TCMDomainEntity> Services_Domain = _context.TCMDomains
+                                                            .Include(d => d.TcmServicePlan)
+                                                            .Where(d => d.TcmServicePlan.Id == idServicePlan)
+                                                            .ToList();
+            
+            List<SelectListItem> list = Services_Domain.Select(c => new SelectListItem
+            {
+                Text = $"{c.Code + " - " + c.Name}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select service...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboTCMNoteActivity(string codeDomain)
+        {
+
+            List<TCMServiceActivityEntity> activity = _context.TCMServiceActivity.Where(n => n.TcmService.Code == codeDomain).ToList();
+            
+            List<SelectListItem> list = activity.Select(c => new SelectListItem
+            {
+                Text = $"{c.Name}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select activity...]",
+                Value = "0"
+            });
+            
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboTCMClientsByCasemanager(string user)
+        {
+            List<SelectListItem> list = _context.TCMServicePlans
+                                                .Include(c => c.TcmClient)
+                                                .ThenInclude(c => c.Client)
+                                                .Where(c => (c.Approved == 2 && c.Status ==0
+                                                        && c.TcmClient.Casemanager.LinkedUser == user))
+                                                .Select(c => new SelectListItem
+            {
+                Text = $"{c.TcmClient.Client.Name}",
+                Value = $"{c.TcmClient.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select client...]",
+                Value = "0"
+            });
 
             return list;
         }

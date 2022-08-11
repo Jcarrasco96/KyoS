@@ -266,5 +266,33 @@ namespace KyoS.Web.Controllers
             }
             return View(caseMannagerViewModel);
         }
+
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
+        public async Task<IActionResult> CasesForCaseManager(StatusType status = StatusType.Open ,int idCaseManager = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<TCMClientEntity> tcmClientList = await _context.TCMClient
+                                                                .Include(n => n.Casemanager)
+                                                                .Include(n => n.Client)
+                                                                .Include(n => n.TCMNote)
+                                                                .ThenInclude(n => n.TCMNoteActivity)
+                                                                .ThenInclude(n => n.TCMDomain)
+                                                                .Where(n => n.Casemanager.Id == idCaseManager
+                                                                    && n.Status == status)
+                                                                .ToListAsync();
+
+            return View(tcmClientList);
+
+        }
     }
 }

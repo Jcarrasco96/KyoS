@@ -54,6 +54,14 @@ namespace KyoS.Web
                 cfg.UseSqlServer(Configuration.GetConnectionString("KyoSConnection"));
             });
 
+            //session variables
+            services.AddSession(options =>
+            {
+                //options.Cookie.Name = ".AdventureWorks.Session";
+                options.IdleTimeout = System.TimeSpan.FromSeconds(10);
+                options.Cookie.IsEssential = true;
+            });
+
             services.AddTransient<SeedDb>();
             services.AddScoped<IImageHelper, ImageHelper>();
             services.AddScoped<IConverterHelper, ConverterHelper>();
@@ -65,7 +73,7 @@ namespace KyoS.Web
             services.AddScoped<ITranslateHelper, TranslateHelper>();
             services.AddScoped<IReportHelper, ReportHelper>();
             services.AddScoped<IMimeType, MimeType>();
-            //services.AddControllers();
+            
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
         }
@@ -91,7 +99,7 @@ namespace KyoS.Web
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

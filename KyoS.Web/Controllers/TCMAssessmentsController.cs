@@ -67,8 +67,21 @@ namespace KyoS.Web.Controllers
                 {
 
                     ViewData["origin"] = origin.ToString();
-
-                    return View(await _context.TCMClient
+                    if (idTCMClient == 0)
+                    {
+                        List<TCMClientEntity> AssessmentList =  await _context.TCMClient
+                                                                        .Include(f => f.Client)
+                                                                        .ThenInclude(f => f.Clinic)
+                                                                        .Include(f => f.TCMAssessment)
+                                                                        .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                            && (n.Casemanager.Id == caseManager.Id))
+                                                                        .OrderBy(f => f.Client.Name)
+                                                                        .ToListAsync();
+                        return View(AssessmentList);
+                    }
+                    else
+                    {
+                        return View(await _context.TCMClient
                                               .Include(f => f.Client)
                                               .ThenInclude(f => f.Clinic)
                                               .Include(f => f.TCMAssessment)
@@ -78,6 +91,8 @@ namespace KyoS.Web.Controllers
                                                  && (n.Id == idTCMClient))
                                               .OrderBy(f => f.Client.Name)
                                               .ToListAsync());
+                    }
+                    
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");
@@ -520,6 +535,7 @@ namespace KyoS.Web.Controllers
                 if (tcmAssessmentEntity == null)
                 {
                     tcmAssessmentEntity = await _converterHelper.ToTCMAssessmentEntity(tcmAssessmentViewModel, true, user_logged.UserName);
+                    tcmAssessmentEntity.Approved = 0;
                     _context.TCMAssessment.Add(tcmAssessmentEntity);
                     try
                     {
@@ -614,6 +630,7 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 TCMAssessmentEntity tcmAssessmentEntity = await _converterHelper.ToTCMAssessmentEntity(tcmAssessmentViewModel, false, user_logged.UserName);
+                tcmAssessmentEntity.Approved = 0;
                 _context.TCMAssessment.Update(tcmAssessmentEntity);
                 try
                 {
@@ -635,7 +652,7 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager")]
         public async Task<IActionResult> FinishEditing(int id)
         {
-            TCMAssessmentEntity tcmAssessment = _context.TCMAssessment.FirstOrDefault(u => u.Id == id);
+            TCMAssessmentEntity tcmAssessment = _context.TCMAssessment.FirstOrDefault(u => u.TcmClient.Id == id);
 
             if (tcmAssessment != null)
             {
@@ -652,7 +669,7 @@ namespace KyoS.Web.Controllers
                         {
                             await _context.SaveChangesAsync();
 
-                            return RedirectToAction("Index", "TCMAssessments");
+                            return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = tcmAssessment.TcmClient_FK, section = 4 });
                         }
                         catch (System.Exception ex)
                         {
@@ -667,7 +684,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> Approved(int id)
+        public async Task<IActionResult> ApproveAssessments(int id)
         {
             TCMAssessmentEntity tcmAssessment = _context.TCMAssessment.FirstOrDefault(u => u.Id == id);
 
@@ -686,7 +703,7 @@ namespace KyoS.Web.Controllers
                         {
                             await _context.SaveChangesAsync();
 
-                            return RedirectToAction("Index", "TCMAssessments");
+                            return RedirectToAction("TCMAssessmentApproved", "TCMAssessments", new { approved = 1});
                         }
                         catch (System.Exception ex)
                         {
@@ -2171,5 +2188,99 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditSurgeryModal", SurgeryViewModel) });
         }
 
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
+        public async Task<IActionResult> TCMAssessmentApproved(int approved = 0)
+        {
+
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (User.IsInRole("Manager") || (User.IsInRole("TCMSupervisor")))
+            {
+                List<TCMAssessmentEntity> tcmAssessment = await _context.TCMAssessment
+                                                                        .Include(m => m.TcmClient)
+                                                                        .ThenInclude(m => m.Client)
+                                                                        .Where(m => m.Approved == approved
+                                                                            && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)
+                                                                        .OrderBy(m => m.TcmClient.CaseNumber)
+                                                                        .ToListAsync();
+
+                return View(tcmAssessment);
+            }
+
+            if (User.IsInRole("CaseManager"))
+            {
+                List<TCMAssessmentEntity> tcmAssessment = await _context.TCMAssessment
+                                                                         .Include(m => m.TcmClient)
+                                                                         .ThenInclude(m => m.Client)
+                                                                         .Where(m => m.Approved == approved
+                                                                             && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                             && m.TcmClient.Casemanager.LinkedUser == user_logged.UserName)
+                                                                         .OrderBy(m => m.TcmClient.CaseNumber)
+                                                                         .ToListAsync();
+                return View(tcmAssessment);
+
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public IActionResult EditReadOnly(int id = 0)
+        {
+            TCMAssessmentViewModel model;
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic != null)
+                {
+
+                    TCMAssessmentEntity TcmAssessment = _context.TCMAssessment
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.Client)
+                                                                .ThenInclude(b => b.Clients_Diagnostics)
+                                                                .ThenInclude(b => b.Diagnostic)
+                                                                .Include(b => b.TcmClient.Client.Referred)
+                                                                .Include(b => b.TcmClient.Client.Doctor)
+                                                                .Include(b => b.TcmClient.Client.Psychiatrist)
+                                                                .Include(b => b.IndividualAgencyList)
+                                                                .Include(b => b.HouseCompositionList)
+                                                                .Include(b => b.MedicationList)
+                                                                .Include(b => b.PastCurrentServiceList)
+                                                                .Include(b => b.HospitalList)
+                                                                .Include(b => b.DrugList)
+                                                                .Include(b => b.MedicalProblemList)
+                                                                .Include(b => b.SurgeryList)
+                                                                .FirstOrDefault(m => m.Id == id);
+                    if (TcmAssessment == null)
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+                    else
+                    {
+
+                        model = _converterHelper.ToTCMAssessmentViewModel(TcmAssessment);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            model = new TCMAssessmentViewModel();
+            return View(model);
+        }
     }
 }

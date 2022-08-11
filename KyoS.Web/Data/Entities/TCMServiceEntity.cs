@@ -14,7 +14,8 @@ namespace KyoS.Web.Data.Entities
         [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string Name { get; set; }
-        
+
+        [MaxLength(2, ErrorMessage = "The {0} field can not have more than {1} characters.")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Code")]
         public string Code { get; set; }
@@ -24,7 +25,8 @@ namespace KyoS.Web.Data.Entities
 
         public ClinicEntity Clinic { get; set; }
         public IEnumerable<TCMStageEntity> Stages { get; set; }
+        public List<TCMServiceActivityEntity> TCMServiceActivity { get; set; }
 
-        
+
     }
 }

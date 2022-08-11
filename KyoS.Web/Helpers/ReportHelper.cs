@@ -3923,6 +3923,67 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMClientDS(TCMClientEntity client)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMClient"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("CasemanagerId", typeof(int));
+            dt.Columns.Add("CaseNumber", typeof(string));
+            dt.Columns.Add("ClientId", typeof(int));
+            dt.Columns.Add("DataClose", typeof(DateTime));
+            dt.Columns.Add("DataOpen", typeof(DateTime));
+            dt.Columns.Add("Period", typeof(int));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+                       
+            if (client != null)
+            {
+                dt.Rows.Add(new object[]
+                                            {
+                                            client.Id,
+                                            0,
+                                            client.CaseNumber,
+                                            0,
+                                            client.DataClose,
+                                            client.DataOpen,
+                                            client.Period,
+                                            client.Status,
+                                            client.CreatedBy,
+                                            client.CreatedOn,
+                                            client.LastModifiedBy,
+                                            client.LastModifiedOn
+                                            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                            {
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()                                                
+                                            });
+            }
+
+            return dt;
+        }
+
         private DataTable GetEmergencyContactDS(EmergencyContactEntity contact)
         {
             DataTable dt = new DataTable
@@ -4203,6 +4264,61 @@ namespace KyoS.Web.Helpers
                                             string.Empty
                                         });
             }           
+
+            return dt;
+        }
+
+        private DataTable GetCaseManagerDS(CaseMannagerEntity caseManager)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "CaseManager"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("ProviderNumber", typeof(string));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("LinkedUser", typeof(string));
+            dt.Columns.Add("SignaturePath", typeof(string));
+            dt.Columns.Add("ClinicId", typeof(int));
+            dt.Columns.Add("Email", typeof(string));
+            dt.Columns.Add("Phone", typeof(string));
+            dt.Columns.Add("Credentials", typeof(string));           
+
+            if (caseManager != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            caseManager.Id,
+                                            caseManager.Name,
+                                            caseManager.ProviderNumber,
+                                            caseManager.Status,
+                                            caseManager.LinkedUser,
+                                            caseManager.SignaturePath,
+                                            0,
+                                            caseManager.Email,
+                                            caseManager.Phone,
+                                            caseManager.Credentials
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty
+                                        });
+            }
 
             return dt;
         }
@@ -7627,6 +7743,197 @@ namespace KyoS.Web.Helpers
 
             return dt;
         }
-        #endregion        
+
+        private DataTable GetTCMNoteDS(TCMNoteEntity note)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMNote"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("DateOfService", typeof(DateTime));
+            dt.Columns.Add("ServiceCode", typeof(string));
+            dt.Columns.Add("Status", typeof(int));            
+            dt.Columns.Add("Outcome", typeof(string));
+            dt.Columns.Add("NextStep", typeof(string));
+            dt.Columns.Add("CaseManagerId", typeof(int));            
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("TCMClientId", typeof(int));            
+
+            dt.Rows.Add(new object[]
+                                        {
+                                            note.Id,
+                                            note.DateOfService,
+                                            note.ServiceCode,
+                                            note.Status,                                            
+                                            note.Outcome,
+                                            note.NextStep,
+                                            0,                                           
+                                            note.CreatedBy,
+                                            note.CreatedOn,
+                                            note.LastModifiedBy,
+                                            note.LastModifiedOn,
+                                            0                                           
+            });
+
+            return dt;
+        }
+
+        private DataTable GetTCMNoteActivityListDS(List<TCMNoteActivityEntity> activityList)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMNoteActivity"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TCMNoteId", typeof(int));
+            dt.Columns.Add("Setting", typeof(string));
+            dt.Columns.Add("TCMDomainId", typeof(string));
+            dt.Columns.Add("DescriptionOfService", typeof(string));
+            dt.Columns.Add("StartTime", typeof(DateTime));
+            dt.Columns.Add("EndTime", typeof(DateTime));
+            dt.Columns.Add("Minutes", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            
+            foreach (TCMNoteActivityEntity item in activityList)
+            {
+
+                dt.Rows.Add(new object[]
+                                        {
+                                            item.Id,
+                                            0,
+                                            item.Setting,
+                                            item.TCMDomain.Code,
+                                            item.DescriptionOfService,
+                                            item.StartTime,
+                                            item.EndTime,
+                                            item.Minutes,
+                                            item.CreatedBy,
+                                            item.CreatedOn,
+                                            item.LastModifiedBy,
+                                            item.LastModifiedOn
+                                        });
+            }
+
+            return dt;
+        }
+
+        #endregion
+
+        #region Approved TCM Notes reports
+        public Stream FloridaSocialHSTCMNoteReportSchema1(TCMNoteEntity note)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMApprovedNotes\\rptFloridaSocialHSTCMNote1.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMNoteDS(note));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMNote");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(note.CaseManager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(note.TCMClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(note.TCMClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMNoteActivityListDS(note.TCMNoteActivity.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMNoteActivity");
+
+            //signatures images 
+            byte[] stream1 = null;
+            //byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(note.CaseManager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(note.CaseManager.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }            
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(null, stream1));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+
+        public Stream DreamsMentalHealthTCMNoteReportSchema1(TCMNoteEntity note)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMApprovedNotes\\rptDreamsMentalHealthTCMNote1.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMNoteDS(note));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMNote");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(note.CaseManager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(note.TCMClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(note.TCMClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMNoteActivityListDS(note.TCMNoteActivity.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMNoteActivity");
+
+            //signatures images 
+            byte[] stream1 = null;
+            //byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(note.CaseManager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(note.CaseManager.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(null, stream1));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
     }
 }

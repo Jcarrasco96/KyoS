@@ -1,0 +1,69 @@
+﻿@model KyoS.Web.Models.TCMNoteViewModel
+@{
+    ViewData["Title"] = "TCM Notes";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("Pending Notes", "NotesStatus", "TCMNotes", new { status = KyoS.Common.Enums.NoteStatus.Pending })
+            </li>
+            <li class="active">TCM Notes</li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+
+    <div class="row">
+        <form asp-action="Edit" asp-route-id="@Model.Id" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdTCMClient" />
+            <input type="hidden" asp-for="IdTCMNote" />
+            <input type="hidden" asp-for="TCMClient.Casemanager.Name" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <partial name="_TCMNotes" />
+            <div class="col-md-push-12">
+                <div id="view-NoteActivity">
+                    @await Html.PartialAsync("_ViewTCMNoteActivity", Model.TCMNoteActivity.ToList())
+                </div>
+            </div>
+            <partial name="_TCMNotes1" />
+            <div class="form-group col-md-12">
+                @if (User.IsInRole("CaseManager"))
+                {
+                    <input type="submit" value="Save" asp-route-origin="@ViewData["origin"]" class="btn btn-primary" />
+                }
+                @if (User.IsInRole("TCMSupervisor"))
+                {
+                    <a asp-action="ApprovedNote" asp-route-id="@Model.Id" asp-route-origin="1" class="btn btn-primary">Approve</a>
+                    <a asp-action="ApprovedNote" asp-route-id="@Model.Id" class="btn btn-warning disabled">Review</a>
+                }
+                <a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Pending" class="btn btn-success">Back</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+<partial name="_ModalPopup" />
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+
+    </script>
+}
+
+

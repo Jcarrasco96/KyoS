@@ -8,7 +8,14 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("TCM Intake", "TCMIntakeDashboard", "TCMIntakes", new { id = @Model.Id })
+            @if (ViewData["origin"].ToString() == "0")
+            {
+                @Html.ActionLink("TCM Intake", "TCMIntakeDashboard", "TCMIntakes", new { id = @Model.Id })
+            }
+            else
+            {
+                @Html.ActionLink("TCM All Documents", "AllDocuments", "TCMClients")
+            }
         </li>
         @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
         {
@@ -464,7 +471,7 @@
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;">Addendum<br>&nbsp;</h4>
-                        <p style="text-align:right"><a asp-action="Adendum" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.CaseNumber" class="btn btn-default disabled" role="button">Go</a></p>
+                        <p style="text-align:right"><a asp-action="Adendum" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-caseNumber="@Model.CaseNumber" class="btn btn-default disabled" role="button">Go</a></p>
                     </div>
                 }
                 else
@@ -473,7 +480,7 @@
                     {
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;">Addendum<br>&nbsp;</h4>
-                            <p style="text-align:right"><a asp-action="Adendum" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.CaseNumber" class="btn btn-default " role="button">Go</a></p>
+                            <p style="text-align:right"><a asp-action="Adendum" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-caseNumber="@Model.CaseNumber" class="btn btn-default " role="button">Go</a></p>
                         </div>
                     }
                     else
@@ -482,7 +489,7 @@
                         {
                             <div class="thumbnail list-group-item list-group-item-warning">
                                 <h4 style="align-content:end;">Addendum<br>&nbsp;</h4>
-                                <p style="text-align:right"><a asp-action="Adendum" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.CaseNumber" class="btn btn-warning" role="button">Go</a></p>
+                                <p style="text-align:right"><a asp-action="Adendum" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-caseNumber="@Model.CaseNumber" class="btn btn-warning" role="button">Go</a></p>
                             </div>
                         }
                         else
@@ -491,14 +498,14 @@
                             {
                                 <div class="thumbnail list-group-item list-group-item-info">
                                     <h4 style="align-content:end;">Addendum<br>&nbsp;</h4>
-                                    <p style="text-align:right"><a asp-action="Adendum" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.CaseNumber" class="btn btn-info" role="button">Go</a></p>
+                                    <p style="text-align:right"><a asp-action="Adendum" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-caseNumber="@Model.CaseNumber" class="btn btn-info" role="button">Go</a></p>
                                 </div>
                             }
                             else
                             {
                                 <div class="thumbnail list-group-item list-group-item-success">
                                     <h4 style="align-content:end;">Addendum<br>&nbsp;</h4>
-                                    <p style="text-align:right"><a asp-action="Adendum" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.CaseNumber" class="btn btn-success" role="button">Go</a></p>
+                                    <p style="text-align:right"><a asp-action="Adendum" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-caseNumber="@Model.CaseNumber" class="btn btn-success" role="button">Go</a></p>
                                 </div>
                             }
                         }

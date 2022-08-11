@@ -318,7 +318,12 @@ namespace KyoS.Web.Controllers
 
         [Authorize(Roles = "Facilitator, Supervisor, Manager")]
         public async Task<IActionResult> Notifications(int id = 0)
-        {            
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
             return View(await _context.Messages
 
                                       .Include(m => m.Workday_Client)
@@ -341,7 +346,7 @@ namespace KyoS.Web.Controllers
 
                                       .Include(m => m.Discharge)
 
-                                      .Where(m => (m.To == User.Identity.Name && m.Notification == true))
+                                      .Where(m => (m.To == user_logged.UserName && m.Notification == true))
                                       .ToListAsync());            
         }
 

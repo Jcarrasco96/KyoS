@@ -28,7 +28,7 @@ namespace KyoS.Web.Helpers
         Stream DavilaNoteReportSchema4(Workday_Client workdayClient);
         Stream DreamsMentalHealthNoteReportSchema3(Workday_Client workdayClient);
         #endregion
-
+        
         #region Approved Individual Notes reports
         Stream DavilaIndNoteReportSchema1(Workday_Client workdayClient);
         Stream FloridaSocialHSIndNoteReportSchema1(Workday_Client workdayClient);
@@ -89,7 +89,12 @@ namespace KyoS.Web.Helpers
         #endregion
 
         #region Utils functions
-        byte[] ConvertStreamToByteArray(Stream stream);        
+        byte[] ConvertStreamToByteArray(Stream stream);
+        #endregion
+
+        #region Approved TCM Notes reports
+        Stream FloridaSocialHSTCMNoteReportSchema1(TCMNoteEntity note);
+        Stream DreamsMentalHealthTCMNoteReportSchema1(TCMNoteEntity note);
         #endregion
     }
 }

@@ -15,17 +15,22 @@ namespace KyoS.Web.Data.Entities
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string Name { get; set; }
 
+        [MaxLength(2, ErrorMessage = "The {0} field can not have more than {1} characters.")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Code")]
         public string Code { get; set; }
 
         public string NeedsIdentified { get; set; }
         public string LongTerm { get; set; }
+
+        [Display(Name = "Date Identified")]
+        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime DateIdentified { get; set; }
         
         public TCMServicePlanEntity TcmServicePlan { get; set; }
         public List <TCMObjetiveEntity> TCMObjetive { get; set; }
-
+        
         public string Origin { get; set; }
 
         public bool Used { get; set; }

@@ -2,50 +2,106 @@
 
 @if (Model != null)
 {
+    var @minutes = Model.Sum(m => m.Minutes);
+    var @value = minutes / 15;
+    var @mod = minutes % 15;
+    var @value1 = value + 1;
+    
+    <div class="col-md-12">
+        <div class="col-md-3">
+            &nbsp;
+        </div>
+        <div class="col-md-2">            
+            <div class="thumbnail list-group-item list-group-item-success">
+                <p style="text-align:center">Total of Services</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.Count()</h4>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="thumbnail list-group-item list-group-item-success">                
+                <p style="text-align:center">Total of Minutes</p>
+                <h4 style="text-align:center; font-weight:bold;">@minutes</h4>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="thumbnail list-group-item list-group-item-success">                
+                <p style="text-align:center">Total of Units</p>
+                <h4 style="text-align:center; font-weight:bold;">
+                    @if (mod > 7)
+                    {
+                        @value1;
+                    }
+                    else
+                    {
+                        @value;
+                    }
+                </h4>
+            </div>
+        </div>        
+        <div class="col-md-3">
+            &nbsp;
+        </div>
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Notes Activity</h3>
+                <h5 style="font-weight:bold;">Services of note</h5>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTableDoc">
                     <thead>
                         <tr>
-                            <th class="col-md-2">
+                            <th class="col-md-1" style="text-align:center;">
                                 Setting
                             </th>
-                            <th class="col-md-2" >
+                            <th class="col-md-1" style="text-align:center;">
                                 Domain
                             </th>
-                            <th class="col-md-4" style="text-align:center;">
+                            <th class="col-md-6" style="text-align:left;">
                                 Description
                             </th>
-                            <th class="col-md-2"  style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
+                                Start Time
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                End Time
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
                                 Minutes
                             </th>
-                            <th class="col-md-2">
-                                
+                            <th class="col-md-1">
+
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
+                            minutes = minutes + item.Minutes;
                             <tr>
-                                <td>
+                                <td align="center">
                                     @Html.DisplayFor(modelItem => item.Setting)
                                 </td>
-                                <td>
+                                <td align="center">
                                     @Html.DisplayFor(modelItem => item.TCMDomain.Code)
                                 </td>
-                                <td align="center">
+                                <td>
                                     @Html.DisplayFor(modelItem => item.DescriptionOfService)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.StartTime)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.EndTime)
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Minutes)
                                 </td>
-                                <td align="right">
-                                    <a onclick="showInPopup('@Url.Action("EditNoteActivity", "TCMNotes",new { id= item.Id}, Context.Request.Scheme)','Edit TCM Note')" class="btn btn-warning" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                <td align="right">                                    
+                                    <a onclick="showInPopupLg('@Url.Action("EditNoteActivity", "TCMNotes", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Note')" class="btn btn-warning" title="Edit activity"><i class="glyphicon glyphicon-pencil"></i></a>
                                     <a asp-action="DeleteTCMNoteActivity" asp-route-id="@item.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>
                                 </td>
                             </tr>
@@ -54,6 +110,6 @@
                 </table>
             </div>
         </div>
-    </div>
+    </div>   
 }
 

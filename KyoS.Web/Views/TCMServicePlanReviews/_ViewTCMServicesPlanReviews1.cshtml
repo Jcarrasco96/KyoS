@@ -81,23 +81,48 @@
                                     }
                                 </td>
                                 <td align="right">
-                                    @if (item.Approved == 0)
+                                    @if (User.IsInRole("CaseManager"))
                                     {
-                                        <a asp-action="Edit" asp-controller="TCMServicePlanReviews" asp-route-Id="@item.Id" asp-route-origin="1" asp-route-IdServicePlan="@item.TcmServicePlan.Id" class="btn btn-warning" title="Edit TCM Service PLan Review"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a asp-action="FinishEditing" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Finish Editing TCM Service Plan Review"><i class="glyphicon glyphicon-ok"></i></a>
-                                        @*<button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete TCM Service PLan Review"><i class="glyphicon glyphicon-trash"></i></button>*@
-                                        <i class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                        @if (item.Approved == 0)
+                                        {
+                                            <a asp-action="Edit" asp-controller="TCMServicePlanReviews" asp-route-Id="@item.Id" asp-route-origin="1" asp-route-IdServicePlan="@item.TcmServicePlan.Id" class="btn btn-warning" title="Edit TCM Service PLan Review"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="FinishEditing" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Finish Editing TCM Service Plan Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                            @*<button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete TCM Service PLan Review"><i class="glyphicon glyphicon-trash"></i></button>*@
+                                            <i class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                        }
+                                        @if (item.Approved == 1)
+                                        {
+                                            <a asp-action="Edit" asp-controller="TCMServicePlanReviews" asp-route-Id="@item.Id" asp-route-origin="2" asp-route-IdServicePlan="@item.TcmServicePlan.Id" class="btn btn-warning" title="Edit TCM Service PLan Review"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <i class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                            <i class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                        }
+                                        @if (item.Approved == 2)
+                                        {
+                                            <i class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                            <i class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                            <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan Review"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
                                     }
-                                    @if (item.Approved == 1)
+                                    @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
                                     {
-                                        <a asp-action="Edit" asp-controller="TCMServicePlanReviews" asp-route-Id="@item.Id" asp-route-origin="2" asp-route-IdServicePlan="@item.TcmServicePlan.Id" class="btn btn-warning" title="Edit TCM Service PLan Review"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <i class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                        <i class="btn btn-success disabled glyphicon glyphicon-print"></i>
-                                    }
-                                    @if (item.Approved == 2)
-                                    {
-                                        <i class="btn btn-success disabled glyphicon glyphicon-flag"></i>
-                                        <a asp-action="FinishEditing" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan Review"><i class="glyphicon glyphicon-print"></i></a>
+                                        @if (item.Approved == 0)
+                                        {
+                                            <i class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                            <i class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                            <i class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                        }
+                                        @if (item.Approved == 1)
+                                        {
+                                            <i class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                            <a asp-action="EditReadOnly" asp-route-id="@item.Id"  asp-route-IdServicePlan="@item.TcmServicePlan.Id" class="btn btn-success" title="Approve TCM Service Plan Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <i class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                        }
+                                        @if (item.Approved == 2)
+                                        {
+                                            <i class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                            <i class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                            <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan Review"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
                                     }
                                 </td>
                             </tr>

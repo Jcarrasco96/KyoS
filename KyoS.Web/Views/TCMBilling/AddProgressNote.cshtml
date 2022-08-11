@@ -1,0 +1,51 @@
+﻿@model KyoS.Web.Models.AddProgressNoteViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @*<form asp-action="AddProgressNote" asp-route-date="@Model.Date" onsubmit="return jQueryAjaxPostTCMAddProgressNote(this);">*@
+        <form asp-action="AddProgressNote" asp-route-date="@Model.Date">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Date" />
+            <div class="col-md-12">
+                <div class="col-md-3">
+                    &nbsp;
+                </div>
+                <div class="col-md-3">
+                    <input type="radio" name="Billable" value="Value1" checked="checked" /> Billable
+                </div>
+                <div class="col-md-3">
+                    <input type="radio" name="Billable" value="Value2" /> Non-Billable
+                </div>
+                <div class="col-md-3">
+                    &nbsp;
+                </div>
+            </div>
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="IdClient" class="control-label"></label>&nbsp;*
+                    <select asp-for="IdClient" asp-items="Model.Clients" class="form-control"></select>
+                    <span asp-validation-for="IdClient" class="text-danger"></span>
+                </div>
+            </div>
+            @*<div class="col-md-12">
+                &nbsp;
+            </div>*@
+            <div>
+                <div class="col-md-offset-7">
+                    <input type="submit" value="Add Progress Note" class="btn btn-primary" /> &nbsp;&nbsp;
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

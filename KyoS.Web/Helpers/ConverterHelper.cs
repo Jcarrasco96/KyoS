@@ -1429,6 +1429,7 @@ namespace KyoS.Web.Helpers
                 Weakness = model.weakness,
                 Strengths = model.strengths,
                 Status = StatusUtils.GetStatusByIndex(model.ID_Status),
+                Approved = model.Approved
                
             };
         }
@@ -1446,7 +1447,11 @@ namespace KyoS.Web.Helpers
                 Name = TcmDomainEntity.Name,
                 TcmServicePlan = TcmDomainEntity.TcmServicePlan,
                 Services = _combosHelper.GetComboServicesNotUsed(TcmDomainEntity.TcmServicePlan.Id),
-                Origin = TcmDomainEntity.Origin
+                Origin = TcmDomainEntity.Origin,
+                CreatedBy = TcmDomainEntity.CreatedBy,
+                CreatedOn = TcmDomainEntity.CreatedOn,
+                LastModifiedBy = TcmDomainEntity.LastModifiedBy,
+                LastModifiedOn = TcmDomainEntity.LastModifiedOn
 
             };
         }
@@ -1846,15 +1851,25 @@ namespace KyoS.Web.Helpers
                 StatusList = _combosHelper.GetComboClientStatus(),
                 ID_Objetive = TcmObjetiveEntity.IdObjetive,
                 IdServicePlanReview = TcmObjetiveEntity.TcmDomain.TcmServicePlan.TCMServicePlanReview.Id,
-                Idd = TcmObjetiveEntity.Id
+                Idd = TcmObjetiveEntity.Id,
+                CreatedBy = TcmObjetiveEntity.CreatedBy,
+                CreatedOn = TcmObjetiveEntity.CreatedOn,
+                LastModifiedBy = TcmObjetiveEntity.LastModifiedBy,
+                LastModifiedOn = TcmObjetiveEntity.LastModifiedOn,
+                Name = TcmObjetiveEntity.Name,
+                Task = TcmObjetiveEntity.Task,
+                EndDate = TcmObjetiveEntity.EndDate,
+                StartDate = TcmObjetiveEntity.StartDate,
+                TargetDate = TcmObjetiveEntity.TargetDate,
+                
 
             };
             if (TcmObjetiveEntity.Origin == "Service Plan")
-                salida.Origin = 0;
+                salida.Origi = 0;
             if (TcmObjetiveEntity.Origin == "Addendum")
-                salida.Origin = 1;
+                salida.Origi = 1;
             if (TcmObjetiveEntity.Origin == "Service Plan Review")
-                salida.Origin = 2;
+                salida.Origi = 2;
 
             return salida;
         }
@@ -1990,7 +2005,9 @@ namespace KyoS.Web.Helpers
                 TcmDomain = TcmAdendumEntity.TcmDomain,
                 DateAdendum = TcmAdendumEntity.DateAdendum,
                 LongTerm = TcmAdendumEntity.LongTerm,
-                NeedsIdentified = TcmAdendumEntity.NeedsIdentified
+                NeedsIdentified = TcmAdendumEntity.NeedsIdentified,
+                CreatedOn = TcmAdendumEntity.CreatedOn,
+                CreatedBy = TcmAdendumEntity.CreatedBy
             };
         }
 
@@ -2089,7 +2106,9 @@ namespace KyoS.Web.Helpers
                 TcmDischargeFollowUp = TcmDischargeEntity.TcmDischargeFollowUp,
                 TcmDischargeServiceStatus = TcmDischargeEntity.TcmDischargeServiceStatus,
                 TcmServices = TcmDischargeEntity.TcmServicePlan.TCMService,
-                Approved = TcmDischargeEntity.Approved
+                Approved = TcmDischargeEntity.Approved,
+                CreatedBy = TcmDischargeEntity.CreatedBy,
+                CreatedOn = TcmDischargeEntity.CreatedOn
 
             };
         }
@@ -5264,7 +5283,7 @@ namespace KyoS.Web.Helpers
                 NeedNoHelp = model.NeedNoHelp,
                 NeedSome = model.NeedSome,
                 OtherReceiveExplain = model.OtherReceiveExplain,
-                Status = TCMDocumentStatus.Approved,
+                Status = TCMDocumentStatus.Edition,
                 TCMSupervisor = model.TCMSupervisor
 
             };
@@ -5594,20 +5613,14 @@ namespace KyoS.Web.Helpers
                 Outcome = model.Outcome,
                 CaseManager = _context.CaseManagers
                                       .FirstOrDefault(n => n.Id == model.IdCaseManager),
-                TCMNoteActivity = await _context.TCMNoteActivity.Where(n => n.TCMNote.Id == model.IdTCMNote).ToListAsync(),
-                CaseManagerDate = model.CaseManagerDate,
-                DateOfService = model.DateOfService,
-                DocumentationTime = model.DocumentationTime,
+                TCMNoteActivity = await _context.TCMNoteActivity.Where(n => n.TCMNote.Id == model.IdTCMNote).ToListAsync(),                
+                DateOfService = model.DateOfService,                
                 NextStep = model.NextStep,
                 ServiceCode = model.ServiceCode,
                 Status = model.Status,
-                TotalMinutes = model.TotalMinutes,
-                TotalUnits = model.TotalUnits,
                 TCMClient = _context.TCMClient
-                                    .FirstOrDefault(n => n.Id == model.IdTCMClient),
-                Workday = _context.Workdays.FirstOrDefault(n => n.Id == model.IdTCMWorday)
-                
-
+                                    .FirstOrDefault(n => n.Id == model.IdTCMClient)
+               
             };
         }
 
@@ -5623,17 +5636,12 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = model.LastModifiedOn,
                 Outcome = model.Outcome,
                 CaseManager = model.CaseManager,
-                TCMNoteActivity = model.TCMNoteActivity,
-                CaseManagerDate = model.CaseManagerDate,
-                DateOfService = model.DateOfService,
-                DocumentationTime = model.DocumentationTime,
+                TCMNoteActivity = model.TCMNoteActivity,                
+                DateOfService = model.DateOfService,               
                 NextStep = model.NextStep,
                 ServiceCode = model.ServiceCode,
                 Status = model.Status,
-                TotalMinutes = model.TotalMinutes,
-                TotalUnits = model.TotalUnits,
                 TCMClient = model.TCMClient,
-                Workday = model.Workday,
                 IdCaseManager = model.CaseManager.Id,
                 IdTCMClient = model.TCMClient.Id,
                 IdTCMNote = model.Id
@@ -5654,12 +5662,10 @@ namespace KyoS.Web.Helpers
                 DescriptionOfService = model.DescriptionOfService,
                 EndTime = model.EndTime,
                 Minutes = model.Minutes,
-                Setting = model.Setting,
+                Setting = ServiceTCMNotesUtils.GetCodeByIndex(model.IdSetting),
                 StartTime = model.StartTime,
-                TCMDomain = _context.TCMDomains.FirstOrDefault(n => n.Id == model.IdTCMDomain),
+                TCMDomain = model.TCMDomain,
                 TCMNote = _context.TCMNote.FirstOrDefault(n => n.Id == model.IdTCMNote)
-                
-
             };
         }
 
@@ -5681,9 +5687,14 @@ namespace KyoS.Web.Helpers
                 TCMDomain = model.TCMDomain,
                 TCMNote = model.TCMNote,
                 IdTCMNote = model.TCMNote.Id,
-                IdTCMDomain = model.TCMDomain.Id
-                
-            };
+                IdTCMDomain = model.TCMDomain.Id,
+                IdSetting = ServiceTCMNotesUtils.GetIndexByCode(model.Setting),
+                SettingList = _combosHelper.GetComboTCMNoteSetting(),
+                DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == model.TCMNote.TCMClient.Id).Id),
+                IdTCMClient = model.TCMNote.TCMClient.Id,
+                ActivityList = _combosHelper.GetComboTCMNoteActivity(model.TCMDomain.Code),
+                DateOfServiceNote = model.TCMNote.DateOfService
+        };
 
             return salida;
         }
@@ -5720,5 +5731,65 @@ namespace KyoS.Web.Helpers
             };
         }
 
+        public async Task<TCMServiceActivityEntity> ToTCMServiceActivityEntity(TCMServiceActivityViewModel model, bool isNew, string userId)
+        {
+            return new TCMServiceActivityEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmService = await _context.TCMServices.FindAsync(model.IdService),
+                Name = model.Name,
+                Description = model.Description,
+                Unit = model.Unit,
+                Status = model.Status,
+                Approved = model.Approved,
+                Frecuency = model.Frecuency
+                
+            };
+        }
+
+        public TCMServiceActivityViewModel ToTCMServiceActivityViewModel(TCMServiceActivityEntity TcmStageEntity)
+        {
+            return new TCMServiceActivityViewModel
+            {
+                Id = TcmStageEntity.Id,
+                CreatedBy = TcmStageEntity.CreatedBy,
+                CreatedOn = TcmStageEntity.CreatedOn,
+                LastModifiedBy = TcmStageEntity.LastModifiedBy,
+                LastModifiedOn = TcmStageEntity.LastModifiedOn,
+                Name = TcmStageEntity.Name,
+                IdService = TcmStageEntity.TcmService.Id,
+                IdClinic = TcmStageEntity.TcmService.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics(),
+                Description = TcmStageEntity.Description,
+                Unit = TcmStageEntity.Unit,
+                TcmService = TcmStageEntity.TcmService,
+                Status = TcmStageEntity.Status,
+                Approved = TcmStageEntity.Approved,
+                Frecuency = TcmStageEntity.Frecuency
+            };
+        }
+
+        public TCMNoteActivityTempEntity ToTCMNoteActivityTempEntity(TCMNoteActivityViewModel model, bool isNew, string userId)
+        {
+            return new TCMNoteActivityTempEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                DescriptionOfService = model.DescriptionOfService,
+                EndTime = model.EndTime,
+                Minutes = model.Minutes,
+                IdSetting = model.IdSetting,
+                Setting = ServiceTCMNotesUtils.GetCodeByIndex(model.IdSetting),
+                IdTCMDomain = model.IdTCMDomain,
+                TCMDomainCode = model.TCMDomain.Code,
+                StartTime = model.StartTime,
+                UserName = userId,
+                IdTCMClient = model.IdTCMClient,
+                DateOfServiceOfNote = model.StartTime
+            };
+        }        
     }
 }

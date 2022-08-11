@@ -9,7 +9,7 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @if (ViewData["origin"] == "")
+            @if (ViewData["origin"].ToString() == "0")
             {
                 @Html.ActionLink("Dashboard", "Index", "Desktop")
             }

@@ -11,7 +11,15 @@
             <i class="icon-home"></i>
                 @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Adendums</li>
+        @if (User.IsInRole("TCMSupervisor"))
+        {
+            <li class="active">Pending TCM Adendums</li>
+        }
+        else
+        { 
+            <li class="active">TCM Adendums</li>
+        }
+        
     </ul><!--.breadcrumb-->
 </div>
 

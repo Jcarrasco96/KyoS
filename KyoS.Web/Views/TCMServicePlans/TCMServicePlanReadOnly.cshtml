@@ -1,0 +1,127 @@
+﻿@model KyoS.Web.Models.TCMServicePlanViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="ID_TcmClient" class="control-label">TCM Client Name</label>&nbsp;*
+            <select asp-for="ID_TcmClient" asp-items="Model.TcmClients" class="form-control" readonly></select>
+            <span asp-validation-for="ID_TcmClient" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="Status" class="control-label">Service Plan Status</label>&nbsp;*
+            <input asp-for="Status" class="form-control" readonly/>
+            <span asp-validation-for="Status" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="CaseNumber" class="control-label">Case number</label>&nbsp;*
+            <input asp-for="CaseNumber" class="form-control" readonly />
+            <span asp-validation-for="CaseNumber" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="ID_Clinic" class="control-label">Clinic Name</label>&nbsp;*
+            <select asp-for="ID_Clinic" asp-items="Model.Clinics" class="form-control" readonly></select>
+            <span asp-validation-for="ID_Clinic" class="text-danger"></span>
+        </div>
+    </div>
+   
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="Date_Intake" class="control-label">Intake Date</label>&nbsp;*
+            <input asp-for="Date_Intake" class="form-control" readonly/>
+            <span asp-validation-for="Date_Intake" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="Date_ServicePlan" class="control-label">Services Plan Date</label>&nbsp;*
+            <input asp-for="Date_ServicePlan" class="form-control" readonly/>
+            <span asp-validation-for="Date_ServicePlan" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="Date_Assessment" class="control-label">Assessment Date</label>&nbsp;*
+            <input asp-for="Date_Assessment" class="form-control" readonly/>
+            <span asp-validation-for="Date_Assessment" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="Date_Certification" class="control-label">Certification Date</label>&nbsp;*
+            <input asp-for="Date_Certification" class="form-control" readonly>
+            <span asp-validation-for="Date_Certification" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="strengths" class="control-label">Strengths</label>
+            <textarea asp-for="strengths" class="form-control" rows="4" readonly></textarea>
+            <span asp-validation-for="strengths" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="weakness" class="control-label">Weakness</label>
+            <textarea asp-for="weakness" class="form-control" rows="4" readonly></textarea>
+            <span asp-validation-for="weakness" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="dischargerCriteria" class="control-label">Discharger Criteria</label>
+            <textarea asp-for="dischargerCriteria" class="form-control" rows="4" readonly></textarea>
+            <span asp-validation-for="dischargerCriteria" class="text-danger"></span>
+        </div>
+    </div>
+   
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+            //    jQueryAjaxPost = form => {
+            //        try {
+            //            $.ajax({
+            //                type: 'POST',
+            //                url: form.action,
+            //                data: new FormData(form),
+            //                contentType: false,
+            //                processData: false,
+            //                success: function (res) {
+            //                    if (res.isValid) {
+            //                        $('#view-all').html(res.html)
+            //                        $('#form-modal .modal-body').html('');
+            //                        $('#form-modal .modal-title').html('');
+            //                        $('#form-modal').modal('hide');
+            //                    }
+            //                    else
+            //                        $('#form-modal .modal-body').html(res.html);
+            //                },
+            //                error: function (err) {
+            //                    console.log(err)
+            //                }
+            //            })
+            //            //to prevent default form submit event
+            //            return false;
+            //        } catch (ex) {
+            //            console.log(ex)
+            //        }
+            //}
+    </script>
+}
+

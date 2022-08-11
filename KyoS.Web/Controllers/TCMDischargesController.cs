@@ -63,6 +63,7 @@ namespace KyoS.Web.Controllers
                                                                        .OrderBy(m => m.TcmServicePlan.TcmClient.CaseNumber)
                                                                        .ToListAsync();
 
+                ViewData["idTCMClient"] = idTCMClient;
                 return View(tcmDischarge);
             }
 
@@ -89,63 +90,71 @@ namespace KyoS.Web.Controllers
         {
 
             TCMDischargeViewModel model;
-
-            if (User.IsInRole("CaseManager"))
+            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
+                                                          .FirstOrDefault(f => (f.Id == id && f.Approved == 2));
+            if (tcmServicePlan != null)
             {
-                UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-                if (user_logged.Clinic != null)
+                if (User.IsInRole("CaseManager"))
                 {
+                    UserEntity user_logged = _context.Users
+                                                     .Include(u => u.Clinic)
+                                                     .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                    model = new TCMDischargeViewModel
+                    if (user_logged.Clinic != null)
                     {
-                        AdministrativeDischarge = false,
-                        CreatedBy = user_logged.UserName,
-                        CreatedOn = DateTime.Now,
-                        AdministrativeDischarge_Explain = "",
-                        AllServiceInPlace = false,
-                        ClientLeftVoluntarily = false,
-                        ClientMovedOutArea = false,
-                        DischargeDate = DateTime.Now,
-                        IdServicePlan = id,
-                        LackOfProgress = false,
-                        NonComplianceWithAgencyRules = false,
-                        Other = false,
-                        Other_Explain = "",
-                        PresentProblems = "",
-                        ProgressToward = "",
-                        Referred = false,
-                        StaffingDate = DateTime.Now,
-                        StaffSignatureDate = DateTime.Now,
-                        SupervisorSignatureDate = DateTime.Now,
-                        TcmDischargeFollowUp = new List<TCMDischargeFollowUpEntity>(),
-                        TcmServicePlan = _context.TCMServicePlans
-                                                 .Include(n => n.TcmClient)
-                                                 .ThenInclude(n => n.Client)
-                                                 .Include(n => n.TCMDomain)
-                                                 .Include(n => n.TCMService)
-                                                 .FirstOrDefault(n => n.Id == id),
-                        TcmServices = _context.TCMServices.ToList(),
-                        TcmDischargeServiceStatus = new List<TCMDischargeServiceStatusEntity>()
 
-                    };
-                    TCMDischargeEntity tcmDischarge = _context.TCMDischarge.FirstOrDefault(n => n.TcmServicePlan.Id == id);
-                    if (tcmDischarge == null)
-                    {
-                        model.Id = 0;
+                        model = new TCMDischargeViewModel
+                        {
+                            AdministrativeDischarge = false,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            AdministrativeDischarge_Explain = "",
+                            AllServiceInPlace = false,
+                            ClientLeftVoluntarily = false,
+                            ClientMovedOutArea = false,
+                            DischargeDate = DateTime.Now,
+                            IdServicePlan = id,
+                            LackOfProgress = false,
+                            NonComplianceWithAgencyRules = false,
+                            Other = false,
+                            Other_Explain = "",
+                            PresentProblems = "",
+                            ProgressToward = "",
+                            Referred = false,
+                            StaffingDate = DateTime.Now,
+                            StaffSignatureDate = DateTime.Now,
+                            SupervisorSignatureDate = DateTime.Now,
+                            TcmDischargeFollowUp = new List<TCMDischargeFollowUpEntity>(),
+                            TcmServicePlan = _context.TCMServicePlans
+                                                     .Include(n => n.TcmClient)
+                                                     .ThenInclude(n => n.Client)
+                                                     .Include(n => n.TCMDomain)
+                                                     .Include(n => n.TCMService)
+                                                     .FirstOrDefault(n => n.Id == id),
+                            TcmServices = _context.TCMServices.ToList(),
+                            TcmDischargeServiceStatus = new List<TCMDischargeServiceStatusEntity>()
+
+                        };
+                        TCMDischargeEntity tcmDischarge = _context.TCMDischarge.FirstOrDefault(n => n.TcmServicePlan.Id == id);
+                        if (tcmDischarge == null)
+                        {
+                            model.Id = 0;
+                        }
+                        else
+                        {
+                            model.Id = tcmDischarge.Id;
+                        }
+
+
+                        return View(model);
                     }
-                    else
-                    {
-                        model.Id = tcmDischarge.Id;
-                    }
-                    
-                    
-                    return View(model);
                 }
-            }
 
+            }
+            else
+            {
+                return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = _context.TCMClient.FirstOrDefault(n => n.TcmServicePlan.Id == id).Id, section = 4 });
+            }
             model = new TCMDischargeViewModel();
             return View(model);
         }
@@ -611,7 +620,7 @@ namespace KyoS.Web.Controllers
                                                                             && m.TcmServicePlan.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)
                                                                        .OrderBy(m => m.TcmServicePlan.TcmClient.CaseNumber)
                                                                        .ToListAsync();
-
+                ViewData["idTCMClient"] = idTCMClient;
                 return View(tcmDischarge);
             }
 
@@ -635,6 +644,83 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
+        [Authorize(Roles = "TCMSupervisor")]
+        public IActionResult EditReadOnly(int id = 0)
+        {
+            TCMDischargeViewModel model;
 
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic != null)
+                {
+
+                    TCMDischargeEntity TcmDischarge = _context.TCMDischarge
+                                                              .Include(m => m.TcmDischargeFollowUp)
+                                                              .Include(n => n.TcmDischargeServiceStatus)
+                                                              .Include(b => b.TcmServicePlan)
+                                                              .ThenInclude(b => b.TcmClient)
+                                                              .ThenInclude(b => b.Client)
+                                                              .Include(b => b.TcmServicePlan)
+                                                              .ThenInclude(b => b.TCMDomain)
+                                                              .FirstOrDefault(m => m.Id == id);
+                    if (TcmDischarge == null)
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToTCMDischargeViewModel(TcmDischarge);
+                        return View(model);
+
+                    }
+
+                }
+            }
+
+            model = new TCMDischargeViewModel();
+            return View(model);
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> ApproveDischarge(int id)
+        {
+            TCMDischargeEntity tcmDischarge = _context.TCMDischarge
+                                                   .Include(u => u.TcmServicePlan)
+                                                   .ThenInclude(u => u.TcmClient)
+                                                   .ThenInclude(u => u.Client)
+                                                   .FirstOrDefault(u => u.Id == id);
+
+            if (tcmDischarge != null)
+            {
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    if (user_logged.Clinic != null)
+                    {
+                        tcmDischarge.Approved = 2;
+                        _context.Update(tcmDischarge);
+                        try
+                        {
+                            await _context.SaveChangesAsync();
+
+                            return RedirectToAction("TCMDischargeApproved", new { approved = 1 });
+                        }
+                        catch (System.Exception ex)
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+            }
+
+            return RedirectToAction("Index", "TCMServicePlans");
+        }
     }
 }

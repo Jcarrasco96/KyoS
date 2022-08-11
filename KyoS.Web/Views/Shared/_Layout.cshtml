@@ -88,7 +88,7 @@
                         <li><a asp-area="" asp-controller="Settings" asp-action="Index">Settings</a></li>
                     }
                     else
-                   if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
+                 if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -244,6 +244,7 @@
                                             <li>@Html.ActionLink("All Discharges", "Index", "Discharge")</li>
                                         </ul>
                                     </li>
+                                    <li>@Html.ActionLink("All Documents", "AllDocuments", "Clients")</li>
                                 </ul>
                             </li>
                         }
@@ -274,23 +275,37 @@
                                         </ul>
                                     </li>
                                     <li role="separator" class="divider"></li>
-                                    <li>@Html.ActionLink("Intakes", "Index", "TCMIntakes")</li>
+                                    <li>@Html.ActionLink("TCM All Documents", "AllDocuments", "TCMClients")</li>
                                     <li role="separator" class="divider"></li>
                                     <li class="dropdown-submenu">
                                         <a class="test" tabindex="-1" href="#">Services Plans / Clients</a>
                                         <ul class="dropdown-menu">
-                                            <li><a asp-area="" asp-controller="TCMServicePlans" asp-action="Index">Open</a></li>
-                                            <li><a asp-area="" asp-controller="TCMServicePlans" asp-action="AproveServicePlan">Pending Approval</a></li>
-                                            <li><a asp-area="" asp-controller="TCMServicePlans" asp-action="ClosedServicePlan">Closed</a></li>
+                                            @*<li><a asp-area="" asp-controller="TCMServicePlans" asp-action="Index">Open</a></li>*@
+                                            @*<li><a asp-area="" asp-controller="TCMServicePlans" asp-action="AproveServicePlan">Pending Approval</a></li>*@
+                                            @*<li><a asp-area="" asp-controller="TCMServicePlans" asp-action="ClosedServicePlan">Closed</a></li>*@
+                                            <li>@Html.ActionLink("Started", "ServicePlanStarted", "TCMServiceplans", new { approved = 1 })</li>
+                                            <li>@Html.ActionLink("Pending Approval", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })</li>
+                                            <li>@Html.ActionLink("Approved", "ApprovedServicePlan", "TCMServiceplans")</li>
                                         </ul>
                                     </li>
                                     <li class="dropdown-submenu">
-                                        <a class="test" tabindex="-1" href="#">Adendums</a>
+                                        <a class="test" tabindex="-1" href="#">Addendums</a>
                                         <ul class="dropdown-menu">
-                                            <li><a asp-area="" asp-controller="TCMAdendums" asp-action="Index">Adendums all</a></li>
-                                            <li><a asp-area="" asp-controller="TCMAdendums" asp-action="AproveAdendum">Pending approval</a></li>
+                                            @*<li><a asp-area="" asp-controller="TCMAdendums" asp-action="Index">All Addendums</a></li>*@
+                                            @*<li><a asp-area="" asp-controller="TCMAdendums" asp-action="AproveAdendum">Pending approval</a></li>*@
+                                            <li>@Html.ActionLink("Pending", "AdendumApproved", "TCMServicePlans", new { approved = 1 })</li>
+                                            <li>@Html.ActionLink("All Addendums", "Adendum", "TCMServicePlans", new { aview = 1 })</li>
                                         </ul>
                                     </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Activities</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a asp-area="" asp-controller="TCMServices" asp-action="ServiceActivity">All Activities</a></li>
+                                            <li><a asp-area="" asp-controller="TCMServices" asp-action="PendingActivity">Pending approval</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>@Html.ActionLink("Billing", "BillingForWeek", "TCMBilling")</li>
                                 </ul>
                             </li>
                         }
@@ -304,7 +319,7 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                        if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
+                      if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -362,6 +377,7 @@
                                     </ul>
                                 </li>
                                 <li>@Html.ActionLink("Discharges", "Index", "Discharge")</li>
+                                <li>@Html.ActionLink("All Documents", "Alldocuments", "Clients")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
@@ -378,7 +394,7 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                                           if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
+                                         if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -455,6 +471,7 @@
                                         <li>@Html.ActionLink("All Discharges", "Index", "Discharge")</li>
                                     </ul>
                                 </li>
+                                <li>@Html.ActionLink("All Documents", "Alldocuments", "Clients")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
@@ -470,10 +487,10 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                                               if (User.Identity.IsAuthenticated && (User.IsInRole("TCMSupervisor")))
+                                             if (User.Identity.IsAuthenticated && (User.IsInRole("TCMSupervisor")))
                     {
                         <li class="class=" dropdown open"">
-                            <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                            <a asp-area="" class="dropdown-toggle" asp-controller="TCMClients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 Cases <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
@@ -482,7 +499,7 @@
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Open", "GetCaseOpen", "TCMClients")</li>
                                         <li>@Html.ActionLink("Close", "GetCaseClose", "TCMClients")</li>
-                                        <li>@Html.ActionLink("All Cases", "Index", "TCMClients")</li>
+                                        <li>@Html.ActionLink("All Cases/Open case", "Index", "TCMClients")</li>
                                     </ul>
                                 </li>
                                 <li>@Html.ActionLink("Not started case", "GetCaseNotServicePlan", "TCMClients")</li>
@@ -491,34 +508,95 @@
                         </li>
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Services Plan <span class="caret"></span>
+                                Documents <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Started", "Index", "TCMServiceplans")</li>
-                                <li>@Html.ActionLink("Closed", "ClosedServicePlan", "TCMServiceplans")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Service Plan</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Started", "ServicePlanStarted", "TCMServiceplans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Pending Approval", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "ApprovedServicePlan", "TCMServiceplans")</li>
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Pending Approval", "AproveServicePlan", "TCMServicePlans")</li>
-                                <li>@Html.ActionLink("In Review", "Index", "TCMServicePlans")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Addendum</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending", "AdendumApproved", "TCMServicePlans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("All Addendums", "Adendum", "TCMServicePlans", new { aview = 1 })</li>
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Service Plan Review", "AproveServicePlanReview", "TCMServicePlanReviews")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Service Plan Review</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Started", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 0 })</li>
+                                        <li>@Html.ActionLink("Pending Approval", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 2 })</li>
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Discharge", "Index", "TCMDischarges")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Assessments</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending Approval", "TCMAssessmentApproved", "TCMAssessments", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "TCMAssessmentApproved", "TCMAssessments", new { approved = 2 })</li>
+                                    </ul>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">FARS Forms</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending Approval", "TCMFarsApproved", "TCMFarsForms", new { status = KyoS.Common.Enums.FarsStatus.Pending })</li>
+                                        <li>@Html.ActionLink("Approved", "TCMFarsApproved", "TCMFarsForms", new { status = KyoS.Common.Enums.FarsStatus.Approved })</li>
+                                    </ul>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Appendix J</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending Approval", "ApendiceJStatus", "TCMIntakes", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "ApendiceJStatus", "TCMIntakes", new { approved = 2 })</li>
+                                    </ul>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Discharge</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending", "TCMDischargeApproved", "TCMDischarges", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Discharge all", "Index", "TCMDischarges")</li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Adendums <span class="caret"></span>
+                                Notes <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Adendums all", "Adendum", "TCMServicePlans")</li>
-                                <li>@Html.ActionLink("Pending approval", "AproveAdendum", "TCMAdendums")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Notes</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Started", "NotesStatus", "TCMNotes", new { status = @KyoS.Common.Enums.NoteStatus.Edition })</li>
+                                        <li>@Html.ActionLink("Pending Approval", "NotesStatus", "TCMNotes", new { status = @KyoS.Common.Enums.NoteStatus.Pending })</li>
+                                        <li>@Html.ActionLink("Approved", "NotesStatus", "TCMNotes", new { status = @KyoS.Common.Enums.NoteStatus.Approved })</li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Activity</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending Activity", "PendingActivity", "TCMServices")</li>
+                                        <li>@Html.ActionLink("Activity for service", "ServiceActivity", "TCMServices")</li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                                                   if (User.Identity.IsAuthenticated && (User.IsInRole("CaseManager")))
+                                                 if (User.Identity.IsAuthenticated && (User.IsInRole("CaseManager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -539,28 +617,84 @@
                         </li>
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Services Plan <span class="caret"></span>
+                                Documents <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Started", "Index", "TCMServiceplans")</li>
-                                <li>@Html.ActionLink("Closed", "ClosedServicePlan", "TCMServiceplans")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Service Plan</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Started", "ServicePlanStarted", "TCMServiceplans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Pending Approval", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "ApprovedServicePlan", "TCMServiceplans")</li>
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Adendums", "Adendum", "TCMServicePlans")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Addendum</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending", "AdendumApproved", "TCMServicePlans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("All Addendums", "Adendum", "TCMServicePlans", new { aview = 1 })</li>
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Service Plan Review", "Index", "TCMServicePlanReviews")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Service Plan Review</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Started", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 0 })</li>
+                                        <li>@Html.ActionLink("Pending Approval", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 2 })</li>
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Discharge", "Index", "TCMDischarges")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Assessments</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending Approval", "TCMAssessmentApproved", "TCMAssessments", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "TCMAssessmentApproved", "TCMAssessments", new { approved = 2 })</li>
+                                    </ul>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">FARS Forms</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending Approval", "TCMFarsApproved", "TCMFarsForms", new { status = KyoS.Common.Enums.FarsStatus.Pending })</li>
+                                        <li>@Html.ActionLink("Approved", "TCMFarsApproved", "TCMFarsForms", new { status = KyoS.Common.Enums.FarsStatus.Approved })</li>
+                                    </ul>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Appendix J</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending Approval", "ApendiceJStatus", "TCMIntakes", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "ApendiceJStatus", "TCMIntakes", new { approved = 2 })</li>
+                                    </ul>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Discharge</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending", "TCMDischargeApproved", "TCMDischarges", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("All Discharge", "Index", "TCMDischarges")</li>
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Domain/Objetives", "Domains", "TCMServicePlans")</li>
                                 <li>@Html.ActionLink("Objetives", "Objectives", "TCMServicePlans")</li>
                             </ul>
                         </li>
-
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" asp-controller="TCMServices" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Activities <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Activities for services", "ServiceActivity", "TCMServices")</li>
+                            </ul>
+                        </li>
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                   if (User.Identity.IsAuthenticated && (User.IsInRole("Documents_Assistant")))
+                 if (User.Identity.IsAuthenticated && (User.IsInRole("Documents_Assistant")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -581,6 +715,7 @@
                                 <li>@Html.ActionLink("Medical History", "MedicalHistory", "Intakes")</li>
                                 <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
                                 <li>@Html.ActionLink("BIOs", "Index", "Bios")</li>
+                                <li>@Html.ActionLink("All Documents", "Alldocuments", "Clients")</li>
                             </ul>
                         </li>
 
@@ -783,7 +918,7 @@
                 integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
         </script>
         <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>        
+        <script src="~/js/site.min.js" asp-append-version="true"></script>            
     </environment>
 
     <script>

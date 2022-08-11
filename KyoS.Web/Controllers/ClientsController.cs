@@ -810,5 +810,121 @@ namespace KyoS.Web.Controllers
                     return View(null);
             }
         }
+
+        [Authorize(Roles = "Manager, Facilitator, Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> AllDocuments()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.UserType.ToString() == "Facilitator")
+            {
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                {
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+                FacilitatorEntity afacilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
+                List<ClientEntity> ClientList = await _context.Clients
+                                                              .Include(g => g.FarsFormList)
+                                                              .Include(g => g.IntakeAccessToServices)
+                                                              .Include(g => g.IntakeAcknowledgementHipa)
+                                                              .Include(g => g.IntakeConsentForRelease)
+                                                              .Include(g => g.IntakeConsentForTreatment)
+                                                              .Include(g => g.IntakeConsentPhotograph)
+                                                              .Include(g => g.IntakeConsumerRights)
+                                                              .Include(g => g.IntakeFeeAgreement)
+                                                              .Include(g => g.IntakeMedicalHistory)
+                                                              .Include(g => g.IntakeOrientationChecklist)
+                                                              .Include(g => g.IntakeScreening)
+                                                              .Include(g => g.IntakeTransportation)
+                                                              .Include(g => g.IntakeTuberculosis)
+                                                              .Include(g => g.DischargeList)
+                                                              .Include(g => g.Bio)
+                                                              .Include(g => g.MedicationList)
+                                                              .Include(g => g.MTPs)
+                                                              .ThenInclude(g => g.AdendumList)
+                                                              .Include(g => g.MTPs)
+                                                              .ThenInclude(g => g.MtpReviewList)
+                                                              .Where(g => (g.IdFacilitatorPSR == afacilitator.Id))
+                                                              .OrderBy(g => g.Name)
+                                                              .ToListAsync();
+
+                
+                return View(ClientList);
+            }
+            if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "Supervisor")
+            {
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                {
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+                List<ClientEntity> ClientList = await _context.Clients
+                                                              .Include(g => g.FarsFormList)
+                                                              .Include(g => g.IntakeAccessToServices)
+                                                              .Include(g => g.IntakeAcknowledgementHipa)
+                                                              .Include(g => g.IntakeConsentForRelease)
+                                                              .Include(g => g.IntakeConsentForTreatment)
+                                                              .Include(g => g.IntakeConsentPhotograph)
+                                                              .Include(g => g.IntakeConsumerRights)
+                                                              .Include(g => g.IntakeFeeAgreement)
+                                                              .Include(g => g.IntakeMedicalHistory)
+                                                              .Include(g => g.IntakeOrientationChecklist)
+                                                              .Include(g => g.IntakeScreening)
+                                                              .Include(g => g.IntakeTransportation)
+                                                              .Include(g => g.IntakeTuberculosis)
+                                                              .Include(g => g.DischargeList)
+                                                              .Include(g => g.Bio)
+                                                              .Include(g => g.MedicationList)
+                                                              .Include(g => g.MTPs)
+                                                              .ThenInclude(g => g.AdendumList)
+                                                              .Include(g => g.MTPs)
+                                                              .ThenInclude(g => g.MtpReviewList)
+                                                              .Where(g => (g.Clinic.Id == user_logged.Clinic.Id))
+                                                              .OrderBy(g => g.Name)
+                                                              .ToListAsync();
+
+               return View(ClientList);
+            }
+
+            if (user_logged.UserType.ToString() == "Documents_Assistant")
+            {
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                {
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+                List<ClientEntity> ClientList = await _context.Clients
+                                                              .Include(g => g.FarsFormList)
+                                                              .Include(g => g.IntakeAccessToServices)
+                                                              .Include(g => g.IntakeAcknowledgementHipa)
+                                                              .Include(g => g.IntakeConsentForRelease)
+                                                              .Include(g => g.IntakeConsentForTreatment)
+                                                              .Include(g => g.IntakeConsentPhotograph)
+                                                              .Include(g => g.IntakeConsumerRights)
+                                                              .Include(g => g.IntakeFeeAgreement)
+                                                              .Include(g => g.IntakeMedicalHistory)
+                                                              .Include(g => g.IntakeOrientationChecklist)
+                                                              .Include(g => g.IntakeScreening)
+                                                              .Include(g => g.IntakeTransportation)
+                                                              .Include(g => g.IntakeTuberculosis)
+                                                              .Include(g => g.DischargeList)
+                                                              .Include(g => g.Bio)
+                                                              .Include(g => g.MedicationList)
+                                                              .Include(g => g.MTPs)
+                                                              .ThenInclude(g => g.AdendumList)
+                                                              .Include(g => g.MTPs)
+                                                              .ThenInclude(g => g.MtpReviewList)
+                                                              .Where(g => (g.Clinic.Id == user_logged.Clinic.Id
+                                                                    && g.Bio.CreatedBy == user_logged.UserName))
+                                                              .OrderBy(g => g.Name)
+                                                              .ToListAsync();
+
+                return View(ClientList);
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
     }
 }

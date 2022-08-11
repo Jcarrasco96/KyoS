@@ -5,42 +5,37 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="CreateObjetive" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMAdendum(this);">
+        <form asp-action="CreateObjetive" asp-route-id="@Model.Id" asp-route-idAddendum="@ViewData["idAddendum"]" onsubmit="return jQueryAjaxPostTCMDomain(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Origin" />
             <input type="hidden" asp-for="Id_Domain" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
-            <div class="">
-                <div class="form-group col-md-3">
-                    <b>Service code:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.TcmDomain.Code)</i>
+            <div class="form-group">
+                <div class=" col-md-3 form-group">
+                    <h4 style="font-weight:bold;"> <span class="label label-info">Service code - @Model.TcmDomain.Code </span></h4>
                 </div>
-                <div class="form-group col-md-9">
-                    <b>Service name:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.TcmDomain.Name)</i>
+                <div class=" col-md-9 form-group">
+                    <h4 style="font-weight:bold;"> <span class="label label-info">Service name - @Model.TcmDomain.Name</span></h4>
                 </div>
             </div>
-
             <div class="">
-                <div class="form-group col-md-6">
-                    <label asp-for="ID_Objetive" class="control-label">Objetive Number</label>&nbsp;*
+                <div class="form-group col-md-3">
+                    <label asp-for="ID_Objetive" class="control-label">Obj. Number</label>
                     <input asp-for="ID_Objetive" class="form-control" readonly />
                     <span asp-validation-for="ID_Objetive" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-3">
                     <label asp-for="Start_Date" class="control-label">Start Date</label>&nbsp;*
                     <input asp-for="Start_Date" class="form-control" />
                     <span asp-validation-for="Start_Date" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="">
-                <div class="form-group col-md-6">
-                    <label asp-for="Target_Date" class="control-label"></label>&nbsp;
+                <div class="form-group col-md-3">
+                    <label asp-for="Target_Date" class="control-label">Target Date</label>
                     <input asp-for="Target_Date" class="form-control" />
                     <span asp-validation-for="Target_Date" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-3">
                     <label asp-for="End_Date" class="control-label">End date</label>&nbsp;
                     <input asp-for="End_Date" class="form-control" />
                     <span asp-validation-for="End_Date" class="text-danger"></span>
@@ -55,7 +50,7 @@
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label asp-for="name" class="control-label">Name</label>&nbsp;*
+                    <label asp-for="name" class="control-label">Name</label>
                     <input asp-for="name" id="GetName" class="form-control" readonly />
                     <span asp-validation-for="name" class="text-danger"></span>
                 </div>
@@ -85,14 +80,14 @@
             </div>
             <div>
                 <div class="col-md-offset-9">
-                    @if (Model.Origin == 0) //viene de la pagina Index de las notas
+                    @if (Model.Origi == 0) //viene de la pagina Index de las notas
                     {
                         <input type="submit" value="Submit" class="btn btn-primary" asp-all-route-id="model.tCMservice.Id" asp-route-Origin="0" />
 
                     }
-                    @if (Model.Origin == 1) //viene de la pagina Index de las notas
+                    @if (Model.Origi == 1) //viene de la pagina Index de las notas
                     {
-                        <input type="submit" value="Submit" class="btn btn-primary" asp-all-route-id="model.tCMservice.Id" asp-route-Origin="1" />
+                        <input type="submit" value="Submit" class="btn btn-primary" asp-route-id="model.tCMservice.Id" asp-route-idAddendum="@ViewData["idAddendum"]" asp-route-Origin="1" />
 
                     }
 

@@ -45,5 +45,6 @@ namespace KyoS.Web.Data.Entities
         public TCMServicePlanReviewEntity TCMServicePlanReview { get; set; }
 
         public TCMDischargeEntity TCMDischarge { get; set; }
+        public TCMSupervisorEntity TCMSupervisor { get; set; }
     }
 }

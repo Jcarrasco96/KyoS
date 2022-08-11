@@ -1,0 +1,118 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.MedicationEntity>
+@{
+    ViewData["Title"] = "MedicationForClient";
+}
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("All Documents", "Alldocuments", "Clients")
+        </li>
+        <li class="active">Medication List</li>
+    </ul><!--.breadcrumb-->
+</div>
+<div class="row">
+
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Medication List</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-2">
+                                Client
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.Client.Code)
+                            </th>
+                            <th class="col-md-3" style="text-align:center;">
+                                Medication
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Dosage
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Frecuency
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Prescriber
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => item.Client.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Client.Code)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                 <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Dosage)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Frequency)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Prescriber)
+                                </td>
+                                
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#MyTable').DataTable({
+               "pageLength": 100
+            });
+
+            // Delete item
+            //var item_to_delete;
+
+            @*$('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                var url = "@Url.Action("Delete", "WorkDays")";
+                window.location.href = url + '/' + item_to_delete;
+            });*@
+        });
+    </script>
+}
+
+
+
