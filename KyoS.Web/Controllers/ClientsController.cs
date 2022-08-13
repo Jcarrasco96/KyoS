@@ -278,12 +278,19 @@ namespace KyoS.Web.Controllers
 
             ClientEntity clientEntity = await _context.Clients
                                                       .Include(c => c.Clinic)
+
                                                       .Include(c => c.Doctor)
+
                                                       .Include(c => c.Psychiatrist)
+
                                                       .Include(c => c.Referred)
+
                                                       .Include(c => c.LegalGuardian)
+
                                                       .Include(c => c.EmergencyContact)
-                                                      .Include(c => c.IndividualTherapyFacilitator)
+
+                                                      .Include(c => c.IndividualTherapyFacilitator)                                                      
+
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
             {
@@ -347,6 +354,12 @@ namespace KyoS.Web.Controllers
                                                        .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 ClientEntity clientEntity = await _converterHelper.ToClientEntity(clientViewModel, false, photoPath, signPath, user_logged.Id);
+                if (clientViewModel.IdStatus == 2) //the client was closed
+                {
+                    _context.Entry(clientEntity).Reference("Group").CurrentValue = null;
+                    _context.Entry(clientEntity).Reference("Group").IsModified = true;
+                }
+                
                 _context.Update(clientEntity);
 
                 //delete all client diagnostic of this client

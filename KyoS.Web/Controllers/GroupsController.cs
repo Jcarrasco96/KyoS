@@ -60,13 +60,13 @@ namespace KyoS.Web.Controllers
             {
                 return View(await _context.Groups
 
-                                      .Include(g => g.Facilitator)
+                                          .Include(g => g.Facilitator)
 
-                                      .Include(g => g.Clients)
+                                          .Include(g => g.Clients)
 
-                                      .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id && g.Service == Common.Enums.ServiceType.PSR))
-                                      .OrderBy(g => g.Facilitator.Name)
-                                      .ToListAsync());
+                                          .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id && g.Service == Common.Enums.ServiceType.PSR))
+                                          .OrderBy(g => g.Facilitator.Name)
+                                          .ToListAsync());
             }
             if (user_logged.UserType.ToString() == "Facilitator")
             {
@@ -82,6 +82,7 @@ namespace KyoS.Web.Controllers
                                       .OrderBy(g => g.Facilitator.Name)
                                       .ToListAsync());
             }
+
             return RedirectToAction("Home/Error404");
         }
 
