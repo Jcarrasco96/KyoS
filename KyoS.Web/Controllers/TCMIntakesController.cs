@@ -2101,7 +2101,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 3 });
                     }
                     catch (System.Exception ex)
                     {
@@ -2115,7 +2115,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdTCMClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 3 });
                     }
                     catch (System.Exception ex)
                     {
@@ -2347,7 +2347,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 3 });
                     }
                     catch (System.Exception ex)
                     {
@@ -2361,7 +2361,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("TCMIntakeDashboard", new { id = IntakeViewModel.IdClient });
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 3 });
                     }
                     catch (System.Exception ex)
                     {
@@ -3316,6 +3316,49 @@ namespace KyoS.Web.Controllers
             }
 
             return RedirectToAction("Index", "TCMIntakes");
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> FinishEditingAppendixJ(int id, int origin = 0)
+        {
+            TCMIntakeAppendixJEntity ApendiceJ = _context.TCMIntakeAppendixJ
+                                                         .Include(u => u.TcmClient)
+                                                         .ThenInclude(u => u.Client)
+                                                         .FirstOrDefault(u => u.Id == id);
+
+            if (ApendiceJ != null)
+            {
+                if (User.IsInRole("CaseManager"))
+                {
+                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    if (user_logged.Clinic != null)
+                    {
+                        ApendiceJ.Approved = 1;
+                        _context.Update(ApendiceJ);
+                        try
+                        {
+                            await _context.SaveChangesAsync();
+                            if (origin == 0)
+                            {
+                                return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = ApendiceJ.TcmClient.Id, section = 4 });
+                            }
+                            else
+                            {
+                                return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = 1 });
+                            }
+                        }
+                        catch (System.Exception ex)
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+            }
+
+            return RedirectToAction("Index", "TCMServicePlans");
         }
 
     }

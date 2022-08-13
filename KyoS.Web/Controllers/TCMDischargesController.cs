@@ -334,7 +334,10 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager")]
         public async Task<IActionResult> FinishEditing(int id, int origin = 0)
         {
-            TCMDischargeEntity tcmDischarge = _context.TCMDischarge.FirstOrDefault(u => u.Id == id);
+            TCMDischargeEntity tcmDischarge = _context.TCMDischarge
+                                                      .Include(n => n.TcmServicePlan)
+                                                      .ThenInclude(n => n.TcmClient)
+                                                      .FirstOrDefault(u => u.Id == id);
 
             if (tcmDischarge != null)
             {
@@ -353,7 +356,7 @@ namespace KyoS.Web.Controllers
 
                             if (origin == 0)
                             {
-                                return RedirectToAction("Index", "TCMDischarges");
+                                return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = tcmDischarge.TcmServicePlan.TcmClient.Id, section = 4 });
                             }
                             else
                             {

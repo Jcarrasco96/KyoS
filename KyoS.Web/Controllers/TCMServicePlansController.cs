@@ -354,9 +354,10 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager")]
         public async Task<IActionResult> FinishEditing(int id, int origin = 0)
         {
-            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans.Include(u => u.TcmClient)
-                                                         .ThenInclude(u => u.Client)
-                                                         .FirstOrDefault(u => u.Id == id);
+            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
+                                                          .Include(u => u.TcmClient)
+                                                          .ThenInclude(u => u.Client)
+                                                          .FirstOrDefault(u => u.Id == id);
            
             if (tcmServicePlan != null)
             {
@@ -374,7 +375,7 @@ namespace KyoS.Web.Controllers
                             await _context.SaveChangesAsync();
                             if (origin == 0)
                             {
-                                return RedirectToAction("Index", "TCMServicePlans", new { caseNumber = tcmServicePlan.TcmClient.CaseNumber });
+                                return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = tcmServicePlan.TcmClient.Id, section = 4 });
                             }
                             else
                             {
@@ -393,8 +394,6 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Index", "TCMServicePlans");
         }
 
-       
-        
         [Authorize(Roles = "TCMSupervisor")]
         public async Task<IActionResult> AproveServicePlan(int id)
         {

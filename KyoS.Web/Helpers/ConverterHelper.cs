@@ -2026,7 +2026,9 @@ namespace KyoS.Web.Helpers
                 StatusListObjetive = _combosHelper.GetComboObjetiveStatus(),
                 IdServicePlan = TcmServicePlanReviewEntity.TcmServicePlan.Id,
                 _TCMServicePlanRevDomain = TcmServicePlanReviewEntity.TCMServicePlanRevDomain,
-
+                Approved = TcmServicePlanReviewEntity.Approved,
+                CreatedBy = TcmServicePlanReviewEntity.CreatedBy,
+                CreatedOn = TcmServicePlanReviewEntity.CreatedOn
                 //ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2,
 
             };
