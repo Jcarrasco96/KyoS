@@ -13,7 +13,7 @@
     </ul>
 </div>
 
-<h4><strong>Activities per day </strong>&nbsp; @Model.Day @Model.Date </h4>
+<h4><strong>Activities per day </strong>&nbsp; @Model.Day <label id="dateOfActivity" style="font-weight:normal">@Model.Date</label> </h4>
 <hr />
 
 <div class="row">
@@ -178,38 +178,38 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#cbTopic1").change(function () {
-                var url = "@Url.Action("GetActivityList", "Activities")";
-                $.get(url, { idTheme: $("#cbTopic1").val() }, function (data) {
+                var url = "@Url.Action("GetActivityList3", "Activities")";
+                $.get(url, { idTheme: $("#cbTopic1").val(), dateOfActivity: $("#dateOfActivity").text() }, function (data) {
                     $("#cbActivity1").empty();
                     $.each(data, function (index, row) {
-                        $("#cbActivity1").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
+                        $("#cbActivity1").append("<option value='" + row.value + "'>" + row.text + "</option>")
                     });
                 });
             })
             $("#cbTopic2").change(function () {
-                var url = "@Url.Action("GetActivityList", "Activities")";
-                $.get(url, { idTheme: $("#cbTopic2").val() }, function (data) {
+                var url = "@Url.Action("GetActivityList3", "Activities")";
+                $.get(url, { idTheme: $("#cbTopic2").val(), dateOfActivity: $("#dateOfActivity").text() }, function (data) {
                     $("#cbActivity2").empty();
                     $.each(data, function (index, row) {
-                        $("#cbActivity2").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
+                        $("#cbActivity2").append("<option value='" + row.value + "'>" + row.text + "</option>")
                     });
                 });
             })
             $("#cbTopic3").change(function () {
-                var url = "@Url.Action("GetActivityList", "Activities")";
-                $.get(url, { idTheme: $("#cbTopic3").val() }, function (data) {
+                var url = "@Url.Action("GetActivityList3", "Activities")";
+                $.get(url, { idTheme: $("#cbTopic3").val() , dateOfActivity: $("#dateOfActivity").text() }, function (data) {
                     $("#cbActivity3").empty();
                     $.each(data, function (index, row) {
-                        $("#cbActivity3").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
+                        $("#cbActivity3").append("<option value='" + row.value + "'>" + row.text + "</option>")
                     });
                 });
             })
             $("#cbTopic4").change(function () {
-                var url = "@Url.Action("GetActivityList", "Activities")";
-                $.get(url, { idTheme: $("#cbTopic4").val() }, function (data) {
+                var url = "@Url.Action("GetActivityList3", "Activities")";
+                $.get(url, { idTheme: $("#cbTopic4").val() , dateOfActivity: $("#dateOfActivity").text() }, function (data) {
                     $("#cbActivity4").empty();
                     $.each(data, function (index, row) {
-                        $("#cbActivity4").append("<option value='" + row.value + "'>" + row.value + " - " + row.text + "</option>")
+                        $("#cbActivity4").append("<option value='" + row.value + "'>" + row.text + "</option>")
                     });
                 });
             })
