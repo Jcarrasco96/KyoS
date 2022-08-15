@@ -1563,7 +1563,18 @@ namespace KyoS.Web.Controllers
                                                       .ToList();
 
             return Json(new SelectList(activities, "Id", "Name"));
-        }        
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public JsonResult GetActivityList3(int idTheme, string dateOfActivity)
+        {
+            FacilitatorEntity facilitator_logged = _context.Facilitators
+                                                           .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
+
+            IEnumerable<SelectListItem> list = _combosHelper.GetComboActivitiesByTheme(idTheme, facilitator_logged.Id, Convert.ToDateTime(dateOfActivity));
+            
+            return Json(new SelectList(list, "Value", "Text"));
+        }
 
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> ActivitiesSupervision(int id = 0, int pending = 0)

@@ -239,7 +239,7 @@ namespace KyoS.Web.Helpers
                 Code = model.Code,
                 MedicaidID = model.MedicaidID,
                 Clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == model.IdClinic),
-                Status = StatusUtils.GetStatusByIndex(model.IdStatus),
+                Status = StatusUtils.GetStatusByIndex(model.IdStatus),                
                 Email = model.Email,
                 Telephone = model.Telephone,
                 TelephoneSecondary = model.TelephoneSecondary,
@@ -275,7 +275,7 @@ namespace KyoS.Web.Helpers
                 OtherLanguage_Speak = model.OtherLanguage_Speak,
                 OtherLanguage_Understand = model.OtherLanguage_Understand,
                 MedicareId = model.MedicareId,
-                DateOfClose = model.DateOfClose
+                DateOfClose = model.DateOfClose                
             };
         }
 
@@ -341,7 +341,7 @@ namespace KyoS.Web.Helpers
                 LegalsGuardians = _combosHelper.GetComboLegalGuardiansByClinic(userId),
                 DiagnosticTemp = _context.DiagnosticsTemp,
                 DocumentTemp = _context.DocumentsTemp,
-                IdService = Convert.ToInt32(clientEntity.Service),
+                IdService = Convert.ToInt32(clientEntity.Service), 
                 Services = _combosHelper.GetComboServices(),
                 IdFacilitatorIT = (clientEntity.IndividualTherapyFacilitator != null) ? clientEntity.IndividualTherapyFacilitator.Id : 0,
                 ITFacilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, true),
@@ -351,7 +351,7 @@ namespace KyoS.Web.Helpers
                 OtherLanguage_Understand = clientEntity.OtherLanguage_Understand,
                 MedicareId = clientEntity.MedicareId,
                 DateOfClose = clientEntity.DateOfClose,
-                Documents = clientEntity.Documents
+                Documents = clientEntity.Documents                
             };
         }
 
