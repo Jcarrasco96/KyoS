@@ -172,11 +172,11 @@ namespace KyoS.Web.Controllers
                             ID_Status = 1,
                             status = _combosHelper.GetComboClientStatus(),
                             CaseNumber = _context.TCMClient.FirstOrDefault(u => u.Id == id).CaseNumber,
-                            Date_ServicePlan = DateTime.Today.Date,
-                            Date_Intake = DateTime.Today.Date,
-                            Date_Assessment = DateTime.Today.Date,
-                            Date_Certification = DateTime.Today.Date
-                            
+                            Date_ServicePlan = DateTime.Now.Date,
+                            Date_Intake = DateTime.Now.Date,
+                            Date_Assessment = DateTime.Now.Date,
+                            Date_Certification = DateTime.Now.Date
+
                         };
                         ViewData["origin"] = origin;
                         return View(model);

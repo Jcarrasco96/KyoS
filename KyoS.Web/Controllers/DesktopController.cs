@@ -430,7 +430,67 @@ namespace KyoS.Web.Controllers
                 }
                 ViewBag.ClientsWithoutDoc = clients_without_doc.ToString();
 
-                ViewBag.AllDocumentsForClient = _context.Clients.Count(n => n.Clinic.Id == user_logged.Clinic.Id).ToString();
+                List<ClientEntity> Clients = await _context.Clients
+                                                     .Include(d => d.IntakeAcknowledgementHipa)
+                                                     .Include(d => d.IntakeConsentForRelease)
+                                                     .Include(d => d.IntakeConsentForTreatment)
+                                                     .Include(d => d.IntakeConsumerRights)
+                                                     .Include(d => d.IntakeOrientationChecklist)
+                                                     .Include(d => d.IntakeAccessToServices)
+                                                     .Include(d => d.IntakeConsentPhotograph)
+                                                     .Include(d => d.IntakeFeeAgreement)
+                                                     .Include(d => d.IntakeMedicalHistory)
+                                                     .Include(d => d.IntakeScreening)
+                                                     .Include(d => d.IntakeTransportation)
+                                                     .Include(d => d.IntakeTuberculosis)
+                                                     .Include(d => d.Bio)
+                                                     .Include(d => d.MTPs)
+                                                     .ThenInclude(d => d.MtpReviewList)
+                                                     .Include(d => d.MTPs)
+                                                     .ThenInclude(d => d.AdendumList)
+                                                     .Include(d => d.MTPs)
+                                                     .Include(d => d.DischargeList)
+                                                     .Include(d => d.FarsFormList)
+                                                     .Where(g => g.Clinic.Id == user_logged.Clinic.Id)
+                                                     .ToListAsync();
+                int cantDocument = 0;
+                foreach (var item in Clients)
+                {
+                    if (item.IntakeAcknowledgementHipa != null)
+                        cantDocument++;
+                    if (item.IntakeConsentForRelease != null)
+                        cantDocument++;
+                    if (item.IntakeConsentForTreatment != null)
+                        cantDocument++;
+                    if (item.IntakeConsumerRights != null)
+                        cantDocument++;
+                    if (item.IntakeAccessToServices != null)
+                        cantDocument++;
+                    if (item.IntakeConsentPhotograph != null)
+                        cantDocument++;
+                    if (item.IntakeFeeAgreement != null)
+                        cantDocument++;
+                    if (item.IntakeMedicalHistory != null)
+                        cantDocument++;
+                    if (item.IntakeScreening != null)
+                        cantDocument++;
+                    if (item.IntakeTransportation != null)
+                        cantDocument++;
+                    if (item.IntakeTuberculosis != null)
+                        cantDocument++;
+                    if (item.Bio != null)
+                        cantDocument++;
+
+                    cantDocument += item.FarsFormList.Count();
+                    cantDocument += item.DischargeList.Count();
+                    cantDocument += item.MTPs.Count();
+                    cantDocument += item.MTPs.Sum(n => n.AdendumList.Count());
+                    cantDocument += item.MTPs.Sum(n => n.MtpReviewList.Count());
+                }
+
+                ViewBag.AllDocumentsForClient = cantDocument.ToString();
+
+                //ViewBag.AllDocumentsForClient = _context.Clients.Count(n => n.Clinic.Id == user_logged.Clinic.Id).ToString();
 
                 ViewBag.ApprovedNotes = _context.Workdays_Clients
 
@@ -699,6 +759,15 @@ namespace KyoS.Web.Controllers
                                                                && g.CreatedBy == user_logged.UserName
                                                                && g.TcmService.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
 
+                ViewBag.TCMNoteReview = _context.TCMNote
+                                                .Include(wc => wc.CaseManager)
+                                                .Include(wc => wc.TCMClient)
+                                                .ThenInclude(wc => wc.Client)
+                                                .Include(wc => wc.TCMMessages.Where(m => m.Notification == false))
+                                                .Where(wc => (wc.CaseManager.LinkedUser == user_logged.UserName
+                                                       && wc.Status == NoteStatus.Pending
+                                                       && wc.TCMMessages.Count() > 0)).Count()
+                                                .ToString();
             }
             if (User.IsInRole("Documents_Assistant"))
             {
@@ -811,7 +880,15 @@ namespace KyoS.Web.Controllers
                                                          && g.Approved == 1
                                                          && g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
 
-
+                ViewBag.TCMNoteReview =  _context.TCMNote
+                                                 .Include(wc => wc.CaseManager)
+                                                 .Include(wc => wc.TCMClient)
+                                                 .ThenInclude(wc => wc.Client)
+                                                 .Include(wc => wc.TCMMessages.Where(m => m.Notification == false))
+                                                 .Where(wc => (wc.CaseManager.Clinic.Id == user_logged.Clinic.Id
+                                                        && wc.Status == NoteStatus.Pending
+                                                        && wc.TCMMessages.Count() > 0)).Count()
+                                                 .ToString();
             }
             return View();
         }

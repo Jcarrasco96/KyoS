@@ -25,11 +25,14 @@
                     {
                         @Html.ActionLink("Notes in Edition", "NotesStatus", "TCMNotes", new { status = KyoS.Common.Enums.NoteStatus.Edition })
                     }
-                    else
+                    @if (@ViewData["origin"].ToString() == "2")
                     {
                         @Html.ActionLink("Billing", "Index", "TCMBilling")
                     }
-
+                    @if (ViewData["origin"].ToString() == "3")
+                    {
+                        @Html.ActionLink("TCM Notes with review", "NotesWithReview", "TCMNotes")
+                    }
                 }
 
             </li>
@@ -41,21 +44,22 @@
         <form asp-action="Edit" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdTCMClient" />
-            <input type="hidden" asp-for="IdTCMNote" />            
+            <input type="hidden" asp-for="IdTCMNote" />
             <input type="hidden" asp-for="TCMClient.Casemanager.Name" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="Status" />
             <partial name="_TCMNotes" />
-            <div class="col-md-push-12">                
+            <div class="col-md-push-12">
                 <div class="col-md-12 form-group">
                     <a onclick="showInPopupLg('@Url.Action("CreateNoteActivity", "TCMNotes", new { idNote = Model.Id, idTCMClient = Model.IdTCMClient}, Context.Request.Scheme)','Add Service')" class="btn btn-success" title="Add service"><i class="glyphicon glyphicon-plus"></i> Add Service</a>
                 </div>
                 <div id="view-NoteActivity">
                     @await Html.PartialAsync("_ViewTCMNoteActivity", Model.TCMNoteActivity.ToList())
-                </div>                               
+                </div>
             </div>
             <partial name="_TCMNotes1" />
-            <div class="col-md-12">                
+            <div class="col-md-12">
                 <input type="submit" value="Save" asp-route-origin="@ViewData["origin"]" class="btn btn-primary" />
                 @if (@ViewData["origin"].ToString() == "0")
                 {
@@ -67,12 +71,15 @@
                     {
                         <a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Edition" class="btn btn-success">Back</a>
                     }
-                    else
+                    @if (@ViewData["origin"].ToString() == "2")
                     {
                         <a asp-action="Index" asp-controller="TCMBilling" class="btn btn-success">Back</a>
                     }
-
-                }             
+                    @if (ViewData["origin"].ToString() == "3")
+                    {
+                        <a asp-action="NotesWithReview" class="btn btn-success">Back</a>
+                    }
+                }
             </div>
         </form>
     </div>

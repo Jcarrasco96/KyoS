@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220816023445_improvesDateTypeInTCMAssessment")]
+    partial class improvesDateTypeInTCMAssessment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3937,9 +3939,6 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("TCMFarsFormEntityId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TCMNoteEntityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -3964,8 +3963,6 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("MTPReviewId");
 
                     b.HasIndex("TCMFarsFormEntityId");
-
-                    b.HasIndex("TCMNoteEntityId");
 
                     b.HasIndex("Workday_ClientId");
 
@@ -7659,78 +7656,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("TCMIntakeWelcome");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMMessageEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateRead")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("From")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Notification")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TCMAddendumId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TCMAssessmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TCMDischargeId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TCMFarsFormId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TCMNoteId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TCMServicePlanId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TCMServicePlanReviewId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("To")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TCMAddendumId");
-
-                    b.HasIndex("TCMAssessmentId");
-
-                    b.HasIndex("TCMDischargeId");
-
-                    b.HasIndex("TCMFarsFormId");
-
-                    b.HasIndex("TCMNoteId");
-
-                    b.HasIndex("TCMServicePlanId");
-
-                    b.HasIndex("TCMServicePlanReviewId");
-
-                    b.ToTable("TCMMessages");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMNoteActivityEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -9348,10 +9273,6 @@ namespace KyoS.Web.Migrations
                         .WithMany("Messages")
                         .HasForeignKey("TCMFarsFormEntityId");
 
-                    b.HasOne("KyoS.Web.Data.Entities.TCMNoteEntity", null)
-                        .WithMany("Messages")
-                        .HasForeignKey("TCMNoteEntityId");
-
                     b.HasOne("KyoS.Web.Data.Entities.Workday_Client", "Workday_Client")
                         .WithMany("Messages")
                         .HasForeignKey("Workday_ClientId");
@@ -9887,51 +9808,6 @@ namespace KyoS.Web.Migrations
                         .IsRequired();
 
                     b.Navigation("TcmClient");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMMessageEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.TCMAdendumEntity", "TCMAddendum")
-                        .WithMany()
-                        .HasForeignKey("TCMAddendumId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.TCMAssessmentEntity", "TCMAssessment")
-                        .WithMany()
-                        .HasForeignKey("TCMAssessmentId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.TCMDischargeEntity", "TCMDischarge")
-                        .WithMany()
-                        .HasForeignKey("TCMDischargeId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.TCMFarsFormEntity", "TCMFarsForm")
-                        .WithMany()
-                        .HasForeignKey("TCMFarsFormId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.TCMNoteEntity", "TCMNote")
-                        .WithMany()
-                        .HasForeignKey("TCMNoteId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanEntity", "TCMServicePlan")
-                        .WithMany()
-                        .HasForeignKey("TCMServicePlanId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanReviewEntity", "TCMServicePlanReview")
-                        .WithMany()
-                        .HasForeignKey("TCMServicePlanReviewId");
-
-                    b.Navigation("TCMAddendum");
-
-                    b.Navigation("TCMAssessment");
-
-                    b.Navigation("TCMDischarge");
-
-                    b.Navigation("TCMFarsForm");
-
-                    b.Navigation("TCMNote");
-
-                    b.Navigation("TCMServicePlan");
-
-                    b.Navigation("TCMServicePlanReview");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMNoteActivityEntity", b =>
@@ -10505,8 +10381,6 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMNoteEntity", b =>
                 {
-                    b.Navigation("Messages");
-
                     b.Navigation("TCMNoteActivity");
                 });
 

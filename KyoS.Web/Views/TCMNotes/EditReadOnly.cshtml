@@ -15,7 +15,14 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("Pending Notes", "NotesStatus", "TCMNotes", new { status = KyoS.Common.Enums.NoteStatus.Pending })
+                @if (ViewData["origi"].ToString() == "1")
+                {
+                    @Html.ActionLink("Pending Notes", "NotesStatus", "TCMNotes", new { status = KyoS.Common.Enums.NoteStatus.Pending })
+                }
+                @if (ViewData["origi"].ToString() == "2")
+                {
+                    @Html.ActionLink("TCM Notes with review", "NotesWithReview", "TCMNotes")
+                }
             </li>
             <li class="active">TCM Notes</li>
         </ul><!--.breadcrumb-->
@@ -30,6 +37,7 @@
             <input type="hidden" asp-for="TCMClient.Casemanager.Name" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="Origin" />
             <partial name="_TCMNotes" />
             <div class="col-md-push-12">
                 <div id="view-NoteActivity">
@@ -40,14 +48,21 @@
             <div class="form-group col-md-12">
                 @if (User.IsInRole("CaseManager"))
                 {
-                    <input type="submit" value="Save" asp-route-origin="@ViewData["origin"]" class="btn btn-primary" />
+                    <input type="submit" value="Save" asp-route-origin="@ViewData["origi"]" class="btn btn-primary" />
                 }
                 @if (User.IsInRole("TCMSupervisor"))
                 {
-                    <a asp-action="ApprovedNote" asp-route-id="@Model.Id" asp-route-origin="1" class="btn btn-primary">Approve</a>
-                    <a asp-action="ApprovedNote" asp-route-id="@Model.Id" class="btn btn-warning disabled">Review</a>
+                    <a asp-action="ApprovedNote" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origi"]" class="btn btn-primary">Approve</a>
+                    <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","TCMNotes",new {id = Model.Id, origi = @ViewData["origi"]},Context.Request.Scheme)','Add message to facilitator')" title="Not approved note due to problems">Review</a>
                 }
-                <a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Pending" class="btn btn-success">Back</a>
+                @if (ViewData["origi"].ToString() == "1")
+                {
+                    <a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Pending" class="btn btn-success">Back</a>
+                }
+                @if (ViewData["origi"].ToString() == "2")
+                {
+                    <a asp-action="NotesWithReview" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>

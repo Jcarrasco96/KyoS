@@ -100,9 +100,18 @@
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Minutes)
                                 </td>
-                                <td align="right">                                    
-                                    <a onclick="showInPopupLg('@Url.Action("EditNoteActivity", "TCMNotes", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Note')" class="btn btn-warning" title="Edit activity"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <a asp-action="DeleteTCMNoteActivity" asp-route-id="@item.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>
+                                <td align="right">
+                                    @if (User.IsInRole("CaseManager"))
+                                    {
+                                        <a onclick="showInPopupLg('@Url.Action("EditNoteActivity", "TCMNotes", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Note')" class="btn btn-warning" title="Edit activity"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="DeleteTCMNoteActivity" asp-route-id="@item.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a onclick="showInPopupLg('@Url.Action("EditNoteActivity", "TCMNotes", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Note')" class="btn btn-warning disabled" title="Edit activity"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="DeleteTCMNoteActivity" asp-route-id="@item.Id" class="btn btn-danger disabled" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>
+                                    }
+
                                 </td>
                             </tr>
                         }

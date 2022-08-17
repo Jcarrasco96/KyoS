@@ -295,9 +295,47 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMNoteEntity tcmNotesEntity = await _converterHelper.ToTCMNoteEntity(tcmNotesViewModel, false, user_logged.UserName);
+                
                 //tcmNotesEntity.TotalMinutes = GetTotalMinutes(tcmNotesEntity);
                 //tcmNotesEntity.TotalUnits = GetTotalUnit(tcmNotesEntity.TotalMinutes);
+
+               /* TCMNoteEntity tcmNote =  _context.TCMNote.FirstOrDefault(n => n.Id == tcmNotesViewModel.Id);
+
+                if (tcmNote == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Already not exists the TCM note");
+                }*/
+
+                TCMNoteEntity tcmNotesEntity = await _converterHelper.ToTCMNoteEntity(tcmNotesViewModel, false, user_logged.UserName);
+
+                List<TCMMessageEntity> messages = tcmNotesEntity.TCMMessages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
+                foreach (TCMMessageEntity value in messages)
+                {
+                    value.Status = MessageStatus.Read;
+                    value.DateRead = DateTime.Now;
+                    _context.Update(value);
+
+                    //I generate a notification to supervisor
+                    TCMMessageEntity notification = new TCMMessageEntity
+                    {
+                        TCMNote = tcmNotesEntity,
+                        TCMFarsForm = null,
+                        TCMServicePlan = null,
+                        TCMServicePlanReview = null,
+                        TCMAddendum = null,
+                        TCMDischarge = null,
+                        TCMAssessment = null,
+                        Title = "Update on reviewed TCM note",
+                        Text = $"The TCM note of {tcmNotesEntity.TCMClient.Client.Name} on {tcmNotesEntity.DateOfService.ToShortDateString()} was rectified",
+                        From = value.To,
+                        To = value.From,
+                        DateCreated = DateTime.Now,
+                        Status = MessageStatus.NotRead,
+                        Notification = true
+                    };
+                    _context.Add(notification);
+                }
                 _context.TCMNote.Update(tcmNotesEntity);
                 try
                 {
@@ -314,6 +352,10 @@ namespace KyoS.Web.Controllers
                     if (origin == 2)
                     {
                         return RedirectToAction("Index", "TCMBilling");
+                    }
+                    if (origin == 3)
+                    {
+                        return RedirectToAction("NotesWithReview");
                     }
                 }
                 catch (System.Exception ex)
@@ -832,11 +874,14 @@ namespace KyoS.Web.Controllers
                             {
                                 return RedirectToAction("TCMNotesForCase", new { idTCMClient = tcmNote.TCMClient.Id });
                             }
-                            else
+                            if (origin == 1)
                             {
                                 return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending });
                             }
-
+                            if (origin == 2)
+                            {
+                                return RedirectToAction("NotesWithReview");
+                            }
                         }
                         catch (System.Exception ex)
                         {
@@ -985,7 +1030,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public IActionResult EditReadOnly(int id = 0)
+        public IActionResult EditReadOnly(int id = 0, int origi = 0)
         {
             TCMNoteViewModel model;
 
@@ -1015,6 +1060,7 @@ namespace KyoS.Web.Controllers
 
                         model = _converterHelper.ToTCMNoteViewModel(TcmNote);
                         model.TCMClient = TcmNote.TCMClient;
+                        ViewData["origi"] = origi;
                         return View(model);
                     }
 
@@ -1109,5 +1155,89 @@ namespace KyoS.Web.Controllers
 
             return false;
         }
+
+        [Authorize(Roles = "TCMSupervisor, CaseManager")]
+        public IActionResult AddMessageEntity(int id = 0, int origi = 0)
+        {
+            if (id == 0)
+            {
+                return View(new TCMMessageViewModel());
+            }
+            else
+            {
+                TCMMessageViewModel model = new TCMMessageViewModel()
+                {
+                    IdTCMNote = id,
+                    Origin = origi
+                };
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> AddMessageEntity(TCMMessageViewModel messageViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                TCMMessageEntity model = await _converterHelper.ToTCMMessageEntity(messageViewModel, true);
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                model.From = user_logged.UserName;
+                model.To = model.TCMNote.CaseManager.LinkedUser;
+                _context.Add(model);
+                await _context.SaveChangesAsync();
+            }
+            if (messageViewModel.Origin == 1)
+                return RedirectToAction("NotesWithReview");
+            
+
+            return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending});
+        }
+
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        public async Task<IActionResult> NotesWithReview()
+        {
+            if (User.IsInRole("CaseManager"))
+            {
+                List<TCMNoteEntity> salida = await _context.TCMNote
+                                                           .Include(wc => wc.CaseManager)
+                                                           .Include(wc => wc.TCMClient)
+                                                           .ThenInclude(wc => wc.Client)
+                                                           .Include(wc => wc.TCMMessages.Where(m => m.Notification == false))
+                                                           .Where(wc => (wc.CaseManager.LinkedUser == User.Identity.Name
+                                                                && wc.Status == NoteStatus.Pending
+                                                                && wc.TCMMessages.Count() > 0))
+                                                           .ToListAsync();
+
+
+                return View(salida);
+            }
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    List<TCMNoteEntity> salida = await _context.TCMNote
+                                                               .Include(wc => wc.CaseManager)
+                                                               .Include(wc => wc.TCMClient)
+                                                               .ThenInclude(wc => wc.Client)
+                                                               .Include(wc => wc.TCMMessages.Where(m => m.Notification == false))
+                                                               .Where(wc => (wc.CaseManager.Clinic.Id == user_logged.Clinic.Id
+                                                                    && wc.Status == NoteStatus.Pending 
+                                                                    && wc.TCMMessages.Count() > 0))
+                                                               .ToListAsync();
+                    return View(salida);
+                }
+            }
+
+            return View();
+        }
+
+
     }
 }

@@ -12,14 +12,17 @@
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
             <div class="form-group">
-                <div class="col-md-6">
-                    <b>Case number:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.TcmInterventionLog.TcmClient.CaseNumber)</i>
-                    <br />
-                    <b>Client name:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.TcmInterventionLog.TcmClient.Client.Name)</i>
+                <div class="col-md-2">
+                    <label asp-for="TcmInterventionLog.TcmClient.CaseNumber" class="control-label">Case</label>
+                    <input asp-for="TcmInterventionLog.TcmClient.CaseNumber" class="form-control" disabled />
+                    <span asp-validation-for="TcmInterventionLog.TcmClient.CaseNumber" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
+                    <label asp-for="TcmInterventionLog.TcmClient.Client.Name" class="control-label">Client name</label>
+                    <input asp-for="TcmInterventionLog.TcmClient.Client.Name" class="form-control" disabled />
+                    <span asp-validation-for="TcmInterventionLog.TcmClient.Client.Name" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
                     <label asp-for="Date" class="control-label">Date</label>
                     <input asp-for="Date" class="form-control" />
                     <span asp-validation-for="Date" class="text-danger"></span>
@@ -31,7 +34,7 @@
             <div class="form-group col-md-12">
                 <div class="">
                     <label asp-for="Activity" class="control-label">Activity Description</label>&nbsp;*
-                    <input asp-for="Activity" class="form-control" />
+                    <textarea asp-for="Activity" class="form-control" rows="4"/>
                     <span asp-validation-for="Activity" class="text-danger"></span>
                 </div>
             </div>

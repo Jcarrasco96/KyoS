@@ -14,15 +14,19 @@ namespace KyoS.Web.Data.Entities
 
         public int TcmClient_FK { get; set; }
 
+        [DataType(DataType.Date)]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime DateServicePlan{ get; set; }
 
+        [DataType(DataType.Date)]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime DateIntake { get; set; }
 
+        [DataType(DataType.Date)]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime DateAssessment { get; set; }
 
+        [DataType(DataType.Date)]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime DateCertification { get; set; }
 

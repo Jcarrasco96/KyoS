@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220817024658_improvesTCMMessages")]
+    partial class improvesTCMMessages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3937,9 +3939,6 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("TCMFarsFormEntityId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TCMNoteEntityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -3964,8 +3963,6 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("MTPReviewId");
 
                     b.HasIndex("TCMFarsFormEntityId");
-
-                    b.HasIndex("TCMNoteEntityId");
 
                     b.HasIndex("Workday_ClientId");
 
@@ -9348,10 +9345,6 @@ namespace KyoS.Web.Migrations
                         .WithMany("Messages")
                         .HasForeignKey("TCMFarsFormEntityId");
 
-                    b.HasOne("KyoS.Web.Data.Entities.TCMNoteEntity", null)
-                        .WithMany("Messages")
-                        .HasForeignKey("TCMNoteEntityId");
-
                     b.HasOne("KyoS.Web.Data.Entities.Workday_Client", "Workday_Client")
                         .WithMany("Messages")
                         .HasForeignKey("Workday_ClientId");
@@ -10505,8 +10498,6 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMNoteEntity", b =>
                 {
-                    b.Navigation("Messages");
-
                     b.Navigation("TCMNoteActivity");
                 });
 

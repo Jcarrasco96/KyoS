@@ -725,7 +725,7 @@
                 &nbsp;
             </div>
             <div class="col-sm-3 col-md-2">
-                @if (@Model.TcmInterventionLog != null)
+                @if (@Model.TcmInterventionLog == null)
                 {
                     <a style="text-decoration: none;" asp-action="CreateTCMInterventionLog" asp-controller="TCMIntakes" asp-route-id="@Model.Id" role="button">
                         <div class="thumbnail list-group-item list-group-item-text">

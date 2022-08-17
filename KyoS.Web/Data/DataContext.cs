@@ -121,6 +121,7 @@ namespace KyoS.Web.Data
         public DbSet<DocumentsAssistantEntity> DocumentsAssistant { get; set; }
         public DbSet<TCMServiceActivityEntity> TCMServiceActivity { get; set; }
         public DbSet<TCMNoteActivityTempEntity> TCMNoteActivityTemp { get; set; }
+        public DbSet<TCMMessageEntity> TCMMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,0 +1,146 @@
+﻿@{
+    ViewBag.Title = "TCM Messages";
+}
+
+<div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-4">
+                    @if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Admin") || User.IsInRole("Facilitator") || User.IsInRole("Documents_Assistant") || User.IsInRole("SupervisorTCM"))
+                    {
+                        <h4 style="text-align:center;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i> No Inbox <b>(0)</b></h4>
+                    }
+                    else
+                    {
+                        <h4 style="text-align:center;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i> Inbox <b>(@ViewBag.Total)</b></h4>
+                    }
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+            @if (User.IsInRole("CaseManager"))
+            {
+                <div class="col-md-12">
+                    <hr />
+                </div>
+                <div class="col-md-1">
+                    &nbsp;
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.CountsMessagesNotes == "0")
+                    {
+                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfNotes" role="button">
+                            <div class="thumbnail list-group-item list-group-item-text">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i> Notes</h4>
+                                <span class="message-counter-cero">@ViewBag.CountsMessagesNotes</span>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfNotes" role="button">
+                            <div class="thumbnail list-group-item list-group-item-danger">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i> Notes</h4>
+                                <span class="message-counter">@ViewBag.CountsMessagesNotes</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.CountsMessagesFars == "0")
+                    {
+                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfFars" role="button">
+                            <div class="thumbnail list-group-item list-group-item-text">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>FARS Forms</h4>
+                                <span class="message-counter-cero">@ViewBag.CountsMessagesFars</span>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfFars" role="button">
+                            <div class="thumbnail list-group-item list-group-item-danger">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>FARS Forms</h4>
+                                <span class="message-counter">@ViewBag.CountsMessagesFars</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.CountsMessagesMTPReview == "0")
+                    {
+                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfMTPReviews" role="button">
+                            <div class="thumbnail list-group-item list-group-item-text">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>MTP Reviews</h4>
+                                <span class="message-counter-cero">@ViewBag.CountsMessagesMTPReview</span>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfMTPReviews" role="button">
+                            <div class="thumbnail list-group-item list-group-item-danger">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>MTP Reviews</h4>
+                                <span class="message-counter">@ViewBag.CountsMessagesMTPReview</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.CountsMessagesAddendum == "0")
+                    {
+                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfAddendums" role="button">
+                            <div class="thumbnail list-group-item list-group-item-text">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Addendums</h4>
+                                <span class="message-counter-cero">@ViewBag.CountsMessagesAddendum</span>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfAddendums" role="button">
+                            <div class="thumbnail list-group-item list-group-item-danger">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Addendums</h4>
+                                <span class="message-counter">@ViewBag.CountsMessagesAddendum</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.CountsMessagesDischarge == "0")
+                    {
+                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfDischarges" role="button">
+                            <div class="thumbnail list-group-item list-group-item-text">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Discharges</h4>
+                                <span class="message-counter-cero">@ViewBag.CountsMessagesDischarge</span>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfDischarges" role="button">
+                            <div class="thumbnail list-group-item list-group-item-danger">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Discharges</h4>
+                                <span class="message-counter">@ViewBag.CountsMessagesDischarge</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-1">
+                    &nbsp;
+                </div>
+                //New line
+                <div class="col-md-12">
+                    &nbsp;
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

@@ -183,5 +183,6 @@ namespace KyoS.Web.Helpers
         DocumentsAssistantViewModel ToDocumentsAssistantViewModel(DocumentsAssistantEntity model, int idClinic);
         Task<TCMServiceActivityEntity> ToTCMServiceActivityEntity(TCMServiceActivityViewModel model, bool isNew, string userId);
         TCMServiceActivityViewModel ToTCMServiceActivityViewModel(TCMServiceActivityEntity model);
+        Task<TCMMessageEntity> ToTCMMessageEntity(TCMMessageViewModel model, bool isNew);
     }
 }
