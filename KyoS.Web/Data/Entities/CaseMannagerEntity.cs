@@ -1,4 +1,5 @@
 ﻿using KyoS.Common.Enums;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
@@ -32,5 +33,7 @@ namespace KyoS.Web.Data.Entities
         public string Phone { get; set; }
 
         public ClinicEntity Clinic { get; set; }
+
+        List<TCMNoteEntity> TCMNotes { get; set; }
     }
 }

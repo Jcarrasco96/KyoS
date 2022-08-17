@@ -1,7 +1,10 @@
-﻿@{
-    ViewData["Title"] = "BillingForWeek";
+﻿@model KyoS.Web.Models.TCMBillingReportViewModel
+@{
+    ViewData["Title"] = "TCM Billing Report";
 }
+
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/css/datepicker.min.css">
 
 <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
@@ -9,12 +12,213 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Billing</li>
+        <li class="active">TCM Billing Report</li>
     </ul><!--.breadcrumb-->
 </div>
-<div class="form-group col-md-2">
-    
-    <input type="week" class="form-control" readonly>
-    
+<div class="row">
+    <form asp-action="BillingForWeek" enctype="multipart/form-data">
+        <div class="form-group col-md-3">
+            <label class="control-label">Select date interval</label>&nbsp;*<br />
+            <input type="text"
+                   asp-for="DateIterval"
+                   data-range="true"
+                   data-multiple-dates-separator=" - "
+                   data-language="en"
+                   class="form-control datepicker-here" />
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="IdCaseManager" class="control-label">Select case manager</label>
+            <select asp-for="IdCaseManager" asp-items="Model.CaseManagers" class="form-control"></select>
+            <span asp-validation-for="IdCaseManager" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="IdClient" class="control-label">Select client</label>
+            <select asp-for="IdClient" asp-items="Model.Clients" class="form-control"></select>
+            <span asp-validation-for="IdClient" class="text-danger"></span>
+        </div>
+        <div class="container-fluid">
+            &nbsp;
+        </div>
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-filter"></i> Filter</button>
+        </div>
+    </form>
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-4">
+            &nbsp;
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-success">
+                <p style="text-align:center">Notes</p>
+                <h4 style="text-align:center; font-weight:bold;">@ViewBag.Notes</h4>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-success">
+                <p style="text-align:center">Units</p>
+                <h4 style="text-align:center; font-weight:bold;">@ViewBag.Units</h4>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-warning">
+                <p style="text-align:center"><i class="glyphicon glyphicon-usd"></i></p>
+                <h4 style="text-align:center; font-weight:bold;">@ViewBag.Money</h4>
+            </div>
+        </div>
+        <div class="col-md-5">
+            &nbsp;
+        </div>
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">TCM Billing Report</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-3">
+                                Case Manager
+                            </th>
+                            <th class="col-md-3">
+                                TCM Client
+                            </th>
+                            <th class="col-md-2" style="text-align:center">
+                                Medicaid ID
+                            </th>
+                            <th class="col-md-1">
+                                Diagnostic
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Date Of Service
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Units
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Money
+                            </th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.TCMNotes.OrderBy(t => t.DateOfService))
+                        {
+                            var @valor = (@item.TCMNoteActivity.ToList().Sum(n => n.Minutes) / 15);
+                            var @residuo = (@item.TCMNoteActivity.ToList().Sum(n => n.Minutes) % 15);
+                            var @valorAumentado = valor + 1;
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CaseManager.Name)
+                                </td>
+                                <td>
+                                    @if (item.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => item.TCMClient.Client.Name)
+                                    |
+                                    @Html.DisplayFor(modelItem => item.TCMClient.CaseNumber)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.TCMClient.Client.MedicaidID)
+                                </td>
+                                <td align="center">
+                                    @if (item.TCMClient.Client.Clients_Diagnostics.Count() > 0)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.TCMClient.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code)
+                                    }
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DateOfService)
+                                </td>                                
+                                <td align="center">
+                                    @if (@residuo > 7)
+                                    {
+                                        @valorAumentado
+                                    }
+                                    else
+                                    {
+                                        @valor
+                                    }
+                                </td>
+                                <td align="center">
+                                    @if (@residuo > 7)
+                                    {
+                                        @(valorAumentado * 12);
+                                    }
+                                    else
+                                    {
+                                        @(valor * 12);
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <td align="center" style="font-weight:bold;">Total:</td>
+                            <td align="center" style="font-weight:bold">Total:</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/datepicker.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="~/js/datepicker.en.js" type="text/javascript" charset="utf-8"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "order": [[0, "asc"]],
+                "pageLength": 100,
+                "footerCallback": function ( row, data, start, end, display ) {        
+                    total = this.api()
+                                .column(5)//numero de columna a sumar
+                                //.column(1, {page: 'current'})//para sumar solo la pagina actual
+                                .data()
+                                .reduce(function (a, b) {
+                                    return parseInt(a) + parseInt(b);
+                                }, 0 );
+
+                    $(this.api().column(5).footer()).html(total);          
+
+                    total = this.api()
+                                .column(6)//numero de columna a sumar
+                                //.column(1, {page: 'current'})//para sumar solo la pagina actual
+                                .data()
+                                .reduce(function (a, b) {
+                                    return parseInt(a) + parseInt(b);
+                                }, 0 );
+
+                    $(this.api().column(6).footer()).html(total);    
+                }
+            });
+        });
+    </script>
+
+}
 

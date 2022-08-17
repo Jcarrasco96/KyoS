@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "CaseManager")]
     public class TCMBillingController : Controller
     {
         private readonly DataContext _context;        
@@ -25,6 +24,7 @@ namespace KyoS.Web.Controllers
             _combosHelper = combosHelper;            
         }
 
+        [Authorize(Roles = "CaseManager")]
         public IActionResult Index()
         {
             UserEntity user_logged = _context.Users
@@ -40,6 +40,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "CaseManager")]
         public IActionResult AddProgressNote(string date)
         {
             UserEntity user_logged = _context.Users
@@ -62,6 +63,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
         public async Task<IActionResult> AddProgressNote(AddProgressNoteViewModel model, IFormCollection form)
         {
             UserEntity user_logged = await _context.Users
@@ -79,6 +81,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "CaseManager")]
         public IActionResult Events(string start, string end, int idClient)
         {
             HttpContext.Session.SetString("initDate", start);
@@ -147,6 +150,7 @@ namespace KyoS.Web.Controllers
             }            
         }
 
+        [Authorize(Roles = "CaseManager")]
         public JsonResult GetTotalNotes()
         {
             DateTime initDate = Convert.ToDateTime(HttpContext.Session.GetString("initDate"));
@@ -180,6 +184,7 @@ namespace KyoS.Web.Controllers
             }            
         }
 
+        [Authorize(Roles = "CaseManager")]
         public JsonResult GetTotalUnits()
         {
             DateTime initDate = Convert.ToDateTime(HttpContext.Session.GetString("initDate"));
@@ -239,10 +244,85 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        public IActionResult BillingForWeek()
+        [Authorize(Roles = "Manager")]
+        public IActionResult BillingForWeek(string dateInterval = "", int idCaseManager = 0, int idClient = 0)
         {
-            return View();
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            ViewBag.Notes = "0";
+            ViewBag.Units = "0";
+            ViewBag.Money = "0";
+            List<TCMNoteEntity> list = new List<TCMNoteEntity>();
+            if (dateInterval != string.Empty)
+            {
+                string[] date = dateInterval.Split(" - ");
+                IQueryable<TCMNoteEntity> query = _context.TCMNote
+                                                          .Include(t => t.CaseManager)
+
+                                                          .Include(t => t.TCMClient)
+
+                                                          .ThenInclude(c => c.Client)
+                                                          .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                          .ThenInclude(cd => cd.Diagnostic)
+
+                                                          .Include(t => t.TCMNoteActivity)
+
+                                                          .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0]) && t.DateOfService <= Convert.ToDateTime(date[1])));
+
+                if (idCaseManager != 0)
+                    query = query.Where(t => t.CaseManager.Id == idCaseManager);
+
+                if (idClient != 0)
+                    query = query.Where(t => t.TCMClient.Id == idClient);
+
+                list = query.ToList();
+
+                int minutes;
+                int totalUnits = 0;
+                int value;
+                int mod;
+                foreach (TCMNoteEntity item in list)
+                {
+                    minutes = item.TCMNoteActivity.Sum(t => t.Minutes);
+                    value = minutes / 15;
+                    mod = minutes % 15;
+                    totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
+                }
+                ViewBag.Notes = list.Count().ToString();
+                ViewBag.Units = totalUnits.ToString();
+                ViewBag.Money = (totalUnits * 12).ToString();
+            }
+
+            TCMBillingReportViewModel model = new TCMBillingReportViewModel
+            {
+                DateIterval = dateInterval,
+                IdCaseManager = idCaseManager,
+                CaseManagers = _combosHelper.GetComboCaseMannagersByClinicFilter(user_logged.Clinic.Id),
+                IdClient = idClient,
+                Clients = _combosHelper.GetComboClientsForTCMCaseOpenFilter(user_logged.Clinic.Id),
+                TCMNotes = dateInterval != string.Empty ? list : new List<TCMNoteEntity>()
+            };
+
+            return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public IActionResult BillingForWeek(TCMBillingReportViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(BillingForWeek), new { dateInterval = model.DateIterval, idCaseManager = model.IdCaseManager, idClient = model.IdClient});
+            }     
+            
+            return View(model);            
+        }
     }
 }
