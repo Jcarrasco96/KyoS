@@ -53,7 +53,7 @@
                 @if (User.IsInRole("TCMSupervisor"))
                 {
                     <a asp-action="ApprovedNote" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origi"]" class="btn btn-primary">Approve</a>
-                    <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","TCMNotes",new {id = Model.Id, origi = @ViewData["origi"]},Context.Request.Scheme)','Add message to facilitator')" title="Not approved note due to problems">Review</a>
+                    <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","TCMNotes",new {id = Model.Id, origi = @ViewData["origi"]},Context.Request.Scheme)','Add message to casemanager')" title="Not approved note due to problems">Review</a>
                 }
                 @if (ViewData["origi"].ToString() == "1")
                 {

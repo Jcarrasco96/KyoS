@@ -242,7 +242,7 @@
                                             <i title="Approved" class="btn btn-info disabled glyphicon glyphicon-plus"></i>
                                             @if (User.IsInRole("TCMSupervisor"))
                                             {
-                                                <a asp-action="EditReadOnly" asp-route-id="@item.Id" asp-route-origi="0" class="btn btn-success" title="Approved TCM Service Plan"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="EditReadOnly" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-success" title="Approved TCM Service Plan"><i class="glyphicon glyphicon-ok"></i></a>
                                             }
                                             else
                                             {

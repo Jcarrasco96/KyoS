@@ -514,7 +514,7 @@
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">Service Plan</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Started", "ServicePlanStarted", "TCMServiceplans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Started", "Index", "TCMServiceplans")</li>
                                         <li>@Html.ActionLink("Pending Approval", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })</li>
                                         <li>@Html.ActionLink("Approved", "ApprovedServicePlan", "TCMServiceplans")</li>
                                     </ul>
@@ -523,7 +523,7 @@
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">Addendum</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Pending", "AdendumApproved", "TCMServicePlans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Pending", "AdendumApproved", "TCMServicePlans", new { approved = 0 })</li>
                                         <li>@Html.ActionLink("All Addendums", "Adendum", "TCMServicePlans", new { aview = 1 })</li>
                                     </ul>
                                 </li>
@@ -623,7 +623,7 @@
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">Service Plan</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Started", "ServicePlanStarted", "TCMServiceplans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Started", "Index", "TCMServiceplans")</li>
                                         <li>@Html.ActionLink("Pending Approval", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })</li>
                                         <li>@Html.ActionLink("Approved", "ApprovedServicePlan", "TCMServiceplans")</li>
                                     </ul>

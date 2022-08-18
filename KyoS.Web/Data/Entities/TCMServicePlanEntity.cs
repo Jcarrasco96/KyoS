@@ -50,5 +50,7 @@ namespace KyoS.Web.Data.Entities
 
         public TCMDischargeEntity TCMDischarge { get; set; }
         public TCMSupervisorEntity TCMSupervisor { get; set; }
+
+        public IEnumerable<TCMMessageEntity> TCMMessages { get; set; }
     }
 }
