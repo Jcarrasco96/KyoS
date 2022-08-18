@@ -901,7 +901,10 @@ namespace KyoS.Web.Helpers
 
         public IEnumerable<SelectListItem> GetComboCasemannagersByClinic(int idClinic)
         {
-            List<SelectListItem> list = _context.CaseManagers.Where(f => f.Clinic.Id == idClinic).Select(f => new SelectListItem
+            List<SelectListItem> list = _context.CaseManagers
+                                                .Where(f => f.Clinic.Id == idClinic)
+                                                .OrderBy(f => f.Name)
+                                                .Select(f => new SelectListItem
             {
                 Text = $"{f.Name}",
                 Value = $"{f.Id}"
@@ -910,6 +913,26 @@ namespace KyoS.Web.Helpers
             list.Insert(0, new SelectListItem
             {
                 Text = "[Select Case Manager...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboCaseMannagersByClinicFilter(int idClinic)
+        {
+            List<SelectListItem> list = _context.CaseManagers
+                                                .Where(f => f.Clinic.Id == idClinic)
+                                                .OrderBy(f => f.Name)
+                                                .Select(f => new SelectListItem
+                                                {
+                                                    Text = $"{f.Name}",
+                                                    Value = $"{f.Id}"
+                                                }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[All Case Managers...]",
                 Value = "0"
             });
 
@@ -974,23 +997,50 @@ namespace KyoS.Web.Helpers
         {
             
             List<TCMClientEntity> tcmClients_Open = _context.TCMClient
-                                                 .Include(g => g.Client)
-                                                 .Where(c => (c.Client.Clinic.Id == idClinic
-                                                            && c.Status == StatusType.Open))
-                                                 .ToList();
+                                                            .Include(g => g.Client)
+                                                            .Where(c => (c.Client.Clinic.Id == idClinic
+                                                                      && c.Status == StatusType.Open))
+                                                            .OrderBy(c => c.Client.Name)
+                                                            .ToList();
 
             List<SelectListItem> list = tcmClients_Open.Select(c => new SelectListItem
             {
-                Text = $"{c.Client.Name}",
+                Text = $"{c.Client.Name} | {c.CaseNumber}",
                 Value = $"{c.Id}"
             })
                                                 .ToList();
 
             list.Insert(0, new SelectListItem
             {
-                Text = "[Select client...]",
+                Text = "[Select Client...]",
                 Value = "0"
                 
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboClientsForTCMCaseOpenFilter(int idClinic)
+        {
+
+            List<TCMClientEntity> tcmClients_Open = _context.TCMClient
+                                                            .Include(g => g.Client)
+                                                            .Where(c => (c.Client.Clinic.Id == idClinic
+                                                                      && c.Status == StatusType.Open))
+                                                            .OrderBy(c => c.Client.Name)
+                                                            .ToList();
+
+            List<SelectListItem> list = tcmClients_Open.Select(c => new SelectListItem
+            {
+                Text = $"{c.Client.Name} | {c.CaseNumber}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[All Clients...]",
+                Value = "0"
             });
 
             return list;
@@ -1354,18 +1404,22 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboTCMClientsByCasemanager(string user)
+        public IEnumerable<SelectListItem> GetComboTCMClientsByCaseManager(string user)
         {
             List<SelectListItem> list = _context.TCMServicePlans
+
                                                 .Include(c => c.TcmClient)
                                                 .ThenInclude(c => c.Client)
-                                                .Where(c => (c.Approved == 2 && c.Status ==0
-                                                        && c.TcmClient.Casemanager.LinkedUser == user))
+
+                                                .Where(c => (c.Approved == 2 && c.Status == 0
+                                                          && c.TcmClient.Casemanager.LinkedUser == user))
+                                                .OrderBy(c => c.TcmClient.Client.Name)
+
                                                 .Select(c => new SelectListItem
-            {
-                Text = $"{c.TcmClient.Client.Name}",
-                Value = $"{c.TcmClient.Id}"
-            }).ToList();
+                                                {
+                                                    Text = $"{c.TcmClient.Client.Name} | {c.TcmClient.CaseNumber}",
+                                                    Value = $"{c.TcmClient.Id}"
+                                                }).ToList();
 
             list.Insert(0, new SelectListItem
             {
