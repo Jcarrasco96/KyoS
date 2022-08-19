@@ -1809,34 +1809,16 @@ namespace KyoS.Web.Controllers
             }
             if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "TCMSupervisor")
             {
-                if (approved == 2)
-                {
-                    servicePlan = await _context.TCMServicePlans
-                                                            .Include(h => h.TCMDomain)
-                                                            .ThenInclude(h => h.TCMObjetive)
-                                                            .Include(g => g.TcmClient)
-                                                            .ThenInclude(f => f.Client)
-                                                            .Include(t => t.TcmClient.Casemanager)
-                                                            .Where(g => (g.TcmClient.Client.Clinic.Id == clinic.Id
-                                                                && g.Approved == approved))
-                                                            .OrderBy(g => g.TcmClient.CaseNumber)
-                                                            .ToListAsync();
-
-                }
-                else
-                {
-                    servicePlan = await _context.TCMServicePlans
-                                                        .Include(h => h.TCMDomain)
-                                                        .ThenInclude(h => h.TCMObjetive)
-                                                        .Include(g => g.TcmClient)
-                                                        .ThenInclude(f => f.Client)
-                                                        .Include(t => t.TcmClient.Casemanager)
-                                                        .Where(g => (g.TcmClient.Client.Clinic.Id == clinic.Id
-                                                            && g.Approved != 2))
-                                                        .OrderBy(g => g.TcmClient.CaseNumber)
-                                                        .ToListAsync();
-
-                }
+                 servicePlan = await _context.TCMServicePlans
+                                             .Include(h => h.TCMDomain)
+                                             .ThenInclude(h => h.TCMObjetive)
+                                             .Include(g => g.TcmClient)
+                                             .ThenInclude(f => f.Client)
+                                             .Include(t => t.TcmClient.Casemanager)
+                                             .Where(g => (g.TcmClient.Client.Clinic.Id == clinic.Id
+                                                && g.Approved == approved))
+                                             .OrderBy(g => g.TcmClient.CaseNumber)
+                                             .ToListAsync();
 
             }
            

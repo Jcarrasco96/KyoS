@@ -16,9 +16,20 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("Pending TCM Discharge", "TCMDischargeApproved", "TCMDischarges", new { approved = 1 })
+                @if (ViewData["origi"].ToString() == "0")
+                {
+                    @Html.ActionLink("Pending TCM Discharge", "TCMDischargeApproved", "TCMDischarges", new { approved = 1 })
+                }
+                @if (ViewData["origi"].ToString() == "1")
+                {
+                    @Html.ActionLink("TCM Discharge with review", "TCMDischargeWithReview", "TCMDischarges")
+                }
+                @if (ViewData["origi"].ToString() == "2")
+                {
+                    @Html.ActionLink("TCM Discharge Notifications", "Notifications", "TCMMessages")
+                }
             </li>
-            <li class="active">Edit</li>
+            <li class="active">Edit read only</li>
         </ul><!--.breadcrumb-->
     </div>
 
@@ -52,8 +63,26 @@
                 <br />
                 <div class="form-group col-md-12">
                     <input type="submit" value="Approve" class="btn btn-primary" />
-                    <a asp-action="TCMDischargeApproved" asp-route-approved="1" class="btn btn-warning disabled">Review</a>
-                    <a asp-action="TCMDischargeApproved" asp-route-approved="1" class="btn btn-success">Back</a>
+                    @if (User.IsInRole("TCMSupervisor") && Model.Approved == 1)
+                    {
+                        <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","TCMDischarges",new {id = Model.Id, origi = @ViewData["origi"]},Context.Request.Scheme)','Add message to casemanager')" title="Not approved tcm service plan due to problems">Review</a>
+                    }
+                    else
+                    {
+                        <a asp-action="AddMessageEntity" class="btn btn-warning disabled">Review</a>
+                    }
+                    @if (ViewData["origi"].ToString() == "0")
+                    {
+                        <a asp-action="TCMDischargeApproved" asp-route-approved="1" class="btn btn-success">Back</a>
+                    }
+                    @if (ViewData["origi"].ToString() == "1")
+                    {
+                        <a asp-action="TCMDischargeWithReview" class="btn btn-success">Back</a>
+                    }
+                    @if (ViewData["origi"].ToString() == "2")
+                    {
+                        <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success">Back</a>
+                    }
                 </div>
             </form>
         </div>

@@ -205,7 +205,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult Edit(int id = 0, int origin  = 0)
+        public IActionResult Edit(int id = 0, int origi  = 0)
         {
             TCMDischargeViewModel model;
 
@@ -233,7 +233,7 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-                        ViewData["origin"] = origin;
+                        ViewData["origi"] = origi;
                         model = _converterHelper.ToTCMDischargeViewModel(TcmDischarge);
                         return View(model);
                        
@@ -249,7 +249,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> Edit(TCMDischargeViewModel tcmDischargeViewModel, int origin  = 0)
+        public async Task<IActionResult> Edit(TCMDischargeViewModel tcmDischargeViewModel, int origi  = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -258,18 +258,56 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 TCMDischargeEntity tcmDischargeEntity = await _converterHelper.ToTCMDischargeEntity(tcmDischargeViewModel, false, user_logged.UserName);
+
+                List<TCMMessageEntity> messages = tcmDischargeEntity.TCMMessages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
+                foreach (TCMMessageEntity value in messages)
+                {
+                    value.Status = MessageStatus.Read;
+                    value.DateRead = DateTime.Now;
+                    _context.Update(value);
+
+                    //I generate a notification to supervisor
+                    TCMMessageEntity notification = new TCMMessageEntity
+                    {
+                        TCMNote = null,
+                        TCMFarsForm = null,
+                        TCMServicePlan = null,
+                        TCMServicePlanReview = null,
+                        TCMAddendum = null,
+                        TCMDischarge = tcmDischargeEntity,
+                        TCMAssessment = null,
+                        Title = "Update on reviewed TCM Discharge",
+                        Text = $"The TCM Discharge of {tcmDischargeEntity.TcmServicePlan.TcmClient.Client.Name} on {tcmDischargeEntity.DischargeDate.ToShortDateString()} was rectified",
+                        From = value.To,
+                        To = value.From,
+                        DateCreated = DateTime.Now,
+                        Status = MessageStatus.NotRead,
+                        Notification = true
+                    };
+                    _context.Add(notification);
+                }
+
+
                 _context.TCMDischarge.Update(tcmDischargeEntity);
                 try
                 {
                     await _context.SaveChangesAsync();
 
-                    if (origin == 0)
+                    if (origi == 0)
                     {
                         return RedirectToAction("Index", "TCMDischarges", new { idTCMClient = tcmDischargeEntity.TcmServicePlan.TcmClient.Id });
                     }
                     else
                     {
-                        return RedirectToAction("TCMDischargeApproved", "TCMDischarges", new { approved = (origin - 1) });
+                        if (origi == 4)
+                        {
+                            return RedirectToAction("MessagesOfDischarges", "TCMMessages");
+                        }
+                        else
+                        {
+                            return RedirectToAction("TCMDischargeApproved", "TCMDischarges", new { approved = (origi - 1) });
+                        }
                     }
                 }
                 catch (System.Exception ex)
@@ -648,7 +686,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public IActionResult EditReadOnly(int id = 0)
+        public IActionResult EditReadOnly(int id = 0, int origi = 0)
         {
             TCMDischargeViewModel model;
 
@@ -677,6 +715,7 @@ namespace KyoS.Web.Controllers
                     else
                     {
                         model = _converterHelper.ToTCMDischargeViewModel(TcmDischarge);
+                        ViewData["origi"] = origi;
                         return View(model);
 
                     }
@@ -725,5 +764,94 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("Index", "TCMServicePlans");
         }
+
+        [Authorize(Roles = "TCMSupervisor, CaseManager")]
+        public IActionResult AddMessageEntity(int id = 0, int origi = 0)
+        {
+            if (id == 0)
+            {
+                return View(new TCMMessageViewModel());
+            }
+            else
+            {
+                TCMMessageViewModel model = new TCMMessageViewModel()
+                {
+                    IdTCMDischarge = id,
+                    Origin = origi
+                };
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> AddMessageEntity(TCMMessageViewModel messageViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                TCMMessageEntity model = await _converterHelper.ToTCMMessageEntity(messageViewModel, true);
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                model.From = user_logged.UserName;
+                model.To = model.TCMDischarge.CreatedBy;
+                _context.Add(model);
+                await _context.SaveChangesAsync();
+            }
+            if (messageViewModel.Origin == 1)
+                return RedirectToAction("TCMDischargeWithReview");
+           
+            return RedirectToAction("TCMDischargeApproved", new { approved = 1 });
+        }
+
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        public async Task<IActionResult> TCMDischargeWithReview()
+        {
+            if (User.IsInRole("CaseManager"))
+            {
+                List<TCMDischargeEntity> salida = await _context.TCMDischarge
+                                                                .Include(wc => wc.TcmServicePlan)
+                                                                .ThenInclude(wc => wc.TcmClient)
+                                                                .ThenInclude(wc => wc.Client)
+                                                                .Include(wc => wc.TcmServicePlan)
+                                                                .ThenInclude(wc => wc.TcmClient)
+                                                                .ThenInclude(wc => wc.Casemanager)
+                                                                .Include(wc => wc.TCMMessages.Where(m => m.Notification == false))
+                                                                .Where(wc => (wc.TcmServicePlan.TcmClient.Casemanager.LinkedUser == User.Identity.Name
+                                                                    && wc.Approved == 1
+                                                                    && wc.TCMMessages.Count() > 0))
+                                                                .ToListAsync();
+
+
+                return View(salida);
+            }
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    List<TCMDischargeEntity> salida = await _context.TCMDischarge
+                                                                    .Include(wc => wc.TcmServicePlan)
+                                                                    .ThenInclude(wc => wc.TcmClient)
+                                                                    .ThenInclude(wc => wc.Client)
+                                                                    .Include(wc => wc.TcmServicePlan)
+                                                                    .ThenInclude(wc => wc.TcmClient)
+                                                                    .ThenInclude(wc => wc.Casemanager)
+                                                                    .Include(wc => wc.TCMMessages.Where(m => m.Notification == false))
+                                                                    .Where(wc => (wc.TcmServicePlan.TcmClient.Casemanager.Clinic.Id == user_logged.Clinic.Id
+                                                                        && wc.Approved == 1
+                                                                        && wc.TCMMessages.Count() > 0))
+                                                               .ToListAsync();
+                    return View(salida);
+                }
+            }
+
+            return View();
+        }
+
+
     }
 }
