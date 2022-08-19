@@ -1,22 +1,22 @@
 ﻿@model KyoS.Web.Data.Entities.TCMClientEntity
 
 @{
-    ViewData["Title"] = "TCM Intake";
+    ViewData["Title"] = "Open Binder details";
 }
 
 <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("TCM Intake", "Index", "TCMIntakes", new { status = @Model.Status })
+            @Html.ActionLink("TCM Open Binder", "Index", "TCMIntakes", new { status = @Model.Status })
         </li>
         @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
         {
-            <li class="active">TCM OPEN BINDER of @Model.Client.Name</li>
+            <li class="active">Open Binder of @Model.Client.Name</li>
         }
         else
         {
-            <li class="active">TCM CLOSE BINDER of @Model.Client.Name</li>
+            <li class="active">Close Binder of @Model.Client.Name</li>
         }
 
     </ul><!--.breadcrumb-->
@@ -27,11 +27,11 @@
     <div class="container-fluid">
         @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
         {
-            <h4 style="font-weight:bold; text-align: center;"> <span class="label label-success">OPEN BINDER</span></h4>
+            <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Open Binder - @Model.Client.Name</span></h4>
         }
         else
         {
-            <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">CLOSE BINDER</span></h4>
+            <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Close Binder - @Model.Client.Name</span></h4>
         }
     </div>
     <div class="col-md-12">

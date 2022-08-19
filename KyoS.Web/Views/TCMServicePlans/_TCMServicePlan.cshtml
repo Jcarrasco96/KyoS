@@ -27,15 +27,12 @@
                             <th class="col-md-1">
 
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                Case
-                            </th>
                             <th class="col-md-3" style="text-align:left;">
-                                Name
-                            </th>
-                            <th class="col-md-2" style="text-align:left;">
                                 Case Manager
                             </th>
+                            <th class="col-md-3" style="text-align:left;">
+                                Client Name
+                            </th>                            
                             <th class="col-md-2" style="text-align:center;">
                                 Services Plan Date
                             </th>
@@ -150,19 +147,8 @@
                                         </table>
                                     </div>
                                 </td>
-                                <td align="center">
-                                    @if (item.TcmClient.Status == KyoS.Common.Enums.StatusType.Open)
-                                    {
-                                        <span class="label label-success">
-                                            @Html.DisplayFor(modelItem => item.TcmClient.CaseNumber)
-                                        </span>
-                                    }
-                                    @if (item.TcmClient.Status == KyoS.Common.Enums.StatusType.Close)
-                                    {
-                                        <span class="label label-default">
-                                            @Html.DisplayFor(modelItem => item.TcmClient.CaseNumber)
-                                        </span>
-                                    }
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TcmClient.Casemanager.Name)
                                 </td>                               
                                 <td>
                                     @if (item.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
@@ -175,10 +161,9 @@
                                     }
                                     &nbsp;
                                     @Html.DisplayFor(modelItem => item.TcmClient.Client.Name)
-                                </td>
-                                <td  >
-                                    @Html.DisplayFor(modelItem => item.TcmClient.Casemanager.Name)
-                                </td>
+                                    |
+                                    @Html.DisplayFor(modelItem => item.TcmClient.CaseNumber)
+                                </td>                                
                                 <td  align="center">
                                     @Html.DisplayFor(modelItem => item.DateServicePlan)
                                 </td>

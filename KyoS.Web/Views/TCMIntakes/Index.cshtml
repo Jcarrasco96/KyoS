@@ -2,12 +2,12 @@
 @{
     @if (@ViewData["open"].ToString() == "0")
     {
-        ViewData["Title"] = "TCM OPEN BINDER";
+        ViewData["Title"] = "TCM Open Binder";
     }
 
     else
     {
-        ViewData["Title"] = "TCM CLOSE BINDER";
+        ViewData["Title"] = "TCM Close Binder";
     }
     
 
@@ -37,14 +37,14 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">@ViewData["Title"]&nbsp;&nbsp;(@Model.Count())</h3>
+                <h3 class="panel-title">@ViewData["Title"]</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
                             <th class="col-md-5">
-                                @Html.DisplayNameFor(model => model.Client.Name)
+                                Client Name
                             </th>                            
                             <th class="col-md-2" style="text-align:center;">
                                 Date Open
@@ -70,8 +70,6 @@
                             {
                                 <tr style="color:orange">
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.CaseNumber)
-                                        &nbsp;
                                         @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
                                             <i class="glyphicon glyphicon-user btn-warning"></i>
@@ -82,6 +80,8 @@
                                         }
                                         &nbsp;
                                         @Html.DisplayFor(modelItem => item.Client.Name)
+                                        |
+                                        @Html.DisplayFor(modelItem => item.CaseNumber)
                                     </td>                                    
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.DataOpen)
@@ -131,11 +131,11 @@
                                          && (item.Client.IntakeMedicalHistory != null) && (item.Client.MedicationList.Count() != 0) && (item.TCMIntakeNonClinicalLog != null)
                                          && (item.TCMIntakeMiniMental != null) && (item.TCMIntakeCoordinationCare != null) && (item.TcmServicePlan != null))
                                         {
-                                            <a asp-action="PrintIntake" asp-route-id="@item.TCMIntakeForm.Id" class="btn btn-success" title="Print TCM Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintIntake" asp-route-id="@item.TCMIntakeForm.Id" class="btn btn-success" title="Print" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
-                                            <a class="btn btn-success disabled" title="Print Intake"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     </td>
                                 </tr>
@@ -144,18 +144,18 @@
                             {
                                 <tr>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.CaseNumber)
-                                        &nbsp;
                                         @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
-                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                            <i class="glyphicon glyphicon-user btn-warning"></i>
                                         }
                                         @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
                                         {
-                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                            <i class="glyphicon glyphicon-user btn-warning"></i>
                                         }
                                         &nbsp;
                                         @Html.DisplayFor(modelItem => item.Client.Name)
+                                        |
+                                        @Html.DisplayFor(modelItem => item.CaseNumber)
                                     </td>                                    
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.DataOpen)
@@ -192,11 +192,11 @@
                                     <td align="right">
                                         @if (User.IsInRole("CaseManager"))
                                         {
-                                            <a asp-action="TCMIntakeDashboard" asp-route-id="@item.Id" class="btn btn-warning" title="Edit TCM Intake"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="TCMIntakeDashboard" asp-route-id="@item.Id" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
                                         else
                                         {
-                                            <a asp-action="TCMIntakeDashboardReadOnly" asp-route-id="@item.Id" class="btn btn-warning" title="Edit TCM Intake"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="TCMIntakeDashboardReadOnly" asp-route-id="@item.Id" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
                                         @if ((item.TCMIntakeForm != null) && (item.TcmIntakeConsentForTreatment != null) && (item.TcmIntakeConsentForRelease != null) && (item.TcmIntakeConsumerRights != null)
                                       && (item.TcmIntakeAcknowledgementHipa != null) && (item.TCMIntakeOrientationChecklist != null) && (item.TCMIntakeAdvancedDirective != null)
@@ -204,11 +204,11 @@
                                       && (item.Client.IntakeMedicalHistory != null) && (item.Client.MedicationList != null) && (item.TCMIntakeNonClinicalLog != null)
                                       && (item.TCMIntakeMiniMental != null) && (item.TCMIntakeCoordinationCare != null) && (item.TcmServicePlan != null))
                                         {
-                                            <a asp-action="PrintIntake" asp-route-id="@item.TCMIntakeForm.Id" class="btn btn-success" title="Print TCM Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintIntake" asp-route-id="@item.TCMIntakeForm.Id" class="btn btn-success" title="Print" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
-                                            <a class="btn btn-success disabled" title="Print TCM Intake"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     </td>
                                 </tr>

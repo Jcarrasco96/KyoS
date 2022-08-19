@@ -45,14 +45,17 @@
                             <th class="col-md-4">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-2" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.ProviderNumber)
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.Credentials)
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.Phone)
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Status
-                            </th>
-                            <th class="col-md-3" style="text-align:center;">
-                                Clinic
                             </th>
                             <th class="col-md-2">
                             </th>
@@ -67,8 +70,14 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Name)
                                     </td>
-                                    <td>
+                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.ProviderNumber)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Credentials)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Phone)
                                     </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -83,10 +92,7 @@
                                                 Close
                                             </span>
                                         }
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Clinic.Name)
-                                    </td>
+                                    </td>                                    
                                     <td align="right">
                                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
                                         <a asp-action="CasesForCaseManager" asp-route-idCaseManager="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list"></i></a>
@@ -100,8 +106,14 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Name)
                                     </td>
-                                    <td>
+                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.ProviderNumber)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Credentials)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Phone)
                                     </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -117,13 +129,10 @@
                                             </span>
                                         }
                                     </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Clinic.Name)
-                                    </td>
                                     <td align="right">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a asp-action="CasesForCaseManager" asp-route-idCaseManager="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list"></i></a>
-                                        <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="CasesForCaseManager" asp-route-idCaseManager="@item.Id" class="btn btn-info" title = "Cases of case manager"><i class="glyphicon glyphicon-list"></i></a>
+                                        <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title = "Delete"><i class="glyphicon glyphicon-trash"></i></button>
                                     </td>
                                 </tr>
                             }
