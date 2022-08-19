@@ -103,7 +103,21 @@
                                                         <a asp-controller="TCMServicePlans" asp-action="EditReadOnly" asp-route-id="@notification.TCMServicePlan.Id" asp-route-origi="3" class="btn btn-warning" title="View TCM Service plan"><i class="glyphicon glyphicon-file"></i></a>
                                                     }
                                                 }
-                                              
+                                                else
+                                                {
+                                                    if (notification.TCMDischarge != null)
+                                                    {
+                                                        if (notification.TCMDischarge.Approved == 2)
+                                                        {
+                                                            <a class="btn btn-warning disabled" title="View TCM Discharge"><i class="glyphicon glyphicon-file"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a asp-controller="TCMDischarges" asp-action="EditReadOnly" asp-route-id="@notification.TCMDischarge.Id" asp-route-origi="2" class="btn btn-warning" title="View TCM Discharge"><i class="glyphicon glyphicon-file"></i></a>
+                                                        }
+                                                    }
+                                                }
+
                                             }
                                             <a onclick="showInPopupLg('@Url.Action("Reviews", "TCMMessages", new { id = notification.Id }, Context.Request.Scheme)','Reviews of this item')" class="btn btn-info" title="View reviews of this item"><i class="glyphicon glyphicon-align-justify"></i></a>
                                         }
@@ -174,6 +188,20 @@
                                                     else
                                                     {
                                                         <a asp-controller="TCMServicePlans" asp-action="EditReadOnly" asp-route-id="@notification.TCMServicePlan.Id" asp-route-origi="3" class="btn btn-warning" title="View TCM Service plan"><i class="glyphicon glyphicon-file"></i></a>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (notification.TCMDischarge != null)
+                                                    {
+                                                        if (notification.TCMDischarge.Approved == 2)
+                                                        {
+                                                            <a class="btn btn-warning disabled" title="View TCM Discharge"><i class="glyphicon glyphicon-file"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a asp-controller="TCMDischarges" asp-action="EditReadOnly" asp-route-id="@notification.TCMDischarge.Id" asp-route-origi="2" class="btn btn-warning" title="View TCM Discharge"><i class="glyphicon glyphicon-file"></i></a>
+                                                        }
                                                     }
                                                 }
                                             }

@@ -630,6 +630,16 @@ namespace KyoS.Web.Controllers
                 ViewBag.TCMNotesApproved = _context.TCMNote
                                                 .Where(g => (g.Status == NoteStatus.Approved
                                                     && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+
+                List<TCMNoteEntity> tcmNotes_review_list = await _context.TCMNote
+                                                                         .Include(wc => wc.TCMMessages)
+                                                                         .Where(wc => (wc.TCMClient.Casemanager.Clinic.Id == user_logged.Clinic.Id &&
+                                                                                   (wc.Status == NoteStatus.Pending)))
+                                                                         .ToListAsync();
+
+                tcmNotes_review_list = tcmNotes_review_list.Where(wc => wc.TCMMessages.Count() > 0).ToList();
+                ViewBag.TCMNotesWithReview = tcmNotes_review_list.Count.ToString();
+
             }
             if (User.IsInRole("Admin"))
             {

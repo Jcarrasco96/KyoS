@@ -122,7 +122,7 @@
                                      @if (item.Approved == 1)
                                      {
                                          <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
-                                         <a asp-action="EditReadOnly" asp-route-id="@item.Id" class="btn btn-success" title="Pending Approval"><i class="glyphicon glyphicon-ok"></i></a>
+                                         <a asp-action="EditReadOnly" asp-route-id="@item.Id"  class="btn btn-success" title="Pending Approval"><i class="glyphicon glyphicon-ok"></i></a>
                                          <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                      }
                                      @if (item.Approved == 2)

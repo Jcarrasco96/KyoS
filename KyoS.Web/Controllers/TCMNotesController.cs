@@ -1215,7 +1215,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending});
         }
 
-        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
         public async Task<IActionResult> NotesWithReview()
         {
             if (User.IsInRole("CaseManager"))
@@ -1234,7 +1234,7 @@ namespace KyoS.Web.Controllers
                 return View(salida);
             }
 
-            if (User.IsInRole("TCMSupervisor"))
+            if (User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
             {
                 UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
                                                              .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
