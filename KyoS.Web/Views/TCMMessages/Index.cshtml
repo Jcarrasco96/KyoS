@@ -35,7 +35,7 @@
                 <div class="col-md-2">
                     @if (ViewBag.CountsMessagesNotes == "0")
                     {
-                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfNotes" role="button">
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfNotes" role="button">
                             <div class="thumbnail list-group-item list-group-item-text">
                                 <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i> Notes</h4>
                                 <span class="message-counter-cero">@ViewBag.CountsMessagesNotes</span>
@@ -44,7 +44,7 @@
                     }
                     else
                     {
-                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfNotes" role="button">
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfNotes" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
                                 <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i> Notes</h4>
                                 <span class="message-counter">@ViewBag.CountsMessagesNotes</span>
@@ -53,21 +53,21 @@
                     }
                 </div>
                 <div class="col-md-2">
-                    @if (ViewBag.CountsMessagesFars == "0")
+                    @if (ViewBag.CountsMessagesTCMServicePlan == "0")
                     {
-                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfFars" role="button">
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfServicePlan" role="button">
                             <div class="thumbnail list-group-item list-group-item-text">
-                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>FARS Forms</h4>
-                                <span class="message-counter-cero">@ViewBag.CountsMessagesFars</span>
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>TCM Service plan</h4>
+                                <span class="message-counter-cero">@ViewBag.CountsMessagesTCMServicePlan</span>
                             </div>
                         </a>
                     }
                     else
                     {
-                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfFars" role="button">
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfServicePlan" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
-                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>FARS Forms</h4>
-                                <span class="message-counter">@ViewBag.CountsMessagesFars</span>
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>TCM Service plan</h4>
+                                <span class="message-counter">@ViewBag.CountsMessagesTCMServicePlan</span>
                             </div>
                         </a>
                     }

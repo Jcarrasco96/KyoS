@@ -357,6 +357,10 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction("NotesWithReview");
                     }
+                    if (origin == 4)
+                    {
+                        return RedirectToAction("MessagesOfNotes", "TCMMessages");
+                    }
                 }
                 catch (System.Exception ex)
                 {
@@ -882,6 +886,8 @@ namespace KyoS.Web.Controllers
                             {
                                 return RedirectToAction("NotesWithReview");
                             }
+                            if (origin == 3)  ///viene de la pagina Notifications
+                                return RedirectToAction("Notifications", "TCMMessages");
                         }
                         catch (System.Exception ex)
                         {
@@ -1074,7 +1080,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> EditReadOnly(TCMNoteViewModel tcmNotesViewModel)
+        public async Task<IActionResult> EditReadOnly(TCMNoteViewModel tcmNotesViewModel, int origi = 1)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -1087,8 +1093,18 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-
-                    return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending });
+                    if (origi == 1)
+                    {
+                        return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending });
+                    }
+                    if (origi == 2)
+                    {
+                        return RedirectToAction("NotesWithReview");
+                    }
+                    if (origi == 3)
+                    {
+                        return RedirectToAction("Notifications", "TCMMessages");
+                    }
 
                 }
                 catch (System.Exception ex)

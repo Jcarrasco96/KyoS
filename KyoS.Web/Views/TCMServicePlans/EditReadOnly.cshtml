@@ -19,6 +19,10 @@
             {
                 @Html.ActionLink("TCM Services Plan with review", "TCMServicePlanWithReview", "TCMServicePlans")
             }
+            @if (ViewData["origi"].ToString() == "3")
+            {
+                @Html.ActionLink("TCM Services Plan Notifications", "Notifications", "TCMMessages")
+            }
         </li>
         <li class="active">Approve service plan</li>
     </ul><!--.breadcrumb-->
@@ -101,6 +105,10 @@
                 @if (ViewData["origi"].ToString() == "2")
                 {
                     <a asp-action="TCMServicePlanWithReview" class="btn btn-success">Back</a>
+                }
+                @if (ViewData["origi"].ToString() == "3")
+                {
+                    <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success">Back</a>
                 }
             </div>
         </form>

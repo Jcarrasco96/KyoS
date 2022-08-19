@@ -23,6 +23,10 @@
                 {
                     @Html.ActionLink("TCM Notes with review", "NotesWithReview", "TCMNotes")
                 }
+                @if (ViewData["origi"].ToString() == "3")
+                {
+                    @Html.ActionLink("TCM Notifications", "Notifications", "TCMMessages")
+                }
             </li>
             <li class="active">TCM Notes</li>
         </ul><!--.breadcrumb-->
@@ -30,7 +34,7 @@
 
 
     <div class="row">
-        <form asp-action="Edit" asp-route-id="@Model.Id" enctype="multipart/form-data">
+        <form asp-action="EditReadOnly" asp-route-id="@Model.Id" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdTCMClient" />
             <input type="hidden" asp-for="IdTCMNote" />
@@ -46,10 +50,6 @@
             </div>
             <partial name="_TCMNotes1" />
             <div class="form-group col-md-12">
-                @if (User.IsInRole("CaseManager"))
-                {
-                    <input type="submit" value="Save" asp-route-origin="@ViewData["origi"]" class="btn btn-primary" />
-                }
                 @if (User.IsInRole("TCMSupervisor"))
                 {
                     <a asp-action="ApprovedNote" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origi"]" class="btn btn-primary">Approve</a>
@@ -62,6 +62,10 @@
                 @if (ViewData["origi"].ToString() == "2")
                 {
                     <a asp-action="NotesWithReview" class="btn btn-success">Back</a>
+                }
+                @if (ViewData["origi"].ToString() == "3")
+                {
+                    <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success">Back</a>
                 }
             </div>
         </form>

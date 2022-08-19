@@ -33,6 +33,10 @@
                     {
                         @Html.ActionLink("TCM Notes with review", "NotesWithReview", "TCMNotes")
                     }
+                    @if (ViewData["origin"].ToString() == "4")
+                    {
+                        @Html.ActionLink("Inbox", "MessagesOfNotes", "TCMMessages")
+                    }
                 }
 
             </li>
@@ -78,6 +82,10 @@
                     @if (ViewData["origin"].ToString() == "3")
                     {
                         <a asp-action="NotesWithReview" class="btn btn-success">Back</a>
+                    }
+                    @if (ViewData["origin"].ToString() == "4")
+                    {
+                        <a asp-action="MessagesOfNotes" asp-controller="TCMMessages" class="btn btn-success">Back</a>
                     }
                 }
             </div>

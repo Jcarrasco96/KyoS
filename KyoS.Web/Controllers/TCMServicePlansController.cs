@@ -2121,6 +2121,8 @@ namespace KyoS.Web.Controllers
 
             if (messageViewModel.Origin == 2)
                 return RedirectToAction("TCMServicePlanWithReview");
+            if (messageViewModel.Origin == 3)
+                return RedirectToAction("Notifications", "TCMMessages");
 
             return RedirectToAction("Index");
         }
