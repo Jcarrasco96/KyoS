@@ -71,7 +71,7 @@
         }
     </div>
     <div>
-        <form asp-action="AproveServicePlan" asp-route-id="@Model.Id">
+        <form asp-action="AproveServicePlan" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" >
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Approved" />
             <input type="hidden" asp-for="CreatedBy" />

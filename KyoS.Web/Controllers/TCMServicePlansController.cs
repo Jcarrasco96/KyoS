@@ -374,7 +374,14 @@ namespace KyoS.Web.Controllers
                         }
                         else
                         {
-                            return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = (origin - 1) });
+                            if (origin == 4)
+                            {
+                                return RedirectToAction("MessagesOfServicePlan", "TCMMessages");
+                            }
+                            else
+                            {
+                                return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = (origin - 1) });
+                            }
                         }
                             
                     }
@@ -433,7 +440,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> AproveServicePlan(int id)
+        public async Task<IActionResult> AproveServicePlan(int id, int origi = 0)
         {
             TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans.Include(u => u.TcmClient)
                                                          .ThenInclude(u => u.Client)
@@ -454,8 +461,14 @@ namespace KyoS.Web.Controllers
                         try
                         {
                             await _context.SaveChangesAsync();
-
-                            return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = 1 });
+                            if (origi == 0)
+                            {
+                                return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = 1 });
+                            }
+                            if (origi == 3)
+                            {
+                                return RedirectToAction("Notifications", "TCMMessages");
+                            }
                         }
                         catch (System.Exception ex)
                         {

@@ -25,19 +25,25 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
+                            <th class="col-md-1">
+
+                            </th>
                             <th class="col-md-3">
                                 TCM Client
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Date Of Service
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 Minutes
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Units
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
+                                Review
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
                                 Note Status
                             </th>
                             <th class="col-md-2" align="right">
@@ -50,124 +56,416 @@
                             var @valor = (@item.TCMNoteActivity.ToList().Sum(n => n.Minutes) / 15);
                             var @residuo = (@item.TCMNoteActivity.ToList().Sum(n => n.Minutes) % 15);
                             var @valorAumentado = valor + 1;
-                            <tr>
-                                <td>
-                                    @if (item.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
-                                    {
-                                        <i class="glyphicon glyphicon-user btn-danger"></i>
-                                    }
-                                    @if (item.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
-                                    {
-                                        <i class="glyphicon glyphicon-user btn-primary"></i>
-                                    }
-                                    &nbsp;
-                                    @Html.DisplayFor(modelItem => item.TCMClient.Client.Name)
-                                    |
-                                    @Html.DisplayFor(modelItem => item.TCMClient.CaseNumber)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.DateOfService)
-                                </td>
-                                <td align="center">
-                                    @item.TCMNoteActivity.ToList().Sum(n => n.Minutes)
-                                </td>
-                                <td align="center">
-                                    @if (@residuo > 7)
-                                    {
-                                        @valorAumentado
-                                    }
-                                    else
-                                    {
-                                        @valor
-                                    }
-                                </td>
-                                <td align="center">
-                                    @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
-                                    {
-                                        <span class="label label-warning">
-                                            Edition
-                                        </span>
-                                    }
-                                    @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
-                                    {
-                                        <span class="label label-info">
-                                            Pending
-                                        </span>
-                                    }
-                                    @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
-                                    {
-                                        <span class="label label-success">
-                                            Approved
-                                        </span>
-                                    }
-                                </td>
-                                <td align="right">
 
-                                    @if (User.IsInRole("CaseManager"))
-                                    {
+                            if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                            {
+                                 <tr>
+                                     <td align="center">
+                                        @if (item.TCMMessages.Count() != 0)
+                                        {
+                                            <a class="icon-plus-sign-alt"></a>
+                                        }
+                                        <div style="display:none">
+                                            <table class="table table-striped">
+                                                <tr>
+                                                    <th class="col-md-2"></th>
+                                                    <th class="col-md-3">Title</th>
+                                                    <th class="col-md-7" style="text-align:center;">Text</th>
+                                                    @*<th class="col-md-1"></th>*@
+                                                    <th></th>
+                                                </tr>
+                                                @foreach (var message in item.TCMMessages.OrderBy(m => m.DateCreated))
+                                                {
+
+                                                    @if (message.Status.ToString() == "NotRead")
+                                                    {
+                                                        <tr style="color:mediumblue;">
+                                                            <td>
+                                                                <i class="glyphicon glyphicon-thumbs-down"></i> Not processed
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Title)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Text)
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    @if (message.Status.ToString() == "Read")
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <i class="glyphicon glyphicon-thumbs-up"></i> Processed
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Title)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Text)
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (item.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (item.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.TCMClient.Client.Name)
+                                        |
+                                        @Html.DisplayFor(modelItem => item.TCMClient.CaseNumber)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.DateOfService)
+                                    </td>
+                                    <td align="center">
+                                        @item.TCMNoteActivity.ToList().Sum(n => n.Minutes)
+                                    </td>
+                                    <td align="center">
+                                        @if (@residuo > 7)
+                                        {
+                                            @valorAumentado
+                                        }
+                                        else
+                                        {
+                                            @valor
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.TCMMessages.Count() == 0)
+                                        {
+                                            <span>
+                                                -
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            bool read = false;
+                                            @foreach (var message in item.TCMMessages.OrderBy(m => m.DateCreated))
+                                            {
+                                                @if (message.Status.ToString() == "NotRead")
+                                                {
+                                                    read = false;
+                                                    break;
+                                                }
+                                                @if (message.Status.ToString() == "Read")
+                                                {
+                                                    read = true;
+                                                }
+                                            }
+                                            if (read)
+                                            {
+                                                <i class="glyphicon glyphicon-thumbs-up"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="glyphicon glyphicon-thumbs-down"></i>
+                                            }
+                                        }
+                                    </td>
+                                    <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-warning" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="FinishEditingNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Finish Editing TCM Notes"><i class="glyphicon glyphicon-ok"></i></a>
-                                            <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            <span class="label label-warning">
+                                                Edition
+                                            </span>
                                         }
                                         @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
-                                            <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            <span class="label label-info">
+                                                Pending
+                                            </span>
                                         }
                                         @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
                                         {
-                                            @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
-                                            <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success " title="Print TCM Notes" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <span class="label label-success">
+                                                Approved
+                                            </span>
                                         }
-                                    }
-                                    @if (User.IsInRole("TCMSupervisor"))
-                                    {
+                                    </td>
+                                    <td align="right">
+
+                                        @if (User.IsInRole("CaseManager"))
+                                        {
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-warning" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="FinishEditingNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Finish Editing TCM Notes"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                            {
+                                                @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success " title="Print TCM Notes" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                        }
+                                        @if (User.IsInRole("TCMSupervisor"))
+                                        {
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Id"  class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="FinishEditingNote" asp-route-id="@item.Id"  class="btn btn-success disabled" title="Finish Editing TCM Notes"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="EditReadOnly" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-success" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                            {
+                                                @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="ApprovedNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success " title="Print TCM Notes" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                        }
+                                        @if (User.IsInRole("Manager"))
+                                        {
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Finish Editing TCM Notes"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="ApprovedNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                            {
+                                                @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="ApprovedNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success " title="Print TCM Notes" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            { 
+                                <tr>
+                                     <td align="center">
+                                        @if (item.TCMMessages.Count() != 0)
+                                        {
+                                            <a class="icon-plus-sign-alt"></a>
+                                        }
+                                        <div style="display:none">
+                                            <table class="table table-striped">
+                                                <tr>
+                                                    <th class="col-md-2"></th>
+                                                    <th class="col-md-3">Title</th>
+                                                    <th class="col-md-7" style="text-align:center;">Text</th>
+                                                    @*<th class="col-md-1"></th>*@
+                                                    <th></th>
+                                                </tr>
+                                                @foreach (var message in item.TCMMessages.OrderBy(m => m.DateCreated))
+                                                {
+
+                                                    @if (message.Status.ToString() == "NotRead")
+                                                    {
+                                                        <tr style="color:mediumblue;">
+                                                            <td>
+                                                                <i class="glyphicon glyphicon-thumbs-down"></i> Not processed
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Title)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Text)
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    @if (message.Status.ToString() == "Read")
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <i class="glyphicon glyphicon-thumbs-up"></i> Processed
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Title)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Text)
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (item.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (item.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.TCMClient.Client.Name)
+                                        |
+                                        @Html.DisplayFor(modelItem => item.TCMClient.CaseNumber)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.DateOfService)
+                                    </td>
+                                    <td align="center">
+                                        @item.TCMNoteActivity.ToList().Sum(n => n.Minutes)
+                                    </td>
+                                    <td align="center">
+                                        @if (@residuo > 7)
+                                        {
+                                            @valorAumentado
+                                        }
+                                        else
+                                        {
+                                            @valor
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.TCMMessages.Count() == 0)
+                                        {
+                                            <span>
+                                                -
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            bool read = false;
+                                            @foreach (var message in item.TCMMessages.OrderBy(m => m.DateCreated))
+                                            {
+                                                @if (message.Status.ToString() == "NotRead")
+                                                {
+                                                    read = false;
+                                                    break;
+                                                }
+                                                @if (message.Status.ToString() == "Read")
+                                                {
+                                                    read = true;
+                                                }
+                                            }
+                                               
+                                            if (read)
+                                            {
+                                                <i class="glyphicon glyphicon-thumbs-up"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="glyphicon glyphicon-thumbs-down"></i>
+                                            }
+                                        }
+                                    </td>
+                                    <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id"  class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="FinishEditingNote" asp-route-id="@item.Id"  class="btn btn-success disabled" title="Finish Editing TCM Notes"><i class="glyphicon glyphicon-ok"></i></a>
-                                            <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            <span class="label label-warning">
+                                                Edition
+                                            </span>
                                         }
                                         @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="EditReadOnly" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-success" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
-                                            <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            <span class="label label-info">
+                                                Pending
+                                            </span>
                                         }
                                         @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
                                         {
-                                            @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="ApprovedNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
-                                            <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success " title="Print TCM Notes" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <span class="label label-success">
+                                                Approved
+                                            </span>
                                         }
-                                    }
-                                    @if (User.IsInRole("Manager"))
-                                    {
-                                        @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                    </td>
+                                    <td align="center">
+                                    
+                                    </td>
+                                    <td align="right">
+
+                                        @if (User.IsInRole("CaseManager"))
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Finish Editing TCM Notes"><i class="glyphicon glyphicon-ok"></i></a>
-                                            <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-warning" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="FinishEditingNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Finish Editing TCM Notes"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                            {
+                                                @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success " title="Print TCM Notes" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
                                         }
-                                        @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                        @if (User.IsInRole("TCMSupervisor"))
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="ApprovedNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
-                                            <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Id"  class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="FinishEditingNote" asp-route-id="@item.Id"  class="btn btn-success disabled" title="Finish Editing TCM Notes"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="EditReadOnly" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-success" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                            {
+                                                @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="ApprovedNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success " title="Print TCM Notes" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
                                         }
-                                        @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                        @if (User.IsInRole("Manager"))
                                         {
-                                            @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="ApprovedNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
-                                            <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success " title="Print TCM Notes" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Finish Editing TCM Notes"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="ApprovedNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                            {
+                                                @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="ApprovedNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
+                                                <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success " title="Print TCM Notes" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
                                         }
-                                    }
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                            }
+                            
                         }
                     </tbody>
                 </table>
@@ -201,6 +499,19 @@
                                 window.location.href = url + '/' + item_to_delete;
                             });
                         });
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
     </script>
 }
 
