@@ -448,6 +448,11 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
             TCMClientEntity TcmClientEntity = await _context.TCMClient
                                                             .Include(c => c.TCMIntakeForm)
                                                             .Include(c => c.Client)
@@ -487,9 +492,11 @@ namespace KyoS.Web.Controllers
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
             List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
-                                                                               .Where(m => m.TcmClient_FK == id).ToListAsync();
+                                                                               .Where(m => m.TcmClient_FK == id)
+                                                                               .ToListAsync();
             List<DocumentEntity> listDocument = await _context.Documents
-                                                              .Where(m => m.Client.Id == TcmClientEntity.Client.Id).ToListAsync();
+                                                              .Where(m => m.Client.Id == TcmClientEntity.Client.Id)
+                                                              .ToListAsync();
 
             TcmClientEntity.TcmIntakeConsentForRelease = listRelease;
             TcmClientEntity.Client.Documents = listDocument;
@@ -511,6 +518,11 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
             TCMClientEntity TcmClientEntity = await _context.TCMClient
                                                             .Include(c => c.TCMIntakeForm)
                                                             .Include(c => c.Client)
@@ -550,9 +562,11 @@ namespace KyoS.Web.Controllers
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
             List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
-                                                                               .Where(m => m.TcmClient_FK == id).ToListAsync();
+                                                                               .Where(m => m.TcmClient_FK == id)
+                                                                               .ToListAsync();
             List<DocumentEntity> listDocument = await _context.Documents
-                                                              .Where(m => m.Client.Id == TcmClientEntity.Client.Id).ToListAsync();
+                                                              .Where(m => m.Client.Id == TcmClientEntity.Client.Id)
+                                                              .ToListAsync();
 
             TcmClientEntity.TcmIntakeConsentForRelease = listRelease;
             TcmClientEntity.Client.Documents = listDocument;
@@ -2715,6 +2729,12 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
+            UserEntity user_logged = await _context.Users
+                                       .Include(u => u.Clinic)
+                                       .ThenInclude(c => c.Setting)
+                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+
             TCMClientEntity TcmClientEntity = await _context.TCMClient
                                                             .Include(c => c.TCMIntakeForm)
                                                             .Include(c => c.Client)
@@ -2777,6 +2797,11 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
+
+            UserEntity user_logged = await _context.Users
+                                       .Include(u => u.Clinic)
+                                       .ThenInclude(c => c.Setting)
+                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             TCMClientEntity TcmClientEntity = await _context.TCMClient
                                                             .Include(c => c.TCMIntakeForm)

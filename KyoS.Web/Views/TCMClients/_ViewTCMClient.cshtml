@@ -25,24 +25,21 @@
                  <table class="table table-hover table-responsive table-striped" id="MyTable">
                      <thead>
                          <tr>
-                             <th class="col-md-2">
+                             <th class="col-md-3">
                                  Case Manager
                              </th>
-                             <th class="col-md-2">
+                             <th class="col-md-4">
                                  Client Name
                              </th>
                              <th class="col-md-2" style="text-align: center;">
-                                 Case Number
-                             </th>
-                             <th class="col-md-2" style="text-align: center;">
-                                 Open Date
-                             </th>
-                             <th class="col-md-2" style="text-align: center;">
-                                 Close Date
+                                 Client Status
                              </th>
                              <th class="col-md-1" style="text-align: center;">
-                                 Status
+                                 Open Date
                              </th>
+                             <th class="col-md-1" style="text-align: center;">
+                                 Close Date
+                             </th>                             
                              <th class="col-md-1" style="text-align: center;">
                              </th>
                          </tr>
@@ -65,14 +62,8 @@
                                  }
                                  &nbsp;
                                  @Html.DisplayFor(modelItem => item.Client.Name)
-                             <td align="center">
+                                 |
                                  @Html.DisplayFor(modelItem => item.CaseNumber)
-                             </td>
-                             <td align="center">
-                                 @Html.DisplayFor(modelItem => item.DataOpen)
-                             </td>
-                             <td align="center">
-                                 @Html.DisplayFor(modelItem => item.DataClose)
                              </td>
                              <td align="center">
                                  @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -87,6 +78,12 @@
                                          Close
                                      </span>
                                  }
+                             </td>
+                             <td align="center">
+                                 @Html.DisplayFor(modelItem => item.DataOpen)
+                             </td>
+                             <td align="center">
+                                 @Html.DisplayFor(modelItem => item.DataClose)
                              </td>
                              <td align="right">
                                  @if ((User.IsInRole("Manager") || User.IsInRole("TCMSupervisor")))

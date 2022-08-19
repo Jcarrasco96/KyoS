@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMClientEntity>
 @{
-    ViewData["Title"] = "CasesForCaseManager";
+    ViewData["Title"] = "Cases of case manager";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,35 +11,22 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Case Managers", "Index", "CaseMannager")
         </li>
-        <li class="active">Case Manager' cases</li>
+        <li class="active">Cases of case manager</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <div class="row">
     <div class="col-md-12">
-        @if (ViewBag.Delete == "N")
-        {
-            <div class="alert alert-block alert-danger">
-                <button type="button" class="close" data-dismiss="alert">
-                    <i class="icon-remove"></i>
-                </button>
-                <strong class="red">
-                    Error. It is not posible delete the case
-                </strong>
-            </div>
-        }
-    </div>
-    <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title"> @Html.DisplayFor(modelItem => Model.ElementAtOrDefault(0).Casemanager.Name)' cases</h3>
+                <h5><b>@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(0).Casemanager.Name)</b></h5>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
                             <th class="col-md-1">
-                                
+
                             </th>
                             <th class="col-md-3">
                                 Client Name
@@ -48,15 +35,14 @@
                                 Open Date
                             </th>
                             <th class="col-md-2" style="text-align: center;">
+                                Close Date
+                            </th>
+                            <th class="col-md-2" style="text-align: center;">
                                 Notes
                             </th>
                             <th class="col-md-2" style="text-align: center;">
                                 Units
                             </th>
-                            <th class="col-md-2" style="text-align: center;">
-                                Close Date
-                            </th>
-
                         </tr>
                     </thead>
                     <tbody>
@@ -81,7 +67,7 @@
                                                 <th class="col-md-2" style="text-align:center;">Service Code</th>
                                                 <th class="col-md-2" style="text-align:center;">Minutes</th>
                                                 <th class="col-md-2" style="text-align:center;">Units</th>
-                                                <th class="col-md-2" style="text-align:center;">Status</th>
+                                                <th class="col-md-2" style="text-align:center;">Note Status</th>
                                             </tr>
                                             @foreach (var product in item.TCMNote)
                                             {
@@ -125,7 +111,7 @@
                                                     </td>
                                                     <td align="center">@Html.DisplayFor(modelItem => product.DateOfService)</td>
                                                     <td align="center">@Html.DisplayFor(modelItem => product.ServiceCode)</td>
-                                                    <td align="center">minutes</td>
+                                                    <td align="center">@product.TCMNoteActivity.Sum(n => n.Minutes)</td>
                                                     <td align="center">
                                                         @if (residuo > 7)
                                                         {
@@ -173,19 +159,6 @@
                                     </div>
                                 </td>
                                 <td>
-                                    @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                                    {
-                                        <span class="label label-success">
-                                            @Html.DisplayFor(modelItem => item.CaseNumber)
-                                        </span>
-                                    }
-                                    @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                                    {
-                                        <span class="label label-default">
-                                            @Html.DisplayFor(modelItem => item.CaseNumber)
-                                        </span>
-                                    }
-                                    &nbsp;
                                     @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                     {
                                         <i class="glyphicon glyphicon-user btn-danger"></i>
@@ -196,8 +169,13 @@
                                     }
                                     &nbsp;
                                     @Html.DisplayFor(modelItem => item.Client.Name)
+                                    |
+                                    @Html.DisplayFor(modelItem => item.CaseNumber)
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.DataOpen)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DataClose)
                                 </td>
                                 <td align="center">
                                     @item.TCMNote.Count()
@@ -205,10 +183,6 @@
                                 <td align="center">
                                     @cant_unit
                                 </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.DataClose)
-                                </td>
-
                             </tr>
                         }
                     </tbody>
@@ -226,7 +200,10 @@
 
     <script type="text/javascript">
                         $(document).ready(function () {
-                            $('#MyTable').DataTable();
+                            $('#MyTable').DataTable({
+                                "order": [[1, "asc"]],
+                                "pageLength": 100
+                            });
 
                             // Delete item
                             var item_to_delete;

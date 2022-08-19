@@ -34,13 +34,12 @@
                             <th class="col-md-2" style="text-align:center;">
                                 Minutes
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 Units
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                Status
+                            <th class="col-md-2" style="text-align:center;">
+                                Note Status
                             </th>
-
                             <th class="col-md-2" align="right">
                             </th>
                         </tr>
@@ -62,9 +61,9 @@
                                         <i class="glyphicon glyphicon-user btn-primary"></i>
                                     }
                                     &nbsp;
-                                    @Html.DisplayFor(modelItem => item.TCMClient.CaseNumber)
-                                    &nbsp;
                                     @Html.DisplayFor(modelItem => item.TCMClient.Client.Name)
+                                    |
+                                    @Html.DisplayFor(modelItem => item.TCMClient.CaseNumber)
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.DateOfService)

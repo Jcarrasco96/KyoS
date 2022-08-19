@@ -1,24 +1,11 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMServicePlanEntity>
 
 @if (Model != null)
-{
-    <div class="col-md-12">
-        @if (ViewBag.Delete == "N")
-        {
-            <div class="alert alert-block alert-danger">
-                <button type="button" class="close" data-dismiss="alert">
-                    <i class="icon-remove"></i>
-                </button>
-                <strong class="red">
-                    Error. It is not posible delete the TCM service Plan
-                </strong>
-            </div>
-        }
-    </div>
+{    
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">TCM Service Plan</h3>
+                <h3 class="panel-title">Service Plan in edition</h3>
             </div>
             <div class="panel-body" id="view-tcmServicePlan">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -27,20 +14,17 @@
                             <th class="col-md-1">
 
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                Case
-                            </th>
                             <th class="col-md-3" style="text-align:left;">
-                                Name
-                            </th>
-                            <th class="col-md-2" style="text-align:left;">
                                 Case Manager
                             </th>
+                            <th class="col-md-3" style="text-align:left;">
+                                Client Name
+                            </th>                            
                             <th class="col-md-2" style="text-align:center;">
                                 Services Plan Date
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Approved
+                                Status
                             </th>
                             <th class="col-md-2">
                             </th>
@@ -49,217 +33,214 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td align="center">
-                                    @if (item.TCMDomain.Count() != 0)
-                                    {
-                                        <a class="icon-plus-sign-alt"></a>
-                                    }
-                                    else
-                                    {
+                        <tr>
+                            <td align="center">
+                                @if (item.TCMDomain.Count() != 0)
+                                {
+                                    <a class="icon-plus-sign-alt"></a>
+                                }
+                                else
+                                {
 
-                                    }
-                                    <div style="display:none">
-                                        <table class="table table-striped table-bordered">
-                                            <tr>
-                                                <th class="col-md-1"></th>
-                                                <th class="col-md-1">Domain Code</th>
-                                                <th class="col-md-2">Domain Name</th>
-                                                <th class="col-md-6">Need Identified</th>
-                                                <th class="col-md-1">Date Identified</th>
-                                                <th class="col-md-1"></th>
-                                            </tr>
-                                            @foreach (var product in item.TCMDomain)
+                                }
+                                <div style="display:none">
+                                    <table class="table table-striped table-bordered">
+                                        <tr>
+                                            <th class="col-md-1"></th>
+                                            <th class="col-md-1" style="text-align:center">Domain</th>
+                                            <th class="col-md-2">Domain Name</th>
+                                            <th class="col-md-4">Need Identified</th>
+                                            <th class="col-md-2" style="text-align:center">Date Identified</th>
+                                            <th class="col-md-2"></th>
+                                        </tr>
+                                        @foreach (var product in item.TCMDomain)
+                                        {
+                                            @if (product.Origin == "Service Plan")
                                             {
-                                                @if (product.Origin == "Service Plan")
-                                                {
-                                                    <tr>
-                                                        <td align="center">
-                                                            @if (product.TCMObjetive.Count() != 0)
+                                                <tr>
+                                                    <td align="center">
+                                                        @if (product.TCMObjetive.Count() != 0)
+                                                        {
+                                                            <a class="icon-plus-sign-alt"></a>
+                                                        }
+                                                        else
+                                                        {
+
+                                                        }
+                                                        <div style="display:none">
+                                                            <table class="table table-striped table-bordered">
+                                                                <tr>
+                                                                    <th class="col-md-1" style="text-align:center;">Objetive</th>
+                                                                    <th class="col-md-6">Task</th>
+                                                                    <th class="col-md-1" style="text-align:center;">Start Date</th>
+                                                                    <th class="col-md-2" style="text-align:center;">Target Date</th>
+                                                                    <th class="col-md-1" style="text-align:center;">End Date</th>
+                                                                    <th class="col-md-1"></th>
+                                                                </tr>
+                                                                @foreach (var product1 in product.TCMObjetive)
+                                                                {
+                                                                    @if (product1.Origin == "Service Plan")
+                                                                    {
+                                                                        <tr>
+                                                                            <td align="center">@Html.DisplayFor(modelItem => product1.IdObjetive)</td>
+                                                                            <td>@Html.DisplayFor(modelItem => product1.Name)</td>
+                                                                            <td align="center">@Html.DisplayFor(modelItem => product1.StartDate)</td>
+                                                                            <td align="center">@Html.DisplayFor(modelItem => product1.TargetDate)</td>
+                                                                            <td align="center">@Html.DisplayFor(modelItem => product1.EndDate)</td>
+                                                                            <td align="center">
+                                                                                @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("CaseManager"))
+                                                                                {
+                                                                                    @if (item.Approved <= 1)
+                                                                                    {
+                                                                                        <a onclick="showInPopup('@Url.Action("EditObjetive", "TCMServicePlans", new { id = product1.Id, Origin = 0, aview = 1 }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning" title="Edit TCM Objective"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                                }
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+
+                                                                    @* cant_unit = cant_unit + product.Units;*@
+                                                                }
+                                                            </table>
+                                                        </div>
+                                                    </td>
+                                                    <td align="center">@Html.DisplayFor(modelItem => product.Code)</td>
+                                                    <td>@Html.DisplayFor(modelItem => product.Name)</td>
+                                                    <td>@Html.DisplayFor(modelItem => product.NeedsIdentified)</td>
+                                                    <td align="center">@Html.DisplayFor(modelItem => product.DateIdentified)</td>
+                                                    <td align="center">
+                                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("CaseManager"))
+                                                        {
+                                                            @if (item.Approved <= 1)
                                                             {
-                                                                <a class="icon-plus-sign-alt"></a>
+                                                                <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlans", new { id = product.Id, aview = 1 }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning" title="Edit TCM Domain"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlans", new { id = product.Id, Origin = 0, aview = 1 }, Context.Request.Scheme)','Create TCM Objetive')" class="btn btn-info" title="Create TCM Objective"><i class="glyphicon glyphicon-plus"></i></a>
                                                             }
                                                             else
                                                             {
-
+                                                                <a class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a class="btn btn-info disabled" title="Create TCM Objective"><i class="glyphicon glyphicon-plus"></i></a>
                                                             }
-                                                            <div style="display:none">
-                                                                <table class="table table-striped table-bordered">
-                                                                    <tr>
-                                                                        <th class="col-md-1">Objetive</th>
-                                                                        <th class="col-md-7">Task</th>
-                                                                        <th class="col-md-1" style="text-align:center;">Start Date</th>
-                                                                        <th class="col-md-1" style="text-align:center;">Target Date</th>
-                                                                        <th class="col-md-1" style="text-align:center;">End Date</th>
-                                                                        <th class="col-md-1"></th>
-                                                                    </tr>
-                                                                    @foreach (var product1 in product.TCMObjetive)
-                                                                    {
-                                                                        @if (product1.Origin == "Service Plan")
-                                                                        {
-                                                                            <tr>
-                                                                                <td>@Html.DisplayFor(modelItem => product1.IdObjetive)</td>
-                                                                                <td>@Html.DisplayFor(modelItem => product1.Name)</td>
-                                                                                <td align="center">@Html.DisplayFor(modelItem => product1.StartDate)</td>
-                                                                                <td align="center">@Html.DisplayFor(modelItem => product1.TargetDate)</td>
-                                                                                <td align="center">@Html.DisplayFor(modelItem => product1.EndDate)</td>
-                                                                                <td align="center">
-                                                                                    @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("CaseManager"))
-                                                                                    {
-                                                                                        @if (item.Approved <= 1)
-                                                                                        {
-                                                                                            <a onclick="showInPopup('@Url.Action("EditObjetive", "TCMServicePlans", new { id = product1.Id, Origin = 0, aview = 1 }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning" title="Edit TCM Objective"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                                        }
-                                                                                        else
-                                                                                        { 
-                                                                                            <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                                        }
-                                                                                    }
-                                                                                </td>
-                                                                            </tr>
-                                                                        }
-
-                                                                        @* cant_unit = cant_unit + product.Units;*@
-                                                                    }
-                                                                </table>
-                                                            </div>
-                                                        </td>
-                                                        <td>@Html.DisplayFor(modelItem => product.Code)</td>
-                                                        <td>@Html.DisplayFor(modelItem => product.Name)</td>
-                                                        <td>@Html.DisplayFor(modelItem => product.NeedsIdentified)</td>
-                                                        <td>@Html.DisplayFor(modelItem => product.DateIdentified)</td>
-                                                        <td>
-                                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("CaseManager"))
-                                                            {
-                                                                @if (item.Approved <= 1)
-                                                                {
-                                                                    <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlans", new { id = product.Id, aview = 1 }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning" title="Edit TCM Domain"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                    <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlans", new { id = product.Id, Origin = 0, aview = 1 }, Context.Request.Scheme)','Create TCM Objetive')" class="btn btn-info" title="Create TCM Objective"><i class="glyphicon glyphicon-plus"></i></a>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                    <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-info disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-plus"></i></a>
-                                                                }
-                                                            }
-                                                        </td>
-                                                    </tr>
-                                                    @* cant_unit = cant_unit + product.Units;*@
-                                                }
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                            <a class="btn btn-info disabled" title="Create TCM Objective"><i class="glyphicon glyphicon-plus"></i></a>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                                @* cant_unit = cant_unit + product.Units;*@
                                             }
-                                        </table>
-                                    </div>
-                                </td>
-                                <td align="center">
-                                    @if (item.TcmClient.Status == KyoS.Common.Enums.StatusType.Open)
+                                        }
+                                    </table>
+                                </div>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TcmClient.Casemanager.Name)
+                            </td>
+                            <td>
+                                @if (item.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                {
+                                    <i class="glyphicon glyphicon-user btn-danger"></i>
+                                }
+                                @if (item.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                {
+                                    <i class="glyphicon glyphicon-user btn-primary"></i>
+                                }
+                                &nbsp;
+                                @Html.DisplayFor(modelItem => item.TcmClient.Client.Name)
+                                |
+                                @Html.DisplayFor(modelItem => item.TcmClient.CaseNumber)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.DateServicePlan)
+                            </td>
+                            <td align="center">
+                                @if (item.Approved == 2)
+                                {
+                                    <span class="label label-success">
+                                        Approved
+                                    </span>
+                                }
+                                @if (item.Approved == 1)
+                                {
+                                    <span class="label label-info">
+                                        Pending
+                                    </span>
+                                }
+                                @if (item.Approved == 0)
+                                {
+                                    <span class="label label-warning">
+                                        Edition
+                                    </span>
+                                }
+                            </td>
+                            <td align="right">
+                                @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("CaseManager"))
+                                {
+                                    @if (item.Approved == 0)
                                     {
-                                        <span class="label label-success">
-                                            @Html.DisplayFor(modelItem => item.TcmClient.CaseNumber)
-                                        </span>
-                                    }
-                                    @if (item.TcmClient.Status == KyoS.Common.Enums.StatusType.Close)
-                                    {
-                                        <span class="label label-default">
-                                            @Html.DisplayFor(modelItem => item.TcmClient.CaseNumber)
-                                        </span>
-                                    }
-                                </td>                               
-                                <td>
-                                    @if (item.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
-                                    {
-                                        <i class="glyphicon glyphicon-user btn-danger"></i>
-                                    }
-                                    @if (item.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
-                                    {
-                                        <i class="glyphicon glyphicon-user btn-primary"></i>
-                                    }
-                                    &nbsp;
-                                    @Html.DisplayFor(modelItem => item.TcmClient.Client.Name)
-                                </td>
-                                <td  >
-                                    @Html.DisplayFor(modelItem => item.TcmClient.Casemanager.Name)
-                                </td>
-                                <td  align="center">
-                                    @Html.DisplayFor(modelItem => item.DateServicePlan)
-                                </td>
-                                <td align="center">
-                                    @if (item.Approved == 2)
-                                    {
-                                        <span class="label label-success">
-                                            Approved
-                                        </span>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-warning" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("CreateDomain", "TCMServiceplans", new { id = item.Id, aview = 1 }, Context.Request.Scheme)','Create TCM Domain')" class="btn btn-info" title="Create TCM Domain"><i class="glyphicon glyphicon-plus"></i></a>
+                                        <a asp-action="FinishEditing" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Finish Editing TCM Service Plan"><i class="glyphicon glyphicon-ok"></i></a>
+                                        <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                     }
                                     @if (item.Approved == 1)
                                     {
-                                        <span class="label label-info">
-                                            Pending
-                                        </span>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-warning" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("CreateDomain", "TCMServiceplans", new { id = item.Id, aview = 2 }, Context.Request.Scheme)','Create TCM Domain')" class="btn btn-info" title="Create TCM Domain"><i class="glyphicon glyphicon-plus"></i></a>
+                                        <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                        <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                     }
+                                    @if (item.Approved == 2)
+                                    {
+                                        <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                        <i title="Approved" class="btn btn-info disabled glyphicon glyphicon-plus"></i>
+                                        <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                        <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan"><i class="glyphicon glyphicon-print"></i></a>
+                                    }
+                                }
+                                @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                                {
                                     @if (item.Approved == 0)
                                     {
-                                        <span class="label label-warning">
-                                            Edition
-                                        </span>
+                                        <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                        <i title="Approved" class="btn btn-info disabled glyphicon glyphicon-plus"></i>
+                                        <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                        <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                     }
-                                </td>
-                                <td align="right">
-                                    @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("CaseManager"))
+                                    @if (item.Approved == 1)
                                     {
-                                        @if (item.Approved == 0)
+                                        <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                        <i title="Approved" class="btn btn-info disabled glyphicon glyphicon-plus"></i>
+                                        @if (User.IsInRole("TCMSupervisor"))
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-warning" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a onclick="showInPopup('@Url.Action("CreateDomain", "TCMServiceplans", new { id = item.Id, aview = 1 }, Context.Request.Scheme)','Create TCM Domain')" class="btn btn-info" title="Create TCM Domain"><i class="glyphicon glyphicon-plus"></i></a>
-                                            <a asp-action="FinishEditing" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Finish Editing TCM Service Plan"><i class="glyphicon glyphicon-ok"></i></a>
-                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                            <a asp-action="EditReadOnly" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-success" title="Approved TCM Service Plan"><i class="glyphicon glyphicon-ok"></i></a>
                                         }
-                                        @if (item.Approved == 1)
+                                        else
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-warning" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a onclick="showInPopup('@Url.Action("CreateDomain", "TCMServiceplans", new { id = item.Id, aview = 2 }, Context.Request.Scheme)','Create TCM Domain')" class="btn btn-info" title="Create TCM Domain"><i class="glyphicon glyphicon-plus"></i></a>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }
-                                        @if (item.Approved == 2)
-                                        {
-                                            <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
-                                            <i title="Approved" class="btn btn-info disabled glyphicon glyphicon-plus"></i>
-                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan"><i class="glyphicon glyphicon-print"></i></a>
-                                        }
+                                        <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                     }
-                                    @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                                    @if (item.Approved == 2)
                                     {
-                                        @if (item.Approved == 0)
-                                        {
-                                            <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
-                                            <i title="Approved" class="btn btn-info disabled glyphicon glyphicon-plus"></i>
-                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
-                                        }
-                                        @if (item.Approved == 1)
-                                        {
-                                            <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
-                                            <i title="Approved" class="btn btn-info disabled glyphicon glyphicon-plus"></i>
-                                            @if (User.IsInRole("TCMSupervisor"))
-                                            {
-                                                <a asp-action="EditReadOnly" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-success" title="Approved TCM Service Plan"><i class="glyphicon glyphicon-ok"></i></a>
-                                            }
-                                            else
-                                            {
-                                                <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            }
-                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
-                                        }
-                                        @if (item.Approved == 2)
-                                        {
-                                            <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
-                                            <i title="Approved" class="btn btn-info disabled glyphicon glyphicon-plus"></i>
-                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan"><i class="glyphicon glyphicon-print"></i></a>
-                                        }
+                                        <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                        <i title="Approved" class="btn btn-info disabled glyphicon glyphicon-plus"></i>
+                                        <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                        <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan"><i class="glyphicon glyphicon-print"></i></a>
                                     }
-                                </td>
-                            </tr>
+                                }
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

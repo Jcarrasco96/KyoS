@@ -261,48 +261,41 @@
                                     TCM <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Supervisors", "Index", "TCMSupervisors")</li>
                                     <li>@Html.ActionLink("Case Managers", "Index", "CaseMannager")</li>
-                                    <li>@Html.ActionLink("TCM Supervisors", "Index", "TCMSupervisors")</li>
                                     <li role="separator" class="divider"></li>
                                     <li>@Html.ActionLink("Services / Stages", "Index", "TCMServices")</li>
                                     <li role="separator" class="divider"></li>
                                     <li class="dropdown-submenu">
-                                        <a class="test" tabindex="-1" href="#">TCM Cases</a>
+                                        <a class="test" tabindex="-1" href="#">Cases</a>
                                         <ul class="dropdown-menu">
-                                            <li><a asp-area="" asp-controller="TCMClients" asp-action="Index">TCM Cases</a></li>
                                             <li><a asp-area="" asp-controller="TCMClients" asp-action="GetCaseNotServicePlan">Not Started Cases</a></li>
-                                            <li><a asp-area="" asp-controller="TCMClients" asp-action="GetCaseClose">Close Cases</a></li>
+                                            <li><a asp-area="" asp-controller="TCMClients" asp-action="GetCaseClose">Closed Cases</a></li>
+                                            <li><a asp-area="" asp-controller="TCMClients" asp-action="Index">All TCM Cases</a></li>
                                         </ul>
                                     </li>
-                                    <li role="separator" class="divider"></li>
-                                    <li>@Html.ActionLink("TCM All Documents", "AllDocuments", "TCMClients")</li>
-                                    <li role="separator" class="divider"></li>
                                     <li class="dropdown-submenu">
-                                        <a class="test" tabindex="-1" href="#">Services Plans / Clients</a>
+                                        <a class="test" tabindex="-1" href="#">Services Plans / Clients &nbsp;</a>
                                         <ul class="dropdown-menu">
-                                            @*<li><a asp-area="" asp-controller="TCMServicePlans" asp-action="Index">Open</a></li>*@
-                                            @*<li><a asp-area="" asp-controller="TCMServicePlans" asp-action="AproveServicePlan">Pending Approval</a></li>*@
-                                            @*<li><a asp-area="" asp-controller="TCMServicePlans" asp-action="ClosedServicePlan">Closed</a></li>*@
                                             <li>@Html.ActionLink("Started", "ServicePlanStarted", "TCMServiceplans", new { approved = 1 })</li>
-                                            <li>@Html.ActionLink("Pending Approval", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })</li>
+                                            <li>@Html.ActionLink("Pending", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })</li>
                                             <li>@Html.ActionLink("Approved", "ApprovedServicePlan", "TCMServiceplans")</li>
                                         </ul>
                                     </li>
                                     <li class="dropdown-submenu">
                                         <a class="test" tabindex="-1" href="#">Addendums</a>
                                         <ul class="dropdown-menu">
-                                            @*<li><a asp-area="" asp-controller="TCMAdendums" asp-action="Index">All Addendums</a></li>*@
-                                            @*<li><a asp-area="" asp-controller="TCMAdendums" asp-action="AproveAdendum">Pending approval</a></li>*@
                                             <li>@Html.ActionLink("Pending", "AdendumApproved", "TCMServicePlans", new { approved = 1 })</li>
                                             <li>@Html.ActionLink("All Addendums", "Adendum", "TCMServicePlans", new { aview = 1 })</li>
                                         </ul>
                                     </li>
+                                    <li>@Html.ActionLink("All Documents", "AllDocuments", "TCMClients")</li>
                                     <li role="separator" class="divider"></li>
                                     <li class="dropdown-submenu">
                                         <a class="test" tabindex="-1" href="#">Activities</a>
                                         <ul class="dropdown-menu">
+                                            <li><a asp-area="" asp-controller="TCMServices" asp-action="PendingActivity">Pending</a></li>
                                             <li><a asp-area="" asp-controller="TCMServices" asp-action="ServiceActivity">All Activities</a></li>
-                                            <li><a asp-area="" asp-controller="TCMServices" asp-action="PendingActivity">Pending approval</a></li>
                                         </ul>
                                     </li>
                                     <li>@Html.ActionLink("Billing Report", "BillingForWeek", "TCMBilling")</li>

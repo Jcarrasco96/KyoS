@@ -1,23 +1,23 @@
 ﻿@model KyoS.Web.Data.Entities.TCMClientEntity
 
 @{
-    ViewData["Title"] = "TCM Intake";
+    ViewData["Title"] = "Open Binder Section 1";
 }
 
 <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @*@Html.ActionLink("TCM Intake", "TCMIntakeDashboardReadOnly", "TCMIntakes", new { id = @Model.Id })*@
-            @Html.ActionLink("TCM All Documents", "AllDocuments", "TCMClients")
+            @Html.ActionLink("Open Binder", "TCMIntakeDashboardReadOnly", "TCMIntakes", new { id = @Model.Id })
+            @*@Html.ActionLink("TCM All Documents", "AllDocuments", "TCMClients")*@
         </li>
         @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
         {
-            <li class="active">TCM OPEN BINDER of @Model.Client.Name</li>
+            <li class="active">Open Binder of @Model.Client.Name</li>
         }
         else
         {
-            <li class="active">TCM CLOSE BINDER of @Model.Client.Name</li>
+            <li class="active">Close Binder of @Model.Client.Name</li>
         }
     </ul><!--.breadcrumb-->
 </div>
@@ -29,11 +29,11 @@
             <div class="container-fluid">
                 @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
                 {
-                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-success">OPEN BINDER SECTION 1</span></h4>
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Open Binder Section 1 - @Model.Client.Name</span></h4>
                 }
                 else
                 {
-                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">CLOSE BINDER SECTION 1</span></h4>
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Close Binder Section 1 - @Model.Client.Name</span></h4>
                 }
             </div>
             <div class="col-md-12">
@@ -45,91 +45,91 @@
             <div class="col-sm-3 col-md-2">
                 @if (Model.TCMIntakeForm != null)
                 {
-                    <a style="text-decoration: none;"  role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-success">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Intake<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form</h4>
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Intake Form <br><br></h4>
                         </div>
-                    </a>
+                    
                 }
                 else
                 {
-                    <a style="text-decoration: none;"  role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-text">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Intake<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form</h4>
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Intake Form <br><br></h4>
                         </div>
-                    </a>
+                    
                 }
             </div>
             <div class="col-sm-3 col-md-2">
                 @if (Model.TcmIntakeConsentForTreatment != null)
                 {
-                    <a style="text-decoration: none;"  role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consent for<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treatment</h4>
                         </div>
-                    </a>
+                    
                 }
                 else
                 {
-                    <a style="text-decoration: none;"  role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consent for<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treatment</h4>
                         </div>
-                    </a>
+                    
                 }
             </div>
             <div class="col-sm-3 col-md-2">
                 @if (Model.TcmIntakeConsentForRelease.Count() >= 0)
                 {
-                    <a style="text-decoration: none;"  role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consent for<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Release</h4>
                         </div>
-                    </a>
+                    
                 }
                 else
                 {
-                    <a style="text-decoration: none;" role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consent for<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Release</h4>
                         </div>
-                    </a>
+                    
                 }
             </div>
             <div class="col-sm-3 col-md-2">
                 @if (Model.TcmIntakeConsumerRights != null)
                 {
-                    <a style="text-decoration: none;"  role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consumer<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rights</h4>
                         </div>
-                    </a>
+                   
                 }
                 else
                 {
-                    <a style="text-decoration: none;"  role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consumer<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rights</h4>
                         </div>
-                    </a>
+                    
                 }
             </div>
             <div class="col-sm-3 col-md-2">
                 @if (Model.TcmIntakeAcknowledgementHipa != null)
                 {
-                    <a style="text-decoration: none;"  role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-success">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Acknowledgement<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hippa</h4>
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Acknowled.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hippa</h4>
                         </div>
-                    </a>
+                    
                 }
                 else
                 {
-                    <a style="text-decoration: none;"  role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-text">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Acknowledgement<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hippa</h4>
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Acknowled.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hippa</h4>
                         </div>
-                    </a>
+                    
                 }
             </div>
             <div class="col-md-1">
@@ -144,73 +144,73 @@
             <div class="col-sm-3 col-md-2">
                 @if (Model.TCMIntakeOrientationChecklist != null)
                 {
-                    <a style="text-decoration: none;"  role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Orientation<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checklist</h4>
                         </div>
-                    </a>
+                    
                 }
                 else
                 {
-                    <a style="text-decoration: none;"  role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Orientation<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checklist</h4>
                         </div>
-                    </a>
+                    
                 }
             </div>
             <div class="col-sm-3 col-md-2">
                 @if (Model.TCMIntakeAdvancedDirective != null)
                 {
-                    <a style="text-decoration: none;"  role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Advance<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Directive</h4>
                         </div>
-                    </a>
+                    
                 }
                 else
                 {
-                    <a style="text-decoration: none;"  role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Advance<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Directive</h4>
                         </div>
-                    </a>
+                    
                 }
             </div>
             <div class="col-sm-3 col-md-2">
                 @if (Model.TCMIntakeForeignLanguage != null)
                 {
-                    <a style="text-decoration: none;"  role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-success">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Foreign Language<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Acknowledgement</h4>
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Foreign Lang.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Acknowledgement</h4>
                         </div>
-                    </a>
+                    
                 }
                 else
                 {
-                    <a style="text-decoration: none;"  role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-text">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Foreign Language<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Acknowledgement</h4>
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Foreign Lang.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Acknowledgement</h4>
                         </div>
-                    </a>
+                    
                 }
             </div>
             <div class="col-sm-3 col-md-2">
                 @if (Model.TCMIntakeWelcome != null)
                 {
-                    <a style="text-decoration: none;"  role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Correspondence<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                         </div>
-                    </a>
+                    
                 }
                 else
                 {
-                    <a style="text-decoration: none;"  role="button">
+                    
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Correspondence<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                         </div>
-                    </a>
+                    
                 }
             </div>
             <div class="col-md-2">
@@ -224,11 +224,11 @@
             <div class="container-fluid">
                 @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
                 {
-                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-success">OPEN BINDER SECTION 2</span></h4>
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Open Binder Section 2 - @Model.Client.Name</span></h4>
                 }
                 else
                 {
-                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">CLOSE BINDER SECTION 2</span></h4>
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Close Binder Section 2 - @Model.Client.Name</span></h4>
                 }
             </div>
             <div class="col-md-12">
@@ -301,14 +301,14 @@
     @if (ViewData["Section"].ToString() == "3")
     {
         <div class="row">
-            <div class="container-fluid">
+             <div class="container-fluid">
                 @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
                 {
-                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-success">OPEN BINDER SECTION 3</span></h4>
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Open Binder Section 3 - @Model.Client.Name</span></h4>
                 }
                 else
                 {
-                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">CLOSE BINDER SECTION 3</span></h4>
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Close Binder Section 3 - @Model.Client.Name</span></h4>
                 }
             </div>
             <div class="col-md-12">
@@ -407,11 +407,11 @@
             <div class="container-fluid">
                 @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
                 {
-                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-success">OPEN BINDER SECTION 4</span></h4>
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Open Binder Section 4 - @Model.Client.Name</span></h4>
                 }
                 else
                 {
-                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">CLOSE BINDER SECTION 4</span></h4>
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Close Binder Section 4 - @Model.Client.Name</span></h4>
                 }
             </div>
             <div class="col-md-12">
@@ -427,7 +427,7 @@
                     {
                         <a style="text-decoration: none;"  role="button">
                             <div class="thumbnail list-group-item list-group-item-success">
-                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Case Management<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assessment</h4>
+                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Case Manag.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assessment</h4>
                             </div>
                         </a>
                     }
@@ -435,7 +435,7 @@
                     {
                         <a style="text-decoration: none;"  role="button">
                             <div class="thumbnail list-group-item list-group-item-warning">
-                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Case Management<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assessment</h4>
+                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Case Manag.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assessment</h4>
                             </div>
                         </a>
                     }
@@ -443,7 +443,7 @@
                     {
                         <a style="text-decoration: none;"  role="button">
                             <div class="thumbnail list-group-item list-group-item-info">
-                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Case Management<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assessment</h4>
+                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Case Manag.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assessment</h4>
                             </div>
                         </a>
                     }
@@ -453,7 +453,7 @@
                 {
                     <a style="text-decoration: none;" role="button">
                         <div class="thumbnail list-group-item list-group-item-text">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Case Management<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assessment</h4>
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Case Manag.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assessment</h4>
                         </div>
                     </a>
                 }
@@ -705,11 +705,11 @@
             <div class="container-fluid">
                 @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
                 {
-                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-success">OPEN BINDER SECTION 5</span></h4>
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Open Binder Section 5 - @Model.Client.Name</span></h4>
                 }
                 else
                 {
-                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">CLOSE BINDER SECTION 5</span></h4>
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Close Binder Section 5 - @Model.Client.Name</span></h4>
                 }
             </div>
             <div class="col-md-12">
@@ -741,7 +741,7 @@
                 {
                     <a style="text-decoration: none;" role="button">
                         <div class="thumbnail list-group-item list-group-item-text">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Fars<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form</h4>
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Fars Form<br /><br /></h4>
                             <span class="message-counter-cero">@Model.TCMFarsFormList.Count()</span>
                         </div>
                     </a>
@@ -750,7 +750,7 @@
                 {
                     <a style="text-decoration: none;" role="button">
                         <div class="thumbnail list-group-item list-group-item-success">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Fars<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form</h4>
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Fars Form<br /><br /></h4>
                             <span class="message-counter-success">@Model.TCMFarsFormList.Count()</span>
                         </div>
                     </a>
@@ -767,11 +767,11 @@
             <div class="container-fluid">
                 @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
                 {
-                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-success">OPEN BINDER SECTION 6</span></h4>
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Open Binder Section 6 - @Model.Client.Name</span></h4>
                 }
                 else
                 {
-                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">CLOSE BINDER SECTION 6</span></h4>
+                    <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Close Binder Section 6 - @Model.Client.Name</span></h4>
                 }
             </div>
             <div class="col-md-12">
@@ -804,12 +804,7 @@
                 &nbsp;
             </div>
         </div>
-    }
-    else
-    {
-
-
-    }
+    }    
 </div>
 
 
