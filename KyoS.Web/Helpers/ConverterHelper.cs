@@ -1404,7 +1404,8 @@ namespace KyoS.Web.Helpers
                 strengths = TcmServicePlanEntity.Strengths,
                 weakness = TcmServicePlanEntity.Weakness,
                 CaseNumber = TcmServicePlanEntity.TcmClient.CaseNumber,
-                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2,
+                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2
+                
                 //TcmClients = _combosHelper.GetComboClientsForTCMCaseOpen(TcmServicePlanEntity.TcmClient.Client.Clinic.Id),
                 //TCMDomain = TcmServicePlanEntity.TCMDomain
 
@@ -1424,13 +1425,18 @@ namespace KyoS.Web.Helpers
                 DateServicePlan = model.Date_ServicePlan,
                 DateAssessment = model.Date_Assessment,
                 DateCertification = model.Date_Certification,
-                TcmClient = await _context.TCMClient.FindAsync(model.ID_TcmClient),
+                TcmClient = await _context.TCMClient
+                                          .Include(n => n.Client)
+                                          .FirstOrDefaultAsync(n => n.Id == model.ID_TcmClient),
                 DischargerCriteria = model.dischargerCriteria,
                 Weakness = model.weakness,
                 Strengths = model.strengths,
                 Status = StatusUtils.GetStatusByIndex(model.ID_Status),
-                Approved = model.Approved
-               
+                Approved = model.Approved,
+                TCMMessages = _context.TCMMessages
+                                      .Where(n => n.TCMServicePlan.Id == model.Id)
+                                      .ToList()
+
             };
         }
 
@@ -2026,7 +2032,9 @@ namespace KyoS.Web.Helpers
                 StatusListObjetive = _combosHelper.GetComboObjetiveStatus(),
                 IdServicePlan = TcmServicePlanReviewEntity.TcmServicePlan.Id,
                 _TCMServicePlanRevDomain = TcmServicePlanReviewEntity.TCMServicePlanRevDomain,
-
+                Approved = TcmServicePlanReviewEntity.Approved,
+                CreatedBy = TcmServicePlanReviewEntity.CreatedBy,
+                CreatedOn = TcmServicePlanReviewEntity.CreatedOn
                 //ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2,
 
             };
@@ -5619,8 +5627,12 @@ namespace KyoS.Web.Helpers
                 ServiceCode = model.ServiceCode,
                 Status = model.Status,
                 TCMClient = _context.TCMClient
-                                    .FirstOrDefault(n => n.Id == model.IdTCMClient)
-               
+                                    .Include(n => n.Client)
+                                    .FirstOrDefault(n => n.Id == model.IdTCMClient),
+                TCMMessages = _context.TCMMessages
+                                      .Where(n => n.TCMNote.Id == model.Id)
+                                      .ToList()
+
             };
         }
 
@@ -5790,6 +5802,35 @@ namespace KyoS.Web.Helpers
                 IdTCMClient = model.IdTCMClient,
                 DateOfServiceOfNote = model.StartTime
             };
-        }        
+        }
+
+        public async Task<TCMMessageEntity> ToTCMMessageEntity(TCMMessageViewModel model, bool isNew)
+        {
+
+            return new TCMMessageEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TCMNote = (model.IdTCMNote != 0) ? await _context.TCMNote
+                                                              .Include(wc => wc.CaseManager)
+                                                              .FirstOrDefaultAsync(wc => wc.Id == model.IdTCMNote) : null,
+                TCMFarsForm = (model.IdTCMFarsForm != 0) ? await _context.TCMFarsForm
+                                                                   .FirstOrDefaultAsync(a => a.Id == model.IdTCMFarsForm) : null,
+                TCMServicePlan = (model.IdTCMServiceplan != 0) ? await _context.TCMServicePlans
+                                                                   .FirstOrDefaultAsync(a => a.Id == model.IdTCMServiceplan) : null,
+                TCMServicePlanReview = (model.IdTCMServiceplanReview != 0) ? await _context.TCMServicePlanReviews
+                                                                   .FirstOrDefaultAsync(a => a.Id == model.IdTCMServiceplanReview) : null,
+                TCMAssessment = (model.IdTCMAssessment != 0) ? await _context.TCMAssessment
+                                                                   .FirstOrDefaultAsync(a => a.Id == model.IdTCMAssessment) : null,
+                TCMAddendum = (model.IdTCMAddendum != 0) ? await _context.TCMAdendums
+                                                                   .FirstOrDefaultAsync(a => a.Id == model.IdTCMAddendum) : null,
+                TCMDischarge = (model.IdTCMDischarge != 0) ? await _context.TCMDischarge
+                                                                     .FirstOrDefaultAsync(d => d.Id == model.IdTCMDischarge) : null,
+                Title = model.Title,
+                Text = model.Text,
+                DateCreated = DateTime.Now,
+                Status = MessageStatus.NotRead,
+                Notification = model.Notification
+            };
+        }
     }
 }

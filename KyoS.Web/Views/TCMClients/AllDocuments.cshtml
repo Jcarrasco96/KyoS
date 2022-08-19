@@ -19,20 +19,6 @@
 {
     <div class="row">
         <div class="col-md-12">
-            @if (ViewBag.Delete == "N")
-            {
-                <div class="alert alert-block alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <i class="icon-remove"></i>
-                    </button>
-                    <strong class="red">
-                        Error. It is not posible delete the TCM case
-                    </strong>
-                </div>
-            }
-        </div>
-
-        <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">TCM All Documents</h3>
@@ -51,13 +37,13 @@
                                     Consent
                                 </th>
                                 <th class="col-md-1" style="text-align: center;">
-                                    Service PLan
+                                    Service Plan
                                 </th>
                                 <th class="col-md-1" style="text-align: center;">
                                     Addendum
                                 </th>
                                 <th class="col-md-1" style="text-align: center;">
-                                    Service P. Review
+                                    Service Plan R.
                                 </th>
                                 <th class="col-md-1" style="text-align: center;">
                                     Assessment
@@ -66,12 +52,11 @@
                                     Appendix J
                                 </th>
                                 <th class="col-md-1" style="text-align: center;">
-                                    FARS Forms
+                                    FARS
                                 </th>
                                 <th class="col-md-1" style="text-align: center;">
                                     Discharge
                                 </th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -79,19 +64,6 @@
                             {
                                 <tr>
                                     <td>
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                                        {
-                                            <span class="label label-success">
-                                                @Html.DisplayFor(modelItem => item.CaseNumber)
-                                            </span>
-                                        }
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                                        {
-                                            <span class="label label-default">
-                                                @Html.DisplayFor(modelItem => item.CaseNumber)
-                                            </span>
-                                        }
-                                        &nbsp;
                                         @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
                                             <i class="glyphicon glyphicon-user btn-danger"></i>
@@ -102,6 +74,8 @@
                                         }
                                         &nbsp;
                                         @Html.DisplayFor(modelItem => item.Client.Name)
+                                        |
+                                        @Html.DisplayFor(modelItem => item.CaseNumber)
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.DataOpen)
@@ -110,8 +84,8 @@
                                         @if (User.IsInRole("CaseManager"))
                                         {
                                             @if ((item.TCMIntakeForm != null) || (item.TcmIntakeConsentForTreatment != null) || (item.TcmIntakeConsentForRelease != null) || (item.TcmIntakeConsumerRights != null)
-                                    || (item.TcmIntakeAcknowledgementHipa != null) || (item.TCMIntakeOrientationChecklist != null) || (item.TCMIntakeAdvancedDirective != null)
-                                    || (item.TCMIntakeForeignLanguage != null) || (item.TCMIntakeWelcome != null))
+                                             || (item.TcmIntakeAcknowledgementHipa != null) || (item.TCMIntakeOrientationChecklist != null) || (item.TCMIntakeAdvancedDirective != null)
+                                             || (item.TCMIntakeForeignLanguage != null) || (item.TCMIntakeWelcome != null))
                                             {
                                                 <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-section="1" asp-route-origin="1" class="btn btn-default" title="Print"><i class="glyphicon glyphicon-share"></i></a>
                                                 @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
@@ -125,8 +99,8 @@
                                         else
                                         {
                                             @if ((item.TCMIntakeForm != null) || (item.TcmIntakeConsentForTreatment != null) || (item.TcmIntakeConsentForRelease != null) || (item.TcmIntakeConsumerRights != null)
-                                           || (item.TcmIntakeAcknowledgementHipa != null) || (item.TCMIntakeOrientationChecklist != null) || (item.TCMIntakeAdvancedDirective != null)
-                                           || (item.TCMIntakeForeignLanguage != null) || (item.TCMIntakeWelcome != null))
+                                             || (item.TcmIntakeAcknowledgementHipa != null) || (item.TCMIntakeOrientationChecklist != null) || (item.TCMIntakeAdvancedDirective != null)
+                                             || (item.TCMIntakeForeignLanguage != null) || (item.TCMIntakeWelcome != null))
                                             {
                                                 <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-section="1" class="btn btn-default" title="Print"><i class="glyphicon glyphicon-share"></i></a>
                                                 @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
@@ -137,7 +111,6 @@
                                                 @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
                                             }
                                         }
-
                                     </td>
                                     <td align="center">
                                         @if (item.TcmServicePlan == null)
@@ -161,7 +134,6 @@
                                                 <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
-
                                     </td>
                                     <td align="center">
                                         @if (item.TcmServicePlan.TCMAdendum == null)
@@ -316,19 +288,7 @@
 
             $('#MyTable').DataTable({
                "pageLength": 100
-            });
-
-            // Delete item
-            //var item_to_delete;
-
-            @*$('.deleteItem').click((e) => {
-                item_to_delete = e.currentTarget.dataset.id;
-            });
-
-            $("#btnYesDelete").click(function () {
-                var url = "@Url.Action("Delete", "WorkDays")";
-                window.location.href = url + '/' + item_to_delete;
-            });*@
+            });            
         });
     </script>
 }

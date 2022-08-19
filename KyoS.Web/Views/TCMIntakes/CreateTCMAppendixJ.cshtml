@@ -31,9 +31,18 @@
             <input type="hidden" asp-for="AdmissionedFor" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="Approved" />
             <partial name="_TCMIntakeAppendixJ" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                @if (Model.Approved == 0)
+                {
+                    <a asp-action="FinishEditingAppendixJ" asp-route-id="@Model.Id" asp-controller="TCMIntakes" class="btn btn-warning ">Finish Edition</a>
+                }
+                else
+                {
+                    <a asp-action="FinishEditingAppendixJ" asp-route-id="@Model.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled">Finish Edition</a>
+                }
                 <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.IdTCMClient" asp-route-section="4" class="btn btn-success">Back</a>
             </div>
         </form>

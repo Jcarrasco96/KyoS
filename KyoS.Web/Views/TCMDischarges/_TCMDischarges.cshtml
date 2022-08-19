@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.TCMDischargeViewModel
 
-<div class="container-fluid">
+
     <div class="form-group col-md-4">
         <label asp-for="TcmServicePlan.TcmClient.Client.Name" class="control-label">Name of Recipient</label>&nbsp;*
         <input asp-for="TcmServicePlan.TcmClient.Client.Name" class="form-control" readonly>
@@ -26,8 +26,8 @@
         <input asp-for="DischargeDate" class="form-control">
         <span asp-validation-for="DischargeDate" class="text-danger"></span>
     </div>
-</div>
-<div class="container-fluid ">
+
+
     <div class="form-group col-md-6">
         <br />
         <label asp-for="PresentProblems" class="control-label">Present Problems (According to the “Presenting Problems” section of the Assessment that was completed upon admission)</label><br />
@@ -39,9 +39,9 @@
         <textarea asp-for="ProgressToward" class="form-control" rows="4"></textarea>
         <span asp-validation-for="ProgressToward" class="text-danger"></span>
     </div>
-</div>
 
-<div class="container-fluid">
+
+
     <div class="form-group col-md-12">
         <pre>
         <strong><u>Reason for Discharge </u></strong>(check only one):
@@ -53,4 +53,4 @@
         <textarea asp-for="AdministrativeDischarge_Explain" style="width:90%"></textarea>
         </pre>
     </div>
-</div>
+

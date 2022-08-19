@@ -16,6 +16,7 @@ namespace KyoS.Web.Data.Entities
 
         public TCMClientEntity TcmClient { get; set; }
 
+        [DataType(DataType.Date)]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime DateAssessment { get; set; }
 
@@ -55,6 +56,7 @@ namespace KyoS.Web.Data.Entities
 
         //SECTION 3
         public string PresentingProblems { get; set; }
+        [DataType(DataType.Date)]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime DateOfOnSetPresentingProblem { get; set; }
         public bool PresentingProblemPrevious { get; set; }

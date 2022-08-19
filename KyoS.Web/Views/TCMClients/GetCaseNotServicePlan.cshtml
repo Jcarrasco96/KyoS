@@ -19,20 +19,6 @@
 {
 <div class="row">
     <div class="col-md-12">
-        @if (ViewBag.Delete == "N")
-        {
-            <div class="alert alert-block alert-danger">
-                <button type="button" class="close" data-dismiss="alert">
-                    <i class="icon-remove"></i>
-                </button>
-                <strong class="red">
-                    Error. It is not posible delete the TCM case
-                </strong>
-            </div>
-        }
-    </div>
-
-    <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Not started TCM Cases</h3>
@@ -41,21 +27,21 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>                            
+                            <th class="col-md-3">
+                                Case Manager
+                            </th>
                             <th class="col-md-4">
                                 Client Name
-                            </th>
+                            </th>          
                             <th class="col-md-2" style="text-align: center;">
-                                Case Number
-                            </th>
-                            <th class="col-md-2" style="text-align: center;">
-                                Open Date
-                            </th>
-                            <th class="col-md-2" style="text-align: center;">
-                                Close Date
+                                Client Status
                             </th>
                             <th class="col-md-1" style="text-align: center;">
-                                Status
+                                Open Date
                             </th>
+                            <th class="col-md-1" style="text-align: center;">
+                                Close Date
+                            </th>                            
                             <th class="col-md-1" style="text-align: center;">
                             </th>
                         </tr>
@@ -63,7 +49,10 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>                                
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Casemanager.Name)
+                                </td>
                                 <td>
                                     @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                     {
@@ -75,14 +64,8 @@
                                     }
                                     &nbsp;
                                     @Html.DisplayFor(modelItem => item.Client.Name)
-                                <td align="center">
+                                    |
                                     @Html.DisplayFor(modelItem => item.CaseNumber)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.DataOpen)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.DataClose)
                                 </td>
                                 <td align="center">
                                     @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -98,8 +81,13 @@
                                         </span>
                                     }
                                 </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DataOpen)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DataClose)
+                                </td>                                
                                 <td align="right">
-
                                     @if ( User.IsInRole("CaseManager"))
                                     {
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open )
@@ -134,20 +122,9 @@
         $(document).ready(function () {
 
             $('#MyTable').DataTable({
+               "order": [[0, "asc"]],
                "pageLength": 100
-            });
-
-            // Delete item
-            //var item_to_delete;
-
-            @*$('.deleteItem').click((e) => {
-                item_to_delete = e.currentTarget.dataset.id;
-            });
-
-            $("#btnYesDelete").click(function () {
-                var url = "@Url.Action("Delete", "WorkDays")";
-                window.location.href = url + '/' + item_to_delete;
-            });*@
+            });            
         });
     </script>
 }

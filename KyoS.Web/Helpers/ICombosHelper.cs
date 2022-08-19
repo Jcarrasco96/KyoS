@@ -49,8 +49,10 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboServices();
         IEnumerable<SelectListItem> GetComboCaseManager();
         IEnumerable<SelectListItem> GetComboCasemannagersByClinic(int idClinic);
+        IEnumerable<SelectListItem> GetComboCaseMannagersByClinicFilter(int idClinic);
         IEnumerable<SelectListItem> GetComboClientsForTCMCaseNotOpen(int idClinic);
         IEnumerable<SelectListItem> GetComboClientsForTCMCaseOpen(int idClinic);
+        IEnumerable<SelectListItem> GetComboClientsForTCMCaseOpenFilter(int idClinic);
         IEnumerable<SelectListItem> GetComboServicesNotUsed(int idServicePlan);
         IEnumerable<SelectListItem> GetComboStagesNotUsed(TCMDomainEntity Domain);
         IEnumerable<SelectListItem> GetComboServicesPlan(int idClinic, int caseManagerId, string idClient);
@@ -67,6 +69,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboTCMNoteSetting();
         IEnumerable<SelectListItem> GetComboServicesUsed(int idServicePlan);
         IEnumerable<SelectListItem> GetComboTCMNoteActivity(string codeDomain);
-        IEnumerable<SelectListItem> GetComboTCMClientsByCasemanager(string user);
+        IEnumerable<SelectListItem> GetComboTCMClientsByCaseManager(string user);
     }
 }

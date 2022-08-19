@@ -11,13 +11,13 @@
             <i class="icon-home"></i>
                 @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Services Plan</li>
+        <li class="active">Services Plan in edition</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <div class="row">
     <div id="view-tcmServicePlan">
-        @await Html.PartialAsync("_TCMServicePlan", Model.ToList())
+        @await Html.PartialAsync("_TCMServicePlanStarted", Model.ToList())
     </div>
 </div>
 <partial name="_ModalPopup" />

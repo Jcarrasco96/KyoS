@@ -68,6 +68,14 @@
                 <br />
                 <div class="form-group col-md-12">
                     <input type="submit" value="Save" class="btn btn-primary" />
+                    @if (Model.Approved == 0)
+                    {
+                        <a asp-action="FinishEditing" asp-route-id="@Model.Id" asp-controller="TCMDischarges" class="btn btn-warning">Finish Edition</a>
+                    }
+                    else
+                    {
+                        <a asp-action="FinishEditing" asp-route-id="@Model.Id" asp-controller="TCMDischarges" class="btn btn-warning disabled">Finish Edition</a>
+                    }
                     @if (@ViewData["origin"].ToString() == "0")
                     {
                         <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmServicePlan.TcmClient.Id" asp-route-section="4" asp-controller="TCMIntakes" class="btn btn-success">Back</a>

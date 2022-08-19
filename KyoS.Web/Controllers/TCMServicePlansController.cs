@@ -172,11 +172,11 @@ namespace KyoS.Web.Controllers
                             ID_Status = 1,
                             status = _combosHelper.GetComboClientStatus(),
                             CaseNumber = _context.TCMClient.FirstOrDefault(u => u.Id == id).CaseNumber,
-                            Date_ServicePlan = DateTime.Today.Date,
-                            Date_Intake = DateTime.Today.Date,
-                            Date_Assessment = DateTime.Today.Date,
-                            Date_Certification = DateTime.Today.Date
-                            
+                            Date_ServicePlan = DateTime.Now.Date,
+                            Date_Intake = DateTime.Now.Date,
+                            Date_Assessment = DateTime.Now.Date,
+                            Date_Certification = DateTime.Now.Date
+
                         };
                         ViewData["origin"] = origin;
                         return View(model);
@@ -326,7 +326,37 @@ namespace KyoS.Web.Controllers
              {
                  
                   TCMServicePlanEntity tcmServicePlanEntity = await _converterHelper.ToTCMServicePlanEntity(serviceplanViewModel, false, user_logged.UserName);
-                  _context.Update(tcmServicePlanEntity);
+
+                List<TCMMessageEntity> messages = tcmServicePlanEntity.TCMMessages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
+                foreach (TCMMessageEntity value in messages)
+                {
+                    value.Status = MessageStatus.Read;
+                    value.DateRead = DateTime.Now;
+                    _context.Update(value);
+
+                    //I generate a notification to supervisor
+                    TCMMessageEntity notification = new TCMMessageEntity
+                    {
+                        TCMNote = null,
+                        TCMFarsForm = null,
+                        TCMServicePlan = tcmServicePlanEntity,
+                        TCMServicePlanReview = null,
+                        TCMAddendum = null,
+                        TCMDischarge = null,
+                        TCMAssessment = null,
+                        Title = "Update on reviewed TCM Service plan",
+                        Text = $"The TCM Service plan of {tcmServicePlanEntity.TcmClient.Client.Name} on {tcmServicePlanEntity.DateServicePlan.ToShortDateString()} was rectified",
+                        From = value.To,
+                        To = value.From,
+                        DateCreated = DateTime.Now,
+                        Status = MessageStatus.NotRead,
+                        Notification = true
+                    };
+                    _context.Add(notification);
+                }
+
+                _context.Update(tcmServicePlanEntity);
                   try
                   {
                        await _context.SaveChangesAsync();
@@ -338,7 +368,22 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = (origin - 1) });
+                        if (origin == 3)
+                        {
+                            return RedirectToAction("TCMServicePlanWithReview", "TCMServicePlans");
+                        }
+                        else
+                        {
+                            if (origin == 4)
+                            {
+                                return RedirectToAction("MessagesOfServicePlan", "TCMMessages");
+                            }
+                            else
+                            {
+                                return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = (origin - 1) });
+                            }
+                        }
+                            
                     }
                     
                   }
@@ -354,9 +399,10 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager")]
         public async Task<IActionResult> FinishEditing(int id, int origin = 0)
         {
-            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans.Include(u => u.TcmClient)
-                                                         .ThenInclude(u => u.Client)
-                                                         .FirstOrDefault(u => u.Id == id);
+            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
+                                                          .Include(u => u.TcmClient)
+                                                          .ThenInclude(u => u.Client)
+                                                          .FirstOrDefault(u => u.Id == id);
            
             if (tcmServicePlan != null)
             {
@@ -374,7 +420,7 @@ namespace KyoS.Web.Controllers
                             await _context.SaveChangesAsync();
                             if (origin == 0)
                             {
-                                return RedirectToAction("Index", "TCMServicePlans", new { caseNumber = tcmServicePlan.TcmClient.CaseNumber });
+                                return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = tcmServicePlan.TcmClient.Id, section = 4 });
                             }
                             else
                             {
@@ -393,10 +439,8 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Index", "TCMServicePlans");
         }
 
-       
-        
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> AproveServicePlan(int id)
+        public async Task<IActionResult> AproveServicePlan(int id, int origi = 0)
         {
             TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans.Include(u => u.TcmClient)
                                                          .ThenInclude(u => u.Client)
@@ -417,8 +461,14 @@ namespace KyoS.Web.Controllers
                         try
                         {
                             await _context.SaveChangesAsync();
-
-                            return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = 1 });
+                            if (origi == 0)
+                            {
+                                return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = 1 });
+                            }
+                            if (origi == 3)
+                            {
+                                return RedirectToAction("Notifications", "TCMMessages");
+                            }
                         }
                         catch (System.Exception ex)
                         {
@@ -1890,7 +1940,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> EditReadOnly(int Id = 0)
+        public async Task<IActionResult> EditReadOnly(int Id = 0, int origi = 0)
         {
             TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
                                                           .Include(f => f.TCMDomain)
@@ -1957,6 +2007,7 @@ namespace KyoS.Web.Controllers
                         };
 
                         model.TCMDomain = model.TCMDomain.Where(n => (n.Origin == "Service Plan")).ToList();
+                        ViewData["origi"] = origi;
                         return View(model);
                     }
                     return RedirectToAction("NotAuthorized", "Account");
@@ -2041,6 +2092,98 @@ namespace KyoS.Web.Controllers
             ViewData["aview"] = aview;
             return View(tcmAdendumViewModel);
         }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public IActionResult AddMessageEntity(int id = 0, int origi = 0)
+        {
+            if (id == 0)
+            {
+                return View(new TCMMessageViewModel());
+            }
+            else
+            {
+                TCMMessageViewModel model = new TCMMessageViewModel()
+                {
+                    IdTCMServiceplan = id,
+                    Origin = origi
+                };
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> AddMessageEntity(TCMMessageViewModel messageViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                TCMMessageEntity model = await _converterHelper.ToTCMMessageEntity(messageViewModel, true);
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                model.From = user_logged.UserName;
+                model.To = model.TCMServicePlan.CreatedBy;
+                _context.Add(model);
+                await _context.SaveChangesAsync();
+            }
+
+            if (messageViewModel.Origin == 1)
+                return RedirectToAction("ServicePlanStarted", new { approved  = 1});
+
+            if (messageViewModel.Origin == 2)
+                return RedirectToAction("TCMServicePlanWithReview");
+            if (messageViewModel.Origin == 3)
+                return RedirectToAction("Notifications", "TCMMessages");
+
+            return RedirectToAction("Index");
+        }
+
+
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        public async Task<IActionResult> TCMServicePlanWithReview()
+        {
+            if (User.IsInRole("CaseManager"))
+            {
+                List<TCMServicePlanEntity> salida = await _context.TCMServicePlans
+                                                                  .Include(wc => wc.TcmClient)
+                                                                  .ThenInclude(wc => wc.Casemanager)
+                                                                  .Include(wc => wc.TcmClient)
+                                                                  .ThenInclude(wc => wc.Client)
+                                                                  .Include(wc => wc.TCMMessages.Where(m => m.Notification == false))
+                                                                  .Where(wc => (wc.TcmClient.Casemanager.LinkedUser == User.Identity.Name
+                                                                        && wc.Approved == 1
+                                                                        && wc.TCMMessages.Count() > 0))
+                                                                  .ToListAsync();
+
+
+                return View(salida);
+            }
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    List<TCMServicePlanEntity> salida = await _context.TCMServicePlans
+                                                                  .Include(wc => wc.TcmClient)
+                                                                  .ThenInclude(wc => wc.Casemanager)
+                                                                  .Include(wc => wc.TcmClient)
+                                                                  .ThenInclude(wc => wc.Client)
+                                                                  .Include(wc => wc.TCMMessages.Where(m => m.Notification == false))
+                                                                  .Where(wc => (wc.TcmClient.Casemanager.Clinic.Id == user_logged.Clinic.Id
+                                                                    && wc.Approved == 1
+                                                                    && wc.TCMMessages.Count() > 0))
+                                                                  .ToListAsync();
+                    return View(salida);
+                }
+            }
+
+            return View();
+        }
+
 
     }
 }

@@ -414,7 +414,7 @@ namespace KyoS.Web.Controllers
                             await _context.SaveChangesAsync();
                             if (origin == 0)
                             {
-                                return RedirectToAction("Index", "TCMServicePlanReviews");
+                                return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = tcmServicePlanReview.TcmServicePlan.TcmClient.Id, section = 4 });
                             }
                             else
                             {

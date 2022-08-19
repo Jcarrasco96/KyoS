@@ -14,6 +14,7 @@ namespace KyoS.Web.Data.Entities
 
         public TCMIntakeInterventionLogEntity TcmInterventionLog { get; set; }
 
+        [DataType(DataType.Date)]
         public DateTime Date { get; set; }
         public string Activity { get; set; }
 
