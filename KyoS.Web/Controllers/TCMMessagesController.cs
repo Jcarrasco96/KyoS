@@ -45,6 +45,10 @@ namespace KyoS.Web.Controllers
                                                                            && m.TCMDischarge != null && m.Notification == false))
                                                              .ToString();
 
+                ViewBag.CountsMessagesTCMFars = _context.TCMMessages
+                                                        .Count(m => (m.To == user_logged.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead
+                                                                           && m.TCMFarsForm != null && m.Notification == false))
+                                                        .ToString();
             }
             
             return View();
@@ -190,5 +194,23 @@ namespace KyoS.Web.Controllers
 
             return View();
         }
+
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> MessagesOfFars(int id = 0)
+        {
+            if (User.IsInRole("CaseManager"))
+            {
+                return View(await _context.TCMFarsForm
+                                          .Include(wc => wc.TCMClient.Casemanager)
+                                          .Include(wc => wc.TCMClient.Client)
+                                          .Include(wc => wc.TcmMessages.Where(m => m.Notification == false))
+                                          .Where(wc => (wc.TCMClient.Casemanager.LinkedUser == User.Identity.Name
+                                                     && wc.TcmMessages.Count() > 0))
+                                          .ToListAsync());
+            }
+
+            return View();
+        }
+
     }
 }

@@ -146,6 +146,6 @@ namespace KyoS.Web.Data.Entities
 
         public FarsStatus Status { get; set; }
 
-        public IEnumerable<MessageEntity> Messages { get; set; }
+        public IEnumerable<TCMMessageEntity> TcmMessages { get; set; }
     }
 }

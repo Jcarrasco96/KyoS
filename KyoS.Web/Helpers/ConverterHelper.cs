@@ -4394,7 +4394,9 @@ namespace KyoS.Web.Helpers
             return new TCMFarsFormEntity
             {
                 Id = isNew ? 0 : model.Id,
-                TCMClient = await _context.TCMClient.FirstOrDefaultAsync(c => c.Id == model.IdTCMClient),
+                TCMClient = await _context.TCMClient
+                                          .Include(n => n.Client)  
+                                          .FirstOrDefaultAsync(c => c.Id == model.IdTCMClient),
                 AbilityScale = model.AbilityScale,
                 ActivitiesScale = model.ActivitiesScale,
                 AdmissionedFor = model.AdmissionedFor,
@@ -4437,7 +4439,10 @@ namespace KyoS.Web.Helpers
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
-                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmMessages = _context.TCMMessages
+                                      .Where(n => n.TCMFarsForm.Id == model.Id)
+                                      .ToList()
             };
         }
 

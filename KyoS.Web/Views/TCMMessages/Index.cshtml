@@ -93,21 +93,21 @@
                     }
                 </div>
                 <div class="col-md-2">
-                    @if (ViewBag.CountsMessagesAddendum == "0")
+                    @if (ViewBag.CountsMessagesTCMFars == "0")
                     {
-                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfAddendums" role="button">
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfFars" role="button">
                             <div class="thumbnail list-group-item list-group-item-text">
-                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Addendums</h4>
-                                <span class="message-counter-cero">@ViewBag.CountsMessagesAddendum</span>
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>FARS</h4>
+                                <span class="message-counter-cero">@ViewBag.CountsMessagesTCMFars</span>
                             </div>
                         </a>
                     }
                     else
                     {
-                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfAddendums" role="button">
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfFars" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
-                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Addendums</h4>
-                                <span class="message-counter">@ViewBag.CountsMessagesAddendum</span>
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>FARS</h4>
+                                <span class="message-counter">@ViewBag.CountsMessagesTCMFars</span>
                             </div>
                         </a>
                     }

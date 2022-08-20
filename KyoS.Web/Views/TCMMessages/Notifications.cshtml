@@ -116,6 +116,20 @@
                                                             <a asp-controller="TCMDischarges" asp-action="EditReadOnly" asp-route-id="@notification.TCMDischarge.Id" asp-route-origi="2" class="btn btn-warning" title="View TCM Discharge"><i class="glyphicon glyphicon-file"></i></a>
                                                         }
                                                     }
+                                                    else
+                                                    {
+                                                        if (notification.TCMFarsForm != null)
+                                                        {
+                                                            if (notification.TCMFarsForm.Status == KyoS.Common.Enums.FarsStatus.Approved)
+                                                            {
+                                                                <a class="btn btn-warning disabled" title="View TCM FARS"><i class="glyphicon glyphicon-file"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a asp-controller="TCMFarsForms" asp-action="EditReadOnly" asp-route-id="@notification.TCMFarsForm.Id" asp-route-origi="1" class="btn btn-warning" title="View TCM FARS"><i class="glyphicon glyphicon-file"></i></a>
+                                                            }
+                                                        }
+                                                    }
                                                 }
 
                                             }
@@ -201,6 +215,20 @@
                                                         else
                                                         {
                                                             <a asp-controller="TCMDischarges" asp-action="EditReadOnly" asp-route-id="@notification.TCMDischarge.Id" asp-route-origi="2" class="btn btn-warning" title="View TCM Discharge"><i class="glyphicon glyphicon-file"></i></a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if (notification.TCMFarsForm != null)
+                                                        {
+                                                            if (notification.TCMFarsForm.Status == KyoS.Common.Enums.FarsStatus.Approved)
+                                                            {
+                                                                <a class="btn btn-warning disabled" title="View TCM FARS"><i class="glyphicon glyphicon-file"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a asp-controller="TCMFarsForms" asp-action="EditReadOnly" asp-route-id="@notification.TCMFarsForm.Id" asp-route-origi="1" class="btn btn-warning" title="View TCM FARS"><i class="glyphicon glyphicon-file"></i></a>
+                                                            }
                                                         }
                                                     }
                                                 }

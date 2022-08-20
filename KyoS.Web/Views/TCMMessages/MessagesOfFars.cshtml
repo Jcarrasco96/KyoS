@@ -1,6 +1,6 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMDischargeEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMFarsFormEntity>
 @{
-    ViewData["Title"] = "Reviews of TCM Discharge";
+    ViewData["Title"] = "Reviews of TCM FARS";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,7 +11,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Inbox", "Index", "TCMMessages")
         </li>
-        <li class="active">Reviews of TCM Discharge</li>
+        <li class="active">Reviews of TCM FARS</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -19,7 +19,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Reviews of TCM Discharge</h3>
+                <h3 class="panel-title">Reviews of TCM FARS</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -34,10 +34,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var discharge in Model.OrderBy(dc => dc.DischargeDate))
+                        @foreach (var fars in Model.OrderBy(dc => dc.EvaluationDate))
                         {
                             bool read = false;
-                            @foreach (var message in discharge.TCMMessages.OrderBy(m => m.DateCreated))
+                            @foreach (var message in fars.TcmMessages.OrderBy(m => m.DateCreated))
                             {
                                 @if (message.Status.ToString() == "NotRead")
                                 {
@@ -54,73 +54,73 @@
                             {
                                 <tr style="font-weight:bold; color:#0072c6;">
                                     <td align="center">
-                                        @if (discharge.TCMMessages.Count() != 0)
+                                        @if (fars.TcmMessages.Count() != 0)
                                         {
                                             <a class="icon-plus-sign-alt"></a>
                                         }
-                                        <div style="display:none">
-                                            <table class="table table-striped">
-                                                <tr>
-                                                    <th class="col-md-2"></th>
-                                                    <th class="col-md-3">Title</th>
-                                                    <th class="col-md-7" style="text-align:center;">Text</th>
-                                                    @*<th class="col-md-1"></th>*@
-                                                    <th></th>
-                                                </tr>
-                                                @foreach (var message in discharge.TCMMessages.OrderBy(m => m.DateCreated))
-                                                {
+                                    <div style="display:none">
+                                        <table class="table table-striped">
+                                            <tr>
+                                                <th class="col-md-2"></th>
+                                                <th class="col-md-3">Title</th>
+                                                <th class="col-md-7" style="text-align:center;">Text</th>
+                                                @*<th class="col-md-1"></th>*@
+                                                <th></th>
+                                            </tr>
+                                            @foreach (var message in fars.TcmMessages.OrderBy(m => m.DateCreated))
+                                            {
 
-                                                    @if (message.Status.ToString() == "NotRead")
-                                                    {
-                                                        <tr style="color:#0072c6;">
-                                                            <td>
-                                                                <i class="glyphicon glyphicon-thumbs-down"></i> Not processed
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => message.Title)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => message.Text)
-                                                            </td>
-                                                        </tr>
-                                                    }
-                                                    @if (message.Status.ToString() == "Read")
-                                                    {
-                                                        <tr>
-                                                            <td>
-                                                                <i class="glyphicon glyphicon-thumbs-up"></i> Processed
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => message.Title)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => message.Text)
-                                                            </td>
-                                                        </tr>
-                                                    }
+                                                @if (message.Status.ToString() == "NotRead")
+                                                {
+                                                    <tr style="color:#0072c6;">
+                                                        <td>
+                                                            <i class="glyphicon glyphicon-thumbs-down"></i> Not processed
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Title)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Text)
+                                                        </td>
+                                                    </tr>
                                                 }
-                                            </table>
+                                                @if (message.Status.ToString() == "Read")
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <i class="glyphicon glyphicon-thumbs-up"></i> Processed
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Title)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Text)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </table>
                                         </div>
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => discharge.DischargeDate)
+                                        @Html.DisplayFor(modelItem => fars.EvaluationDate)
                                     </td>
                                     <td>
-                                        @if (discharge.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        @if (fars.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
                                             <i class="glyphicon glyphicon-user btn-danger"></i>
                                         }
-                                        @if (discharge.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        @if (fars.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
                                         {
                                             <i class="glyphicon glyphicon-user btn-primary"></i>
                                         }
                                         &nbsp;
-                                        @Html.DisplayFor(modelItem => discharge.TcmServicePlan.TcmClient.Client.Name)
+                                        @Html.DisplayFor(modelItem => fars.TCMClient.Client.Name)
                                         |
-                                        @Html.DisplayFor(modelItem => discharge.TcmServicePlan.TcmClient.CaseNumber)
+                                        @Html.DisplayFor(modelItem => fars.TCMClient.CaseNumber)
                                     </td>
                                     <td align="center">
-                                        @if (discharge.Approved == 1)
+                                        @if (fars.Status == KyoS.Common.Enums.FarsStatus.Pending)
                                         {
                                             <span class="label label-info">
                                                 Pending
@@ -128,7 +128,7 @@
                                         }
                                         else
                                         {
-                                            if (discharge.Approved == 2)
+                                            if (fars.Status == KyoS.Common.Enums.FarsStatus.Approved)
                                             {
                                                 <span class="label label-success">
                                                     Approved
@@ -142,18 +142,18 @@
                                     <td align="right">
                                         @if (User.IsInRole("CaseManager"))
                                         {
-                                            @if (discharge.Approved == 1)
+                                            @if (fars.Status == KyoS.Common.Enums.FarsStatus.Pending)
                                             {
-                                                <a asp-action="Edit" asp-controller="TCMDischarges" asp-route-id="@discharge.Id" asp-route-origi="4" class="btn btn-warning" title="Edit TCM Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="Edit" asp-controller="TCMFarsForms" asp-route-id="@fars.Id" asp-route-origin="2" class="btn btn-warning" title="Edit TCM FARS"><i class="glyphicon glyphicon-pencil"></i></a>
                                             }
                                             else
                                             {
-                                                <a asp-action="Edit" asp-controller="TCMDischarges" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-file"></i></a>
+                                                <a asp-action="Edit" asp-controller="TCMFarsForms" class="btn btn-warning disabled" title="Edit TCM FARS"><i class="glyphicon glyphicon-file"></i></a>
                                             }
                                         }
                                         @if (User.IsInRole("TCMSupervisor"))
                                         {
-                                            <a asp-action="ApproveNote" asp-route-id="@discharge.Id" asp-route-origin="5" class="btn btn-primary" title="Approve Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a asp-action="ApproveNote" asp-route-id="@fars.Id" asp-route-origin="5" class="btn btn-primary" title="Approve Note"><i class="glyphicon glyphicon-ok"></i></a>
                                         }
                                     </td>
                                 </tr>
@@ -162,7 +162,7 @@
                             {
                                 <tr>
                                     <td align="center">
-                                        @if (discharge.TCMMessages.Count() != 0)
+                                        @if (fars.TcmMessages.Count() != 0)
                                         {
                                             <a class="icon-plus-sign-alt"></a>
                                         }
@@ -175,7 +175,7 @@
                                                     @*<th class="col-md-1"></th>*@
                                                     <th></th>
                                                 </tr>
-                                                @foreach (var message in discharge.TCMMessages.OrderBy(m => m.DateCreated))
+                                                @foreach (var message in fars.TcmMessages.OrderBy(m => m.DateCreated))
                                                 {
 
                                                     @if (message.Status.ToString() == "NotRead")
@@ -211,24 +211,24 @@
                                         </div>
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => discharge.DischargeDate)
+                                        @Html.DisplayFor(modelItem => fars.EvaluationDate)
                                     </td>
                                     <td>
-                                        @if (discharge.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        @if (fars.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
                                             <i class="glyphicon glyphicon-user btn-danger"></i>
                                         }
-                                        @if (discharge.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        @if (fars.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
                                         {
                                             <i class="glyphicon glyphicon-user btn-primary"></i>
                                         }
                                         &nbsp;
-                                        @Html.DisplayFor(modelItem => discharge.TcmServicePlan.TcmClient.Client.Name)
+                                        @Html.DisplayFor(modelItem => fars.TCMClient.Client.Name)
                                         |
-                                        @Html.DisplayFor(modelItem => discharge.TcmServicePlan.TcmClient.CaseNumber)
+                                        @Html.DisplayFor(modelItem => fars.TCMClient.CaseNumber)
                                     </td>
                                     <td align="center">
-                                        @if (discharge.Approved == 1)
+                                        @if (fars.Status == KyoS.Common.Enums.FarsStatus.Pending)
                                         {
                                             <span class="label label-info">
                                                 Pending
@@ -236,7 +236,7 @@
                                         }
                                         else
                                         {
-                                            if (discharge.Approved == 2)
+                                            if (fars.Status == KyoS.Common.Enums.FarsStatus.Approved)
                                             {
                                                 <span class="label label-success">
                                                     Approved
@@ -250,18 +250,18 @@
                                     <td align="right">
                                         @if (User.IsInRole("CaseManager"))
                                         {
-                                            @if (discharge.Approved == 1)
+                                            @if (fars.Status == KyoS.Common.Enums.FarsStatus.Pending)
                                             {
-                                                <a asp-action="Edit" asp-controller="TCMDischarges" asp-route-id="@discharge.Id" asp-route-origi="4" class="btn btn-warning" title="Edit TCM Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="Edit" asp-controller="TCMFarsForms" asp-route-id="@fars.Id" asp-route-origin="2" class="btn btn-warning" title="Edit TCM FARS"><i class="glyphicon glyphicon-pencil"></i></a>
                                             }
                                             else
                                             {
-                                                <a asp-action="Edit" asp-controller="TCMDischarges" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="Edit" asp-controller="TCMFarsForms" class="btn btn-warning disabled" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>
                                             }
                                         }
                                         @if (User.IsInRole("TCMSupervisor"))
                                         {
-                                            <a asp-action="ApproveNote" asp-route-id="@discharge.Id" asp-route-origi="5" class="btn btn-primary" title="Approve Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a asp-action="ApproveNote" asp-route-id="@fars.Id" asp-route-origi="5" class="btn btn-primary" title="Approve FARS"><i class="glyphicon glyphicon-ok"></i></a>
                                         }
                                     </td>
                                 </tr>
@@ -307,6 +307,7 @@
         });
     </script>
 }
+
 
 
 

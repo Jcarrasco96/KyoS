@@ -657,6 +657,7 @@ namespace KyoS.Web.Controllers
                                                                        .ThenInclude(m => m.TcmClient)
                                                                        .ThenInclude(m => m.Client)
                                                                        .Include(n => n.TcmDischargeFollowUp)
+                                                                       .Include(n => n.TCMMessages)
                                                                        .Where(m => m.Approved == approved
                                                                             && m.TcmServicePlan.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)
                                                                        .OrderBy(m => m.TcmServicePlan.TcmClient.CaseNumber)
@@ -673,6 +674,7 @@ namespace KyoS.Web.Controllers
                                                                        .ThenInclude(m => m.TcmClient)
                                                                        .ThenInclude(m => m.Client)
                                                                        .Include(n => n.TcmDischargeFollowUp)
+                                                                       .Include(n => n.TCMMessages)
                                                                        .Where(m => m.TcmServicePlan.TcmClient.Casemanager.LinkedUser == user_logged.UserName
                                                                             && m.Approved == approved
                                                                             && m.TcmServicePlan.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)
