@@ -142,6 +142,20 @@
                                                                     <a asp-controller="TCMServicePlanReviews" asp-action="EditReadOnly" asp-route-Id="@notification.TCMServicePlan.Id" asp-route-IdServicePlan="@notification.TCMServicePlanReview.Id" asp-route-origi="1" class="btn btn-warning" title="View TCM Service plan review"><i class="glyphicon glyphicon-file"></i></a>
                                                                 }
                                                             }
+                                                            else
+                                                            {
+                                                                @if (notification.TCMAddendum != null)
+                                                                {
+                                                                    @if (notification.TCMAddendum.Approved == 2)
+                                                                    {
+                                                                        <a class="btn btn-warning disabled" title="View TCM Addendum"><i class="glyphicon glyphicon-file"></i></a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a asp-controller="TCMServicePlans" asp-action="EditAdendumReadOnly" asp-route-Id="@notification.TCMAddendum.Id" asp-route-aview="2" class="btn btn-warning" title="View TCM Service plan review"><i class="glyphicon glyphicon-file"></i></a>
+                                                                    }
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -254,7 +268,21 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                   <a asp-controller="TCMServicePlanReviews" asp-action="EditReadOnly" asp-route-Id="@notification.TCMServicePlanReview.Id" asp-route-IdServicePlan="@notification.TCMServicePlanReview.TcmServicePlan.Id" asp-route-origi="1" class="btn btn-warning" title="View TCM Service plan review"><i class="glyphicon glyphicon-file"></i></a>
+                                                                    <a asp-controller="TCMServicePlanReviews" asp-action="EditReadOnly" asp-route-Id="@notification.TCMServicePlanReview.Id" asp-route-IdServicePlan="@notification.TCMServicePlanReview.TcmServicePlan.Id" asp-route-origi="1" class="btn btn-warning" title="View TCM Service plan review"><i class="glyphicon glyphicon-file"></i></a>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                @if (notification.TCMAddendum != null)
+                                                                {
+                                                                    @if (notification.TCMAddendum.Approved == 2)
+                                                                    {
+                                                                        <a class="btn btn-warning disabled" title="View TCM Addendum"><i class="glyphicon glyphicon-file"></i></a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a asp-controller="TCMServicePlans" asp-action="EditAdendumReadOnly" asp-route-Id="@notification.TCMAddendum.Id" asp-route-aview="2" class="btn btn-warning" title="View TCM Service plan review"><i class="glyphicon glyphicon-file"></i></a>
+                                                                    }
                                                                 }
                                                             }
                                                         }

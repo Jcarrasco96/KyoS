@@ -34,10 +34,6 @@
                     <thead>
                         <tr>
                             <th class="col-md-1">
-
-                            </th>
-                            <th class="col-md-1" style="text-align:left;">
-                                Case
                             </th>
                             <th class="col-md-2" style="text-align:left;">
                                 Name
@@ -50,6 +46,9 @@
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Date
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Review
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Approved
@@ -78,7 +77,7 @@
                                             <th class="col-md-1" style="text-align:center;">Code</th>
                                             <th class="col-md-3">Name</th>
                                             <th class="col-md-7" style="text-align:left;">Need Identified</th>
-                                           
+
                                         </tr>
                                         <tr>
                                             <td align="center">
@@ -124,20 +123,6 @@
                                 </div>
                             </td>
                             <td>
-                                @if (item.TcmServicePlan.TcmClient.Status == KyoS.Common.Enums.StatusType.Open)
-                                {
-                                    <span class="label label-success">
-                                        @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.CaseNumber)
-                                    </span>
-                                }
-                                @if (item.TcmServicePlan.TcmClient.Status == KyoS.Common.Enums.StatusType.Close)
-                                {
-                                    <span class="label label-default">
-                                        @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.CaseNumber)
-                                    </span>
-                                }
-                            </td>
-                            <td>
                                 @if (item.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                 {
                                     <i class="glyphicon glyphicon-user btn-danger"></i>
@@ -148,6 +133,8 @@
                                 }
                                 &nbsp;
                                 @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Client.Name)
+                                |
+                                @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.CaseNumber)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.NeedsIdentified)
@@ -157,6 +144,38 @@
                             </td>
                             <td align="center">
                                 @Html.DisplayFor(modelItem => item.DateAdendum)
+                            </td>
+                            <td align="center">
+                                @if (item.TCMMessages.Count() == 0)
+                                {
+                                    <span>
+                                        -
+                                    </span>
+                                }
+                                else
+                                {
+                                    bool read = false;
+                                    @foreach (var message in item.TCMMessages.OrderBy(m => m.DateCreated))
+                                    {
+                                        @if (message.Status.ToString() == "NotRead")
+                                        {
+                                            read = false;
+                                            break;
+                                        }
+                                        @if (message.Status.ToString() == "Read")
+                                        {
+                                            read = true;
+                                        }
+                                    }
+                                    if (read)
+                                    {
+                                        <i class="glyphicon glyphicon-thumbs-up"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="glyphicon glyphicon-thumbs-down"></i>
+                                    }
+                                }
                             </td>
                             <td align="center">
                                 @if (item.Approved == 2)
@@ -189,7 +208,7 @@
                                     }
                                     @if (item.Approved == 1)
                                     {
-                                        <a onclick="showInPopup('@Url.Action("EditAdendum", "TCMServicePlans", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Adendum')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="EditAdendum" asp-route-id="@item.Id" asp-route-aview="@ViewData["aview"]" class="btn btn-warning disabled"><i class="glyphicon glyphicon-pencil"></i></a>
                                         <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
                                         <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                     }

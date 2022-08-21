@@ -2000,8 +2000,9 @@ namespace KyoS.Web.Helpers
                 LongTerm = model.Long_term,
                 NeedsIdentified = model.Needs_Identified,
                 TCMMessages = _context.TCMMessages
-                                      .Where(n => n.TCMServicePlan.TCMAdendum.Where(m => m.Id == model.Id).Count() > 0)
-                                      .ToList()
+                                      .Where(n => n.TCMAddendum.Id == model.Id)
+                                      .ToList(),
+                Approved = model.Approved
 
             };
         }

@@ -53,6 +53,26 @@
                     }
                 </div>
                 <div class="col-md-2">
+                    @if (ViewBag.CountsMessagesTCMAssessments == "0")
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfFars" role="button">
+                            <div class="thumbnail list-group-item list-group-item-text">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Assessments</h4>
+                                <span class="message-counter-cero">@ViewBag.CountsMessagesTCMFars</span>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfFars" role="button">
+                            <div class="thumbnail list-group-item list-group-item-danger">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Assessments</h4>
+                                <span class="message-counter">@ViewBag.CountsMessagesTCMFars</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
                     @if (ViewBag.CountsMessagesTCMServicePlan == "0")
                     {
                         <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfServicePlan" role="button">
@@ -68,6 +88,26 @@
                             <div class="thumbnail list-group-item list-group-item-danger">
                                 <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>TCM Service plan</h4>
                                 <span class="message-counter">@ViewBag.CountsMessagesTCMServicePlan</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.CountsMessagesTCMAddendum == "0")
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfAddendum" role="button">
+                            <div class="thumbnail list-group-item list-group-item-text">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Addendum</h4>
+                                <span class="message-counter-cero">@ViewBag.CountsMessagesTCMAddendum</span>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfAddendum" role="button">
+                            <div class="thumbnail list-group-item list-group-item-danger">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Addendum</h4>
+                                <span class="message-counter">@ViewBag.CountsMessagesTCMAddendum</span>
                             </div>
                         </a>
                     }
@@ -91,6 +131,19 @@
                             </div>
                         </a>
                     }
+                </div>
+                <div class="col-md-1">
+                    &nbsp;
+                </div>
+                //New line
+                <div class="col-md-12">
+                    &nbsp;
+                </div>
+                <div class="col-md-12">
+                    
+                </div>
+                <div class="col-md-4">
+                    &nbsp;
                 </div>
                 <div class="col-md-2">
                     @if (ViewBag.CountsMessagesTCMFars == "0")
@@ -132,7 +185,7 @@
                         </a>
                     }
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-4">
                     &nbsp;
                 </div>
                 //New line

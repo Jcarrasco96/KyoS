@@ -54,7 +54,7 @@ namespace KyoS.Web.Controllers
                                                                      .Count(m => (m.To == user_logged.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead
                                                                            && m.TCMServicePlanReview != null && m.Notification == false))
                                                                      .ToString();
-                ViewBag.CountsMessagesTCMFars = _context.TCMMessages
+                ViewBag.CountsMessagesTCMAddendum = _context.TCMMessages
                                                        .Count(m => (m.To == user_logged.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead
                                                                           && m.TCMAddendum != null && m.Notification == false))
                                                        .ToString();
