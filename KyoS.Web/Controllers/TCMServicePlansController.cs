@@ -1816,16 +1816,13 @@ namespace KyoS.Web.Controllers
                                              .ThenInclude(f => f.Client)
                                              .Include(t => t.TcmClient.Casemanager)
                                              .Where(g => (g.TcmClient.Client.Clinic.Id == clinic.Id
-                                                && g.Approved == approved))
+                                                       && g.Approved == approved))
                                              .OrderBy(g => g.TcmClient.CaseNumber)
                                              .ToListAsync();
-
             }
            
             ViewData["origin"] = caseNumber;
             return View(servicePlan);
-
-
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]

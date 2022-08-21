@@ -284,15 +284,15 @@
                                     <li class="dropdown-submenu">
                                         <a class="test" tabindex="-1" href="#">Services Plans / Clients &nbsp;</a>
                                         <ul class="dropdown-menu">
-                                            <li>@Html.ActionLink("Started", "Index", "TCMServiceplans")</li>
-                                            <li>@Html.ActionLink("Pending", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })</li>
-                                            <li>@Html.ActionLink("Approved", "ApprovedServicePlan", "TCMServiceplans")</li>
+                                            <li>@Html.ActionLink("Pending Services Plans", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })</li>
+                                            <li>@Html.ActionLink("Approved Services Plans", "ApprovedServicePlan", "TCMServicePlans")</li>
+                                            <li>@Html.ActionLink("All Services Plans", "Index", "TCMServicePlans")</li>
                                         </ul>
                                     </li>
                                     <li class="dropdown-submenu">
                                         <a class="test" tabindex="-1" href="#">Addendums</a>
                                         <ul class="dropdown-menu">
-                                            <li>@Html.ActionLink("Pending", "AdendumApproved", "TCMServicePlans", new { approved = 1 })</li>
+                                            <li>@Html.ActionLink("Pending Addendums", "AdendumApproved", "TCMServicePlans", new { approved = 1 })</li>
                                             <li>@Html.ActionLink("All Addendums", "Adendum", "TCMServicePlans", new { aview = 1 })</li>
                                         </ul>
                                     </li>
@@ -301,8 +301,8 @@
                                     <li class="dropdown-submenu">
                                         <a class="test" tabindex="-1" href="#">Activities</a>
                                         <ul class="dropdown-menu">
-                                            <li><a asp-area="" asp-controller="TCMServices" asp-action="PendingActivity">Pending</a></li>
-                                            <li><a asp-area="" asp-controller="TCMServices" asp-action="ServiceActivity">All Activities</a></li>
+                                            <li><a asp-area="" asp-controller="TCMServices" asp-action="PendingActivity">Pending Activities</a></li>
+                                            <li><a asp-area="" asp-controller="TCMServices" asp-action="ServiceActivity">All Activities for services</a></li>
                                         </ul>
                                     </li>
                                     <li>@Html.ActionLink("Billing Report", "BillingForWeek", "TCMBilling")</li>

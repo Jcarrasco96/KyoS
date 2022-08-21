@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMAdendumEntity>
 @{
-    ViewData["Title"] = "TCM Adendum";
+    ViewData["Title"] = "TCM Addendums";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -13,11 +13,11 @@
         </li>
         @if (User.IsInRole("TCMSupervisor"))
         {
-            <li class="active">Pending TCM Adendums</li>
+            <li class="active">Pending TCM Addendums</li>
         }
         else
         { 
-            <li class="active">TCM Adendums</li>
+            <li class="active">TCM Addendums</li>
         }
         
     </ul><!--.breadcrumb-->
