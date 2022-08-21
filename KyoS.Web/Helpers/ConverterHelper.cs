@@ -1992,11 +1992,17 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 DateAdendum = model.Date_Identified,
-                TcmServicePlan = model.TcmServicePlan,
+                TcmServicePlan = await _context.TCMServicePlans
+                                               .Include(n => n.TcmClient)
+                                               .ThenInclude(n => n.Client)
+                                               .FirstOrDefaultAsync(n => n.Id == model.ID_TcmServicePlan),
                 TcmDomain = model.TcmDomain,
                 LongTerm = model.Long_term,
-                NeedsIdentified = model.Needs_Identified
-                
+                NeedsIdentified = model.Needs_Identified,
+                TCMMessages = _context.TCMMessages
+                                      .Where(n => n.TCMServicePlan.TCMAdendum.Where(m => m.Id == model.Id).Count() > 0)
+                                      .ToList()
+
             };
         }
 
@@ -2042,7 +2048,10 @@ namespace KyoS.Web.Helpers
 
         public async Task<TCMServicePlanReviewEntity> ToTCMServicePlanReviewEntity(TCMServicePlanReviewViewModel model, bool isNew, string userId)
         {
-            TCMServicePlanEntity tcmServicePlan = await _context.TCMServicePlans.FirstOrDefaultAsync(n => n.Id == model.IdServicePlan);
+            TCMServicePlanEntity tcmServicePlan = await _context.TCMServicePlans
+                                                                .Include(n => n.TcmClient)
+                                                                .ThenInclude(n => n.Client)
+                                                                .FirstOrDefaultAsync(n => n.Id == model.IdServicePlan);
             return new TCMServicePlanReviewEntity
             {
                 Id = isNew ? 0 : model.Id,
@@ -2056,7 +2065,10 @@ namespace KyoS.Web.Helpers
                 SummaryProgress = model.SummaryProgress,
                 TcmServicePlan = tcmServicePlan,
                 TCMServicePlanRevDomain = model.TCMServicePlanRevDomain,
-                
+                TCMMessages = _context.TCMMessages
+                                      .Where(n => n.TCMServicePlan.TCMServicePlanReview.Id == model.Id)
+                                      .ToList()
+
             };
         }
 

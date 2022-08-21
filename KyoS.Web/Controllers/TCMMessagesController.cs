@@ -49,6 +49,15 @@ namespace KyoS.Web.Controllers
                                                         .Count(m => (m.To == user_logged.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead
                                                                            && m.TCMFarsForm != null && m.Notification == false))
                                                         .ToString();
+
+                ViewBag.CountsMessagesTCMServicePlanReview = _context.TCMMessages
+                                                                     .Count(m => (m.To == user_logged.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead
+                                                                           && m.TCMServicePlanReview != null && m.Notification == false))
+                                                                     .ToString();
+                ViewBag.CountsMessagesTCMFars = _context.TCMMessages
+                                                       .Count(m => (m.To == user_logged.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead
+                                                                          && m.TCMAddendum != null && m.Notification == false))
+                                                       .ToString();
             }
             
             return View();
@@ -96,16 +105,17 @@ namespace KyoS.Web.Controllers
                                                    .ThenInclude(c => c.Setting)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
-            return View(await _context.TCMMessages
-                                      .Include(m => m.TCMAddendum)
-                                      .Include(m => m.TCMAssessment)
-                                      .Include(m => m.TCMDischarge)
-                                      .Include(m => m.TCMFarsForm)
-                                      .Include(m => m.TCMNote)
-                                      .Include(m => m.TCMServicePlan)
-                                      .Include(m => m.TCMServicePlanReview)
-                                      .Where(m => (m.To == user_logged.UserName && m.Notification == true))
-                                      .ToListAsync());
+            List<TCMMessageEntity> salida = await _context.TCMMessages
+                                                          .Include(m => m.TCMAddendum)
+                                                          .Include(m => m.TCMAssessment)
+                                                          .Include(m => m.TCMDischarge)
+                                                          .Include(m => m.TCMFarsForm)
+                                                          .Include(m => m.TCMNote)
+                                                          .Include(m => m.TCMServicePlan)
+                                                          .Include(m => m.TCMServicePlanReview)
+                                                          .Where(m => (m.To == user_logged.UserName && m.Notification == true))
+                                                          .ToListAsync();
+            return View(salida);
         }
 
         [Authorize(Roles = "TCMSupervisor")]
@@ -206,6 +216,41 @@ namespace KyoS.Web.Controllers
                                           .Include(wc => wc.TcmMessages.Where(m => m.Notification == false))
                                           .Where(wc => (wc.TCMClient.Casemanager.LinkedUser == User.Identity.Name
                                                      && wc.TcmMessages.Count() > 0))
+                                          .ToListAsync());
+            }
+
+            return View();
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> MessagesOfServicePlanReview(int id = 0)
+        {
+            if (User.IsInRole("CaseManager"))
+            {
+                return View(await _context.TCMServicePlanReviews
+                                          .Include(wc => wc.TcmServicePlan)
+                                          .Include(wc => wc.TcmServicePlan.TcmClient.Casemanager)
+                                          .Include(wc => wc.TcmServicePlan.TcmClient.Client)
+                                          .Include(wc => wc.TCMMessages.Where(m => m.Notification == false))
+                                          .Where(wc => (wc.TcmServicePlan.TcmClient.Casemanager.LinkedUser == User.Identity.Name
+                                                     && wc.TCMMessages.Count() > 0))
+                                          .ToListAsync());
+            }
+
+            return View();
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> MessagesOfAddendum(int id = 0)
+        {
+            if (User.IsInRole("CaseManager"))
+            {
+                return View(await _context.TCMAdendums
+                                          .Include(wc => wc.TcmServicePlan.TcmClient.Casemanager)
+                                          .Include(wc => wc.TcmServicePlan.TcmClient.Client)
+                                          .Include(wc => wc.TCMMessages.Where(m => m.Notification == false))
+                                          .Where(wc => (wc.TcmServicePlan.TcmClient.Casemanager.LinkedUser == User.Identity.Name
+                                                     && wc.TCMMessages.Count() > 0))
                                           .ToListAsync());
             }
 

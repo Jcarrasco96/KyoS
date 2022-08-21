@@ -1522,6 +1522,36 @@ namespace KyoS.Web.Controllers
                 if (ModelState.IsValid)
                 {
                     TCMAdendumEntity tcmAdendumEntity = await _converterHelper.ToTCMAdendumEntity(tcmAdendumViewModel, false, user_logged.UserName);
+
+                    List<TCMMessageEntity> messages = tcmAdendumEntity.TCMMessages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                    //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
+                    foreach (TCMMessageEntity value in messages)
+                    {
+                        value.Status = MessageStatus.Read;
+                        value.DateRead = DateTime.Now;
+                        _context.Update(value);
+
+                        //I generate a notification to supervisor
+                        TCMMessageEntity notification = new TCMMessageEntity
+                        {
+                            TCMNote = null,
+                            TCMFarsForm = null,
+                            TCMServicePlan = null,
+                            TCMServicePlanReview = null,
+                            TCMAddendum = tcmAdendumEntity,
+                            TCMDischarge = null,
+                            TCMAssessment = null,
+                            Title = "Update on reviewed TCM Service plan review",
+                            Text = $"The TCM Service plan review of {tcmAdendumEntity.TcmServicePlan.TcmClient.Client.Name} on {tcmAdendumEntity.DateAdendum.ToShortDateString()} was rectified",
+                            From = value.To,
+                            To = value.From,
+                            DateCreated = DateTime.Now,
+                            Status = MessageStatus.NotRead,
+                            Notification = true
+                        };
+                        _context.Add(notification);
+                    }
+
                     _context.Update(tcmAdendumEntity);
 
                     try
@@ -2121,7 +2151,6 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("Index");
         }
-
 
         [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> TCMServicePlanWithReview()

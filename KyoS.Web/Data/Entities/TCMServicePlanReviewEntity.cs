@@ -34,5 +34,6 @@ namespace KyoS.Web.Data.Entities
         public TCMServicePlanEntity TcmServicePlan { get; set; }
         public TCMSupervisorEntity TCMSupervisor { get; set; }
         public List<TCMServicePlanReviewDomainEntity> TCMServicePlanRevDomain { get; set; }
+        public IEnumerable<TCMMessageEntity> TCMMessages { get; set; }
     }
 }
