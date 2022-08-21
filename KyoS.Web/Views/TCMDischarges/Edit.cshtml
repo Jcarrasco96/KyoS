@@ -16,17 +16,21 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @if (@ViewData["origin"].ToString() == "0")
+                @if (@ViewData["origi"].ToString() == "0")
                 {
                     @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.TcmServicePlan.TcmClient.Id, section = 4 })
                 }
-                @if (@ViewData["origin"].ToString() == "1")
+                @if (@ViewData["origi"].ToString() == "1")
                 {
                     @Html.ActionLink("TCM Discharge", "TCMDischargeApproved", "TCMDischarges", new { approved = 0 })
                 }
-                @if (@ViewData["origin"].ToString() == "2")
+                @if (@ViewData["origi"].ToString() == "2")
                 {
                     @Html.ActionLink("TCM Discharge", "TCMDischargeApproved", "TCMDischarges", new { approved = 1 })
+                }
+                @if (@ViewData["origi"].ToString() == "4")
+                {
+                    @Html.ActionLink("Inbox", "MessagesOfDischarges", "TCMMessages")
                 }
             </li>
             <li class="active">Edit</li>
@@ -40,7 +44,7 @@
 
         </div>
         <div>
-            <form asp-action="Edit" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]" enctype="multipart/form-data">
+            <form asp-action="Edit" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="IdServicePlan" />
                 <input type="hidden" asp-for="Approved" />
@@ -76,19 +80,23 @@
                     {
                         <a asp-action="FinishEditing" asp-route-id="@Model.Id" asp-controller="TCMDischarges" class="btn btn-warning disabled">Finish Edition</a>
                     }
-                    @if (@ViewData["origin"].ToString() == "0")
+                    @if (@ViewData["origi"].ToString() == "0")
                     {
                         <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmServicePlan.TcmClient.Id" asp-route-section="4" asp-controller="TCMIntakes" class="btn btn-success">Back</a>
                     }
-                    @if (@ViewData["origin"].ToString() == "1")
+                    @if (@ViewData["origi"].ToString() == "1")
                     {
 
                         <a asp-action="TCMDischargeApproved" asp-route-approved="0" class="btn btn-success">Back</a>
                     }
-                    @if (@ViewData["origin"].ToString() == "2")
+                    @if (@ViewData["origi"].ToString() == "2")
                     {
 
                         <a asp-action="TCMDischargeApproved" asp-route-approved="1" class="btn btn-success">Back</a>
+                    }
+                    @if (@ViewData["origi"].ToString() == "4")
+                    {
+                        <a asp-action="MessagesOfDischarges" asp-controller="TCMMessages" class="btn btn-success">Back</a>
                     }
                 </div>
             </form>

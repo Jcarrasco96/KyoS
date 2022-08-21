@@ -143,6 +143,10 @@
                                     {
                                         <a asp-action="EditReadOnly" asp-route-id="@client.Id" asp-route-origi="2" class="btn btn-primary" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
                                     }
+                                    @if (User.IsInRole("Manager"))
+                                    {
+                                        <a asp-action="EditReadOnly" asp-route-id="@client.Id" asp-route-origi="2" class="btn btn-primary disabled" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                    }
                                 </td>
                             </tr>
 

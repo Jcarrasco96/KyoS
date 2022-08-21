@@ -53,6 +53,26 @@
                     }
                 </div>
                 <div class="col-md-2">
+                    @if (ViewBag.CountsMessagesTCMAssessments == "0")
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfFars" role="button">
+                            <div class="thumbnail list-group-item list-group-item-text">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Assessments</h4>
+                                <span class="message-counter-cero">@ViewBag.CountsMessagesTCMFars</span>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfFars" role="button">
+                            <div class="thumbnail list-group-item list-group-item-danger">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Assessments</h4>
+                                <span class="message-counter">@ViewBag.CountsMessagesTCMFars</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
                     @if (ViewBag.CountsMessagesTCMServicePlan == "0")
                     {
                         <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfServicePlan" role="button">
@@ -73,66 +93,99 @@
                     }
                 </div>
                 <div class="col-md-2">
-                    @if (ViewBag.CountsMessagesMTPReview == "0")
+                    @if (ViewBag.CountsMessagesTCMAddendum == "0")
                     {
-                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfMTPReviews" role="button">
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfAddendum" role="button">
                             <div class="thumbnail list-group-item list-group-item-text">
-                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>MTP Reviews</h4>
-                                <span class="message-counter-cero">@ViewBag.CountsMessagesMTPReview</span>
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Addendum</h4>
+                                <span class="message-counter-cero">@ViewBag.CountsMessagesTCMAddendum</span>
                             </div>
                         </a>
                     }
                     else
                     {
-                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfMTPReviews" role="button">
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfAddendum" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
-                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>MTP Reviews</h4>
-                                <span class="message-counter">@ViewBag.CountsMessagesMTPReview</span>
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Addendum</h4>
+                                <span class="message-counter">@ViewBag.CountsMessagesTCMAddendum</span>
                             </div>
                         </a>
                     }
                 </div>
                 <div class="col-md-2">
-                    @if (ViewBag.CountsMessagesAddendum == "0")
+                    @if (ViewBag.CountsMessagesTCMServicePlanReview == "0")
                     {
-                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfAddendums" role="button">
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfServicePlanReview" role="button">
                             <div class="thumbnail list-group-item list-group-item-text">
-                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Addendums</h4>
-                                <span class="message-counter-cero">@ViewBag.CountsMessagesAddendum</span>
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Service Plan Reviews</h4>
+                                <span class="message-counter-cero">@ViewBag.CountsMessagesTCMServicePlanReview</span>
                             </div>
                         </a>
                     }
                     else
                     {
-                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfAddendums" role="button">
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfServicePlanReview" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
-                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Addendums</h4>
-                                <span class="message-counter">@ViewBag.CountsMessagesAddendum</span>
-                            </div>
-                        </a>
-                    }
-                </div>
-                <div class="col-md-2">
-                    @if (ViewBag.CountsMessagesDischarge == "0")
-                    {
-                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfDischarges" role="button">
-                            <div class="thumbnail list-group-item list-group-item-text">
-                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Discharges</h4>
-                                <span class="message-counter-cero">@ViewBag.CountsMessagesDischarge</span>
-                            </div>
-                        </a>
-                    }
-                    else
-                    {
-                        <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfDischarges" role="button">
-                            <div class="thumbnail list-group-item list-group-item-danger">
-                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Discharges</h4>
-                                <span class="message-counter">@ViewBag.CountsMessagesDischarge</span>
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Service Plan Reviews</h4>
+                                <span class="message-counter">@ViewBag.CountsMessagesTCMServicePlanReview</span>
                             </div>
                         </a>
                     }
                 </div>
                 <div class="col-md-1">
+                    &nbsp;
+                </div>
+                //New line
+                <div class="col-md-12">
+                    &nbsp;
+                </div>
+                <div class="col-md-12">
+                    
+                </div>
+                <div class="col-md-4">
+                    &nbsp;
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.CountsMessagesTCMFars == "0")
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfFars" role="button">
+                            <div class="thumbnail list-group-item list-group-item-text">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>FARS</h4>
+                                <span class="message-counter-cero">@ViewBag.CountsMessagesTCMFars</span>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfFars" role="button">
+                            <div class="thumbnail list-group-item list-group-item-danger">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>FARS</h4>
+                                <span class="message-counter">@ViewBag.CountsMessagesTCMFars</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-2">
+                    @if (ViewBag.CountsMessagesTCMDischarge == "0")
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfDischarges" role="button">
+                            <div class="thumbnail list-group-item list-group-item-text">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Discharges</h4>
+                                <span class="message-counter-cero">@ViewBag.CountsMessagesTCMDischarge</span>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfDischarges" role="button">
+                            <div class="thumbnail list-group-item list-group-item-danger">
+                                <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Discharges</h4>
+                                <span class="message-counter">@ViewBag.CountsMessagesTCMDischarge</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-4">
                     &nbsp;
                 </div>
                 //New line

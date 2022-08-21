@@ -17,18 +17,33 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("TCM Addendum", "Adendum", "TCMServicePlans", new { approved = 0, caseNumber = Model.TcmServicePlan.TcmClient.CaseNumber, aview = ViewData["aview"] })
+                @if (ViewData["aview"].ToString() == "0")
+                {
+                    @Html.ActionLink("TCM Addendum", "Adendum", "TCMServicePlans", new { approved = 0, caseNumber = Model.TcmServicePlan.TcmClient.CaseNumber, aview = ViewData["aview"] })
+                }
+                @if (ViewData["aview"].ToString() == "1")
+                {
+                    @Html.ActionLink("TCM Addendum", "Adendum", "TCMServicePlans", new { approved = 0, aview = ViewData["aview"] })
+                }
+                @if (ViewData["aview"].ToString() == "2")
+                {
+                    @Html.ActionLink("TCM Addendum Edition", "AdendumApproved", "TCMServicePlans", new { aview = ViewData["aview"] })
+                }
+                @if (ViewData["aview"].ToString() == "3")
+                {
+                    @Html.ActionLink("TCM Addendum Messages", "MessagesOfAddendum", "TCMMessages")
+                }
             </li>
             <li class="active">Edit</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Edit new Addendum</h4>
+    <h4>Edit Addendum</h4>
     <hr />
 
     <div class="row">
 
-        <form asp-action="EditAdendum" asp-route-id="@Model.Id" >
+        <form asp-action="EditAdendum" asp-route-id="@Model.Id" asp-route-aview="@ViewData["aview"]" >
             <div class="row col-md-12">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Approved" />
@@ -48,7 +63,22 @@
                 <br />
                 <div class="form-group col-md-12">
                     <input type="submit" value="Save" class="btn btn-primary" />
-                    <a asp-action="Adendum" asp-route-approved="0" asp-route-caseNumber="@Model.TcmServicePlan.TcmClient.CaseNumber" asp-route-aview="@ViewData["aview"]" class="btn btn-success">Back</a>
+                    @if (ViewData["aview"].ToString() == "0")
+                    {
+                        <a asp-action="Adendum" asp-route-approved="0" asp-route-caseNumber="@Model.TcmServicePlan.TcmClient.CaseNumber" asp-route-aview="@ViewData["aview"]" class="btn btn-success">Back</a>
+                    }
+                    @if (ViewData["aview"].ToString() == "1")
+                    {
+                        <a asp-action="Adendum" asp-route-approved="0" asp-route-aview="@ViewData["aview"]" class="btn btn-success">Back</a>
+                    }
+                    @if (ViewData["aview"].ToString() == "2")
+                    {
+                        <a asp-action="AdendumApproved" asp-route-aview="@ViewData["aview"]" class="btn btn-success">Back</a>
+                    }
+                    @if (ViewData["aview"].ToString() == "3")
+                    {
+                        <a asp-action="MessagesOfAddendum" asp-controller="TCMMessages" class="btn btn-success">Back</a>
+                    }
                 </div>
             </div>
         </form>

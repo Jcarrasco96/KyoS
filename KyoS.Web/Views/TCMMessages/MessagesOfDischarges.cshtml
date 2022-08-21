@@ -1,6 +1,6 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMServicePlanEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMDischargeEntity>
 @{
-    ViewData["Title"] = "Reviews of TCM Service plan";
+    ViewData["Title"] = "Reviews of TCM Discharge";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,7 +11,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Inbox", "Index", "TCMMessages")
         </li>
-        <li class="active">Reviews of TCM Service plan</li>
+        <li class="active">Reviews of TCM Discharge</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -19,7 +19,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Reviews of TCM Service plan</h3>
+                <h3 class="panel-title">Reviews of TCM Discharge</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -34,10 +34,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var serviceplan in Model.OrderBy(dc => dc.DateServicePlan))
+                        @foreach (var discharge in Model.OrderBy(dc => dc.DischargeDate))
                         {
                             bool read = false;
-                            @foreach (var message in serviceplan.TCMMessages.OrderBy(m => m.DateCreated))
+                            @foreach (var message in discharge.TCMMessages.OrderBy(m => m.DateCreated))
                             {
                                 @if (message.Status.ToString() == "NotRead")
                                 {
@@ -54,7 +54,7 @@
                             {
                                 <tr style="font-weight:bold; color:#0072c6;">
                                     <td align="center">
-                                        @if (serviceplan.TCMMessages.Count() != 0)
+                                        @if (discharge.TCMMessages.Count() != 0)
                                         {
                                             <a class="icon-plus-sign-alt"></a>
                                         }
@@ -67,7 +67,7 @@
                                                     @*<th class="col-md-1"></th>*@
                                                     <th></th>
                                                 </tr>
-                                                @foreach (var message in serviceplan.TCMMessages.OrderBy(m => m.DateCreated))
+                                                @foreach (var message in discharge.TCMMessages.OrderBy(m => m.DateCreated))
                                                 {
 
                                                     @if (message.Status.ToString() == "NotRead")
@@ -103,24 +103,24 @@
                                         </div>
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => serviceplan.DateServicePlan)
+                                        @Html.DisplayFor(modelItem => discharge.DischargeDate)
                                     </td>
                                     <td>
-                                        @if (serviceplan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        @if (discharge.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
                                             <i class="glyphicon glyphicon-user btn-danger"></i>
                                         }
-                                        @if (serviceplan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        @if (discharge.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
                                         {
                                             <i class="glyphicon glyphicon-user btn-primary"></i>
                                         }
                                         &nbsp;
-                                        @Html.DisplayFor(modelItem => serviceplan.TcmClient.Client.Name)
+                                        @Html.DisplayFor(modelItem => discharge.TcmServicePlan.TcmClient.Client.Name)
                                         |
-                                        @Html.DisplayFor(modelItem => serviceplan.TcmClient.CaseNumber)
+                                        @Html.DisplayFor(modelItem => discharge.TcmServicePlan.TcmClient.CaseNumber)
                                     </td>
                                     <td align="center">
-                                        @if (serviceplan.Approved == 1)
+                                        @if (discharge.Approved == 1)
                                         {
                                             <span class="label label-info">
                                                 Pending
@@ -128,7 +128,7 @@
                                         }
                                         else
                                         {
-                                            if (serviceplan.Approved == 2)
+                                            if (discharge.Approved == 2)
                                             {
                                                 <span class="label label-success">
                                                     Approved
@@ -142,18 +142,18 @@
                                     <td align="right">
                                         @if (User.IsInRole("CaseManager"))
                                         {
-                                            @if (serviceplan.Approved == 1)
+                                            @if (discharge.Approved == 1)
                                             {
-                                                <a asp-action="Edit" asp-controller="TCMServicePlans" asp-route-id="@serviceplan.Id" asp-route-origin="4" class="btn btn-warning" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="Edit" asp-controller="TCMDischarges" asp-route-id="@discharge.Id" asp-route-origi="4" class="btn btn-warning" title="Edit TCM Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
                                             }
                                             else
                                             {
-                                                <a asp-action="Edit" asp-controller="TCMServicePlans" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-file"></i></a>
+                                                <a asp-action="Edit" asp-controller="TCMDischarges" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-file"></i></a>
                                             }
                                         }
                                         @if (User.IsInRole("TCMSupervisor"))
                                         {
-                                            <a asp-action="ApproveNote" asp-route-id="@serviceplan.Id" asp-route-origin="5" class="btn btn-primary" title="Approve Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a asp-action="ApproveNote" asp-route-id="@discharge.Id" asp-route-origin="5" class="btn btn-primary" title="Approve Note"><i class="glyphicon glyphicon-ok"></i></a>
                                         }
                                     </td>
                                 </tr>
@@ -162,7 +162,7 @@
                             {
                                 <tr>
                                     <td align="center">
-                                        @if (serviceplan.TCMMessages.Count() != 0)
+                                        @if (discharge.TCMMessages.Count() != 0)
                                         {
                                             <a class="icon-plus-sign-alt"></a>
                                         }
@@ -175,7 +175,7 @@
                                                     @*<th class="col-md-1"></th>*@
                                                     <th></th>
                                                 </tr>
-                                                @foreach (var message in serviceplan.TCMMessages.OrderBy(m => m.DateCreated))
+                                                @foreach (var message in discharge.TCMMessages.OrderBy(m => m.DateCreated))
                                                 {
 
                                                     @if (message.Status.ToString() == "NotRead")
@@ -211,24 +211,24 @@
                                         </div>
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => serviceplan.DateServicePlan)
+                                        @Html.DisplayFor(modelItem => discharge.DischargeDate)
                                     </td>
                                     <td>
-                                        @if (serviceplan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        @if (discharge.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
                                             <i class="glyphicon glyphicon-user btn-danger"></i>
                                         }
-                                        @if (serviceplan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        @if (discharge.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
                                         {
                                             <i class="glyphicon glyphicon-user btn-primary"></i>
                                         }
                                         &nbsp;
-                                        @Html.DisplayFor(modelItem => serviceplan.TcmClient.Client.Name)
+                                        @Html.DisplayFor(modelItem => discharge.TcmServicePlan.TcmClient.Client.Name)
                                         |
-                                        @Html.DisplayFor(modelItem => serviceplan.TcmClient.CaseNumber)
+                                        @Html.DisplayFor(modelItem => discharge.TcmServicePlan.TcmClient.CaseNumber)
                                     </td>
                                     <td align="center">
-                                        @if (serviceplan.Approved == 1)
+                                        @if (discharge.Approved == 1)
                                         {
                                             <span class="label label-info">
                                                 Pending
@@ -236,7 +236,7 @@
                                         }
                                         else
                                         {
-                                            if (serviceplan.Approved == 2)
+                                            if (discharge.Approved == 2)
                                             {
                                                 <span class="label label-success">
                                                     Approved
@@ -250,18 +250,18 @@
                                     <td align="right">
                                         @if (User.IsInRole("CaseManager"))
                                         {
-                                            @if (serviceplan.Approved == 1)
+                                            @if (discharge.Approved == 1)
                                             {
-                                                <a asp-action="Edit" asp-controller="TCMServicePlans" asp-route-id="@serviceplan.Id" asp-route-origin="4" class="btn btn-warning" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="Edit" asp-controller="TCMDischarges" asp-route-id="@discharge.Id" asp-route-origi="4" class="btn btn-warning" title="Edit TCM Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
                                             }
                                             else
                                             {
-                                                <a asp-action="Edit" asp-controller="TCMServicePlans" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="Edit" asp-controller="TCMDischarges" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
                                             }
                                         }
                                         @if (User.IsInRole("TCMSupervisor"))
                                         {
-                                            <a asp-action="ApproveNote" asp-route-id="@serviceplan.Id" asp-route-origin="5" class="btn btn-primary" title="Approve Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a asp-action="ApproveNote" asp-route-id="@discharge.Id" asp-route-origi="5" class="btn btn-primary" title="Approve Note"><i class="glyphicon glyphicon-ok"></i></a>
                                         }
                                     </td>
                                 </tr>
@@ -307,5 +307,7 @@
         });
     </script>
 }
+
+
 
 

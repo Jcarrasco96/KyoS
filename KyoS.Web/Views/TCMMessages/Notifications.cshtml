@@ -79,9 +79,9 @@
                                     <td align="right">
                                         @if (User.IsInRole("TCMSupervisor"))
                                         {
-                                            if ((notification.TCMNote != null))
+                                            @if ((notification.TCMNote != null))
                                             {
-                                                if (notification.TCMNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                @if (notification.TCMNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
                                                 {
                                                     <a class="btn btn-warning disabled" title="View TCM note"><i class="glyphicon glyphicon-file"></i></a>
                                                 }
@@ -92,9 +92,9 @@
                                             }
                                             else
                                             {
-                                                if (notification.TCMServicePlan != null)
+                                                @if (notification.TCMServicePlan != null)
                                                 {
-                                                    if (notification.TCMServicePlan.Approved == 2)
+                                                    @if (notification.TCMServicePlan.Approved == 2)
                                                     {
                                                         <a class="btn btn-warning disabled" title="View TCM Service Plan"><i class="glyphicon glyphicon-file"></i></a>
                                                     }
@@ -103,7 +103,63 @@
                                                         <a asp-controller="TCMServicePlans" asp-action="EditReadOnly" asp-route-id="@notification.TCMServicePlan.Id" asp-route-origi="3" class="btn btn-warning" title="View TCM Service plan"><i class="glyphicon glyphicon-file"></i></a>
                                                     }
                                                 }
-                                              
+                                                else
+                                                {
+                                                    @if (notification.TCMDischarge != null)
+                                                    {
+                                                        @if (notification.TCMDischarge.Approved == 2)
+                                                        {
+                                                            <a class="btn btn-warning disabled" title="View TCM Discharge"><i class="glyphicon glyphicon-file"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a asp-controller="TCMDischarges" asp-action="EditReadOnly" asp-route-id="@notification.TCMDischarge.Id" asp-route-origi="2" class="btn btn-warning" title="View TCM Discharge"><i class="glyphicon glyphicon-file"></i></a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        @if (notification.TCMFarsForm != null)
+                                                        {
+                                                            @if (notification.TCMFarsForm.Status == KyoS.Common.Enums.FarsStatus.Approved)
+                                                            {
+                                                                <a class="btn btn-warning disabled" title="View TCM FARS"><i class="glyphicon glyphicon-file"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a asp-controller="TCMFarsForms" asp-action="EditReadOnly" asp-route-id="@notification.TCMFarsForm.Id" asp-route-origi="1" class="btn btn-warning" title="View TCM FARS"><i class="glyphicon glyphicon-file"></i></a>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            @if (notification.TCMServicePlanReview != null)
+                                                            {
+                                                                @if (notification.TCMServicePlanReview.Approved == 2)
+                                                                {
+                                                                    <a class="btn btn-warning disabled" title="View TCM Service plan review"><i class="glyphicon glyphicon-file"></i></a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a asp-controller="TCMServicePlanReviews" asp-action="EditReadOnly" asp-route-Id="@notification.TCMServicePlan.Id" asp-route-IdServicePlan="@notification.TCMServicePlanReview.Id" asp-route-origi="1" class="btn btn-warning" title="View TCM Service plan review"><i class="glyphicon glyphicon-file"></i></a>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                @if (notification.TCMAddendum != null)
+                                                                {
+                                                                    @if (notification.TCMAddendum.Approved == 2)
+                                                                    {
+                                                                        <a class="btn btn-warning disabled" title="View TCM Addendum"><i class="glyphicon glyphicon-file"></i></a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a asp-controller="TCMServicePlans" asp-action="EditAdendumReadOnly" asp-route-Id="@notification.TCMAddendum.Id" asp-route-aview="2" class="btn btn-warning" title="View TCM Service plan review"><i class="glyphicon glyphicon-file"></i></a>
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
                                             }
                                             <a onclick="showInPopupLg('@Url.Action("Reviews", "TCMMessages", new { id = notification.Id }, Context.Request.Scheme)','Reviews of this item')" class="btn btn-info" title="View reviews of this item"><i class="glyphicon glyphicon-align-justify"></i></a>
                                         }
@@ -152,9 +208,9 @@
                                     <td align="right">
                                         @if (User.IsInRole("TCMSupervisor"))
                                         {
-                                            if (notification.TCMNote != null)
+                                            @if (notification.TCMNote != null)
                                             {
-                                                if (notification.TCMNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                @if (notification.TCMNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
                                                 {
                                                     <a class="btn btn-warning disabled" title="View TCM note"><i class="glyphicon glyphicon-file"></i></a>
                                                 }
@@ -165,15 +221,71 @@
                                             }
                                             else
                                             {
-                                                if (notification.TCMServicePlan != null)
+                                                @if (notification.TCMServicePlan != null)
                                                 {
-                                                    if (notification.TCMServicePlan.Approved == 2)
+                                                    @if (notification.TCMServicePlan.Approved == 2)
                                                     {
                                                         <a class="btn btn-warning disabled" title="View TCM Service Plan"><i class="glyphicon glyphicon-file"></i></a>
                                                     }
                                                     else
                                                     {
                                                         <a asp-controller="TCMServicePlans" asp-action="EditReadOnly" asp-route-id="@notification.TCMServicePlan.Id" asp-route-origi="3" class="btn btn-warning" title="View TCM Service plan"><i class="glyphicon glyphicon-file"></i></a>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    @if (notification.TCMDischarge != null)
+                                                    {
+                                                        @if (notification.TCMDischarge.Approved == 2)
+                                                        {
+                                                            <a class="btn btn-warning disabled" title="View TCM Discharge"><i class="glyphicon glyphicon-file"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a asp-controller="TCMDischarges" asp-action="EditReadOnly" asp-route-id="@notification.TCMDischarge.Id" asp-route-origi="2" class="btn btn-warning" title="View TCM Discharge"><i class="glyphicon glyphicon-file"></i></a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        @if (notification.TCMFarsForm != null)
+                                                        {
+                                                            @if (notification.TCMFarsForm.Status == KyoS.Common.Enums.FarsStatus.Approved)
+                                                            {
+                                                                <a class="btn btn-warning disabled" title="View TCM FARS"><i class="glyphicon glyphicon-file"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a asp-controller="TCMFarsForms" asp-action="EditReadOnly" asp-route-id="@notification.TCMFarsForm.Id" asp-route-origi="1" class="btn btn-warning" title="View TCM FARS"><i class="glyphicon glyphicon-file"></i></a>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            @if (notification.TCMServicePlanReview != null)
+                                                            {
+                                                                @if (notification.TCMServicePlanReview.Approved == 2)
+                                                                {
+                                                                    <a class="btn btn-warning disabled" title="View TCM Service plan review"><i class="glyphicon glyphicon-file"></i></a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a asp-controller="TCMServicePlanReviews" asp-action="EditReadOnly" asp-route-Id="@notification.TCMServicePlanReview.Id" asp-route-IdServicePlan="@notification.TCMServicePlanReview.TcmServicePlan.Id" asp-route-origi="1" class="btn btn-warning" title="View TCM Service plan review"><i class="glyphicon glyphicon-file"></i></a>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                @if (notification.TCMAddendum != null)
+                                                                {
+                                                                    @if (notification.TCMAddendum.Approved == 2)
+                                                                    {
+                                                                        <a class="btn btn-warning disabled" title="View TCM Addendum"><i class="glyphicon glyphicon-file"></i></a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a asp-controller="TCMServicePlans" asp-action="EditAdendumReadOnly" asp-route-Id="@notification.TCMAddendum.Id" asp-route-aview="2" class="btn btn-warning" title="View TCM Service plan review"><i class="glyphicon glyphicon-file"></i></a>
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }

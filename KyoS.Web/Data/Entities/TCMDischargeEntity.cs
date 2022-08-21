@@ -58,5 +58,7 @@ namespace KyoS.Web.Data.Entities
 
         public List <TCMDischargeFollowUpEntity> TcmDischargeFollowUp { get; set; }
         public List<TCMDischargeServiceStatusEntity> TcmDischargeServiceStatus { get; set; }
+
+        public IEnumerable<TCMMessageEntity> TCMMessages { get; set; }
     }
 }

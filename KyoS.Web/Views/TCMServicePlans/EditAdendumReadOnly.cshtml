@@ -17,7 +17,18 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("TCM Addendum", "AdendumApproved", "TCMServicePlans", new { approved = 1, caseNumber = Model.TcmServicePlan.TcmClient.CaseNumber, aview = 1 })
+                @if (ViewData["aview"].ToString() == "0")
+                {
+                    @Html.ActionLink("TCM Addendum Pending", "AdendumApproved", "TCMServicePlans", new { approved = 1, caseNumber = Model.TcmServicePlan.TcmClient.CaseNumber, aview = @ViewData["aview"] })
+                }
+                @if (ViewData["aview"].ToString() == "1")
+                {
+                    @Html.ActionLink("TCM Addendum all", "Adendum", "TCMServicePlans", new { aview = @ViewData["aview"] })
+                }
+                @if (ViewData["aview"].ToString() == "2")
+                {
+                    @Html.ActionLink("TCM Addendum Notification", "Notifications", "TCMMessages")
+                }
             </li>
             <li class="active">Approve</li>
         </ul><!--.breadcrumb-->
@@ -28,7 +39,7 @@
 
     <div class="row">
 
-        <form asp-action="AproveAdendum" asp-route-id="@Model.Id">
+        <form asp-action="AproveAdendum" asp-route-id="@Model.Id" asp-route-aview="@ViewData["aview"]">
             <div class="row col-md-12">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Approved" />
@@ -48,8 +59,26 @@
                 <br />
                 <div class="form-group col-md-12">
                     <input type="submit" value="Approve" class="btn btn-primary" />
-                    <a asp-action="Review"  class="btn btn-warning disabled">Review</a>
-                    <a asp-action="AdendumApproved" asp-route-approved="1" asp-route-caseNumber="@Model.TcmServicePlan.TcmClient.CaseNumber" asp-route-aview="@ViewData["aview"]" class="btn btn-success">Back</a>
+                    @if (User.IsInRole("TCMSupervisor"))
+                    {
+                        <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageAddendumEntity","TCMServicePlans",new {id = Model.Id, origi = @ViewData["aview"]},Context.Request.Scheme)','Add message to casemanager')" title="Not approved tcm addendum due to problems">Review</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Review" class="btn btn-warning disabled">Review</a>
+                    }
+                    @if (ViewData["aview"].ToString() == "0")
+                    {
+                        <a asp-action="AdendumApproved" asp-route-approved="1" asp-route-caseNumber="@Model.TcmServicePlan.TcmClient.CaseNumber" asp-route-aview="@ViewData["aview"]" class="btn btn-success">Back</a>
+                    }
+                    @if (ViewData["aview"].ToString() == "1")
+                    {
+                        <a asp-action="Adendum" asp-route-aview="@ViewData["aview"]" class="btn btn-success">Back</a>
+                    }
+                    @if (ViewData["aview"].ToString() == "2")
+                    {
+                        <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success">Back</a>
+                    }
                 </div>
             </div>
         </form>

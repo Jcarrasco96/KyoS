@@ -310,7 +310,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "TCMSupervisor, CaseManager")]
-        public async Task<IActionResult> Edit(TCMFarsFormViewModel farsFormViewModel, string origin = "")
+        public async Task<IActionResult> Edit(TCMFarsFormViewModel farsFormViewModel, string origi = "")
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -319,6 +319,37 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 TCMFarsFormEntity farsFormEntity = await _converterHelper.ToTCMFarsFormEntity(farsFormViewModel, false, user_logged.Id);
+
+                List<TCMMessageEntity> messages = farsFormEntity.TcmMessages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
+                foreach (TCMMessageEntity value in messages)
+                {
+                    value.Status = MessageStatus.Read;
+                    value.DateRead = DateTime.Now;
+                    _context.Update(value);
+
+                    //I generate a notification to supervisor
+                    TCMMessageEntity notification = new TCMMessageEntity
+                    {
+                        TCMNote = null,
+                        TCMFarsForm = farsFormEntity,
+                        TCMServicePlan = null,
+                        TCMServicePlanReview = null,
+                        TCMAddendum = null,
+                        TCMDischarge = null,
+                        TCMAssessment = null,
+                        Title = "Update on reviewed TCM FARS",
+                        Text = $"The TCM FARS of {farsFormEntity.TCMClient.Client.Name} on {farsFormEntity.EvaluationDate.ToShortDateString()} was rectified",
+                        From = value.To,
+                        To = value.From,
+                        DateCreated = DateTime.Now,
+                        Status = MessageStatus.NotRead,
+                        Notification = true
+                    };
+                    _context.Add(notification);
+                }
+
+
                 _context.TCMFarsForm.Update(farsFormEntity);
                 try
                 {
@@ -326,10 +357,13 @@ namespace KyoS.Web.Controllers
 
                     if (farsFormViewModel.Origin == 1)
                     {
-                        return RedirectToAction("Index", new { idTCMClient = farsFormEntity.TCMClient.Id, origin = origin });
+                        return RedirectToAction("Index", new { idTCMClient = farsFormEntity.TCMClient.Id, origin = origi });
                     }
-
-                    return RedirectToAction("Index", new { idTCMClient = farsFormEntity.TCMClient.Id, origin = origin });
+                    if (farsFormViewModel.Origin == 2)
+                    {
+                        return RedirectToAction("MessagesOfFars", "TCMMessages");
+                    }
+                    return RedirectToAction("Index", new { idTCMClient = farsFormEntity.TCMClient.Id, origin = origi });
                 }
                 catch (System.Exception ex)
                 {
@@ -470,7 +504,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> ApproveFars(int id)
+        public async Task<IActionResult> ApproveFars(int id, int origi = 0)
         {
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
@@ -483,9 +517,17 @@ namespace KyoS.Web.Controllers
             _context.Update(tcmfars);
 
             await _context.SaveChangesAsync();
-            
+
+            if (origi == 0)
+            {
+                return RedirectToAction("TCMFarsApproved", "TCMFarsForms", new { status = FarsStatus.Pending });
+            }
+            if (origi == 1)
+            {
+                return RedirectToAction("Notifications", "TCMMessages");
+            }
+
             return RedirectToAction("TCMFarsApproved", "TCMFarsForms", new { status = FarsStatus.Pending });
-           
         }
 
         [Authorize(Roles = "TCMSupervisor, CaseManager")]
@@ -519,18 +561,18 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public IActionResult AddMessageEntity(int id = 0, int origin = 0)
+        public IActionResult AddMessageEntity(int id = 0, int origi = 0)
         {
             if (id == 0)
             {
-                return View(new MessageViewModel());
+                return View(new TCMMessageViewModel());
             }
             else
             {
-                MessageViewModel model = new MessageViewModel()
+                TCMMessageViewModel model = new TCMMessageViewModel()
                 {
-                    IdFarsForm = id,
-                    Origin = origin
+                    IdTCMFarsForm = id,
+                    Origin = origi
                 };
 
                 return View(model);
@@ -540,22 +582,22 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> AddMessageEntity(MessageViewModel messageViewModel)
+        public async Task<IActionResult> AddMessageEntity(TCMMessageViewModel messageViewModel)
         {
             if (ModelState.IsValid)
             {
-                MessageEntity model = await _converterHelper.ToMessageEntity(messageViewModel, true);
+                TCMMessageEntity model = await _converterHelper.ToTCMMessageEntity(messageViewModel, true);
                 UserEntity user_logged = await _context.Users
                                                        .Include(u => u.Clinic)
                                                        .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
                 model.From = user_logged.UserName;
-                model.To = model.FarsForm.CreatedBy;
+                model.To = model.TCMFarsForm.CreatedBy;
                 _context.Add(model);
                 await _context.SaveChangesAsync();
             }
             
             if (messageViewModel.Origin == 1)
-                return RedirectToAction("PendingFars");
+                return RedirectToAction("TCMFarsApproved", new { status = FarsStatus .Pending});
 
             return RedirectToAction("Index");
         }
@@ -581,6 +623,7 @@ namespace KyoS.Web.Controllers
                 List<TCMFarsFormEntity> tcmFars = await _context.TCMFarsForm
                                                                 .Include(m => m.TCMClient)
                                                                 .ThenInclude(m => m.Client)
+                                                                .Include(m => m.TcmMessages)
                                                                 .Where(m => m.Status == status
                                                                             && m.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id)
                                                                 .OrderBy(m => m.TCMClient.CaseNumber)
@@ -594,6 +637,7 @@ namespace KyoS.Web.Controllers
                 List<TCMFarsFormEntity> tcmFars = await _context.TCMFarsForm
                                                                 .Include(m => m.TCMClient)
                                                                 .ThenInclude(m => m.Client)
+                                                                .Include(m => m.TcmMessages)
                                                                 .Where(m => m.Status == status
                                                                     && m.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
                                                                     && m.TCMClient.Casemanager.LinkedUser == user_logged.UserName)
@@ -607,7 +651,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public IActionResult EditReadOnly(int id = 0)
+        public IActionResult EditReadOnly(int id = 0, int origi = 0)
         {
             TCMFarsFormViewModel model;
 
@@ -635,8 +679,8 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-
                         model = _converterHelper.ToTCMFarsFormViewModel(tcmFarsForm);
+                        ViewData["origi"] = origi;
                         return View(model);
                     }
 
@@ -700,5 +744,54 @@ namespace KyoS.Web.Controllers
             }
             return RedirectToAction("NotAuthorized", "Account");
         }
+
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        public async Task<IActionResult> TCMDischargeWithReview()
+        {
+            if (User.IsInRole("CaseManager"))
+            {
+                List<TCMDischargeEntity> salida = await _context.TCMDischarge
+                                                                .Include(wc => wc.TcmServicePlan)
+                                                                .ThenInclude(wc => wc.TcmClient)
+                                                                .ThenInclude(wc => wc.Client)
+                                                                .Include(wc => wc.TcmServicePlan)
+                                                                .ThenInclude(wc => wc.TcmClient)
+                                                                .ThenInclude(wc => wc.Casemanager)
+                                                                .Include(wc => wc.TCMMessages.Where(m => m.Notification == false))
+                                                                .Where(wc => (wc.TcmServicePlan.TcmClient.Casemanager.LinkedUser == User.Identity.Name
+                                                                    && wc.Approved == 1
+                                                                    && wc.TCMMessages.Count() > 0))
+                                                                .ToListAsync();
+
+
+                return View(salida);
+            }
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    List<TCMDischargeEntity> salida = await _context.TCMDischarge
+                                                                    .Include(wc => wc.TcmServicePlan)
+                                                                    .ThenInclude(wc => wc.TcmClient)
+                                                                    .ThenInclude(wc => wc.Client)
+                                                                    .Include(wc => wc.TcmServicePlan)
+                                                                    .ThenInclude(wc => wc.TcmClient)
+                                                                    .ThenInclude(wc => wc.Casemanager)
+                                                                    .Include(wc => wc.TCMMessages.Where(m => m.Notification == false))
+                                                                    .Where(wc => (wc.TcmServicePlan.TcmClient.Casemanager.Clinic.Id == user_logged.Clinic.Id
+                                                                        && wc.Approved == 1
+                                                                        && wc.TCMMessages.Count() > 0))
+                                                               .ToListAsync();
+                    return View(salida);
+                }
+            }
+
+            return View();
+        }
+
+
     }
 }

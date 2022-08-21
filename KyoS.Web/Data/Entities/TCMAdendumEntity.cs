@@ -23,5 +23,6 @@ namespace KyoS.Web.Data.Entities
          
         public string NeedsIdentified { get; set; }
         public string LongTerm { get; set; }
+        public IEnumerable<TCMMessageEntity> TCMMessages { get; set; }
     }
 }

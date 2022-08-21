@@ -8,16 +8,23 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("Pending Fars Forms", "TCMFarsApproved", "TCMFarsForms", new { status = @KyoS.Common.Enums.FarsStatus.Pending })
+            @if (@ViewData["origi"].ToString() == "0")
+            {
+                @Html.ActionLink("Pending TCM Fars Forms", "TCMFarsApproved", "TCMFarsForms", new { status = @KyoS.Common.Enums.FarsStatus.Pending })
+            }
+            @if (ViewData["origi"].ToString() == "1")
+            {
+                @Html.ActionLink("TCM FARS Notifications", "Notifications", "TCMMessages")
+            }
         </li>
-        <li class="active">Approve Fars Form</li>
+        <li class="active">Approve TCM Fars Form</li>
     </ul><!--.breadcrumb-->
 </div>
 
-<h4>Approve Fars Form</h4>
+<h4>Approve TCM Fars Form</h4>
 <hr />
 <div class="row">
-    <form asp-action="ApproveFars" asp-route-id="@Model.Id" asp-route-origin="2"  enctype="multipart/form-data">
+    <form asp-action="ApproveFars" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="IdTCMClient" />
         <input type="hidden" asp-for="AdmissionedFor" />
@@ -31,8 +38,22 @@
         <partial name="_TCMFarsFormsReadOnly" />
         <div class="form-group col-md-12">
             <input type="submit" value="Approve" class="btn btn-primary" title="Save it and back" />
-            <a asp-action="Review"  class="btn btn-warning disabled" title="Approve FARS">Review</a>
-            <a asp-action="TCMFarsApproved" asp-route-status="@KyoS.Common.Enums.FarsStatus.Pending" class="btn btn-success" title="Approve FARS">Back</a>
+            @if (User.IsInRole("TCMSupervisor"))
+            {
+                <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","TCMFarsForms",new {id = Model.Id, origi = 1},Context.Request.Scheme)','Add message to casemanager')" title="Not approved tcm Fars due to problems">Review</a>
+            }
+            else
+            {
+                <a asp-action="AddMessageEntity" class="btn btn-warning disabled" title="Review TCM FARS">Review</a>
+            }
+            @if (@ViewData["origi"].ToString() == "0")
+            {
+                <a asp-action="TCMFarsApproved" asp-route-status="@KyoS.Common.Enums.FarsStatus.Pending" class="btn btn-success" title="Approve FARS">Back</a>
+            }
+            @if (@ViewData["origi"].ToString() == "1")
+            {
+                <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success" title="Approve FARS">Back</a>
+            }
         </div>
     </form>
 </div>
@@ -41,7 +62,9 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
 }
+
 
 
 

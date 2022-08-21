@@ -1992,11 +1992,18 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 DateAdendum = model.Date_Identified,
-                TcmServicePlan = model.TcmServicePlan,
+                TcmServicePlan = await _context.TCMServicePlans
+                                               .Include(n => n.TcmClient)
+                                               .ThenInclude(n => n.Client)
+                                               .FirstOrDefaultAsync(n => n.Id == model.ID_TcmServicePlan),
                 TcmDomain = model.TcmDomain,
                 LongTerm = model.Long_term,
-                NeedsIdentified = model.Needs_Identified
-                
+                NeedsIdentified = model.Needs_Identified,
+                TCMMessages = _context.TCMMessages
+                                      .Where(n => n.TCMAddendum.Id == model.Id)
+                                      .ToList(),
+                Approved = model.Approved
+
             };
         }
 
@@ -2042,7 +2049,10 @@ namespace KyoS.Web.Helpers
 
         public async Task<TCMServicePlanReviewEntity> ToTCMServicePlanReviewEntity(TCMServicePlanReviewViewModel model, bool isNew, string userId)
         {
-            TCMServicePlanEntity tcmServicePlan = await _context.TCMServicePlans.FirstOrDefaultAsync(n => n.Id == model.IdServicePlan);
+            TCMServicePlanEntity tcmServicePlan = await _context.TCMServicePlans
+                                                                .Include(n => n.TcmClient)
+                                                                .ThenInclude(n => n.Client)
+                                                                .FirstOrDefaultAsync(n => n.Id == model.IdServicePlan);
             return new TCMServicePlanReviewEntity
             {
                 Id = isNew ? 0 : model.Id,
@@ -2056,7 +2066,10 @@ namespace KyoS.Web.Helpers
                 SummaryProgress = model.SummaryProgress,
                 TcmServicePlan = tcmServicePlan,
                 TCMServicePlanRevDomain = model.TCMServicePlanRevDomain,
-                
+                TCMMessages = _context.TCMMessages
+                                      .Where(n => n.TCMServicePlan.TCMServicePlanReview.Id == model.Id)
+                                      .ToList()
+
             };
         }
 
@@ -2149,9 +2162,13 @@ namespace KyoS.Web.Helpers
                 StaffSignatureDate = model.StaffSignatureDate,
                 SupervisorSignatureDate = model.SupervisorSignatureDate,
                 TcmServicePlan = await _context.TCMServicePlans
-                                         .Include(n => n.TcmClient)
-                                         .FirstOrDefaultAsync(m => m.Id == model.IdServicePlan),
-                 Approved = model.Approved
+                                               .Include(n => n.TcmClient)
+                                               .ThenInclude(n => n.Client)
+                                               .FirstOrDefaultAsync(m => m.Id == model.IdServicePlan),
+                Approved = model.Approved,
+                TCMMessages = _context.TCMMessages
+                                      .Where(n => n.TCMDischarge.Id == model.Id)
+                                      .ToList()
 
             };
         }
@@ -4390,7 +4407,9 @@ namespace KyoS.Web.Helpers
             return new TCMFarsFormEntity
             {
                 Id = isNew ? 0 : model.Id,
-                TCMClient = await _context.TCMClient.FirstOrDefaultAsync(c => c.Id == model.IdTCMClient),
+                TCMClient = await _context.TCMClient
+                                          .Include(n => n.Client)  
+                                          .FirstOrDefaultAsync(c => c.Id == model.IdTCMClient),
                 AbilityScale = model.AbilityScale,
                 ActivitiesScale = model.ActivitiesScale,
                 AdmissionedFor = model.AdmissionedFor,
@@ -4433,7 +4452,10 @@ namespace KyoS.Web.Helpers
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
-                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmMessages = _context.TCMMessages
+                                      .Where(n => n.TCMFarsForm.Id == model.Id)
+                                      .ToList()
             };
         }
 
@@ -5811,20 +5833,20 @@ namespace KyoS.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 TCMNote = (model.IdTCMNote != 0) ? await _context.TCMNote
-                                                              .Include(wc => wc.CaseManager)
-                                                              .FirstOrDefaultAsync(wc => wc.Id == model.IdTCMNote) : null,
+                                                                 .Include(wc => wc.CaseManager)
+                                                                 .FirstOrDefaultAsync(wc => wc.Id == model.IdTCMNote) : null,
                 TCMFarsForm = (model.IdTCMFarsForm != 0) ? await _context.TCMFarsForm
-                                                                   .FirstOrDefaultAsync(a => a.Id == model.IdTCMFarsForm) : null,
+                                                                         .FirstOrDefaultAsync(a => a.Id == model.IdTCMFarsForm) : null,
                 TCMServicePlan = (model.IdTCMServiceplan != 0) ? await _context.TCMServicePlans
-                                                                   .FirstOrDefaultAsync(a => a.Id == model.IdTCMServiceplan) : null,
+                                                                               .FirstOrDefaultAsync(a => a.Id == model.IdTCMServiceplan) : null,
                 TCMServicePlanReview = (model.IdTCMServiceplanReview != 0) ? await _context.TCMServicePlanReviews
-                                                                   .FirstOrDefaultAsync(a => a.Id == model.IdTCMServiceplanReview) : null,
+                                                                                           .FirstOrDefaultAsync(a => a.Id == model.IdTCMServiceplanReview) : null,
                 TCMAssessment = (model.IdTCMAssessment != 0) ? await _context.TCMAssessment
-                                                                   .FirstOrDefaultAsync(a => a.Id == model.IdTCMAssessment) : null,
+                                                                             .FirstOrDefaultAsync(a => a.Id == model.IdTCMAssessment) : null,
                 TCMAddendum = (model.IdTCMAddendum != 0) ? await _context.TCMAdendums
-                                                                   .FirstOrDefaultAsync(a => a.Id == model.IdTCMAddendum) : null,
+                                                                         .FirstOrDefaultAsync(a => a.Id == model.IdTCMAddendum) : null,
                 TCMDischarge = (model.IdTCMDischarge != 0) ? await _context.TCMDischarge
-                                                                     .FirstOrDefaultAsync(d => d.Id == model.IdTCMDischarge) : null,
+                                                                           .FirstOrDefaultAsync(d => d.Id == model.IdTCMDischarge) : null,
                 Title = model.Title,
                 Text = model.Text,
                 DateCreated = DateTime.Now,

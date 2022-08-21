@@ -1,0 +1,76 @@
+﻿@model KyoS.Web.Models.TCMMessageViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="AddMessageAddendumEntity">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdTCMAddendum" />
+            <input type="hidden" asp-for="Origin" />
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Text" class="control-label"></label>
+                    <textarea asp-for="Text" class="form-control" rows="4" />
+                    <span asp-validation-for="Text" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+    //    jQueryAjaxPost = form => {
+    //        try {
+    //            $.ajax({
+    //                type: 'POST',
+    //                url: form.action,
+    //                data: new FormData(form),
+    //                contentType: false,
+    //                processData: false,
+    //                success: function (res) {
+    //                    if (res.isValid) {
+    //                        $('#view-all').html(res.html)
+    //                        $('#form-modal .modal-body').html('');
+    //                        $('#form-modal .modal-title').html('');
+    //                        $('#form-modal').modal('hide');
+    //                    }
+    //                    else
+    //                        $('#form-modal .modal-body').html(res.html);
+    //                },
+    //                error: function (err) {
+    //                    console.log(err)
+    //                }
+    //            })
+    //            //to prevent default form submit event
+    //            return false;
+    //        } catch (ex) {
+    //            console.log(ex)
+    //        }
+    //}
+    </script>
+}
+
+
+
+
+
+
