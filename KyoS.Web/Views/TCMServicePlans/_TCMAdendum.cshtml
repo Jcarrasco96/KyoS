@@ -10,7 +10,7 @@
                     <i class="icon-remove"></i>
                 </button>
                 <strong class="red">
-                    Error. It is not posible delete the TCM Adendum
+                    Error. It is not posible delete the TCM Addendum
                 </strong>
             </div>
         }
@@ -21,11 +21,11 @@
             <div class="panel-heading">
                 @if (User.IsInRole("TCMSupervisor"))
                 {
-                    <h3 class="panel-title">Pending TCM Adendum</h3>
+                    <h3 class="panel-title">Pending TCM Addendums</h3>
                 }
                 else
                 { 
-                    <h3 class="panel-title">TCM Adendum</h3>
+                    <h3 class="panel-title">TCM Addendums</h3>
                 }
 
             </div>
@@ -34,16 +34,14 @@
                     <thead>
                         <tr>
                             <th class="col-md-1">
+
                             </th>
-                            <th class="col-md-2" style="text-align:left;">
-                                Name
+                            <th class="col-md-3" style="text-align:left;">
+                                Case Manager
                             </th>
-                            <th class="col-md-2" style="text-align:left;">
-                                Needs Identified
-                            </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Casemanager
-                            </th>
+                            <th class="col-md-4" style="text-align:left;">
+                                Client Name
+                            </th>                            
                             <th class="col-md-1" style="text-align:center;">
                                 Date
                             </th>
@@ -51,7 +49,7 @@
                                 Review
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Approved
+                                Status
                             </th>
                             <th class="col-md-2">
                             </th>
@@ -77,7 +75,6 @@
                                             <th class="col-md-1" style="text-align:center;">Code</th>
                                             <th class="col-md-3">Name</th>
                                             <th class="col-md-7" style="text-align:left;">Need Identified</th>
-
                                         </tr>
                                         <tr>
                                             <td align="center">
@@ -93,10 +90,10 @@
                                                     <table class="table table-striped table-bordered">
                                                         <tr>
                                                             <th class="col-md-1" style="text-align:center;">Objetive</th>
-                                                            <th class="col-md-8">Task</th>
-                                                            <th class="col-md-1" style="text-align:center;">Start Date</th>
-                                                            <th class="col-md-1" style="text-align:center;">Target Date</th>
-                                                            <th class="col-md-1" style="text-align:center;">End Date</th>
+                                                            <th class="col-md-5">Task</th>
+                                                            <th class="col-md-2" style="text-align:center;">Start Date</th>
+                                                            <th class="col-md-2" style="text-align:center;">Target Date</th>
+                                                            <th class="col-md-2" style="text-align:center;">End Date</th>
                                                         </tr>
                                                         @foreach (var product in item.TcmDomain.TCMObjetive)
                                                         {
@@ -122,6 +119,9 @@
                                     </table>
                                 </div>
                             </td>
+                            <td align="left">
+                                @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Casemanager.Name)
+                            </td>
                             <td>
                                 @if (item.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                 {
@@ -135,13 +135,7 @@
                                 @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Client.Name)
                                 |
                                 @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.CaseNumber)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.NeedsIdentified)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Casemanager.Name)
-                            </td>
+                            </td>                            
                             <td align="center">
                                 @Html.DisplayFor(modelItem => item.DateAdendum)
                             </td>
