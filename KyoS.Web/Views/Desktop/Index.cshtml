@@ -1591,7 +1591,7 @@
                 }
                 else
                 {
-                    <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="ServicePlanStarted" role="button">
+                    <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="ServicePlanStarted" asp-route-approved="0" role="button">
                         <div class="thumbnail list-group-item list-group-item-warning">
                             <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Services Plans<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                             <span class="message-counter-warning">@ViewBag.ServicePlanEdition</span>
