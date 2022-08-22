@@ -20,6 +20,8 @@
     int counts_of_notification = DataContext.Messages.Count(m => (m.To == user.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead && m.Notification == true));
     int counts_of_messageTCM = DataContext.TCMMessages.Count(m => (m.To == user.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead && m.Notification == false));
     int counts_of_notificationTCM = DataContext.TCMMessages.Count(m => (m.To == user.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead && m.Notification == true));
+    int counts_of_messageTOTAL = counts_of_message + counts_of_messageTCM;
+    int counts_of_notificationTOTAL = counts_of_notification + counts_of_notificationTCM;
     IEnumerable<MessageEntity> last3_notifications = DataContext.Messages
                                                         .Where(m => (m.To == user.UserName && m.Notification == true))
                                                         .OrderByDescending(m => m.Id)
@@ -999,6 +1001,137 @@
                             }
                             else
                             {
+                                <li class="class=" dropdown open"">
+                                    @if (counts_of_notification == 0 && counts_of_notificationTCM == 0)
+                                    {
+                                        <span class="notifications-counter-cero">@counts_of_notificationTOTAL</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="notifications-counter">@counts_of_notificationTOTAL</span>
+                                    }
+
+                                    <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" style="background-color: transparent;">
+                                        <i class="icon-bell">&nbsp;</i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="notice-header">
+                                            <i class="icon-bell pdd-right-10"></i>
+                                            <b><span class="text-gray">Last 3 notifications</span></b>
+                                        </li>
+                                        @foreach (var item in last3_notificationsTCM)
+                                        {
+                                            <li>
+                                                <a asp-controller="Messages" asp-action="Notifications">
+                                                    <div class="info">
+                                                        <span class="title">
+                                                            @if (item.Status == KyoS.Common.Enums.MessageStatus.NotRead)
+                                                            {
+                                                                <span style="color:#0072c6;">@item.Title</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span>@item.Title</span>
+                                                            }
+                                                        </span>
+                                                        @{
+                                                            TimeSpan sustract = DateTime.Now.Subtract(item.DateCreated);
+                                                        }
+                                                        @if (sustract.Days > 0)
+                                                        {
+                                                            <span class="sub-title">
+                                                                @sustract.Days days ago
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            if (sustract.Hours > 0)
+                                                            {
+                                                                <span class="sub-title">
+                                                                    @sustract.Hours hours ago
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="sub-title">
+                                                                    @sustract.Minutes minutes ago
+                                                                </span>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a asp-controller="TCMMessages" asp-action="Notifications">
+                                                    <div class="info">
+                                                        <span class="title">
+                                                            @if (item.Status == KyoS.Common.Enums.MessageStatus.NotRead)
+                                                            {
+                                                                <span style="color:#0072c6;">@item.Title</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span>@item.Title</span>
+                                                            }
+                                                        </span>
+                                                        @{
+                                                            TimeSpan sustract1 = DateTime.Now.Subtract(item.DateCreated);
+                                                        }
+                                                        @if (sustract1.Days > 0)
+                                                        {
+                                                            <span class="sub-title">
+                                                                @sustract1.Days days ago
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            if (sustract1.Hours > 0)
+                                                            {
+                                                                <span class="sub-title">
+                                                                    @sustract1.Hours hours ago
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="sub-title">
+                                                                    @sustract1.Minutes minutes ago
+                                                                </span>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (last3_notifications.Count() == 0)
+                                        {
+                                            <li>
+                                                <a asp-controller="Messages" asp-action="Notifications">
+                                                    <div class="info">
+                                                        <span style="color:#0072c6;">No notifications MH for you &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (last3_notificationsTCM.Count() == 0)
+                                        {
+                                            <li>
+                                                <a asp-controller="TCMMessages" asp-action="Notifications">
+                                                    <div class="info">
+                                                        <span style="color:#0072c6;">No notifications TCM for you &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        }
+                                    <li class="notice-footer">
+                                        <span>
+                                            <a asp-controller="Messages" asp-action="Notifications" class="text-gray">View all notifications MH &nbsp;<i class="icon-chevron-right pdd-left-5 font-size-10"></i></a>
+                                        </span>
+                                        <span>
+                                            <a asp-controller="TCMMessages" asp-action="Notifications" class="text-gray">View all notifications TCM &nbsp;<i class="icon-chevron-right pdd-left-5 font-size-10"></i></a>
+                                        </span>
+                                    </li>
+                                    </ul>
+                                </li>
                                 <li>
                                     <a class="">
                                         @if (User.IsInRole("Manager"))
@@ -1047,6 +1180,7 @@
                                             </a>
                                         </li>
                                     </ul>
+
                                 </li>
 
                             }
