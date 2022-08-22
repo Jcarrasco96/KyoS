@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMAdendumEntity>
 @{
-    ViewData["Title"] = "TCM Adendum";
+    ViewData["Title"] = "TCM Addendums";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -34,14 +34,14 @@
             }
 
         </li>
-        <li class="active">Adendums</li>
+        <li class="active">TCM Addendums</li>
     </ul><!--.breadcrumb-->
 </div>
 
 @if (User.IsInRole("CaseManager"))
 {
     <p>
-        <a onclick="showInPopup('@Url.Action("CreateAdendum", "TCMServicePlans", new {idClient = ViewData["tcmClientId"] }, Context.Request.Scheme)','Add TCM Adendum')" class="btn btn-primary" title="Create TCM Adendum"><i class="glyphicon glyphicon-plus"></i> Create TCM Adendum</a>
+        <a onclick="showInPopup('@Url.Action("CreateAdendum", "TCMServicePlans", new {idClient = ViewData["tcmClientId"] }, Context.Request.Scheme)','Add TCM Addendum')" class="btn btn-primary" title="Create TCM Adendum"><i class="glyphicon glyphicon-plus"></i> Create TCM Addendum</a>
     </p>
 }
 <div class="row">
