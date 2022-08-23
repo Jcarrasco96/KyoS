@@ -14,7 +14,6 @@
     ViewBag.Title = "Dashboard";
 }
 
-
 <div class="row">
     <div class="col-md-12">
         @if (User.IsInRole("Facilitator"))
@@ -1247,7 +1246,7 @@
                             @if (ViewBag.AssesmentPending == "0")
                             {
                                 <div class="thumbnail list-group-item list-group-item-text">
-                                    <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assesment</h4>
+                                    <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assesments</h4>
                                     <span class="message-counter-cero">@ViewBag.AssesmentPending</span>
                                 </div>
                             }
@@ -1255,7 +1254,7 @@
                             {
                                 <a style="text-decoration: none;" asp-controller="TCMAssessments" asp-action="TCMAssessmentApproved" asp-route-approved="1" role="button">
                                     <div class="thumbnail list-group-item list-group-item-info">
-                                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assesment</h4>
+                                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assesments</h4>
                                         <span class="message-counter-info">@ViewBag.AssesmentPending</span>
                                     </div>
                                 </a>
@@ -1265,7 +1264,7 @@
                             @if (ViewBag.ServicePlanPending == "0")
                             {
                                 <div class="thumbnail list-group-item list-group-item-text">
-                                    <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service Plan</h4>
+                                    <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Services Plans</h4>
                                     <span class="message-counter-cero">@ViewBag.ServicePlanPending</span>
                                 </div>
                             }
@@ -1273,7 +1272,7 @@
                             {
                                 <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="ServicePlanStarted" asp-route-approved="1" role="button">
                                     <div class="thumbnail list-group-item list-group-item-info">
-                                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service Plan</h4>
+                                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Services Plans</h4>
                                         <span class="message-counter-info">@ViewBag.ServicePlanPending</span>
                                     </div>
                                 </a>
@@ -1283,7 +1282,7 @@
                             @if (ViewBag.AdendumPending == "0")
                             {
                                 <div class="thumbnail list-group-item list-group-item-text">
-                                    <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Addendum</h4>
+                                    <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Addendums</h4>
                                     <span class="message-counter-cero">@ViewBag.AdendumPending</span>
                                 </div>
                             }
@@ -1291,7 +1290,7 @@
                             {
                                 <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="AdendumApproved" asp-route-approved="1" role="button">
                                     <div class="thumbnail list-group-item list-group-item-info">
-                                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Addendum</h4>
+                                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Addendums</h4>
                                         <span class="message-counter-info">@ViewBag.AdendumPending</span>
                                     </div>
                                 </a>
@@ -1319,7 +1318,7 @@
                             @if (ViewBag.TCMFarsPending == "0")
                             {
                                 <div class="thumbnail list-group-item list-group-item-text">
-                                    <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FARS Form.</h4>
+                                    <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FARS Forms</h4>
                                     <span class="message-counter-cero">@ViewBag.TCMFarsPending</span>
                                 </div>
                             }
@@ -1327,7 +1326,7 @@
                             {
                                 <a style="text-decoration: none;" asp-controller="TCMFarsForms" asp-action="TCMFarsApproved" asp-route-status="@KyoS.Common.Enums.FarsStatus.Pending" role="button">
                                     <div class="thumbnail list-group-item list-group-item-info">
-                                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FARS Form.</h4>
+                                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FARS Forms</h4>
                                         <span class="message-counter-info">@ViewBag.TCMFarsPending</span>
                                     </div>
                                 </a>
@@ -1337,7 +1336,7 @@
                             @if (ViewBag.DischargePending == "0")
                             {
                                 <div class="thumbnail list-group-item list-group-item-text">
-                                    <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharge</h4>
+                                    <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharges</h4>
                                     <span class="message-counter-cero">@ViewBag.DischargePending</span>
                                 </div>
                             }
@@ -1345,7 +1344,7 @@
                             {
                                 <a style="text-decoration: none;" asp-controller="TCMDischarges" asp-action="TCMDischargeApproved" asp-route-approved="1" role="button">
                                     <div class="thumbnail list-group-item list-group-item-info">
-                                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharge</h4>
+                                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharges</h4>
                                         <span class="message-counter-info">@ViewBag.DischargePending</span>
                                     </div>
                                 </a>
@@ -1561,7 +1560,7 @@
                 @if (ViewBag.AllDocuments == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-print" style="padding-right: 10px !important;"></i>Close<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Binder</h4>
+                        <h4 style="align-content:end;"><i class="icon-print" style="padding-right: 10px !important;"></i>All<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Documents</h4>
                         <span class="message-counter-cero">@ViewBag.AllDocuments</span>
                     </div>
                 }
@@ -1585,7 +1584,7 @@
                 @if (ViewBag.ServicePlanEdition == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Service Plan<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Services Plans<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                         <span class="message-counter-cero">@ViewBag.ServicePlanEdition</span>
                     </div>
                 }
@@ -1593,7 +1592,7 @@
                 {
                     <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="ServicePlanStarted" asp-route-approved="0" role="button">
                         <div class="thumbnail list-group-item list-group-item-warning">
-                            <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Service Plan<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                            <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Services Plans<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                             <span class="message-counter-warning">@ViewBag.ServicePlanEdition</span>
                         </div>
                     </a>
@@ -1603,7 +1602,7 @@
                 @if (ViewBag.NotesEdition == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Notes<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in Edition</h4>
+                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Notes<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                         <span class="message-counter-cero">@ViewBag.NotesEdition</span>
                     </div>
                 }
@@ -1611,7 +1610,7 @@
                 {
                     <a style="text-decoration: none;" asp-controller="TCMNotes" asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Edition" role="button">
                         <div class="thumbnail list-group-item list-group-item-warning">
-                            <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Notes<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in Edition</h4>
+                            <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Notes<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                             <span class="message-counter-warning">@ViewBag.NotesEdition</span>
                         </div>
                     </a>
@@ -1621,7 +1620,7 @@
                 @if (ViewBag.AdendumEdition == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Addendums<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                         <span class="message-counter-cero">@ViewBag.AdendumEdition</span>
                     </div>
                 }
@@ -1629,7 +1628,7 @@
                 {
                     <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="AdendumApproved" asp-route-aview="2" role="button">
                         <div class="thumbnail list-group-item list-group-item-warning">
-                            <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                            <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Addendums<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                             <span class="message-counter-warning">@ViewBag.AdendumEdition</span>
                         </div>
                     </a>
@@ -1657,7 +1656,7 @@
                 @if (ViewBag.DischargeEdition == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Discharge<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Discharges<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                         <span class="message-counter-cero">@ViewBag.DischargeEdition</span>
                     </div>
                 }
@@ -1665,7 +1664,7 @@
                 {
                     <a style="text-decoration: none;" asp-controller="TCMDischarges" asp-action="TCMDischargeApproved" role="button">
                         <div class="thumbnail list-group-item list-group-item-warning">
-                            <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Discharge<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
+                            <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Discharges<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in edition</h4>
                             <span class="message-counter-warning">@ViewBag.DischargeEdition</span>
                         </div>
                     </a>
@@ -1683,7 +1682,7 @@
                 @if (ViewBag.ServicePlanPending == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service Plan</h4>
+                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Services Plans</h4>
                         <span class="message-counter-cero">@ViewBag.ServicePlanPending</span>
                     </div>
                 }
@@ -1691,7 +1690,7 @@
                 {
                     <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="ServicePlanStarted" asp-route-approved="1" role="button">
                         <div class="thumbnail list-group-item list-group-item-info">
-                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service Plan</h4>
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Services Plans</h4>
                             <span class="message-counter-info">@ViewBag.ServicePlanPending</span>
                         </div>
                     </a>
@@ -1719,7 +1718,7 @@
                 @if (ViewBag.AdendumPending == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Addendum</h4>
+                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Addendums</h4>
                         <span class="message-counter-cero">@ViewBag.AdendumPending</span>
                     </div>
                 }
@@ -1727,7 +1726,7 @@
                 {
                     <a style="text-decoration: none;" asp-controller="TCMServicePlans" asp-action="AdendumApproved" asp-route-approved="1" role="button">
                         <div class="thumbnail list-group-item list-group-item-info">
-                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Addendum</h4>
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Addendums</h4>
                             <span class="message-counter-info">@ViewBag.AdendumPending</span>
                         </div>
                     </a>
@@ -1755,7 +1754,7 @@
                 @if (ViewBag.DischargePending == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharge</h4>
+                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharges</h4>
                         <span class="message-counter-cero">@ViewBag.DischargePending</span>
                     </div>
                 }
@@ -1763,7 +1762,7 @@
                 {
                     <a style="text-decoration: none;" asp-controller="TCMDischarges" asp-action="TCMDischargeApproved" asp-route-approved="1" role="button">
                         <div class="thumbnail list-group-item list-group-item-info">
-                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharge</h4>
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharges</h4>
                             <span class="message-counter-info">@ViewBag.DischargePending</span>
                         </div>
                     </a>
@@ -1781,7 +1780,7 @@
                 @if (ViewBag.AssesmentPending == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assesment</h4>
+                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assesments</h4>
                         <span class="message-counter-cero">@ViewBag.AssesmentPending</span>
                     </div>
                 }
@@ -1789,7 +1788,7 @@
                 {
                     <a style="text-decoration: none;" asp-controller="TCMAssessments" asp-action="TCMAssessmentApproved" asp-route-approved="1" role="button">
                         <div class="thumbnail list-group-item list-group-item-info">
-                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assesment</h4>
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assesments</h4>
                             <span class="message-counter-info">@ViewBag.AssesmentPending</span>
                         </div>
                     </a>
@@ -1835,7 +1834,7 @@
                 @if (ViewBag.ActivityPending == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Activity</h4>
+                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Activities</h4>
                         <span class="message-counter-cero">@ViewBag.ActivityPending</span>
                     </div>
                 }
@@ -1843,7 +1842,7 @@
                 {
                     <a style="text-decoration: none;" asp-controller="TCMServices" asp-action="PendingActivity" asp-route-status="@KyoS.Common.Enums.NoteStatus.Pending" role="button">
                         <div class="thumbnail list-group-item list-group-item-info">
-                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Activity</h4>
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Activities</h4>
                             <span class="message-counter-info">@ViewBag.ActivityPending</span>
                         </div>
                     </a>

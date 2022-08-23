@@ -1,6 +1,25 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMAdendumEntity>
 @{
-    ViewData["Title"] = "TCM Addendums";
+    if (Model.Count() != 0)
+    {
+        if (Model.FirstOrDefault().Approved == 2)
+        {
+            ViewData["Title"] = "TCM Approved Addendums";
+        }
+        if (Model.FirstOrDefault().Approved == 1)
+        {
+            ViewData["Title"] = "TCM Pending Addendums";
+        }
+        if (Model.FirstOrDefault().Approved == 0)
+        {
+            ViewData["Title"] = "TCM Addendums in Edition";
+        }
+
+    }
+    else
+    {
+        ViewData["Title"] = "TCM Addendums";
+    }
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -9,18 +28,35 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-                @Html.ActionLink("Dashboard", "Index", "Desktop")
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
         @if (User.IsInRole("TCMSupervisor"))
         {
-            <li class="active">Pending TCM Addendums</li>
+            <li class="active">TCM Pending Addendums</li>
         }
         else
-        { 
-            <li class="active">TCM Addendums</li>
+        {
+            if (Model.Count() != 0)
+            {
+                if (Model.FirstOrDefault().Approved == 2)
+                {
+                    <li class="active">TCM Approved Addendums</li>
+                }
+                if (Model.FirstOrDefault().Approved == 1)
+                {
+                    <li class="active">TCM Pending Addendums</li>
+                }
+                if (Model.FirstOrDefault().Approved == 0)
+                {                    
+                    <li class="active">TCM Addendums in Edition</li>
+                }
+            }
+            else
+            {
+                <li class="active">TCM Addendums</li>
+            }
         }
-        
-    </ul><!--.breadcrumb-->
+    </ul>
 </div>
 
 <div class="row">

@@ -19,7 +19,27 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">TCM Discharge</h3>
+                @{
+                    if (Model.Count() != 0)
+                    {
+                        if (Model.FirstOrDefault().Approved == 2)
+                        {
+                            <h3 class="panel-title">Approved TCM Discharges</h3>
+                        }
+                        if (Model.FirstOrDefault().Approved == 1)
+                        {                            
+                            <h3 class="panel-title">Pending TCM Discharges</h3>
+                        }
+                        if (Model.FirstOrDefault().Approved == 0)
+                        {
+                            <h3 class="panel-title">TCM Discharges in Edition</h3>
+                        }
+                    }
+                    else
+                    {
+                        <h3 class="panel-title">TCM Discharges</h3>
+                    }
+                }                
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -31,7 +51,7 @@
                                 Client Name
                             </th>
                             <th class="col-md-2" style="text-align: center;">
-                                Open/Close
+                                Open / Close
                             </th>
                             <th class="col-md-2" style="text-align: center;">
                                 Discharge Date
@@ -40,7 +60,7 @@
                                 Review
                             </th>
                             <th class="col-md-1" style="text-align: center;">
-                                Approved
+                                Status
                             </th>
                             <th class="col-md-2" style="text-align: center;">
                             </th>
@@ -110,9 +130,11 @@
                                     }
                                     &nbsp;
                                     @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Client.Name)
+                                    |
+                                    @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.CaseNumber)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.DataOpen)--@Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.DataClose)
+                                    @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.DataOpen) - @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.DataClose)
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.DischargeDate)
