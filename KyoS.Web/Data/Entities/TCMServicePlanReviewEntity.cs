@@ -15,12 +15,10 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Start Time")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{mm/dd/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime DateServicePlanReview { get; set; }
 
         [Display(Name = "Start Time")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{mm/dd/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime DateOpending { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]

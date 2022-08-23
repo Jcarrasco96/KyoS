@@ -3,23 +3,29 @@
 @if (Model != null)
 {
     <div class="col-md-12">
-        @if (ViewBag.Delete == "N")
-        {
-            <div class="alert alert-block alert-danger">
-                <button type="button" class="close" data-dismiss="alert">
-                    <i class="icon-remove"></i>
-                </button>
-                <strong class="red">
-                    Error. It is not posible delete the TCM Services PLan Review
-                </strong>
-            </div>
-        }
-    </div>
-
-    <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">TCM Services Plan Review</h3>
+                @{
+                    if (Model.Count() != 0)
+                    {
+                        if (Model.FirstOrDefault().Approved == 2)
+                        {
+                            <h3 class="panel-title">Approved Services Plans Reviews</h3>
+                        }
+                        if (Model.FirstOrDefault().Approved == 1)
+                        {
+                            <h3 class="panel-title">Pending Services Plans Reviews</h3>
+                        }
+                        if (Model.FirstOrDefault().Approved == 0)
+                        {
+                            <h3 class="panel-title">Services Plans Reviews in Edition</h3>
+                        }
+                    }
+                    else
+                    {                        
+                        <h3 class="panel-title">Services Plans Reviews</h3>
+                    }
+                }                
             </div>
             <div class="panel-body" id="view-tcmServicePlanReview">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -28,14 +34,14 @@
                             <th class="col-md-1" >
 
                             </th>
+                            <th class="col-md-3" style="text-align:left;">
+                                Case Manager
+                            </th>
                             <th class="col-md-3" >
                                 Client Name
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 Date
-                            </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                CaseManager
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Review
@@ -51,7 +57,7 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                 <td align="center">
+                                <td align="center">
                                     @if (item.TCMMessages.Count() != 0)
                                     {
                                         <a class="icon-plus-sign-alt"></a>
@@ -100,23 +106,25 @@
                                         </table>
                                     </div>
                                 </td>
-                                 <td>
-                                     @if (item.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
-                                     {
-                                         <i class="glyphicon glyphicon-user btn-danger"></i>
-                                     }
-                                     @if (item.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
-                                     {
-                                         <i class="glyphicon glyphicon-user btn-primary"></i>
-                                     }
-                                     &nbsp;
-                                     @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Client.Name)
-                                 </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.DateServicePlanReview.Date)
+                                <td align="left">
+                                    @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Casemanager.Name)
+                                </td>
+                                <td>
+                                    @if (item.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Client.Name)
+                                    |
+                                    @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.CaseNumber)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Casemanager.Name)
+                                    @Html.DisplayFor(modelItem => item.DateServicePlanReview)
                                 </td>
                                 <td align="center">
                                         @if (item.TCMMessages.Count() == 0)
@@ -175,14 +183,14 @@
                                     {
                                         @if (item.Approved == 0)
                                         {
-                                            <a asp-action="Edit" asp-controller="TCMServicePlanReviews" asp-route-Id="@item.Id" asp-route-origin="1" asp-route-IdServicePlan="@item.TcmServicePlan.Id" class="btn btn-warning" title="Edit TCM Service PLan Review"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="Edit" asp-controller="TCMServicePlanReviews" asp-route-Id="@item.Id" asp-route-origin="1" asp-route-IdServicePlan="@item.TcmServicePlan.Id" class="btn btn-warning" title="Edit TCM Service Plan Review"><i class="glyphicon glyphicon-pencil"></i></a>
                                             <a asp-action="FinishEditing" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Finish Editing TCM Service Plan Review"><i class="glyphicon glyphicon-ok"></i></a>
                                             @*<button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete TCM Service PLan Review"><i class="glyphicon glyphicon-trash"></i></button>*@
                                             <i class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }
                                         @if (item.Approved == 1)
                                         {
-                                            <a asp-action="Edit" asp-controller="TCMServicePlanReviews" asp-route-Id="@item.Id" asp-route-origin="2" asp-route-IdServicePlan="@item.TcmServicePlan.Id" class="btn btn-warning" title="Edit TCM Service PLan Review"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="Edit" asp-controller="TCMServicePlanReviews" asp-route-Id="@item.Id" asp-route-origin="2" asp-route-IdServicePlan="@item.TcmServicePlan.Id" class="btn btn-warning" title="Edit TCM Service Plan Review"><i class="glyphicon glyphicon-pencil"></i></a>
                                             <i class="btn btn-success disabled glyphicon glyphicon-ok"></i>
                                             <i class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }

@@ -569,7 +569,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult Edit(int id = 0)
+        public IActionResult Edit(int id = 0, int origi = 0)
         {
             TCMAssessmentViewModel model;
 
@@ -607,7 +607,7 @@ namespace KyoS.Web.Controllers
                     {
 
                         model = _converterHelper.ToTCMAssessmentViewModel(TcmAssessment);
-
+                        ViewData["origi"] = origi;
                         return View(model);
                     }
 
@@ -621,7 +621,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> Edit(TCMAssessmentViewModel tcmAssessmentViewModel)
+        public async Task<IActionResult> Edit(TCMAssessmentViewModel tcmAssessmentViewModel, int origi = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -630,14 +630,54 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 TCMAssessmentEntity tcmAssessmentEntity = await _converterHelper.ToTCMAssessmentEntity(tcmAssessmentViewModel, false, user_logged.UserName);
-                tcmAssessmentEntity.Approved = 0;
+                if (tcmAssessmentEntity.Approved != 1)
+                {
+                    tcmAssessmentEntity.Approved = 0;
+                }
+
+                List<TCMMessageEntity> messages = tcmAssessmentEntity.TcmMessages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
+                foreach (TCMMessageEntity value in messages)
+                {
+                    value.Status = MessageStatus.Read;
+                    value.DateRead = DateTime.Now;
+                    _context.Update(value);
+
+                    //I generate a notification to supervisor
+                    TCMMessageEntity notification = new TCMMessageEntity
+                    {
+                        TCMNote = null,
+                        TCMFarsForm = null,
+                        TCMServicePlan = null,
+                        TCMServicePlanReview = null,
+                        TCMAddendum = null,
+                        TCMDischarge = null,
+                        TCMAssessment = tcmAssessmentEntity,
+                        Title = "Update on reviewed TCM Assessment",
+                        Text = $"The TCM Assessment of {tcmAssessmentEntity.TcmClient.Client.Name} on {tcmAssessmentEntity.DateAssessment.ToShortDateString()} was rectified",
+                        From = value.To,
+                        To = value.From,
+                        DateCreated = DateTime.Now,
+                        Status = MessageStatus.NotRead,
+                        Notification = true
+                    };
+                    _context.Add(notification);
+                }
+
                 _context.TCMAssessment.Update(tcmAssessmentEntity);
                 try
                 {
                     await _context.SaveChangesAsync();
-                   
-                    return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = tcmAssessmentEntity.TcmClient_FK, section = 4 });
-                    
+
+                    if (origi == 0)
+                    {
+                        return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = tcmAssessmentEntity.TcmClient_FK, section = 4 });
+                    }
+                    if (origi == 1)
+                    {
+                        return RedirectToAction("MessagesOfAssessment", "TCMMessages");
+                    }
+
                 }
                 catch (System.Exception ex)
                 {
@@ -684,7 +724,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> ApproveAssessments(int id)
+        public async Task<IActionResult> ApproveAssessments(int id, int origi = 0)
         {
             TCMAssessmentEntity tcmAssessment = _context.TCMAssessment.FirstOrDefault(u => u.Id == id);
 
@@ -702,8 +742,14 @@ namespace KyoS.Web.Controllers
                         try
                         {
                             await _context.SaveChangesAsync();
-
-                            return RedirectToAction("TCMAssessmentApproved", "TCMAssessments", new { approved = 1});
+                            if (origi == 0)
+                            {
+                                return RedirectToAction("TCMAssessmentApproved", "TCMAssessments", new { approved = 1 });
+                            }
+                            if (origi == 1)
+                            {
+                                return RedirectToAction("Notifications", "TCMMessages");
+                            }
                         }
                         catch (System.Exception ex)
                         {
@@ -2209,6 +2255,7 @@ namespace KyoS.Web.Controllers
                 List<TCMAssessmentEntity> tcmAssessment = await _context.TCMAssessment
                                                                         .Include(m => m.TcmClient)
                                                                         .ThenInclude(m => m.Client)
+                                                                        .Include(m => m.TcmMessages)
                                                                         .Where(m => m.Approved == approved
                                                                             && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)
                                                                         .OrderBy(m => m.TcmClient.CaseNumber)
@@ -2222,6 +2269,7 @@ namespace KyoS.Web.Controllers
                 List<TCMAssessmentEntity> tcmAssessment = await _context.TCMAssessment
                                                                          .Include(m => m.TcmClient)
                                                                          .ThenInclude(m => m.Client)
+                                                                         .Include(m => m.TcmMessages)
                                                                          .Where(m => m.Approved == approved
                                                                              && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
                                                                              && m.TcmClient.Casemanager.LinkedUser == user_logged.UserName)
@@ -2234,7 +2282,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public IActionResult EditReadOnly(int id = 0)
+        public IActionResult EditReadOnly(int id = 0, int origi = 0)
         {
             TCMAssessmentViewModel model;
 
@@ -2270,10 +2318,11 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-
                         model = _converterHelper.ToTCMAssessmentViewModel(TcmAssessment);
 
+                        ViewData["origi"] = origi;
                         return View(model);
+                       
                     }
 
                 }
@@ -2282,5 +2331,48 @@ namespace KyoS.Web.Controllers
             model = new TCMAssessmentViewModel();
             return View(model);
         }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public IActionResult AddMessageEntity(int id = 0, int origi = 0)
+        {
+            if (id == 0)
+            {
+                return View(new TCMMessageViewModel());
+            }
+            else
+            {
+                TCMMessageViewModel model = new TCMMessageViewModel()
+                {
+                    IdTCMAssessment = id,
+                    Origin = origi
+                };
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> AddMessageEntity(TCMMessageViewModel messageViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                TCMMessageEntity model = await _converterHelper.ToTCMMessageEntity(messageViewModel, true);
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                model.From = user_logged.UserName;
+                model.To = model.TCMAssessment.CreatedBy;
+                _context.Add(model);
+                await _context.SaveChangesAsync();
+            }
+
+            if (messageViewModel.Origin == 1)
+                return RedirectToAction("TCMAssessmentApproved", new { approved = 1 });
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

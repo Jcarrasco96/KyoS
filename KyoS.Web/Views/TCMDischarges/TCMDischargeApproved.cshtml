@@ -1,6 +1,24 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMDischargeEntity>
 @{
-    ViewData["Title"] = "TCM Discharge";
+    if (Model.Count() != 0)
+    {
+        if (Model.FirstOrDefault().Approved == 2)
+        {
+            ViewData["Title"] = "Approved TCM Discharges";
+        }
+        if (Model.FirstOrDefault().Approved == 1)
+        {
+            ViewData["Title"] = "Pending TCM Discharges";
+        }
+        if (Model.FirstOrDefault().Approved == 0)
+        {
+            ViewData["Title"] = "TCM Discharges in Edition";
+        }
+    }
+    else
+    {
+        ViewData["Title"] = "TCM Discharges";
+    }
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -25,8 +43,27 @@
             {
                 @Html.ActionLink("Dashboard", "Index", "Desktop")
             }
-
-        <li class="active">TCM Cases</li>
+            @{
+             if (Model.Count() != 0)
+             {
+                    if (Model.FirstOrDefault().Approved == 2)
+                    {
+                        <li class="active">Approved TCM Discharges</li>                        
+                    }
+                    if (Model.FirstOrDefault().Approved == 1)
+                    {
+                        <li class="active">Pending TCM Discharges</li>                        
+                    }
+                    if (Model.FirstOrDefault().Approved == 0)
+                    {
+                        <li class="active">TCM Discharges in Edition</li>                        
+                    }
+             }
+             else
+             {
+                    <li class="active">TCM Discharges</li>
+             }   
+            }                
     </ul><!--.breadcrumb-->
 </div>
 

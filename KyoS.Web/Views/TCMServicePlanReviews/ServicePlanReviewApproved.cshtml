@@ -1,6 +1,25 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMServicePlanReviewEntity>
 @{
-    ViewData["Title"] = "TCM Service Plan Review";
+    if (Model.Count() != 0)
+    {
+        if (Model.FirstOrDefault().Approved == 2)
+        {
+            ViewData["Title"] = "Approved Services Plans Reviews";
+        }
+        if (Model.FirstOrDefault().Approved == 1)
+        {
+            ViewData["Title"] = "Pending Services Plans Reviews";
+        }
+        if (Model.FirstOrDefault().Approved == 0)
+        {
+            ViewData["Title"] = "Services Plans Reviews in Edition ";
+        }
+
+    }
+    else
+    {
+        ViewData["Title"] = "Services Plans Reviews";
+    }
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,7 +30,28 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">TCM Services Plan Review</li>
+        @{
+            if (Model.Count() != 0)
+            {
+                if (Model.FirstOrDefault().Approved == 2)
+                {                    
+                    <li class="active">Approved Services Plans Reviews</li>
+                }
+                if (Model.FirstOrDefault().Approved == 1)
+                {
+                    <li class="active">Pending Services Plans Reviews</li>
+                }
+                if (Model.FirstOrDefault().Approved == 0)
+                {
+                    <li class="active">Services Plans Reviews in Edition</li>
+                }
+            }
+            else
+            {
+                <li class="active">Services Plans Reviews</li>
+            }
+        }
+
     </ul><!--.breadcrumb-->
 </div>
 

@@ -4525,7 +4525,10 @@ namespace KyoS.Web.Helpers
             return new TCMAssessmentEntity
             {
                 Id = isNew ? 0 : model.Id,
-                TcmClient = await _context.TCMClient.FirstOrDefaultAsync(c => c.Id == model.TcmClient_FK),
+                TcmClient = await _context.TCMClient
+                                          .Include(n => n.Client)
+                                          .FirstOrDefaultAsync(c => c.Id == model.TcmClient_FK),
+                
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
@@ -4914,8 +4917,11 @@ namespace KyoS.Web.Helpers
                 NeedSome = model.NeedSome,
                 OtherReceiveExplain = model.OtherReceiveExplain,
                 Status = TCMDocumentStatus.Approved,
-                TCMSupervisor = model.TCMSupervisor
-                
+                TCMSupervisor = model.TCMSupervisor,
+                TcmMessages = _context.TCMMessages
+                                      .Where(n => n.TCMAssessment.Id == model.Id)
+                                      .ToList(),
+
 
             };
         }
