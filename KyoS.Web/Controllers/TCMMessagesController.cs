@@ -58,6 +58,11 @@ namespace KyoS.Web.Controllers
                                                        .Count(m => (m.To == user_logged.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead
                                                                           && m.TCMAddendum != null && m.Notification == false))
                                                        .ToString();
+
+                ViewBag.CountsMessagesTCMAssessment = _context.TCMMessages
+                                                      .Count(m => (m.To == user_logged.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead
+                                                                         && m.TCMAssessment != null && m.Notification == false))
+                                                      .ToString();
             }
             
             return View();
@@ -256,6 +261,24 @@ namespace KyoS.Web.Controllers
 
             return View();
         }
+
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> MessagesOfAssessment(int id = 0)
+        {
+            if (User.IsInRole("CaseManager"))
+            {
+                return View(await _context.TCMAssessment
+                                          .Include(wc => wc.TcmClient.Casemanager)
+                                          .Include(wc => wc.TcmClient.Client)
+                                          .Include(wc => wc.TcmMessages.Where(m => m.Notification == false))
+                                          .Where(wc => (wc.TcmClient.Casemanager.LinkedUser == User.Identity.Name
+                                                     && wc.TcmMessages.Count() > 0))
+                                          .ToListAsync());
+            }
+
+            return View();
+        }
+
 
     }
 }

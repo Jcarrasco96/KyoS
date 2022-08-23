@@ -24,19 +24,22 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-2">
-                                Case Number
+                            <th class="col-md-1">
+
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-3">
                                 Client Name
                             </th>
                             <th class="col-md-2" style="text-align: center;">
-                                Open/Close
+                                Open
                             </th>
                             <th class="col-md-2" style="text-align: center;">
-                                Date
+                                Assessment
                             </th>
-                            <th class="col-md-2" style="text-align: center;">
+                            <th class="col-md-1" style="text-align: center;">
+                                Review
+                            </th>
+                            <th class="col-md-1" style="text-align: center;">
                                 Status
                             </th>
                             <th class="col-md-2" style="text-align: center;">
@@ -47,20 +50,54 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td>
-                                    @if (item.TcmClient.Status == KyoS.Common.Enums.StatusType.Open)
+                                <td align="center">
+                                    @if (item.TcmMessages.Count() != 0)
                                     {
-                                        <span class="label label-success">
-                                            @Html.DisplayFor(modelItem => item.TcmClient.CaseNumber)
-                                        </span>
+                                        <a class="icon-plus-sign-alt"></a>
                                     }
-                                    else
-                                    {
-                                        <span class="label label-default">
-                                            @Html.DisplayFor(modelItem => item.TcmClient.CaseNumber)
-                                        </span>
-                                    }
+                                    <div style="display:none">
+                                        <table class="table table-striped">
+                                            <tr>
+                                                <th class="col-md-2"></th>
+                                                <th class="col-md-3">Title</th>
+                                                <th class="col-md-7" style="text-align:center;">Text</th>
+                                                @*<th class="col-md-1"></th>*@
+                                                <th></th>
+                                            </tr>
+                                            @foreach (var message in item.TcmMessages.OrderBy(m => m.DateCreated))
+                                            {
 
+                                                @if (message.Status.ToString() == "NotRead")
+                                                {
+                                                    <tr style="color:mediumblue;">
+                                                        <td>
+                                                            <i class="glyphicon glyphicon-thumbs-down"></i> Not processed
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Title)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Text)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                @if (message.Status.ToString() == "Read")
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <i class="glyphicon glyphicon-thumbs-up"></i> Processed
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Title)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Text)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </table>
+                                    </div>
                                 </td>
                                 <td>
                                     @if (item.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
@@ -73,12 +110,46 @@
                                     }
                                     &nbsp;
                                     @Html.DisplayFor(modelItem => item.TcmClient.Client.Name)
+                                    |
+                                    @Html.DisplayFor(modelItem => item.TcmClient.Client.Code)
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.TcmClient.DataOpen)
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.DateAssessment)
                                 </td>
+                                 <td align="center">
+                                        @if (item.TcmMessages.Count() == 0)
+                                        {
+                                            <span>
+                                                -
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            bool read = false;
+                                            @foreach (var message in item.TcmMessages.OrderBy(m => m.DateCreated))
+                                            {
+                                                @if (message.Status.ToString() == "NotRead")
+                                                {
+                                                    read = false;
+                                                    break;
+                                                }
+                                                @if (message.Status.ToString() == "Read")
+                                                {
+                                                    read = true;
+                                                }
+                                            }
+                                            if (read)
+                                            {
+                                                <i class="glyphicon glyphicon-thumbs-up"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="glyphicon glyphicon-thumbs-down"></i>
+                                            }
+                                        }
+                                    </td>
                                 <td align="center">
                                     @if (item.Approved == 0)
                                     {
@@ -193,7 +264,19 @@
                 window.location.href = url + '/' + item_to_delete;
             });
         });
+        $(function () {
 
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
     </script>
 }
 

@@ -53,21 +53,21 @@
                     }
                 </div>
                 <div class="col-md-2">
-                    @if (ViewBag.CountsMessagesTCMAssessments == "0")
+                    @if (ViewBag.CountsMessagesTCMAssessment == "0")
                     {
-                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfFars" role="button">
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfAssessment" role="button">
                             <div class="thumbnail list-group-item list-group-item-text">
                                 <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Assessments</h4>
-                                <span class="message-counter-cero">@ViewBag.CountsMessagesTCMFars</span>
+                                <span class="message-counter-cero">@ViewBag.CountsMessagesTCMAssessment</span>
                             </div>
                         </a>
                     }
                     else
                     {
-                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfFars" role="button">
+                        <a style="text-decoration: none;" asp-controller="TCMMessages" asp-action="MessagesOfAssessment" role="button">
                             <div class="thumbnail list-group-item list-group-item-danger">
                                 <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>Assessments</h4>
-                                <span class="message-counter">@ViewBag.CountsMessagesTCMFars</span>
+                                <span class="message-counter">@ViewBag.CountsMessagesTCMAssessment</span>
                             </div>
                         </a>
                     }

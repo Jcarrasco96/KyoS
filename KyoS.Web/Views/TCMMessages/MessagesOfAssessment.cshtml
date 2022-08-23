@@ -1,0 +1,316 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMAssessmentEntity>
+@{
+    ViewData["Title"] = "Reviews of TCM Assessment";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Inbox", "Index", "TCMMessages")
+        </li>
+        <li class="active">Reviews of TCM Assessment</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Reviews of TCM Assessment</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1"></th>
+                            <th class="col-md-2" style="text-align:center;">Date</th>
+                            <th class="col-md-4">Name</th>
+                            <th class="col-md-2" style="text-align:center;">Status</th>
+                            <th class="col-md-2" style="text-align:center;">Review</th>
+                            <th class="col-md-1"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var assessment in Model.OrderBy(dc => dc.DateAssessment))
+                        {
+                            bool read = false;
+                            @foreach (var message in assessment.TcmMessages.OrderBy(m => m.DateCreated))
+                            {
+                                @if (message.Status.ToString() == "NotRead")
+                                {
+                                    read = false;
+                                    break;
+                                }
+                                @if (message.Status.ToString() == "Read")
+                                {
+                                    read = true;
+                                }
+                            }
+
+                            @if (!read)
+                            {
+                                <tr style="font-weight:bold; color:#0072c6;">
+                                    <td align="center">
+                                        @if (assessment.TcmMessages.Count() != 0)
+                                        {
+                                            <a class="icon-plus-sign-alt"></a>
+                                        }
+                                        <div style="display:none">
+                                            <table class="table table-striped">
+                                                <tr>
+                                                    <th class="col-md-2"></th>
+                                                    <th class="col-md-3">Title</th>
+                                                    <th class="col-md-7" style="text-align:center;">Text</th>
+                                                    @*<th class="col-md-1"></th>*@
+                                                    <th></th>
+                                                </tr>
+                                                @foreach (var message in assessment.TcmMessages.OrderBy(m => m.DateCreated))
+                                                {
+
+                                                    @if (message.Status.ToString() == "NotRead")
+                                                    {
+                                                        <tr style="color:#0072c6;">
+                                                            <td>
+                                                                <i class="glyphicon glyphicon-thumbs-down"></i> Not processed
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Title)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Text)
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    @if (message.Status.ToString() == "Read")
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <i class="glyphicon glyphicon-thumbs-up"></i> Processed
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Title)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Text)
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => assessment.DateAssessment)
+                                    </td>
+                                    <td>
+                                        @if (assessment.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (assessment.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => assessment.TcmClient.Client.Name)
+                                        |
+                                        @Html.DisplayFor(modelItem => assessment.TcmClient.CaseNumber)
+                                    </td>
+                                    <td align="center">
+                                        @if (assessment.Approved == 1)
+                                        {
+                                            <span class="label label-info">
+                                                Pending
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            if (assessment.Approved == 2)
+                                            {
+                                                <span class="label label-success">
+                                                    Approved
+                                                </span>
+                                            }
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        <i class="glyphicon glyphicon-thumbs-down"></i>
+                                    </td>
+                                    <td align="right">
+                                        @if (User.IsInRole("CaseManager"))
+                                        {
+                                            @if (assessment.Approved == 1)
+                                            {
+                                                <a asp-action="Edit" asp-controller="TCMAssessments" asp-route-id="@assessment.Id" asp-route-origi="1" class="btn btn-warning" title="Edit TCM Assessment"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="Edit" asp-controller="TCMAssessments" class="btn btn-warning disabled" title="Edit TCM Assessment"><i class="glyphicon glyphicon-file"></i></a>
+                                            }
+                                        }
+                                        @if (User.IsInRole("TCMSupervisor"))
+                                        {
+                                            <a asp-action="ApproveNote" asp-route-id="@assessment.Id" asp-route-origin="5" class="btn btn-primary disabled" title="Approve Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td align="center">
+                                        @if (assessment.TcmMessages.Count() != 0)
+                                        {
+                                            <a class="icon-plus-sign-alt"></a>
+                                        }
+                                        <div style="display:none">
+                                            <table class="table table-striped">
+                                                <tr>
+                                                    <th class="col-md-2"></th>
+                                                    <th class="col-md-3">Title</th>
+                                                    <th class="col-md-7" style="text-align:center;">Text</th>
+                                                    @*<th class="col-md-1"></th>*@
+                                                    <th></th>
+                                                </tr>
+                                                @foreach (var message in assessment.TcmMessages.OrderBy(m => m.DateCreated))
+                                                {
+
+                                                    @if (message.Status.ToString() == "NotRead")
+                                                    {
+                                                        <tr style="color:mediumblue;">
+                                                            <td>
+                                                                <i class="glyphicon glyphicon-thumbs-down"></i> Not processed
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Title)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Text)
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    @if (message.Status.ToString() == "Read")
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <i class="glyphicon glyphicon-thumbs-up"></i> Processed
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Title)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => message.Text)
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => assessment.DateAssessment)
+                                    </td>
+                                    <td>
+                                        @if (assessment.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (assessment.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => assessment.TcmClient.Client.Name)
+                                        |
+                                        @Html.DisplayFor(modelItem => assessment.TcmClient.CaseNumber)
+                                    </td>
+                                    <td align="center">
+                                        @if (assessment.Approved == 1)
+                                        {
+                                            <span class="label label-info">
+                                                Pending
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            if (assessment.Approved == 2)
+                                            {
+                                                <span class="label label-success">
+                                                    Approved
+                                                </span>
+                                            }
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        <i class="glyphicon glyphicon-thumbs-up"></i>
+                                    </td>
+                                    <td align="right">
+                                        @if (User.IsInRole("CaseManager"))
+                                        {
+                                            @if (assessment.Approved == 1)
+                                            {
+                                                <a asp-action="Edit" asp-controller="TCMAssessments" asp-route-id="@assessment.Id" asp-route-origi="1" class="btn btn-warning" title="Edit TCM Assessment"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="Edit" asp-controller="TCMAssessments" class="btn btn-warning disabled" title="Edit TCM Assessment"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            }
+                                        }
+                                        @if (User.IsInRole("TCMSupervisor"))
+                                        {
+                                            <a asp-action="ApproveNote" asp-route-id="@assessment.Id" asp-route-origi="5" class="btn btn-primary disabled" title="Approve FARS"><i class="glyphicon glyphicon-ok"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.fn.dataTable.moment('MM/DD/YYYY');
+
+            $('#MyTable').DataTable({
+                "order": [[1, "desc"]],
+                "pageLength": 100
+            });
+        });
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+    </script>
+}
+
+
+
+
+
+
+

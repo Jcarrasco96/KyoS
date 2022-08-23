@@ -508,6 +508,6 @@ namespace KyoS.Web.Data.Entities
         public TCMDocumentStatus Status { get; set; }
         public int Approved { get; set; }
 
-       
+        public IEnumerable<TCMMessageEntity> TcmMessages { get; set; }
     }
 }

@@ -15,7 +15,14 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("TCM Pending Assessments", "TCMAssessmentApproved", "TCMAssessments", new { approved = 1})
+                @if(@ViewData["origi"].ToString() == "0")
+                {
+                    @Html.ActionLink("TCM Pending Assessments", "TCMAssessmentApproved", "TCMAssessments", new { approved = 1 })
+                }
+                @if (ViewData["origi"].ToString() == "1")
+                {
+                    @Html.ActionLink("TCM Assessments Notifications", "Notifications", "TCMMessages")
+                }
             </li>
             <li class="active">Edit TCM Assessment</li>
         </ul><!--.breadcrumb-->
@@ -24,7 +31,7 @@
     <h4>Edit TCM Assessment</h4>
     <hr />
     <div class="row">
-        <form asp-action="ApproveAssessments" asp-route-id="@Model.Id" enctype="multipart/form-data">
+        <form asp-action="ApproveAssessments" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="TcmClient_FK" />
             <partial name="_TCMAssessmentReadOnly" />
@@ -124,8 +131,23 @@
             <partial name="_TCMAssessment6ReadOnly" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="Review" asp-route-id="@Model.TcmClient.Id" asp-controller="TCMAssessments" class="btn btn-warning disabled">Review</a>
-                <a asp-action="TCMAssessmentApproved" asp-route-approved="1" class="btn btn-success">Back</a>
+                @if (User.IsInRole("TCMSupervisor"))
+                {
+                    <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","TCMAssessments",new {id = Model.Id, origi = 1},Context.Request.Scheme)','Add message to casemanager')" title="Not approved tcm Assessment due to problems">Review</a>
+                }
+                else
+                {
+                    <a asp-action="AddMessageEntity" asp-route-origi="1" asp-controller="TCMAssessments" class="btn btn-warning disabled">Review</a>
+                }
+                @if (@ViewData["origi"].ToString() == "0")
+                {
+                    <a asp-action="TCMAssessmentApproved" asp-route-approved="1" class="btn btn-success">Back</a>
+                }
+                @if (ViewData["origi"].ToString() == "1")
+                {
+                    <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success">Back</a>
+                }
+
             </div>
         </form>
     </div>

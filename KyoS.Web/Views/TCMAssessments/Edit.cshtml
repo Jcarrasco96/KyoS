@@ -15,7 +15,14 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.TcmClient_FK, section = 4 })
+                @if (ViewData["origi"].ToString() == "0")
+                {
+                    @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.TcmClient_FK, section = 4 })
+                }
+                @if (ViewData["origi"].ToString() == "1")
+                {
+                    @Html.ActionLink("TCM Assessment Messages", "MessagesOfAssessment", "TCMMessages")
+                }
             </li>
             <li class="active">Edit TCM Assessment</li>
         </ul><!--.breadcrumb-->
@@ -24,11 +31,12 @@
     <h4>Edit TCM Assessment</h4>
     <hr />
     <div class="row">
-        <form asp-action="Edit" asp-route-id="@Model.Id" enctype="multipart/form-data">
+        <form asp-action="Edit" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="TcmClient_FK" />
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="Approved" />
             <partial name="_TCMAssessment" />
             <div class="col-md-push-12">
                 <div class="">
@@ -142,7 +150,15 @@
                 {
                     <a asp-action="FinishEditing" asp-route-id="@Model.TcmClient.Id" asp-route-section="4" asp-controller="TCMAssessments" class="btn btn-warning disabled">Finish Edition</a>
                 }
-                <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmClient.Id" asp-route-section="4" asp-controller="TCMIntakes" class="btn btn-success">Back</a>
+                @if (ViewData["origi"].ToString() == "0")
+                {
+                    <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmClient.Id" asp-route-section="4" asp-controller="TCMIntakes" class="btn btn-success">Back</a>
+                }
+                @if (ViewData["origi"].ToString() == "1")
+                {
+                    <a asp-action="MessagesOfAssessment" asp-controller="TCMMessages" class="btn btn-success">Back</a>
+                }
+
             </div>
         </form>
     </div>
