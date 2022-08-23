@@ -14,7 +14,6 @@
     ViewBag.Title = "Dashboard";
 }
 
-
 <div class="row">
     <div class="col-md-12">
         @if (User.IsInRole("Facilitator"))
@@ -1561,7 +1560,7 @@
                 @if (ViewBag.AllDocuments == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-print" style="padding-right: 10px !important;"></i>Close<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Binder</h4>
+                        <h4 style="align-content:end;"><i class="icon-print" style="padding-right: 10px !important;"></i>All<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Documents</h4>
                         <span class="message-counter-cero">@ViewBag.AllDocuments</span>
                     </div>
                 }

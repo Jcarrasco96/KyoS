@@ -606,13 +606,12 @@
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">Cases</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Open", "GetCaseOpen", "TCMClients")</li>
-                                        <li>@Html.ActionLink("Close", "GetCaseClose", "TCMClients")</li>
+                                        <li>@Html.ActionLink("Not Started", "GetCaseNotServicePlan", "TCMClients")</li>
+                                        <li>@Html.ActionLink("Opened", "GetCaseOpen", "TCMClients")</li>
+                                        <li>@Html.ActionLink("Closed", "GetCaseClose", "TCMClients")</li>
                                         <li>@Html.ActionLink("All Cases", "Index", "TCMClients")</li>
                                     </ul>
-                                </li>
-                                <li>@Html.ActionLink("Not started case", "GetCaseNotServicePlan", "TCMClients")</li>
-                                <li>@Html.ActionLink("Open Binder", "Index", "TCMIntakes")</li>
+                                </li>                           
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
@@ -620,61 +619,64 @@
                                 Documents <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
+
+                                
                                 <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Service Plan</a>
+                                    <a class="test" tabindex="-1" href="#">Binders</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Open Binder", "Index", "TCMIntakes")</li>
+                                        <li>@Html.ActionLink("Close Binder", "Index", "TCMIntakes", new { status = KyoS.Common.Enums.StatusType.Close })</li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Services Plans</a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Started", "Index", "TCMServiceplans")</li>
-                                        <li>@Html.ActionLink("Pending Approval", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Pending", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })</li>
                                         <li>@Html.ActionLink("Approved", "ApprovedServicePlan", "TCMServiceplans")</li>
                                     </ul>
                                 </li>
-                                <li role="separator" class="divider"></li>
                                 <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Addendum</a>
+                                    <a class="test" tabindex="-1" href="#">Addendums</a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Pending", "AdendumApproved", "TCMServicePlans", new { approved = 1 })</li>
                                         <li>@Html.ActionLink("All Addendums", "Adendum", "TCMServicePlans", new { aview = 1 })</li>
                                     </ul>
                                 </li>
-                                <li role="separator" class="divider"></li>
                                 <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Service Plan Review</a>
+                                    <a class="test" tabindex="-1" href="#">Services Plans Reviews&nbsp;</a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Started", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 0 })</li>
-                                        <li>@Html.ActionLink("Pending Approval", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Pending", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 1 })</li>
                                         <li>@Html.ActionLink("Approved", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 2 })</li>
                                     </ul>
                                 </li>
-                                <li role="separator" class="divider"></li>
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">Assessments</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Pending Approval", "TCMAssessmentApproved", "TCMAssessments", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Pending", "TCMAssessmentApproved", "TCMAssessments", new { approved = 1 })</li>
                                         <li>@Html.ActionLink("Approved", "TCMAssessmentApproved", "TCMAssessments", new { approved = 2 })</li>
                                     </ul>
                                 </li>
-                                <li role="separator" class="divider"></li>
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">FARS Forms</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Pending Approval", "TCMFarsApproved", "TCMFarsForms", new { status = KyoS.Common.Enums.FarsStatus.Pending })</li>
+                                        <li>@Html.ActionLink("Pending", "TCMFarsApproved", "TCMFarsForms", new { status = KyoS.Common.Enums.FarsStatus.Pending })</li>
                                         <li>@Html.ActionLink("Approved", "TCMFarsApproved", "TCMFarsForms", new { status = KyoS.Common.Enums.FarsStatus.Approved })</li>
                                     </ul>
                                 </li>
-                                <li role="separator" class="divider"></li>
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">Appendix J</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Pending Approval", "ApendiceJStatus", "TCMIntakes", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Pending", "ApendiceJStatus", "TCMIntakes", new { approved = 1 })</li>
                                         <li>@Html.ActionLink("Approved", "ApendiceJStatus", "TCMIntakes", new { approved = 2 })</li>
                                     </ul>
                                 </li>
-                                <li role="separator" class="divider"></li>
                                 <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Discharge</a>
+                                    <a class="test" tabindex="-1" href="#">Discharges</a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Pending", "TCMDischargeApproved", "TCMDischarges", new { approved = 1 })</li>
-                                        <li>@Html.ActionLink("All Discharge", "Index", "TCMDischarges")</li>
+                                        <li>@Html.ActionLink("All Discharges", "Index", "TCMDischarges")</li>
                                     </ul>
                                 </li>
                             </ul>
