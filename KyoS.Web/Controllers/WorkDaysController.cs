@@ -296,14 +296,14 @@ namespace KyoS.Web.Controllers
                                     _context.Add(workday);
 
                                     DateTime developed_date;
-                                    Workday_Client workday_client;
+                                    List<Workday_Client> workday_client = new List<Workday_Client>();
                                     foreach (ClientEntity client in clients)
                                     {
                                         developed_date = client.MTPs.FirstOrDefault(m => m.Active == true).MTPDevelopedDate;
                                         //si el workday que estoy creando es mayor o igual que la fecha de desarrollo del mtp del cliente entonces creo el workday_client
                                         if (workday.Date >= developed_date)
                                         {
-                                            workday_client = new Workday_Client
+                                            workday_client.Add(new Workday_Client
                                             {
                                                 Workday = workday,
                                                 Client = client,
@@ -311,10 +311,10 @@ namespace KyoS.Web.Controllers
                                                 Session = client.Group.Meridian,
                                                 Present = true,
                                                 GroupSize = client.Group.Clients.Count()
-                                            };
-                                            _context.Add(workday_client);
+                                            });                                           
                                         }
                                     }
+                                    _context.AddRange(workday_client);
                                 }
                             }
                         }
@@ -500,8 +500,7 @@ namespace KyoS.Web.Controllers
                                     _context.Add(workday);
 
                                     string[] facilitators = form["facilitators"].ToString().Split(',');
-                                    FacilitatorEntity facilitator;
-                                    Workday_Client workday_client;
+                                    FacilitatorEntity facilitator;                                    
                                     foreach (var value in facilitators)
                                     {
                                         facilitator = await _context.Facilitators
@@ -514,92 +513,80 @@ namespace KyoS.Web.Controllers
                                             return RedirectToAction(nameof(CreateIndividual), new { error = 1, idFacilitator = facilitator.Id });
                                         }
 
-                                        workday_client = new Workday_Client
-                                        {
-                                            Workday = workday,
-                                            Client = null,
-                                            Facilitator = facilitator,
-                                            Session = "8.00 - 9.00 AM",
-                                            Present = true
-                                        };
-                                        _context.Add(workday_client);
-
-                                        workday_client = new Workday_Client
-                                        {
-                                            Workday = workday,
-                                            Client = null,
-                                            Facilitator = facilitator,
-                                            Session = "9.05 - 10.05 AM",
-                                            Present = true
-                                        };
-                                        _context.Add(workday_client);
-
-                                        workday_client = new Workday_Client
-                                        {
-                                            Workday = workday,
-                                            Client = null,
-                                            Facilitator = facilitator,
-                                            Session = "10.15 - 11.15 AM",
-                                            Present = true
-                                        };
-                                        _context.Add(workday_client);
-
-                                        workday_client = new Workday_Client
-                                        {
-                                            Workday = workday,
-                                            Client = null,
-                                            Facilitator = facilitator,
-                                            Session = "11.20 - 12.20 PM",
-                                            Present = true
-                                        };
-                                        _context.Add(workday_client);
-
-                                        workday_client = new Workday_Client
-                                        {
-                                            Workday = workday,
-                                            Client = null,
-                                            Facilitator = facilitator,
-                                            Session = "12.45 - 1.45 PM",
-                                            Present = true
-                                        };
-                                        _context.Add(workday_client);
-
-                                        workday_client = new Workday_Client
-                                        {
-                                            Workday = workday,
-                                            Client = null,
-                                            Facilitator = facilitator,
-                                            Session = "1.50 - 2.50 PM",
-                                            Present = true
-                                        };
-                                        _context.Add(workday_client);
-
-                                        workday_client = new Workday_Client
-                                        {
-                                            Workday = workday,
-                                            Client = null,
-                                            Facilitator = facilitator,
-                                            Session = "3.00 - 4.00 PM",
-                                            Present = true
-                                        };
-                                        _context.Add(workday_client);
-
-                                        workday_client = new Workday_Client
-                                        {
-                                            Workday = workday,
-                                            Client = null,
-                                            Facilitator = facilitator,
-                                            Session = "4.05 - 5.05 PM",
-                                            Present = true
-                                        };
-                                        _context.Add(workday_client);
+                                        List<Workday_Client> workday_client = new List<Workday_Client>() {
+                                            new Workday_Client
+                                            {
+                                                Workday = workday,
+                                                Client = null,
+                                                Facilitator = facilitator,
+                                                Session = "8.00 - 9.00 AM",
+                                                Present = true
+                                            },
+                                            new Workday_Client
+                                            {
+                                                Workday = workday,
+                                                Client = null,
+                                                Facilitator = facilitator,
+                                                Session = "9.05 - 10.05 AM",
+                                                Present = true
+                                            },
+                                            new Workday_Client
+                                            {
+                                                Workday = workday,
+                                                Client = null,
+                                                Facilitator = facilitator,
+                                                Session = "10.15 - 11.15 AM",
+                                                Present = true
+                                            },
+                                            new Workday_Client
+                                            {
+                                                Workday = workday,
+                                                Client = null,
+                                                Facilitator = facilitator,
+                                                Session = "11.20 - 12.20 PM",
+                                                Present = true
+                                            },
+                                            new Workday_Client
+                                            {
+                                                Workday = workday,
+                                                Client = null,
+                                                Facilitator = facilitator,
+                                                Session = "12.45 - 1.45 PM",
+                                                Present = true
+                                            },
+                                            new Workday_Client
+                                            {
+                                                Workday = workday,
+                                                Client = null,
+                                                Facilitator = facilitator,
+                                                Session = "1.50 - 2.50 PM",
+                                                Present = true
+                                            },
+                                            new Workday_Client
+                                            {
+                                                Workday = workday,
+                                                Client = null,
+                                                Facilitator = facilitator,
+                                                Session = "3.00 - 4.00 PM",
+                                                Present = true
+                                            },
+                                            new Workday_Client
+                                            {
+                                                Workday = workday,
+                                                Client = null,
+                                                Facilitator = facilitator,
+                                                Session = "4.05 - 5.05 PM",
+                                                Present = true
+                                            }
+                                        };                                       
+                                        
+                                        _context.AddRange(workday_client);
                                     }
                                 }
                                 else
                                 {
                                     string[] facilitators = form["facilitators"].ToString().Split(',');
                                     FacilitatorEntity facilitator;
-                                    Workday_Client workday_client;
                                     foreach (var value in facilitators)
                                     {
                                         facilitator = await _context.Facilitators
@@ -612,85 +599,74 @@ namespace KyoS.Web.Controllers
                                             return RedirectToAction(nameof(CreateIndividual), new { error = 1, idFacilitator = facilitator.Id });
                                         }
 
-                                        workday_client = new Workday_Client
-                                        {
-                                            Workday = workday_entity,
-                                            Client = null,
-                                            Facilitator = facilitator,
-                                            Session = "8.00 - 9.00 AM",
-                                            Present = true
+                                        List<Workday_Client> workday_client = new List<Workday_Client>() {
+                                            new Workday_Client
+                                            {
+                                                Workday = workday_entity,
+                                                Client = null,
+                                                Facilitator = facilitator,
+                                                Session = "8.00 - 9.00 AM",
+                                                Present = true
+                                            },
+                                            new Workday_Client
+                                            {
+                                                Workday = workday_entity,
+                                                Client = null,
+                                                Facilitator = facilitator,
+                                                Session = "9.05 - 10.05 AM",
+                                                Present = true
+                                            },
+                                            new Workday_Client
+                                            {
+                                                Workday = workday_entity,
+                                                Client = null,
+                                                Facilitator = facilitator,
+                                                Session = "10.15 - 11.15 AM",
+                                                Present = true
+                                            },
+                                            new Workday_Client
+                                            {
+                                                Workday = workday_entity,
+                                                Client = null,
+                                                Facilitator = facilitator,
+                                                Session = "11.20 - 12.20 PM",
+                                                Present = true
+                                            },
+                                            new Workday_Client
+                                            {
+                                                Workday = workday_entity,
+                                                Client = null,
+                                                Facilitator = facilitator,
+                                                Session = "12.45 - 1.45 PM",
+                                                Present = true
+                                            },
+                                            new Workday_Client
+                                            {
+                                                Workday = workday_entity,
+                                                Client = null,
+                                                Facilitator = facilitator,
+                                                Session = "1.50 - 2.50 PM",
+                                                Present = true
+                                            },
+                                            new Workday_Client
+                                            {
+                                                Workday = workday_entity,
+                                                Client = null,
+                                                Facilitator = facilitator,
+                                                Session = "3.00 - 4.00 PM",
+                                                Present = true
+                                            },
+                                            new Workday_Client
+                                            {
+                                                Workday = workday_entity,
+                                                Client = null,
+                                                Facilitator = facilitator,
+                                                Session = "4.05 - 5.05 PM",
+                                                Present = true
+                                            }
                                         };
-                                        _context.Add(workday_client);
 
-                                        workday_client = new Workday_Client
-                                        {
-                                            Workday = workday_entity,
-                                            Client = null,
-                                            Facilitator = facilitator,
-                                            Session = "9.05 - 10.05 AM",
-                                            Present = true
-                                        };
-                                        _context.Add(workday_client);
-
-                                        workday_client = new Workday_Client
-                                        {
-                                            Workday = workday_entity,
-                                            Client = null,
-                                            Facilitator = facilitator,
-                                            Session = "10.15 - 11.15 AM",
-                                            Present = true
-                                        };
-                                        _context.Add(workday_client);
-
-                                        workday_client = new Workday_Client
-                                        {
-                                            Workday = workday_entity,
-                                            Client = null,
-                                            Facilitator = facilitator,
-                                            Session = "11.20 - 12.20 PM",
-                                            Present = true
-                                        };
-                                        _context.Add(workday_client);
-
-                                        workday_client = new Workday_Client
-                                        {
-                                            Workday = workday_entity,
-                                            Client = null,
-                                            Facilitator = facilitator,
-                                            Session = "12.45 - 1.45 PM",
-                                            Present = true
-                                        };
-                                        _context.Add(workday_client);
-
-                                        workday_client = new Workday_Client
-                                        {
-                                            Workday = workday_entity,
-                                            Client = null,
-                                            Facilitator = facilitator,
-                                            Session = "1.50 - 2.50 PM",
-                                            Present = true
-                                        };
-                                        _context.Add(workday_client);
-
-                                        workday_client = new Workday_Client
-                                        {
-                                            Workday = workday_entity,
-                                            Client = null,
-                                            Facilitator = facilitator,
-                                            Session = "3.00 - 4.00 PM",
-                                            Present = true
-                                        };
-                                        _context.Add(workday_client);
-
-                                        workday_client = new Workday_Client
-                                        {
-                                            Workday = workday_entity,
-                                            Client = null,
-                                            Facilitator = facilitator,
-                                            Session = "4.05 - 5.05 PM",
-                                            Present = true
-                                        };
-                                        _context.Add(workday_client);
+                                        _context.AddRange(workday_client);
                                     }
                                 }
                             }
@@ -905,14 +881,14 @@ namespace KyoS.Web.Controllers
                                     _context.Add(workday);
 
                                     DateTime developed_date;
-                                    Workday_Client workday_client;
+                                    List<Workday_Client> workday_client = new List<Workday_Client>();
                                     foreach (ClientEntity client in clients)
                                     {
                                         developed_date = client.MTPs.FirstOrDefault(m => m.Active == true).MTPDevelopedDate;
                                         //si el workday que estoy creando es mayor o igual que la fecha de desarrollo del mtp del cliente entonces creo el workday_client
                                         if (workday.Date >= developed_date)
                                         {
-                                            workday_client = new Workday_Client
+                                            workday_client.Add(new Workday_Client
                                             {
                                                 Workday = workday,
                                                 Client = client,
@@ -920,10 +896,10 @@ namespace KyoS.Web.Controllers
                                                 Session = client.Group.Meridian,
                                                 Present = true,
                                                 GroupSize = client.Group.Clients.Count()
-                                            };
-                                            _context.Add(workday_client);
+                                            });                                            
                                         }
                                     }
+                                    _context.AddRange(workday_client);
                                 }
                             }
                         }
@@ -1006,7 +982,7 @@ namespace KyoS.Web.Controllers
         private bool VerifyFreeTimeOfFacilitator(int idFacilitator, ServiceType service, string session, DateTime date)
         {
             //Group notes
-            if (session == "AM" && service == ServiceType.Group)
+            /*if (session == "AM" && service == ServiceType.Group)
             {
                 if (_context.Workdays_Clients
                             .Where(wc => (wc.Facilitator.Id == idFacilitator && wc.Session == "8.00 - 9.00 AM" && wc.Workday.Date == date))
@@ -1103,7 +1079,9 @@ namespace KyoS.Web.Controllers
                 return false;
             }
 
-            return true;
+            return true;*/
+
+            return false;
         }
         
         private bool VerifyNotesAtSameTime(int idClient, string session, DateTime date, ServiceType service)
