@@ -199,7 +199,7 @@ namespace KyoS.Web.Controllers
                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(value));
                         DateTime developed_date;
                         List<WorkdayEntity> workdays;
-                        Workday_Client workday_client;                        
+                        List<Workday_Client> workday_client = new List<Workday_Client>();                        
                         if (client != null)
                         {
                             client.Group = group;
@@ -232,16 +232,19 @@ namespace KyoS.Web.Controllers
                                         return RedirectToAction(nameof(Create), new { error = 1, idFacilitator = group.Facilitator.Id });
                                     }
 
-                                    workday_client = new Workday_Client
+                                    workday_client.Add(new Workday_Client
                                     {
                                         Workday = item,
                                         Client = client,
                                         Facilitator = client.Group.Facilitator,
                                         Session = client.Group.Meridian,
                                         Present = true
-                                    };
-                                    _context.Add(workday_client);
+                                    });                                    
                                 }                                
+                            }
+                            if (workday_client.Count() > 0)
+                            {
+                                _context.AddRange(workday_client);
                             }
                         }
                     }
@@ -389,7 +392,7 @@ namespace KyoS.Web.Controllers
                     ClientEntity client;
                     DateTime developed_date;
                     List<WorkdayEntity> workdays;
-                    Workday_Client workday_client;
+                    List<Workday_Client> workday_client = new List<Workday_Client>();
                     foreach (string value in clients)
                     {
                         client = await _context.Clients
@@ -427,16 +430,19 @@ namespace KyoS.Web.Controllers
                                         return RedirectToAction(nameof(Edit), new { id = model.Id, error = 1, idFacilitator = group.Facilitator.Id });
                                     }
 
-                                    workday_client = new Workday_Client
+                                    workday_client.Add(new Workday_Client
                                     {
                                         Workday = item,
                                         Client = client,
                                         Facilitator = client.Group.Facilitator,
                                         Session = client.Group.Meridian,
                                         Present = true
-                                    };
-                                    _context.Add(workday_client);
+                                    });                                    
                                 }                                
+                            }
+                            if (workday_client.Count() > 0)
+                            {
+                                _context.AddRange(workday_client);
                             }
                         }
                     }
@@ -628,7 +634,7 @@ namespace KyoS.Web.Controllers
                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(value));
                         DateTime developed_date;
                         List<WorkdayEntity> workdays;
-                        Workday_Client workday_client;
+                        List<Workday_Client> workday_client = new List<Workday_Client>();
                         if (client != null)
                         {                            
                             client.Group = group;
@@ -664,16 +670,20 @@ namespace KyoS.Web.Controllers
                                         return RedirectToAction(nameof(CreateGT), new { error = 1, idFacilitator = group.Facilitator.Id });
                                     }
 
-                                    workday_client = new Workday_Client
+                                    workday_client.Add(new Workday_Client
                                     {
                                         Workday = item,
                                         Client = client,
                                         Facilitator = client.Group.Facilitator,
                                         Session = client.Group.Meridian,
                                         Present = true
-                                    };
-                                    _context.Add(workday_client);
+                                    });
                                 }                                
+                            }
+
+                            if (workday_client.Count() > 0)
+                            {
+                                _context.AddRange(workday_client);
                             }
                         }
                     }
@@ -836,7 +846,7 @@ namespace KyoS.Web.Controllers
                     ClientEntity client;
                     DateTime developed_date;
                     List<WorkdayEntity> workdays;
-                    Workday_Client workday_client;
+                    List<Workday_Client> workday_client = new List<Workday_Client>();
                     foreach (string value in clients)
                     {
                         client = await _context.Clients
@@ -877,16 +887,20 @@ namespace KyoS.Web.Controllers
                                         return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 1, idFacilitator = group.Facilitator.Id });
                                     }
 
-                                    workday_client = new Workday_Client
+                                    workday_client.Add(new Workday_Client
                                     {
                                         Workday = item,
                                         Client = client,
                                         Facilitator = client.Group.Facilitator,
                                         Session = client.Group.Meridian,
                                         Present = true
-                                    };
-                                    _context.Add(workday_client);
+                                    });                                    
                                 }                                
+                            }
+
+                            if (workday_client.Count() > 0)
+                            {
+                                _context.AddRange(workday_client);
                             }
                         }
                     }
@@ -938,7 +952,7 @@ namespace KyoS.Web.Controllers
         private bool VerifyFreeTimeOfFacilitator(int idFacilitator, ServiceType service, string session, DateTime date)
         {
             //Group notes
-            if (session == "AM" && service == ServiceType.Group)
+            /*if (session == "AM" && service == ServiceType.Group)
             {
                 if (_context.Workdays_Clients
                             .Where(wc => (wc.Facilitator.Id == idFacilitator && wc.Session == "8.00 - 9.00 AM" && wc.Workday.Date == date))
@@ -1025,7 +1039,9 @@ namespace KyoS.Web.Controllers
                 return false;
             }
 
-            return true;
+            return true;*/
+
+            return false;
         }
 
         [Authorize(Roles = "Manager")]
