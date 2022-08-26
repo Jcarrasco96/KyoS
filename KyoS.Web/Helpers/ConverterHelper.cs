@@ -1396,19 +1396,15 @@ namespace KyoS.Web.Helpers
             {
                 Id = TcmServicePlanEntity.Id,
                 ID_TcmClient = TcmServicePlanEntity.TcmClient.Id,
-                Date_Intake = TcmServicePlanEntity.DateIntake,
-                Date_ServicePlan = TcmServicePlanEntity.DateServicePlan,
-                Date_Assessment = TcmServicePlanEntity.DateAssessment,
-                Date_Certification = TcmServicePlanEntity.DateCertification,
-                dischargerCriteria = TcmServicePlanEntity.DischargerCriteria,
-                strengths = TcmServicePlanEntity.Strengths,
-                weakness = TcmServicePlanEntity.Weakness,
+                DateIntake = TcmServicePlanEntity.DateIntake,
+                DateServicePlan = TcmServicePlanEntity.DateServicePlan,
+                DateAssessment = TcmServicePlanEntity.DateAssessment,
+                DateCertification = TcmServicePlanEntity.DateCertification,
+                DischargerCriteria = TcmServicePlanEntity.DischargerCriteria,
+                Strengths = TcmServicePlanEntity.Strengths,
+                Weakness = TcmServicePlanEntity.Weakness,
                 CaseNumber = TcmServicePlanEntity.TcmClient.CaseNumber,
-                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2
-                
-                //TcmClients = _combosHelper.GetComboClientsForTCMCaseOpen(TcmServicePlanEntity.TcmClient.Client.Clinic.Id),
-                //TCMDomain = TcmServicePlanEntity.TCMDomain
-
+                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2                
             };
         }
 
@@ -1421,22 +1417,21 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                DateIntake = model.Date_Intake,
-                DateServicePlan = model.Date_ServicePlan,
-                DateAssessment = model.Date_Assessment,
-                DateCertification = model.Date_Certification,
+                DateIntake = model.DateIntake,
+                DateServicePlan = model.DateServicePlan,
+                DateAssessment = model.DateAssessment,
+                DateCertification = model.DateCertification,
                 TcmClient = await _context.TCMClient
                                           .Include(n => n.Client)
                                           .FirstOrDefaultAsync(n => n.Id == model.ID_TcmClient),
-                DischargerCriteria = model.dischargerCriteria,
-                Weakness = model.weakness,
-                Strengths = model.strengths,
+                DischargerCriteria = model.DischargerCriteria,
+                Weakness = model.Weakness,
+                Strengths = model.Strengths,
                 Status = StatusUtils.GetStatusByIndex(model.ID_Status),
                 Approved = model.Approved,
                 TCMMessages = _context.TCMMessages
                                       .Where(n => n.TCMServicePlan.Id == model.Id)
                                       .ToList()
-
             };
         }
 
@@ -1445,7 +1440,7 @@ namespace KyoS.Web.Helpers
             return new TCMDomainViewModel
             {
                 Id = TcmDomainEntity.Id,
-                Date_Identified = TcmDomainEntity.DateIdentified,
+                DateIdentified = TcmDomainEntity.DateIdentified,
                 Needs_Identified = TcmDomainEntity.NeedsIdentified,
                 Long_Term = TcmDomainEntity.LongTerm,
                 Id_ServicePlan = TcmDomainEntity.TcmServicePlan.Id,
@@ -1472,7 +1467,7 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                DateIdentified = model.Date_Identified,
+                DateIdentified = model.DateIdentified,
                 NeedsIdentified = model.Needs_Identified,
                 LongTerm = model.Long_Term,
                 TCMObjetive = model.TCMObjetive,

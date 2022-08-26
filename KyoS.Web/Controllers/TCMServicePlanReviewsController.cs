@@ -493,7 +493,7 @@ namespace KyoS.Web.Controllers
 
                         model = new TCMDomainViewModel
                         {
-                            Date_Identified = DateTime.Today.Date,
+                            DateIdentified = DateTime.Today.Date,
                             Services = list_Services,
                             TcmServicePlan = tcmServicePlan,
                             Id_ServicePlan = id,

@@ -172,10 +172,10 @@ namespace KyoS.Web.Controllers
                             ID_Status = 1,
                             status = _combosHelper.GetComboClientStatus(),
                             CaseNumber = _context.TCMClient.FirstOrDefault(u => u.Id == id).CaseNumber,
-                            Date_ServicePlan = DateTime.Now.Date,
-                            Date_Intake = DateTime.Now.Date,
-                            Date_Assessment = DateTime.Now.Date,
-                            Date_Certification = DateTime.Now.Date
+                            DateServicePlan = DateTime.Now.Date,
+                            DateIntake = DateTime.Now.Date,
+                            DateAssessment = DateTime.Now.Date,
+                            DateCertification = DateTime.Now.Date
 
                         };
                         ViewData["origin"] = origin;
@@ -287,13 +287,13 @@ namespace KyoS.Web.Controllers
                             ID_Status = (tcmServicePlan.Status == StatusType.Open) ? 1 : 2,
                             status = _combosHelper.GetComboClientStatus(),
                             CaseNumber = _context.TCMClient.FirstOrDefault(u => u.Id == tcmServicePlan.TcmClient.Id).CaseNumber,
-                            Date_ServicePlan = tcmServicePlan.DateServicePlan,
-                            Date_Intake = tcmServicePlan.DateIntake,
-                            Date_Assessment = tcmServicePlan.DateAssessment,
-                            Date_Certification = tcmServicePlan.DateCertification,
-                            strengths = tcmServicePlan.Strengths,
-                            weakness = tcmServicePlan.Weakness,
-                            dischargerCriteria = tcmServicePlan.DischargerCriteria,
+                            DateServicePlan = tcmServicePlan.DateServicePlan,
+                            DateIntake = tcmServicePlan.DateIntake,
+                            DateAssessment = tcmServicePlan.DateAssessment,
+                            DateCertification = tcmServicePlan.DateCertification,
+                            Strengths = tcmServicePlan.Strengths,
+                            Weakness = tcmServicePlan.Weakness,
+                            DischargerCriteria = tcmServicePlan.DischargerCriteria,
                             Id = Id,
                             TCMDomain = tcmServicePlan.TCMDomain,
                             Approved = tcmServicePlan.Approved,
@@ -678,7 +678,7 @@ namespace KyoS.Web.Controllers
 
                         model = new TCMDomainViewModel
                         {
-                            Date_Identified = DateTime.Today,
+                            DateIdentified = DateTime.Today,
                             Services = list_Services,
                             TcmServicePlan = tcmServicePlan,
                             Id_ServicePlan = id,
@@ -707,34 +707,28 @@ namespace KyoS.Web.Controllers
                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
-                                                     .Include(u => u.TcmClient)
-                                                     .ThenInclude(u => u.Client)
-                                                     .FirstOrDefault(g => g.Id == tcmDomainViewModel.Id_ServicePlan);
+                                                          .Include(u => u.TcmClient)
+                                                          .ThenInclude(u => u.Client)
+                                                          .FirstOrDefault(g => g.Id == tcmDomainViewModel.Id_ServicePlan);
+
             tcmDomainViewModel.TcmServicePlan = tcmServicePlan;
-
-            if (tcmDomainViewModel.Id_Service == 0)
-            {
-                IEnumerable<SelectListItem> list_Services = _combosHelper.GetComboServicesNotUsed(tcmServicePlan.Id);
-                TCMDomainViewModel model = tcmDomainViewModel;
-
-                model.Services = list_Services;
-                ModelState.AddModelError(string.Empty, "You must select a Service code");
-
-                return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateDomain", model) });
-
-            }
 
             if (ModelState.IsValid)
             {
+                TCMServiceEntity service = _context.TCMServices
+                                                   .FirstOrDefault(s => s.Id == tcmDomainViewModel.Id_Service);
+                tcmDomainViewModel.Code = service.Code;
+                tcmDomainViewModel.Name = service.Name;
 
                 TCMDomainEntity tcmDomainEntity = _context.TCMDomains
                                                           .Include(f => f.TcmServicePlan)
                                                           .FirstOrDefault(g => (g.TcmServicePlan.Id == tcmDomainViewModel.TcmServicePlan.Id
-                                                             && g.Code == tcmDomainViewModel.Code));
+                                                                             && g.Code == service.Code));
                 if (tcmDomainEntity == null)
                 {
                     CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
                     tcmDomainEntity = await _converterHelper.ToTCMDomainEntity(tcmDomainViewModel, true,"Service Plan", user_logged.UserName);
+
                     _context.Add(tcmDomainEntity);
                     try
                     {
@@ -772,11 +766,10 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                   
+                    ModelState.AddModelError("Error", "The service already exists in the services plan");
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateDomain", tcmDomainViewModel) });
                 }
             }
-
             
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateDomain", tcmDomainViewModel) });
         }
@@ -1998,13 +1991,13 @@ namespace KyoS.Web.Controllers
                             ID_Status = (tcmServicePlan.Status == StatusType.Open) ? 1 : 2,
                             status = _combosHelper.GetComboClientStatus(),
                             CaseNumber = _context.TCMClient.FirstOrDefault(u => u.Id == tcmServicePlan.TcmClient.Id).CaseNumber,
-                            Date_ServicePlan = tcmServicePlan.DateServicePlan,
-                            Date_Intake = tcmServicePlan.DateIntake,
-                            Date_Assessment = tcmServicePlan.DateAssessment,
-                            Date_Certification = tcmServicePlan.DateCertification,
-                            strengths = tcmServicePlan.Strengths,
-                            weakness = tcmServicePlan.Weakness,
-                            dischargerCriteria = tcmServicePlan.DischargerCriteria,
+                            DateServicePlan = tcmServicePlan.DateServicePlan,
+                            DateIntake = tcmServicePlan.DateIntake,
+                            DateAssessment = tcmServicePlan.DateAssessment,
+                            DateCertification = tcmServicePlan.DateCertification,
+                            Strengths = tcmServicePlan.Strengths,
+                            Weakness = tcmServicePlan.Weakness,
+                            DischargerCriteria = tcmServicePlan.DischargerCriteria,
                             Id = Id,
                             TCMDomain = tcmServicePlan.TCMDomain,
                             Approved = tcmServicePlan.Approved,

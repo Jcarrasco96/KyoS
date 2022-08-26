@@ -10,58 +10,38 @@
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Id_ServicePlan" />
             <input type="hidden" asp-for="CreatedOn" />
-            <input type="hidden" asp-for="CreatedBy" />
-            <div class="container-fluid">
-                <div class=" col-md-6 form-group">
-                    <h4 style="font-weight:bold;"> <span class="label label-info">Case number - @Model.TcmServicePlan.TcmClient.CaseNumber </span></h4>
-                </div>
-                <div class=" col-md-6 form-group">
-                    <h4 style="font-weight:bold;"> <span class="label label-info">Client name - @Model.TcmServicePlan.TcmClient.Client.Name</span></h4>
-                </div>
-            </div>
+            <input type="hidden" asp-for="CreatedBy" />            
             <div class="form-group">
-                <div class="form-group col-md-8">
+                <div class="col-md-12 form-group">
                     <label asp-for="Id_Service" class="control-label">Service</label>&nbsp;*
-                    <select asp-for="Id_Service" asp-items="Model.Services" class="form-control" id="Code_Name" onchange="getCode();"></select>
+                    <select asp-for="Id_Service" asp-items="Model.Services" class="form-control"></select>
                     <span asp-validation-for="Id_Service" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-4">
-                    <label asp-for="Date_Identified" class="control-label">Date Identified</label>&nbsp;*
-                    <input asp-for="Date_Identified" class="form-control" />
-                    <span asp-validation-for="Date_Identified" class="text-danger"></span>
-                </div>
             </div>
-            <br />
             <div class="form-group">
-                <div class="form-group col-md-3">
-                    <label asp-for="Code" class="control-label">Service Code</label>
-                    <input asp-for="Code" id="GetCode" class="form-control" readonly />
-                    <span asp-validation-for="Code" class="text-danger"></span>
+                <div class="col-md-4">
+                    <label asp-for="DateIdentified" class="control-label">Date Identified</label>&nbsp;*
+                    <input asp-for="DateIdentified" class="form-control" />
+                    <span asp-validation-for="DateIdentified" class="text-danger"></span>
                 </div>
-
-                <div class="form-group col-md-9">
-                    <label asp-for="Name" class="control-label">Service Name</label>
-                    <input asp-for="Name" id="GetName" class="form-control" readonly />
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                <div class="container-fluid">
+                    &nbsp;
                 </div>
-            </div>
+            </div>   
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Needs_Identified" class="control-label">Identified Needs</label>
-                    <textarea asp-for="Needs_Identified" class="form-control" rows="5" />
+                    <textarea asp-for="Needs_Identified" class="form-control" rows="4" />
                     <span asp-validation-for="Needs_Identified" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Long_Term" class="control-label">Long Term</label>
-                    <textarea asp-for="Long_Term" class="form-control" rows="5" />
+                    <textarea asp-for="Long_Term" class="form-control" rows="4" />
                     <span asp-validation-for="Long_Term" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="col-md-12">
-                &nbsp;
-            </div>
+            </div>            
             <div>
                 <div class="col-md-offset-9">
                     <input type="submit" value="Submit" class="btn btn-primary" />
@@ -71,26 +51,3 @@
         </form>
     </div>
 </div>
-
-<script>
-    function getCode() {
-        var x = document.getElementById('Code_Name');
-        var y = x.options[x.selectedIndex].text;
-        var code = y[0] + y[1];
-        var name = y[3];
-        if (y[0] != '[') {
-            for (var i = 4; i < y.length; i++) {
-                name = name + y[i];
-            }
-            document.getElementById('GetCode').value = code;
-            document.getElementById('GetName').value = name;
-        }
-        else
-        {
-            document.getElementById('GetCode').value = "";
-            document.getElementById('GetName').value = "";
-        }
-
-
-    }
-</script>
