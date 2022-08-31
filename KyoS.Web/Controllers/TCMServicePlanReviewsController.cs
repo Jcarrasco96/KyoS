@@ -638,10 +638,10 @@ namespace KyoS.Web.Controllers
                         Id_Stage = 0,
                         Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain),
                         Id_Domain = tcmdomain.Id,
-                        ID_Objetive = tcmdomain.TCMObjetive.Count() + 1,
-                        Start_Date = DateTime.Today.Date,
-                        Target_Date = DateTime.Today.Date,
-                        End_Date = DateTime.Today.Date,
+                        IdObjetive = tcmdomain.TCMObjetive.Count() + 1,
+                        StartDate = DateTime.Today.Date,
+                        TargetDate = DateTime.Today.Date,
+                        EndDate = DateTime.Today.Date,
                         task = "es para que veas el problema del textarea",
                         Origi = 2,
                         IdServicePlanReview = idServicePlanReview
@@ -705,8 +705,8 @@ namespace KyoS.Web.Controllers
                             {
                                 Id = 0,
                                 ChangesUpdate = "",
-                                DateEndObjective = tcmObjetiveViewModel.End_Date,
-                                IdObjective = tcmObjetiveViewModel.ID_Objetive,
+                                DateEndObjective = tcmObjetiveViewModel.EndDate,
+                                IdObjective = tcmObjetiveViewModel.IdObjetive,
                                 Origin = "Service Plan Review",
                                 
                             };
@@ -1084,7 +1084,7 @@ namespace KyoS.Web.Controllers
                 tcmObjetiveViewModel.Id = tcmObjetiveViewModel.Idd;
                 tcmServicePlanReviewObjetive.Status = StatusUtils.GetStatusByIndex(tcmObjetiveViewModel.IdStatus);
                 tcmServicePlanReviewObjetive.ChangesUpdate = tcmObjetiveViewModel.ChangesUpdates;
-                tcmServicePlanReviewObjetive.DateEndObjective = tcmObjetiveViewModel.End_Date;
+                tcmServicePlanReviewObjetive.DateEndObjective = tcmObjetiveViewModel.EndDate;
 
 
                 TCMDomainEntity tcmDomain = _context.TCMDomains
@@ -1287,7 +1287,7 @@ namespace KyoS.Web.Controllers
                 tcmObjetiveViewModel.Id = tcmObjetiveViewModel.Idd;
                 tcmServicePlanReviewObjetive.Status = StatusUtils.GetStatusByIndex(tcmObjetiveViewModel.IdStatus);
                 tcmServicePlanReviewObjetive.ChangesUpdate = tcmObjetiveViewModel.ChangesUpdates;
-                tcmServicePlanReviewObjetive.DateEndObjective = tcmObjetiveViewModel.End_Date;
+                tcmServicePlanReviewObjetive.DateEndObjective = tcmObjetiveViewModel.EndDate;
 
 
                 TCMDomainEntity tcmDomain = _context.TCMDomains

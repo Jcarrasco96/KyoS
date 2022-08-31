@@ -850,10 +850,10 @@ namespace KyoS.Web.Controllers
                         Id_Stage = 0,
                         Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain),
                         Id_Domain = tcmdomain.Id,
-                        ID_Objetive = tcmdomain.TCMObjetive.Count() + 1,
-                        Start_Date = DateTime.Today.Date,
-                        Target_Date = DateTime.Today.Date,
-                        End_Date = DateTime.Today.Date,
+                        IdObjetive = tcmdomain.TCMObjetive.Count() + 1,
+                        StartDate = DateTime.Today.Date,
+                        TargetDate = DateTime.Today.Date,
+                        EndDate = DateTime.Today.Date,
                         task = "es para que veas el problema del textarea",
                         Origi = Origin,
                         Origin = ""
@@ -884,32 +884,38 @@ namespace KyoS.Web.Controllers
                 if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
                 {
                     return RedirectToAction("NotAuthorized", "Account");
-                }
-
-                TCMDomainEntity tcmDomain = _context.TCMDomains
-                                                        .Include(f => f.TCMObjetive)
-                                                        .Include(f => f.TcmServicePlan)
-                                                        .ThenInclude(f => f.TcmClient)
-                                                        .FirstOrDefault(f => f.Id == tcmObjetiveViewModel.Id_Domain);
-                TCMObjetiveEntity tcmObjetiveEntity = await _converterHelper.ToTCMObjetiveEntity(tcmObjetiveViewModel, true, Origin, user_logged.UserName);
-                tcmObjetiveEntity.TcmDomain = tcmDomain;
+                }                
 
                 if (ModelState.IsValid)
                 {
+                    TCMDomainEntity tcmDomain = _context.TCMDomains
+
+                                                        .Include(f => f.TCMObjetive)
+
+                                                        .Include(f => f.TcmServicePlan)
+                                                        .ThenInclude(f => f.TcmClient)
+
+                                                        .FirstOrDefault(f => f.Id == tcmObjetiveViewModel.Id_Domain);
+
+                    TCMStageEntity stage = _context.TCMStages
+                                                   .FirstOrDefault(s => s.Id == tcmObjetiveViewModel.Id_Stage);
+
+                    tcmObjetiveViewModel.name = stage.Name;
+                    TCMObjetiveEntity tcmObjetiveEntity = await _converterHelper.ToTCMObjetiveEntity(tcmObjetiveViewModel, true, Origin, user_logged.UserName);
+                    tcmObjetiveEntity.TcmDomain = tcmDomain;
 
                     _context.Add(tcmObjetiveEntity);
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                       
+                        
                         if (Origin == 0)
                         {
                             List<TCMDomainEntity> domainList = await _context.TCMDomains
-                                                                        .Include(h => h.TCMObjetive)
-                                                                        .Where(g => (g.TcmServicePlan.Id == tcmDomain.TcmServicePlan.Id))
-                                                                        .OrderBy(g => g.Code)
-                                                                        .ToListAsync();
+                                                                             .Include(h => h.TCMObjetive)
+                                                                             .Where(g => (g.TcmServicePlan.Id == tcmDomain.TcmServicePlan.Id))
+                                                                             .OrderBy(g => g.Code)
+                                                                             .ToListAsync();
                             
                             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomains", domainList) });
 
@@ -930,20 +936,18 @@ namespace KyoS.Web.Controllers
                         ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                     }
                 }
-                else
-                {
-                    TCMDomainEntity tcmdomain = await _context.TCMDomains
-                                                   .Include(g => g.TCMObjetive)
-                                                   .Include(g => g.TcmServicePlan)
-                                                   .FirstOrDefaultAsync(m => m.Id == tcmObjetiveViewModel.Id_Domain);
-                    tcmObjetiveViewModel.TcmDomain = tcmdomain;
-                    tcmObjetiveViewModel.Id_Stage = 0;
-                    tcmObjetiveViewModel.Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain);
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateDomain", tcmObjetiveViewModel) });
-                }
-
-                return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateDomain", tcmObjetiveViewModel) });
-
+                
+                TCMDomainEntity tcmdomain = await _context.TCMDomains
+                                                              
+                                                            .Include(g => g.TCMObjetive)
+                                                              
+                                                            .Include(g => g.TcmServicePlan)
+                                                              
+                                                            .FirstOrDefaultAsync(m => m.Id == tcmObjetiveViewModel.Id_Domain);
+                tcmObjetiveViewModel.TcmDomain = tcmdomain;
+                tcmObjetiveViewModel.Id_Stage = 0;
+                tcmObjetiveViewModel.Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain);
+                return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjetive", tcmObjetiveViewModel) });                
             }
             return RedirectToAction("NotAuthorized", "Account");
         }
@@ -1005,10 +1009,10 @@ namespace KyoS.Web.Controllers
                     Stages = list,
                     name = objetiveEntity.Name,
                     descriptionStages = stage.Description,
-                    ID_Objetive = objetiveEntity.IdObjetive,
-                    Start_Date = objetiveEntity.StartDate,
-                    Target_Date = objetiveEntity.TargetDate,
-                    End_Date = objetiveEntity.EndDate,
+                    IdObjetive = objetiveEntity.IdObjetive,
+                    StartDate = objetiveEntity.StartDate,
+                    TargetDate = objetiveEntity.TargetDate,
+                    EndDate = objetiveEntity.EndDate,
                     task = objetiveEntity.Task,
                     Responsible = objetiveEntity.Responsible,
                     Origi = origi,
@@ -1033,27 +1037,35 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> EditObjetive(TCMObjetiveViewModel tcmObjetiveViewModel, int origi = 0, int idAddendum = 0) 
         {
             UserEntity user_logged = await _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .ThenInclude(c => c.Setting)
-                                                 .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                                                   
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (User.IsInRole("CaseManager"))
             {
 
                 if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
                 {
                     return RedirectToAction("NotAuthorized", "Account");
-                }
-
-                TCMDomainEntity tcmDomain = _context.TCMDomains
+                }                
+               
+                if (ModelState.IsValid)
+                {
+                    TCMDomainEntity tcmDomain = _context.TCMDomains
                                                     .Include(f => f.TcmServicePlan)
                                                     .ThenInclude(f => f.TcmClient)
                                                     .ThenInclude(f => f.Casemanager)
                                                     .FirstOrDefault(f => f.Id == tcmObjetiveViewModel.Id_Domain);
-                TCMObjetiveEntity tcmObjetiveEntity = await _converterHelper.ToTCMObjetiveEntity(tcmObjetiveViewModel, false, origi, user_logged.UserName);
-                tcmObjetiveEntity.TcmDomain = tcmDomain;
-               
-                if (ModelState.IsValid)
-                {
+
+                    TCMStageEntity stage = _context.TCMStages
+                                                   .FirstOrDefault(s => s.Id == tcmObjetiveViewModel.Id_Stage);
+
+                    tcmObjetiveViewModel.name = stage.Name;
+
+                    TCMObjetiveEntity tcmObjetiveEntity = await _converterHelper.ToTCMObjetiveEntity(tcmObjetiveViewModel, false, origi, user_logged.UserName);
+                    tcmObjetiveEntity.TcmDomain = tcmDomain;
+
                     _context.Update(tcmObjetiveEntity);
                     try
                     {
@@ -1087,20 +1099,17 @@ namespace KyoS.Web.Controllers
                         ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                     }
                 }
-                else
-                {
-                    TCMDomainEntity tcmdomain = await _context.TCMDomains
-                                                   .Include(g => g.TCMObjetive)
-                                                   .Include(g => g.TcmServicePlan)
-                                                   .FirstOrDefaultAsync(m => m.Id == tcmObjetiveViewModel.Id_Domain);
+                
+                TCMDomainEntity tcmdomain = await _context.TCMDomains
 
-                    tcmObjetiveViewModel.TcmDomain = tcmdomain;
-                    tcmObjetiveViewModel.Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain);
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjetive", tcmObjetiveViewModel) });
-                }
+                                                          .Include(g => g.TCMObjetive)
+                                                          .Include(g => g.TcmServicePlan)
 
+                                                          .FirstOrDefaultAsync(m => m.Id == tcmObjetiveViewModel.Id_Domain);
+
+                tcmObjetiveViewModel.TcmDomain = tcmdomain;
+                tcmObjetiveViewModel.Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain);
                 return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjetive", tcmObjetiveViewModel) });
-
             }
             return RedirectToAction("NotAuthorized", "Account");
         }
@@ -2228,5 +2237,44 @@ namespace KyoS.Web.Controllers
 
         }
 
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public IActionResult PrintServicePlan(int id)
+        {
+            TCMServicePlanEntity servicePlan = _context.TCMServicePlans                                                         
+
+                                                       .Include(sp => sp.TcmClient)
+                                                       .ThenInclude(c => c.Client)
+                                                       .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                       .ThenInclude(d => d.Diagnostic)
+
+                                                       .Include(sp => sp.TCMSupervisor)
+                                                       .ThenInclude(s => s.Clinic)
+
+                                                       .Include(sp => sp.TcmClient)
+                                                       .ThenInclude(c => c.Casemanager)
+
+                                                       .Include(sp => sp.TCMDomain)
+                                                       .ThenInclude(d => d.TCMObjetive)
+
+                                                       .FirstOrDefault(sp => (sp.Id == id && sp.Approved == 2));
+            if (servicePlan == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (servicePlan.TCMSupervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            {
+                Stream stream = _reportHelper.FloridaSocialHSTCMServicePlan(servicePlan);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
+            if (servicePlan.TCMSupervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+            {
+                Stream stream = _reportHelper.DreamsMentalHealthTCMServicePlan(servicePlan);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
+            return null;
+        }
     }
 }

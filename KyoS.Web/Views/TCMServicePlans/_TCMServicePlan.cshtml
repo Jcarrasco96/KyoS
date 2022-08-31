@@ -62,9 +62,8 @@
                                                 <th class="col-md-1"></th>
                                                 <th class="col-md-1" style="text-align:center">Domain</th>
                                                 <th class="col-md-2">Domain Name</th>
-                                                <th class="col-md-4">Need Identified</th>
-                                                <th class="col-md-2" style="text-align:center">Date Identified</th>
-                                                <th class="col-md-2"></th>
+                                                <th class="col-md-6">Need Identified</th>
+                                                <th class="col-md-2" style="text-align:center">Date Identified</th>                                                
                                             </tr>
                                             @foreach (var product in item.TCMDomain)
                                             {
@@ -84,11 +83,10 @@
                                                                 <table class="table table-striped table-bordered">
                                                                     <tr>
                                                                         <th class="col-md-1" style="text-align:center;">Objetive</th>
-                                                                        <th class="col-md-6">Task</th>
+                                                                        <th class="col-md-7">Task</th>
                                                                         <th class="col-md-1" style="text-align:center;">Start Date</th>
                                                                         <th class="col-md-2" style="text-align:center;">Target Date</th>
-                                                                        <th class="col-md-1" style="text-align:center;">End Date</th>
-                                                                        <th class="col-md-1"></th>
+                                                                        <th class="col-md-1" style="text-align:center;">End Date</th>                                                                        
                                                                     </tr>
                                                                     @foreach (var product1 in product.TCMObjetive)
                                                                     {
@@ -99,24 +97,7 @@
                                                                                 <td>@Html.DisplayFor(modelItem => product1.Name)</td>
                                                                                 <td align="center">@Html.DisplayFor(modelItem => product1.StartDate)</td>
                                                                                 <td align="center">@Html.DisplayFor(modelItem => product1.TargetDate)</td>
-                                                                                <td align="center">@Html.DisplayFor(modelItem => product1.EndDate)</td>
-                                                                                <td align="center">
-                                                                                 @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("CaseManager"))
-                                                                                 {
-                                                                                    @if (item.Approved <= 1)
-                                                                                    {
-                                                                                        <a onclick="showInPopup('@Url.Action("EditObjetive", "TCMServicePlans", new { id = product1.Id, Origin = 0, aview = 1 }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning" title="Edit TCM Objective"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                                    }
-                                                                                 }
-                                                                                 else
-                                                                                 {
-                                                                                    <a asp-action="EditObjetive" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                                 }
-                                                                                </td>
+                                                                                <td align="center">@Html.DisplayFor(modelItem => product1.EndDate)</td>                                                                                
                                                                             </tr>
                                                                         }
 
@@ -128,27 +109,7 @@
                                                         <td align="center">@Html.DisplayFor(modelItem => product.Code)</td>
                                                         <td>@Html.DisplayFor(modelItem => product.Name)</td>
                                                         <td>@Html.DisplayFor(modelItem => product.NeedsIdentified)</td>
-                                                        <td align="center">@Html.DisplayFor(modelItem => product.DateIdentified)</td>
-                                                        <td align="center">
-                                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("CaseManager"))
-                                                            {
-                                                                @if (item.Approved <= 1)
-                                                                {
-                                                                    <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlans", new { id = product.Id, aview = 1 }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning" title="Edit TCM Domain"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                    <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlans", new { id = product.Id, Origin = 0, aview = 1 }, Context.Request.Scheme)','Create TCM Objetive')" class="btn btn-info" title="Create TCM Objective"><i class="glyphicon glyphicon-plus"></i></a>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <a class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                    <a class="btn btn-info disabled" title="Create TCM Objective"><i class="glyphicon glyphicon-plus"></i></a>
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                <a class="btn btn-warning disabled" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                <a class="btn btn-info disabled" title="Create TCM Objective"><i class="glyphicon glyphicon-plus"></i></a>
-                                                            }
-                                                        </td>
+                                                        <td align="center">@Html.DisplayFor(modelItem => product.DateIdentified)</td>                                                        
                                                     </tr>
                                                     @* cant_unit = cant_unit + product.Units;*@
                                                 }
@@ -218,7 +179,7 @@
                                             <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
                                             <i title="Approved" class="btn btn-info disabled glyphicon glyphicon-plus"></i>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintServicePlan" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     }
                                     @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
@@ -249,7 +210,7 @@
                                             <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
                                             <i title="Approved" class="btn btn-info disabled glyphicon glyphicon-plus"></i>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintServicePlan" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     }
                                 </td>

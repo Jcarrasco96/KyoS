@@ -4268,6 +4268,61 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMSupervisorDS(TCMSupervisorEntity supervisor)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMSupervisor"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Firm", typeof(string));
+            dt.Columns.Add("Code", typeof(string));
+            dt.Columns.Add("ClinicId", typeof(int));
+            dt.Columns.Add("LinkedUser", typeof(string));
+            dt.Columns.Add("SignaturePath", typeof(string));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("RaterEducation", typeof(string));
+            dt.Columns.Add("RaterFMHCertification", typeof(string));
+
+            if (supervisor != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            supervisor.Id,
+                                            supervisor.Name,
+                                            supervisor.Firm,
+                                            supervisor.Code,
+                                            0,
+                                            supervisor.LinkedUser,
+                                            supervisor.SignaturePath,
+                                            0,
+                                            supervisor.RaterEducation,
+                                            supervisor.RaterFMHCertification
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            string.Empty,
+                                            string.Empty
+                                        });
+            }
+
+            return dt;
+        }
+
         private DataTable GetCaseManagerDS(CaseMannagerEntity caseManager)
         {
             DataTable dt = new DataTable
@@ -7828,6 +7883,201 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMDomainDS(TCMDomainEntity domain)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMDomain"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Code", typeof(string));
+            dt.Columns.Add("NeedsIdentified", typeof(string));
+            dt.Columns.Add("DateIdentified", typeof(DateTime));
+            dt.Columns.Add("TcmServicePlanId", typeof(int));
+            dt.Columns.Add("LongTerm", typeof(string));
+            dt.Columns.Add("Origin", typeof(string));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("Used", typeof(bool));            
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            if (domain != null)
+            {
+                dt.Rows.Add(new object[]
+                {
+                                domain.Id,
+                                domain.Name,
+                                domain.Code,
+                                domain.NeedsIdentified,
+                                domain.DateIdentified,
+                                0,
+                                domain.LongTerm,
+                                domain.Origin,
+                                0,
+                                0,
+                                domain.CreatedBy,
+                                domain.CreatedOn,
+                                domain.LastModifiedBy,
+                                domain.LastModifiedOn
+                });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                {
+                                0,
+                                string.Empty,
+                                string.Empty,
+                                string.Empty,
+                                new DateTime(),
+                                0,
+                                string.Empty,
+                                string.Empty,
+                                0,
+                                false,
+                                string.Empty,
+                                new DateTime(),
+                                string.Empty,
+                                new DateTime()
+                });
+            }           
+
+            return dt;
+        }
+
+        private DataTable GetTCMServicePlanDS(TCMServicePlanEntity servicePlan)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMServicePlan"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("DateServicePlan", typeof(DateTime));
+            dt.Columns.Add("DateIntake", typeof(DateTime));
+            dt.Columns.Add("DateAssessment", typeof(DateTime));
+            dt.Columns.Add("DateCertification", typeof(DateTime));
+            dt.Columns.Add("Strengths", typeof(string));
+            dt.Columns.Add("Weakness", typeof(string));
+            dt.Columns.Add("DischargerCriteria", typeof(string));
+            dt.Columns.Add("TcmClientId", typeof(int));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("Approved", typeof(int));          
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("TcmClient_FK", typeof(int));
+            dt.Columns.Add("TCMSupervisorId", typeof(string));
+
+            if (servicePlan != null)
+            {
+                dt.Rows.Add(new object[]
+                {
+                                servicePlan.Id,
+                                servicePlan.DateServicePlan,
+                                servicePlan.DateIntake,
+                                servicePlan.DateAssessment,
+                                servicePlan.DateCertification,
+                                servicePlan.Strengths,
+                                servicePlan.Weakness,
+                                servicePlan.DischargerCriteria,
+                                0,
+                                0,
+                                0,
+                                servicePlan.CreatedBy,
+                                servicePlan.CreatedOn,
+                                servicePlan.LastModifiedBy,
+                                servicePlan.LastModifiedOn,
+                                0,
+                                0
+                });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                {
+                                0,
+                                new DateTime(),
+                                new DateTime(),
+                                new DateTime(),
+                                new DateTime(),
+                                string.Empty,
+                                string.Empty,
+                                string.Empty,
+                                0,
+                                0,
+                                0,                                
+                                string.Empty,
+                                new DateTime(),
+                                string.Empty,
+                                new DateTime(),
+                                0,
+                                0
+                });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetTCMObjectiveListDS(List<TCMObjetiveEntity> objectiveList)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMObjetive"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("IdObjetive", typeof(int));
+            dt.Columns.Add("Task", typeof(string));
+            dt.Columns.Add("StartDate", typeof(DateTime));
+            dt.Columns.Add("TargetDate", typeof(DateTime));
+            dt.Columns.Add("EndDate", typeof(DateTime));
+            dt.Columns.Add("TcmDomainId", typeof(int));
+            dt.Columns.Add("Finish", typeof(bool));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("Responsible", typeof(string));
+            dt.Columns.Add("Origin", typeof(string));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            foreach (TCMObjetiveEntity item in objectiveList)
+            {
+
+                dt.Rows.Add(new object[]
+                {
+                                            item.Id,
+                                            item.IdObjetive,
+                                            item.Task,
+                                            item.StartDate,
+                                            item.TargetDate,
+                                            item.EndDate,
+                                            0,
+                                            item.Finish,
+                                            item.Name,
+                                            item.Status,
+                                            item.Responsible,
+                                            item.Origin,
+                                            item.CreatedBy,
+                                            item.CreatedOn,
+                                            item.LastModifiedBy,
+                                            item.LastModifiedOn
+                });
+            }
+
+            return dt;
+        }
+
         #endregion
 
         #region Approved TCM Notes reports
@@ -7924,6 +8174,208 @@ namespace KyoS.Web.Helpers
 
             dataSet = new DataSet();
             dataSet.Tables.Add(GetSignaturesDS(null, stream1));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
+
+        #region TCM Service Plan
+        public Stream FloridaSocialHSTCMServicePlan(TCMServicePlanEntity servicePlan)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMServicesPlans\\rptFloridaSocialHSTCMServicePlan.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMServicePlanDS(servicePlan));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMServicePlans");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(servicePlan.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(servicePlan.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(servicePlan.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMSupervisorDS(servicePlan.TCMSupervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMSupervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(servicePlan.TcmClient.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            //To bind domains with services, and it includes objectives
+            List<TCMServiceEntity> services = _context.TCMServices.ToList();
+            int i = 1;
+            TCMDomainEntity domain;
+            foreach (var item in services)
+            {
+                domain = servicePlan.TCMDomain.FirstOrDefault(d => d.Name == item.Name);
+                if (domain != null)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetTCMDomainDS(domain));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMDomains{i}");
+
+                    if (domain.TCMObjetive.Count() > 0)
+                    {
+                        dataSet = new DataSet();
+                        dataSet.Tables.Add(GetTCMObjectiveListDS(domain.TCMObjetive));
+                        WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
+                    }
+                    else
+                    {
+                        dataSet = new DataSet();
+                        dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
+                        WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
+                    }
+                }
+                else
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetTCMDomainDS(null));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMDomains{i}");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
+                }
+                i++;
+            }
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(servicePlan.TCMSupervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TCMSupervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(servicePlan.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+
+        public Stream DreamsMentalHealthTCMServicePlan(TCMServicePlanEntity servicePlan)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMServicesPlans\\rptDreamsMentalHealthTCMServicePlan.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMServicePlanDS(servicePlan));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMServicePlans");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(servicePlan.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(servicePlan.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(servicePlan.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMSupervisorDS(servicePlan.TCMSupervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMSupervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(servicePlan.TcmClient.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            //To bind domains with services, and it includes objectives
+            List<TCMServiceEntity> services = _context.TCMServices.ToList();
+            int i = 1;
+            TCMDomainEntity domain;
+            foreach (var item in services)
+            {
+                domain = servicePlan.TCMDomain.FirstOrDefault(d => d.Name == item.Name);
+                if (domain != null)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetTCMDomainDS(domain));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMDomains{i}");
+
+                    if (domain.TCMObjetive.Count() > 0)
+                    {
+                        dataSet = new DataSet();
+                        dataSet.Tables.Add(GetTCMObjectiveListDS(domain.TCMObjetive));
+                        WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
+                    }
+                    else
+                    {
+                        dataSet = new DataSet();
+                        dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
+                        WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
+                    }
+                }
+                else
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetTCMDomainDS(null));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMDomains{i}");
+
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
+                }
+                i++;
+            }
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(servicePlan.TCMSupervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TCMSupervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(servicePlan.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
 
             WebReport.Report.Prepare();

@@ -10,7 +10,7 @@
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Id_ServicePlan" />
             <input type="hidden" asp-for="CreatedOn" />
-            <input type="hidden" asp-for="CreatedBy" />            
+            <input type="hidden" asp-for="CreatedBy" />
             <div class="form-group">
                 <div class="col-md-12 form-group">
                     <label asp-for="Id_Service" class="control-label">Service</label>&nbsp;*
@@ -27,7 +27,7 @@
                 <div class="container-fluid">
                     &nbsp;
                 </div>
-            </div>   
+            </div>
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Needs_Identified" class="control-label">Identified Needs</label>
@@ -41,7 +41,7 @@
                     <textarea asp-for="Long_Term" class="form-control" rows="4" />
                     <span asp-validation-for="Long_Term" class="text-danger"></span>
                 </div>
-            </div>            
+            </div>
             <div>
                 <div class="col-md-offset-9">
                     <input type="submit" value="Submit" class="btn btn-primary" />
@@ -51,3 +51,7 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
