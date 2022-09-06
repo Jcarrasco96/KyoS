@@ -8590,7 +8590,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator, Supervisor")]
-        public async Task<IActionResult> PendingNotes(int id = 0)
+        public async Task<IActionResult> PendingNotes(int id = 0, int error = 0)
         {
             if (User.IsInRole("Facilitator"))
             {
@@ -8617,6 +8617,7 @@ namespace KyoS.Web.Controllers
                                                              .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic != null)
                 {
+                    ViewBag.Error = error.ToString();
                     return View(await _context.Workdays_Clients.Include(wc => wc.Note)
 
                                                                .Include(wc => wc.Facilitator)
@@ -10199,6 +10200,110 @@ namespace KyoS.Web.Controllers
                 }
             }
             return View(workdayClientModel);
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ApproveNotePBatch(int id, int origin = 0)
+        {
+            NotePEntity note = await _context.NotesP
+
+                                             .Include(n => n.Workday_Cient)
+                                             .ThenInclude(wc => wc.Client)
+                                             
+                                             .Include(n => n.Workday_Cient)
+                                             .ThenInclude(wc => wc.Facilitator)
+
+                                             .Include(n => n.Workday_Cient)
+                                             .ThenInclude(w => w.Workday)
+                                             
+                                             .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+
+            if (note == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+            else
+            {
+                List<NotePEntity> notelist = await _context.NotesP
+                                                           .Include(n => n.Workday_Cient)
+                                                           .ThenInclude(wc => wc.Client)
+
+                                                           .Include(n => n.Workday_Cient)
+                                                           .ThenInclude(wc => wc.Facilitator)
+
+                                                           .Include(n => n.Workday_Cient)
+                                                           .ThenInclude(wc => wc.Messages)
+
+                                                           .Include(n => n.Workday_Cient)
+                                                           .ThenInclude(w => w.Workday)
+                                             
+                                                           .Where(n => (n.Workday_Cient.Facilitator.Id == note.Workday_Cient.Facilitator.Id
+                                                                    && n.Status == NoteStatus.Pending
+                                                                    && n.Workday_Cient.Workday.Id == note.Workday_Cient.Workday.Id
+                                                                    && n.Workday_Cient.Messages.Count() == 0))
+                                                           .ToListAsync();
+                if (notelist.Count() == 0)
+                {
+                    return RedirectToAction("PendingNotes", "Notes",new {id = id , error = 1});
+                }
+                return View(notelist);
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ApproveNotePBatch(int id = 0)
+        {
+            NotePEntity note = await _context.NotesP
+
+                                             .Include(n => n.Workday_Cient)
+                                             .ThenInclude(wc => wc.Client)
+
+                                             .Include(n => n.Workday_Cient)
+                                             .ThenInclude(wc => wc.Facilitator)
+
+                                             .Include(n => n.Workday_Cient)
+                                             .ThenInclude(w => w.Workday)
+
+                                             .FirstOrDefaultAsync(n => n.Id == id);
+
+            if (note == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            List<NotePEntity> model = await _context.NotesP
+                                                    .Include(n => n.Workday_Cient)
+                                                    .ThenInclude(wc => wc.Client)
+
+                                                    .Include(n => n.Workday_Cient)
+                                                    .ThenInclude(wc => wc.Facilitator)
+
+                                                    .Include(n => n.Workday_Cient)
+                                                    .ThenInclude(wc => wc.Messages)
+
+                                                    .Include(n => n.Workday_Cient)
+                                                    .ThenInclude(w => w.Workday)
+
+                                                    .Where(n => (n.Workday_Cient.Facilitator.Id == note.Workday_Cient.Facilitator.Id
+                                                             && n.Status == NoteStatus.Pending
+                                                             && n.Workday_Cient.Workday.Id == note.Workday_Cient.Workday.Id
+                                                             && n.Workday_Cient.Messages.Count() == 0))
+                                                    .ToListAsync();
+
+            foreach (var item in model)
+            {
+                item.Status = NoteStatus.Approved;
+                item.DateOfApprove = DateTime.Now;
+                item.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+                _context.Update(item);
+
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(PendingNotes));
         }
     }
 }
