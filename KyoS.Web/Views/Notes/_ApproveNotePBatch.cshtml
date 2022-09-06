@@ -1,0 +1,172 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.NotePEntity>
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Pending PSR Notes</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover table-responsive table-striped" id="MyTable">
+                <thead>
+                    <tr>
+                        <th class="col-md-1"></th>
+                        <th class="col-md-1" style="text-align:center;">Date</th>
+                        <th class="col-md-1" style="text-align:center;">Session</th>
+                        <th class="col-md-3">Name</th>
+                        <th class="col-md-2" style="text-align:center;">Note Status</th>
+                        <th class="col-md-1" style="text-align:center;">Review</th>
+                        <th class="col-md-3">Facilitator</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var note in Model)
+                    {
+                        <tr>
+                            <td align="center">
+                                @if (note.Workday_Cient.Messages.Count() != 0)
+                                {
+                                    <a class="icon-plus-sign-alt"></a>
+                                }
+                                <div style="display:none">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <th class="col-md-2"></th>
+                                            <th class="col-md-3">Title</th>
+                                            <th class="col-md-7" style="text-align:center;">Text</th>
+                                            @*<th class="col-md-1"></th>*@
+                                            <th></th>
+                                        </tr>
+                                        @foreach (var message in note.Workday_Cient.Messages.OrderBy(m => m.DateCreated))
+                                        {
+
+                                            @if (message.Status.ToString() == "NotRead")
+                                            {
+                                                <tr style="color:mediumblue;">
+                                                    <td>
+                                                        <i class="glyphicon glyphicon-thumbs-down"></i> Not processed
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => message.Title)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => message.Text)
+                                                    </td>
+                                                </tr>
+                                            }
+                                            @if (message.Status.ToString() == "Read")
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <i class="glyphicon glyphicon-thumbs-up"></i> Processed
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => message.Title)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => message.Text)
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </table>
+                                </div>
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => note.Workday_Cient.Workday.Date)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => note.Workday_Cient.Session)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => note.Workday_Cient.Client.Name)
+                            </td>
+                            <td align="center">
+                                <span class="label label-info">
+                                    Pending
+                                </span>
+                            </td>
+                            <td align="center">
+                                @if (note.Workday_Cient.Messages.Count() == 0)
+                                {
+                                    <span>
+                                        -
+                                    </span>
+                                }
+                                else
+                                {
+                                    bool read = false;
+                                    @foreach (var message in note.Workday_Cient.Messages.OrderBy(m => m.DateCreated))
+                                    {
+                                        @if (message.Status.ToString() == "NotRead")
+                                        {
+                                            read = false;
+                                            break;
+                                        }
+                                        @if (message.Status.ToString() == "Read")
+                                        {
+                                            read = true;
+                                        }
+                                    }
+                                    @*<span class="label label-warning">
+                                            Yes &nbsp;
+                                        </span>*@
+                                    if (read)
+                                    {
+                                        <i class="glyphicon glyphicon-thumbs-up"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="glyphicon glyphicon-thumbs-down"></i>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => note.Workday_Cient.Facilitator.Name)
+                            </td>
+
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>    
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.fn.dataTable.moment('MM/DD/YYYY');
+
+            $('#MyTable').DataTable({
+                "order": [[1, "asc"]],
+                "pageLength": 100
+            });
+        });
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+    </script>
+}
+
+
+

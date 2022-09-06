@@ -70,7 +70,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create(int id = 0)
         {
             if (id == 1)
@@ -126,7 +126,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(TCMServiceViewModel tcmServiceViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -224,7 +224,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -268,7 +268,7 @@ namespace KyoS.Web.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, TCMServiceViewModel tcmServiceViewModel)
         {
             if (id != tcmServiceViewModel.Id)
