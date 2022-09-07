@@ -5516,9 +5516,9 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Immunizations", typeof(string));
             dt.Columns.Add("Documents", typeof(bool));
             dt.Columns.Add("AgeOfFirstMenstruation", typeof(string));
-            dt.Columns.Add("DateOfLastBreastExam", typeof(DateTime));
-            dt.Columns.Add("DateOfLastPelvic", typeof(DateTime));
-            dt.Columns.Add("DateOfLastPeriod", typeof(DateTime));
+            dt.Columns.Add("DateOfLastBreastExam", typeof(string));
+            dt.Columns.Add("DateOfLastPelvic", typeof(string));
+            dt.Columns.Add("DateOfLastPeriod", typeof(string));
             dt.Columns.Add("UsualDurationOfPeriods", typeof(string));
             dt.Columns.Add("UsualIntervalBetweenPeriods", typeof(string));
             dt.Columns.Add("InformationProvided", typeof(bool));
@@ -5829,9 +5829,9 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             false,
                                             string.Empty,
-                                            new DateTime(),
-                                            new DateTime(),
-                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
                                             string.Empty,
                                             string.Empty,
                                             false
