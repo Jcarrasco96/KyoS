@@ -29,7 +29,6 @@
     <div class="row">
         <form asp-action="CreateMTPReview" asp-route-id="@Model.Id" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="IdMTP" />
             <input type="hidden" asp-for="MTP_FK" />
             <input type="hidden" asp-for="Therapist" />
