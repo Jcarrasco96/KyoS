@@ -3206,7 +3206,14 @@ namespace KyoS.Web.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "Already exists the MTP Review.");
 
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMTPReview", reviewViewModel) });
+                    reviewViewModel.Mtp = _context.MTPs
+                                                 .Include(n => n.Client)
+                                                 .ThenInclude(n => n.LegalGuardian)
+                                                 .Include(n => n.Client.Clinic)
+                                                 .Include(n => n.Goals)
+                                                 .ThenInclude(n => n.Objetives)
+                                                 .FirstOrDefault(m => m.Id == reviewViewModel.IdMTP);
+                    return View(reviewViewModel);
                 }
             }
 
