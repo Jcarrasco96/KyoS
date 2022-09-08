@@ -258,7 +258,12 @@ namespace KyoS.Web.Controllers
                     if (model.TcmClient.Client.EmergencyContact == null)
                     {
                         model.TcmClient.Client.EmergencyContact = new EmergencyContactEntity();
-                        
+                    }
+                    if (model.TcmClient.Client.Clients_HealthInsurances.Count() == 0)
+                    {
+                        Client_HealthInsurance temp = new Client_HealthInsurance();
+                        temp.HealthInsurance = new HealthInsuranceEntity();
+                        model.TcmClient.Client.Clients_HealthInsurances.Add(temp);
                     }
                     return View(model);
                 }
@@ -332,7 +337,12 @@ namespace KyoS.Web.Controllers
             if (model.TcmClient.Client.EmergencyContact == null)
             {
                 model.TcmClient.Client.EmergencyContact = new EmergencyContactEntity();
-                
+            }
+            if (model.TcmClient.Client.Clients_HealthInsurances.Count() == 0)
+            {
+                Client_HealthInsurance temp = new Client_HealthInsurance();
+                temp.HealthInsurance = new HealthInsuranceEntity();
+                model.TcmClient.Client.Clients_HealthInsurances.Add(temp);
             }
             return View(model);
         }

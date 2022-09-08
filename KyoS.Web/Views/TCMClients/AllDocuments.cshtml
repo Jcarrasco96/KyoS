@@ -113,11 +113,9 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @if (item.TcmServicePlan == null)
+                                        @if (item.TcmServicePlan == null || item.TcmServicePlan.Id == 0)
                                         {
-                                            <span class="label label-default">
-                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                            </span>
+                                             <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
@@ -139,24 +137,21 @@
                                         @if (item.TcmServicePlan.TCMAdendum == null)
                                         {
                                             <a asp-action="Adendum" asp-route-id="@item.Id" asp-controller="TCMServicePlans" asp-route-caseNumber="@item.CaseNumber" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
-                                            @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
                                         }
                                         else
                                         {
                                             @if (item.TcmServicePlan.TCMAdendum.Count() == 0)
                                             {
                                                 <a asp-action="Adendum" asp-route-id="@item.Id" asp-controller="TCMServicePlans" asp-route-caseNumber="@item.CaseNumber" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
-                                                @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
                                             }
                                             else
                                             {
                                                 <a asp-action="Adendum" asp-route-id="@item.Id" asp-controller="TCMServicePlans" asp-route-caseNumber="@item.CaseNumber" asp-route-aview="2" class="btn btn-default" title="Print"><i class="glyphicon glyphicon-share"></i></a>
-                                                @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
                                             }
                                         }
                                     </td>
                                     <td align="center">
-                                        @if (item.TcmServicePlan.TCMServicePlanReview == null)
+                                        @if (item.TcmServicePlan.TCMServicePlanReview == null || item.TcmServicePlan.TCMServicePlanReview.Id == 0)
                                         {
                                             <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
                                         }
@@ -178,11 +173,9 @@
 
                                     </td>
                                     <td align="center">
-                                        @if (item.TCMAssessment == null)
+                                        @if (item.TCMAssessment == null || item.TCMAssessment.Id == 0)
                                         {
-                                            <span class="label label-default">
-                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                            </span>
+                                            <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
@@ -202,11 +195,9 @@
 
                                     </td>
                                     <td align="center">
-                                        @if (item.TcmIntakeAppendixJ == null)
+                                        @if (item.TcmIntakeAppendixJ == null || item.TcmIntakeAppendixJ.Id == 0)
                                         {
-                                            <span class="label label-default">
-                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                            </span>
+                                             <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
@@ -229,29 +220,23 @@
                                         @if (item.TCMFarsFormList == null)
                                         {
                                             <a asp-action="TCMFarsForTCMClient" asp-route-id="@item.Id" asp-controller="TCMFarsForms" asp-route-idTCMClient="@item.CaseNumber" asp-route-origin="2" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
-                                            @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
                                         }
                                         else
                                         {
                                             @if (item.TCMFarsFormList.Count() == 0)
                                             {
                                                 <a asp-action="TCMFarsForTCMClient" asp-route-id="@item.Id" asp-controller="TCMFarsForms" asp-route-idTCMClient="@item.CaseNumber" asp-route-origin="2" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
-                                                @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
                                             }
                                             else
                                             {
                                                 <a asp-action="TCMFarsForTCMClient" asp-route-id="@item.Id" asp-controller="TCMFarsForms" asp-route-idTCMClient="@item.Id" asp-route-origin="2" class="btn btn-default" title="Print"><i class="glyphicon glyphicon-share"></i></a>
-                                                @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
                                             }
-
                                         }
                                     </td>
                                     <td align="center">
-                                        @if (item.TcmServicePlan.TCMDischarge == null)
+                                        @if (item.TcmServicePlan.TCMDischarge == null || item.TcmServicePlan.TCMDischarge.Id == 0)
                                         {
-                                            <span class="label label-default">
                                                 <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                            </span>
                                         }
                                         else
                                         {
