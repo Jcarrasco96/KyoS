@@ -102,12 +102,12 @@
                                              || (item.TcmIntakeAcknowledgementHipa != null) || (item.TCMIntakeOrientationChecklist != null) || (item.TCMIntakeAdvancedDirective != null)
                                              || (item.TCMIntakeForeignLanguage != null) || (item.TCMIntakeWelcome != null))
                                             {
-                                                <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-section="1" class="btn btn-default" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                                <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@item.Id" asp-route-origin = "1" asp-controller="TCMIntakes" asp-route-section="1" class="btn btn-default" title="Print"><i class="glyphicon glyphicon-share"></i></a>
                                                 @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
                                             }
                                             else
                                             {
-                                                <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-section="1" class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                                <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@item.Id" asp-route-origin = "1" asp-controller="TCMIntakes" asp-route-section="1" class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
                                                 @*<a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>*@
                                             }
                                         }

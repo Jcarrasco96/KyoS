@@ -2801,7 +2801,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor, Manager")]
-        public async Task<IActionResult> TCMIntakeSectionDashboardReadOnly(int id = 0, int section = 0)
+        public async Task<IActionResult> TCMIntakeSectionDashboardReadOnly(int id = 0, int section = 0, int origin = 0)
         {
             if (id == 0)
             {
@@ -2864,6 +2864,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
             ViewBag.Section = section.ToString();
+            ViewData["origin"] = origin;
             return View(TcmClientEntity);
         }
 
