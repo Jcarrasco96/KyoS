@@ -258,7 +258,12 @@ namespace KyoS.Web.Controllers
                     if (model.TcmClient.Client.EmergencyContact == null)
                     {
                         model.TcmClient.Client.EmergencyContact = new EmergencyContactEntity();
-                        
+                    }
+                    if (model.TcmClient.Client.Clients_HealthInsurances.Count() == 0)
+                    {
+                        Client_HealthInsurance temp = new Client_HealthInsurance();
+                        temp.HealthInsurance = new HealthInsuranceEntity();
+                        model.TcmClient.Client.Clients_HealthInsurances.Add(temp);
                     }
                     return View(model);
                 }
@@ -332,7 +337,12 @@ namespace KyoS.Web.Controllers
             if (model.TcmClient.Client.EmergencyContact == null)
             {
                 model.TcmClient.Client.EmergencyContact = new EmergencyContactEntity();
-                
+            }
+            if (model.TcmClient.Client.Clients_HealthInsurances.Count() == 0)
+            {
+                Client_HealthInsurance temp = new Client_HealthInsurance();
+                temp.HealthInsurance = new HealthInsuranceEntity();
+                model.TcmClient.Client.Clients_HealthInsurances.Add(temp);
             }
             return View(model);
         }
@@ -2791,7 +2801,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor, Manager")]
-        public async Task<IActionResult> TCMIntakeSectionDashboardReadOnly(int id = 0, int section = 0)
+        public async Task<IActionResult> TCMIntakeSectionDashboardReadOnly(int id = 0, int section = 0, int origin = 0)
         {
             if (id == 0)
             {
@@ -2854,6 +2864,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
             ViewBag.Section = section.ToString();
+            ViewData["origin"] = origin;
             return View(TcmClientEntity);
         }
 

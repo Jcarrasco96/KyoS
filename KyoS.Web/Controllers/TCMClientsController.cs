@@ -579,7 +579,7 @@ namespace KyoS.Web.Controllers
 
             if (user_logged.UserType.ToString() == "CaseManager")
             {
-                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || user_logged.Clinic.Setting.MentalHealthClinic == false)
                 {
                     return RedirectToAction("NotAuthorized", "Account");
                 }
@@ -634,7 +634,7 @@ namespace KyoS.Web.Controllers
             }
             if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "TCMSupervisor")
             {
-                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || user_logged.Clinic.Setting.MentalHealthClinic == false)
                 {
                     return RedirectToAction("NotAuthorized", "Account");
                 }
