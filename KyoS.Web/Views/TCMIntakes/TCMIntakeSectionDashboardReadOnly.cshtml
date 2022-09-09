@@ -8,7 +8,15 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("Open Binder", "TCMIntakeDashboardReadOnly", "TCMIntakes", new { id = @Model.Id })
+            @if (@ViewData["origin"].ToString() == "0")
+            {
+                @Html.ActionLink("Open Binder", "TCMIntakeDashboardReadOnly", "TCMIntakes", new { id = @Model.Id })
+            }
+            @if (@ViewData["origin"].ToString() == "1")
+            {
+                @Html.ActionLink("All Documents", "AllDocuments", "TCMClients")
+            }
+
             @*@Html.ActionLink("TCM All Documents", "AllDocuments", "TCMClients")*@
         </li>
         @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
@@ -79,7 +87,7 @@
                 }
             </div>
             <div class="col-sm-3 col-md-2">
-                @if (Model.TcmIntakeConsentForRelease.Count() >= 0)
+                @if (Model.TcmIntakeConsentForRelease.Count() > 0)
                 {
                     
                         <div class="thumbnail list-group-item list-group-item-success">

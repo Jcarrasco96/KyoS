@@ -96,5 +96,10 @@ namespace KyoS.Web.Helpers
         Stream FloridaSocialHSTCMNoteReportSchema1(TCMNoteEntity note);
         Stream DreamsMentalHealthTCMNoteReportSchema1(TCMNoteEntity note);
         #endregion
+
+        #region TCM Service Plan
+        Stream FloridaSocialHSTCMServicePlan(TCMServicePlanEntity servicePlan);
+        Stream DreamsMentalHealthTCMServicePlan(TCMServicePlanEntity servicePlan);
+        #endregion
     }
 }

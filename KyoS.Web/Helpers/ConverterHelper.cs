@@ -1396,19 +1396,15 @@ namespace KyoS.Web.Helpers
             {
                 Id = TcmServicePlanEntity.Id,
                 ID_TcmClient = TcmServicePlanEntity.TcmClient.Id,
-                Date_Intake = TcmServicePlanEntity.DateIntake,
-                Date_ServicePlan = TcmServicePlanEntity.DateServicePlan,
-                Date_Assessment = TcmServicePlanEntity.DateAssessment,
-                Date_Certification = TcmServicePlanEntity.DateCertification,
-                dischargerCriteria = TcmServicePlanEntity.DischargerCriteria,
-                strengths = TcmServicePlanEntity.Strengths,
-                weakness = TcmServicePlanEntity.Weakness,
+                DateIntake = TcmServicePlanEntity.DateIntake,
+                DateServicePlan = TcmServicePlanEntity.DateServicePlan,
+                DateAssessment = TcmServicePlanEntity.DateAssessment,
+                DateCertification = TcmServicePlanEntity.DateCertification,
+                DischargerCriteria = TcmServicePlanEntity.DischargerCriteria,
+                Strengths = TcmServicePlanEntity.Strengths,
+                Weakness = TcmServicePlanEntity.Weakness,
                 CaseNumber = TcmServicePlanEntity.TcmClient.CaseNumber,
-                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2
-                
-                //TcmClients = _combosHelper.GetComboClientsForTCMCaseOpen(TcmServicePlanEntity.TcmClient.Client.Clinic.Id),
-                //TCMDomain = TcmServicePlanEntity.TCMDomain
-
+                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2                
             };
         }
 
@@ -1421,22 +1417,21 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                DateIntake = model.Date_Intake,
-                DateServicePlan = model.Date_ServicePlan,
-                DateAssessment = model.Date_Assessment,
-                DateCertification = model.Date_Certification,
+                DateIntake = model.DateIntake,
+                DateServicePlan = model.DateServicePlan,
+                DateAssessment = model.DateAssessment,
+                DateCertification = model.DateCertification,
                 TcmClient = await _context.TCMClient
                                           .Include(n => n.Client)
                                           .FirstOrDefaultAsync(n => n.Id == model.ID_TcmClient),
-                DischargerCriteria = model.dischargerCriteria,
-                Weakness = model.weakness,
-                Strengths = model.strengths,
+                DischargerCriteria = model.DischargerCriteria,
+                Weakness = model.Weakness,
+                Strengths = model.Strengths,
                 Status = StatusUtils.GetStatusByIndex(model.ID_Status),
                 Approved = model.Approved,
                 TCMMessages = _context.TCMMessages
                                       .Where(n => n.TCMServicePlan.Id == model.Id)
                                       .ToList()
-
             };
         }
 
@@ -1445,7 +1440,7 @@ namespace KyoS.Web.Helpers
             return new TCMDomainViewModel
             {
                 Id = TcmDomainEntity.Id,
-                Date_Identified = TcmDomainEntity.DateIdentified,
+                DateIdentified = TcmDomainEntity.DateIdentified,
                 Needs_Identified = TcmDomainEntity.NeedsIdentified,
                 Long_Term = TcmDomainEntity.LongTerm,
                 Id_ServicePlan = TcmDomainEntity.TcmServicePlan.Id,
@@ -1472,7 +1467,7 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                DateIdentified = model.Date_Identified,
+                DateIdentified = model.DateIdentified,
                 NeedsIdentified = model.Needs_Identified,
                 LongTerm = model.Long_Term,
                 TCMObjetive = model.TCMObjetive,
@@ -1815,20 +1810,19 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmDomain = await _context.TCMDomains.FindAsync(model.Id_Domain),
+                IdObjetive = model.IdObjetive,
                 //Clinic = await _context.Clinics.FindAsync(model.IdClinic),
                 Name = model.name,
                 Task = model.task,
                 //Long_Term = model.long_Term,
-                StartDate = model.Start_Date,
+                StartDate = model.StartDate,
                 
-                TargetDate = model.Target_Date,
-                EndDate = model.End_Date,
-                Finish = model.Finish,
-                IdObjetive = model.ID_Objetive,
+                TargetDate = model.TargetDate,
+                EndDate = model.EndDate,
+                Finish = model.Finish,                
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus),
                 Responsible = model.Responsible,
                 Origin = valor
-
             };
         }
 
@@ -1846,16 +1840,15 @@ namespace KyoS.Web.Helpers
                 name = TcmObjetiveEntity.Name,
                 task = TcmObjetiveEntity.Task,
                 Status = TcmObjetiveEntity.Status,
-                Start_Date = TcmObjetiveEntity.StartDate,
-                Target_Date = TcmObjetiveEntity.TargetDate,
-                End_Date = TcmObjetiveEntity.EndDate,
+                StartDate = TcmObjetiveEntity.StartDate,
+                TargetDate = TcmObjetiveEntity.TargetDate,
+                EndDate = TcmObjetiveEntity.EndDate,
                 Finish = TcmObjetiveEntity.Finish,
                 TcmDomain = TcmObjetiveEntity.TcmDomain,
                 Stages = _combosHelper.GetComboStagesNotUsed(TcmObjetiveEntity.TcmDomain),
                 Responsible = TcmObjetiveEntity.Responsible,
                 IdStatus = (TcmObjetiveEntity.Status == StatusType.Open) ? 1 : 2,
                 StatusList = _combosHelper.GetComboClientStatus(),
-                ID_Objetive = TcmObjetiveEntity.IdObjetive,
                 IdServicePlanReview = TcmObjetiveEntity.TcmDomain.TcmServicePlan.TCMServicePlanReview.Id,
                 Idd = TcmObjetiveEntity.Id,
                 CreatedBy = TcmObjetiveEntity.CreatedBy,
@@ -1863,13 +1856,9 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = TcmObjetiveEntity.LastModifiedBy,
                 LastModifiedOn = TcmObjetiveEntity.LastModifiedOn,
                 Name = TcmObjetiveEntity.Name,
-                Task = TcmObjetiveEntity.Task,
-                EndDate = TcmObjetiveEntity.EndDate,
-                StartDate = TcmObjetiveEntity.StartDate,
-                TargetDate = TcmObjetiveEntity.TargetDate,
-                
-
+                Task = TcmObjetiveEntity.Task                
             };
+
             if (TcmObjetiveEntity.Origin == "Service Plan")
                 salida.Origi = 0;
             if (TcmObjetiveEntity.Origin == "Addendum")

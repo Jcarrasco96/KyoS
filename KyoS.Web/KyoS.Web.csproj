@@ -90,7 +90,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KyoS.Common\KyoS.Common.csproj" />
-    <ProjectReference Include="..\RDLCDesign\RDLCDesign.csproj" />
   </ItemGroup>
 
   <ItemGroup>
