@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="06/17/2022 09:46:21" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="09/10/2022 18:41:46" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3CFS4VaHRI5ePhF/xztOm/w==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3ckRV6DAl0KEnTYGxPsD8FQ==">
       <TableDataSource Name="Goals1" Alias="Goals2" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -32,7 +32,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3rGNtNkU5uBdbRrHxF5hpEQ==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u33nXpxxevBh2v4Pu7bN1JYA==">
       <TableDataSource Name="Goals2" Alias="Goals3" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -63,7 +63,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3rzw71IJb/C8uuTIk9neyTw==">
+    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u35ePQGTOn0LlcC/T5KjJKxQ==">
       <TableDataSource Name="Goals3" Alias="Goals4" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -94,7 +94,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u33XhNGzPcHHYNuF2RN9kYVw==">
+    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u36V9B8yP3pYRnji8GK+Ax5g==">
       <TableDataSource Name="Goals4" Alias="Goals5" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -125,7 +125,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3iBGwR2jcFYo1OZkoilLs6w==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3xL3kUce1Ekn5mWK58dzboQ==">
       <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -780,7 +780,7 @@
       </TableObject>
       <DataHeaderBand Name="DataHeader6" Top="2694.51" Width="778.3" CanGrow="true" CanShrink="true"/>
     </DataBand>
-    <DataBand Name="Data14" Top="2884.2" Width="778.3" Height="500.85">
+    <DataBand Name="Data14" Top="2884.2" Width="778.3" Height="529.2">
       <TextObject Name="Text57" Left="-2.55" Top="28.35" Width="274.05" Height="18.9" Text="ANTICIPATED LENGTH OF TREATMENT:" HorzAlign="Right" Font="Arial, 10pt, style=Bold, Underline"/>
       <CheckBoxObject Name="CheckBox5" Left="277.5" Top="30.35" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([MTPs.NumberOfMonths] == 1,true,false)" CheckWidthRatio="2"/>
       <TextObject Name="Text59" Left="291.4" Top="29.35" Width="47.25" Height="18.9" Text="1 mo" Font="Arial, 9pt"/>
@@ -791,34 +791,34 @@
       <TextObject Name="Text62" Left="567" Top="29.35" Width="47.25" Height="18.9" Text="Other:" HorzAlign="Right" Font="Arial, 9pt"/>
       <TextObject Name="Text63" Left="610.25" Top="29.35" Width="103.95" Height="18.9" Text="[IIf(([MTPs.NumberOfMonths] != 1 &amp;&amp; [MTPs.NumberOfMonths] != 3 &amp;&amp; [MTPs.NumberOfMonths] != 6),[MTPs.NumberOfMonths],&quot;&quot;)] [IIf(([MTPs.NumberOfMonths] != 1 &amp;&amp; [MTPs.NumberOfMonths] != 3 &amp;&amp; [MTPs.NumberOfMonths] != 6),&quot;mo&quot;,&quot;&quot;)] " Font="Arial, 9pt, style=Underline"/>
       <TextObject Name="Text64" Left="5.45" Top="62.7" Width="576.45" Height="18.9" Text="These services are medically necessary according to the needs and diagnoses of the client" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text67" Left="22.35" Top="241.9" Width="179.55" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text67" Left="22.35" Top="241.9" Width="179.55" Height="18.9" Text="_________________________" Font="Arial, 9pt"/>
       <TextObject Name="Text68" Left="39.8" Top="261.15" Width="132.3" Height="18.9" Text="Client Signature" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text69" Left="264.6" Top="242.25" Width="255.15" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text70" Left="319.85" Top="261.5" Width="132.3" Height="18.9" Text="Print Name" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text71" Left="576.45" Top="242.25" Width="189" Height="18.9" Text="_______________________" HorzAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text72" Left="606.8" Top="261.5" Width="132.3" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text73" Left="264.6" Top="236.8" Width="255.15" Height="18.9" Text="[Clients.Name]" HorzAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text76" Left="23.9" Top="379.1" Width="179.55" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
-      <TextObject Name="Text77" Left="-0.45" Top="397.9" Width="236.25" Height="18.9" Text="Licensed Therapist &amp; Credentials " Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text78" Left="264.15" Top="379" Width="255.15" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text79" Left="262.7" Top="398.25" Width="255.15" Height="18.9" Text="Print Name" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text80" Left="576" Top="379" Width="189" Height="18.9" Text="_______________________" HorzAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text81" Left="606.35" Top="398.25" Width="132.3" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text76" Left="23.9" Top="393.55" Width="179.55" Height="18.9" Text="_________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text77" Left="-0.45" Top="412.35" Width="236.25" Height="18.9" Text="Licensed Therapist &amp; Credentials " Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text78" Left="264.15" Top="393.45" Width="255.15" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text79" Left="262.7" Top="412.7" Width="255.15" Height="18.9" Text="Print Name" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text80" Left="576" Top="393.45" Width="189" Height="18.9" Text="_______________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text81" Left="606.35" Top="407.7" Width="132.3" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text211" Left="567.45" Top="62.7" Width="207.9" Height="18.9" Text="[Clients.Name]" Font="Arial, 10pt, style=Underline"/>
       <TextObject Name="Text212" Left="4.9" Top="113.3" Width="774.9" Height="56.7" CanGrow="true" Text="[MTPs.InitialDischargeCriteria]" HorzAlign="Justify" Font="Arial, 10pt"/>
       <TextObject Name="Text213" Left="5.45" Top="94.5" Width="765.45" Height="18.9" Text="&lt;b&gt;Transition or discontinuation of services criteria and plan:&lt;/b&gt;" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text214" Left="24.35" Top="311.95" Width="179.55" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
-      <TextObject Name="Text215" Top="330.75" Width="245.7" Height="18.9" Text="Unlicensed Therapist &amp; Credentials" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text216" Left="263.6" Top="311.85" Width="255.15" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text217" Left="262.15" Top="331.1" Width="255.15" Height="18.9" Text="Print Name" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text218" Left="575.45" Top="311.85" Width="189" Height="18.9" Text="_______________________" HorzAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text219" Left="605.8" Top="331.1" Width="132.3" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text220" Left="24.35" Top="444.25" Width="179.55" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
-      <TextObject Name="Text221" Left="-10" Top="463.05" Width="236.25" Height="37.8" Text="Clinical Supervisor’s Reviewers Signature &amp; Credentials" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text222" Left="264.6" Top="444.15" Width="255.15" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text223" Left="263.15" Top="463.4" Width="255.15" Height="18.9" Text="Print Name" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text224" Left="576.45" Top="444.15" Width="189" Height="18.9" Text="_______________________" HorzAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text225" Left="606.8" Top="463.4" Width="132.3" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text214" Left="24.35" Top="317.95" Width="179.55" Height="18.9" Text="_________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text215" Top="336.75" Width="245.7" Height="18.9" Text="Unlicensed Therapist &amp; Credentials" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text216" Left="263.6" Top="317.85" Width="255.15" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text217" Left="262.15" Top="337.1" Width="255.15" Height="18.9" Text="Print Name" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text218" Left="575.45" Top="317.85" Width="189" Height="18.9" Text="_______________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text219" Left="605.8" Top="337.1" Width="132.3" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text220" Left="24.35" Top="468.7" Width="179.55" Height="18.9" Text="_________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text221" Left="-10" Top="487.5" Width="236.25" Height="37.8" Text="Clinical Supervisor’s Reviewers Signature &amp; Credentials" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text222" Left="264.6" Top="468.6" Width="255.15" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text223" Left="263.15" Top="487.85" Width="255.15" Height="18.9" Text="Print Name" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text224" Left="576.45" Top="468.6" Width="189" Height="18.9" Text="_______________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text225" Left="606.8" Top="487.85" Width="132.3" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
     </DataBand>
   </ReportPage>
 </Report>
