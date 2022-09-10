@@ -340,6 +340,10 @@ namespace KyoS.Web.Controllers
                 ViewBag.MedicalHistoryMissing = _context.Clients
                                                        .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                               && wc.IntakeMedicalHistory == null)).ToString();
+
+                ViewBag.PendingMtp = _context.MTPs
+                                                  .Count(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && m.Status == MTPStatus.Pending)).ToString();
             }
             if (User.IsInRole("Manager"))
             {
@@ -803,6 +807,22 @@ namespace KyoS.Web.Controllers
                                                         .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                                && wc.IntakeMedicalHistory == null)).ToString();
 
+                List<MTPEntity> MtpPending = await _context.MTPs
+                                                                 .Include(f => f.Client)
+                                                                 .ThenInclude(n => n.Clinic)
+                                                                 .Where(n => (n.Status == MTPStatus.Pending
+                                                                      && n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                      && n.CreatedBy == user_logged.UserName))
+                                                                 .OrderBy(f => f.Client.Name)
+                                                                 .ToListAsync();
+                ViewBag.MtpPending = MtpPending.Count().ToString();
+
+                List<MTPEntity> MtpWithReview = await _context.MTPs
+                                                      .Include(wc => wc.Messages)
+                                                      .Where(wc => (wc.DocumentAssistant.LinkedUser == User.Identity.Name
+                                                                 && wc.Status == MTPStatus.Pending)).ToListAsync();
+                MtpWithReview = MtpWithReview.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
+                ViewBag.MtpWithReview = MtpWithReview.Count.ToString();
             }
             if (User.IsInRole("TCMSupervisor"))
             {

@@ -23,9 +23,12 @@
                 }
                 @if (ViewData["origi"].ToString() == "1")
                 {
-                    @Html.ActionLink("Messages MTPs", "MessagesOfMTP", "Messages")
+                    @Html.ActionLink("Pending", "Pending", "MTPs")
                 }
-
+                @if (ViewData["origi"].ToString() == "2")
+                {
+                    @Html.ActionLink("MTP with Review", "Notifications", "Messages")
+                }
             </li>
             <li class="active">Edit</li>
         </ul><!--.breadcrumb-->
@@ -34,7 +37,7 @@
     <h4>Edit master treament plan</h4>
     <hr />
     <div class="row">
-        <form asp-action="Edit" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
+        <form asp-action="Approve" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Active" />
@@ -42,29 +45,32 @@
             <input type="hidden" asp-for="AdmissionedFor" />
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="CreatedOn" />
-            <input type="hidden" asp-for="Status" />
-            <partial name="_MTPs" />
+            <partial name="_MTPsReadOnly" />
             <div class="col-md-push-12">
                 <div class="col-md-12 form-group">
-                    <a onclick="showInPopup('@Url.Action("CreateGoalModal", "MTPs", new {id =  @Model.Id, idAdendum = 0}, Context.Request.Scheme)','Create goal of MTP')" class="btn btn-success" title="Create Goal of this MTP"><i class="glyphicon glyphicon-plus"></i> Add Goal</a>
+                    <a onclick="showInPopup('@Url.Action("CreateGoalModal", "MTPs", new {id =  @Model.Id, idAdendum = 0}, Context.Request.Scheme)','Create goal of MTP')" class="btn btn-success disabled" title="Create Goal of this MTP"><i class="glyphicon glyphicon-plus"></i> Add Goal</a>
                 </div>
                 <div class="col-md-12">
                     <div id="view-goals">
-                        @await Html.PartialAsync("_ViewGoals", Model.Goals.ToList())
+                        @await Html.PartialAsync("_ViewGoalsReadOnly", Model.Goals.ToList())
                     </div>
                 </div>
             </div>
             <div class="form-group col-md-12">
-                <input type="submit" value="Save MTP" class="btn btn-primary" />
+                <input type="submit" value="Approve MTP" class="btn btn-primary" />
+                <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageMtpEntity","MTPs",new {id = Model.Id, origin = @ViewData["origi"]},Context.Request.Scheme)','Add message to document creator')" title="Not approved note due to problems">Review</a>
                 @if (ViewData["origi"].ToString() == "0")
                 {
                     <a asp-action="Index" class="btn btn-success">Back</a>
                 }
                 @if (ViewData["origi"].ToString() == "1")
                 {
-                    <a asp-action="MessagesOfMTP" asp-controller="Messages" class="btn btn-success">Back</a>
+                    <a asp-action="Pending" class="btn btn-success">Back</a>
                 }
-                @*<a asp-action="UpdateGoals" asp-route-id="@Model.Id" class="btn btn-info">Update goals - objetives</a>*@
+                @if (ViewData["origi"].ToString() == "2")
+                {
+                    <a asp-action="Notifications" asp-controller="Messages" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>
@@ -109,5 +115,7 @@
         });
     </script>
 }
+
+
 
 
