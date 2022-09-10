@@ -18,6 +18,10 @@ namespace KyoS.Web.Models
 
         public int IdDischarge { get; set; }
 
+        public int IdMtp { get; set; }
+
+        public int IdBio { get; set; }
+
         public int Origin { get; set; }
     }
 }

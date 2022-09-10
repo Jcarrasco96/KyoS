@@ -64,4 +64,10 @@
         Pending,
         Approved
     }
+    public enum MTPStatus
+    {
+        Edition,
+        Pending,
+        Approved
+    }
 }

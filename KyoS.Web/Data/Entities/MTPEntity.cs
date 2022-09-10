@@ -119,5 +119,16 @@ namespace KyoS.Web.Data.Entities
         public string OtherWhere { get; set; }
 
         public string AdmissionedFor { get; set; }
+
+        [Display(Name = "MTP Supervisor date")]
+        [DataType(DataType.Date)]
+
+        public DateTime SupervisorDate { get; set; }
+
+        public DocumentsAssistantEntity DocumentAssistant { get; set; }
+        public SupervisorEntity Supervisor { get; set; }
+        public MTPStatus Status { get; set; }
+
+        public IEnumerable<MessageEntity> Messages { get; set; }
     }
 }

@@ -29,6 +29,10 @@ namespace KyoS.Web.Data.Entities
 
         public DischargeEntity Discharge { get; set; }
 
+        public MTPEntity Mtp { get; set; }
+
+        public BioEntity Bio { get; set; }
+
         public string From { get; set; }
 
         public string To { get; set; }

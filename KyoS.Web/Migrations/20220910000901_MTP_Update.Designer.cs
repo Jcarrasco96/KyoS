@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220910000901_MTP_Update")]
+    partial class MTP_Update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3926,9 +3928,6 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("AddendumId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BioId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -3944,10 +3943,10 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("From")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MTPReviewId")
+                    b.Property<int?>("MTPEntityId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MtpId")
+                    b.Property<int?>("MTPReviewId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Notification")
@@ -3973,15 +3972,13 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("AddendumId");
 
-                    b.HasIndex("BioId");
-
                     b.HasIndex("DischargeId");
 
                     b.HasIndex("FarsFormId");
 
-                    b.HasIndex("MTPReviewId");
+                    b.HasIndex("MTPEntityId");
 
-                    b.HasIndex("MtpId");
+                    b.HasIndex("MTPReviewId");
 
                     b.HasIndex("Workday_ClientId");
 
@@ -9354,10 +9351,6 @@ namespace KyoS.Web.Migrations
                         .WithMany("Messages")
                         .HasForeignKey("AddendumId");
 
-                    b.HasOne("KyoS.Web.Data.Entities.BioEntity", "Bio")
-                        .WithMany()
-                        .HasForeignKey("BioId");
-
                     b.HasOne("KyoS.Web.Data.Entities.DischargeEntity", "Discharge")
                         .WithMany("Messages")
                         .HasForeignKey("DischargeId");
@@ -9366,13 +9359,13 @@ namespace KyoS.Web.Migrations
                         .WithMany("Messages")
                         .HasForeignKey("FarsFormId");
 
+                    b.HasOne("KyoS.Web.Data.Entities.MTPEntity", null)
+                        .WithMany("Messages")
+                        .HasForeignKey("MTPEntityId");
+
                     b.HasOne("KyoS.Web.Data.Entities.MTPReviewEntity", "MTPReview")
                         .WithMany("Messages")
                         .HasForeignKey("MTPReviewId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.MTPEntity", "Mtp")
-                        .WithMany("Messages")
-                        .HasForeignKey("MtpId");
 
                     b.HasOne("KyoS.Web.Data.Entities.Workday_Client", "Workday_Client")
                         .WithMany("Messages")
@@ -9380,13 +9373,9 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("Addendum");
 
-                    b.Navigation("Bio");
-
                     b.Navigation("Discharge");
 
                     b.Navigation("FarsForm");
-
-                    b.Navigation("Mtp");
 
                     b.Navigation("MTPReview");
 

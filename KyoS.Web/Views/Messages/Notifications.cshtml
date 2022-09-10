@@ -184,6 +184,21 @@
                                                                         }
 
                                                                     }
+                                                                    else
+                                                                    {
+                                                                        if (notification.Mtp != null)
+                                                                        {
+                                                                            if (notification.Mtp.Status == KyoS.Common.Enums.MTPStatus.Approved)
+                                                                            {
+                                                                                <a class="btn btn-warning disabled" title="View MTPs"><i class="glyphicon glyphicon-file"></i></a>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <a asp-action="EditReadOnly" asp-controller="Mtps" asp-route-id="@notification.Mtp.Id" asp-route-origi="2" class="btn btn-warning" title="View Mtps"><i class="glyphicon glyphicon-file"></i></a>
+                                                                            }
+
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
                                                         }
@@ -341,6 +356,21 @@
                                                                             <a asp-action="Edit" asp-controller="Discharge" asp-route-id="@notification.Discharge.Id" asp-route-origin="4" class="btn btn-warning" title="View Discharge"><i class="glyphicon glyphicon-file"></i></a>
                                                                         }
 
+                                                                    }
+                                                                     else
+                                                                    {
+                                                                        if (notification.Mtp != null)
+                                                                        {
+                                                                            if (notification.Mtp.Status == KyoS.Common.Enums.MTPStatus.Approved)
+                                                                            {
+                                                                                <a class="btn btn-warning disabled" title="View MTPs"><i class="glyphicon glyphicon-file"></i></a>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <a asp-action="EditReadOnly" asp-controller="Mtps" asp-route-id="@notification.Mtp.Id" asp-route-origi="2" class="btn btn-warning" title="View Mtps"><i class="glyphicon glyphicon-file"></i></a>
+                                                                            }
+
+                                                                        }
                                                                     }
                                                                 }
                                                             }

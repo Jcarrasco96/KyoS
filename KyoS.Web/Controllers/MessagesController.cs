@@ -56,6 +56,15 @@ namespace KyoS.Web.Controllers
 
                 ViewBag.Total = Convert.ToInt32(ViewBag.CountsMessagesNotes) + Convert.ToInt32(ViewBag.CountsMessagesFars) + Convert.ToInt32(ViewBag.CountsMessagesMTPReview) + Convert.ToInt32(ViewBag.CountsMessagesAddendum) + Convert.ToInt32(ViewBag.CountsMessagesDischarge);
             }
+            if (User.IsInRole("Documents_Assistant"))
+            {
+                ViewBag.CountsMessagesMtp = _context.Messages
+                                                     .Count(m => (m.To == user_logged.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead
+                                                                                               && m.Mtp != null && m.Notification == false))
+                                                     .ToString();
+
+                ViewBag.Total = Convert.ToInt32(ViewBag.CountsMessagesMtp) ;
+            }
             return View();
         }
 
@@ -316,14 +325,14 @@ namespace KyoS.Web.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Facilitator, Supervisor, Manager")]
+        [Authorize(Roles = "Facilitator, Supervisor, Manager, Documents_Assistant")]
         public async Task<IActionResult> Notifications(int id = 0)
         {
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
                                                    .ThenInclude(c => c.Setting)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-
+            
             return View(await _context.Messages
 
                                       .Include(m => m.Workday_Client)
@@ -346,6 +355,10 @@ namespace KyoS.Web.Controllers
 
                                       .Include(m => m.Discharge)
 
+                                      .Include(m => m.Mtp)
+
+                                      .Include(m => m.Bio)
+
                                       .Where(m => (m.To == user_logged.UserName && m.Notification == true))
                                       .ToListAsync());            
         }
@@ -360,7 +373,8 @@ namespace KyoS.Web.Controllers
                                                        .Include(m => m.MTPReview)
                                                        .Include(m => m.Addendum)
                                                        .Include(m => m.Discharge)
-
+                                                       .Include(m => m.Mtp)
+                                                       .Include(m => m.Bio)
                                                        .FirstOrDefaultAsync(m => m.Id == id);
 
             if (notification == null)
@@ -406,7 +420,47 @@ namespace KyoS.Web.Controllers
                                           .ToListAsync());
             }
 
+            if (notification.Mtp != null)
+            {
+                return View(await _context.Messages
+
+                                          .Where(m => (m.Mtp.Id == notification.Mtp.Id && m.Notification == false))
+                                          .ToListAsync());
+            }
+
+            if (notification.Bio != null)
+            {
+                return View(await _context.Messages
+
+                                          .Where(m => (m.Bio.Id == notification.Bio.Id && m.Notification == false))
+                                          .ToListAsync());
+            }
+
             return null;
         }
+
+        [Authorize(Roles = "Documents_Assistant")]
+        public async Task<IActionResult> MessagesOfMTP(int id = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (User.IsInRole("Documents_Assistant"))
+            {
+                return View(await _context.MTPs
+
+                                          .Include(m => m.Client)
+
+                                          .Include(m => m.Messages.Where(m => m.Notification == false))
+
+                                          .Where(m => (m.CreatedBy == user_logged.UserName && m.Messages.Count() > 0))
+                                          .ToListAsync());
+            }
+
+            return View();
+        }
+
     }
 }
