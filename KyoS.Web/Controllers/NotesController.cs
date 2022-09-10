@@ -10305,5 +10305,47 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction(nameof(PendingNotes));
         }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> PaymentReceivedToday(int id = 0)
+        {
+            PaymentReceivedViewModel model = new PaymentReceivedViewModel { Id = id, PaymentDate = DateTime.Now };
+            
+            Workday_Client workday_client = await _context.Workdays_Clients
+
+                                                          .Include(wc => wc.Workday)
+                                                          .ThenInclude(w => w.Week)
+                                                          .ThenInclude(we => we.Clinic)
+
+                                                          .Where(wc => wc.Id == model.Id)
+                                                          .FirstOrDefaultAsync();
+            workday_client.PaymentDate = model.PaymentDate;
+            _context.Update(workday_client);
+            await _context.SaveChangesAsync();
+                       
+            return RedirectToAction("BillingWeek", "Notes", new { id = workday_client.Workday.Week.Id});
+        
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> BillNoteToday(int id = 0)
+        {
+            BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
+            Workday_Client workday_client = await _context.Workdays_Clients
+
+                                                              .Include(wc => wc.Workday)
+                                                              .ThenInclude(w => w.Week)
+                                                              .ThenInclude(we => we.Clinic)
+
+                                                              .Where(wc => wc.Id == model.Id)
+                                                              .FirstOrDefaultAsync();
+            workday_client.BilledDate = model.BilledDate;
+            _context.Update(workday_client);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("BillingWeek", "Notes", new { id = workday_client.Workday.Week.Id });
+
+        }
+
     }
 }

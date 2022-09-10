@@ -17,9 +17,8 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h4 style="font-weight:bold;"><span class="label label-default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Week&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></h4>        
-        <h5>&nbsp;&nbsp;&nbsp;<b>Init Date:</b> @Model.First().Workday.Week.InitDate.ToShortDateString()</h5>
-        <h5><b>Final Date:</b> @Model.First().Workday.Week.FinalDate.ToShortDateString()</h5>
+        @*<h4 style="font-weight:bold;"><span class="label label-default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Week&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></h4>*@        
+        <h5>&nbsp;<b>Init Date:</b> @Model.First().Workday.Week.InitDate.ToShortDateString()&nbsp;&nbsp;<b>Final Date:</b> @Model.First().Workday.Week.FinalDate.ToShortDateString()</h5>
         <hr />
     </div>
     <div id="view-templates">
@@ -36,8 +35,8 @@
         $(document).ready(function () {
             $('#MyTable').DataTable({
                 "order": [[0, "asc"]],
-                "lengthMenu": [[100, 200, -1], [100, 200, "All"]],
-                "pageLength": 200
+                "lengthMenu": [[100, 200, 400, -1], [100, 200, 400, "All"]],
+                "pageLength": 400
             });        
         });
     </script>
