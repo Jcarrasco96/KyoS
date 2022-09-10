@@ -589,6 +589,27 @@
             <div class="col-md-12">
                 &nbsp;
             </div>
+            <div class="col-md-1">
+                &nbsp;
+            </div>
+            <div class="col-md-2">
+                @if (ViewBag.PendingMtp == "0")
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MTPs</h4>
+                        <span class="message-counter-cero">@ViewBag.PendingMtp</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="MTPs" asp-action="Pending" role="button">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MTPs</h4>
+                            <span class="message-counter-info">@ViewBag.PendingMtp</span>
+                        </div>
+                    </a>
+                }
+            </div>
             <div class="col-md-2">
                 @if (ViewBag.PendingFars == "0")
                 {
@@ -661,6 +682,17 @@
                     </a>
                 }
             </div>
+            <div class="col-md-1">
+                &nbsp;
+            </div>
+
+            //New line
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+            <div class="col-md-2">
+                &nbsp;
+            </div>
             <div class="col-md-2">
                 @if (ViewBag.PendingActivities == "0")
                 {
@@ -696,13 +728,6 @@
                         </div>
                     </a>
                 }
-            </div>
-            //New line
-            <div class="col-md-12">
-                &nbsp;
-            </div>
-            <div class="col-md-4">
-                &nbsp;
             </div>
             <div class="col-md-2">
                 @if (ViewBag.PendingIndNotes == "0")
@@ -740,7 +765,7 @@
                     </a>
                 }
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 &nbsp;
             </div>
             <div class="col-md-12">
@@ -803,7 +828,7 @@
                     </a>
                 }
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 &nbsp;
             </div>
         }
@@ -1447,6 +1472,107 @@
                     </a>
                 }
             </div>
+
+            //NewLine
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+            <div class="col-md-4">
+                &nbsp;
+            </div>
+            <div class="col-md-2">
+                @if (ViewBag.MtpPending == "0")
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MTP</h4>
+                        <span class="message-counter-cero">@ViewBag.MtpPending</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="MTPs" asp-action="Pending" role="button">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MTP</h4>
+                            <span class="message-counter-info">@ViewBag.MtpPending</span>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="col-md-2">
+                @if (ViewBag.MTPReviewPending == "0")
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BIO</h4>
+                        <span class="message-counter-cero">@ViewBag.MTPReviewPending</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="MTPs" asp-action="PendingMtpReview" role="button">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BIO</h4>
+                            <span class="message-counter-info">@ViewBag.MTPReviewPending</span>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="col-md-4">
+                &nbsp;
+            </div>
+            //NewLine
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+            <div class="col-md-4">
+                &nbsp;
+            </div>
+            <div class="col-md-2">
+                @if (ViewBag.MtpWithReview == "0")
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>MTP<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with review</h4>
+                        <span class="message-counter-cero">@ViewBag.MtpWithReview</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfMTP" role="button">
+                        <div class="thumbnail list-group-item list-group-item-warning">
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>MTP<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with review</h4>
+                            <span class="message-counter-warning">@ViewBag.MtpWithReview</span>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="col-md-2">
+                @if (ViewBag.MtpPending == "0")
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>MTP<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with review</h4>
+                        <span class="message-counter-cero">@ViewBag.MtpPending</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="MTPs" asp-action="Pending" role="button">
+                        <div class="thumbnail list-group-item list-group-item-warning">
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>MTP<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with review</h4>
+                            <span class="message-counter-warning">@ViewBag.MtpPending</span>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="col-md-4">
+                &nbsp;
+            </div>
         }
         @if (User.IsInRole("CaseManager"))
         {
@@ -1849,7 +1975,7 @@
                 }
             </div>
             <div class="col-md-2">
-            </div>            
+            </div>
         }
         @if (User.IsInRole("TCMSupervisor"))
         {

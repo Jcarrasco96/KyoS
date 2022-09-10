@@ -485,7 +485,12 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-
+                Messages = _context.Messages
+                                      .Where(n => n.Mtp.Id == model.Id)
+                                      .ToList(),
+                Status = model.Status,
+                SupervisorDate = model.SupervisorDate
+              
             };
         }
 
@@ -552,7 +557,10 @@ namespace KyoS.Web.Helpers
                 CreatedBy = mtpEntity.CreatedBy,
                 CreatedOn = mtpEntity.CreatedOn,
                 LastModifiedBy = mtpEntity.LastModifiedBy,
-                LastModifiedOn = mtpEntity.LastModifiedOn
+                LastModifiedOn = mtpEntity.LastModifiedOn,
+                Status = mtpEntity.Status,
+                AdmissionedFor = mtpEntity.AdmissionedFor,
+                DocumentAssistant = mtpEntity.DocumentAssistant
             };
         }        
 
@@ -927,6 +935,10 @@ namespace KyoS.Web.Helpers
                                                                    .FirstOrDefaultAsync(a => a.Id == model.IdAddendum) : null,
                 Discharge = (model.IdDischarge != 0) ? await _context.Discharge
                                                                      .FirstOrDefaultAsync(d => d.Id == model.IdDischarge) : null,
+                Mtp = (model.IdMtp != 0) ? await _context.MTPs
+                                                         .FirstOrDefaultAsync(d => d.Id == model.IdMtp) : null,
+                Bio = (model.IdBio != 0) ? await _context.Bio
+                                                         .FirstOrDefaultAsync(d => d.Id == model.IdBio) : null,
                 Title = model.Title,
                 Text = model.Text,
                 DateCreated = DateTime.Now,
@@ -4909,7 +4921,7 @@ namespace KyoS.Web.Helpers
                 TCMSupervisor = model.TCMSupervisor,
                 TcmMessages = _context.TCMMessages
                                       .Where(n => n.TCMAssessment.Id == model.Id)
-                                      .ToList(),
+                                      .ToList()
 
 
             };

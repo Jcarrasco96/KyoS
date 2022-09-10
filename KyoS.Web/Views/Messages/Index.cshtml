@@ -12,7 +12,7 @@
                     <div class="col-md-4">
                     </div>
                     <div class="col-md-4">
-                        @if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Admin") || User.IsInRole("CaseManager") || User.IsInRole("Documents_Assistant") || User.IsInRole("SupervisorTCM"))
+                        @if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Admin") || User.IsInRole("CaseManager") || User.IsInRole("SupervisorTCM"))
                         {
                             <h4 style="text-align:center;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i> No Inbox <b>(0)</b></h4>
                         }
@@ -133,6 +133,62 @@
                         }
                     </div>
                     <div class="col-md-1">
+                        &nbsp;
+                    </div>
+                    //New line
+                    <div class="col-md-12">
+                        &nbsp;
+                    </div>
+                }
+                @if (User.IsInRole("Documents_Assistant"))
+                {
+                    <div class="col-md-12">
+                        <hr />
+                    </div>
+                    <div class="col-md-4">
+                        &nbsp;
+                    </div>
+                    <div class="col-md-2">
+                        @if (ViewBag.CountsMessagesMtp == "0")
+                        {
+                            <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfMTP" role="button">
+                                <div class="thumbnail list-group-item list-group-item-text">
+                                    <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i> MTPs</h4>
+                                    <span class="message-counter-cero">@ViewBag.CountsMessagesMtp</span>
+                                </div>
+                            </a>
+                        }
+                        else
+                        {
+                            <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfMTP" role="button">
+                                <div class="thumbnail list-group-item list-group-item-danger">
+                                    <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i> MTPs</h4>
+                                    <span class="message-counter">@ViewBag.CountsMessagesMtp</span>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                    <div class="col-md-2">
+                        @if (ViewBag.CountsMessagesMtp == "0")
+                        {
+                            <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfMTP" role="button">
+                                <div class="thumbnail list-group-item list-group-item-text">
+                                    <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>BIO</h4>
+                                    <span class="message-counter-cero">@ViewBag.CountsMessagesMtp</span>
+                                </div>
+                            </a>
+                        }
+                        else
+                        {
+                            <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfMTP" role="button">
+                                <div class="thumbnail list-group-item list-group-item-danger">
+                                    <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>BIO</h4>
+                                    <span class="message-counter">@ViewBag.CountsMessagesMtp</span>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                    <div class="col-md-4">
                         &nbsp;
                     </div>
                     //New line

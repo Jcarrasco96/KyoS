@@ -279,15 +279,57 @@
 
                                             </td>
                                             <td align="center">
-                                                @if (User.IsInRole("Supervisor") || (@item.CreatedBy == User.Identity.Name))
+                                                @if (!User.IsInRole("Supervisor") || (@item.CreatedBy == User.Identity.Name))
                                                 {
-                                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                    @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition)
+                                                    {
+                                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a asp-action="FinishEditing" asp-route-id="@item.Id" class="btn btn-success" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a class="btn btn-success disabled" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                    @if (User.IsInRole("Supervisor"))
+                                                    {
+                                                        @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition && item.CreatedBy == User.Identity.Name)
+                                                        {
+                                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                            <a asp-action="FinishEditing" asp-route-id="@item.Id" class="btn btn-success" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            @if (item.Status == KyoS.Common.Enums.MTPStatus.Pending && item.CreatedBy != User.Identity.Name)
+                                                            {
+                                                                <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a asp-action="EditReadOnly" asp-route-id="@item.Id" class="btn btn-success" title="Approve MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a class="btn btn-success disabled" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a class="btn btn-success disabled" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    }
+
                                                 }
-                                                <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                @if (item.Status == KyoS.Common.Enums.MTPStatus.Approved)
+                                                {
+                                                    <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
                                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
                                                 @if (User.IsInRole("Supervisor") || (@item.CreatedBy == User.Identity.Name))
                                                 {
@@ -383,15 +425,57 @@
 
                                             </td>
                                             <td align="center">
-                                                @if (User.IsInRole("Supervisor") || (item.CreatedBy == User.Identity.Name))
+                                                @if (!User.IsInRole("Supervisor") || (@item.CreatedBy == User.Identity.Name))
                                                 {
-                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                    @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition)
+                                                    {
+                                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a asp-action="FinishEditing" asp-route-id="@item.Id" class="btn btn-success" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a class="btn btn-success disabled" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>     
+                                                    @if (User.IsInRole("Supervisor"))
+                                                    {
+                                                        @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition && item.CreatedBy == User.Identity.Name)
+                                                        {
+                                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                            <a asp-action="FinishEditing" asp-route-id="@item.Id" class="btn btn-success" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            @if (item.Status == KyoS.Common.Enums.MTPStatus.Pending && item.CreatedBy != User.Identity.Name)
+                                                            {
+                                                                <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a asp-action="EditReadOnly" asp-route-id="@item.Id" class="btn btn-success" title="Approve MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a class="btn btn-success disabled" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a class="btn btn-success disabled" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    }
+
                                                 }
-                                                <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                @if (item.Status == KyoS.Common.Enums.MTPStatus.Approved)
+                                                {
+                                                    <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
                                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
                                                 @if (User.IsInRole("Supervisor") || (item.CreatedBy == User.Identity.Name))
                                                 {
@@ -574,15 +658,57 @@
                                                 <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
                                             </td>
                                             <td align="center">
-                                                @if (!User.IsInRole("Supervisor"))
+                                                @if (!User.IsInRole("Supervisor") || (@item.CreatedBy == User.Identity.Name))
                                                 {
-                                                    <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                    @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition)
+                                                    {
+                                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a asp-action="FinishEditing" asp-route-id="@item.Id" class="btn btn-success" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a class="btn btn-success disabled" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                    @if (User.IsInRole("Supervisor"))
+                                                    {
+                                                        @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition && item.CreatedBy == User.Identity.Name)
+                                                        {
+                                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                            <a asp-action="FinishEditing" asp-route-id="@item.Id" class="btn btn-success" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            @if (item.Status == KyoS.Common.Enums.MTPStatus.Pending && item.CreatedBy != User.Identity.Name)
+                                                            {
+                                                                <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a asp-action="EditReadOnly" asp-route-id="@item.Id" class="btn btn-success" title="Approve MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a class="btn btn-success disabled" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a class="btn btn-success disabled" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    }
+
                                                 }
-                                                <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                @if (item.Status == KyoS.Common.Enums.MTPStatus.Approved)
+                                                {
+                                                    <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
                                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
                                                 @if (User.IsInRole("Supervisor"))
                                                 {
@@ -658,15 +784,57 @@
                                                 <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
                                             </td>
                                             <td align="center">
-                                                @if (!User.IsInRole("Supervisor"))
+                                                @if (!User.IsInRole("Supervisor") || (@item.CreatedBy == User.Identity.Name))
                                                 {
-                                                    <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                    @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition)
+                                                    {
+                                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a asp-action="FinishEditing" asp-route-id="@item.Id" class="btn btn-success" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a class="btn btn-success disabled" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                    @if (User.IsInRole("Supervisor"))
+                                                    {
+                                                        @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition && item.CreatedBy == User.Identity.Name)
+                                                        {
+                                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                            <a asp-action="FinishEditing" asp-route-id="@item.Id" class="btn btn-success" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            @if (item.Status == KyoS.Common.Enums.MTPStatus.Pending && item.CreatedBy != User.Identity.Name)
+                                                            {
+                                                                <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a asp-action="EditReadOnly" asp-route-id="@item.Id" class="btn btn-success" title="Approve MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a class="btn btn-success disabled" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a class="btn btn-success disabled" title="Finish Editing MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    }
+
                                                 }
-                                                <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                @if (item.Status == KyoS.Common.Enums.MTPStatus.Approved)
+                                                {
+                                                    <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
+                                                else
+                                                { 
+                                                    <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
                                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
                                                 @if (User.IsInRole("Supervisor"))
                                                 {
