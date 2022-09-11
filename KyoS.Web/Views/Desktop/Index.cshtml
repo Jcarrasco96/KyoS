@@ -1520,7 +1520,7 @@
                 @if (ViewBag.BioPending == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BIO</h4>
+                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BIOs</h4>
                         <span class="message-counter-cero">@ViewBag.BioPending</span>
                     </div>
                 }
@@ -1528,7 +1528,7 @@
                 {
                     <a style="text-decoration: none;" asp-controller="Bios" asp-action="Pending" role="button">
                         <div class="thumbnail list-group-item list-group-item-info">
-                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BIO</h4>
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BIOs</h4>
                             <span class="message-counter-info">@ViewBag.BioPending</span>
                         </div>
                     </a>
@@ -1554,7 +1554,7 @@
                 }
                 else
                 {
-                    <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfMTP" role="button">
+                    <a style="text-decoration: none;" asp-controller="MTPs" asp-action="MtpWithReview" role="button">
                         <div class="thumbnail list-group-item list-group-item-warning">
                             <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>MTPs<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with review</h4>
                             <span class="message-counter-warning">@ViewBag.MtpWithReview</span>
@@ -1566,7 +1566,7 @@
                 @if (ViewBag.BioWithReview == "0")
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>BIO<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with review</h4>
+                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>BIOs<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with review</h4>
                         <span class="message-counter-cero">@ViewBag.BioWithReview</span>
                     </div>
                 }
@@ -1574,7 +1574,7 @@
                 {
                     <a style="text-decoration: none;" asp-controller="Bios" asp-action="BioWithReview" role="button">
                         <div class="thumbnail list-group-item list-group-item-warning">
-                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>BIO<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with review</h4>
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>BIOs<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with review</h4>
                             <span class="message-counter-warning">@ViewBag.BioWithReview</span>
                         </div>
                     </a>

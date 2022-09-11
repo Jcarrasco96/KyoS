@@ -473,6 +473,10 @@ namespace KyoS.Web.Controllers
                         {
                             return RedirectToAction("MessagesOfMTP", "Messages");
                         }
+                        if (origi == 2)
+                        {
+                            return RedirectToAction("MtpWithReview", "MTPs");
+                        }
                     }
                     catch (System.Exception ex)
                     {

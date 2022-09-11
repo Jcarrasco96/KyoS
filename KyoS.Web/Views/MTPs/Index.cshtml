@@ -57,7 +57,7 @@
                                 <th class="col-md-1">
 
                                 </th>
-                                <th class="col-md-3">
+                                <th class="col-md-2">
                                     Client
                                 </th>
                                 <th class="col-md-1" style="text-align:center;">
@@ -76,6 +76,9 @@
                                 </th>
                                 <th class="col-md-1" style="text-align:center;">
                                     Review
+                                </th>
+                                <th class="col-md-1" style="text-align:center;">
+                                    Document
                                 </th>
                                 <th class="col-md-2">
                                 </th>
@@ -279,6 +282,26 @@
 
                                             </td>
                                             <td align="center">
+                                                @if (item.Status == KyoS.Common.Enums.MTPStatus.Approved)
+                                                {
+                                                    <span class="label label-success">
+                                                        Approve
+                                                    </span>
+                                                }
+                                                @if (item.Status == KyoS.Common.Enums.MTPStatus.Pending)
+                                                {
+                                                    <span class="label label-info">
+                                                        Pending
+                                                    </span>
+                                                }
+                                                @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition)
+                                                {
+                                                    <span class="label label-warning">
+                                                        Edition
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td align="center">
                                                 @if (@item.CreatedBy == User.Identity.Name)
                                                 {
                                                     @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition)
@@ -423,6 +446,26 @@
                                                     <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
                                                 }
 
+                                            </td>
+                                            <td align="center">
+                                                @if (item.Status == KyoS.Common.Enums.MTPStatus.Approved)
+                                                {
+                                                    <span class="label label-success">
+                                                        Approve
+                                                    </span>
+                                                }
+                                                @if (item.Status == KyoS.Common.Enums.MTPStatus.Pending)
+                                                {
+                                                    <span class="label label-info">
+                                                        Pending
+                                                    </span>
+                                                }
+                                                @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition)
+                                                {
+                                                    <span class="label label-warning">
+                                                        Edition
+                                                    </span>
+                                                }
                                             </td>
                                             <td align="center">
                                                 @if (@item.CreatedBy == User.Identity.Name)
@@ -658,6 +701,26 @@
                                                 <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
                                             </td>
                                             <td align="center">
+                                                @if (item.Status == KyoS.Common.Enums.MTPStatus.Approved)
+                                                {
+                                                    <span class="label label-success">
+                                                        Approve
+                                                    </span>
+                                                }
+                                                @if (item.Status == KyoS.Common.Enums.MTPStatus.Pending)
+                                                {
+                                                    <span class="label label-info">
+                                                        Pending
+                                                    </span>
+                                                }
+                                                @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition)
+                                                {
+                                                    <span class="label label-warning">
+                                                        Edition
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td align="center">
                                                 @if (@item.CreatedBy == User.Identity.Name)
                                                 {
                                                     @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition)
@@ -782,6 +845,26 @@
                                             </td>
                                             <td align="center">
                                                 <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
+                                            </td>
+                                            <td align="center">
+                                                @if (item.Status == KyoS.Common.Enums.MTPStatus.Approved)
+                                                {
+                                                    <span class="label label-success">
+                                                        Approve
+                                                    </span>
+                                                }
+                                                @if (item.Status == KyoS.Common.Enums.MTPStatus.Pending)
+                                                {
+                                                    <span class="label label-info">
+                                                        Pending
+                                                    </span>
+                                                }
+                                                @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition)
+                                                {
+                                                    <span class="label label-warning">
+                                                        Edition
+                                                    </span>
+                                                }
                                             </td>
                                             <td align="center">
                                                 @if (@item.CreatedBy == User.Identity.Name)

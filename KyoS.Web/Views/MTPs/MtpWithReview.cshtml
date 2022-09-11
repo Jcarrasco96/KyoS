@@ -26,11 +26,11 @@
                     <thead>
                         <tr>
                             <th class="col-md-1"></th>
-                            <th class="col-md-1" style="text-align:center;">Date</th>
                             <th class="col-md-3">Name</th>
-                            <th class="col-md-2" style="text-align:center;">MTP Status</th>
+                            <th class="col-md-2">Admission for</th>
+                            <th class="col-md-2" style="text-align:center;">Date</th>
                             <th class="col-md-1" style="text-align:center;">Review</th>
-                            <th class="col-md-2">Documents Assistant</th>
+                            <th class="col-md-2" style="text-align:center;">Status</th>
                             <th class="col-md-1"></th>
                         </tr>
                     </thead>
@@ -87,16 +87,25 @@
                                         </table>
                                     </div>
                                 </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => mtp.AdmissionDateMTP)
+                                <td >
+                                    @if (mtp.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (mtp.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => mtp.Client.Name)
+                                    |
+                                    @Html.DisplayFor(modelItem => mtp.Client.Code)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => mtp.Client.Name)
+                                    @Html.DisplayFor(modelItem => mtp.AdmissionedFor)
                                 </td>
                                 <td align="center">
-                                    <span class="label label-info">
-                                        Pending
-                                    </span>
+                                    @Html.DisplayFor(modelItem => mtp.AdmissionDateMTP)
                                 </td>
                                 <td align="center">
                                     @if (mtp.Messages.Count() == 0)
@@ -131,17 +140,19 @@
                                         }
                                     }
                                 </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => mtp.DocumentAssistant.Name)
+                                <td align="center">
+                                    <span class="label label-info">
+                                        Pending
+                                    </span>
                                 </td>
                                 <td align="right">
-                                    @if (User.IsInRole("CaseManager"))
+                                    @if (User.IsInRole("Documents_Assistant"))
                                     {
-                                        <a asp-action="Edit" asp-route-id="@mtp.Id" asp-route-origin="3" class="btn btn-warning" title="Edit TCM note"><i class="glyphicon glyphicon-file"></i></a>
+                                        <a asp-action="Edit" asp-route-id="@mtp.Id" asp-route-origi="2" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
                                     }
-                                    @if (User.IsInRole("TCMSupervisor"))
+                                    @if (User.IsInRole("Supervisor"))
                                     {
-                                        <a asp-action="EditReadOnly" asp-route-id="@mtp.Id" asp-route-origi="1" class="btn btn-primary" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                        <a asp-action="EditReadOnly" asp-route-id="@mtp.Id" asp-route-origi="1" class="btn btn-success" title="Approve MTP"><i class="glyphicon glyphicon-ok"></i></a>
                                     }
                                 </td>
                             </tr>
