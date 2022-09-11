@@ -16,13 +16,13 @@
 </div>
 
 <p>
-    @if (User.IsInRole("Supervisor"))
+    @if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
     {
-        <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create MTP</a>
+        <a asp-action="Create" class="btn btn-primary" title="Create MTP"><i class="glyphicon glyphicon-plus"></i> Create MTP</a>
     }
     else
     {
-        <a class="btn btn-primary disabled" title="Create MTP"><i class="glyphicon glyphicon-plus"></i> Create MTP</a>
+        <a class="btn btn-primary disabled"><i class="glyphicon glyphicon-plus"></i> Create MTP</a>
     }
 </p>
 
@@ -212,9 +212,9 @@
                                                     <i class="glyphicon glyphicon-user btn-primary"></i>
                                                 }
                                                 &nbsp;
-                                                @Html.DisplayFor(modelItem => item.Client.Code)
-                                                &nbsp;
                                                 @Html.DisplayFor(modelItem => item.Client.Name)
+                                                |
+                                                @Html.DisplayFor(modelItem => item.Client.Code)                                                
                                             </td>
                                             <td align="center">
                                                 @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).MTPDevelopedDate)
@@ -279,7 +279,7 @@
 
                                             </td>
                                             <td align="center">
-                                                @if (!User.IsInRole("Supervisor") || (@item.CreatedBy == User.Identity.Name))
+                                                @if (@item.CreatedBy == User.Identity.Name)
                                                 {
                                                     @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition)
                                                     {
@@ -358,9 +358,9 @@
                                                     <i class="glyphicon glyphicon-user btn-primary"></i>
                                                 }
                                                 &nbsp;
-                                                @Html.DisplayFor(modelItem => item.Client.Code)
-                                                &nbsp;
                                                 @Html.DisplayFor(modelItem => item.Client.Name)
+                                                |
+                                                @Html.DisplayFor(modelItem => item.Client.Code)
                                             </td>
                                             <td align="center">
                                                 @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).MTPDevelopedDate)
@@ -425,7 +425,7 @@
 
                                             </td>
                                             <td align="center">
-                                                @if (!User.IsInRole("Supervisor") || (@item.CreatedBy == User.Identity.Name))
+                                                @if (@item.CreatedBy == User.Identity.Name)
                                                 {
                                                     @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition)
                                                     {
@@ -610,9 +610,9 @@
                                                     <i class="glyphicon glyphicon-user btn-primary"></i>
                                                 }
                                                 &nbsp;
-                                                @Html.DisplayFor(modelItem => item.Client.Code)
-                                                &nbsp;
                                                 @Html.DisplayFor(modelItem => item.Client.Name)
+                                                |
+                                                @Html.DisplayFor(modelItem => item.Client.Code)
                                             </td>
                                             <td align="center">
                                                 @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).MTPDevelopedDate)
@@ -658,7 +658,7 @@
                                                 <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
                                             </td>
                                             <td align="center">
-                                                @if (!User.IsInRole("Supervisor") || (@item.CreatedBy == User.Identity.Name))
+                                                @if (@item.CreatedBy == User.Identity.Name)
                                                 {
                                                     @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition)
                                                     {
@@ -735,10 +735,10 @@
                                                 {
                                                     <i class="glyphicon glyphicon-user btn-primary"></i>
                                                 }
-                                                 &nbsp;
-                                                @Html.DisplayFor(modelItem => item.Client.Code)
                                                 &nbsp;
                                                 @Html.DisplayFor(modelItem => item.Client.Name)
+                                                |
+                                                @Html.DisplayFor(modelItem => item.Client.Code)
                                             </td>
                                             <td align="center">
                                                 @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).MTPDevelopedDate)
@@ -784,7 +784,7 @@
                                                 <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
                                             </td>
                                             <td align="center">
-                                                @if (!User.IsInRole("Supervisor") || (@item.CreatedBy == User.Identity.Name))
+                                                @if (@item.CreatedBy == User.Identity.Name)
                                                 {
                                                     @if (item.Status == KyoS.Common.Enums.MTPStatus.Edition)
                                                     {
