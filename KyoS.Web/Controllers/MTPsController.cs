@@ -2097,6 +2097,10 @@ namespace KyoS.Web.Controllers
                                                .ThenInclude(c => c.Clients_Diagnostics)
                                                .ThenInclude(cd => cd.Diagnostic)
 
+                                               .Include(m => m.DocumentAssistant)
+
+                                               .Include(m => m.Supervisor)
+
                                                .FirstOrDefault(m => (m.Id == id));
             if (mtpEntity == null)
             {
