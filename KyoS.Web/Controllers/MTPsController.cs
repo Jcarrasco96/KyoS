@@ -3742,6 +3742,8 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("Supervisor"))
             {
                 mtp.Status = MTPStatus.Approved;
+                mtp.SupervisorDate = DateTime.Now;
+                mtp.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
             }
             else
             {
