@@ -3008,7 +3008,7 @@ namespace KyoS.Web.Helpers
                 Lacking_Time = model.Lacking_Time,
                 LegalAssessment = model.LegalAssessment,
                 LegalHistory = model.LegalHistory,
-                LicensedPractitioner = model.LicensedPractitioner,
+                Supervisor = model.Supervisor,
                 MaritalStatus = model.MaritalStatus,
                 Mood_Angry = model.Mood_Angry,
                 Mood_Anxious = model.Mood_Anxious,
@@ -3084,7 +3084,7 @@ namespace KyoS.Web.Helpers
                 ThoughtProcess_Tangential = model.ThoughtProcess_Tangential,
                 TreatmentNeeds = model.TreatmentNeeds,
                 Treatmentrecomendations = model.Treatmentrecomendations,
-                UnlicensedTherapist = model.UnlicensedTherapist,
+                DocumentsAssistant = model.DocumentsAssistant,
                 WhatIsTheClient = model.WhatIsTheClient,
                 WhatIsYourLanguage = model.WhatIsYourLanguage,
                 WhereRecord = model.WhereRecord,
@@ -3100,7 +3100,11 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                AdmissionedFor = model.AdmissionedFor
+                AdmissionedFor = model.AdmissionedFor,
+                Messages = _context.Messages
+                                   .Where(n => n.Bio.Id == model.Id)
+                                   .ToList(),
+                Status = model.Status
 
             };
         }
@@ -3209,7 +3213,7 @@ namespace KyoS.Web.Helpers
                 Lacking_Time = model.Lacking_Time,
                 LegalAssessment = model.LegalAssessment,
                 LegalHistory = model.LegalHistory,
-                LicensedPractitioner = model.LicensedPractitioner,
+                Supervisor = model.Supervisor,
                 MaritalStatus = model.MaritalStatus,
                 Mood_Angry = model.Mood_Angry,
                 Mood_Anxious = model.Mood_Anxious,
@@ -3285,7 +3289,7 @@ namespace KyoS.Web.Helpers
                 ThoughtProcess_Tangential = model.ThoughtProcess_Tangential,
                 TreatmentNeeds = model.TreatmentNeeds,
                 Treatmentrecomendations = model.Treatmentrecomendations,
-                UnlicensedTherapist = model.UnlicensedTherapist,
+                DocumentsAssistant = model.DocumentsAssistant,
                 WhatIsTheClient = model.WhatIsTheClient,
                 WhatIsYourLanguage = model.WhatIsYourLanguage,
                 WhereRecord = model.WhereRecord,
@@ -3309,7 +3313,8 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
-                AdmissionedFor = model.AdmissionedFor
+                AdmissionedFor = model.AdmissionedFor,
+                Status = model.Status
 
             };
 

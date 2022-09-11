@@ -36,20 +36,23 @@
                             <th class="col-md-1">
 
                             </th>
-                            <th class="col-md-4">
+                            <th class="col-md-3">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.Code)
-                            </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.AdmisionDate)
+                                Admission
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Status
+                                Client
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                MH Therapy
+                                Admission for
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Date BIO
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Document
                             </th>
                             <th class="col-md-1" align="right">
                             </th>
@@ -109,8 +112,7 @@
                                         }
                                         &nbsp;
                                         @Html.DisplayFor(modelItem => item.Name)
-                                    </td>
-                                    <td align="center">
+                                        |
                                         @Html.DisplayFor(modelItem => item.Code)
                                     </td>
                                     <td align="center">
@@ -131,7 +133,15 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Service)
+                                        -
+                                    </td>
+                                    <td align="center">
+                                        -
+                                    </td>
+                                    <td align="center">
+                                        <span class="label label-default">
+                                           Not Exist
+                                        </span>
                                     </td>
                                     <td align="right">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant")))
@@ -141,7 +151,8 @@
                                         else
                                         { 
                                             <a class="btn btn-warning disabled" title="Create BIO"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        }                                       
+                                        }  
+                                        <a class="btn btn-success disabled" title="Finish Editing BIO"><i class="glyphicon glyphicon-ok"></i></a>
                                         <a class="btn btn-success disabled" title="Print BIO"><i class="glyphicon glyphicon-print"></i></a>                                        
                                         </td>
                                 </tr>
@@ -187,18 +198,17 @@
                                         </div>
                                     </td>
                                     <td>
-                                       @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
                                             <i class="glyphicon glyphicon-user btn-danger"></i>
                                         }
-                                       @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
                                         {
                                             <i class="glyphicon glyphicon-user btn-primary"></i>
                                         }
                                         &nbsp;
                                         @Html.DisplayFor(modelItem => item.Name)
-                                    </td>
-                                    <td align="center">
+                                        |
                                         @Html.DisplayFor(modelItem => item.Code)
                                     </td>
                                     <td align="center">
@@ -219,26 +229,84 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Service)
+                                        @Html.DisplayFor(modelItem => item.Bio.AdmissionedFor)
                                     </td>
-                                    <td align="right">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant")))
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Bio.DateBio)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Bio.Status == KyoS.Common.Enums.BioStatus.Approved)
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <span class="label label-success">
+                                                Approve
+                                            </span>
+                                        }
+                                        @if (item.Bio.Status == KyoS.Common.Enums.BioStatus.Pending)
+                                        {
+                                            <span class="label label-info">
+                                                Pending
+                                            </span>
+                                        }
+                                        @if (item.Bio.Status == KyoS.Common.Enums.BioStatus.Edition)
+                                        {
+                                            <span class="label label-warning">
+                                                Edition
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (User.IsInRole("Documents_Assistant") && (@item.Bio.CreatedBy == User.Identity.Name))
+                                        {
+                                            @if (item.Bio.Status == KyoS.Common.Enums.BioStatus.Edition)
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="FinishEditing" asp-route-id="@item.Bio.Id" class="btn btn-success" title="Finish Editing BIO"><i class="glyphicon glyphicon-ok"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-warning disabled" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a class="btn btn-success disabled" title="Finish Editing BIO"><i class="glyphicon glyphicon-ok"></i></a>
+                                            }
                                         }
                                         else
-                                        { 
-                                            <a class="btn btn-success disabled" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a> 
-                                        }
-                                       @if ((item.Bio != null))
                                         {
-                                           <a asp-action="PrintBio" asp-route-id="@item.Bio.Id" class="btn btn-success" title="Print BIO" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            @if (User.IsInRole("Supervisor"))
+                                            {
+                                                @if (item.Bio.Status == KyoS.Common.Enums.BioStatus.Edition && item.Bio.CreatedBy == User.Identity.Name)
+                                                {
+                                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                    <a asp-action="FinishEditing" asp-route-id="@item.Bio.Id" class="btn btn-success" title="Finish Editing BIO"><i class="glyphicon glyphicon-ok"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    @if (item.Bio.Status == KyoS.Common.Enums.BioStatus.Pending && item.CreatedBy != User.Identity.Name)
+                                                    {
+                                                        <a class="btn btn-warning disabled" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a asp-action="EditReadOnly" asp-route-id="@item.Id" class="btn btn-success" title="Approve BIO"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-warning disabled" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a class="btn btn-success disabled" title="Finish Editing BIO"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-warning disabled" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a class="btn btn-success disabled" title="Finish Editing BIO"><i class="glyphicon glyphicon-ok"></i></a>
+                                            }
+
+                                        }
+                                        @if (item.Bio.Status == KyoS.Common.Enums.BioStatus.Approved)
+                                        {
+                                            <a asp-action="PrintBio" asp-route-id="@item.Bio.Id" class="btn btn-success" title="Print BIO" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
-                                           <a class="btn btn-success disabled" title="Print BIO"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintBio" asp-route-id="@item.Bio.Id" class="btn btn-success disabled" title="Print BIO" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
-                                        </td>
+                                    </td>
                                 </tr>
                             }
                         }

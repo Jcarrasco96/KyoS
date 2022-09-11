@@ -282,7 +282,7 @@ namespace KyoS.Web.Controllers
                                                                && wc.GroupNote.Status == NoteStatus.Pending
                                                                && wc.Workday.Service == ServiceType.Group)).ToString();
 
-                ViewBag.PendingBIO = _context.Clients
+                ViewBag.ClientWithoutBIO = _context.Clients
                                                     .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                                && wc.Bio == null)).ToString();
 
@@ -338,12 +338,16 @@ namespace KyoS.Web.Controllers
                 ViewBag.GroupNotesWithReview = notes_review_list.Count.ToString();
 
                 ViewBag.MedicalHistoryMissing = _context.Clients
-                                                       .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                        .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                               && wc.IntakeMedicalHistory == null)).ToString();
 
                 ViewBag.PendingMtp = _context.MTPs
-                                                  .Count(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
-                                                    && m.Status == MTPStatus.Pending)).ToString();
+                                             .Count(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                  && m.Status == MTPStatus.Pending)).ToString();
+
+                ViewBag.PendingBio = _context.Bio
+                                             .Count(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                  && m.Status == BioStatus.Pending)).ToString();
             }
             if (User.IsInRole("Manager"))
             {
@@ -817,12 +821,29 @@ namespace KyoS.Web.Controllers
                                                                  .ToListAsync();
                 ViewBag.MtpPending = MtpPending.Count().ToString();
 
+                List<BioEntity> BioPending = await _context.Bio
+                                                           .Include(f => f.Client)
+                                                           .ThenInclude(n => n.Clinic)
+                                                           .Where(n => (n.Status == BioStatus.Pending
+                                                                     && n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                     && n.CreatedBy == user_logged.UserName))
+                                                           .OrderBy(f => f.Client.Name)
+                                                           .ToListAsync();
+                ViewBag.BioPending = BioPending.Count().ToString();
+
                 List<MTPEntity> MtpWithReview = await _context.MTPs
                                                       .Include(wc => wc.Messages)
                                                       .Where(wc => (wc.DocumentAssistant.LinkedUser == User.Identity.Name
                                                                  && wc.Status == MTPStatus.Pending)).ToListAsync();
                 MtpWithReview = MtpWithReview.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
                 ViewBag.MtpWithReview = MtpWithReview.Count.ToString();
+
+                List<BioEntity> BioWithReview = await _context.Bio
+                                                              .Include(wc => wc.Messages)
+                                                              .Where(wc => (wc.DocumentsAssistant.LinkedUser == User.Identity.Name
+                                                                     && wc.Status == BioStatus.Pending)).ToListAsync();
+                BioWithReview = BioWithReview.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
+                ViewBag.BioWithReview = BioWithReview.Count.ToString();
             }
             if (User.IsInRole("TCMSupervisor"))
             {

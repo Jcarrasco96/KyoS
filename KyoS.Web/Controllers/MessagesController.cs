@@ -63,7 +63,12 @@ namespace KyoS.Web.Controllers
                                                                                                && m.Mtp != null && m.Notification == false))
                                                      .ToString();
 
-                ViewBag.Total = Convert.ToInt32(ViewBag.CountsMessagesMtp) ;
+                ViewBag.CountsMessagesBio = _context.Messages
+                                                    .Count(m => (m.To == user_logged.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead
+                                                                                              && m.Bio != null && m.Notification == false))
+                                                    .ToString();
+
+                ViewBag.Total = Convert.ToInt32(ViewBag.CountsMessagesMtp) + Convert.ToInt32(ViewBag.CountsMessagesBio);
             }
             return View();
         }
@@ -450,6 +455,29 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("Documents_Assistant"))
             {
                 return View(await _context.MTPs
+
+                                          .Include(m => m.Client)
+
+                                          .Include(m => m.Messages.Where(m => m.Notification == false))
+
+                                          .Where(m => (m.CreatedBy == user_logged.UserName && m.Messages.Count() > 0))
+                                          .ToListAsync());
+            }
+
+            return View();
+        }
+
+        [Authorize(Roles = "Documents_Assistant")]
+        public async Task<IActionResult> MessagesOfBio(int id = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (User.IsInRole("Documents_Assistant"))
+            {
+                return View(await _context.Bio
 
                                           .Include(m => m.Client)
 

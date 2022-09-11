@@ -120,6 +120,7 @@
                 
     <strong>NUTRITONIAL STATUS</strong>               
     APPETITE <select asp-for="IdAppetite" asp-items="Model.Appetite_Status"></select>     HYDRATATION <select asp-for="IdHydratation" asp-items="Model.Hydratation_Status"></select>     RECENT WEIGHT CHANGE <select asp-for="IdRecentWeight" asp-items="Model.RecentWeight_Status"></select>
+    <span asp-validation-for="IdAppetite" class="text-danger"></span>          <span asp-validation-for="IdHydratation" class="text-danger"></span>              <span asp-validation-for="IdRecentWeight" class="text-danger"></span>     
 </pre>
 </div>
 <div class="col-md-12">
@@ -168,7 +169,7 @@
         •	If Separated, Divorce, or Widowed, how long:        <input asp-for="IfSeparated" style="width:10%">
 
         •	If sexually active, is client aware of risk regarding Sexual Transmitted Diseases:    <select asp-for="IdIfSexuallyActive" asp-items="Model.IfSexuallyActive_Status"></select>
-        •	If “No” please educate client as to risk of sexually transmitted diseases.
+        •	If “No” please educate client as to risk of sexually transmitted diseases.      <span asp-validation-for="IdIfSexuallyActive" class="text-danger"></span> 
     </pre>
 </div>
 <div class="col-md-12">
