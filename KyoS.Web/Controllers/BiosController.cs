@@ -152,10 +152,10 @@ namespace KyoS.Web.Controllers
                         Comments = "",
                         DateAbuse = DateTime.Now,
                         DateBio = DateTime.Now,
-                        DateSignatureLicensedPractitioner = DateTime.Now,
+                        //DateSignatureLicensedPractitioner = DateTime.Now,
                         DateSignaturePerson = DateTime.Now,
                         DateSignatureSupervisor = DateTime.Now,
-                        DateSignatureUnlicensedTherapist = DateTime.Now,
+                        //DateSignatureUnlicensedTherapist = DateTime.Now,
                         Details = "",
                         DoesClient = false,
                         DoesClientRequired = false,
@@ -216,7 +216,7 @@ namespace KyoS.Web.Controllers
                         Lacking_Time = false,
                         LegalAssessment = "",
                         LegalHistory = "",
-                        LicensedPractitioner = user_logged.FullName,
+                        //LicensedPractitioner = user_logged.FullName,
                         MaritalStatus = "",
                         Mood_Angry = false,
                         Mood_Anxious = false,
@@ -292,7 +292,6 @@ namespace KyoS.Web.Controllers
                         ThoughtProcess_Tangential = false,
                         TreatmentNeeds = "",
                         Treatmentrecomendations = "",
-                        UnlicensedTherapist = "",
                         WhatIsTheClient = "",
                         WhatIsYourLanguage = "",
                         WhereRecord = false,
@@ -354,7 +353,18 @@ namespace KyoS.Web.Controllers
                 BioEntity bioEntity = _context.Bio.Find(bioViewModel.Id);
                 if (bioEntity == null)
                 {
+                    DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
                     bioEntity = await _converterHelper.ToBioEntity(bioViewModel, true, user_logged.UserName);
+
+                    if (documentAssistant != null)
+                    {
+                        bioEntity.DocumentsAssistant = documentAssistant;
+                        bioEntity.DateSignatureUnlicensedTherapist = DateTime.Now;
+                    }
+                    else
+                    {
+                        bioEntity.DateSignatureLicensedPractitioner = DateTime.Now;
+                    }
                     _context.Bio.Add(bioEntity);
                     try
                     {
@@ -481,7 +491,6 @@ namespace KyoS.Web.Controllers
                 Lacking_Time = false,
                 LegalAssessment = "",
                 LegalHistory = "",
-                LicensedPractitioner = "",
                 MaritalStatus = "",
                 Mood_Angry = false,
                 Mood_Anxious = false,
@@ -557,7 +566,6 @@ namespace KyoS.Web.Controllers
                 ThoughtProcess_Tangential = false,
                 TreatmentNeeds = "",
                 Treatmentrecomendations = "",
-                UnlicensedTherapist = "",
                 WhatIsTheClient = "",
                 WhatIsYourLanguage = "",
                 WhereRecord = false,
@@ -582,7 +590,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public IActionResult Edit(int id = 0)
+        public IActionResult Edit(int id = 0, int origi = 0)
         {
             BioEntity entity = _context.Bio
 
@@ -637,6 +645,7 @@ namespace KyoS.Web.Controllers
                     model.EmergencyContactTelephone = model.Client.EmergencyContact.Telephone;
                     model.RelationShipOfEmergencyContact = model.Client.RelationShipOfEmergencyContact.ToString();
 
+                    ViewData["origi"] = origi;
                     return View(model);
                 }
             }
@@ -648,7 +657,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public async Task<IActionResult> Edit(BioViewModel bioViewModel)
+        public async Task<IActionResult> Edit(BioViewModel bioViewModel, int origi = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -660,8 +669,48 @@ namespace KyoS.Web.Controllers
                 _context.Bio.Update(bioEntity);
                 try
                 {
+                    List<MessageEntity> messages = bioEntity.Messages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                    //todos los mensajes no leidos que tiene el bio los pongo como leidos
+                    foreach (MessageEntity value in messages)
+                    {
+                        value.Status = MessageStatus.Read;
+                        value.DateRead = DateTime.Now;
+                        _context.Update(value);
+
+                        //I generate a notification to supervisor
+                        MessageEntity notification = new MessageEntity
+                        {
+                            Workday_Client = null,
+                            FarsForm = null,
+                            MTPReview = null,
+                            Addendum = null,
+                            Discharge = null,
+                            Mtp = null,
+                            Bio = bioEntity,
+                            Title = "Update on reviewed BIO",
+                            Text = $"The BIO document of {bioEntity.Client.Name} that was evaluated on {bioEntity.DateBio.ToShortDateString()} was rectified",
+                            From = value.To,
+                            To = value.From,
+                            DateCreated = DateTime.Now,
+                            Status = MessageStatus.NotRead,
+                            Notification = true
+                        };
+                        _context.Add(notification);
+                    }
+
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Index", "Bios");
+                    if(origi == 0)
+                    {
+                        return RedirectToAction("Index", "Bios");
+                    }
+                    if (origi == 1)
+                    {
+                        return RedirectToAction("MessagesOfBio", "Messages");
+                    }
+                    if (origi == 2)
+                    {
+                        return RedirectToAction("BioWithReview","Bios");
+                    }
                 }
                 catch (System.Exception ex)
                 {
@@ -1328,5 +1377,257 @@ namespace KyoS.Web.Controllers
                 return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", medication) });
             }
         }
+
+        [Authorize(Roles = "Supervisor")]
+        public IActionResult EditReadOnly(int id = 0, int origi = 0)
+        {
+            BioEntity entity = _context.Bio
+
+                                       .Include(m => m.Client)
+                                       .Include(n => n.Client.LegalGuardian)
+                                       .Include(n => n.Client.EmergencyContact)
+                                       .Include(n => n.Client.MedicationList)
+                                       .Include(n => n.Client.Referred)
+                                       .Include(n => n.Client.List_BehavioralHistory)
+
+                                       .FirstOrDefault(i => i.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Create", new { id = id });
+            }
+
+            BioViewModel model;
+
+            if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
+            {
+                UserEntity user_logged = _context.Users
+
+                                                 .Include(u => u.Clinic)
+
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic != null)
+                {
+                    model = _converterHelper.ToBioViewModel(entity);
+                    if (model.Client.LegalGuardian == null)
+                        model.Client.LegalGuardian = new LegalGuardianEntity();
+                    if (model.Client.EmergencyContact == null)
+                        model.Client.EmergencyContact = new EmergencyContactEntity();
+                    if (model.Client.MedicationList == null)
+                        model.Client.MedicationList = new List<MedicationEntity>();
+                    if (model.Client.Doctor == null)
+                        model.Client.Doctor = new DoctorEntity();
+                    if (model.Client.Referred == null)
+                        model.Client.Referred = new ReferredEntity();
+                    if (model.Client.FarsFormList == null)
+                        model.Client.FarsFormList = new List<FarsFormEntity>();
+                    if (model.Client.MedicationList == null)
+                        model.Client.MedicationList = new List<MedicationEntity>();
+                    if (model.Client.List_BehavioralHistory == null)
+                        model.Client.List_BehavioralHistory = new List<Bio_BehavioralHistoryEntity>();
+
+                    model.ReferralName = model.Client.Referred.Name;
+                    model.LegalGuardianName = model.Client.LegalGuardian.Name;
+                    model.LegalGuardianTelephone = model.Client.LegalGuardian.Telephone;
+                    model.EmergencyContactName = model.Client.EmergencyContact.Name;
+                    model.EmergencyContactTelephone = model.Client.EmergencyContact.Telephone;
+                    model.RelationShipOfEmergencyContact = model.Client.RelationShipOfEmergencyContact.ToString();
+
+                    ViewData["origi"] = origi;
+                    return View(model);
+                }
+            }
+
+            model = new BioViewModel();
+            return View(model);
+        }
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> FinishEditing(int id)
+        {
+            BioEntity bio = await _context.Bio.FirstOrDefaultAsync(n => n.Id == id);
+            if (User.IsInRole("Supervisor"))
+            {
+                bio.Status = BioStatus.Approved;
+                bio.DateSignatureSupervisor = DateTime.Now;
+                bio.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+            }
+            else
+            {
+                bio.Status = BioStatus.Pending;
+            }
+
+            _context.Update(bio);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> Approve(int id, int origi = 0)
+        {
+
+            BioEntity bio = await _context.Bio.FirstOrDefaultAsync(n => n.Id == id);
+
+
+            bio.Status = BioStatus.Approved;
+            bio.DateSignatureSupervisor = DateTime.Now;
+            bio.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+            _context.Update(bio);
+
+            await _context.SaveChangesAsync();
+
+            if (origi == 1)
+            {
+                return RedirectToAction(nameof(Pending));
+            }
+            if (origi == 2)
+            {
+                return RedirectToAction("Notifications", "Messages");
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "Supervisor, Manager, Documents_Assistant")]
+        public async Task<IActionResult> Pending(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if (clinic != null)
+                {
+                    DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    if (User.IsInRole("Documents_Assistant"))
+                    {
+                        return View(await _context.Bio
+
+                                                  .Include(a => a.Client)
+                                                  .ThenInclude(a => a.Clinic)
+
+                                                  .Include(f => f.Messages.Where(m => m.Notification == false))
+
+                                                  .Where(a => (a.Client.Clinic.Id == clinic.Id)
+                                                            && a.Status == BioStatus.Pending && (a.DocumentsAssistant.Id == documentAssistant.Id))
+                                                  .OrderBy(a => a.Client.Clinic.Name).ToListAsync());
+
+                    }
+                    else
+                    {
+                        return View(await _context.Bio
+
+                                                  .Include(a => a.Client)
+                                                  .ThenInclude(a => a.Clinic)
+
+                                                  .Include(f => f.Messages.Where(m => m.Notification == false))
+
+                                                  .Where(a => (a.Client.Clinic.Id == clinic.Id)
+                                                            && a.Status == BioStatus.Pending)
+                                                  .OrderBy(a => a.Client.Clinic.Name).ToListAsync());
+
+                    }
+
+                }
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public IActionResult AddMessageEntity(int id = 0, int origi = 0)
+        {
+            if (id == 0)
+            {
+                return View(new MessageViewModel());
+            }
+            else
+            {
+                MessageViewModel model = new MessageViewModel()
+                {
+                    IdBio = id,
+                    Origin = origi
+                };
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> AddMessageEntity(MessageViewModel messageViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                MessageEntity model = await _converterHelper.ToMessageEntity(messageViewModel, true);
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                model.From = user_logged.UserName;
+                model.To = model.Bio.CreatedBy;
+                _context.Add(model);
+                await _context.SaveChangesAsync();
+            }
+
+            if (messageViewModel.Origin == 1)
+                return RedirectToAction("Pending");
+
+            if (messageViewModel.Origin == 2)
+                return RedirectToAction("Notifications","Messages");
+
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "Documents_Assistant, Supervisor")]
+        public async Task<IActionResult> BioWithReview()
+        {
+            if (User.IsInRole("Documents_Assistant"))
+            {
+                List<BioEntity> salida = await _context.Bio
+                                                       .Include(wc => wc.Client)
+                                                       .Include(wc => wc.DocumentsAssistant)
+                                                       .Include(wc => wc.Messages.Where(m => m.Notification == false))
+                                                       .Where(wc => (wc.DocumentsAssistant.LinkedUser == User.Identity.Name
+                                                               && wc.Status == BioStatus.Pending
+                                                               && wc.Messages.Count() > 0))
+                                                       .ToListAsync();
+
+
+                return View(salida);
+            }
+
+            if (User.IsInRole("Supervisor"))
+            {
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    List<BioEntity> salida = await _context.Bio
+                                                      .Include(wc => wc.Client)
+                                                      .Include(wc => wc.DocumentsAssistant)
+                                                      .Include(wc => wc.Messages.Where(m => m.Notification == false))
+                                                      .Where(wc => (wc.Client.Clinic.Id == user_logged.Clinic.Id
+                                                              && wc.Status == BioStatus.Pending
+                                                              && wc.Messages.Count() > 0))
+                                                      .ToListAsync();
+                    return View(salida);
+                }
+            }
+
+            return View();
+        }
+
     }
 }

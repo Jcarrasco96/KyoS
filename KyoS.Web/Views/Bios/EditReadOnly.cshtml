@@ -15,17 +15,17 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @if (ViewData["origi"].ToString() == "0")
+                @if (@ViewData["origi"].ToString() == "0")
                 {
-                    @Html.ActionLink("BIOs", "Index", "Bios")
+                    @Html.ActionLink("Bios", "Index", "Bios")
                 }
                 @if (ViewData["origi"].ToString() == "1")
                 {
-                    @Html.ActionLink("Messages BIOs", "MessagesOfBio", "Messages")
+                    @Html.ActionLink("Pending Bios", "Pending", "Bios")
                 }
                 @if (ViewData["origi"].ToString() == "2")
                 {
-                    @Html.ActionLink("BIOs with rview ", "BioWithReview", "Bios")
+                    @Html.ActionLink("Notification Bios", "Notifications", "Messages")
                 }
             </li>
             <li class="active">Edit</li>
@@ -35,55 +35,53 @@
     <h4>Edit BIO</h4>
     <hr />
     <div class="row">
-        <form asp-action="Edit" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
+        <form asp-action="Approve" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdClient" />
             <input type="hidden" asp-for="Client_FK" />
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="AdmissionedFor" />
-            <input type="hidden" asp-for="Status" />
-            <input type="hidden" asp-for="DateSignatureLicensedPractitioner" />
-            <input type="hidden" asp-for="DateSignatureUnlicensedTherapist" />
-            <partial name="_Bios1" />
+            <partial name="_Bios1ReadOnly" />
             <div class="col-md-push-12">
                 <div class="">
                     <div class="col-md-12 form-group">
-                        <a onclick="showInPopup('@Url.Action("CreateBehavioralModal", "Bios",new { id = @Model.IdClient}, Context.Request.Scheme)','Create Behavioral Health')" class="btn btn-success" title="Create Behavioral Health of this MTP Review"><i class="glyphicon glyphicon-plus"></i> Add Behavioral</a>
+                        <a onclick="showInPopup('@Url.Action("CreateBehavioralModal", "Bios",new { id = @Model.IdClient}, Context.Request.Scheme)','Create Behavioral Health')" class="btn btn-success disabled" title="Create Behavioral Health of this MTP Review"><i class="glyphicon glyphicon-plus"></i> Add Behavioral</a>
                     </div>
                 </div>
                 <div class="">
                     <div id="view-BioBehavioral">
-                        @await Html.PartialAsync("_ViewBehavioralHealth", Model.Client.List_BehavioralHistory.ToList())
+                        @await Html.PartialAsync("_ViewBehavioralHealthReadOnly", Model.Client.List_BehavioralHistory.ToList())
                     </div>
                 </div>
             </div>
             <div class="col-md-push-12">
                 <div class="">
                     <div class="col-md-12 form-group">
-                        <a onclick="showInPopup('@Url.Action("CreateMedicationModal", "Bios",new { id = @Model.IdClient}, Context.Request.Scheme)','Create Medication of Client')" class="btn btn-success" title="Create Medication of Client"><i class="glyphicon glyphicon-plus"></i> Add Medications</a>
+                        <a onclick="showInPopup('@Url.Action("CreateMedicationModal", "Bios",new { id = @Model.IdClient}, Context.Request.Scheme)','Create Medication of Client')" class="btn btn-success disabled" title="Create Medication of Client"><i class="glyphicon glyphicon-plus"></i> Add Medications</a>
                     </div>
                 </div>
                 <div class="">
                     <div id="view-Medication">
-                        @await Html.PartialAsync("_ViewMedication", Model.Client.MedicationList.ToList())
+                        @await Html.PartialAsync("_ViewMedicationReadOnly", Model.Client.MedicationList.ToList())
                     </div>
                 </div>
             </div>
-            <partial name="_Bios2" />
+            <partial name="_Bios2ReadOnly" />
             <div class="form-group col-md-12">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Approve" class="btn btn-primary" />
+                <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","Bios",new {id = Model.Id, origi = @ViewData["origi"]},Context.Request.Scheme)','Add message to document creator')" title="Not approved note due to problems">Review</a>
                 @if (ViewData["origi"].ToString() == "0")
                 {
-                    <a asp-action="Index" asp-route-id="@Model.Client.Id" class="btn btn-success">Back</a>
+                    <a asp-action="Index" class="btn btn-success">Back</a>
                 }
                 @if (ViewData["origi"].ToString() == "1")
                 {
-                    <a asp-action="MessagesOfBio" asp-controller="Messages" class="btn btn-success">Back</a>
+                    <a asp-action="Pending" class="btn btn-success">Back</a>
                 }
                 @if (ViewData["origi"].ToString() == "2")
                 {
-                    <a asp-action="BioWithReview" asp-controller="Bios" class="btn btn-success">Back</a>
+                    <a asp-action="Notifications" asp-controller="Messages" class="btn btn-success">Back</a>
                 }
             </div>
         </form>
@@ -600,3 +598,5 @@
         }
     </script>
 }
+
+

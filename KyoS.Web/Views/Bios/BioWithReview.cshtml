@@ -1,6 +1,6 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.MTPEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.BioEntity>
 @{
-    ViewData["Title"] = "MTP with review";
+    ViewData["Title"] = "BIO with review";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,7 +11,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">MTP with review</li>
+        <li class="active">BIO with review</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -19,7 +19,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">MTP with review</h3>
+                <h3 class="panel-title">BIO with review</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -35,11 +35,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var mtp in Model)
+                        @foreach (var bio in Model)
                         {
                             <tr>
                                 <td align="center">
-                                    @if (mtp.Messages.Count() != 0)
+                                    @if (bio.Messages.Count() != 0)
                                     {
                                         <a class="icon-plus-sign-alt"></a>
                                     }
@@ -52,7 +52,7 @@
                                                 @*<th class="col-md-1"></th>*@
                                                 <th></th>
                                             </tr>
-                                            @foreach (var message in mtp.Messages.OrderBy(m => m.DateCreated))
+                                            @foreach (var message in bio.Messages.OrderBy(m => m.DateCreated))
                                             {
 
                                                 @if (message.Status.ToString() == "NotRead")
@@ -87,28 +87,28 @@
                                         </table>
                                     </div>
                                 </td>
-                                <td >
-                                    @if (mtp.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                <td>
+                                    @if (bio.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                     {
                                         <i class="glyphicon glyphicon-user btn-danger"></i>
                                     }
-                                    @if (mtp.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    @if (bio.Client.Gender == KyoS.Common.Enums.GenderType.Male)
                                     {
                                         <i class="glyphicon glyphicon-user btn-primary"></i>
                                     }
                                     &nbsp;
-                                    @Html.DisplayFor(modelItem => mtp.Client.Name)
+                                    @Html.DisplayFor(modelItem => bio.Client.Name)
                                     |
-                                    @Html.DisplayFor(modelItem => mtp.Client.Code)
+                                    @Html.DisplayFor(modelItem => bio.Client.Code)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => mtp.AdmissionedFor)
+                                    @Html.DisplayFor(modelItem => bio.DocumentsAssistant.Name)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => mtp.AdmissionDateMTP)
+                                    @Html.DisplayFor(modelItem => bio.DateBio)
                                 </td>
                                 <td align="center">
-                                    @if (mtp.Messages.Count() == 0)
+                                    @if (bio.Messages.Count() == 0)
                                     {
                                         <span>
                                             -
@@ -117,7 +117,7 @@
                                     else
                                     {
                                         bool read = false;
-                                        @foreach (var message in mtp.Messages.OrderBy(m => m.DateCreated))
+                                        @foreach (var message in bio.Messages.OrderBy(m => m.DateCreated))
                                         {
                                             @if (message.Status.ToString() == "NotRead")
                                             {
@@ -148,11 +148,11 @@
                                 <td align="right">
                                     @if (User.IsInRole("Documents_Assistant"))
                                     {
-                                        <a asp-action="Edit" asp-route-id="@mtp.Id" asp-route-origi="2" class="btn btn-warning" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="Edit" asp-route-id="@bio.Client.Id" asp-route-origi="2" class="btn btn-warning" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
                                     }
                                     @if (User.IsInRole("Supervisor"))
                                     {
-                                        <a asp-action="EditReadOnly" asp-route-id="@mtp.Id" asp-route-origi="1" class="btn btn-success" title="Approve MTP"><i class="glyphicon glyphicon-ok"></i></a>
+                                        <a asp-action="EditReadOnly" asp-route-id="@bio.Id" asp-route-origi="1" class="btn btn-warning" title="Approve BIO"><i class="glyphicon glyphicon-ok"></i></a>
                                     }
                                 </td>
                             </tr>
@@ -198,6 +198,7 @@
         });
     </script>
 }
+
 
 
 

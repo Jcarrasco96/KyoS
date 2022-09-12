@@ -169,21 +169,21 @@
                         }
                     </div>
                     <div class="col-md-2">
-                        @if (ViewBag.CountsMessagesMtp == "0")
+                        @if (ViewBag.CountsMessagesBio == "0")
                         {
-                            <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfMTP" role="button">
+                            <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfBio" role="button">
                                 <div class="thumbnail list-group-item list-group-item-text">
                                     <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>BIO</h4>
-                                    <span class="message-counter-cero">@ViewBag.CountsMessagesMtp</span>
+                                    <span class="message-counter-cero">@ViewBag.CountsMessagesBio</span>
                                 </div>
                             </a>
                         }
                         else
                         {
-                            <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfMTP" role="button">
+                            <a style="text-decoration: none;" asp-controller="Messages" asp-action="MessagesOfBio" role="button">
                                 <div class="thumbnail list-group-item list-group-item-danger">
                                     <h4 style="align-content:end;"><i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>BIO</h4>
-                                    <span class="message-counter">@ViewBag.CountsMessagesMtp</span>
+                                    <span class="message-counter">@ViewBag.CountsMessagesBio</span>
                                 </div>
                             </a>
                         }

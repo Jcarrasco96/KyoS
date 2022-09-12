@@ -196,7 +196,21 @@
                                                                             {
                                                                                 <a asp-action="EditReadOnly" asp-controller="Mtps" asp-route-id="@notification.Mtp.Id" asp-route-origi="2" class="btn btn-warning" title="View Mtps"><i class="glyphicon glyphicon-file"></i></a>
                                                                             }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (notification.Bio != null)
+                                                                            {
+                                                                                if (notification.Bio.Status == KyoS.Common.Enums.BioStatus.Approved)
+                                                                                {
+                                                                                    <a class="btn btn-warning disabled" title="View BIOs"><i class="glyphicon glyphicon-file"></i></a>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <a asp-action="EditReadOnly" asp-controller="Bios" asp-route-id="@notification.Bio.Id" asp-route-origi="2" class="btn btn-warning" title="View BIOs"><i class="glyphicon glyphicon-file"></i></a>
+                                                                                }
 
+                                                                            }
                                                                         }
                                                                     }
                                                                 }
@@ -357,7 +371,7 @@
                                                                         }
 
                                                                     }
-                                                                     else
+                                                                    else
                                                                     {
                                                                         if (notification.Mtp != null)
                                                                         {
@@ -369,7 +383,21 @@
                                                                             {
                                                                                 <a asp-action="EditReadOnly" asp-controller="Mtps" asp-route-id="@notification.Mtp.Id" asp-route-origi="2" class="btn btn-warning" title="View Mtps"><i class="glyphicon glyphicon-file"></i></a>
                                                                             }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (notification.Bio != null)
+                                                                            {
+                                                                                if (notification.Bio.Status == KyoS.Common.Enums.BioStatus.Approved)
+                                                                                {
+                                                                                    <a class="btn btn-warning disabled" title="View BIOs"><i class="glyphicon glyphicon-file"></i></a>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <a asp-action="EditReadOnly" asp-controller="Bios" asp-route-id="@notification.Bio.Id" asp-route-origi="2" class="btn btn-warning" title="View BIOs"><i class="glyphicon glyphicon-file"></i></a>
+                                                                                }
 
+                                                                            }
                                                                         }
                                                                     }
                                                                 }

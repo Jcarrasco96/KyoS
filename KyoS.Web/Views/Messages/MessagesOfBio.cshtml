@@ -1,6 +1,6 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.MTPEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.BioEntity>
 @{
-    ViewData["Title"] = "Reviews of MTPs";
+    ViewData["Title"] = "Reviews of BIOs";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,7 +11,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Inbox", "Index", "Messages")
         </li>
-        <li class="active">Reviews of MTPs</li>
+        <li class="active">Reviews of BIOs</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -19,7 +19,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Reviews of MTPs</h3>
+                <h3 class="panel-title">Reviews of BIOs</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -35,10 +35,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var Mtp in Model.OrderBy(f => f.AdmissionDateMTP))
+                        @foreach (var Bio in Model.OrderBy(f => f.DateBio))
                         {
                             bool read = false;
-                            @foreach (var message in Mtp.Messages.OrderBy(m => m.DateCreated))
+                            @foreach (var message in Bio.Messages.OrderBy(m => m.DateCreated))
                             {
                                 @if (message.Status.ToString() == "NotRead")
                                 {
@@ -55,7 +55,7 @@
                             {
                                 <tr style="font-weight:bold; color:#0072c6;">
                                     <td align="center">
-                                        @if (Mtp.Messages.Count() != 0)
+                                        @if (Bio.Messages.Count() != 0)
                                         {
                                             <a class="icon-plus-sign-alt"></a>
                                         }
@@ -68,7 +68,7 @@
                                                     @*<th class="col-md-1"></th>*@
                                                     <th></th>
                                                 </tr>
-                                                @foreach (var message in Mtp.Messages.OrderBy(m => m.DateCreated))
+                                                @foreach (var message in Bio.Messages.OrderBy(m => m.DateCreated))
                                                 {
 
                                                     @if (message.Status.ToString() == "NotRead")
@@ -104,25 +104,25 @@
                                         </div>
                                     </td>
                                     <td>
-                                        @if (Mtp.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        @if (Bio.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
                                             <i class="glyphicon glyphicon-user btn-danger"></i>
                                         }
-                                        @if (Mtp.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        @if (Bio.Client.Gender == KyoS.Common.Enums.GenderType.Male)
                                         {
                                             <i class="glyphicon glyphicon-user btn-primary"></i>
                                         }
                                         &nbsp;
-                                        @Html.DisplayFor(modelItem => Mtp.Client.Name)
+                                        @Html.DisplayFor(modelItem => Bio.Client.Name)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => Mtp.AdmissionDateMTP)
+                                        @Html.DisplayFor(modelItem => Bio.DateBio)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => Mtp.Client.Service)
+                                        @Html.DisplayFor(modelItem => Bio.Client.Service)
                                     </td>
                                     <td align="center">
-                                        @if (Mtp.Status == KyoS.Common.Enums.MTPStatus.Edition)
+                                        @if (Bio.Status == KyoS.Common.Enums.BioStatus.Edition)
                                         {
                                             <span class="label label-default">
                                                 Edition
@@ -130,7 +130,7 @@
                                         }
                                         else
                                         {
-                                            if (Mtp.Status == KyoS.Common.Enums.MTPStatus.Pending)
+                                            if (Bio.Status == KyoS.Common.Enums.BioStatus.Pending)
                                             {
                                                 <span class="label label-info">
                                                     Pending
@@ -138,7 +138,7 @@
                                             }
                                             else
                                             {
-                                                if (Mtp.Status == KyoS.Common.Enums.MTPStatus.Approved)
+                                                if (Bio.Status == KyoS.Common.Enums.BioStatus.Approved)
                                                 {
                                                     <span class="label label-success">
                                                         Approved
@@ -153,9 +153,9 @@
                                     <td align="right">
                                         @if (User.IsInRole("Documents_Assistant"))
                                         {
-                                            @if (Mtp.Status == KyoS.Common.Enums.MTPStatus.Edition || Mtp.Status == KyoS.Common.Enums.MTPStatus.Pending)
+                                            @if (Bio.Status == KyoS.Common.Enums.BioStatus.Edition || Bio.Status == KyoS.Common.Enums.BioStatus.Pending)
                                             {
-                                                <a asp-action="Edit" asp-controller="Mtps" asp-route-id="@Mtp.Id" asp-route-origi="1" class="btn btn-warning" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="Edit" asp-controller="Bios" asp-route-id="@Bio.Client.Id" asp-route-origi="1" class="btn btn-warning" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>
                                             }
                                             else
                                             {
@@ -169,7 +169,7 @@
                             {
                                 <tr>
                                     <td align="center">
-                                        @if (Mtp.Messages.Count() != 0)
+                                        @if (Bio.Messages.Count() != 0)
                                         {
                                             <a class="icon-plus-sign-alt"></a>
                                         }
@@ -182,7 +182,7 @@
                                                     @*<th class="col-md-1"></th>*@
                                                     <th></th>
                                                 </tr>
-                                                @foreach (var message in Mtp.Messages.OrderBy(m => m.DateCreated))
+                                                @foreach (var message in Bio.Messages.OrderBy(m => m.DateCreated))
                                                 {
 
                                                     @if (message.Status.ToString() == "NotRead")
@@ -218,25 +218,25 @@
                                         </div>
                                     </td>
                                     <td>
-                                        @if (Mtp.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        @if (Bio.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
                                             <i class="glyphicon glyphicon-user btn-danger"></i>
                                         }
-                                        @if (Mtp.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        @if (Bio.Client.Gender == KyoS.Common.Enums.GenderType.Male)
                                         {
                                             <i class="glyphicon glyphicon-user btn-primary"></i>
                                         }
                                         &nbsp;
-                                        @Html.DisplayFor(modelItem => Mtp.Client.Name)
+                                        @Html.DisplayFor(modelItem => Bio.Client.Name)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => Mtp.AdmissionDateMTP)
+                                        @Html.DisplayFor(modelItem => Bio.DateBio)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => Mtp.Client.Service)
+                                        @Html.DisplayFor(modelItem => Bio.Client.Service)
                                     </td>
                                     <td align="center">
-                                        @if (Mtp.Status == KyoS.Common.Enums.MTPStatus.Edition)
+                                        @if (Bio.Status == KyoS.Common.Enums.BioStatus.Edition)
                                         {
                                             <span class="label label-default">
                                                 Edition
@@ -244,7 +244,7 @@
                                         }
                                         else
                                         {
-                                            if (Mtp.Status == KyoS.Common.Enums.MTPStatus.Pending)
+                                            if (Bio.Status == KyoS.Common.Enums.BioStatus.Pending)
                                             {
                                                 <span class="label label-info">
                                                     Pending
@@ -252,7 +252,7 @@
                                             }
                                             else
                                             {
-                                                if (Mtp.Status == KyoS.Common.Enums.MTPStatus.Approved)
+                                                if (Bio.Status == KyoS.Common.Enums.BioStatus.Approved)
                                                 {
                                                     <span class="label label-success">
                                                         Approved
@@ -267,9 +267,9 @@
                                     <td align="right">
                                         @if (User.IsInRole("Documents_Assistant"))
                                         {
-                                            @if (Mtp.Status == KyoS.Common.Enums.MTPStatus.Edition || Mtp.Status == KyoS.Common.Enums.MTPStatus.Pending)
+                                            @if (Bio.Status == KyoS.Common.Enums.BioStatus.Edition || Bio.Status == KyoS.Common.Enums.BioStatus.Pending)
                                             {
-                                                <a asp-action="Edit" asp-controller="Mtps" asp-route-id="@Mtp.Id" asp-route-origi="1" class="btn btn-warning" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="Edit" asp-controller="Bios" asp-route-id="@Bio.Client.Id" asp-route-origi="1" class="btn btn-warning" title="Edit FARS"><i class="glyphicon glyphicon-pencil"></i></a>
                                             }
                                             else
                                             {

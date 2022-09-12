@@ -70,4 +70,10 @@
         Pending,
         Approved
     }
+    public enum BioStatus
+    {
+        Edition,
+        Pending,
+        Approved
+    }
 }
