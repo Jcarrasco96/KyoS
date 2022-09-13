@@ -7,98 +7,107 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - DMS System</title>
-    <link href="~/css/font-awesome.css" rel="stylesheet">
-    <link href="~/css/font-awesome.min.css" rel="stylesheet">
-    <link href="~/css/font-awesome-ie7.css" rel="stylesheet">
-    <link href="~/css/font-awesome-ie7.min.css" rel="stylesheet">
 
     <style>
         .login-dark {
-        height: 1000px;
-        /*background: #475d62 url(../../assets/img/star-sky.jpg);*/
-        background-size: cover;
-        position: center;       
+            height: 600px;
+            /*background: #475d62 url(../../assets/img/star-sky.jpg);*/
+            background-size: cover;
+            position: center;
         }
 
-        .login-dark form {
-        max-width: 320px;
-        width: 90%;
-        background-color: #1e2833;
-        padding: 40px;
-        border-radius: 4px;
-        transform: translate(-50%, -50%);
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        color: #fff;
-        box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
-        }
-
-        .login-dark .illustration {
-            text-align: center;
-            padding: 15px 0 20px;
-            font-size: 100px;
-            color: #2980ef;
-        }
-
-        .login-dark form .form-control {
-            background: none;
-            border: none;
-            border-bottom: 1px solid #434a52;
-            border-radius: 0;
-            box-shadow: none;
-            outline: none;
-            color: inherit;
-        }
-
-        .login-dark form .btn-primary {
-            background: #2980ef;
-            border: none;
-            border-radius: 4px;
-            padding: 11px;
-            box-shadow: none;
-            margin-top: 26px;
-            text-shadow: none;
-            outline: none;         
-            font-weight: normal;
-        }
-
-        .login-dark form .btn-primary:hover, .login-dark form .btn-primary:active {
-                background: #214a80;
-                outline: none;
+            .login-dark form {
+                max-width: 340px;
+                width: 90%;
+                background-color: #1e2833;
+                padding: 25px;
+                border-radius: 10px;
+                transform: translate(-50%, -50%);
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                color: #fff;
+                box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
             }
 
-        .login-dark form .forgot {
-            /*display: block;*/
-            /*text-align: center;*/
-            font-size: 13px;
-            color: #6f7a85;
-            opacity: 1.0;
-            text-decoration: none;
-        }
+            .login-dark .illustration {
+                text-align: center;
+                padding: 10px 0 15px;
+                font-size: 90px;
+                color: goldenrod;
+            }
 
-        .login-dark form .forgot:hover, .login-dark form .forgot:active {
+            .login-dark .social-networks {
+                text-align: center;
+                font-size: 30px;
+                color: goldenrod;
+            }
+
+            .login-dark form .form-control {
+                background: none;
+                border: none;
+                border-bottom: 1px solid #434a52;
+                border-radius: 0;
+                box-shadow: none;
+                outline: none;
+                color: inherit;
+            }
+
+            .login-dark form .form-control:focus {
+                
+                border-bottom: 1px solid  goldenrod;
+                
+            }
+
+            .login-dark form .btn-primary {
+                background: goldenrod;
+                border: none;
+                border-radius: 4px;
+                padding: 11px;
+                box-shadow: none;
+                margin-top: 26px;
+                text-shadow: none;
+                outline: none;
+                font-weight: normal;
+            }
+
+            .login-dark form .btn-primary:hover, .login-dark form .btn-primary:active {
+                background: darkgoldenrod;
+                outline: none;               
+            }
+
+            .login-dark form .forgot {                
+                color: #999;                
+                text-decoration: none;
+                font-family: Helvetica;
+                font-size:small;
+            }
+
+            .login-dark form .note {                
+                color: #999;                
+                text-decoration: none;
+                font-family: Helvetica;
+                font-size:x-small;
+            }
+            .login-dark form .author {  
+                text-align:center;
+                color: #999;                
+                text-decoration: none;
+                font-family: Helvetica;
+                font-size:x-small;
+            }
+
+            .login-dark form .forgot:hover, .login-dark form .forgot:active {
                 opacity: 1;
                 text-decoration: none;
             }
-
-        .login-dark form .btn-primary:active {
-            transform: translateY(1px);
-        }
     </style>
-    
-    <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-    </environment>
-    <environment exclude="Development">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />        
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />        
-    </environment>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
+
 </head>
 <body style="background-color: #fff;">
 
@@ -106,31 +115,45 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger" style="font-weight:bold;"></div>
             <div class="text-center mb-5">
-                <label style="font-family:Tahoma; color:goldenrod; font-size:x-large">
+                <label style="font-family:Tahoma; color:goldenrod; font-size:xx-large">
                     DMS
                 </label>
+
                 <label style="font-family:Tahoma; color:white; font-size:x-large">
                     System
                 </label>
             </div>
             <div class="illustration"><i class="icon ion-android-lock"></i></div>
             <div class="form-group">
-                <input asp-for="Username" class="form-control" placeholder="Enter email" />
+                <input asp-for="Username" class="form-control" placeholder="Enter email *" />
                 <span asp-validation-for="Username" class="text-warning"></span>
             </div>
             <div class="form-group">
-                <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" />
+                <input asp-for="Password" type="password" class="form-control" placeholder="Enter password *" />
                 <span asp-validation-for="Password" class="text-warning"></span>
             </div>
-            <div class="form-group">
-                <div class="form-check">
-                    <input asp-for="RememberMe" type="checkbox" class="form-check-input" />
-                    <label asp-for="RememberMe" class="forgot">Keep me signed in</label>
-                </div>
-                <span asp-validation-for="RememberMe" class="text-warning"></span>
+            <div class="form-group">                
+                <input asp-for="RememberMe" type="checkbox" class="form-check-input" />
+                <label asp-for="RememberMe" class="forgot">&nbsp;Keep me signed in</label>                
             </div>
             <div class="form-group">
                 <input type="submit" value=" Log in " class="btn btn-primary" style="width: 100% !important;" />
+            </div>
+            
+            <div class="social-networks">
+                <i class="icon ion-social-twitter-outline"></i>&nbsp;
+                <i class="icon ion-social-facebook-outline"></i>&nbsp;
+                <i class="icon ion-social-instagram-outline"></i>&nbsp;
+                <i class="icon ion-social-linkedin-outline"></i>&nbsp;
+            </div>
+            <div>
+                <p class="note">
+                    By clicking Log In, you agree to our Terms of Service, and have read our Privacy Policy.                    
+                </p>
+                <br />
+                <p class="author">
+                    © 2022 DMS System. All Rights Reserved
+                </p>
             </div>
         </form>
     </div>
