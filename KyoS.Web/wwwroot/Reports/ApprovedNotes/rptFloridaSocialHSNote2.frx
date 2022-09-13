@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="06/29/2022 12:11:50" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="09/13/2022 18:28:53" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3xvMCscWFbylu8xOBIVqJPQ==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3m3RUjY7c7X+E814ZAl44PQ==">
       <TableDataSource Name="Themes1" Alias="Themes2" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -53,7 +53,7 @@
         <Column Name="stressManagement" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3RSFUnQkpv4nzIOs2MobN+g==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3MDqojrNdBPmP0K04GvnxEg==">
       <TableDataSource Name="Themes2" Alias="Themes3" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -105,7 +105,7 @@
         <Column Name="stressManagement" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3M1ftNFxySdWdQOyGn5h0Og==">
+    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3YDmct8jmc6sNbY7tXjPTCw==">
       <TableDataSource Name="Themes3" Alias="Themes4" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -157,7 +157,7 @@
         <Column Name="stressManagement" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3haEJRT1rqUDx3k9RaCMAdw==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3oWus2VhMOqEExqEortvj2w==">
       <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -359,10 +359,10 @@
         </TableRow>
         <TableRow Name="Row2">
           <TableCell Name="Cell6" Border.Lines="All" Text="BEGIN-END TIME:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
-          <TableCell Name="Cell7" Border.Lines="All" Text="[IIf([NotesP_Activities1.Present] == true,IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;8:00 am - 9:00 am&quot;,&quot;1:00 pm - 2:00 pm&quot;),&quot;&quot;)]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
-          <TableCell Name="Cell15" Border.Lines="All" Text="[IIf([NotesP_Activities2.Present] == true,IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;9:00 am - 10:00 am&quot;,&quot;2:00 pm - 3:00 pm&quot;),&quot;&quot;)]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
-          <TableCell Name="Cell8" Border.Lines="All" Text="[IIf([NotesP_Activities3.Present] == true,IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;10:15 am - 11:15 am&quot;,&quot;3:15 pm - 4:15 pm&quot;),&quot;&quot;)]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
-          <TableCell Name="Cell55" Border.Lines="All" Text="[IIf([NotesP_Activities4.Present] == true,IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;11:15 am - 12:15 am&quot;,&quot;4:15 pm - 5:15 pm&quot;),&quot;&quot;)]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell7" Border.Lines="All" Text="[IIf([NotesP_Activities1.Present] == true,IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;8:00 am - 9:00 am&quot;,&quot;12:30 pm - 1:30 pm&quot;),&quot;&quot;)]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+          <TableCell Name="Cell15" Border.Lines="All" Text="[IIf([NotesP_Activities2.Present] == true,IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;9:00 am - 10:00 am&quot;,&quot;1:30 pm - 2:30 pm&quot;),&quot;&quot;)]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+          <TableCell Name="Cell8" Border.Lines="All" Text="[IIf([NotesP_Activities3.Present] == true,IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;10:15 am - 11:15 am&quot;,&quot;2:45 pm - 3:45 pm&quot;),&quot;&quot;)]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+          <TableCell Name="Cell55" Border.Lines="All" Text="[IIf([NotesP_Activities4.Present] == true,IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;11:15 am - 12:15 am&quot;,&quot;3:45 pm - 4:45 pm&quot;),&quot;&quot;)]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
         </TableRow>
       </TableObject>
       <TextObject Name="Text57" Left="217.35" Top="28.25" Width="368.55" Height="18.9" Text="PROGRESS NOTE" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
