@@ -28,6 +28,10 @@
             {
                 @Html.ActionLink("Messages TCM Services Plan with review", "MessagesOfServicePlan", "TCMMessages")
             }
+            @if (@ViewData["origin"].ToString() == "5")
+            {
+                @Html.ActionLink("Not started cases", "GetCaseNotServicePlan", "TCMClients")
+            }
         </li>
         <li class="active">Edit</li>
     </ul><!--.breadcrumb-->
@@ -96,11 +100,19 @@
                 <input type="submit" value="Save" class="btn btn-primary" />
                 @if (Model.Approved == 0)
                 {
-                    <a asp-action="FinishEditing" asp-route-id="@Model.Id" asp-controller="TCMServicePlans" class="btn btn-warning">Finish Edition</a>
+                    @if (ViewData["origin"].ToString() == "5")
+                    {
+                        <a asp-action="FinishEditing" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]" asp-controller="TCMServicePlans" class="btn btn-warning">Finish Edition</a>
+                    }
+                    else
+                    { 
+                        <a asp-action="FinishEditing" asp-route-id="@Model.Id" asp-controller="TCMServicePlans" class="btn btn-warning">Finish Edition</a>
+                    }
+
                 }
                 else
                 {
-                    <a asp-action="FinishEditing" asp-route-id="@Model.Id" asp-route-section="4" asp-controller="TCMAssessments" class="btn btn-warning disabled">Finish Edition</a>
+                    <a asp-action="FinishEditing" asp-route-id="@Model.Id" class="btn btn-warning disabled">Finish Edition</a>
                 }
                 @if (@ViewData["origin"].ToString() == "0")
                 {
@@ -121,6 +133,10 @@
                 @if (@ViewData["origin"].ToString() == "4")
                 {
                     <a asp-action="MessagesOfServicePlan" asp-controller="TCMmessages" class="btn btn-success">Back</a>
+                }
+                @if (@ViewData["origin"].ToString() == "5")
+                {
+                    <a asp-action="GetCaseNotServicePlan" asp-controller="TCMClients" class="btn btn-success">Back</a>
                 }
             </div>
         </form>

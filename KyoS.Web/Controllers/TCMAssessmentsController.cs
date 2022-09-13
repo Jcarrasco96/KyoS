@@ -99,7 +99,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult Create(int id = 0)
+        public IActionResult Create(int id = 0, int origi = 0)
         {
 
             TCMAssessmentViewModel model;
@@ -509,6 +509,8 @@ namespace KyoS.Web.Controllers
                     };
                     if (model.IndividualAgencyList == null)
                         model.IndividualAgencyList = new List<TCMAssessmentIndividualAgencyEntity>();
+
+                    ViewData["origi"] = origi;
                     return View(model);
                 }
             }
@@ -523,7 +525,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> Create(TCMAssessmentViewModel tcmAssessmentViewModel)
+        public async Task<IActionResult> Create(TCMAssessmentViewModel tcmAssessmentViewModel, int origi = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -540,17 +542,24 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        TCMAssessmentEntity tcmAssessment = await _context.TCMAssessment
-                                                                          .Include(m => m.TcmClient)
-                                                                          .ThenInclude(m => m.Client)
-                                                                          .Include(m => m.IndividualAgencyList)
-                                                                          .Include(m => m.HouseCompositionList)
-                                                                          .Include(m => m.MedicationList)
-                                                                          .Include(m => m.PastCurrentServiceList)
-                                                                          .FirstOrDefaultAsync(m => m.TcmClient.Casemanager.LinkedUser == user_logged.UserName
-                                                                            && m.TcmClient.Id == tcmAssessmentViewModel.TcmClient_FK);
+                        if (origi == 0)
+                        {
+                            TCMAssessmentEntity tcmAssessment = await _context.TCMAssessment
+                                                                              .Include(m => m.TcmClient)
+                                                                              .ThenInclude(m => m.Client)
+                                                                              .Include(m => m.IndividualAgencyList)
+                                                                              .Include(m => m.HouseCompositionList)
+                                                                              .Include(m => m.MedicationList)
+                                                                              .Include(m => m.PastCurrentServiceList)
+                                                                              .FirstOrDefaultAsync(m => m.TcmClient.Casemanager.LinkedUser == user_logged.UserName
+                                                                                && m.TcmClient.Id == tcmAssessmentViewModel.TcmClient_FK);
 
-                        return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = tcmAssessmentEntity.TcmClient_FK, section = 4 });
+                            return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = tcmAssessmentEntity.TcmClient_FK, section = 4 });
+                        }
+                        if (origi == 1)
+                        {
+                            return RedirectToAction("GetCaseNotServicePlan", "TCMClients");
+                        }
                     }
                     catch (System.Exception ex)
                     {
@@ -677,7 +686,10 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction("MessagesOfAssessment", "TCMMessages");
                     }
-
+                    if (origi == 2)
+                    {
+                        return RedirectToAction("GetCaseNotServicePlan", "TCMClients");
+                    }
                 }
                 catch (System.Exception ex)
                 {

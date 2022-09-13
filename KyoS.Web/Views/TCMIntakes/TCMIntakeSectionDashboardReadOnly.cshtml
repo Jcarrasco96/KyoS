@@ -16,7 +16,10 @@
             {
                 @Html.ActionLink("All Documents", "AllDocuments", "TCMClients")
             }
-
+            @if (@ViewData["origin"].ToString() == "2")
+            {
+                @Html.ActionLink("Not started cases", "GetCaseNotServicePlan", "TCMClients")
+            }
             @*@Html.ActionLink("TCM All Documents", "AllDocuments", "TCMClients")*@
         </li>
         @if (Model.Status == KyoS.Common.Enums.StatusType.Open)

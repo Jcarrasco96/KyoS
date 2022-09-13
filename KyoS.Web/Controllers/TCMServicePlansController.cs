@@ -126,7 +126,7 @@ namespace KyoS.Web.Controllers
         public IActionResult Create(int id, int origin = 0)
         {
             TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans.Include(u => u.TcmClient)
-                                                         .FirstOrDefault(u => u.TcmClient.Id == id);
+                                                          .FirstOrDefault(u => u.TcmClient.Id == id);
             TCMServicePlanViewModel model;
 
             if (tcmServicePlan == null)
@@ -139,9 +139,9 @@ namespace KyoS.Web.Controllers
                     if (user_logged.Clinic != null)
                     {
                         List <TCMClientEntity> tcmClient = _context.TCMClient
-                                                        .Include(u => u.Client)
-                                                        .Where(u => u.Id == id)
-                                                        .ToList();
+                                                                   .Include(u => u.Client)
+                                                                   .Where(u => u.Id == id)
+                                                                   .ToList();
 
                         List<SelectListItem> list_Client = tcmClient.Select(c => new SelectListItem
                         {
@@ -151,8 +151,8 @@ namespace KyoS.Web.Controllers
                             .ToList();
 
                         List<ClinicEntity> clinic = _context.Clinics                                                         
-                                                         .Where(u => u.Id == user_logged.Clinic.Id)
-                                                         .ToList();
+                                                            .Where(u => u.Id == user_logged.Clinic.Id)
+                                                            .ToList();
 
                         List<SelectListItem> list_Clinins = clinic.Select(c => new SelectListItem
                         {
@@ -215,7 +215,14 @@ namespace KyoS.Web.Controllers
                         }
                         else
                         {
-                            return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = (origin - 1) });
+                            if (origin == 4)
+                            {
+                                return RedirectToAction("GetCaseNotServicePlan", "TCMClients");
+                            }
+                            else
+                            {
+                                return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = (origin - 1) });
+                            }
                         }
                         
                     }
@@ -380,7 +387,14 @@ namespace KyoS.Web.Controllers
                             }
                             else
                             {
-                                return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = (origin - 1) });
+                                if (origin == 5)
+                                {
+                                    return RedirectToAction("GetCaseNotServicePlan", "TCMClients");
+                                }
+                                else
+                                {
+                                    return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = (origin - 1) });
+                                }
                             }
                         }
                             
@@ -424,7 +438,14 @@ namespace KyoS.Web.Controllers
                             }
                             else
                             {
-                                return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = 1 });
+                                if (origin == 5)
+                                {
+                                    return RedirectToAction("GetCaseNotServicePlan", "TCMClients");
+                                }
+                                else
+                                {
+                                    return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = 1 });
+                                }
                             }
                         }
                         catch (System.Exception ex)
