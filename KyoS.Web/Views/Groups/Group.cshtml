@@ -24,7 +24,7 @@
     {
         <div class="col-md-12">
             <p class="alert alert-block alert-danger">
-                <strong class="red"> Note: </strong> There are group therapy active clients that are not in any group.
+                <strong class="red"> Note: </strong> There are group therapy active clients that are not in any group (<a asp-action="ListClientWithoutGroup" asp-route-serviceType="@KyoS.Common.Enums.ServiceType.Group">@ViewData["count"]</a> ).
             </p>
         </div>
     }
