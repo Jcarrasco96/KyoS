@@ -16,6 +16,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\lib\bootstrap\dist\css\material-plugins.css" />
+    <Content Remove="wwwroot\lib\bootstrap\dist\css\material-plugins.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\dist\css\material-plugins.min.css" />
+    <Content Remove="wwwroot\lib\bootstrap\dist\css\material-plugins.min.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\dist\css\material.css" />
+    <Content Remove="wwwroot\lib\bootstrap\dist\css\material.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\dist\css\material.min.css" />
+    <Content Remove="wwwroot\lib\bootstrap\dist\css\material.min.css.map" />
     <Content Remove="wwwroot\Reports\MTPs\rptMTPLarkinBehavior - Copy.frx" />
   </ItemGroup>
 

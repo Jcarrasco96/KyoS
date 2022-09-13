@@ -282,7 +282,7 @@ namespace KyoS.Web.Controllers
                                                                && wc.GroupNote.Status == NoteStatus.Pending
                                                                && wc.Workday.Service == ServiceType.Group)).ToString();
 
-                ViewBag.PendingBIO = _context.Clients
+                ViewBag.ClientWithoutBIO = _context.Clients
                                                     .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                                && wc.Bio == null)).ToString();
 
@@ -338,8 +338,16 @@ namespace KyoS.Web.Controllers
                 ViewBag.GroupNotesWithReview = notes_review_list.Count.ToString();
 
                 ViewBag.MedicalHistoryMissing = _context.Clients
-                                                       .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                        .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                               && wc.IntakeMedicalHistory == null)).ToString();
+
+                ViewBag.PendingMtp = _context.MTPs
+                                             .Count(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                  && m.Status == MTPStatus.Pending)).ToString();
+
+                ViewBag.PendingBio = _context.Bio
+                                             .Count(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                  && m.Status == BioStatus.Pending)).ToString();
             }
             if (User.IsInRole("Manager"))
             {
@@ -532,10 +540,39 @@ namespace KyoS.Web.Controllers
                 //TCM Dashboard
 
                 List<TCMClientEntity> tcmClient = await _context.TCMClient
-                                                               .Include(c => c.TcmServicePlan)
-                                                               .Include(c => c.Client)
-                                                               .Where(c => c.Client.Clinic.Id == user_logged.Clinic.Id).ToListAsync();
-                tcmClient = tcmClient.Where(wc => wc.TcmServicePlan == null).ToList();
+                                                                .Include(g => g.Casemanager)
+                                                                .Include(g => g.Client)
+                                                                .Include(g => g.TcmServicePlan)
+                                                                .Include(g => g.TcmIntakeAppendixJ)
+                                                                .Include(g => g.TCMAssessment)
+                                                                .Include(g => g.TcmIntakeAcknowledgementHipa)
+                                                                .Include(g => g.TCMIntakeAdvancedDirective)
+                                                                .Include(g => g.TcmIntakeConsentForRelease)
+                                                                .Include(g => g.TcmIntakeConsentForTreatment)
+                                                                .Include(g => g.TcmIntakeConsumerRights)
+                                                                .Include(g => g.TCMIntakeForeignLanguage)
+                                                                .Include(g => g.TCMIntakeForm)
+                                                                .Include(g => g.TCMIntakeOrientationChecklist)
+                                                                .Include(g => g.TCMIntakeWelcome)
+                                                                .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                    && s.Status == StatusType.Open
+                                                                    && (s.TcmServicePlan == null
+                                                                        || s.TcmServicePlan.Approved != 2
+                                                                        || s.TCMAssessment == null
+                                                                        || s.TCMAssessment.Approved != 2
+                                                                        || s.TcmIntakeAppendixJ == null
+                                                                        || s.TcmIntakeAcknowledgementHipa == null
+                                                                        || s.TCMIntakeAdvancedDirective == null
+                                                                        || s.TcmIntakeConsentForRelease == null
+                                                                        || s.TcmIntakeConsentForTreatment == null
+                                                                        || s.TcmIntakeConsumerRights == null
+                                                                        || s.TCMIntakeCoordinationCare == null
+                                                                        || s.TCMIntakeForeignLanguage == null
+                                                                        || s.TCMIntakeForm == null
+                                                                        || s.TCMIntakeOrientationChecklist == null
+                                                                        || s.TCMIntakeWelcome == null)))
+                                                                .OrderBy(g => g.Casemanager.Name)
+                                                                .ToListAsync();
                 ViewBag.NotStartedCases = tcmClient.Count.ToString();
 
                 ViewBag.OpenBinder = _context.TCMClient
@@ -654,11 +691,39 @@ namespace KyoS.Web.Controllers
                 CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
 
                 List<TCMClientEntity> tcmClient = await _context.TCMClient
-                                                                .Include(c => c.TcmServicePlan)
-                                                                .Include(c => c.Client)
-                                                                .Where(c => c.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                     && c.Casemanager.Id == caseManager.Id).ToListAsync();
-                tcmClient = tcmClient.Where(wc => wc.TcmServicePlan == null).ToList();
+                                                                .Include(g => g.Casemanager)
+                                                                .Include(g => g.Client)
+                                                                .Include(g => g.TcmServicePlan)
+                                                                .Include(g => g.TcmIntakeAppendixJ)
+                                                                .Include(g => g.TCMAssessment)
+                                                                .Include(g => g.TcmIntakeAcknowledgementHipa)
+                                                                .Include(g => g.TCMIntakeAdvancedDirective)
+                                                                .Include(g => g.TcmIntakeConsentForRelease)
+                                                                .Include(g => g.TcmIntakeConsentForTreatment)
+                                                                .Include(g => g.TcmIntakeConsumerRights)
+                                                                .Include(g => g.TCMIntakeForeignLanguage)
+                                                                .Include(g => g.TCMIntakeForm)
+                                                                .Include(g => g.TCMIntakeOrientationChecklist)
+                                                                .Include(g => g.TCMIntakeWelcome)
+                                                                .Where(g => (g.Casemanager.Id == caseManager.Id
+                                                                        && g.Status == StatusType.Open
+                                                                        && (g.TcmServicePlan == null
+                                                                            || g.TcmServicePlan.Approved != 2
+                                                                            || g.TCMAssessment == null
+                                                                            || g.TCMAssessment.Approved != 2
+                                                                            || g.TcmIntakeAppendixJ == null
+                                                                            || g.TcmIntakeAcknowledgementHipa == null
+                                                                            || g.TCMIntakeAdvancedDirective == null
+                                                                            || g.TcmIntakeConsentForRelease == null
+                                                                            || g.TcmIntakeConsentForTreatment == null
+                                                                            || g.TcmIntakeConsumerRights == null
+                                                                            || g.TCMIntakeCoordinationCare == null
+                                                                            || g.TCMIntakeForeignLanguage == null
+                                                                            || g.TCMIntakeForm == null
+                                                                            || g.TCMIntakeOrientationChecklist == null
+                                                                            || g.TCMIntakeWelcome == null)))
+                                                               .ToListAsync();
+
                 ViewBag.NotStartedCases = tcmClient.Count.ToString();
 
                 ViewBag.OpenBinder = _context.TCMClient
@@ -803,6 +868,39 @@ namespace KyoS.Web.Controllers
                                                         .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                                && wc.IntakeMedicalHistory == null)).ToString();
 
+                List<MTPEntity> MtpPending = await _context.MTPs
+                                                                 .Include(f => f.Client)
+                                                                 .ThenInclude(n => n.Clinic)
+                                                                 .Where(n => (n.Status == MTPStatus.Pending
+                                                                      && n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                      && n.CreatedBy == user_logged.UserName))
+                                                                 .OrderBy(f => f.Client.Name)
+                                                                 .ToListAsync();
+                ViewBag.MtpPending = MtpPending.Count().ToString();
+
+                List<BioEntity> BioPending = await _context.Bio
+                                                           .Include(f => f.Client)
+                                                           .ThenInclude(n => n.Clinic)
+                                                           .Where(n => (n.Status == BioStatus.Pending
+                                                                     && n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                     && n.CreatedBy == user_logged.UserName))
+                                                           .OrderBy(f => f.Client.Name)
+                                                           .ToListAsync();
+                ViewBag.BioPending = BioPending.Count().ToString();
+
+                List<MTPEntity> MtpWithReview = await _context.MTPs
+                                                      .Include(wc => wc.Messages)
+                                                      .Where(wc => (wc.DocumentAssistant.LinkedUser == User.Identity.Name
+                                                                 && wc.Status == MTPStatus.Pending)).ToListAsync();
+                MtpWithReview = MtpWithReview.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
+                ViewBag.MtpWithReview = MtpWithReview.Count.ToString();
+
+                List<BioEntity> BioWithReview = await _context.Bio
+                                                              .Include(wc => wc.Messages)
+                                                              .Where(wc => (wc.DocumentsAssistant.LinkedUser == User.Identity.Name
+                                                                     && wc.Status == BioStatus.Pending)).ToListAsync();
+                BioWithReview = BioWithReview.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
+                ViewBag.BioWithReview = BioWithReview.Count.ToString();
             }
             if (User.IsInRole("TCMSupervisor"))
             {
@@ -812,11 +910,40 @@ namespace KyoS.Web.Controllers
 
               
                 List<TCMClientEntity> tcmClient = await _context.TCMClient
-                                                                .Include(c => c.TcmServicePlan)
-                                                                .Include(c => c.Client)
-                                                                .Where(c => c.Client.Clinic.Id == user_logged.Clinic.Id).ToListAsync();
+                                                                 .Include(g => g.Casemanager)
+                                                                 .Include(g => g.Client)
+                                                                 .Include(g => g.TcmServicePlan)
+                                                                 .Include(g => g.TcmIntakeAppendixJ)
+                                                                 .Include(g => g.TCMAssessment)
+                                                                 .Include(g => g.TcmIntakeAcknowledgementHipa)
+                                                                 .Include(g => g.TCMIntakeAdvancedDirective)
+                                                                 .Include(g => g.TcmIntakeConsentForRelease)
+                                                                 .Include(g => g.TcmIntakeConsentForTreatment)
+                                                                 .Include(g => g.TcmIntakeConsumerRights)
+                                                                 .Include(g => g.TCMIntakeForeignLanguage)
+                                                                 .Include(g => g.TCMIntakeForm)
+                                                                 .Include(g => g.TCMIntakeOrientationChecklist)
+                                                                 .Include(g => g.TCMIntakeWelcome)
+                                                                 .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                    && s.Status == StatusType.Open
+                                                                    && (s.TcmServicePlan == null
+                                                                        || s.TcmServicePlan.Approved != 2
+                                                                        || s.TCMAssessment == null
+                                                                        || s.TCMAssessment.Approved != 2
+                                                                        || s.TcmIntakeAppendixJ == null
+                                                                        || s.TcmIntakeAcknowledgementHipa == null
+                                                                        || s.TCMIntakeAdvancedDirective == null
+                                                                        || s.TcmIntakeConsentForRelease == null
+                                                                        || s.TcmIntakeConsentForTreatment == null
+                                                                        || s.TcmIntakeConsumerRights == null
+                                                                        || s.TCMIntakeCoordinationCare == null
+                                                                        || s.TCMIntakeForeignLanguage == null
+                                                                        || s.TCMIntakeForm == null
+                                                                        || s.TCMIntakeOrientationChecklist == null
+                                                                        || s.TCMIntakeWelcome == null)))
+                                                                .OrderBy(g => g.Casemanager.Name)
+                                                                .ToListAsync();
 
-                tcmClient = tcmClient.Where(wc => wc.TcmServicePlan == null).ToList();
                 ViewBag.NotStartedCases = tcmClient.Count.ToString();
 
                 ViewBag.OpenBinder = _context.TCMClient

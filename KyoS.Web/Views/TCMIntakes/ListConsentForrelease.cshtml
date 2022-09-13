@@ -8,7 +8,7 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.First().TcmClient_FK, section = 1 })
+            @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.First().TcmClient_FK, section = 1, origin = ViewData["origi"] })
         </li>
         <li class="active">TCM Intakes</li>
     </ul><!--.breadcrumb-->
@@ -17,7 +17,7 @@
 <div class="row">
     <div class="col-md-12">
         <p>
-            <a asp-action="CreateTCMConsentForRelease" asp-route-id="@Model.First().TcmClient.Id" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create TCM Consent for Release</a>
+            <a asp-action="CreateTCMConsentForRelease" asp-route-id="@Model.First().TcmClient.Id" asp-route-origi="@ViewData["origi"]" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create TCM Consent for Release</a>
         </p>       
     </div>
     <div class="col-md-12">
@@ -36,7 +36,7 @@
                                 @Html.DisplayNameFor(model => model.TcmClient.Client.Code)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.TcmClient.Client.AdmisionDate)
+                                Date
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Status
@@ -66,7 +66,7 @@
                                         @Html.DisplayFor(modelItem => item.TcmClient.Client.Code)
                                     </td>
                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.TcmClient.Client.AdmisionDate)
+                                        @Html.DisplayFor(modelItem => item.DateSignatureEmployee)
                                     </td>
                                    <td align="center">
                                         @if (item.TcmClient.Status == KyoS.Common.Enums.StatusType.Open)
@@ -83,7 +83,7 @@
                                         }
                                     </td>
                                    <td align="right">
-                                        <a asp-action="EditConsentForRelease" asp-route-id="@item.Id" class="btn btn-warning" title="Edit TCM Intake Consent for Release"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="EditConsentForRelease" asp-route-id="@item.Id" asp-route-origi="@ViewData["origi"]" class="btn btn-warning" title="Edit TCM Intake Consent for Release"><i class="glyphicon glyphicon-pencil"></i></a>
                                    </td>
                                 </tr>
                         }

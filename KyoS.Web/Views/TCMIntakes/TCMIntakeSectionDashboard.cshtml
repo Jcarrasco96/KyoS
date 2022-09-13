@@ -12,9 +12,13 @@
             {
                 @Html.ActionLink("Open Binder", "TCMIntakeDashboard", "TCMIntakes", new { id = @Model.Id })
             }
-            else
+            @if (ViewData["origin"].ToString() == "1")
             {
                 @Html.ActionLink("TCM All Documents", "AllDocuments", "TCMClients")
+            }
+            @if (@ViewData["origin"].ToString() == "2")
+            {
+                @Html.ActionLink("Not started cases", "GetCaseNotServicePlan", "TCMClients")
             }
         </li>
         @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
@@ -51,7 +55,7 @@
             <div class="col-sm-3 col-md-2">
                 @if (Model.TCMIntakeForm != null)
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="Create" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origin"]" asp-action="Edit" role="button">
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Intake<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form</h4>
                         </div>
@@ -59,7 +63,7 @@
                 }
                 else
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="Edit" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origin"]" asp-action="Create" role="button">
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Intake<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form</h4>
                         </div>
@@ -69,7 +73,7 @@
             <div class="col-sm-3 col-md-2">
                 @if (Model.TcmIntakeConsentForTreatment != null)
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMConsentForTreatment" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origin"]" asp-action="CreateTCMConsentForTreatment" role="button">
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consent for<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treatment</h4>
                         </div>
@@ -77,7 +81,7 @@
                 }
                 else
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMConsentForTreatment" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origin"]" asp-action="CreateTCMConsentForTreatment" role="button">
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consent for<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treatment</h4>
                         </div>
@@ -87,7 +91,7 @@
             <div class="col-sm-3 col-md-2">
                 @if (Model.TcmIntakeConsentForRelease.Count() > 0)
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMConsentForRelease" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="ListConsentForrelease"  asp-route-origi="@ViewData["origin"]" role="button">
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consent for<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Release</h4>
                         </div>
@@ -95,7 +99,7 @@
                 }
                 else
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMConsentForRelease" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMConsentForRelease" asp-route-origi="@ViewData["origin"]" role="button">
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consent for<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Release</h4>
                         </div>
@@ -105,7 +109,7 @@
             <div class="col-sm-3 col-md-2">
                 @if (Model.TcmIntakeConsumerRights != null)
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMConsumerRights" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMConsumerRights" asp-route-origi="@ViewData["origin"]" role="button">
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consumer<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rights</h4>
                         </div>
@@ -113,7 +117,7 @@
                 }
                 else
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMConsumerRights" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMConsumerRights" asp-route-origi="@ViewData["origin"]" role="button">
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consumer<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rights</h4>
                         </div>
@@ -123,7 +127,7 @@
             <div class="col-sm-3 col-md-2">
                 @if (Model.TcmIntakeAcknowledgementHipa != null)
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMAcknowledgementHippa" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMAcknowledgementHippa" asp-route-origi="@ViewData["origin"]" role="button">
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Acknowled.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hippa</h4>
                         </div>
@@ -131,7 +135,7 @@
                 }
                 else
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMAcknowledgementHippa" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMAcknowledgementHippa" asp-route-origi="@ViewData["origin"]" role="button">
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Acknowled.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hippa</h4>
                         </div>
@@ -150,7 +154,7 @@
             <div class="col-sm-3 col-md-2">
                 @if (Model.TCMIntakeOrientationChecklist != null)
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMOrientationCheckList" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMOrientationCheckList" asp-route-origi="@ViewData["origin"]" role="button">
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Orientation<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checklist</h4>
                         </div>
@@ -158,7 +162,7 @@
                 }
                 else
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMOrientationCheckList" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMOrientationCheckList" asp-route-origi="@ViewData["origin"]" role="button">
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Orientation<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checklist</h4>
                         </div>
@@ -168,7 +172,7 @@
             <div class="col-sm-3 col-md-2">
                 @if (Model.TCMIntakeAdvancedDirective != null)
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMIntakeAdvenceDirective" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMIntakeAdvenceDirective" asp-route-origi="@ViewData["origin"]" role="button">
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Advance<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Directive</h4>
                         </div>
@@ -176,7 +180,7 @@
                 }
                 else
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMIntakeAdvenceDirective" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMIntakeAdvenceDirective" asp-route-origi="@ViewData["origin"]" role="button">
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Advance<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Directive</h4>
                         </div>
@@ -186,7 +190,7 @@
             <div class="col-sm-3 col-md-2">
                 @if (Model.TCMIntakeForeignLanguage != null)
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMForeignLanguage" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMForeignLanguage" asp-route-origi="@ViewData["origin"]" role="button">
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Foreign Lang.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Acknowledgement</h4>
                         </div>
@@ -194,7 +198,7 @@
                 }
                 else
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMForeignLanguage" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMForeignLanguage" asp-route-origi="@ViewData["origin"]" role="button">
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Foreign Lang.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Acknowledgement</h4>
                         </div>
@@ -204,7 +208,7 @@
             <div class="col-sm-3 col-md-2">
                 @if (Model.TCMIntakeWelcome != null)
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMWelcome" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMWelcome" asp-route-origi="@ViewData["origin"]" role="button">
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Correspondence<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                         </div>
@@ -212,7 +216,7 @@
                 }
                 else
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMWelcome" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMWelcome" asp-route-origi="@ViewData["origin"]" role="button">
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Correspondence<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                         </div>

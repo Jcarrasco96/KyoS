@@ -510,29 +510,42 @@ namespace KyoS.Web.Controllers
 
                 CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
                 List<TCMClientEntity> tcmClientsT = await _context.TCMClient
-                                       .Include(g => g.Casemanager)
-                                       .Include(g => g.Client)
-                                       .Where(g => (g.Casemanager.Id == caseManager.Id))
-                                       .OrderBy(g => g.Client.Name)
-                                       .ToListAsync();
-                TCMServicePlanEntity servicePlan = null;
-                List<TCMClientEntity> tcmClientsTemp = await _context.TCMClient
-                                       .Include(g => g.Casemanager)
-                                       .Include(g => g.Client)
-                                       .Where(g => (g.Casemanager.Id == caseManager.Id))
-                                       .OrderBy(g => g.Client.Name)
-                                       .ToListAsync();
-                for (int i = 0; i < tcmClientsT.Count(); i++)
-                {
-                    servicePlan = await _context.TCMServicePlans.FirstOrDefaultAsync(c => c.TcmClient.CaseNumber == tcmClientsT[i].CaseNumber);
-                    if (servicePlan != null)
-                    {
-                        tcmClientsTemp.Remove(tcmClientsT[i]);
-                    }
-                }
+                                                                  .Include(g => g.Casemanager)
+                                                                  .Include(g => g.Client)
+                                                                  .Include(g => g.TcmServicePlan)
+                                                                  .Include(g => g.TcmIntakeAppendixJ)
+                                                                  .Include(g => g.TCMAssessment)
+                                                                  .Include(g => g.TcmIntakeAcknowledgementHipa)
+                                                                  .Include(g => g.TCMIntakeAdvancedDirective)
+                                                                  .Include(g => g.TcmIntakeConsentForRelease)
+                                                                  .Include(g => g.TcmIntakeConsentForTreatment)
+                                                                  .Include(g => g.TcmIntakeConsumerRights)
+                                                                  .Include(g => g.TCMIntakeForeignLanguage)
+                                                                  .Include(g => g.TCMIntakeForm)
+                                                                  .Include(g => g.TCMIntakeOrientationChecklist)
+                                                                  .Include(g => g.TCMIntakeWelcome)
+                                                                  .Where(g => (g.Casemanager.Id == caseManager.Id
+                                                                        && g.Status == StatusType.Open
+                                                                        && (g.TcmServicePlan == null 
+                                                                            || g.TcmServicePlan.Approved != 2
+                                                                            || g.TCMAssessment == null
+                                                                            || g.TCMAssessment.Approved != 2
+                                                                            || g.TcmIntakeAppendixJ == null
+                                                                            || g.TcmIntakeAcknowledgementHipa == null
+                                                                            || g.TCMIntakeAdvancedDirective == null
+                                                                            || g.TcmIntakeConsentForRelease == null
+                                                                            || g.TcmIntakeConsentForTreatment == null
+                                                                            || g.TcmIntakeConsumerRights == null
+                                                                            || g.TCMIntakeCoordinationCare == null
+                                                                            || g.TCMIntakeForeignLanguage == null
+                                                                            || g.TCMIntakeForm == null
+                                                                            || g.TCMIntakeOrientationChecklist == null
+                                                                            || g.TCMIntakeWelcome == null)))
+                                                                  .OrderBy(g => g.Client.Name)
+                                                                  .ToListAsync();
+               
 
-
-                return View(tcmClientsTemp);
+                return View(tcmClientsT);
             }
             if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "TCMSupervisor")
             {
@@ -541,29 +554,41 @@ namespace KyoS.Web.Controllers
                     return RedirectToAction("NotAuthorized", "Account");
                 }
                 List<TCMClientEntity> tcmClients = await _context.TCMClient
-                                                          .Include(g => g.Casemanager)
-                                                          .Include(g => g.Client)
-                                                          .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id))
-                                                          .OrderBy(g => g.Casemanager.Name)
-                                                          .ToListAsync();
+                                                                 .Include(g => g.Casemanager)
+                                                                 .Include(g => g.Client)
+                                                                 .Include(g => g.TcmServicePlan)
+                                                                 .Include(g => g.TcmIntakeAppendixJ)
+                                                                 .Include(g => g.TCMAssessment)
+                                                                 .Include(g => g.TcmIntakeAcknowledgementHipa)
+                                                                 .Include(g => g.TCMIntakeAdvancedDirective)
+                                                                 .Include(g => g.TcmIntakeConsentForRelease)
+                                                                 .Include(g => g.TcmIntakeConsentForTreatment)
+                                                                 .Include(g => g.TcmIntakeConsumerRights)
+                                                                 .Include(g => g.TCMIntakeForeignLanguage)
+                                                                 .Include(g => g.TCMIntakeForm)
+                                                                 .Include(g => g.TCMIntakeOrientationChecklist)
+                                                                 .Include(g => g.TCMIntakeWelcome)
+                                                                 .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                    && s.Status == StatusType.Open
+                                                                    && (s.TcmServicePlan == null
+                                                                        || s.TcmServicePlan.Approved != 2
+                                                                        || s.TCMAssessment == null
+                                                                        || s.TCMAssessment.Approved != 2
+                                                                        || s.TcmIntakeAppendixJ == null
+                                                                        || s.TcmIntakeAcknowledgementHipa == null
+                                                                        || s.TCMIntakeAdvancedDirective == null
+                                                                        || s.TcmIntakeConsentForRelease == null
+                                                                        || s.TcmIntakeConsentForTreatment == null
+                                                                        || s.TcmIntakeConsumerRights == null
+                                                                        || s.TCMIntakeCoordinationCare == null
+                                                                        || s.TCMIntakeForeignLanguage == null
+                                                                        || s.TCMIntakeForm == null
+                                                                        || s.TCMIntakeOrientationChecklist == null
+                                                                        || s.TCMIntakeWelcome == null)))
+                                                                .OrderBy(g => g.Casemanager.Name)
+                                                                .ToListAsync();
 
-                TCMServicePlanEntity servicePlan = null;
-                List<TCMClientEntity> tcmClientsTemp = await _context.TCMClient
-                                                          .Include(g => g.Casemanager)
-                                                          .Include(g => g.Client)
-                                                          .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id))
-                                                          .OrderBy(g => g.Casemanager.Name)
-                                                          .ToListAsync();
-                for (int i = 0; i < tcmClients.Count(); i++)
-                {
-                    servicePlan = await _context.TCMServicePlans.FirstOrDefaultAsync(c => c.TcmClient.CaseNumber == tcmClients[i].CaseNumber);
-                    if (servicePlan != null)
-                    {
-                        tcmClientsTemp.Remove(tcmClients[i]);
-                    }
-                }
-
-                return View(tcmClientsTemp);
+                return View(tcmClients);
 
             }
             return RedirectToAction("NotAuthorized", "Account");

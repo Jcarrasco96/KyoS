@@ -224,6 +224,7 @@ namespace KyoS.Web.Controllers
                                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 ClientEntity client = await _context.Clients.FindAsync(mtpViewModel.IdClient);
+                DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
                 string gender_problems = string.Empty;
 
                 if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
@@ -263,6 +264,10 @@ namespace KyoS.Web.Controllers
                     _context.Update(item);
                 }
 
+                if (documentAssistant != null)
+                {
+                    mtpEntity.DocumentAssistant = documentAssistant;
+                }
                 _context.Add(mtpEntity);
                 try
                 {
@@ -322,7 +327,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, int origi = 0)
         {
             if (id == null)
             {
@@ -360,6 +365,7 @@ namespace KyoS.Web.Controllers
                 mtpViewModel.Clients = list;
                 if (mtpViewModel.Goals == null)
                     mtpViewModel.Goals= new List<GoalEntity>();
+                ViewData["origi"] = origi;
                 return View(mtpViewModel);
             }
 
@@ -370,7 +376,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public async Task<IActionResult> Edit(int id, MTPViewModel mtpViewModel, IFormCollection form)
+        public async Task<IActionResult> Edit(int id, MTPViewModel mtpViewModel, IFormCollection form, int origi = 0)
         {
             if (id != mtpViewModel.Id)
             {
@@ -416,6 +422,7 @@ namespace KyoS.Web.Controllers
                             Setting = form["Setting"].ToString(),
                             AdmissionedFor = mtpViewModel.AdmissionedFor
                         };
+                        ViewData["origi"] = origi;
                         return View(model);
                     }
                 }
@@ -426,8 +433,50 @@ namespace KyoS.Web.Controllers
                     _context.Update(mtpEntity);
                     try
                     {
+                        List<MessageEntity> messages = mtpEntity.Messages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                        //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
+                        foreach (MessageEntity value in messages)
+                        {
+                            value.Status = MessageStatus.Read;
+                            value.DateRead = DateTime.Now;
+                            _context.Update(value);
+
+                            //I generate a notification to supervisor
+                            MessageEntity notification = new MessageEntity
+                            {
+                                Workday_Client = null,
+                                FarsForm = null,
+                                MTPReview = null,
+                                Addendum = null,
+                                Discharge = null,
+                                Mtp = mtpEntity,
+                                Bio = null,
+                                Title = "Update on reviewed MTP",
+                                Text = $"The MTP document of {mtpEntity.Client.Name} that was evaluated on {mtpEntity.AdmissionDateMTP.ToShortDateString()} was rectified",
+                                From = value.To,
+                                To = value.From,
+                                DateCreated = DateTime.Now,
+                                Status = MessageStatus.NotRead,
+                                Notification = true
+                            };
+                            _context.Add(notification);
+                        }
+
                         await _context.SaveChangesAsync();
-                        return RedirectToAction(nameof(Index));
+
+                        await _context.SaveChangesAsync();
+                        if (origi == 0)
+                        {
+                            return RedirectToAction(nameof(Index));
+                        }
+                        if (origi == 1)
+                        {
+                            return RedirectToAction("MessagesOfMTP", "Messages");
+                        }
+                        if (origi == 2)
+                        {
+                            return RedirectToAction("MtpWithReview", "MTPs");
+                        }
                     }
                     catch (System.Exception ex)
                     {
@@ -2052,6 +2101,10 @@ namespace KyoS.Web.Controllers
                                                .ThenInclude(c => c.Clients_Diagnostics)
                                                .ThenInclude(cd => cd.Diagnostic)
 
+                                               .Include(m => m.DocumentAssistant)
+
+                                               .Include(m => m.Supervisor)
+
                                                .FirstOrDefault(m => (m.Id == id));
             if (mtpEntity == null)
             {
@@ -3542,6 +3595,336 @@ namespace KyoS.Web.Controllers
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> EditReadOnly(int? id, int origi = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = await _context.Users
+                                                  .Include(u => u.Clinic)
+                                                  .ThenInclude(c => c.Setting)
+                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            MTPEntity mtpEntity = await _context.MTPs.Include(m => m.Client)
+                                                     .ThenInclude(c => c.Clients_Diagnostics)
+                                                     .ThenInclude(c => c.Diagnostic)
+                                                     .Include(m => m.MtpReviewList)
+                                                     .Include(m => m.Goals.Where(m => m.Adendum == null && m.IdMTPReview == 0))
+                                                     .ThenInclude(c => c.Objetives)
+                                                     .FirstOrDefaultAsync(m => m.Id == id);
+            if (mtpEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            MTPViewModel mtpViewModel = _converterHelper.ToMTPViewModel(mtpEntity);
+
+            if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
+            {
+
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Insert(0, new SelectListItem
+                {
+                    Text = mtpEntity.Client.Name,
+                    Value = $"{mtpEntity.Client.Id}"
+                });
+                mtpViewModel.Clients = list;
+                if (mtpViewModel.Goals == null)
+                    mtpViewModel.Goals = new List<GoalEntity>();
+
+                ViewData["origi"] = origi;
+                return View(mtpViewModel);
+            }
+
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> EditReadOnly(int id, MTPViewModel mtpViewModel, IFormCollection form, int origi = 0)
+        {
+            if (id != mtpViewModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (ModelState.IsValid)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
+                {
+                    mtpViewModel.InitialDischargeCriteria = (mtpViewModel.InitialDischargeCriteria.Last() == '.') ? mtpViewModel.InitialDischargeCriteria : $"{mtpViewModel.InitialDischargeCriteria}.";
+                }
+
+                MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, false, user_logged.UserName);
+
+                string gender_problems = string.Empty;
+                if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
+                {
+                    if (this.GenderEvaluation(mtpEntity.Client.Gender, mtpViewModel.InitialDischargeCriteria))
+                    {
+                        ModelState.AddModelError(string.Empty, "Error.There are gender issues in: Initial discharge criteria");
+                        List<SelectListItem> list = new List<SelectListItem>();
+                        list.Insert(0, new SelectListItem
+                        {
+                            Text = mtpEntity.Client.Name,
+                            Value = $"{mtpEntity.Client.Id}"
+                        });
+                        MTPViewModel model = new MTPViewModel
+                        {
+                            Clients = list,
+                            IdClient = mtpViewModel.IdClient,
+                            MTPDevelopedDate = mtpViewModel.MTPDevelopedDate,
+                            NumberOfMonths = mtpViewModel.NumberOfMonths,
+                            StartTime = mtpViewModel.StartTime,
+                            EndTime = mtpViewModel.EndTime,
+                            Modality = mtpViewModel.Modality,
+                            Frecuency = mtpViewModel.Frecuency,
+                            LevelCare = mtpViewModel.LevelCare,
+                            InitialDischargeCriteria = mtpViewModel.InitialDischargeCriteria,
+                            Setting = form["Setting"].ToString(),
+                            AdmissionedFor = mtpViewModel.AdmissionedFor
+                        };
+                        ViewData["origi"] = origi;
+                        return View(model);
+                    }
+                }
+                // mtpEntity.MtpReview = await _context.MTPReviews.FirstOrDefaultAsync(u => u.MTP_FK == mtpViewModel.Id);
+                if ((User.IsInRole("Supervisor")) || (User.IsInRole("Documents_Assistant"))) //|| ((mtpEntity.MtpReview != null) && (mtpEntity.MtpReview.CreatedBy == user_logged.Id)))
+                {
+                    mtpEntity.Setting = form["Setting"].ToString();
+                    _context.Update(mtpEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        if (origi == 0)
+                        {
+                            return RedirectToAction(nameof(Index));
+                        }
+                        if (origi == 1)
+                        {
+                            return RedirectToAction(nameof(Pending));
+                        }
+                        if (origi == 2)
+                        {
+                            return RedirectToAction("Notifications","Messages");
+                        }
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, $"Already exists the facilitator: {mtpEntity.Client.Name}");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                }
+            }
+            return View(mtpViewModel);
+        }
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> FinishEditing(int id)
+        {
+            MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(n => n.Id == id);
+            if (User.IsInRole("Supervisor"))
+            {
+                mtp.Status = MTPStatus.Approved;
+                mtp.SupervisorDate = DateTime.Now;
+                mtp.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+            }
+            else
+            {
+                mtp.Status = MTPStatus.Pending;
+            }
+
+            _context.Update(mtp);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> Approve(int id, int origi = 0)
+        {
+
+            MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(n => n.Id == id);
+
+
+            mtp.Status = MTPStatus.Approved;
+            mtp.SupervisorDate = DateTime.Now;
+            mtp.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+            _context.Update(mtp);
+
+            await _context.SaveChangesAsync();
+
+            if (origi == 1)
+            {
+                return RedirectToAction(nameof(Pending));
+            }
+            if (origi == 2)
+            {
+                return RedirectToAction("Notifications", "Messages");
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "Supervisor, Manager, Documents_Assistant")]
+        public async Task<IActionResult> Pending(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if (clinic != null)
+                {
+                    DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    if (User.IsInRole("Documents_Assistant"))
+                    {
+                        return View(await _context.MTPs
+
+                                                  .Include(a => a.Client)
+                                                  .ThenInclude(a => a.Clinic)
+
+                                                  .Include(a => a.Goals)
+                                                  .ThenInclude(a => a.Objetives)
+
+                                                  .Include(f => f.Messages.Where(m => m.Notification == false))
+
+                                                  .Where(a => (a.Client.Clinic.Id == clinic.Id)
+                                                            && a.Status == MTPStatus.Pending && (a.DocumentAssistant.Id == documentAssistant.Id))
+                                                  .OrderBy(a => a.Client.Clinic.Name).ToListAsync());
+
+                    }
+                    else
+                    {
+                        return View(await _context.MTPs
+
+                                                  .Include(a => a.Client)
+                                                  .ThenInclude(a => a.Clinic)
+
+                                                  .Include(a => a.Goals)
+                                                  .ThenInclude(a => a.Objetives)
+
+                                                  .Include(f => f.Messages.Where(m => m.Notification == false))
+
+                                                  .Where(a => (a.Client.Clinic.Id == clinic.Id)
+                                                            && a.Status == MTPStatus.Pending)
+                                                  .OrderBy(a => a.Client.Clinic.Name).ToListAsync());
+
+                    }
+
+                }
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public IActionResult AddMessageMtpEntity(int id = 0, int origin = 0)
+        {
+            if (id == 0)
+            {
+                return View(new MessageViewModel());
+            }
+            else
+            {
+                MessageViewModel model = new MessageViewModel()
+                {
+                    IdMtp = id,
+                    Origin = origin
+                };
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> AddMessageMtpEntity(MessageViewModel messageViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                MessageEntity model = await _converterHelper.ToMessageEntity(messageViewModel, true);
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                model.From = user_logged.UserName;
+                model.To = model.Mtp.CreatedBy;
+                _context.Add(model);
+                await _context.SaveChangesAsync();
+            }
+
+            if (messageViewModel.Origin == 1)
+                return RedirectToAction("Pending");
+
+            if (messageViewModel.Origin == 2)
+                return RedirectToAction("MTPRinEdit");
+
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "Documents_Assistant, Supervisor")]
+        public async Task<IActionResult> MtpWithReview()
+        {
+            if (User.IsInRole("Documents_Assistant"))
+            {
+                List<MTPEntity> salida = await _context.MTPs
+                                                       .Include(wc => wc.Client)
+                                                       .Include(wc => wc.DocumentAssistant)
+                                                       .Include(wc => wc.Messages.Where(m => m.Notification == false))
+                                                       .Where(wc => (wc.DocumentAssistant.LinkedUser == User.Identity.Name
+                                                               && wc.Status == MTPStatus.Pending
+                                                               && wc.Messages.Count() > 0))
+                                                       .ToListAsync();
+
+
+                return View(salida);
+            }
+
+            if (User.IsInRole("Supervisor"))
+            {
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    List<MTPEntity> salida = await _context.MTPs
+                                                      .Include(wc => wc.Client)
+                                                      .Include(wc => wc.DocumentAssistant)
+                                                      .Include(wc => wc.Messages.Where(m => m.Notification == false))
+                                                      .Where(wc => (wc.Client.Clinic.Id == user_logged.Clinic.Id
+                                                              && wc.Status == MTPStatus.Pending
+                                                              && wc.Messages.Count() > 0))
+                                                      .ToListAsync();
+                    return View(salida);
+                }
+            }
+
+            return View();
         }
 
     }

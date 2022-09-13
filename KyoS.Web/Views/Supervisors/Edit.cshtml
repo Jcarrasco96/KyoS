@@ -3,11 +3,19 @@
 @{
     ViewData["Title"] = "Edit";
 }
-
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Supervisors", "Index", "Supervisors")
+        </li>
+        <li class="active">Edit</li>
+    </ul><!--.breadcrumb-->
+</div>
 <h4>Edit supervisor</h4>
 <hr />
 <div class="row">
-    <div class="col-md-6">
+    <div>
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -22,7 +30,7 @@
             <div class="col-md-12">
                 &nbsp;
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-12">
                 <input type="submit" value="Save" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-success">Back</a>
             </div>

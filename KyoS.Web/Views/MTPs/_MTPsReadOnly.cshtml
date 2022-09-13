@@ -1,0 +1,297 @@
+﻿@model KyoS.Web.Models.MTPViewModel
+<div class="col-md-push-12">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="IdClient" class="control-label"></label>&nbsp;*
+            <select asp-for="IdClient" asp-items="Model.Clients" class="form-control" id="cbClient" disabled></select>           
+            <span asp-validation-for="IdClient" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="Client.Code" class="control-label"></label>
+            <input asp-for="Client.Code" class="form-control" readonly id="txtCode"/>
+            <span asp-validation-for="Client.Code" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group col-md-6">
+        <label class="control-label">Diagnosis</label>
+        @if(Model.Client != null)
+        {
+            @if (Model.Client.Clients_Diagnostics.Count() > 0)
+            {
+                <input class="form-control" value="@Model.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code @Model.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Description" readonly id="txtDiagnosis">
+            }
+            else
+            {
+                <input class="form-control" readonly id="txtDiagnosis">
+            }
+        }
+        else
+        {
+            <input class="form-control" readonly id="txtDiagnosis">
+        }
+    </div>    
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="AdmissionDateMTP" class="control-label">MTP Creation Date</label>
+            <input asp-for="AdmissionDateMTP" class="form-control" disabled/>
+            <span asp-validation-for="AdmissionDateMTP" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="MTPDevelopedDate" class="control-label">Initial Date of Therapy</label>
+            <input asp-for="MTPDevelopedDate" class="form-control" disabled/>
+            <span asp-validation-for="MTPDevelopedDate" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="StartTime" class="control-label"></label>
+            <input asp-for="StartTime" class="form-control" disabled/>
+            <span asp-validation-for="StartTime" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="EndTime" class="control-label"></label>
+            <input asp-for="EndTime" class="form-control" disabled/>
+            <span asp-validation-for="EndTime" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="Setting" class="control-label"></label>
+            <br />
+            @if (Model.Setting == "53")
+            {
+                <input type="radio" name="Setting" value="53" checked="checked" disabled/>
+            }
+            else
+            {
+                <input type="radio" name="Setting" value="53" disabled/>
+            }
+            <strong>53</strong>&nbsp;Client in the clinic
+            &nbsp;
+            @if (Model.Setting == "02")
+            {
+                <input type="radio" name="Setting" value="02" checked="checked" disabled/>
+            }
+            else
+            {
+                <input type="radio" name="Setting" value="02" disabled/>
+            }
+            <strong>02</strong>&nbsp;Remote
+        </div>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="ClientStrengths" class="control-label">Client’s Strengths</label>
+            <textarea asp-for="ClientStrengths" class="form-control" rows="2" readonly></textarea>
+            <span asp-validation-for="ClientStrengths" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="ClientLimitation" class="control-label">Client’s Limitations</label>
+            <textarea asp-for="ClientLimitation" class="form-control" rows="2" readonly></textarea>
+            <span asp-validation-for="ClientLimitation" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="DateOfUpdate" class="control-label">MTP Update Date</label>
+            <input asp-for="DateOfUpdate" class="form-control" disabled />
+            <span asp-validation-for="DateOfUpdate" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="container-fluid">
+        &nbsp;
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label asp-for="RationaleForUpdate" class="control-label">Rationale for Update</label>
+            <textarea asp-for="RationaleForUpdate" class="form-control" rows="2" readonly></textarea>
+            <span asp-validation-for="RationaleForUpdate" class="text-danger"></span>
+        </div>
+    </div>    
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <div class="form-group">
+            <pre>
+    <strong><u>Recommended Program of Coordinated Services:</u></strong>
+
+    <strong>        <u>TYPE</u></strong>                                 <label style="width:10%; text-decoration:underline; text-align:center">CODE</label>      <label style="width:10%; text-decoration:underline; text-align:center">UNITS</label>      <label style="width:15%; text-decoration:underline; text-align:center">FRECUENCY</label>      <label style="width:10%; text-decoration:underline; text-align:center">DURATION (months)</label>
+    <input type="checkbox" asp-for="Medication" class="form-check-input" disabled> Medication Management                      <input asp-for="MedicationCode" type="text" style="width:10%" disabled/>      <input asp-for="MedicationUnits" type="number" style="width:10%" disabled/>     <input asp-for="MedicationFrecuency" type="text" style="width:15%" disabled/>      <input asp-for="MedicationDuration" type="number" style="width:10%" disabled/>
+
+    <input type="checkbox" asp-for="Individual" class="form-check-input" disabled> Individual Therapy                         <input asp-for="IndividualCode" type="text" style="width:10%" disabled/>      <input asp-for="IndividualUnits" type="number" style="width:10%" disabled/>     <input asp-for="IndividualFrecuency" type="text" style="width:15%" disabled/>      <input asp-for="IndividualDuration" type="number" style="width:10%" disabled/>
+
+    <input type="checkbox" asp-for="Family" class="form-check-input" disabled> Family Therapy                             <input asp-for="FamilyCode" type="text" style="width:10%" disabled/>      <input asp-for="FamilyUnits" type="number" style="width:10%" disabled/>     <input asp-for="FamilyFrecuency" type="text" style="width:15%" disabled/>      <input asp-for="FamilyDuration" type="number" style="width:10%"disabled/>
+    
+    <input type="checkbox" asp-for="Psychosocial" class="form-check-input" disabled> Psychosocial Rehabilitation Services       <input asp-for="PsychosocialCode" type="text" style="width:10%" disabled/>      <input asp-for="PsychosocialUnits" type="number" style="width:10%" disabled/>     <input asp-for="PsychosocialFrecuency" type="text" style="width:15%" disabled/>      <input asp-for="PsychosocialDuration" type="number" style="width:10%" disabled/>
+    
+    <input type="checkbox" asp-for="Group" class="form-check-input" disabled> Group Therapy                              <input asp-for="GroupCode" type="text" style="width:10%" disabled/>      <input asp-for="GroupUnits" type="number" style="width:10%" disabled/>     <input asp-for="GroupFrecuency" type="text" style="width:15%" disabled/>      <input asp-for="GroupDuration" type="number" style="width:10%" disabled/>
+            </pre>
+        </div>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label asp-for="AdditionalRecommended" class="control-label">Additional recommended services outside of clinic (indicate the service and referrals necessary and where client was referred to. Please have client sign a release of information for each service) </label>
+            <textarea asp-for="AdditionalRecommended" class="form-control" rows="2" readonly></textarea>
+            <span asp-validation-for="AdditionalRecommended" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <div class="form-group">
+            <pre>
+    <strong></strong>
+    Substance Abuse:    <input type="checkbox" class="form-check-input" id="check101" disabled> No   <input type="checkbox" asp-for="Substance" class="form-check-input" readonly id="check1" disabled> Yes       <input asp-for="SubstanceWhere" type="text" style="width:70%" disabled/> 
+    
+    Legal:              <input type="checkbox" class="form-check-input" id="check102" disabled> No   <input type="checkbox" asp-for="Legal" class="form-check-input" readonly id="check2" disabled> Yes       <input asp-for="LegalWhere" type="text" style="width:70%" disabled/> 
+    
+    Health:             <input type="checkbox" class="form-check-input" id="check103" disabled> No   <input type="checkbox" asp-for="Health" class="form-check-input" readonly id="check3" disabled> Yes       <input asp-for="HealthWhere" type="text" style="width:70%" disabled/> 
+    
+    Pain:               <input type="checkbox" class="form-check-input" id="check104" disabled> No   <input type="checkbox" asp-for="Paint" class="form-check-input" readonly id="check4" disabled> Yes       <input asp-for="PaintWhere" type="text" style="width:70%" disabled/> 
+    
+    Other:              <input type="checkbox" class="form-check-input" id="check105" disabled> No   <input type="checkbox" asp-for="Other" class="form-check-input" readonly id="check5" disabled> Yes       <input asp-for="OtherWhere" type="text" style="width:70%" disabled/> 
+            </pre>
+        </div>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label asp-for="InitialDischargeCriteria" class="control-label">Transition or discontinuation of services criteria and plan (Initial discharge criteria)</label>
+            <textarea asp-for="InitialDischargeCriteria" class="form-control" rows="4" readonly></textarea>
+            <span asp-validation-for="InitialDischargeCriteria" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+
+<script>
+    check1.addEventListener('change', (e) => {
+        if (check1.checked == true) {
+            check101.checked = false;
+        } else {
+            check101.checked = true;
+        }
+
+    })
+    check101.addEventListener('change', (e) => {
+        if (check101.checked == true) {
+            check1.checked = false;
+        } else {
+            check1.checked = true;
+        }
+
+    })
+    if (check1.checked == true) {
+        check101.checked = false;
+    } else {
+        check101.checked = true;
+    }
+    //-------------------------------
+    check2.addEventListener('change', (e) => {
+        if (check2.checked == true) {
+            check102.checked = false;
+        } else {
+            check102.checked = true;
+        }
+
+    })
+    check102.addEventListener('change', (e) => {
+        if (check102.checked == true) {
+            check2.checked = false;
+        } else {
+            check2.checked = true;
+        }
+
+    })
+    if (check2.checked == true) {
+        check102.checked = false;
+    } else {
+        check102.checked = true;
+    }
+    //--------------------------------
+    check3.addEventListener('change', (e) => {
+        if (check3.checked == true) {
+            check103.checked = false;
+        } else {
+            check103.checked = true;
+        }
+
+    })
+    check103.addEventListener('change', (e) => {
+        if (check103.checked == true) {
+            check3.checked = false;
+        } else {
+            check3.checked = true;
+        }
+
+    })
+    if (check3.checked == true) {
+        check103.checked = false;
+    } else {
+        check103.checked = true;
+    }
+    //----------------------------
+    check4.addEventListener('change', (e) => {
+        if (check4.checked == true) {
+            check104.checked = false;
+        } else {
+            check104.checked = true;
+        }
+
+    })
+    check104.addEventListener('change', (e) => {
+        if (check104.checked == true) {
+            check4.checked = false;
+        } else {
+            check4.checked = true;
+        }
+
+    })
+    if (check4.checked == true) {
+        check104.checked = false;
+    } else {
+        check104.checked = true;
+    }
+    //--------------------------------
+    check5.addEventListener('change', (e) => {
+        if (check5.checked == true) {
+            check105.checked = false;
+        } else {
+            check105.checked = true;
+        }
+
+    })
+    check105.addEventListener('change', (e) => {
+        if (check105.checked == true) {
+            check5.checked = false;
+        } else {
+            check5.checked = true;
+        }
+
+    })
+    if (check5.checked == true) {
+        check105.checked = false;
+    } else {
+        check105.checked = true;
+    }
+</script>
+
+

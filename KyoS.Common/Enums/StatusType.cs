@@ -64,4 +64,16 @@
         Pending,
         Approved
     }
+    public enum MTPStatus
+    {
+        Edition,
+        Pending,
+        Approved
+    }
+    public enum BioStatus
+    {
+        Edition,
+        Pending,
+        Approved
+    }
 }

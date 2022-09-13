@@ -270,6 +270,9 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("DoYouOwn_Explain")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("DocumentsAssistantId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("DoesClient")
                         .HasColumnType("bit");
 
@@ -444,9 +447,6 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("LegalHistory")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LicensedPractitioner")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("MaritalStatus")
                         .HasColumnType("nvarchar(max)");
 
@@ -606,8 +606,14 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<string>("SubstanceAbuse")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SupervisorId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Takes3OrMore")
                         .HasColumnType("bit");
@@ -675,9 +681,6 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("Treatmentrecomendations")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UnlicensedTherapist")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("WhatIsTheClient")
                         .HasColumnType("nvarchar(max)");
 
@@ -700,6 +703,10 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("Client_FK")
                         .IsUnique();
+
+                    b.HasIndex("DocumentsAssistantId");
+
+                    b.HasIndex("SupervisorId");
 
                     b.ToTable("Bio");
                 });
@@ -3602,6 +3609,9 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("DateOfUpdate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("DocumentAssistantId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
@@ -3737,15 +3747,28 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Substance")
                         .HasColumnType("bit");
 
                     b.Property<string>("SubstanceWhere")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("SupervisorDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("SupervisorId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
+
+                    b.HasIndex("DocumentAssistantId");
+
+                    b.HasIndex("SupervisorId");
 
                     b.ToTable("MTPs");
                 });
@@ -3910,6 +3933,9 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("AddendumId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("BioId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -3928,16 +3954,13 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("MTPReviewId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("MtpId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Notification")
                         .HasColumnType("bit");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TCMFarsFormEntityId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TCMNoteEntityId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -3957,15 +3980,15 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("AddendumId");
 
+                    b.HasIndex("BioId");
+
                     b.HasIndex("DischargeId");
 
                     b.HasIndex("FarsFormId");
 
                     b.HasIndex("MTPReviewId");
 
-                    b.HasIndex("TCMFarsFormEntityId");
-
-                    b.HasIndex("TCMNoteEntityId");
+                    b.HasIndex("MtpId");
 
                     b.HasIndex("Workday_ClientId");
 
@@ -6448,9 +6471,7 @@ namespace KyoS.Web.Migrations
                         .UseIdentityColumn();
 
                     b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(2)
-                        .HasColumnType("nvarchar(2)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -6471,9 +6492,7 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NeedsIdentified")
                         .HasColumnType("nvarchar(max)");
@@ -7905,9 +7924,7 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Origin")
                         .HasColumnType("nvarchar(max)");
@@ -8844,7 +8861,19 @@ namespace KyoS.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("KyoS.Web.Data.Entities.DocumentsAssistantEntity", "DocumentsAssistant")
+                        .WithMany()
+                        .HasForeignKey("DocumentsAssistantId");
+
+                    b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
+                        .WithMany()
+                        .HasForeignKey("SupervisorId");
+
                     b.Navigation("Client");
+
+                    b.Navigation("DocumentsAssistant");
+
+                    b.Navigation("Supervisor");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.Bio_BehavioralHistoryEntity", b =>
@@ -9303,7 +9332,19 @@ namespace KyoS.Web.Migrations
                         .WithMany("MTPs")
                         .HasForeignKey("ClientId");
 
+                    b.HasOne("KyoS.Web.Data.Entities.DocumentsAssistantEntity", "DocumentAssistant")
+                        .WithMany()
+                        .HasForeignKey("DocumentAssistantId");
+
+                    b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
+                        .WithMany()
+                        .HasForeignKey("SupervisorId");
+
                     b.Navigation("Client");
+
+                    b.Navigation("DocumentAssistant");
+
+                    b.Navigation("Supervisor");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.MTPReviewEntity", b =>
@@ -9332,6 +9373,10 @@ namespace KyoS.Web.Migrations
                         .WithMany("Messages")
                         .HasForeignKey("AddendumId");
 
+                    b.HasOne("KyoS.Web.Data.Entities.BioEntity", "Bio")
+                        .WithMany("Messages")
+                        .HasForeignKey("BioId");
+
                     b.HasOne("KyoS.Web.Data.Entities.DischargeEntity", "Discharge")
                         .WithMany("Messages")
                         .HasForeignKey("DischargeId");
@@ -9344,13 +9389,9 @@ namespace KyoS.Web.Migrations
                         .WithMany("Messages")
                         .HasForeignKey("MTPReviewId");
 
-                    b.HasOne("KyoS.Web.Data.Entities.TCMFarsFormEntity", null)
+                    b.HasOne("KyoS.Web.Data.Entities.MTPEntity", "Mtp")
                         .WithMany("Messages")
-                        .HasForeignKey("TCMFarsFormEntityId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.TCMNoteEntity", null)
-                        .WithMany("Messages")
-                        .HasForeignKey("TCMNoteEntityId");
+                        .HasForeignKey("MtpId");
 
                     b.HasOne("KyoS.Web.Data.Entities.Workday_Client", "Workday_Client")
                         .WithMany("Messages")
@@ -9358,9 +9399,13 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("Addendum");
 
+                    b.Navigation("Bio");
+
                     b.Navigation("Discharge");
 
                     b.Navigation("FarsForm");
+
+                    b.Navigation("Mtp");
 
                     b.Navigation("MTPReview");
 
@@ -9892,31 +9937,31 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMMessageEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.TCMAdendumEntity", "TCMAddendum")
-                        .WithMany()
+                        .WithMany("TCMMessages")
                         .HasForeignKey("TCMAddendumId");
 
                     b.HasOne("KyoS.Web.Data.Entities.TCMAssessmentEntity", "TCMAssessment")
-                        .WithMany()
+                        .WithMany("TcmMessages")
                         .HasForeignKey("TCMAssessmentId");
 
                     b.HasOne("KyoS.Web.Data.Entities.TCMDischargeEntity", "TCMDischarge")
-                        .WithMany()
+                        .WithMany("TCMMessages")
                         .HasForeignKey("TCMDischargeId");
 
                     b.HasOne("KyoS.Web.Data.Entities.TCMFarsFormEntity", "TCMFarsForm")
-                        .WithMany()
+                        .WithMany("TcmMessages")
                         .HasForeignKey("TCMFarsFormId");
 
                     b.HasOne("KyoS.Web.Data.Entities.TCMNoteEntity", "TCMNote")
-                        .WithMany()
+                        .WithMany("TCMMessages")
                         .HasForeignKey("TCMNoteId");
 
                     b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanEntity", "TCMServicePlan")
-                        .WithMany()
+                        .WithMany("TCMMessages")
                         .HasForeignKey("TCMServicePlanId");
 
                     b.HasOne("KyoS.Web.Data.Entities.TCMServicePlanReviewEntity", "TCMServicePlanReview")
-                        .WithMany()
+                        .WithMany("TCMMessages")
                         .HasForeignKey("TCMServicePlanReviewId");
 
                     b.Navigation("TCMAddendum");
@@ -10233,6 +10278,11 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Messages");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.BioEntity", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClassificationEntity", b =>
                 {
                     b.Navigation("NotesClassification");
@@ -10367,6 +10417,8 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("Goals");
 
+                    b.Navigation("Messages");
+
                     b.Navigation("MtpReviewList");
                 });
 
@@ -10423,6 +10475,11 @@ namespace KyoS.Web.Migrations
                     b.Navigation("NotesP");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMAdendumEntity", b =>
+                {
+                    b.Navigation("TCMMessages");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMAssessmentEntity", b =>
                 {
                     b.Navigation("DrugList");
@@ -10440,6 +10497,8 @@ namespace KyoS.Web.Migrations
                     b.Navigation("PastCurrentServiceList");
 
                     b.Navigation("SurgeryList");
+
+                    b.Navigation("TcmMessages");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMClientEntity", b =>
@@ -10486,6 +10545,8 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TcmDischargeFollowUp");
 
                     b.Navigation("TcmDischargeServiceStatus");
+
+                    b.Navigation("TCMMessages");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDomainEntity", b =>
@@ -10495,7 +10556,7 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMFarsFormEntity", b =>
                 {
-                    b.Navigation("Messages");
+                    b.Navigation("TcmMessages");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeInterventionLogEntity", b =>
@@ -10505,7 +10566,7 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMNoteEntity", b =>
                 {
-                    b.Navigation("Messages");
+                    b.Navigation("TCMMessages");
 
                     b.Navigation("TCMNoteActivity");
                 });
@@ -10525,6 +10586,8 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("TCMDomain");
 
+                    b.Navigation("TCMMessages");
+
                     b.Navigation("TCMService");
 
                     b.Navigation("TCMServicePlanReview");
@@ -10537,6 +10600,8 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServicePlanReviewEntity", b =>
                 {
+                    b.Navigation("TCMMessages");
+
                     b.Navigation("TCMServicePlanRevDomain");
                 });
 

@@ -268,14 +268,14 @@ namespace KyoS.Web.Data.Entities
         //13 TREATMENT RECOMMENDATIOS:
         public string Treatmentrecomendations { get; set; }
 
-        public string LicensedPractitioner { get; set; }
+        public SupervisorEntity Supervisor { get; set; }
 
         [Display(Name = "Date of Licensed Practitioner Signature")]
         [DataType(DataType.Date)]
 
         public DateTime DateSignatureLicensedPractitioner { get; set; }
 
-        public string UnlicensedTherapist  { get; set; }
+        public DocumentsAssistantEntity DocumentsAssistant  { get; set; }
 
         [Display(Name = "Date of UnlicensedTherapist  Signature")]
         [DataType(DataType.Date)]
@@ -291,5 +291,9 @@ namespace KyoS.Web.Data.Entities
         public DateTime DateSignatureSupervisor { get; set; }
 
         public string AdmissionedFor { get; set; }
+
+        public BioStatus Status { get; set; }
+
+        public IEnumerable<MessageEntity> Messages { get; set; }
     }
 }

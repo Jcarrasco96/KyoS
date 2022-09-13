@@ -22,7 +22,7 @@
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Create new supervisor</h4>
+    <h4>Create supervisor</h4>
     <hr />
     <div class="row">
         <div class="col-md-12">
@@ -52,11 +52,11 @@
                 </div>
             }
         </div>
-        <div class="col-md-6">
+        <div>
             <form asp-action="Create" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <partial name="_Supervisors" />
-                <div class="form-group">
+                <div class="form-group col-md-12">
                     <input type="submit" value="Create" class="btn btn-primary" />
                     <a asp-action="Index" class="btn btn-success">Back</a>
                 </div>
