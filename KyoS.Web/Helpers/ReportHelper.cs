@@ -3257,6 +3257,13 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetDoctorDS(bio.Client.Doctor));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Doctors");
 
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(bio.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDocumentAssistantDS(bio.DocumentsAssistant));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "DocumentsAssistant");
 
             int nutritionScoreTotal = 0;
             if (bio.HasAnIllnes)
@@ -3301,6 +3308,25 @@ namespace KyoS.Web.Helpers
             }
            
             WebReport.Report.SetParameterValue("nutritionScoreTotal", nutritionScoreTotal);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if ((bio.Supervisor != null) && (!string.IsNullOrEmpty(bio.Supervisor.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(bio.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if ((bio.DocumentsAssistant != null) && (!string.IsNullOrEmpty(bio.DocumentsAssistant.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(bio.DocumentsAssistant.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
 
             WebReport.Report.Prepare();
 
@@ -3355,6 +3381,13 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetDoctorDS(bio.Client.Doctor));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Doctors");
 
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(bio.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDocumentAssistantDS(bio.DocumentsAssistant));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "DocumentsAssistant");
 
             int nutritionScoreTotal = 0;
             if (bio.HasAnIllnes)
@@ -3399,6 +3432,25 @@ namespace KyoS.Web.Helpers
             }
 
             WebReport.Report.SetParameterValue("nutritionScoreTotal", nutritionScoreTotal);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if ((bio.Supervisor != null) && (!string.IsNullOrEmpty(bio.Supervisor.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(bio.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if ((bio.DocumentsAssistant != null) && (!string.IsNullOrEmpty(bio.DocumentsAssistant.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(bio.DocumentsAssistant.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
 
             WebReport.Report.Prepare();
 
@@ -7403,11 +7455,8 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("ProvideIntegratedSummary", typeof(string));
             dt.Columns.Add("TreatmentNeeds", typeof(string));
             dt.Columns.Add("Treatmentrecomendations", typeof(string));
-            dt.Columns.Add("LicensedPractitioner", typeof(string));
-
+            
             dt.Columns.Add("DateSignatureLicensedPractitioner", typeof(DateTime));
-
-            dt.Columns.Add("UnlicensedTherapist", typeof(string));
 
             dt.Columns.Add("DateSignatureUnlicensedTherapist", typeof(DateTime));
 
@@ -7421,8 +7470,17 @@ namespace KyoS.Web.Helpers
 
             dt.Columns.Add("ClientDenied", typeof(bool));
 
-            dt.Columns.Add("ForHowLong", typeof(int));
+            dt.Columns.Add("ForHowLong", typeof(string));
 
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            
+            dt.Columns.Add("DocumentsAssistantId", typeof(int));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("SupervisorId", typeof(int));
 
             if (bio != null)
             {
@@ -7603,9 +7661,7 @@ namespace KyoS.Web.Helpers
                                             bio.ProvideIntegratedSummary,
                                             bio.TreatmentNeeds,
                                             bio.Treatmentrecomendations,
-                                            //bio.LicensedPractitioner,
                                             bio.DateSignatureLicensedPractitioner,
-                                            //bio.UnlicensedTherapist,
                                             bio.DateSignatureUnlicensedTherapist,
                                             bio.IConcurWhitDiagnistic,
                                             bio.AlternativeDiagnosis,
@@ -7613,7 +7669,15 @@ namespace KyoS.Web.Helpers
                                             bio.EndTime,
                                             bio.StartTime,
                                             bio.ClientDenied,
-                                            bio.ForHowLong
+                                            bio.ForHowLong,
+                                            bio.AdmissionedFor,
+                                            bio.CreatedBy,
+                                            bio.CreatedOn,
+                                            bio.LastModifiedBy,
+                                            bio.LastModifiedOn,
+                                            0,
+                                            bio.Status,
+                                            0
             });
             }
             else
@@ -7794,10 +7858,8 @@ namespace KyoS.Web.Helpers
                                             false,
                                             string.Empty,
                                             string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            new DateTime(),
-                                            string.Empty,
+                                            string.Empty,                                            
+                                            new DateTime(),                                            
                                             new DateTime(),
                                             false,
                                             string.Empty,
@@ -7805,6 +7867,14 @@ namespace KyoS.Web.Helpers
                                             new DateTime(),
                                             new DateTime(),
                                             false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            0,
+                                            0,
                                             0
                                         });
             }

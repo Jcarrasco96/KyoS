@@ -1125,6 +1125,10 @@ namespace KyoS.Web.Controllers
                                        .Include(b => b.Client)
                                        .ThenInclude(c => c.Doctor)
 
+                                       .Include(b => b.Supervisor)
+
+                                       .Include(b => b.DocumentsAssistant)
+
                                        .FirstOrDefault(i => (i.Id == id));
             if (entity == null)
             {
