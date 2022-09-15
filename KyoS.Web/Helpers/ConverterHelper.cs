@@ -202,7 +202,8 @@ namespace KyoS.Web.Helpers
                 LinkedUser = _userHelper.GetUserNameById(model.IdUser),
                 SignaturePath = signaturePath,
                 Email = model.Email,
-                Phone = model.Phone
+                Phone = model.Phone,
+                Money = model.Money
             };
         }
 
@@ -222,7 +223,8 @@ namespace KyoS.Web.Helpers
                 UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, idClinic),
                 SignaturePath = caseMannagerEntity.SignaturePath,
                 Email = caseMannagerEntity.Email,
-                Phone = caseMannagerEntity.Phone
+                Phone = caseMannagerEntity.Phone,
+                Money = caseMannagerEntity.Money
             };
         }
 
