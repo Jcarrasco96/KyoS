@@ -103,7 +103,7 @@ namespace KyoS.Web.Controllers
                                      .Select(t => new
                                      {
                                       //id = t.TCMNote.Id,
-                                      title = t.DescriptionOfService,
+                                      title = t.ServiceName.ToString(),
                                          start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                          end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                          url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
@@ -130,7 +130,7 @@ namespace KyoS.Web.Controllers
                                      .Select(t => new
                                      {
                                          //id = t.TCMNote.Id,
-                                         title = t.DescriptionOfService,
+                                         title = t.ServiceName.ToString(),
                                          start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                          end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                          url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),

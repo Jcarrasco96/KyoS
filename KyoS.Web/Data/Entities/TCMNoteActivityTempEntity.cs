@@ -32,5 +32,9 @@ namespace KyoS.Web.Data.Entities
         public int Minutes { get; set; }
 
         public string UserName { get; set; }
+
+        public int IdTCMServiceActivity { get; set; }
+
+        public string ServiceName { get; set; }
     }
 }

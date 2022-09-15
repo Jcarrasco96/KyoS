@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220914200414_TCMNotesActivityTemp_review1.0")]
+    partial class TCMNotesActivityTemp_review10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -7780,6 +7782,7 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ServiceName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Setting")
@@ -7833,13 +7836,11 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("IdTCMDomain")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdTCMServiceActivity")
-                        .HasColumnType("int");
-
                     b.Property<int>("Minutes")
                         .HasColumnType("int");
 
                     b.Property<string>("ServiceName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Setting")
@@ -7851,10 +7852,15 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("TCMDomainCode")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TCMServiceActivityId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TCMServiceActivityId");
 
                     b.ToTable("TCMNoteActivityTemp");
                 });
@@ -10011,6 +10017,15 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TCMDomain");
 
                     b.Navigation("TCMNote");
+
+                    b.Navigation("TCMServiceActivity");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMNoteActivityTempEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMServiceActivityEntity", "TCMServiceActivity")
+                        .WithMany()
+                        .HasForeignKey("TCMServiceActivityId");
 
                     b.Navigation("TCMServiceActivity");
                 });

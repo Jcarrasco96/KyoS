@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220914194259_TCMNotes_review")]
+    partial class TCMNotes_review
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -7833,14 +7835,8 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("IdTCMDomain")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdTCMServiceActivity")
-                        .HasColumnType("int");
-
                     b.Property<int>("Minutes")
                         .HasColumnType("int");
-
-                    b.Property<string>("ServiceName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Setting")
                         .HasColumnType("nvarchar(max)");

@@ -68,6 +68,13 @@
         </div>
         <div>
             <div class=" col-md-12 form-group">
+                <label asp-for="ServiceName" class="control-label">Description of service(s) &nbsp;*</label>
+                <textarea asp-for="ServiceName" class="form-control" rows="1"></textarea>
+                <span asp-validation-for="ServiceName" class="text-danger"></span>
+            </div>
+        </div>
+        <div>
+            <div class=" col-md-12 form-group">
                 <label asp-for="DescriptionOfService" class="control-label">Description of service(s) &nbsp;*</label>
                 <textarea asp-for="DescriptionOfService" class="form-control" rows="6"></textarea>
                 <span asp-validation-for="DescriptionOfService" class="text-danger"></span>

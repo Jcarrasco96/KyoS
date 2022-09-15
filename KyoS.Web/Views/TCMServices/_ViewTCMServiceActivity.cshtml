@@ -38,119 +38,119 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                            <tr>
-                                <td align="center">
-                                    @if (item.TCMServiceActivity.Count() != 0)
-                                    {
-                                        <a class="icon-plus-sign-alt"></a>
-                                    }
-                                    else
-                                    {
+                                <tr>
+                                    <td align="center">
+                                        @if (item.TCMServiceActivity.Count() != 0)
+                                        {
+                                            <a class="icon-plus-sign-alt"></a>
+                                        }
+                                        else
+                                        {
 
-                                    }
-                                    <div style="display:none">
-                                        <table class="table table-striped table-bordered">
-                                            <tr>
-                                                <th class="col-md-2">Name</th>
-                                                <th class="col-md-4">Description</th>
-                                                <th class="col-md-1" style="text-align:center;">Units</th>
-                                                <th class="col-md-1" style="text-align:center;">Frecuency</th>
-                                                <th class="col-md-1" style="text-align:center;">Active</th>
-                                                <th class="col-md-1" style="text-align:center;">Status</th>
-                                                <th class="col-md-2" style="text-align:center;"></th>
-                                            </tr>
-                                            @foreach (var product in item.TCMServiceActivity)
-                                            {
-                                                 <tr>
-                                                     <td>@Html.DisplayFor(modelItem => product.Name)</td>
-                                                     <td>@Html.DisplayFor(modelItem => product.Description)</td>
-                                                     <td align="center">@Html.DisplayFor(modelItem => product.Unit)</td>
-                                                     <td align="center">@Html.DisplayFor(modelItem => product.Frecuency) (days)</td>
-                                                     <td align="center">@Html.DisplayFor(modelItem => product.Status)</td>
-                                                     <td align="center">
-                                                        @if (product.Approved < 2)
-                                                        {
-                                                            <span class="label label-info">
-                                                              Pending
-                                                            </span>
-                                                        }
-                                                        @if (product.Approved == 2)
-                                                        {
-                                                            <span class="label label-success">
-                                                                Approved
-                                                            </span>
-                                                        }
-                                                    </td>
-                                                     <td align="center">
-                                                         @if (User.Identity.Name == product.CreatedBy && product.Approved < 2 && !User.IsInRole("TCMSupervisor"))
-                                                         {
-                                                             <a onclick="showInPopup('@Url.Action("EditServiceActivity", "TCMServices", new { id = product.Id }, Context.Request.Scheme)','Edit TCM Activity')" class="btn btn-warning" title="Edit stage"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                             @if (User.IsInRole("Manager"))
-                                                             {
-                                                                 <a asp-action="ApprovedActivity" asp-route-id="@product.Id" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></a>
-                                                             }
-                                                             else
-                                                             {
-                                                                 <a class="btn btn-success disabled" title="Approved Activity"><i class="glyphicon glyphicon-ok"></i></a>
-                                                             }
+                                        }
+                                        <div style="display:none">
+                                            <table class="table table-striped table-bordered">
+                                                <tr>
+                                                    <th class="col-md-2">Name</th>
+                                                    <th class="col-md-4">Description</th>
+                                                    <th class="col-md-1" style="text-align:center;">Units</th>
+                                                    <th class="col-md-1" style="text-align:center;">Frecuency</th>
+                                                    <th class="col-md-1" style="text-align:center;">Active</th>
+                                                    <th class="col-md-1" style="text-align:center;">Status</th>
+                                                    <th class="col-md-2" style="text-align:center;"></th>
+                                                </tr>
+                                                @foreach (var product in item.TCMServiceActivity)
+                                                {
+                                                    <tr>
+                                                        <td>@Html.DisplayFor(modelItem => product.Name)</td>
+                                                        <td>@Html.DisplayFor(modelItem => product.Description)</td>
+                                                        <td align="center">@Html.DisplayFor(modelItem => product.Unit)</td>
+                                                        <td align="center">@Html.DisplayFor(modelItem => product.Frecuency) (days)</td>
+                                                        <td align="center">@Html.DisplayFor(modelItem => product.Status)</td>
+                                                        <td align="center">
+                                                            @if (product.Approved < 2)
+                                                            {
+                                                                <span class="label label-info">
+                                                                    Pending
+                                                                </span>
+                                                            }
+                                                            @if (product.Approved == 2)
+                                                            {
+                                                                <span class="label label-success">
+                                                                    Approved
+                                                                </span>
+                                                            }
+                                                        </td>
+                                                        <td align="center">
+                                                            @if (User.Identity.Name == product.CreatedBy && product.Approved < 2 && !User.IsInRole("TCMSupervisor"))
+                                                            {
+                                                                <a onclick="showInPopup('@Url.Action("EditServiceActivity", "TCMServices", new { id = product.Id }, Context.Request.Scheme)','Edit TCM Activity')" class="btn btn-warning" title="Edit stage"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                @if (User.IsInRole("Manager"))
+                                                                {
+                                                                    <a asp-action="ApprovedActivity" asp-route-id="@product.Id" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a class="btn btn-success disabled" title="Approved Activity"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                }
 
-                                                         }
-                                                         else
-                                                         {
-                                                             @if (User.IsInRole("TCMSupervisor"))
-                                                             {
-                                                                 <a onclick="showInPopup('@Url.Action("EditServiceActivity", "TCMServices", new { id = product.Id }, Context.Request.Scheme)','Edit TCM Activity')" class="btn btn-warning" title="Edit activity"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                 @if (product.Approved < 2)
-                                                                 {
-                                                                     <a asp-action="ApprovedActivity" asp-route-id="@product.Id" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></a>
-                                                                 }
-                                                                 else
-                                                                 {
-                                                                     <a class="btn btn-success disabled" title="Approved Activity"><i class="glyphicon glyphicon-ok"></i></a>
-                                                                 }
+                                                            }
+                                                            else
+                                                            {
+                                                                @if (User.IsInRole("TCMSupervisor"))
+                                                                {
+                                                                    <a onclick="showInPopup('@Url.Action("EditServiceActivity", "TCMServices", new { id = product.Id }, Context.Request.Scheme)','Edit TCM Activity')" class="btn btn-warning" title="Edit activity"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                    @if (product.Approved < 2)
+                                                                    {
+                                                                        <a asp-action="ApprovedActivity" asp-route-id="@product.Id" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a class="btn btn-success disabled" title="Approved Activity"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                    }
 
-                                                             }
-                                                             else
-                                                             {
-                                                                 <a class="btn btn-warning disabled" title="Edit Activity"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                 <a class="btn btn-success disabled" title="Approved Activity"><i class="glyphicon glyphicon-ok"></i></a>
-                                                             }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a class="btn btn-warning disabled" title="Edit Activity"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                    <a class="btn btn-success disabled" title="Approved Activity"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                }
 
-                                                         }
-                                                     </td>
-                                                 </tr>
-                                                cant_unit = cant_unit + product.Unit;
-                                            }
-                                        </table>
-                                    </div>
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Code)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Description)
-                                </td>
-                                <td align="center">
-                                    @item.TCMServiceActivity.Count()
-                                </td>
-                                <td align="center">
-                                    @cant_unit
-                                </td>
-                                <td align="right">
-                                    @if (User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
-                                    {
-                                        <a onclick="showInPopup('@Url.Action("CreateActivity", "TCMServices", new { id = item.Id }, Context.Request.Scheme)','Create TCM Activity')" class="btn btn-info" title="Create new Activity"><i class="glyphicon glyphicon-plus"></i></a>
-                                    }
-                                    else
-                                    {
-                                        <a onclick="showInPopup('@Url.Action("CreateActivity", "TCMServices", new { id = item.Id }, Context.Request.Scheme)','Create TCM Activity')" class="btn btn-info" title="Create new Activity"><i class="glyphicon glyphicon-plus"></i></a>
-                                    }
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                    cant_unit = cant_unit + product.Unit;
+                                                }
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td align="center">
+                                        @item.TCMServiceActivity.Count()
+                                    </td>
+                                    <td align="center">
+                                        @cant_unit
+                                    </td>
+                                    <td align="right">
+                                        @if (User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
+                                        {
+                                            <a onclick="showInPopup('@Url.Action("CreateActivity", "TCMServices", new { id = item.Id }, Context.Request.Scheme)','Create TCM Activity')" class="btn btn-info" title="Create new Activity"><i class="glyphicon glyphicon-plus"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a onclick="showInPopup('@Url.Action("CreateActivity", "TCMServices", new { id = item.Id }, Context.Request.Scheme)','Create TCM Activity')" class="btn btn-info" title="Create new Activity"><i class="glyphicon glyphicon-plus"></i></a>
+                                        }
 
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
                                 cant_unit = 0;
                             }
                         </tbody>
