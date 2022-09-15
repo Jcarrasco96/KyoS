@@ -849,7 +849,11 @@ namespace KyoS.Web.Helpers
                 new SelectListItem { Text = DocumentDescription.FollowUps.ToString(), Value = "15"},
                 new SelectListItem { Text = DocumentDescription.YearlyPhysical.ToString(), Value = "16"},
                 new SelectListItem { Text = DocumentDescription.MedicalReports.ToString(), Value = "17"},
-                new SelectListItem { Text = DocumentDescription.Others.ToString(), Value = "18"}
+                new SelectListItem { Text = DocumentDescription.Assessment.ToString(), Value = "18"},
+                new SelectListItem { Text = DocumentDescription.ServicePlan.ToString(), Value = "19"},
+                new SelectListItem { Text = DocumentDescription.ServicePlanReview.ToString(), Value = "20"},
+                new SelectListItem { Text = DocumentDescription.AppendixJ.ToString(), Value = "21"},
+                new SelectListItem { Text = DocumentDescription.Others.ToString(), Value = "22"}
                 
             };
 

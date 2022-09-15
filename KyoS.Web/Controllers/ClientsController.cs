@@ -641,8 +641,13 @@ namespace KyoS.Web.Controllers
                 }
                 return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.OrderByDescending(d => d.CreatedOn).ToList()) });
             }
+            DocumentTempViewModel salida = new DocumentTempViewModel()
+            {
+                IdDescription = 0,
+                Descriptions = _combosHelper.GetComboDocumentDescriptions()
+            };
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddDocument", salida) });
 
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddDocument", documentTempViewModel) });
         }
 
         [Authorize(Roles = "Manager, Supervisor")]

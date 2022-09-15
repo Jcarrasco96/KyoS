@@ -1804,7 +1804,13 @@ namespace KyoS.Web.Controllers
                 return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", documentList) });
             }
 
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddDocument", documentViewModel) });
+            DocumentViewModel salida = new DocumentViewModel()
+            {
+                IdDescription = 0,
+                Descriptions = _combosHelper.GetComboDocumentDescriptions(),
+                Client = _context.Clients.Find(id)
+            };
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddDocument", salida) });
         }
 
          [Authorize(Roles = "CaseManager")]

@@ -102,7 +102,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor, CaseManager")]
-        public IActionResult Create(int id = 0)
+        public IActionResult Create(int id = 0, int origi = 0)
         {
 
             UserEntity user_logged = _context.Users
@@ -176,6 +176,7 @@ namespace KyoS.Web.Controllers
 
                 if (model.TCMClient.TCMFarsFormList == null)
                     model.TCMClient.TCMFarsFormList = new List<TCMFarsFormEntity>();
+                ViewData["origi"] = origi;
                 return View(model);
                 }
             
@@ -185,7 +186,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "TCMSupervisor, CaseManager")]
-        public async Task<IActionResult> Create(TCMFarsFormViewModel FarsFormViewModel)
+        public async Task<IActionResult> Create(TCMFarsFormViewModel FarsFormViewModel, int origi = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -201,8 +202,15 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
+                        if (origi == 0)
+                        {
+                            return RedirectToAction(nameof(Index));
+                        }
+                        if (origi == 1)
+                        {
+                            return RedirectToAction("Index",new { idTCMClient = FarsFormViewModel.IdTCMClient, origin = origi});
+                        }
 
-                        return RedirectToAction(nameof(Index));
                     }
                     catch (System.Exception ex)
                     {
