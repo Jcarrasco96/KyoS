@@ -136,7 +136,8 @@ namespace KyoS.Web.Controllers
                         OtherLanguage_Read = false,
                         OtherLanguage_Speak = false,
                         OtherLanguage_Understand = false,
-                        MedicareId = ""
+                        MedicareId = "",
+                        OnlyTCM = false
                     };
                     return View(model);
                 }
@@ -501,7 +502,8 @@ namespace KyoS.Web.Controllers
                     return View(await _context.Clients
                                               .Include(c => c.MTPs)
                                               .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
-                                                        && c.MTPs.Count == 0))
+                                                        && c.MTPs.Count == 0
+                                                        && c.OnlyTCM == false))
                                               .ToListAsync());
 
                 }
@@ -515,7 +517,8 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("Admin"))
                 return View(await _context.Clients
                                           .Include(c => c.Clinic)
-                                          .Where(c => c.MTPs.Count == 0)
+                                          .Where(c => (c.MTPs.Count == 0
+                                                        && c.OnlyTCM == false))
                                           .OrderBy(c => c.Clinic.Name)
                                           .ToListAsync());
             else
@@ -532,7 +535,8 @@ namespace KyoS.Web.Controllers
                     List<ClientEntity> client = await _context.Clients
                                                               .Include(c => c.Clinic)
                                                               .Include(c => c.Documents)
-                                                              .Where(c => (c.Clinic.Id == clinic.Id))
+                                                              .Where(c => (c.Clinic.Id == clinic.Id
+                                                                        && c.OnlyTCM == false))
                                                               .OrderBy(c => c.Name)
                                                               .ToListAsync();
                     client = client.Where(c => c.MissingDoc != string.Empty).ToList();
@@ -778,7 +782,8 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("Admin"))
                 return View(await _context.Clients
                                           .Include(c => c.Clinic)
-                                          .Where(c => c.MTPs.Count == 0)
+                                          .Where(c => (c.MTPs.Count == 0
+                                                    && c.OnlyTCM == false))
                                           .OrderBy(c => c.Clinic.Name)
                                           .ToListAsync());
             else
@@ -813,7 +818,8 @@ namespace KyoS.Web.Controllers
                                                               .Include(c => c.IntakeScreening)
                                                               .Include(c => c.IntakeTransportation)
                                                               .Include(c => c.IntakeTuberculosis)
-                                                              .Where(c => (c.Clinic.Id == clinic.Id))
+                                                              .Where(c => (c.Clinic.Id == clinic.Id
+                                                                        && c.OnlyTCM == false))
                                                               .OrderBy(c => c.Name)
                                                               .ToListAsync();
                     //client = client.Where(c => c.MissingDoc != string.Empty).ToList();
@@ -860,7 +866,8 @@ namespace KyoS.Web.Controllers
                                                               .ThenInclude(g => g.AdendumList)
                                                               .Include(g => g.MTPs)
                                                               .ThenInclude(g => g.MtpReviewList)
-                                                              .Where(g => (g.IdFacilitatorPSR == afacilitator.Id))
+                                                              .Where(g => (g.IdFacilitatorPSR == afacilitator.Id
+                                                                        && g.OnlyTCM == false))
                                                               .OrderBy(g => g.Name)
                                                               .ToListAsync();
 
@@ -894,7 +901,8 @@ namespace KyoS.Web.Controllers
                                                               .ThenInclude(g => g.AdendumList)
                                                               .Include(g => g.MTPs)
                                                               .ThenInclude(g => g.MtpReviewList)
-                                                              .Where(g => (g.Clinic.Id == user_logged.Clinic.Id))
+                                                              .Where(g => (g.Clinic.Id == user_logged.Clinic.Id
+                                                                        && g.OnlyTCM == false))
                                                               .OrderBy(g => g.Name)
                                                               .ToListAsync();
 
@@ -929,7 +937,8 @@ namespace KyoS.Web.Controllers
                                                               .Include(g => g.MTPs)
                                                               .ThenInclude(g => g.MtpReviewList)
                                                               .Where(g => (g.Clinic.Id == user_logged.Clinic.Id
-                                                                    && g.Bio.CreatedBy == user_logged.UserName))
+                                                                        && g.Bio.CreatedBy == user_logged.UserName
+                                                                        && g.OnlyTCM == false))
                                                               .OrderBy(g => g.Name)
                                                               .ToListAsync();
 

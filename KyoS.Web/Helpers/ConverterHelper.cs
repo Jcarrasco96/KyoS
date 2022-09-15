@@ -277,7 +277,8 @@ namespace KyoS.Web.Helpers
                 OtherLanguage_Speak = model.OtherLanguage_Speak,
                 OtherLanguage_Understand = model.OtherLanguage_Understand,
                 MedicareId = model.MedicareId,
-                DateOfClose = model.DateOfClose                
+                DateOfClose = model.DateOfClose,
+                OnlyTCM = model.OnlyTCM
             };
         }
 
@@ -353,7 +354,8 @@ namespace KyoS.Web.Helpers
                 OtherLanguage_Understand = clientEntity.OtherLanguage_Understand,
                 MedicareId = clientEntity.MedicareId,
                 DateOfClose = clientEntity.DateOfClose,
-                Documents = clientEntity.Documents                
+                Documents = clientEntity.Documents,
+                OnlyTCM = clientEntity.OnlyTCM
             };
         }
 

@@ -961,6 +961,7 @@ namespace KyoS.Web.Helpers
             List<ClientEntity> clients_Total = _context.Clients
                                                        .Where(c => (c.Clinic.Id == idClinic
                                                             && c.Status == StatusType.Open))
+                                                       .OrderBy(c => c.Name)
                                                        .ToList();
             List<TCMClientEntity> clients_Open = _context.TCMClient
                                                          .Include(n => n.Client)

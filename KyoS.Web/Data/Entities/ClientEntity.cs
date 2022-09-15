@@ -159,6 +159,8 @@ namespace KyoS.Web.Data.Entities
         [DataType(DataType.Date)]
         public DateTime DateOfClose { get; set; }
 
+        public bool OnlyTCM { get; set; }
+
         public string MissingDoc 
         {
             get
