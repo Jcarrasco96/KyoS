@@ -17,11 +17,11 @@
                 <i class="icon-home"></i>
                 @if (ViewData["origi"].ToString() == "0")
                 {
-                    @Html.ActionLink("TCM Fars Forms", "Index", "TCMFarsForms", new { origin = @ViewData["origi"] })
+                    @Html.ActionLink("TCM Fars Forms", "Index", "TCMFarsForms", new { origin = 1, idTCMClient = Model.IdTCMClient })
                 }
                 @if (ViewData["origi"].ToString() == "1")
                 {
-                    @Html.ActionLink("TCM Fars Forms", "Index", "TCMFarsForms", new { idTCMClient = Model.TCMClient.Id, origin = @ViewData["origi"] })
+                    @Html.ActionLink("TCM Intake Section 5", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 5 })
                 }
 
             </li>
@@ -47,11 +47,11 @@
                 <input type="submit" value="Create" class="btn btn-primary" />
                 @if (ViewData["origi"].ToString() == "0")
                 {
-                    <a asp-action="Index" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
+                    <a asp-action="Index" asp-route-origin="1" asp-route-idTCMClient="@Model.IdTCMClient" class="btn btn-success">Back</a>
                 }
                 @if (ViewData["origi"].ToString() == "1")
                 {
-                    <a asp-action="Index" asp-route-idTCMClient="@Model.TCMClient.Id" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
+                    <a asp-action="TCMIntakeSectionDashboard" asp-controller="TCMIntakes" asp-route-id="@Model.IdTCMClient" asp-route-section="5" class="btn btn-success">Back</a>
                 }
             </div>
         </form>

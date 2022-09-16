@@ -4350,7 +4350,6 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                TcmClient = await _context.TCMClient.FirstAsync(n => n.Id == model.IdTCMClient),
                 TcmClient_FK = model.TcmClient_FK,
                 InterventionList = new System.Collections.Generic.List<TCMIntakeInterventionEntity>()
                 
