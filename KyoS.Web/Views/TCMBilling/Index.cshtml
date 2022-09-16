@@ -15,10 +15,10 @@
 </div>
 
 <div class="row">
-    <div class="col-md-4">        
-            <label asp-for="IdClient" class="control-label"></label>
-            <select asp-for="IdClient" asp-items="Model.Clients" class="form-control" id = "cbClient"></select>
-            <span asp-validation-for="IdClient" class="text-danger"></span>        
+    <div class="col-md-3">
+        <label asp-for="IdClient" class="control-label"></label>
+        <select asp-for="IdClient" asp-items="Model.Clients" class="form-control" id="cbClient"></select>
+        <span asp-validation-for="IdClient" class="text-danger"></span>
     </div>
     <div class="col-md-1">
         &nbsp;
@@ -35,7 +35,19 @@
             <h4 style="text-align:center; font-weight:bold;"><label id="lbUnits"></label></h4>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-1">
+        <div class="thumbnail list-group-item list-group-item-success">
+            <p style="text-align:center">Minutes</p>
+            <h4 style="text-align:center; font-weight:bold;"><label id="lbMinutes"></label></h4>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="thumbnail list-group-item list-group-item-warning">
+            <p style="text-align:center">Estimated Income</p>
+            <h4 style="text-align:center; font-weight:bold;">$<label id="lbMoney"></label></h4>
+        </div>
+    </div>
+    <div class="col-md-3">
         &nbsp;
     </div>
 </div>
@@ -120,6 +132,16 @@
                                 $.get(url, { }, function (data) {
                                     $("#lbUnits").text(data);
                                 });
+
+                                 url = "@Url.Action("GetTotalMoney", "TCMBilling")";
+                                $.get(url, { }, function (data) {
+                                    $("#lbMoney").text(data);
+                                });
+
+                                 url = "@Url.Action("GetTotalMinutes", "TCMBilling")";
+                                $.get(url, { }, function (data) {
+                                    $("#lbMinutes").text(data);
+                                });
                             }
                 }
             });
@@ -128,7 +150,7 @@
             $("#cbClient").change(function () {
                 calendar.refetchEvents();
             })
-        });        
+        });
     </script>
 }
 

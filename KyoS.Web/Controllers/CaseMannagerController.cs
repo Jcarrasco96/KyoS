@@ -100,7 +100,9 @@ namespace KyoS.Web.Controllers
                         Clinics = list,
                         IdClinic = clinic.Id,
                         StatusList = _combosHelper.GetComboClientStatus(),
-                        UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, user_logged.Clinic.Id)
+                        UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, user_logged.Clinic.Id),
+                        Money = 0
+                        
                     };
                     return View(model);
                 }
@@ -111,7 +113,8 @@ namespace KyoS.Web.Controllers
                 Clinics = _combosHelper.GetComboClinics(),
                 IdStatus = 1,
                 StatusList = _combosHelper.GetComboClientStatus(),
-                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, 0)
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, 0),
+                Money = 0
             };
             return View(model);
         }

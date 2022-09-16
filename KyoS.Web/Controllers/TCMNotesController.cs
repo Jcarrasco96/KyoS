@@ -95,10 +95,12 @@ namespace KyoS.Web.Controllers
                                                               .Include(w => w.TCMClient)
                                                               .ThenInclude(d => d.Client)
                                                               .Include(w => w.TCMNoteActivity)
+                                                              .ThenInclude(d => d.TCMDomain)
                                                               .Include(w => w.TCMClient)
                                                               .ThenInclude(d => d.Casemanager)
                                                               .Where(w => (w.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
                                                                 && w.TCMClient.Id == idTCMClient))
+                                                              .OrderBy(m => m.DateOfService)
                                                               .ToListAsync();
             return View(TcmNoteEntity);
         }
@@ -190,7 +192,9 @@ namespace KyoS.Web.Controllers
                             Minutes = item.Minutes,
                             Setting = ServiceTCMNotesUtils.GetCodeByIndex(item.IdSetting),
                             StartTime = item.StartTime,
-                            TCMNote = NoteEntity
+                            TCMNote = NoteEntity,
+                            ServiceName = item.ServiceName,
+                            TCMServiceActivity = await _context.TCMServiceActivity.FirstOrDefaultAsync(n => n.Id == item.IdTCMServiceActivity)
                         };
                         _context.TCMNoteActivity.Add(noteActivity);                   
                     }
@@ -450,7 +454,9 @@ namespace KyoS.Web.Controllers
                     DescriptionTemp = "",
                     StartTime = StartTime,
                     EndTime = StartTime.AddMinutes(15),
-                    DateOfServiceNote = note.DateOfService
+                    DateOfServiceNote = note.DateOfService,
+                    ServiceName = "",
+                    IdTCMActivity = 0
                 };
                 if (model.TCMNote.TCMNoteActivity == null)
                     model.TCMNote.TCMNoteActivity = new List<TCMNoteActivityEntity>();
@@ -693,6 +699,7 @@ namespace KyoS.Web.Controllers
                                                                  .Include(m => m.TCMNote)
                                                                  .ThenInclude(m => m.TCMClient)
                                                                  .ThenInclude(m => m.Client)
+                                                                 .Include(m => m.TCMServiceActivity)
                                                                  .FirstOrDefault(m => m.Id == id);
                     if (NoteActivity == null)
                     {

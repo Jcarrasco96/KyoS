@@ -506,6 +506,7 @@ namespace KyoS.Web.Controllers
             if (count > 0)
             {
                 ViewBag.Message = "1";
+                ViewData["count"] = count;
             }           
 
             return View(await _context.Groups
@@ -945,6 +946,41 @@ namespace KyoS.Web.Controllers
             ViewData["clients"] = client_list;
 
             return View(groupViewModel);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ListClientWithoutGroup(ServiceType serviceType = ServiceType.PSR)
+        {
+            List<ClientEntity> clients = new List<ClientEntity>();
+
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                    .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic != null)
+            {
+               
+                clients = await _context.Clients
+
+                                        .Include(c => c.MTPs)
+                                        .Include(c => c.Clients_HealthInsurances)
+                                        .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                    && c.Status == Common.Enums.StatusType.Open
+                                                    && c.Service == serviceType
+                                                    && c.Group == null))
+                                        .OrderBy(c => c.Name).ToListAsync();
+
+                clients = clients.Where(c => c.MTPs.Count > 0).ToList();
+                if (serviceType == ServiceType.Group)
+                {
+                    ViewData["service"] = "Group";
+                }
+                else
+                {
+                    ViewData["service"] = "PSR";
+                }
+                return View(clients);
+            }
+
+            return View(null);
         }
 
         [Authorize(Roles = "Manager")]

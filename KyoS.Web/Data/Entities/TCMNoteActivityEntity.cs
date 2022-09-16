@@ -29,5 +29,9 @@ namespace KyoS.Web.Data.Entities
 
         public int Minutes { get; set; }
 
+        public TCMServiceActivityEntity TCMServiceActivity { get; set; }
+
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public string ServiceName { get; set; }
     }
 }

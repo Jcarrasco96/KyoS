@@ -202,7 +202,8 @@ namespace KyoS.Web.Helpers
                 LinkedUser = _userHelper.GetUserNameById(model.IdUser),
                 SignaturePath = signaturePath,
                 Email = model.Email,
-                Phone = model.Phone
+                Phone = model.Phone,
+                Money = model.Money
             };
         }
 
@@ -222,7 +223,8 @@ namespace KyoS.Web.Helpers
                 UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, idClinic),
                 SignaturePath = caseMannagerEntity.SignaturePath,
                 Email = caseMannagerEntity.Email,
-                Phone = caseMannagerEntity.Phone
+                Phone = caseMannagerEntity.Phone,
+                Money = caseMannagerEntity.Money
             };
         }
 
@@ -275,7 +277,8 @@ namespace KyoS.Web.Helpers
                 OtherLanguage_Speak = model.OtherLanguage_Speak,
                 OtherLanguage_Understand = model.OtherLanguage_Understand,
                 MedicareId = model.MedicareId,
-                DateOfClose = model.DateOfClose                
+                DateOfClose = model.DateOfClose,
+                OnlyTCM = model.OnlyTCM
             };
         }
 
@@ -351,7 +354,8 @@ namespace KyoS.Web.Helpers
                 OtherLanguage_Understand = clientEntity.OtherLanguage_Understand,
                 MedicareId = clientEntity.MedicareId,
                 DateOfClose = clientEntity.DateOfClose,
-                Documents = clientEntity.Documents                
+                Documents = clientEntity.Documents,
+                OnlyTCM = clientEntity.OnlyTCM
             };
         }
 
@@ -5691,6 +5695,7 @@ namespace KyoS.Web.Helpers
                 IdCaseManager = model.CaseManager.Id,
                 IdTCMClient = model.TCMClient.Id,
                 IdTCMNote = model.Id
+                
             };
 
             return salida;
@@ -5711,7 +5716,9 @@ namespace KyoS.Web.Helpers
                 Setting = ServiceTCMNotesUtils.GetCodeByIndex(model.IdSetting),
                 StartTime = model.StartTime,
                 TCMDomain = model.TCMDomain,
-                TCMNote = _context.TCMNote.FirstOrDefault(n => n.Id == model.IdTCMNote)
+                TCMNote = _context.TCMNote.FirstOrDefault(n => n.Id == model.IdTCMNote),
+                ServiceName = model.ServiceName,
+                TCMServiceActivity = await _context.TCMServiceActivity.FirstOrDefaultAsync(n => n.Id == model.IdTCMActivity)
             };
         }
 
@@ -5739,7 +5746,10 @@ namespace KyoS.Web.Helpers
                 DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == model.TCMNote.TCMClient.Id).Id),
                 IdTCMClient = model.TCMNote.TCMClient.Id,
                 ActivityList = _combosHelper.GetComboTCMNoteActivity(model.TCMDomain.Code),
-                DateOfServiceNote = model.TCMNote.DateOfService
+                DateOfServiceNote = model.TCMNote.DateOfService,
+                ServiceName = model.ServiceName,
+                IdTCMActivity = model.TCMServiceActivity.Id,
+                DescriptionTemp = _context.TCMServiceActivity.FirstOrDefault(n => n.Id == model.TCMServiceActivity.Id).Description
         };
 
             return salida;
@@ -5834,7 +5844,9 @@ namespace KyoS.Web.Helpers
                 StartTime = model.StartTime,
                 UserName = userId,
                 IdTCMClient = model.IdTCMClient,
-                DateOfServiceOfNote = model.StartTime
+                DateOfServiceOfNote = model.StartTime,
+                ServiceName = model.ServiceName,
+                IdTCMServiceActivity = model.IdTCMActivity
             };
         }
 

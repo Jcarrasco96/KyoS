@@ -103,7 +103,7 @@ namespace KyoS.Web.Controllers
                                      .Select(t => new
                                      {
                                       //id = t.TCMNote.Id,
-                                      title = t.DescriptionOfService,
+                                      title = t.ServiceName.ToString(),
                                          start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                          end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                          url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
@@ -130,7 +130,7 @@ namespace KyoS.Web.Controllers
                                      .Select(t => new
                                      {
                                          //id = t.TCMNote.Id,
-                                         title = t.DescriptionOfService,
+                                         title = t.ServiceName.ToString(),
                                          start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                          end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                          url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
@@ -323,6 +323,147 @@ namespace KyoS.Web.Controllers
             }     
             
             return View(model);            
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public JsonResult GetTotalMoney()
+        {
+            DateTime initDate = Convert.ToDateTime(HttpContext.Session.GetString("initDate"));
+            DateTime finalDate = Convert.ToDateTime(HttpContext.Session.GetString("finalDate"));
+            int idClient = HttpContext.Session.GetInt32("idClient") == null ? 0 : (int)HttpContext.Session.GetInt32("idClient");
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (idClient == 0)
+            {
+                List <TCMNoteEntity> notes = _context.TCMNote
+
+                                                           .Include(t => t.TCMNoteActivity)
+                                                           .Include(t => t.CaseManager)
+                                                           .Where(t => (t.CaseManager.LinkedUser == user_logged.UserName
+                                                                     && t.DateOfService >= initDate && t.DateOfService <= finalDate))
+                                                           .ToList();
+
+
+                decimal totalMinutes = 0;
+                decimal valor = new decimal(0.00);
+                decimal money = new decimal(0.00);
+                foreach (TCMNoteEntity item in notes)
+                {
+                    totalMinutes = totalMinutes + item.TCMNoteActivity.Sum(t => t.Minutes);
+                }
+                if (notes.Count() > 0)
+                {
+                    valor = notes.ElementAt(0).CaseManager.Money / 60;
+                    money = totalMinutes * valor;
+                    return Json(decimal.Round(money, 2));
+                }
+                else
+                {
+                    return Json("0.00");
+                }
+
+            }
+            else
+            {
+                List<TCMNoteEntity> notes = _context.TCMNote
+
+                                                           .Include(t => t.TCMNoteActivity)
+                                                           .Include(t => t.CaseManager)
+                                                           .Where(t => (t.CaseManager.LinkedUser == user_logged.UserName
+                                                                     && t.TCMClient.Id == idClient
+                                                                     && t.DateOfService >= initDate && t.DateOfService <= finalDate))
+                                                           .ToList();
+
+                decimal totalMinutes = 0;
+                decimal valor = new decimal();
+                decimal money = new decimal();
+                foreach (TCMNoteEntity item in notes)
+                {
+                    totalMinutes = totalMinutes + item.TCMNoteActivity.Sum(t => t.Minutes);
+                }
+                if (notes.Count() > 0)
+                {
+                    valor = notes.ElementAt(0).CaseManager.Money / 60;
+                    money = totalMinutes * valor;
+                    return Json(decimal.Round(money, 2));
+                }
+                else
+                {
+                    return Json("0.00");
+                }
+
+            }
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public JsonResult GetTotalMinutes()
+        {
+            DateTime initDate = Convert.ToDateTime(HttpContext.Session.GetString("initDate"));
+            DateTime finalDate = Convert.ToDateTime(HttpContext.Session.GetString("finalDate"));
+            int idClient = HttpContext.Session.GetInt32("idClient") == null ? 0 : (int)HttpContext.Session.GetInt32("idClient");
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (idClient == 0)
+            {
+                IEnumerable<TCMNoteEntity> notes = _context.TCMNote
+
+                                                           .Include(t => t.TCMNoteActivity)
+                                                           .Include(t => t.CaseManager)
+                                                           .Where(t => (t.CaseManager.LinkedUser == user_logged.UserName
+                                                                     && t.DateOfService >= initDate && t.DateOfService <= finalDate));
+
+                int minutes = 0;
+                int totalMinutes = 0;
+                decimal money = 0;
+                foreach (TCMNoteEntity item in notes)
+                {
+                    minutes = item.TCMNoteActivity.Sum(t => t.Minutes);
+                    totalMinutes = totalMinutes + minutes;
+                }
+                if (notes.Count() > 0)
+                {
+                    money = (totalMinutes / 60 * notes.ElementAt(0).CaseManager.Money);
+                }
+                else
+                {
+                    money = 0;
+                }
+                return Json(totalMinutes);
+            }
+            else
+            {
+                IEnumerable<TCMNoteEntity> notes = _context.TCMNote
+
+                                                           .Include(t => t.TCMNoteActivity)
+                                                           .Include(t => t.CaseManager)
+                                                           .Where(t => (t.CaseManager.LinkedUser == user_logged.UserName
+                                                                     && t.TCMClient.Id == idClient
+                                                                     && t.DateOfService >= initDate && t.DateOfService <= finalDate));
+
+                int minutes = 0;
+                int totalMinutes = 0;
+                decimal money = 0;
+                foreach (TCMNoteEntity item in notes)
+                {
+                    minutes = item.TCMNoteActivity.Sum(t => t.Minutes);
+                    totalMinutes = totalMinutes + minutes;
+                }
+                if (notes.Count() > 0)
+                {
+                    money = (totalMinutes / 60 * notes.ElementAt(0).CaseManager.Money);
+                }
+                else
+                {
+                    money = 0;
+                }
+                return Json(totalMinutes);
+            }
         }
     }
 }
