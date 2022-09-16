@@ -62,13 +62,20 @@
                 <h4 style="text-align:center; font-weight:bold;">@ViewBag.Units</h4>
             </div>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
             <div class="thumbnail list-group-item list-group-item-warning">
-                <p style="text-align:center"><i class="glyphicon glyphicon-usd"></i></p>
-                <h4 style="text-align:center; font-weight:bold;">@ViewBag.Money</h4>
+                <p style="text-align:center">Estimated Income</p>
+                @if (ViewBag.Money == "0")
+                {
+                    <h4 style="text-align:center; font-weight:bold;">$0.00</h4>
+                }
+                else
+                {
+                    <h4 style="text-align:center; font-weight:bold;"> $@string.Concat(ViewBag.Money, ".00")</h4>                   
+                }
             </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-4">
             &nbsp;
         </div>
     </div>

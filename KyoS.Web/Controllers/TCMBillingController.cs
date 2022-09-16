@@ -362,7 +362,7 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    return Json(money);
+                    return Json("0.00");
                 }
 
             }
@@ -392,7 +392,7 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    return Json(money);
+                    return Json("0.00");
                 }
 
             }
