@@ -20,6 +20,10 @@
         FollowUps,
         YearlyPhysical,
         MedicalReports,
+        Assessment,
+        ServicePlan,
+        ServicePlanReview,
+        AppendixJ,
         Others
     }
     public class DocumentUtils
@@ -44,7 +48,11 @@
                    (index == 15) ? DocumentDescription.FollowUps :
                    (index == 16) ? DocumentDescription.YearlyPhysical :
                    (index == 17) ? DocumentDescription.MedicalReports :
-                   (index == 18) ? DocumentDescription.Others : DocumentDescription.Others;
+                   (index == 18) ? DocumentDescription.Assessment :
+                   (index == 19) ? DocumentDescription.ServicePlan :
+                   (index == 20) ? DocumentDescription.ServicePlanReview :
+                   (index == 21) ? DocumentDescription.AppendixJ :
+                   (index == 22) ? DocumentDescription.Others : DocumentDescription.Others;
         }
     }
 }

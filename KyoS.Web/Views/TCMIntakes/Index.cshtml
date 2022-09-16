@@ -131,7 +131,7 @@
                                          && (item.Client.IntakeMedicalHistory != null) && (item.Client.MedicationList.Count() != 0) && (item.TCMIntakeNonClinicalLog != null)
                                          && (item.TCMIntakeMiniMental != null) && (item.TCMIntakeCoordinationCare != null) && (item.TcmServicePlan != null))
                                         {
-                                            <a asp-action="PrintIntake" asp-route-id="@item.TCMIntakeForm.Id" class="btn btn-success" title="Print" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintIntake" asp-route-id="@item.TCMIntakeForm.Id" class="btn btn-success disabled" title="Print" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
@@ -204,7 +204,7 @@
                                       && (item.Client.IntakeMedicalHistory != null) && (item.Client.MedicationList != null) && (item.TCMIntakeNonClinicalLog != null)
                                       && (item.TCMIntakeMiniMental != null) && (item.TCMIntakeCoordinationCare != null) && (item.TcmServicePlan != null))
                                         {
-                                            <a asp-action="PrintIntake" asp-route-id="@item.TCMIntakeForm.Id" class="btn btn-success" title="Print" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintIntake" asp-route-id="@item.TCMIntakeForm.Id" class="btn btn-success disabled" title="Print" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {

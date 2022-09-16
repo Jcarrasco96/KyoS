@@ -745,7 +745,7 @@
             <div class="col-sm-3 col-md-2">
                 @if (@Model.TCMFarsFormList.Count() == 0)
                 {
-                    <a style="text-decoration: none;" asp-action="Create" asp-controller="TCMFarsForms" asp-route-id="@Model.Id" role="button">
+                    <a style="text-decoration: none;" asp-action="Create" asp-controller="TCMFarsForms" asp-route-origi="1" asp-route-id="@Model.Id" role="button">
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Fars<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Forms</h4>
                             <span class="message-counter-cero">@Model.TCMFarsFormList.Count()</span>

@@ -284,14 +284,16 @@ namespace KyoS.Web.Controllers
 
                 ViewBag.ClientWithoutBIO = _context.Clients
                                                     .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                               && wc.Bio == null)).ToString();
+                                                               && wc.Bio == null
+                                                               && wc.OnlyTCM == false)).ToString();
 
                 ViewBag.PendingInitialFars = _context.Clients
-                                                    .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                               && wc.FarsFormList.Count == 0)).ToString();
+                                                     .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                               && wc.FarsFormList.Count == 0
+                                                               && wc.OnlyTCM == false)).ToString();
 
                 ViewBag.PendingFars = _context.FarsForm
-                                                  .Count(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                              .Count(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
                                                     && m.Status == FarsStatus.Pending)).ToString();
 
                 ViewBag.PendingAddendum = _context.Adendums
@@ -299,16 +301,17 @@ namespace KyoS.Web.Controllers
                                                     && m.Status == AdendumStatus.Pending)).ToString();
 
                 ViewBag.PendingMTPReview = _context.MTPReviews
-                                                  .Count(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
+                                                   .Count(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
                                                     && m.Status == AdendumStatus.Pending)).ToString();
 
                 ViewBag.PendingDischarge = _context.Discharge
-                                                  .Count(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                   .Count(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
                                                     && m.Status == DischargeStatus.Pending)).ToString();
 
                 List<ClientEntity> client = await _context.Clients
                                                           .Include(c => c.MTPs)
-                                                          .Where(c => c.Clinic.Id == user_logged.Clinic.Id).ToListAsync();
+                                                          .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                                    && c.OnlyTCM == false)).ToListAsync();
                 client = client.Where(wc => wc.MTPs.Count == 0).ToList();
                 ViewBag.MTPMissing = client.Count.ToString();
 
@@ -384,7 +387,8 @@ namespace KyoS.Web.Controllers
 
                                                           .Include(c => c.MTPs)
 
-                                                          .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
+                                                          .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                                    && c.OnlyTCM == false))
                                                           .ToListAsync();
 
                 client = client.Where(wc => wc.MTPs.Count == 0).ToList();
@@ -402,7 +406,8 @@ namespace KyoS.Web.Controllers
                 
                 //-------------clients without documentation--------------//
                 client = await _context.Clients
-                                       .Where(c => c.Clinic.Id == user_logged.Clinic.Id).ToListAsync();
+                                       .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                 && c.OnlyTCM == false)).ToListAsync();
                 int clients_without_doc = 0;                
                 DocumentEntity doc_pe;
                 DocumentEntity doc_intake;
@@ -439,28 +444,29 @@ namespace KyoS.Web.Controllers
                 ViewBag.ClientsWithoutDoc = clients_without_doc.ToString();
 
                 List<ClientEntity> Clients = await _context.Clients
-                                                     .Include(d => d.IntakeAcknowledgementHipa)
-                                                     .Include(d => d.IntakeConsentForRelease)
-                                                     .Include(d => d.IntakeConsentForTreatment)
-                                                     .Include(d => d.IntakeConsumerRights)
-                                                     .Include(d => d.IntakeOrientationChecklist)
-                                                     .Include(d => d.IntakeAccessToServices)
-                                                     .Include(d => d.IntakeConsentPhotograph)
-                                                     .Include(d => d.IntakeFeeAgreement)
-                                                     .Include(d => d.IntakeMedicalHistory)
-                                                     .Include(d => d.IntakeScreening)
-                                                     .Include(d => d.IntakeTransportation)
-                                                     .Include(d => d.IntakeTuberculosis)
-                                                     .Include(d => d.Bio)
-                                                     .Include(d => d.MTPs)
-                                                     .ThenInclude(d => d.MtpReviewList)
-                                                     .Include(d => d.MTPs)
-                                                     .ThenInclude(d => d.AdendumList)
-                                                     .Include(d => d.MTPs)
-                                                     .Include(d => d.DischargeList)
-                                                     .Include(d => d.FarsFormList)
-                                                     .Where(g => g.Clinic.Id == user_logged.Clinic.Id)
-                                                     .ToListAsync();
+                                                           .Include(d => d.IntakeAcknowledgementHipa)
+                                                           .Include(d => d.IntakeConsentForRelease)
+                                                           .Include(d => d.IntakeConsentForTreatment)
+                                                           .Include(d => d.IntakeConsumerRights)
+                                                           .Include(d => d.IntakeOrientationChecklist)
+                                                           .Include(d => d.IntakeAccessToServices)
+                                                           .Include(d => d.IntakeConsentPhotograph)
+                                                           .Include(d => d.IntakeFeeAgreement)
+                                                           .Include(d => d.IntakeMedicalHistory)
+                                                           .Include(d => d.IntakeScreening)
+                                                           .Include(d => d.IntakeTransportation)
+                                                           .Include(d => d.IntakeTuberculosis)
+                                                           .Include(d => d.Bio)
+                                                           .Include(d => d.MTPs)
+                                                           .ThenInclude(d => d.MtpReviewList)
+                                                           .Include(d => d.MTPs)
+                                                           .ThenInclude(d => d.AdendumList)
+                                                           .Include(d => d.MTPs)
+                                                           .Include(d => d.DischargeList)
+                                                           .Include(d => d.FarsFormList)
+                                                           .Where(g => (g.Clinic.Id == user_logged.Clinic.Id
+                                                                     && g.OnlyTCM == false))
+                                                           .ToListAsync();
                 int cantDocument = 0;
                 foreach (var item in Clients)
                 {
@@ -851,31 +857,35 @@ namespace KyoS.Web.Controllers
                                                        .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
                 List<ClientEntity> client = await _context.Clients
-                                                         .Include(c => c.MTPs)
-                                                         .Where(c => c.Clinic.Id == user_logged.Clinic.Id).ToListAsync();
+                                                          .Include(c => c.MTPs)
+                                                          .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                                    && c.OnlyTCM == false)).ToListAsync();
                 client = client.Where(wc => wc.MTPs.Count == 0).ToList();
                 ViewBag.MTPMissing = client.Count.ToString();
 
                 ViewBag.PendingBIO = _context.Clients
-                                                    .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                               && wc.Bio == null)).ToString();
+                                             .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                        && wc.Bio == null
+                                                        && wc.OnlyTCM == false)).ToString();
 
                 ViewBag.PendingInitialFars = _context.Clients
-                                                    .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                               && wc.FarsFormList.Count == 0)).ToString();
+                                                     .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                                && wc.FarsFormList.Count == 0
+                                                                && wc.OnlyTCM == false)).ToString();
 
                 ViewBag.MedicalHistoryMissing = _context.Clients
                                                         .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                               && wc.IntakeMedicalHistory == null)).ToString();
+                                                                   && wc.IntakeMedicalHistory == null
+                                                                   && wc.OnlyTCM == false)).ToString();
 
                 List<MTPEntity> MtpPending = await _context.MTPs
-                                                                 .Include(f => f.Client)
-                                                                 .ThenInclude(n => n.Clinic)
-                                                                 .Where(n => (n.Status == MTPStatus.Pending
-                                                                      && n.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                      && n.CreatedBy == user_logged.UserName))
-                                                                 .OrderBy(f => f.Client.Name)
-                                                                 .ToListAsync();
+                                                           .Include(f => f.Client)
+                                                           .ThenInclude(n => n.Clinic)
+                                                           .Where(n => (n.Status == MTPStatus.Pending
+                                                                     && n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                     && n.CreatedBy == user_logged.UserName))
+                                                           .OrderBy(f => f.Client.Name)
+                                                           .ToListAsync();
                 ViewBag.MtpPending = MtpPending.Count().ToString();
 
                 List<BioEntity> BioPending = await _context.Bio

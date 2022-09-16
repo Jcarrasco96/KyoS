@@ -15,7 +15,15 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("TCM Fars Forms", "Index", "TCMFarsForms", new { idTCMClient = Model.TCMClient.Id, origin = 1 })
+                @if (ViewData["origi"].ToString() == "0")
+                {
+                    @Html.ActionLink("TCM Fars Forms", "Index", "TCMFarsForms", new { origin = @ViewData["origi"] })
+                }
+                @if (ViewData["origi"].ToString() == "1")
+                {
+                    @Html.ActionLink("TCM Fars Forms", "Index", "TCMFarsForms", new { idTCMClient = Model.TCMClient.Id, origin = @ViewData["origi"] })
+                }
+
             </li>
             <li class="active">Create TCM Fars Form</li>
         </ul><!--.breadcrumb-->
@@ -24,7 +32,7 @@
     <h4>Create Fars Form</h4>
     <hr />
     <div class="row">
-        <form asp-action="Create" asp-route-id="@Model.Id" enctype="multipart/form-data">
+        <form asp-action="Create" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdTCMClient" />
             <input type="hidden" asp-for="AdmissionedFor" />
@@ -37,7 +45,14 @@
             <partial name="_TCMFarsForms" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-success">Back</a>
+                @if (ViewData["origi"].ToString() == "0")
+                {
+                    <a asp-action="Index" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
+                }
+                @if (ViewData["origi"].ToString() == "1")
+                {
+                    <a asp-action="Index" asp-route-idTCMClient="@Model.TCMClient.Id" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>
