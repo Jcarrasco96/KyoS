@@ -73,30 +73,15 @@ namespace KyoS.Web.Controllers
                                                                     .Include(n => n.TCMIntakeWelcome)
                                                                     .Include(n => n.Client)
                                                                     .ThenInclude(n => n.Clinic)
-                                                                    .Include(n => n.Client)
-                                                                    .ThenInclude(n => n.Documents)
                                                                     .Include(n => n.Client.IntakeFeeAgreement)
                                                                     .Include(n => n.Client.IntakeMedicalHistory)
                                                                     .Include(n => n.Client.MedicationList)
-                                                                    .Include(n => n.Client.Psychiatrist)
-                                                                    .Include(n => n.Client.Doctor)
                                                                     .Include(n => n.TCMIntakeNonClinicalLog)
                                                                     .Include(n => n.TCMIntakeMiniMental)
                                                                     .Include(n => n.TCMIntakeCoordinationCare)
                                                                     .Include(n => n.TcmServicePlan)
-                                                                    .ThenInclude(n => n.TCMAdendum)
-                                                                    .Include(n => n.TcmServicePlan)
-                                                                    .ThenInclude(n => n.TCMServicePlanReview)
-                                                                    .Include(n => n.TcmServicePlan)
-                                                                    .ThenInclude(n => n.TCMDischarge)
-                                                                    .Include(n => n.TcmIntakeAppendixJ)
                                                                     .Include(n => n.TcmInterventionLog)
                                                                     .Include(n => n.TCMFarsFormList)
-                                                                    .Include(n => n.TCMAssessment)
-                                                                    .ThenInclude(n => n.HouseCompositionList)
-                                                                    .ThenInclude(n => n.TcmAssessment.MedicationList)
-                                                                    .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
-                                                                    .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
                                                                     .Include(n => n.TCMNote)
                                                                     .Include(n => n.Casemanager)
                                                                     .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
@@ -128,32 +113,15 @@ namespace KyoS.Web.Controllers
                                                                     .Include(n => n.TCMIntakeWelcome)
                                                                     .Include(n => n.Client)
                                                                     .ThenInclude(n => n.Clinic)
-                                                                    .Include(n => n.Client)
-                                                                    .ThenInclude(n => n.Documents)
                                                                     .Include(n => n.Client.IntakeFeeAgreement)
                                                                     .Include(n => n.Client.IntakeMedicalHistory)
                                                                     .Include(n => n.Client.MedicationList)
-                                                                    .Include(n => n.Client.Psychiatrist)
-                                                                    .Include(n => n.Client.Doctor)
                                                                     .Include(n => n.TCMIntakeNonClinicalLog)
                                                                     .Include(n => n.TCMIntakeMiniMental)
                                                                     .Include(n => n.TCMIntakeCoordinationCare)
                                                                     .Include(n => n.TcmServicePlan)
-                                                                    .ThenInclude(n => n.TCMAdendum)
-                                                                    .Include(n => n.TcmServicePlan)
-                                                                    .ThenInclude(n => n.TCMServicePlanReview)
-                                                                    .Include(n => n.TcmServicePlan)
-                                                                    .ThenInclude(n => n.TCMDischarge)
-                                                                    .Include(n => n.TcmIntakeAppendixJ)
                                                                     .Include(n => n.TcmInterventionLog)
                                                                     .Include(n => n.TCMFarsFormList)
-                                                                    .Include(n => n.TCMAssessment)
-                                                                    .ThenInclude(n => n.HouseCompositionList)
-                                                                    .ThenInclude(n => n.TcmAssessment.MedicationList)
-                                                                    .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
-                                                                    .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
-                                                                    .Include(n => n.TCMNote)
-                                                                    .Include(n => n.Casemanager)
                                                                     .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
                                                                      && n.Casemanager.LinkedUser == user_logged.UserName
                                                                      && n.Status == status))
@@ -478,8 +446,6 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.TCMIntakeWelcome)
                                                             .Include(n => n.Client)
                                                             .ThenInclude(n => n.Documents)
-                                                            .Include(n => n.Client.Psychiatrist)
-                                                            .Include(n => n.Client.Doctor)
                                                             .Include(n => n.Client.IntakeFeeAgreement)
                                                             .Include(n => n.Client.IntakeMedicalHistory)
                                                             .Include(n => n.Client.MedicationList)
@@ -496,24 +462,10 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.TcmInterventionLog)
                                                             .Include(n => n.TCMFarsFormList)
                                                             .Include(n => n.TCMAssessment)
-                                                            .ThenInclude(n => n.HouseCompositionList)
-                                                            .ThenInclude(n => n.TcmAssessment.MedicationList)
-                                                            .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
-                                                            .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
                                                             .Include(n => n.TCMNote)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
-            List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
-                                                                               .Where(m => m.TcmClient_FK == id)
-                                                                               .ToListAsync();
-            List<DocumentEntity> listDocument = await _context.Documents
-                                                              .Where(m => m.Client.Id == TcmClientEntity.Client.Id)
-                                                              .ToListAsync();
-
-            TcmClientEntity.TcmIntakeConsentForRelease = listRelease;
-            TcmClientEntity.Client.Documents = listDocument;
-            
-
+           
             if (TcmClientEntity == null)
             {
                 return RedirectToAction("Home/Error404");
@@ -539,17 +491,13 @@ namespace KyoS.Web.Controllers
                                                             .Include(c => c.TCMIntakeForm)
                                                             .Include(c => c.Client)
                                                             .Include(c => c.TcmIntakeConsentForTreatment)
-                                                            .Include(n => n.TcmIntakeConsentForRelease.Where(m => m.TcmClient_FK == id))
+                                                            .Include(n => n.TcmIntakeConsentForRelease)
                                                             .Include(n => n.TcmIntakeConsumerRights)
                                                             .Include(n => n.TcmIntakeAcknowledgementHipa)
                                                             .Include(n => n.TCMIntakeOrientationChecklist)
                                                             .Include(n => n.TCMIntakeAdvancedDirective)
                                                             .Include(n => n.TCMIntakeForeignLanguage)
                                                             .Include(n => n.TCMIntakeWelcome)
-                                                            .Include(n => n.Client)
-                                                            .ThenInclude(n => n.Documents)
-                                                            .Include(n => n.Client.Psychiatrist)
-                                                            .Include(n => n.Client.Doctor)
                                                             .Include(n => n.Client.IntakeFeeAgreement)
                                                             .Include(n => n.Client.IntakeMedicalHistory)
                                                             .Include(n => n.Client.MedicationList)
@@ -566,23 +514,10 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.TcmInterventionLog)
                                                             .Include(n => n.TCMFarsFormList)
                                                             .Include(n => n.TCMAssessment)
-                                                            .ThenInclude(n => n.HouseCompositionList)
-                                                            .ThenInclude(n => n.TcmAssessment.MedicationList)
-                                                            .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
-                                                            .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
                                                             .Include(n => n.TCMNote)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
-            List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
-                                                                               .Where(m => m.TcmClient_FK == id)
-                                                                               .ToListAsync();
-            List<DocumentEntity> listDocument = await _context.Documents
-                                                              .Where(m => m.Client.Id == TcmClientEntity.Client.Id)
-                                                              .ToListAsync();
-
-            TcmClientEntity.TcmIntakeConsentForRelease = listRelease;
-            TcmClientEntity.Client.Documents = listDocument;
-
+           
 
             if (TcmClientEntity == null)
             {
@@ -2764,16 +2699,16 @@ namespace KyoS.Web.Controllers
             }
 
             UserEntity user_logged = await _context.Users
-                                       .Include(u => u.Clinic)
-                                       .ThenInclude(c => c.Setting)
-                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
 
             TCMClientEntity TcmClientEntity = await _context.TCMClient
                                                             .Include(c => c.TCMIntakeForm)
                                                             .Include(c => c.Client)
                                                             .Include(c => c.TcmIntakeConsentForTreatment)
-                                                            .Include(n => n.TcmIntakeConsentForRelease.Where(m => m.TcmClient_FK == id))
+                                                            .Include(n => n.TcmIntakeConsentForRelease)
                                                             .Include(n => n.TcmIntakeConsumerRights)
                                                             .Include(n => n.TcmIntakeAcknowledgementHipa)
                                                             .Include(n => n.TCMIntakeOrientationChecklist)
@@ -2790,30 +2725,23 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.TCMIntakeNonClinicalLog)
                                                             .Include(n => n.TCMIntakeMiniMental)
                                                             .Include(n => n.TCMIntakeCoordinationCare)
-                                                            .Include(n => n.TcmServicePlan)
-                                                            .ThenInclude(n => n.TCMAdendum)
-                                                            .Include(n => n.TcmServicePlan)
-                                                            .ThenInclude(n => n.TCMServicePlanReview)
-                                                            .Include(n => n.TcmServicePlan)
-                                                            .ThenInclude(n => n.TCMDischarge)
-                                                            .Include(n => n.TcmIntakeAppendixJ)
-                                                            .Include(n => n.TcmInterventionLog)
-                                                            .Include(n => n.TCMFarsFormList)
-                                                            .Include(n => n.TCMAssessment)
-                                                            .ThenInclude(n => n.HouseCompositionList)
-                                                            .ThenInclude(n => n.TcmAssessment.MedicationList)
-                                                            .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
-                                                            .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
+                                                            .Include(n => n.TcmServicePlan)   
+                                                            .ThenInclude(n => n.TCMAdendum)    
+                                                            .Include(n => n.TcmServicePlan)    
+                                                            .ThenInclude(n => n.TCMServicePlanReview)    
+                                                            .Include(n => n.TcmServicePlan)     
+                                                            .ThenInclude(n => n.TCMDischarge)   
+                                                            .Include(n => n.TcmIntakeAppendixJ) 
+                                                            .Include(n => n.TcmInterventionLog) 
+                                                            .Include(n => n.TCMFarsFormList)   
+                                                            .Include(n => n.TCMAssessment)     
                                                             .Include(n => n.TCMNote)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
-            List<TCMIntakeConsentForReleaseEntity> listRelease = await _context.TCMIntakeConsentForRelease
-                                                                               .Where(m => m.TcmClient_FK == id).ToListAsync();
-            List<DocumentEntity> listDocument = await _context.Documents
-                                                              .Where(m => m.Client.Id == TcmClientEntity.Client.Id).ToListAsync();
+           // List<DocumentEntity> listDocument = await _context.Documents
+           //                                                   .Where(m => m.Client.Id == TcmClientEntity.Client.Id).ToListAsync();
 
-            TcmClientEntity.TcmIntakeConsentForRelease = listRelease;
-            TcmClientEntity.Client.Documents = listDocument;
+          //  TcmClientEntity.Client.Documents = listDocument;
 
             if (TcmClientEntity == null)
             {
@@ -3035,7 +2963,8 @@ namespace KyoS.Web.Controllers
                                                                              .Include(n => n.TcmClient)
                                                                              .ThenInclude(n => n.Casemanager)
                                                                              .Include(n => n.InterventionList)
-                                                                             .FirstOrDefault(n => n.InterventionList.Count() > 0);
+                                                                             .FirstOrDefault(n => (n.InterventionList.Count() > 0
+                                                                                        && n.TcmClient.Id == id));
                     if(interventionLog == null)
                     {
                         model = new TCMIntakeInterventionLogViewModel
@@ -3081,7 +3010,6 @@ namespace KyoS.Web.Controllers
             {
                 TCMIntakeInterventionLogEntity InterventionLogEntity = await _converterHelper.ToTCMIntakeInterventionLogEntity(interventionLogViewModel, true, user_logged.UserName);
 
-                InterventionLogEntity.TcmClient = null;
                 _context.TCMIntakeInterventionLog.Add(InterventionLogEntity);
                 try
                 {

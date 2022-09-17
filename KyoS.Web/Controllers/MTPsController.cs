@@ -1224,9 +1224,9 @@ namespace KyoS.Web.Controllers
             {
                 Goal = goalEntity,
                 IdGoal = goalEntity.Id,
-                DateOpened = goalEntity.MTP.MTPDevelopedDate,
-                DateResolved = goalEntity.MTP.MTPDevelopedDate.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
-                DateTarget = goalEntity.MTP.MTPDevelopedDate.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
+                DateOpened = goalEntity.MTP.AdmissionDateMTP,
+                DateResolved = goalEntity.MTP.AdmissionDateMTP.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
+                DateTarget = goalEntity.MTP.AdmissionDateMTP.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
                 Objetive = objetive
             };
 
@@ -1349,9 +1349,9 @@ namespace KyoS.Web.Controllers
             {
                 Goal = goalEntity,
                 IdGoal = goalEntity.Id,
-                DateOpened = goalEntity.MTP.MTPDevelopedDate,
-                DateResolved = goalEntity.MTP.MTPDevelopedDate.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
-                DateTarget = goalEntity.MTP.MTPDevelopedDate.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
+                DateOpened = goalEntity.MTP.AdmissionDateMTP,
+                DateResolved = goalEntity.MTP.AdmissionDateMTP.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
+                DateTarget = goalEntity.MTP.AdmissionDateMTP.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
                 Objetive = objetive
             };
 
@@ -1500,9 +1500,9 @@ namespace KyoS.Web.Controllers
             {
                 Goal = goalEntity,
                 IdGoal = goalEntity.Id,
-                DateOpened = goalEntity.MTP.MTPDevelopedDate,
-                DateResolved = goalEntity.MTP.MTPDevelopedDate.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
-                DateTarget = goalEntity.MTP.MTPDevelopedDate.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
+                DateOpened = goalEntity.MTP.AdmissionDateMTP,
+                DateResolved = goalEntity.MTP.AdmissionDateMTP.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
+                DateTarget = goalEntity.MTP.AdmissionDateMTP.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
                 Objetive = objetive,
                 IdMTPReview = idReview
             };

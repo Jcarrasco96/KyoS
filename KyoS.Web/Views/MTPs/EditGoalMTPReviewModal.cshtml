@@ -29,16 +29,16 @@
                 </div>
                 <div>
                     <div class=" col-md-12 form-group">
-                        <label asp-for="Name" class="control-label"></label> &nbsp;
-                        <textarea asp-for="Name" class="form-control" readonly rows="3"></textarea>
-                        <span asp-validation-for="Name" class="text-danger"></span>
+                        <label asp-for="AreaOfFocus" class="control-label"></label> &nbsp;
+                        <textarea asp-for="AreaOfFocus" class="form-control" rows="5" readonly></textarea>
+                        <span asp-validation-for="AreaOfFocus" class="text-danger"></span>
                     </div>
                 </div>
                 <div>
                     <div class=" col-md-12 form-group">
-                        <label asp-for="AreaOfFocus" class="control-label"></label> &nbsp;
-                        <textarea asp-for="AreaOfFocus" class="form-control" rows="5" readonly></textarea>
-                        <span asp-validation-for="AreaOfFocus" class="text-danger"></span>
+                        <label asp-for="Name" class="control-label">Goal </label> <strong>@Model.Number</strong> &nbsp;
+                        <textarea asp-for="Name" class="form-control" readonly rows="3"></textarea>
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                 </div>
             }
@@ -58,16 +58,16 @@
                 </div>
                 <div>
                     <div class=" col-md-12 form-group">
-                        <label asp-for="Name" class="control-label"></label> &nbsp;
-                        <input asp-for="Name" class="form-control" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
+                        <label asp-for="AreaOfFocus" class="control-label"></label> &nbsp;
+                        <textarea asp-for="AreaOfFocus" class="form-control" rows="5"></textarea>
+                        <span asp-validation-for="AreaOfFocus" class="text-danger"></span>
                     </div>
                 </div>
                 <div>
                     <div class=" col-md-12 form-group">
-                        <label asp-for="AreaOfFocus" class="control-label"></label> &nbsp;
-                        <textarea asp-for="AreaOfFocus" class="form-control" rows="5" ></textarea>
-                        <span asp-validation-for="AreaOfFocus" class="text-danger"></span>
+                        <label asp-for="Name" class="control-label">Goal </label> <strong>@Model.Number</strong> &nbsp;
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                 </div>
             }

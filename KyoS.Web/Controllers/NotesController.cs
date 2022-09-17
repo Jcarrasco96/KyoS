@@ -9560,6 +9560,7 @@ namespace KyoS.Web.Controllers
                                       .Include(w => w.Clinic)
 
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
+                                      .AsNoTrackingWithIdentityResolution()
                                       .ToListAsync());            
         }
 

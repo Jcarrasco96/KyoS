@@ -204,7 +204,7 @@ namespace KyoS.Web.Controllers
                         await _context.SaveChangesAsync();
                         if (origi == 0)
                         {
-                            return RedirectToAction(nameof(Index));
+                            return RedirectToAction("Index", new { idTCMClient = FarsFormViewModel.IdTCMClient, origin = 1 });
                         }
                         if (origi == 1)
                         {
