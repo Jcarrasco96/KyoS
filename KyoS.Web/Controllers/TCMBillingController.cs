@@ -98,7 +98,7 @@ namespace KyoS.Web.Controllers
             if (idClient == 0)
             {
                 var events = _context.TCMNoteActivity
-                                     .Where(t => (t.TCMNote.CaseManager.LinkedUser == user_logged.UserName
+                                     .Where(t => (t.TCMNote.TCMClient.Casemanager.LinkedUser == user_logged.UserName
                                               && t.TCMNote.DateOfService >= initDate && t.TCMNote.DateOfService <= finalDate))
                                      .Select(t => new
                                      {
@@ -124,7 +124,7 @@ namespace KyoS.Web.Controllers
             else
             {
                 var events = _context.TCMNoteActivity
-                                     .Where(t => (t.TCMNote.CaseManager.LinkedUser == user_logged.UserName
+                                     .Where(t => (t.TCMNote.TCMClient.Casemanager.LinkedUser == user_logged.UserName
                                               && t.TCMNote.TCMClient.Id == idClient
                                               && t.TCMNote.DateOfService >= initDate && t.TCMNote.DateOfService <= finalDate))
                                      .Select(t => new
@@ -164,21 +164,21 @@ namespace KyoS.Web.Controllers
             if (idClient == 0)
             {
                 int count = _context.TCMNote
-                                 .Where(t => (t.CaseManager.LinkedUser == user_logged.UserName
+                                    .Where(t => (t.TCMClient.Casemanager.LinkedUser == user_logged.UserName
                                            && t.DateOfService >= initDate && t.DateOfService <= finalDate))
-                                 .ToList()
-                                 .Count();
+                                    .ToList()
+                                    .Count();
 
                 return Json(count);
             }
             else
             {
                 int count = _context.TCMNote
-                                 .Where(t => (t.CaseManager.LinkedUser == user_logged.UserName
+                                    .Where(t => (t.TCMClient.Casemanager.LinkedUser == user_logged.UserName
                                            && t.TCMClient.Id == idClient
                                            && t.DateOfService >= initDate && t.DateOfService <= finalDate))
-                                 .ToList()
-                                 .Count();
+                                    .ToList()
+                                    .Count();
 
                 return Json(count);
             }            
@@ -201,7 +201,7 @@ namespace KyoS.Web.Controllers
 
                                                            .Include(t => t.TCMNoteActivity)
 
-                                                           .Where(t => (t.CaseManager.LinkedUser == user_logged.UserName
+                                                           .Where(t => (t.TCMClient.Casemanager.LinkedUser == user_logged.UserName
                                                                      && t.DateOfService >= initDate && t.DateOfService <= finalDate));
 
                 int minutes;
@@ -224,7 +224,7 @@ namespace KyoS.Web.Controllers
 
                                                            .Include(t => t.TCMNoteActivity)
 
-                                                           .Where(t => (t.CaseManager.LinkedUser == user_logged.UserName
+                                                           .Where(t => (t.TCMClient.Casemanager.LinkedUser == user_logged.UserName
                                                                      && t.TCMClient.Id == idClient
                                                                      && t.DateOfService >= initDate && t.DateOfService <= finalDate));
 
@@ -259,20 +259,18 @@ namespace KyoS.Web.Controllers
             {
                 string[] date = dateInterval.Split(" - ");
                 IQueryable<TCMNoteEntity> query = _context.TCMNote
-                                                          .Include(t => t.CaseManager)
-
                                                           .Include(t => t.TCMClient)
-
                                                           .ThenInclude(c => c.Client)
                                                           .ThenInclude(cl => cl.Clients_Diagnostics)
                                                           .ThenInclude(cd => cd.Diagnostic)
 
+                                                          .Include(t => t.TCMClient.Casemanager)
                                                           .Include(t => t.TCMNoteActivity)
 
                                                           .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0]) && t.DateOfService <= Convert.ToDateTime(date[1])));
 
                 if (idCaseManager != 0)
-                    query = query.Where(t => t.CaseManager.Id == idCaseManager);
+                    query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
 
                 if (idClient != 0)
                     query = query.Where(t => t.TCMClient.Id == idClient);
@@ -339,12 +337,12 @@ namespace KyoS.Web.Controllers
             if (idClient == 0)
             {
                 List <TCMNoteEntity> notes = _context.TCMNote
-
-                                                           .Include(t => t.TCMNoteActivity)
-                                                           .Include(t => t.CaseManager)
-                                                           .Where(t => (t.CaseManager.LinkedUser == user_logged.UserName
+                                                     .Include(t => t.TCMNoteActivity)
+                                                     .Include(t => t.TCMClient)
+                                                     .ThenInclude(t => t.Casemanager)
+                                                     .Where(t => (t.TCMClient.Casemanager.LinkedUser == user_logged.UserName
                                                                      && t.DateOfService >= initDate && t.DateOfService <= finalDate))
-                                                           .ToList();
+                                                     .ToList();
 
 
                 decimal totalMinutes = 0;
@@ -356,7 +354,7 @@ namespace KyoS.Web.Controllers
                 }
                 if (notes.Count() > 0)
                 {
-                    valor = notes.ElementAt(0).CaseManager.Money / 60;
+                    valor = notes.ElementAt(0).TCMClient.Casemanager.Money / 60;
                     money = totalMinutes * valor;
                     return Json(decimal.Round(money, 2));
                 }
@@ -369,13 +367,13 @@ namespace KyoS.Web.Controllers
             else
             {
                 List<TCMNoteEntity> notes = _context.TCMNote
-
-                                                           .Include(t => t.TCMNoteActivity)
-                                                           .Include(t => t.CaseManager)
-                                                           .Where(t => (t.CaseManager.LinkedUser == user_logged.UserName
-                                                                     && t.TCMClient.Id == idClient
-                                                                     && t.DateOfService >= initDate && t.DateOfService <= finalDate))
-                                                           .ToList();
+                                                    .Include(t => t.TCMNoteActivity)
+                                                    .Include(t => t.TCMClient)
+                                                    .ThenInclude(t => t.Casemanager)
+                                                    .Where(t => (t.TCMClient.Casemanager.LinkedUser == user_logged.UserName
+                                                              && t.TCMClient.Id == idClient
+                                                              && t.DateOfService >= initDate && t.DateOfService <= finalDate))
+                                                    .ToList();
 
                 decimal totalMinutes = 0;
                 decimal valor = new decimal();
@@ -386,7 +384,7 @@ namespace KyoS.Web.Controllers
                 }
                 if (notes.Count() > 0)
                 {
-                    valor = notes.ElementAt(0).CaseManager.Money / 60;
+                    valor = notes.ElementAt(0).TCMClient.Casemanager.Money / 60;
                     money = totalMinutes * valor;
                     return Json(decimal.Round(money, 2));
                 }
@@ -412,10 +410,10 @@ namespace KyoS.Web.Controllers
             if (idClient == 0)
             {
                 IEnumerable<TCMNoteEntity> notes = _context.TCMNote
-
                                                            .Include(t => t.TCMNoteActivity)
-                                                           .Include(t => t.CaseManager)
-                                                           .Where(t => (t.CaseManager.LinkedUser == user_logged.UserName
+                                                           .Include(t => t.TCMClient)
+                                                           .ThenInclude(t => t.Casemanager)
+                                                           .Where(t => (t.TCMClient.Casemanager.LinkedUser == user_logged.UserName
                                                                      && t.DateOfService >= initDate && t.DateOfService <= finalDate));
 
                 int minutes = 0;
@@ -428,7 +426,7 @@ namespace KyoS.Web.Controllers
                 }
                 if (notes.Count() > 0)
                 {
-                    money = (totalMinutes / 60 * notes.ElementAt(0).CaseManager.Money);
+                    money = (totalMinutes / 60 * notes.ElementAt(0).TCMClient.Casemanager.Money);
                 }
                 else
                 {
@@ -439,10 +437,10 @@ namespace KyoS.Web.Controllers
             else
             {
                 IEnumerable<TCMNoteEntity> notes = _context.TCMNote
-
                                                            .Include(t => t.TCMNoteActivity)
-                                                           .Include(t => t.CaseManager)
-                                                           .Where(t => (t.CaseManager.LinkedUser == user_logged.UserName
+                                                           .Include(t => t.TCMClient)
+                                                           .ThenInclude(t => t.Casemanager)
+                                                           .Where(t => (t.TCMClient.Casemanager.LinkedUser == user_logged.UserName
                                                                      && t.TCMClient.Id == idClient
                                                                      && t.DateOfService >= initDate && t.DateOfService <= finalDate));
 
@@ -456,7 +454,7 @@ namespace KyoS.Web.Controllers
                 }
                 if (notes.Count() > 0)
                 {
-                    money = (totalMinutes / 60 * notes.ElementAt(0).CaseManager.Money);
+                    money = (totalMinutes / 60 * notes.ElementAt(0).TCMClient.Casemanager.Money);
                 }
                 else
                 {

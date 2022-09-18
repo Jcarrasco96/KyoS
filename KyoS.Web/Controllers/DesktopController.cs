@@ -841,11 +841,11 @@ namespace KyoS.Web.Controllers
                                                                && g.TcmService.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
 
                 ViewBag.TCMNoteReview = _context.TCMNote
-                                                .Include(wc => wc.CaseManager)
                                                 .Include(wc => wc.TCMClient)
                                                 .ThenInclude(wc => wc.Client)
+                                                .Include(wc => wc.TCMClient.Casemanager)
                                                 .Include(wc => wc.TCMMessages.Where(m => m.Notification == false))
-                                                .Where(wc => (wc.CaseManager.LinkedUser == user_logged.UserName
+                                                .Where(wc => (wc.TCMClient.Casemanager.LinkedUser == user_logged.UserName
                                                        && wc.Status == NoteStatus.Pending
                                                        && wc.TCMMessages.Count() > 0)).Count()
                                                 .ToString();
@@ -1028,11 +1028,11 @@ namespace KyoS.Web.Controllers
                                                          && g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
 
                 ViewBag.TCMNoteReview =  _context.TCMNote
-                                                 .Include(wc => wc.CaseManager)
                                                  .Include(wc => wc.TCMClient)
                                                  .ThenInclude(wc => wc.Client)
+                                                 .Include(wc => wc.TCMClient.Casemanager)
                                                  .Include(wc => wc.TCMMessages.Where(m => m.Notification == false))
-                                                 .Where(wc => (wc.CaseManager.Clinic.Id == user_logged.Clinic.Id
+                                                 .Where(wc => (wc.TCMClient.Casemanager.Clinic.Id == user_logged.Clinic.Id
                                                         && wc.Status == NoteStatus.Pending
                                                         && wc.TCMMessages.Count() > 0)).Count()
                                                  .ToString();
