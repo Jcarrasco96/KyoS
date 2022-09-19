@@ -1,56 +1,55 @@
 ﻿@model KyoS.Web.Models.TCMDischargeViewModel
 
-<div class="container-fluid">
-    <div class="form-group col-md-4">
-        <label asp-for="TcmServicePlan.TcmClient.Client.Name" class="control-label">Name of Recipient</label>&nbsp;*
-        <input asp-for="TcmServicePlan.TcmClient.Client.Name" class="form-control" readonly>
-        <span asp-validation-for="TcmServicePlan.TcmClient.Client.Name" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="TcmServicePlan.TcmClient.CaseNumber" class="control-label">Case No.</label>&nbsp;*
-        <input asp-for="TcmServicePlan.TcmClient.CaseNumber" class="form-control" readonly>
-        <span asp-validation-for="TcmServicePlan.TcmClient.CaseNumber" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="TcmServicePlan.TcmClient.DataOpen" class="control-label">Date of Admission</label>&nbsp;*
-        <input asp-for="TcmServicePlan.TcmClient.DataOpen" class="form-control" readonly>
-        <span asp-validation-for="TcmServicePlan.TcmClient.DataOpen" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="StaffingDate" class="control-label">Staffing Date</label>&nbsp;*
-        <input asp-for="StaffingDate" class="form-control" readonly>
-        <span asp-validation-for="StaffingDate" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="DischargeDate" class="control-label">Date of Discharge</label>&nbsp;*
-        <input asp-for="DischargeDate" class="form-control" readonly>
-        <span asp-validation-for="DischargeDate" class="text-danger"></span>
-    </div>
+
+<div class="form-group col-md-4">
+    <label asp-for="TcmServicePlan.TcmClient.Client.Name" class="control-label">Name of Recipient</label>&nbsp;*
+    <input asp-for="TcmServicePlan.TcmClient.Client.Name" class="form-control" readonly>
+    <span asp-validation-for="TcmServicePlan.TcmClient.Client.Name" class="text-danger"></span>
 </div>
-<div class="container-fluid ">
-    <div class="form-group col-md-6">
-        <br />
-        <label asp-for="PresentProblems" class="control-label">Present Problems (According to the “Presenting Problems” section of the Assessment that was completed upon admission)</label><br />
-        <textarea asp-for="PresentProblems" class="form-control" rows="4" readonly></textarea>
-        <span asp-validation-for="PresentProblems" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-6">
-        <label asp-for="ProgressToward" class="control-label">Progress Toward (This is based on a review of functioning at admission, the identified needs and goals, the level of goal achievement, and the level of functioning at discharge as compared to the level of functioning at admission)</label>
-        <textarea asp-for="ProgressToward" class="form-control" rows="4" readonly></textarea>
-        <span asp-validation-for="ProgressToward" class="text-danger"></span>
-    </div>
+<div class="form-group col-md-2">
+    <label asp-for="TcmServicePlan.TcmClient.CaseNumber" class="control-label">Case No.</label>&nbsp;*
+    <input asp-for="TcmServicePlan.TcmClient.CaseNumber" class="form-control" readonly>
+    <span asp-validation-for="TcmServicePlan.TcmClient.CaseNumber" class="text-danger"></span>
+</div>
+<div class="form-group col-md-2">
+    <label asp-for="TcmServicePlan.TcmClient.DataOpen" class="control-label">Date of Admission</label>&nbsp;*
+    <input asp-for="TcmServicePlan.TcmClient.DataOpen" class="form-control" readonly>
+    <span asp-validation-for="TcmServicePlan.TcmClient.DataOpen" class="text-danger"></span>
+</div>
+<div class="form-group col-md-2">
+    <label asp-for="StaffingDate" class="control-label">Staffing Date</label>&nbsp;*
+    <input asp-for="StaffingDate" class="form-control" readonly>
+    <span asp-validation-for="StaffingDate" class="text-danger"></span>
+</div>
+<div class="form-group col-md-2">
+    <label asp-for="DischargeDate" class="control-label">Date of Discharge</label>&nbsp;*
+    <input asp-for="DischargeDate" class="form-control" readonly>
+    <span asp-validation-for="DischargeDate" class="text-danger"></span>
 </div>
 
-<div class="container-fluid">
-    <div class="form-group col-md-12 " >
-        <pre>
-        <strong><u>Reason for Discharge </u></strong>(check only one):
-        <input type="checkbox" asp-for="AllServiceInPlace" disabled> All services in place/coordinated                           <input type="checkbox" asp-for="AllServiceInPlace" disabled> Non-compliance with agency rules  
-        <input type="checkbox" asp-for="Referred" disabled> Referred/Transferred to other provider                      <input type="checkbox" asp-for="ClientMovedOutArea" disabled> Client moved out of area
-        <input type="checkbox" asp-for="ClientLeftVoluntarily" disabled> Client left voluntarily/refused services                    <input type="checkbox" asp-for="LackOfProgress" disabled>  Lack of progress
-        <input type="checkbox" asp-for="Other" disabled> Other:                     <input asp-for="Other_Explain" style="width:80%" disabled>
-        <input type="checkbox" asp-for="AdministrativeDischarge" disabled> <strong>Administrative Discharge:</strong> 
-        <textarea asp-for="AdministrativeDischarge_Explain" style="width:90%" disabled></textarea>
-        </pre>
-    </div>
+<div class="form-group col-md-6">
+    <br />
+    <label asp-for="PresentProblems" class="control-label">Present Problems (According to the “Presenting Problems” section of the Assessment that was completed upon admission)</label><br />
+    <textarea asp-for="PresentProblems" class="form-control" rows="4" readonly></textarea>
+    <span asp-validation-for="PresentProblems" class="text-danger"></span>
 </div>
+<div class="form-group col-md-6">
+    <label asp-for="ProgressToward" class="control-label">Progress Toward (This is based on a review of functioning at admission, the identified needs and goals, the level of goal achievement, and the level of functioning at discharge as compared to the level of functioning at admission)</label>
+    <textarea asp-for="ProgressToward" class="form-control" rows="4" readonly></textarea>
+    <span asp-validation-for="ProgressToward" class="text-danger"></span>
+</div>
+
+
+
+<div class="form-group col-md-12 ">
+    <pre>
+    <strong><u>Reason for Discharge </u></strong>(check only one):
+    <input type="checkbox" asp-for="AllServiceInPlace" disabled> All services in place/coordinated                           <input type="checkbox" asp-for="AllServiceInPlace" disabled> Non-compliance with agency rules  
+    <input type="checkbox" asp-for="Referred" disabled> Referred/Transferred to other provider                      <input type="checkbox" asp-for="ClientMovedOutArea" disabled> Client moved out of area
+    <input type="checkbox" asp-for="ClientLeftVoluntarily" disabled> Client left voluntarily/refused services                    <input type="checkbox" asp-for="LackOfProgress" disabled>  Lack of progress
+    <input type="checkbox" asp-for="Other" disabled> Other:                     <input asp-for="Other_Explain" style="width:80%" disabled>
+    <input type="checkbox" asp-for="AdministrativeDischarge" disabled> <strong>Administrative Discharge:</strong> 
+    <textarea asp-for="AdministrativeDischarge_Explain" style="width:90%" disabled></textarea>
+        </pre>
+</div>
+

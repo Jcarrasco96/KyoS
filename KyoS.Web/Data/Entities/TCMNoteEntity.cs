@@ -26,7 +26,7 @@ namespace KyoS.Web.Data.Entities
 
         public TCMClientEntity TCMClient { get; set; }
 
-        public CaseMannagerEntity CaseManager { get; set; }
+       // public CaseMannagerEntity CaseManager { get; set; }
 
         public List<TCMNoteActivityEntity> TCMNoteActivity { get; set; }
 

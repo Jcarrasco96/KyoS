@@ -8290,7 +8290,7 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "TCMNote");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetCaseManagerDS(note.CaseManager));
+            dataSet.Tables.Add(GetCaseManagerDS(note.TCMClient.Casemanager));
             WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
 
             dataSet = new DataSet();
@@ -8309,9 +8309,9 @@ namespace KyoS.Web.Helpers
             byte[] stream1 = null;
             //byte[] stream2 = null;
             string path;
-            if (!string.IsNullOrEmpty(note.CaseManager.SignaturePath))
+            if (!string.IsNullOrEmpty(note.TCMClient.Casemanager.SignaturePath))
             {
-                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(note.CaseManager.SignaturePath)}");
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(note.TCMClient.Casemanager.SignaturePath)}");
                 stream1 = _imageHelper.ImageToByteArray(path);
             }            
 
@@ -8342,7 +8342,7 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "TCMNote");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetCaseManagerDS(note.CaseManager));
+            dataSet.Tables.Add(GetCaseManagerDS(note.TCMClient.Casemanager));
             WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
 
             dataSet = new DataSet();
@@ -8361,9 +8361,9 @@ namespace KyoS.Web.Helpers
             byte[] stream1 = null;
             //byte[] stream2 = null;
             string path;
-            if (!string.IsNullOrEmpty(note.CaseManager.SignaturePath))
+            if (!string.IsNullOrEmpty(note.TCMClient.Casemanager.SignaturePath))
             {
-                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(note.CaseManager.SignaturePath)}");
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(note.TCMClient.Casemanager.SignaturePath)}");
                 stream1 = _imageHelper.ImageToByteArray(path);
             }
 
