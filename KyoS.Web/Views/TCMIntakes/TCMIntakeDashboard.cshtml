@@ -59,19 +59,19 @@
                 <div class="thumbnail list-group-item list-group-item-text">
                     <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button">
                         <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 1</h4>         
-                    </a>
-                    <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>
+                    </a>                    
                 </div>                
             }
         </div>
         <div class="col-sm-3 col-md-2">
             @if ((Model.Client.IntakeFeeAgreement != null) && (Model.TCMIntakeNonClinicalLog != null))
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="2" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-success">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 2<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
+            {                
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="2" asp-action="TCMIntakeSectionDashboard" role="button">
+                        <h4 style="align-content: end; color: #3c763d "><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 2</h4>
+                    </a>
+                    <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d "></i>
+                </div>                
             }
             else
             {                
@@ -79,7 +79,7 @@
                     <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="2" asp-action="TCMIntakeSectionDashboard" role="button">
                         <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 2</h4>
                     </a>
-                    <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>
+                    @*<i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>*@
                 </div>                
             }
         </div>
@@ -99,7 +99,7 @@
                     <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="3" asp-action="TCMIntakeSectionDashboard" role="button">
                         <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 3</h4>
                     </a>
-                    <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>
+                    @*<i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>*@
                 </div>                
             }
         </div>        
@@ -127,7 +127,7 @@
                     <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="4" asp-action="TCMIntakeSectionDashboard" role="button">
                         <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 4</h4>
                     </a>
-                    <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>
+                    @*<i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>*@
                 </div>                
             }
         </div>
@@ -146,7 +146,7 @@
                     <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="5" asp-action="TCMIntakeSectionDashboard" role="button">
                         <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 5</h4>
                     </a>
-                    <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>
+                    @*<i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>*@
                 </div>                
             }
         </div>
@@ -159,7 +159,7 @@
                         <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboard" role="button">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6</h4>
                         </a>
-                        <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>
+                        @*<i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>*@
                     </div>                    
                 }
                 else
@@ -170,7 +170,7 @@
                             <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboard" role="button">
                                 <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6</h4>
                             </a>
-                            <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>
+                            @*<i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>*@
                         </div>                        
                     }
                     else
@@ -189,7 +189,7 @@
                     <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboard" role="button">
                         <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6</h4>
                     </a>
-                    <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>
+                    @*<i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>*@
                 </div>                
             }
         </div>

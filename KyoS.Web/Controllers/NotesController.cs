@@ -8812,20 +8812,20 @@ namespace KyoS.Web.Controllers
 
             return View(await _context.Workdays_Clients.AsNoTracking()
 
-                                      .Include(wc => wc.Note)
+                                      .Include(wc => wc.Note).AsNoTracking()
 
-                                      .Include(wc => wc. IndividualNote)
+                                      .Include(wc => wc. IndividualNote).AsNoTracking()
 
-                                      .Include(wc => wc.GroupNote)
+                                      .Include(wc => wc.GroupNote).AsNoTracking()
 
-                                      .Include(wc => wc.NoteP)
+                                      .Include(wc => wc.NoteP).AsNoTracking()
 
-                                      .Include(wc => wc.Facilitator)
+                                      .Include(wc => wc.Facilitator).AsNoTracking()
 
-                                      .Include(wc => wc.Client)
-                                      
-                                      .Include(wc => wc.Workday)                                      
-                                      
+                                      .Include(wc => wc.Client).AsNoTracking()
+
+                                      .Include(wc => wc.Workday).AsNoTracking()
+
                                       .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                 && (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved
                                                                                           || wc.GroupNote.Status == NoteStatus.Approved
