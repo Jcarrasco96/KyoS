@@ -44,20 +44,24 @@
             @if ((Model.TCMIntakeForm != null) && (Model.TcmIntakeConsentForTreatment != null) && (Model.TcmIntakeConsentForRelease != null) && (Model.TcmIntakeConsumerRights != null)
              && (Model.TcmIntakeAcknowledgementHipa != null) && (Model.TCMIntakeOrientationChecklist != null) && (Model.TCMIntakeAdvancedDirective != null)
              && (Model.TCMIntakeForeignLanguage != null) && (Model.TCMIntakeWelcome != null))
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-success">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
+            {                
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button">
+                        <h4 style="align-content: end; color: #3c763d "><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 1</h4>
+                    </a>
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
+                        <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
+                    </a>
+                </div>                
             }
             else
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
+            {               
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 1</h4>         
+                    </a>
+                    <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>
+                </div>                
             }
         </div>
         <div class="col-sm-3 col-md-2">
@@ -70,12 +74,13 @@
                 </a>
             }
             else
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="2" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 2<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
+            {                
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="2" asp-action="TCMIntakeSectionDashboard" role="button">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 2</h4>
+                    </a>
+                    <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>
+                </div>                
             }
         </div>
         <div class="col-sm-3 col-md-2">
@@ -89,15 +94,15 @@
                 </a>
             }
             else
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="3" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 3<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
+            {               
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="3" asp-action="TCMIntakeSectionDashboard" role="button">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 3</h4>
+                    </a>
+                    <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>
+                </div>                
             }
-        </div>
-        
+        </div>        
         <div class="col-md-3">
             &nbsp;
         </div>
@@ -117,12 +122,13 @@
                 </a>
             }
             else
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="4" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 4<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
+            {                
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="4" asp-action="TCMIntakeSectionDashboard" role="button">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 4</h4>
+                    </a>
+                    <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>
+                </div>                
             }
         </div>
         <div class="col-sm-3 col-md-2">
@@ -135,34 +141,37 @@
                 </a>
             }
             else
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="5" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 5<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
+            {                
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="5" asp-action="TCMIntakeSectionDashboard" role="button">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 5</h4>
+                    </a>
+                    <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>
+                </div>                
             }
         </div>
         <div class="col-sm-3 col-md-2">
             @if ((Model.TCMNote.Count() > 0))
             {
                 @if ((Model.TCMNote.Where(n => n.Status == KyoS.Common.Enums.NoteStatus.Edition).Count() > 0))
-                {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboard" role="button">
-                        <div class="thumbnail list-group-item list-group-item-warning">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                        </div>
-                    </a>
+                {                    
+                    <div class="thumbnail list-group-item list-group-item-warning">
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboard" role="button">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6</h4>
+                        </a>
+                        <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>
+                    </div>                    
                 }
                 else
                 {
                     @if ((Model.TCMNote.Where(n => n.Status == KyoS.Common.Enums.NoteStatus.Pending).Count() > 0))
-                    {
-                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboard" role="button">
-                            <div class="thumbnail list-group-item list-group-item-info">
-                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                            </div>
-                        </a>
+                    {                        
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboard" role="button">
+                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6</h4>
+                            </a>
+                            <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>
+                        </div>                        
                     }
                     else
                     { 
@@ -173,15 +182,15 @@
                         </a>
                     }
                 }
-
             }
             else
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
+            {                
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboard" role="button">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6</h4>
+                    </a>
+                    <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #337ab7; "></i>
+                </div>                
             }
         </div>
         <div class="col-md-3">

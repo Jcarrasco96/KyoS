@@ -8810,7 +8810,7 @@ namespace KyoS.Web.Controllers
                                                    .Include(u => u.Clinic)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
-            return View(await _context.Workdays_Clients
+            return View(await _context.Workdays_Clients.AsNoTracking()
 
                                       .Include(wc => wc.Note)
 
@@ -8824,13 +8824,12 @@ namespace KyoS.Web.Controllers
 
                                       .Include(wc => wc.Client)
                                       
-                                      .Include(wc => wc.Workday)
-                                      .ThenInclude(w => w.Week)
+                                      .Include(wc => wc.Workday)                                      
                                       
                                       .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                 && (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved
-                                                                                           || wc.GroupNote.Status == NoteStatus.Approved
-                                                                                           || wc.NoteP.Status == NoteStatus.Approved)))
+                                                && (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved
+                                                                                          || wc.GroupNote.Status == NoteStatus.Approved
+                                                                                          || wc.NoteP.Status == NoteStatus.Approved)))
                                       .ToListAsync());
         }
 
@@ -9520,47 +9519,48 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
             
-            return View(await _context.Weeks
-                                      .Include(w => w.Days)
-                                      .ThenInclude(d => d.Workdays_Clients)
-                                      .ThenInclude(wc => wc.Client)
-                                      .ThenInclude(c => c.Group)
-
-                                      .Include(w => w.Days)
-                                      .ThenInclude(d => d.Workdays_Clients)
-                                      .ThenInclude(g => g.Facilitator)
-
-                                      .Include(w => w.Days)
-                                      .ThenInclude(d => d.Workdays_Clients)
-                                      .ThenInclude(wc => wc.Note)
-
-                                      .Include(w => w.Days)
-                                      .ThenInclude(d => d.Workdays_Clients)
-                                      .ThenInclude(wc => wc.NoteP)
-
-                                      .Include(w => w.Days)
-                                      .ThenInclude(d => d.Workdays_Clients)
-                                      .ThenInclude(wc => wc.IndividualNote)
-
-                                      .Include(w => w.Days)
-                                      .ThenInclude(d => d.Workdays_Clients)
-                                      .ThenInclude(wc => wc.GroupNote)
+            return View(await _context.Weeks.AsNoTrackingWithIdentityResolution()
 
                                       .Include(w => w.Days)
                                       .ThenInclude(d => d.Workdays_Clients)
                                       .ThenInclude(wc => wc.Client)
-                                      .ThenInclude(c => c.MTPs)
+                                      .ThenInclude(c => c.Group).AsNoTrackingWithIdentityResolution()
+
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(g => g.Facilitator).AsNoTrackingWithIdentityResolution()
+
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(wc => wc.Note).AsNoTrackingWithIdentityResolution()
+
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(wc => wc.NoteP).AsNoTrackingWithIdentityResolution()
+
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(wc => wc.IndividualNote).AsNoTrackingWithIdentityResolution()
+
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(wc => wc.GroupNote).AsNoTrackingWithIdentityResolution()
+
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(wc => wc.Client)
+                                      .ThenInclude(c => c.MTPs).AsNoTrackingWithIdentityResolution()
 
                                       .Include(w => w.Days)
                                       .ThenInclude(d => d.Workdays_Clients)
                                       .ThenInclude(wc => wc.Client)
                                       .ThenInclude(c => c.Clients_Diagnostics)
-                                      .ThenInclude(cd => cd.Diagnostic)      
-                                            
-                                      .Include(w => w.Clinic)
+                                      .ThenInclude(cd => cd.Diagnostic).AsNoTrackingWithIdentityResolution()
+
+                                      .Include(w => w.Clinic).AsNoTrackingWithIdentityResolution()
 
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
-                                      .AsNoTrackingWithIdentityResolution()
+                                      
                                       .ToListAsync());            
         }
 
