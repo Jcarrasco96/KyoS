@@ -17,11 +17,11 @@
                 <i class="icon-home"></i>
                 @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 1, origin = ViewData["origi"] })
             </li>
-            <li class="active">MENTAL HEALTH ADVANCE DIRECTIVE ACKNOWLEDGEMENT</li>
+            <li class="active">Mental Health Advance Directive Acknowledgement</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>MENTAL HEALTH ADVANCE DIRECTIVE ACKNOWLEDGEMENT</h4>
+    <h4>Mental Health Advance Directive Acknowledgement</h4>
     <hr />
     <div class="row">
         <form asp-action="CreateTCMIntakeAdvenceDirective" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">

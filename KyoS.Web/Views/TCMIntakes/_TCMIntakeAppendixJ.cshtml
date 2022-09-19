@@ -1,7 +1,7 @@
 ﻿@model KyoS.Web.Models.TCMIntakeAppendixJViewModel
 <div class="col-md-12">
     <pre>
-    Recipient's Name: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)</strong>                                Medicaid ID# : <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.MedicaidID)</strong>
+    Recipient's Name: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)</strong>                                Medicaid ID: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.MedicaidID)</strong>
 
     Is hereby certified as meeting all of the following adult mental health targeted case management criteria. 
         1. Is enrolled in a Department of Children and Families adult mental health target population
@@ -26,22 +26,15 @@
             e.  <input type="checkbox" asp-for="IsExperiencing" />  Is experiencing long-term or acute episodes of mental impairment that may put him or
                     her at risk of requiring more intensive services (provide explanation); or
 
-
-
         9. Has relocated from a Department of Children and Families district or region where he or she was
-           receiving mental health targeted case management services.
-
-    
+           receiving mental health targeted case management services.    
 </pre>
 </div>
 <div class="col-md-12">
     <pre>
     
     <strong>Employee signature date</strong>         <input asp-for="Date">     <strong>Legal Guardian signature date</strong>    <input asp-for="SupervisorSignatureDate">
-    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>      
-    
-    
-                                                                      
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                 
     </pre>
 </div>
 <div class="col-md-12">

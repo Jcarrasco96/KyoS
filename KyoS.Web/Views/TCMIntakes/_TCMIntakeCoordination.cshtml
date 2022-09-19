@@ -6,12 +6,12 @@
         <input asp-for="TcmClient.Client.Name" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.Name" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-2">
+    <div class="form-group col-md-3">
         <label asp-for="TcmClient.Client.SSN" class="control-label">Social Security Number</label>
         <input asp-for="TcmClient.Client.SSN" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.SSN" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-2">
         <label asp-for="TcmClient.Client.DateOfBirth" class="control-label">DOB</label>
         <input asp-for="TcmClient.Client.DateOfBirth" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.DateOfBirth" class="text-danger"></span>
@@ -21,11 +21,14 @@
         <input asp-for="TcmClient.CaseNumber" class="form-control" readonly>
         <span asp-validation-for="TcmClient.CaseNumber" class="text-danger"></span>
     </div>
-
+</div>
+<div class="col-md-12">
+    <hr />
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-12">
         <pre>
+
         <input type="checkbox" asp-for="InformationToRelease">  <label asp-for="InformationToRelease" class="control-label">Information to be released to:</label>           <input type="checkbox" asp-for="InformationTorequested">  <label asp-for="InformationTorequested" class="control-label">Information to be requested from:</label>
         </pre>
     </div>
@@ -55,6 +58,7 @@
 <div class="col-md-push-12">
     <div class="form-group col-md-12">
         <pre>
+
         <input type="checkbox" asp-for="PCP"> PCP           <input type="checkbox" asp-for="Specialist">  Specialist     <input asp-for="SpecialistText" style="width:30%" />
         </pre>
     </div>
@@ -62,6 +66,7 @@
 <div class="col-md-push-12">
     <div class="form-group col-md-12">
         <pre>
+
         <strong>Information received/sent via: </strong>
         <input type="checkbox" asp-for="InformationVerbal"> Verbal    <input type="checkbox" asp-for="InformationWrited"> Written Record     <input type="checkbox" asp-for="InformationFascimile"> Facsimile    <input type="checkbox" asp-for="InformationElectronic"> Electronic Record    <input type="checkbox" asp-for="InformationAllBefore"> All before mentioned    <input type="checkbox" asp-for="InformationNonKnown"> Information not known by client/guardian 
         </pre>
@@ -72,13 +77,12 @@
     <div>
         <pre>
         Dear Physician: 
-        We wish to inform you that the above mentioned client is receiving Targeted Case Management services from 
-        our center. Medicaid regulations as well as <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name))</strong> believe that
-        <u>coordination of care</u> is crucial for our clients. To that effect, the client/guardian has authorized our mutual sharing of 
-        health information at the bottom of this letter. 
+        We wish to inform you that the above mentioned client is receiving Targeted Case Management services from our center. Medicaid regulations as well as 
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name))</strong> believe that <u>coordination of care</u> is crucial for our clients. 
+        To that effect, the client/guardian has authorized our mutual sharing of health information at the bottom of this letter. 
 
-        In order to properly and expeditiously coordinate the client’s care, we would appreciate you contacting us at
-        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Phone))</strong> with any pertinent information, concern or question. 
+        In order to properly and expeditiously coordinate the client’s care, we would appreciate you contacting us at <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Phone))</strong> with any pertinent information,
+        concern or question. 
 
         <strong><u>CLIENT/GUARDIAN AUTORIZATION OR REFUSAL</u></strong>
         <input type="checkbox" asp-for="IAuthorize"> I authorize on behalf of myself the above mentioned doctor as well as <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name))</strong>

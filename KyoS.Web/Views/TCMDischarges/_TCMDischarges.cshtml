@@ -2,22 +2,22 @@
 
 
     <div class="form-group col-md-4">
-        <label asp-for="TcmServicePlan.TcmClient.Client.Name" class="control-label">Name of Recipient</label>&nbsp;*
+        <label asp-for="TcmServicePlan.TcmClient.Client.Name" class="control-label">Name of Recipient</label>&nbsp;
         <input asp-for="TcmServicePlan.TcmClient.Client.Name" class="form-control" readonly>
         <span asp-validation-for="TcmServicePlan.TcmClient.Client.Name" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="TcmServicePlan.TcmClient.CaseNumber" class="control-label">Case No.</label>&nbsp;*
+        <label asp-for="TcmServicePlan.TcmClient.CaseNumber" class="control-label">Case No.</label>&nbsp;
         <input asp-for="TcmServicePlan.TcmClient.CaseNumber" class="form-control" readonly>
         <span asp-validation-for="TcmServicePlan.TcmClient.CaseNumber" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="TcmServicePlan.TcmClient.DataOpen" class="control-label">Date of Admission</label>&nbsp;*
+        <label asp-for="TcmServicePlan.TcmClient.DataOpen" class="control-label">Date of Admission</label>&nbsp;
         <input asp-for="TcmServicePlan.TcmClient.DataOpen" class="form-control" readonly>
         <span asp-validation-for="TcmServicePlan.TcmClient.DataOpen" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="StaffingDate" class="control-label">Staffing Date</label>&nbsp;*
+        <label asp-for="StaffingDate" class="control-label">Staffing Date</label>&nbsp;
         <input asp-for="StaffingDate" class="form-control" readonly>
         <span asp-validation-for="StaffingDate" class="text-danger"></span>
     </div>
@@ -26,8 +26,6 @@
         <input asp-for="DischargeDate" class="form-control">
         <span asp-validation-for="DischargeDate" class="text-danger"></span>
     </div>
-
-
     <div class="form-group col-md-6">
         <br />
         <label asp-for="PresentProblems" class="control-label">Present Problems (According to the “Presenting Problems” section of the Assessment that was completed upon admission)</label><br />
@@ -35,22 +33,22 @@
         <span asp-validation-for="PresentProblems" class="text-danger"></span>
     </div>
     <div class="form-group col-md-6">
-        <label asp-for="ProgressToward" class="control-label">Progress Toward (This is based on a review of functioning at admission, the identified needs and goals, the level of goal achievement, and the level of functioning at discharge as compared to the level of functioning at admission)</label>
+        <br />
+        <label asp-for="ProgressToward" class="control-label">Progress Toward (This is based on a review of functioning at admission, the identified needs and goals, the level of goal achievement, and the level of functioning at discharge)</label>
         <textarea asp-for="ProgressToward" class="form-control" rows="4"></textarea>
         <span asp-validation-for="ProgressToward" class="text-danger"></span>
     </div>
-
-
-
     <div class="form-group col-md-12">
-        <pre>
-        <strong><u>Reason for Discharge </u></strong>(check only one):
-        <input type="checkbox" asp-for="AllServiceInPlace"> All services in place/coordinated                           <input type="checkbox" asp-for="AllServiceInPlace"> Non-compliance with agency rules  
-        <input type="checkbox" asp-for="Referred"> Referred/Transferred to other provider                      <input type="checkbox" asp-for="ClientMovedOutArea"> Client moved out of area
-        <input type="checkbox" asp-for="ClientLeftVoluntarily"> Client left voluntarily/refused services                    <input type="checkbox" asp-for="LackOfProgress">  Lack of progress
-        <input type="checkbox" asp-for="Other"> Other:                     <input asp-for="Other_Explain" style="width:80%">
-        <input type="checkbox" asp-for="AdministrativeDischarge"> <strong>Administrative Discharge:</strong> 
-        <textarea asp-for="AdministrativeDischarge_Explain" style="width:90%"></textarea>
-        </pre>
+    <pre>
+    
+    <strong><u>Reason for Discharge</u></strong> (check only one):
+    <input type="checkbox" asp-for="AllServiceInPlace"> All services in place/coordinated                           <input type="checkbox" asp-for="AllServiceInPlace"> Non-compliance with agency rules  
+    <input type="checkbox" asp-for="Referred"> Referred/Transferred to other provider                      <input type="checkbox" asp-for="ClientMovedOutArea"> Client moved out of area
+    <input type="checkbox" asp-for="ClientLeftVoluntarily"> Client left voluntarily/refused services                    <input type="checkbox" asp-for="LackOfProgress">  Lack of progress
+    <input type="checkbox" asp-for="Other"> Other:   
+    <input asp-for="Other_Explain" style="width:95%">
+    <input type="checkbox" asp-for="AdministrativeDischarge"> <strong>Administrative Discharge:</strong> 
+    <textarea asp-for="AdministrativeDischarge_Explain" style="width:95%"></textarea>
+    </pre>
     </div>
 

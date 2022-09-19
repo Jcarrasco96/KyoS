@@ -1,23 +1,14 @@
 ﻿@model KyoS.Web.Models.TCMIntakeWelcomeViewModel
 <div class="col-md-12">
-    <pre>
-    
-
+    <pre>  
     Date:  <input asp-for="Date"> 
-
 
     Dear: <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>  
 
-
-    I am more than pleased to welcome you to <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Clinic.Name))</strong>.
-    On behalf of our dedicated staff, I would like to thank you 
-    for choosing our agency for your case management needs. From now on and 
-    for as long as you are our client, we are going to work tirelessly to assist you with 
-    your needs and help you to achieve your goals. 
-    Within the next days, I will be contacting you and conducting home visits 
-    as part of the process of opening your case for Targeted Case Management 
-    services. I look forward to working with you on this case. Thanks again 
-    for choosing <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Clinic.Name))</strong>.  
+    I am more than pleased to welcome you to <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Clinic.Name))</strong>. On behalf of our dedicated staff, I would like to thank you for choosing our agency
+    for your case management needs. From now on and for as long as you are our client, we are going to work tirelessly to assist you with your needs and help you to achieve
+    your goals. Within the next days, I will be contacting you and conducting home visits as part of the process of opening your case for Targeted Case Management services. 
+    I look forward to working with you on this case. Thanks again for choosing <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Clinic.Name))</strong>.
 
     If you have any questions, you can reach me at: <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Phone))</strong>
                                                     <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Email))</strong>
@@ -25,6 +16,7 @@
 </div>
 <div class="col-md-12">
     <pre>
+
     Case Management:   <strong><u>@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Name)</u></strong>     
     </pre>
 </div>
