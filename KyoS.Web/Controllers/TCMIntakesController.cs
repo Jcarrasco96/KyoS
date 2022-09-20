@@ -233,6 +233,14 @@ namespace KyoS.Web.Controllers
                         temp.HealthInsurance = new HealthInsuranceEntity();
                         model.TcmClient.Client.Clients_HealthInsurances.Add(temp);
                     }
+                    if (model.TcmClient.Client.Clients_Diagnostics.Count() == 0)
+                    {
+                        Client_Diagnostic diagnostic = new Client_Diagnostic();
+                        diagnostic.Diagnostic = new DiagnosticEntity();
+                        diagnostic.Diagnostic.Code = "";
+                        diagnostic.Diagnostic.Description = "";
+                        model.TcmClient.Client.Clients_Diagnostics.Add(diagnostic);
+                    }
                     ViewData["origi"] = origi;
                     return View(model);
                 }
@@ -567,6 +575,14 @@ namespace KyoS.Web.Controllers
                     {
                         model.TcmClient.Client.EmergencyContact = new EmergencyContactEntity();
                         
+                    }
+                    if (model.TcmClient.Client.Clients_Diagnostics.Count() == 0)
+                    {
+                        Client_Diagnostic diagnostic = new Client_Diagnostic();
+                        diagnostic.Diagnostic = new DiagnosticEntity();
+                        diagnostic.Diagnostic.Code = "";
+                        diagnostic.Diagnostic.Description = "";
+                        model.TcmClient.Client.Clients_Diagnostics.Add(diagnostic);
                     }
                     ViewData["origi"] = origi;
                     return View(model);
