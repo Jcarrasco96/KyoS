@@ -4159,6 +4159,116 @@ namespace KyoS.Web.Helpers
 
             return dt;
         }
+        
+        private DataTable GetPsychiatristDS(PsychiatristEntity psychiatrist)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "Psychiatrists"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Address", typeof(string));
+            dt.Columns.Add("Telephone", typeof(string));
+            dt.Columns.Add("Email", typeof(string));            
+
+            if (psychiatrist != null)
+            {
+                dt.Rows.Add(new object[]
+                                            {
+                                            psychiatrist.Id,
+                                            psychiatrist.CreatedBy,
+                                            psychiatrist.CreatedOn,
+                                            psychiatrist.LastModifiedBy,
+                                            psychiatrist.LastModifiedOn,
+                                            psychiatrist.Name,
+                                            psychiatrist.Address,
+                                            psychiatrist.Telephone,
+                                            psychiatrist.Email
+                                            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                            {
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty                                            
+                                            });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetReferredDS(ReferredEntity referred)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "Referreds"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Address", typeof(string));
+            dt.Columns.Add("Telephone", typeof(string));
+            dt.Columns.Add("Email", typeof(string));
+            dt.Columns.Add("Agency", typeof(string));
+            dt.Columns.Add("Title", typeof(string));
+            
+            if (referred != null)
+            {
+                dt.Rows.Add(new object[]
+                                            {
+                                            referred.Id,
+                                            referred.CreatedBy,
+                                            referred.CreatedOn,
+                                            referred.LastModifiedBy,
+                                            referred.LastModifiedOn,
+                                            referred.Name,
+                                            referred.Address,
+                                            referred.Telephone,
+                                            referred.Email,
+                                            referred.Agency,
+                                            referred.Title
+                                            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                            {
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty                                            
+                                            });
+            }
+
+            return dt;
+        }
 
         private DataTable GetDoctorDS(DoctorEntity doctor)
         {
@@ -7159,6 +7269,47 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetHealthInsurancesListDS(List<Client_HealthInsurance> insurancesList)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "HealthInsurances"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("SignedDate", typeof(DateTime));
+            dt.Columns.Add("DurationTime", typeof(int));
+            dt.Columns.Add("DocumentPath", typeof(string));
+            dt.Columns.Add("Active", typeof(bool));
+            dt.Columns.Add("ClinicId", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            foreach (Client_HealthInsurance item in insurancesList)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            item.HealthInsurance.Id,
+                                            item.HealthInsurance.Name,
+                                            item.HealthInsurance.SignedDate,
+                                            item.HealthInsurance.DurationTime,
+                                            item.HealthInsurance.DocumentPath,
+                                            item.HealthInsurance.Active,
+                                            0,
+                                            item.HealthInsurance.CreatedBy,
+                                            item.HealthInsurance.CreatedOn,
+                                            item.HealthInsurance.LastModifiedBy,
+                                            item.HealthInsurance.LastModifiedOn,
+                                        });
+            }
+
+            return dt;
+        }
+
         private DataTable GetMedicationsListDS(List<MedicationEntity> medicationList)
         {
             DataTable dt = new DataTable
@@ -8273,6 +8424,172 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMIntakeFormDS(TCMIntakeFormEntity intakeForm)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakeForms"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmClient_FK", typeof(int));
+            dt.Columns.Add("IntakeDate", typeof(DateTime));
+            dt.Columns.Add("EmploymentStatus", typeof(string));
+            dt.Columns.Add("ResidentialStatus", typeof(string));
+            dt.Columns.Add("MonthlyFamilyIncome", typeof(string));
+            dt.Columns.Add("PrimarySourceIncome", typeof(string));
+            dt.Columns.Add("TitlePosition", typeof(string));
+            dt.Columns.Add("Agency", typeof(string));
+            dt.Columns.Add("IsClientCurrently", typeof(bool));
+            dt.Columns.Add("Elibigility", typeof(string));
+            dt.Columns.Add("MMA", typeof(bool));
+            dt.Columns.Add("LTC", typeof(bool));
+            dt.Columns.Add("School", typeof(string));
+            dt.Columns.Add("Grade", typeof(string));
+            dt.Columns.Add("School_Regular", typeof(bool));
+            dt.Columns.Add("School_ESE", typeof(bool));
+            dt.Columns.Add("School_EBD", typeof(bool));
+            dt.Columns.Add("School_ESOL", typeof(bool));
+            dt.Columns.Add("School_HHIP", typeof(bool));
+            dt.Columns.Add("School_Other", typeof(bool));
+            dt.Columns.Add("TeacherCounselor_Name", typeof(string));
+            dt.Columns.Add("TeacherCounselor_Phone", typeof(string));
+            dt.Columns.Add("SecondaryContact", typeof(string));
+            dt.Columns.Add("SecondaryContact_Phone", typeof(string));
+            dt.Columns.Add("SecondaryContact_RelationShip", typeof(string));
+            dt.Columns.Add("Other", typeof(string));
+            dt.Columns.Add("Other_Phone", typeof(string));
+            dt.Columns.Add("Other_Address", typeof(string));
+            dt.Columns.Add("Other_City", typeof(string));
+            dt.Columns.Add("NeedSpecial", typeof(bool));
+            dt.Columns.Add("NeedSpecial_Specify", typeof(string));
+            dt.Columns.Add("CaseManagerNotes", typeof(string));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("EducationLevel", typeof(string));
+            dt.Columns.Add("ReligionOrEspiritual", typeof(string));
+            dt.Columns.Add("InsuranceOther", typeof(string));
+            dt.Columns.Add("CountryOfBirth", typeof(string));
+            dt.Columns.Add("EmergencyContact", typeof(bool));
+            dt.Columns.Add("StatusOther", typeof(bool));
+            dt.Columns.Add("StatusOther_Explain", typeof(string));
+            dt.Columns.Add("StatusResident", typeof(bool));
+            dt.Columns.Add("StausCitizen", typeof(bool));
+            dt.Columns.Add("YearEnterUsa", typeof(string));
+
+            if (intakeForm != null)
+            {
+                dt.Rows.Add(new object[]
+                                            {
+                                            intakeForm.Id,
+                                            0,
+                                            intakeForm.IntakeDate,
+                                            intakeForm.EmploymentStatus,
+                                            intakeForm.ResidentialStatus,
+                                            intakeForm.MonthlyFamilyIncome,
+                                            intakeForm.PrimarySourceIncome,
+                                            intakeForm.TitlePosition,
+                                            intakeForm.Agency,
+                                            intakeForm.IsClientCurrently,
+                                            intakeForm.Elibigility,
+                                            intakeForm.MMA,
+                                            intakeForm.LTC,
+                                            intakeForm.School,
+                                            intakeForm.Grade,
+                                            intakeForm.School_Regular,
+                                            intakeForm.School_ESE,
+                                            intakeForm.School_EBD,
+                                            intakeForm.School_ESOL,
+                                            intakeForm.School_HHIP,
+                                            intakeForm.School_Other,
+                                            intakeForm.TeacherCounselor_Name,
+                                            intakeForm.TeacherCounselor_Phone,
+                                            intakeForm.SecondaryContact,
+                                            intakeForm.SecondaryContact_Phone,
+                                            intakeForm.SecondaryContact_RelationShip,
+                                            intakeForm.Other,
+                                            intakeForm.Other_Phone,
+                                            intakeForm.Other_Address,
+                                            intakeForm.Other_City,
+                                            intakeForm.NeedSpecial,
+                                            intakeForm.NeedSpecial_Specify,
+                                            intakeForm.CaseManagerNotes,
+                                            intakeForm.CreatedBy,
+                                            intakeForm.CreatedOn,
+                                            intakeForm.LastModifiedBy,
+                                            intakeForm.LastModifiedOn,
+                                            intakeForm.EducationLevel,
+                                            intakeForm.ReligionOrEspiritual,
+                                            intakeForm.InsuranceOther,
+                                            intakeForm.CountryOfBirth,
+                                            intakeForm.EmergencyContact,
+                                            intakeForm.StatusOther,
+                                            intakeForm.StatusOther_Explain,
+                                            intakeForm.StatusResident,
+                                            intakeForm.StausCitizen,
+                                            intakeForm.YearEnterUsa
+                                            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                            {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            string.Empty
+                                            });
+            }
+
+            return dt;
+        }
+
         #endregion
 
         #region Approved TCM Notes reports
@@ -8580,6 +8897,134 @@ namespace KyoS.Web.Helpers
             stream.Position = 0;
 
             return stream;
+        }
+        #endregion
+
+        #region TCM Binder Section #1
+        public Stream TCMIntakeFormReport(TCMIntakeFormEntity intakeForm)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakeForm.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intakeForm.TcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(intakeForm.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intakeForm.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(intakeForm.TcmClient.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(intakeForm.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetReferredDS(intakeForm.TcmClient.Client.Referred));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Referreds");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetHealthInsurancesListDS(intakeForm.TcmClient.Client.Clients_HealthInsurances.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "HealthInsurances");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(intakeForm.TcmClient.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+            
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetPsychiatristDS(intakeForm.TcmClient.Client.Psychiatrist));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Psychiatrists");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDoctorDS(intakeForm.TcmClient.Client.Doctor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Doctors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeFormDS(intakeForm));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeForms");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intakeForm.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeForm.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            
+            if (!string.IsNullOrEmpty(intakeForm.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeForm.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+
+        public Stream TCMIntakeConsentForTreatmentReport(TCMIntakeConsentForTreatmentEntity intakeConsentForTreatment)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream TCMIntakeConsentForRelease(TCMIntakeConsentForReleaseEntity intakeConsentForRelease)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream TCMIntakeAdvancedDirective(TCMIntakeAdvancedDirectiveEntity intakeAdvanced)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream TCMIntakeConsumerRights(TCMIntakeConsumerRightsEntity intakeConsumerRights)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream TCMIntakeOrientationCheckList(TCMIntakeOrientationChecklistEntity intakeOrientation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream TCMIntakeAcknowledgementHippa(TCMIntakeAcknowledgementHippaEntity intakeAcknowledgement)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream TCMIntakeForeignLanguage(TCMIntakeForeignLanguageEntity intakeForeignLanguage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream TCMIntakeWelcome(TCMIntakeWelcomeEntity intakeWelcome)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

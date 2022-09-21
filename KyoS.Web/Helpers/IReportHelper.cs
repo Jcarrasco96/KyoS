@@ -101,5 +101,17 @@ namespace KyoS.Web.Helpers
         Stream FloridaSocialHSTCMServicePlan(TCMServicePlanEntity servicePlan);
         Stream DreamsMentalHealthTCMServicePlan(TCMServicePlanEntity servicePlan);
         #endregion
+
+        #region TCM Binder Section #1
+        Stream TCMIntakeFormReport(TCMIntakeFormEntity intakeForm);
+        Stream TCMIntakeConsentForTreatmentReport(TCMIntakeConsentForTreatmentEntity intakeConsentForTreatment);
+        Stream TCMIntakeConsentForRelease(TCMIntakeConsentForReleaseEntity intakeConsentForRelease);
+        Stream TCMIntakeAdvancedDirective(TCMIntakeAdvancedDirectiveEntity intakeAdvanced);
+        Stream TCMIntakeConsumerRights(TCMIntakeConsumerRightsEntity intakeConsumerRights);
+        Stream TCMIntakeOrientationCheckList(TCMIntakeOrientationChecklistEntity intakeOrientation);
+        Stream TCMIntakeAcknowledgementHippa(TCMIntakeAcknowledgementHippaEntity intakeAcknowledgement);
+        Stream TCMIntakeForeignLanguage(TCMIntakeForeignLanguageEntity intakeForeignLanguage);
+        Stream TCMIntakeWelcome(TCMIntakeWelcomeEntity intakeWelcome);
+        #endregion
     }
 }
