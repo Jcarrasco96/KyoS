@@ -3380,7 +3380,50 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Index", "TCMServicePlans");
         }
 
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTCMIntakeForm(int id)
+        {
+            TCMIntakeFormEntity entity = await _context.TCMIntakeForms
+                                                       
+                                                       .Include(t => t.TcmClient)
+                                                       .ThenInclude(c => c.Client)
+                                                       .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                       .ThenInclude(cd => cd.Diagnostic)
+
+                                                       .Include(t => t.TcmClient)
+                                                       .ThenInclude(c => c.Client)
+                                                       .ThenInclude(cl => cl.Referred)
+
+                                                       .Include(t => t.TcmClient)
+                                                       .ThenInclude(c => c.Client)
+                                                       .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                       .ThenInclude(ch => ch.HealthInsurance)
+
+                                                       .Include(t => t.TcmClient)
+                                                       .ThenInclude(c => c.Client)
+                                                       .ThenInclude(cl => cl.EmergencyContact)
+
+                                                       .Include(t => t.TcmClient)
+                                                       .ThenInclude(c => c.Client)
+                                                       .ThenInclude(cl => cl.Psychiatrist)
+
+                                                       .Include(t => t.TcmClient)
+                                                       .ThenInclude(c => c.Client)
+                                                       .ThenInclude(cl => cl.Doctor)
+
+                                                       .Include(t => t.TcmClient)
+                                                       .ThenInclude(c => c.Casemanager)
+                                                       .ThenInclude(cm => cm.Clinic)
+                                                       
+                                                       .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMIntakeFormReport(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
     }
-
-
 }
