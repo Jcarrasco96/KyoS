@@ -220,8 +220,14 @@
 </div>
 <div class="col-md-12">
     <pre>
-    
-    <strong>Date Signature Licensed Practitioner</strong> <input asp-for="DateSignatureLicensedPractitioner">                                                   
+    @if (User.IsInRole("Supervisor"))
+    { 
+        <strong>Date Signature Licensed Practitioner</strong> <input asp-for="DateSignatureLicensedPractitioner">                                                   
+    }
+    @if (User.IsInRole("Documents_Assistant"))
+    { 
+        <strong>Date Signature Unlicensed Therapist</strong> <input asp-for="DateSignatureUnlicensedTherapist">                                                   
+    }                                               
     </pre>
 </div>
 <br />
