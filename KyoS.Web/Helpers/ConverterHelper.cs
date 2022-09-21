@@ -261,7 +261,7 @@ namespace KyoS.Web.Helpers
                 SignPath = signPath,
                 Doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == model.IdDoctor),
                 Psychiatrist = await _context.Psychiatrists.FirstOrDefaultAsync(p => p.Id == model.IdPsychiatrist),
-                Referred = await _context.Referreds.FirstOrDefaultAsync(r => r.Id == model.IdReferred),
+                //Referred = await _context.Referreds.FirstOrDefaultAsync(r => r.Id == model.IdReferred),
                 LegalGuardian = await _context.LegalGuardians.FirstOrDefaultAsync(lg => lg.Id == model.IdLegalGuardian),
                 EmergencyContact = await _context.EmergencyContacts.FirstOrDefaultAsync(ec => ec.Id == model.IdEmergencyContact),
                 RelationShipOfEmergencyContact = RelationshipUtils.GetRelationshipByIndex(model.IdRelationshipEC),
@@ -332,8 +332,8 @@ namespace KyoS.Web.Helpers
                 Relationships = _combosHelper.GetComboRelationships(),
                 IdRelationshipEC = Convert.ToInt32(clientEntity.RelationShipOfEmergencyContact),
                 RelationshipsEC = _combosHelper.GetComboRelationships(),
-                IdReferred = (clientEntity.Referred != null) ? clientEntity.Referred.Id : 0,
-                Referreds = _combosHelper.GetComboReferredsByClinic(userId),                
+                //IdReferred = (clientEntity.Client_Referred != null) ? clientEntity.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).ElementAt(0).Id : 0,
+                //Referreds = _combosHelper.GetComboReferredsByClinic(userId),                
                 IdEmergencyContact = (clientEntity.EmergencyContact != null) ? clientEntity.EmergencyContact.Id : 0,
                 EmergencyContacts = _combosHelper.GetComboEmergencyContactsByClinic(userId),
                 IdDoctor = (clientEntity.Doctor != null) ? clientEntity.Doctor.Id : 0,
@@ -343,6 +343,7 @@ namespace KyoS.Web.Helpers
                 IdLegalGuardian = (clientEntity.LegalGuardian != null) ? clientEntity.LegalGuardian.Id : 0,
                 LegalsGuardians = _combosHelper.GetComboLegalGuardiansByClinic(userId),
                 DiagnosticTemp = _context.DiagnosticsTemp,
+                ReferredTemp = _context.ReferredsTemp,
                 DocumentTemp = _context.DocumentsTemp,
                 IdService = Convert.ToInt32(clientEntity.Service), 
                 Services = _combosHelper.GetComboServices(),
@@ -1033,7 +1034,7 @@ namespace KyoS.Web.Helpers
             return new ReferredEntity
             {
                 Id = isNew ? 0 : model.Id,
-                ReferredNote = model.ReferredNote,
+               // ReferredNote = model.ReferredNote,
                 Name = model.Name,
                 Address = model.Address,
                 Telephone = model.Telephone,
@@ -1099,7 +1100,7 @@ namespace KyoS.Web.Helpers
                 Address = model.Address,
                 Telephone = model.Telephone,
                 Email = model.Email,
-                ReferredNote = model.ReferredNote,
+                //ReferredNote = model.ReferredNote,
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 Agency = model.Agency,
@@ -3524,7 +3525,7 @@ namespace KyoS.Web.Helpers
                                           .ThenInclude(m => m.HealthInsurance)
                                           .Include(m => m.Client.LegalGuardian)
                                           .Include(n => n.Client.EmergencyContact)
-                                          .Include(n => n.Client.Referred)
+                                          .Include(n => n.Client.Client_Referred)
                                           .Include(n => n.Client.Doctor)
                                           .Include(n => n.Client.Psychiatrist)
                                           .FirstOrDefaultAsync(n => n.Id == model.Id),

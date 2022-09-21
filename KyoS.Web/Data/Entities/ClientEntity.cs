@@ -93,8 +93,6 @@ namespace KyoS.Web.Data.Entities
 
         public GroupEntity Group { get; set; }
 
-        public ReferredEntity Referred { get; set; }
-
         public LegalGuardianEntity LegalGuardian { get; set; }
 
         public EmergencyContactEntity EmergencyContact { get; set; }
@@ -114,6 +112,8 @@ namespace KyoS.Web.Data.Entities
         public ICollection<Client_HealthInsurance> Clients_HealthInsurances { get; set; }
 
         public ServiceType Service { get; set; }
+
+        public ICollection<Client_Referred> Client_Referred { get; set; }
 
         public FacilitatorEntity IndividualTherapyFacilitator { get; set; }
 

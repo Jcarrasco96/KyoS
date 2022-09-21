@@ -8,11 +8,6 @@ namespace KyoS.Web.Data.Entities
     {
         public int Id{ get; set; }
 
-        [Display(Name = "Referred Note")]
-        public string ReferredNote { get; set; }
-
-        public ICollection<ClientEntity> Clients { get; set; }
-
         public string Title { get; set; }
 
         public string Agency { get; set; }

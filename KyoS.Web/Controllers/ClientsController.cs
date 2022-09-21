@@ -121,8 +121,8 @@ namespace KyoS.Web.Controllers
                         Relationships = _combosHelper.GetComboRelationships(),
                         IdRelationshipEC = 0,
                         RelationshipsEC = _combosHelper.GetComboRelationships(),
-                        IdReferred = 0,
-                        Referreds = _combosHelper.GetComboReferredsByClinic(user_logged.Id),
+                        //IdReferred = 0,
+                        //Referreds = _combosHelper.GetComboReferredsByClinic(user_logged.Id),
                         IdEmergencyContact = 0,
                         EmergencyContacts = _combosHelper.GetComboEmergencyContactsByClinic(user_logged.Id),
                         IdDoctor = 0,
@@ -132,6 +132,7 @@ namespace KyoS.Web.Controllers
                         IdLegalGuardian = 0,
                         LegalsGuardians = _combosHelper.GetComboLegalGuardiansByClinic(user_logged.Id),
                         DiagnosticTemp = _context.DiagnosticsTemp,
+                        ReferredTemp = _context.ReferredsTemp,
                         DocumentTemp = _context.DocumentsTemp,
                         OtherLanguage_Read = false,
                         OtherLanguage_Speak = false,
@@ -284,7 +285,7 @@ namespace KyoS.Web.Controllers
 
                                                       .Include(c => c.Psychiatrist)
 
-                                                      .Include(c => c.Referred)
+                                                     // .Include(c => c.Client_Referred)
 
                                                       .Include(c => c.LegalGuardian)
 
@@ -304,9 +305,11 @@ namespace KyoS.Web.Controllers
 
             this.DeleteDiagnosticsTemp();
             this.DeleteDocumentsTemp();
+            this.DeleteReferredsTemp();
 
             this.SetDiagnosticsTemp(clientEntity);
             this.SetDocumentsTemp(clientEntity);
+            this.SetReferredsTemp(clientEntity);
 
             ClientViewModel clientViewModel = await _converterHelper.ToClientViewModel(clientEntity, user_logged.Id);            
 
@@ -384,6 +387,28 @@ namespace KyoS.Web.Controllers
                     _context.DiagnosticsTemp.Remove(item);
                 }
 
+                //delete all client referred of this client
+                IEnumerable<Client_Referred> listReferred_to_delete = await _context.Clients_Referreds
+                                                                              .Where(cd => cd.Client.Id == clientViewModel.Id)
+                                                                              .ToListAsync();
+                _context.Clients_Referreds.RemoveRange(listReferred_to_delete);
+
+                //update Client_Referred table with the news ReferredTemp
+                IQueryable<ReferredTempEntity> listReferredTemp = _context.ReferredsTemp;
+                Client_Referred clientReferred;
+                foreach (ReferredTempEntity item1 in listReferredTemp)
+                {
+                    clientReferred = new Client_Referred
+                    {
+                        Client = clientEntity,
+                        Referred = await _context.Referreds.FirstOrDefaultAsync(d => d.Id == item1.IdReferred),
+                        Service = item1.Service,
+                        ReferredNote = item1.ReferredNote
+                    };
+                    _context.Add(clientReferred);
+                    _context.ReferredsTemp.Remove(item1);
+                }
+
                 //update Documents table with the news DocumentsTemp
                 IQueryable<DocumentTempEntity> listDocumentTemp = _context.DocumentsTemp;
                 DocumentEntity document;
@@ -445,7 +470,7 @@ namespace KyoS.Web.Controllers
                                                       .Include(c => c.Clinic)
                                                       .Include(c => c.Doctor)
                                                       .Include(c => c.Psychiatrist)
-                                                      .Include(c => c.Referred)
+                                                      .Include(c => c.Client_Referred)
                                                       .Include(c => c.LegalGuardian)
                                                       .Include(c => c.EmergencyContact)
                                                       .Include(c => c.IndividualTherapyFacilitator)
@@ -951,6 +976,188 @@ namespace KyoS.Web.Controllers
             }
 
             return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager, Supervisor")]
+        public IActionResult AddReferred(int id = 0)
+        {
+            if (id == 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                ReferredTempViewModel model = new ReferredTempViewModel
+                {
+                    Id_Referred = 0,
+                    Referreds = _combosHelper.GetComboReferredsByClinic(user_logged.Id),
+                    IdServiceAgency = 0,
+                    ServiceAgency = _combosHelper.GetComboServiceAgency()
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                return View(new ReferredTempViewModel());
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, Supervisor")]
+        public async Task<IActionResult> AddReferred(int id, ReferredTempViewModel referredTempViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (id == 0)
+                {
+                    ReferredEntity referred = await _context.Referreds.FirstOrDefaultAsync(d => d.Id == referredTempViewModel.Id_Referred);
+                    ReferredTempEntity referredTemp = new ReferredTempEntity
+                    {
+                        Id = 0,
+                        Title = referred.Title,
+                        Agency = referred.Agency,
+                        Service = ServiceAgencyUtils.GetServiceAgencyByIndex(referredTempViewModel.IdServiceAgency),
+                        Name = referred.Name,
+                        ReferredNote = referredTempViewModel.ReferredNote, 
+                        Address = referred.Address,
+                        Telephone = referred.Telephone,
+                        IdReferred = referred.Id
+
+                    };
+                    _context.Add(referredTemp);
+                    await _context.SaveChangesAsync();
+                }
+                
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", _context.ReferredsTemp.ToList()) });
+            }
+
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            ReferredTempViewModel model = new ReferredTempViewModel
+            {
+                IdReferred = 0,
+                Referreds = _combosHelper.GetComboReferredsByClinic(user_logged.Id),
+                IdServiceAgency = 0,
+                ServiceAgency = _combosHelper.GetComboServiceAgency()
+            };
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddReferred", model) });
+        }
+
+        [Authorize(Roles = "Manager, Supervisor")]
+        public async Task<IActionResult> DeleteReferredTemp(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ReferredTempEntity referred = await _context.ReferredsTemp.FirstOrDefaultAsync(d => d.Id == id);
+            if (referred == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            _context.ReferredsTemp.Remove(referred);
+            await _context.SaveChangesAsync();
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", _context.ReferredsTemp.ToList()) });
+        }
+
+        [Authorize(Roles = "Manager, Supervisor")]
+        public void DeleteReferredsTemp()
+        {
+            //delete all ReferredsTemp
+            IQueryable<ReferredTempEntity> list_to_delete = _context.ReferredsTemp;
+            foreach (ReferredTempEntity item in list_to_delete)
+            {
+                _context.ReferredsTemp.Remove(item);
+            }
+            _context.SaveChanges();
+        }
+
+        [Authorize(Roles = "Manager, Supervisor")]
+        public void SetReferredsTemp(ClientEntity client)
+        {
+            List<Client_Referred> clientsReferreds = _context.Clients_Referreds
+                                                                        .Include(cd => cd.Referred)
+                                                                        .Where(cd => cd.Client == client).ToList();
+
+            if (clientsReferreds.Count() > 0)
+            {
+                ReferredTempEntity referred;
+                foreach (var item in clientsReferreds)
+                {
+                    referred = new ReferredTempEntity
+                    {
+                        Title = item.Referred.Title,
+                        Agency = item.Referred.Agency,
+                        Service = item.Service,
+                        Name = item.Referred.Name,
+                        ReferredNote = item.ReferredNote,
+                        Telephone = item.Referred.Telephone,
+                        IdReferred = item.Referred.Id
+                        
+                    };
+                    _context.Add(referred);
+                }
+                _context.SaveChanges();
+            }
+        }
+
+        public JsonResult GetNameReferred(int idReferred)
+        {
+            ReferredEntity referred = _context.Referreds.FirstOrDefault(o => o.Id == idReferred);
+            string text = "Select Referred";
+            if (referred != null)
+            {
+                text = referred.Name;
+            }
+            return Json(text);
+        }
+
+        public JsonResult GetTitleReferred(int idReferred)
+        {
+            ReferredEntity referred = _context.Referreds.FirstOrDefault(o => o.Id == idReferred);
+            string text = "Select Referred";
+            if (referred != null)
+            {
+                text = referred.Title;
+            }
+            return Json(text);
+        }
+
+        public JsonResult GetAgencyReferred(int idReferred)
+        {
+            ReferredEntity referred = _context.Referreds.FirstOrDefault(o => o.Id == idReferred);
+            string text = "Select Referred";
+            if (referred != null)
+            {
+                text = referred.Agency;
+            }
+            return Json(text);
+        }
+
+        public JsonResult GetAddressReferred(int idReferred)
+        {
+            ReferredEntity referred = _context.Referreds.FirstOrDefault(o => o.Id == idReferred);
+            string text = "Select Referred";
+            if (referred != null)
+            {
+                text = referred.Address;
+            }
+            return Json(text);
+        }
+
+        public JsonResult GetPhoneReferred(int idReferred)
+        {
+            ReferredEntity referred = _context.Referreds.FirstOrDefault(o => o.Id == idReferred);
+            string text = "Select Referred";
+            if (referred != null)
+            {
+                text = referred.Telephone;
+            }
+            return Json(text);
         }
 
     }
