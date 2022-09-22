@@ -4,6 +4,7 @@ using FastReport.Data;
 using FastReport.Export.PdfSimple;
 using FastReport.Utils;
 using FastReport.Web;
+using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using Microsoft.AspNetCore.Hosting;
@@ -3929,6 +3930,14 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("PlaceOfBirth", typeof(string));
             dt.Columns.Add("RelationShipOfEmergencyContact", typeof(int));
 
+            dt.Columns.Add("IdFacilitatorPSR", typeof(int));
+            dt.Columns.Add("OtherLanguage_Read", typeof(bool));
+            dt.Columns.Add("OtherLanguage_Speak", typeof(bool));
+            dt.Columns.Add("OtherLanguage_Understand", typeof(bool));
+            dt.Columns.Add("MedicareId", typeof(string));
+            dt.Columns.Add("DateOfClose", typeof(DateTime));
+            dt.Columns.Add("OnlyTCM", typeof(bool));
+
             if (client != null)
             {
                 dt.Rows.Add(new object[]
@@ -3974,7 +3983,14 @@ namespace KyoS.Web.Helpers
                                             client.ZipCode,
                                             client.AdmisionDate,
                                             client.PlaceOfBirth,
-                                            client.RelationShipOfEmergencyContact
+                                            client.RelationShipOfEmergencyContact,
+                                            0,
+                                            client.OtherLanguage_Read,
+                                            client.OtherLanguage_Speak,
+                                            client.OtherLanguage_Understand,
+                                            client.MedicareId,
+                                            client.DateOfClose,
+                                            client.OnlyTCM
             }) ;
             }
             else
@@ -4022,7 +4038,14 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             new DateTime(),
                                             string.Empty,                                            
-                                            Common.Enums.RelationshipType.Brother
+                                            Common.Enums.RelationshipType.Brother,
+                                            0,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            new DateTime(),
+                                            false
                                             });
             }
 
@@ -7269,6 +7292,49 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetReferredsListDS(List<Client_Referred> referredList, ServiceAgency service)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "Referred"
+            };
+
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Address", typeof(string));
+            dt.Columns.Add("Telephone", typeof(string));
+            dt.Columns.Add("Email", typeof(string));
+            dt.Columns.Add("Agency", typeof(string));
+            dt.Columns.Add("Title", typeof(string));
+
+            foreach (Client_Referred item in referredList)
+            {
+                if (item.Service == service)
+                {
+                    dt.Rows.Add(new object[]
+                                        {
+                                            item.Referred.Id,                                            
+                                            item.Referred.CreatedBy,
+                                            item.Referred.CreatedOn,
+                                            item.Referred.LastModifiedBy,
+                                            item.Referred.LastModifiedOn,
+                                            item.Referred.Name,
+                                            item.Referred.Address,
+                                            item.Referred.Telephone,
+                                            item.Referred.Email,
+                                            item.Referred.Agency,
+                                            item.Referred.Title
+                                        });
+                }                
+            }
+
+            return dt;
+        }
+
         private DataTable GetHealthInsurancesListDS(List<Client_HealthInsurance> insurancesList)
         {
             DataTable dt = new DataTable
@@ -8931,8 +8997,12 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetReferredDS(intakeForm.TcmClient.Client.Client_Referred.Where(n => n.Service == Common.Enums.ServiceAgency.TCM).ElementAt(0).Referred));
+            dataSet.Tables.Add(GetReferredsListDS(intakeForm.TcmClient.Client.Client_Referred.ToList(), ServiceAgency.TCM));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Referreds");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(intakeForm.TcmClient.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
 
             dataSet = new DataSet();
             dataSet.Tables.Add(GetHealthInsurancesListDS(intakeForm.TcmClient.Client.Clients_HealthInsurances.ToList()));
@@ -8963,6 +9033,9 @@ namespace KyoS.Web.Helpers
 
             PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
             pic1.Image = new Bitmap(path);
+
+            PictureObject pic2 = WebReport.Report.FindObject("Picture2") as PictureObject;
+            pic2.Image = new Bitmap(path);
 
             //signatures images 
             byte[] stream1 = null;

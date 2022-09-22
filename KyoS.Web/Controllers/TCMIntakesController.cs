@@ -3397,6 +3397,10 @@ namespace KyoS.Web.Controllers
 
                                                        .Include(t => t.TcmClient)
                                                        .ThenInclude(c => c.Client)
+                                                       .ThenInclude(cl => cl.LegalGuardian)
+
+                                                       .Include(t => t.TcmClient)
+                                                       .ThenInclude(c => c.Client)
                                                        .ThenInclude(cl => cl.Clients_HealthInsurances)
                                                        .ThenInclude(ch => ch.HealthInsurance)
 
