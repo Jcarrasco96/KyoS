@@ -282,7 +282,7 @@
                                                     @if (item.Bio.Status == KyoS.Common.Enums.BioStatus.Pending && item.CreatedBy != User.Identity.Name)
                                                     {
                                                         <a class="btn btn-warning disabled" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                        <a asp-action="EditReadOnly" asp-route-id="@item.Id" class="btn btn-success" title="Approve BIO"><i class="glyphicon glyphicon-ok"></i></a>
+                                                        <a asp-action="EditReadOnly" asp-route-id="@item.Bio.Id" class="btn btn-success" title="Approve BIO"><i class="glyphicon glyphicon-ok"></i></a>
                                                     }
                                                     else
                                                     {
