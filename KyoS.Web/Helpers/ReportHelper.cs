@@ -3929,6 +3929,14 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("PlaceOfBirth", typeof(string));
             dt.Columns.Add("RelationShipOfEmergencyContact", typeof(int));
 
+            dt.Columns.Add("IdFacilitatorPSR", typeof(int));
+            dt.Columns.Add("OtherLanguage_Read", typeof(bool));
+            dt.Columns.Add("OtherLanguage_Speak", typeof(bool));
+            dt.Columns.Add("OtherLanguage_Understand", typeof(bool));
+            dt.Columns.Add("MedicareId", typeof(string));
+            dt.Columns.Add("DateOfClose", typeof(DateTime));
+            dt.Columns.Add("OnlyTCM", typeof(bool));
+
             if (client != null)
             {
                 dt.Rows.Add(new object[]
@@ -3974,7 +3982,14 @@ namespace KyoS.Web.Helpers
                                             client.ZipCode,
                                             client.AdmisionDate,
                                             client.PlaceOfBirth,
-                                            client.RelationShipOfEmergencyContact
+                                            client.RelationShipOfEmergencyContact,
+                                            0,
+                                            client.OtherLanguage_Read,
+                                            client.OtherLanguage_Speak,
+                                            client.OtherLanguage_Understand,
+                                            client.MedicareId,
+                                            client.DateOfClose,
+                                            client.OnlyTCM
             }) ;
             }
             else
@@ -4022,7 +4037,14 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             new DateTime(),
                                             string.Empty,                                            
-                                            Common.Enums.RelationshipType.Brother
+                                            Common.Enums.RelationshipType.Brother,
+                                            0,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            new DateTime(),
+                                            false
                                             });
             }
 
@@ -8935,6 +8957,10 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "Referreds");
 
             dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(intakeForm.TcmClient.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
             dataSet.Tables.Add(GetHealthInsurancesListDS(intakeForm.TcmClient.Client.Clients_HealthInsurances.ToList()));
             WebReport.Report.RegisterData(dataSet.Tables[0], "HealthInsurances");
 
@@ -8963,6 +8989,9 @@ namespace KyoS.Web.Helpers
 
             PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
             pic1.Image = new Bitmap(path);
+
+            PictureObject pic2 = WebReport.Report.FindObject("Picture2") as PictureObject;
+            pic2.Image = new Bitmap(path);
 
             //signatures images 
             byte[] stream1 = null;
