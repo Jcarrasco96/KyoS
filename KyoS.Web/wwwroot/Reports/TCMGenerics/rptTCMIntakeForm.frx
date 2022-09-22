@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="09/22/2022 13:13:43" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="09/22/2022 17:14:59" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3DN8ec+Yl8LO5ZPoQwmDQKA==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3wQZq4/P0pcdqKMPwwdCFRg==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -208,7 +208,7 @@
       </TableDataSource>
       <TableDataSource Name="Referreds" DataType="System.Int32" Enabled="true" TableName="Referreds">
         <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="ReferredNote" DataType="System.String"/>
+        <Column Name="ReferredNote" Enabled="false" DataType="System.String"/>
         <Column Name="CreatedBy" DataType="System.String"/>
         <Column Name="CreatedOn" DataType="System.DateTime"/>
         <Column Name="LastModifiedBy" DataType="System.String"/>
@@ -250,7 +250,7 @@
       <TextObject Name="Textbox64" Left="170.1" Top="31.33" Width="402.8" Height="22" CanGrow="true" Text="CASE MANAGEMENT INTAKE FORM" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <LineObject Name="Line3" Left="160.65" Top="14.45" Height="37.2"/>
       <LineObject Name="Line4" Left="774.52" Top="79.6" Width="-776"/>
-      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15" Image=""/>
+      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15"/>
       <LineObject Name="Line6" Left="159.65" Top="13.45" Height="37.8"/>
       <LineObject Name="Line7" Left="774.9" Top="78.7" Width="-776"/>
     </ReportTitleBand>
@@ -374,7 +374,7 @@
       <TextObject Name="Text2" Left="170.1" Top="31.33" Width="402.8" Height="22" CanGrow="true" Text="CASE MANAGEMENT INTAKE FORM &lt;i&gt;(continued)&lt;/i&gt;" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <LineObject Name="Line1" Left="160.65" Top="14.45" Height="37.2"/>
       <LineObject Name="Line2" Left="774.52" Top="79.6" Width="-776"/>
-      <PictureObject Name="Picture2" Left="18.9" Top="5.45" Width="103.95" Height="66.15" Image=""/>
+      <PictureObject Name="Picture2" Left="18.9" Top="5.45" Width="103.95" Height="66.15"/>
       <LineObject Name="Line5" Left="159.65" Top="13.45" Height="37.8"/>
       <LineObject Name="Line8" Left="774.9" Top="78.7" Width="-776"/>
     </ReportTitleBand>

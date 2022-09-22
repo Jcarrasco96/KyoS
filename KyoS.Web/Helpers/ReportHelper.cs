@@ -4,6 +4,7 @@ using FastReport.Data;
 using FastReport.Export.PdfSimple;
 using FastReport.Utils;
 using FastReport.Web;
+using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using Microsoft.AspNetCore.Hosting;
@@ -7291,6 +7292,49 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetReferredsListDS(List<Client_Referred> referredList, ServiceAgency service)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "Referred"
+            };
+
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Address", typeof(string));
+            dt.Columns.Add("Telephone", typeof(string));
+            dt.Columns.Add("Email", typeof(string));
+            dt.Columns.Add("Agency", typeof(string));
+            dt.Columns.Add("Title", typeof(string));
+
+            foreach (Client_Referred item in referredList)
+            {
+                if (item.Service == service)
+                {
+                    dt.Rows.Add(new object[]
+                                        {
+                                            item.Referred.Id,                                            
+                                            item.Referred.CreatedBy,
+                                            item.Referred.CreatedOn,
+                                            item.Referred.LastModifiedBy,
+                                            item.Referred.LastModifiedOn,
+                                            item.Referred.Name,
+                                            item.Referred.Address,
+                                            item.Referred.Telephone,
+                                            item.Referred.Email,
+                                            item.Referred.Agency,
+                                            item.Referred.Title
+                                        });
+                }                
+            }
+
+            return dt;
+        }
+
         private DataTable GetHealthInsurancesListDS(List<Client_HealthInsurance> insurancesList)
         {
             DataTable dt = new DataTable
@@ -8953,7 +8997,7 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetReferredDS(intakeForm.TcmClient.Client.Client_Referred.Where(n => n.Service == Common.Enums.ServiceAgency.TCM).ElementAt(0).Referred));
+            dataSet.Tables.Add(GetReferredsListDS(intakeForm.TcmClient.Client.Client_Referred.ToList(), ServiceAgency.TCM));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Referreds");
 
             dataSet = new DataSet();
