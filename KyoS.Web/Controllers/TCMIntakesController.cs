@@ -171,7 +171,7 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(m => m.HealthInsurance)
                                             .Include(m => m.Client.LegalGuardian)
                                             .Include(n => n.Client.EmergencyContact)
-                                            .Include(n => n.Client.Referred)
+                                            .Include(n => n.Client.Client_Referred)
                                             .Include(n => n.Client.Doctor)
                                             .Include(n => n.Client.Psychiatrist)
                                             .Include(n => n.TCMIntakeCoordinationCare)
@@ -259,7 +259,7 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(m => m.HealthInsurance)
                                             .Include(m => m.Client.LegalGuardian)
                                             .Include(n => n.Client.EmergencyContact)
-                                            .Include(n => n.Client.Referred)
+                                            .Include(n => n.Client.Client_Referred)
                                             .Include(n => n.Client.Doctor)
                                             .Include(n => n.Client.Psychiatrist)
                                             .FirstOrDefault(n => n.Id == id),
@@ -372,7 +372,7 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(m => m.HealthInsurance)
                                             .Include(m => m.Client.LegalGuardian)
                                             .Include(n => n.Client.EmergencyContact)
-                                            .Include(n => n.Client.Referred)
+                                            .Include(n => n.Client.Client_Referred)
                                             .Include(n => n.Client.Doctor)
                                             .Include(n => n.Client.Psychiatrist)
                                             .FirstOrDefault(n => n.Id == IntakeViewModel.Id),
@@ -549,7 +549,7 @@ namespace KyoS.Web.Controllers
                                                  .ThenInclude(m => m.HealthInsurance)
                                                  .Include(m => m.TcmClient.Client.LegalGuardian)
                                                  .Include(n => n.TcmClient.Client.EmergencyContact)
-                                                 .Include(n => n.TcmClient.Client.Referred)
+                                                 .Include(n => n.TcmClient.Client.Client_Referred)
                                                  .Include(n => n.TcmClient.Client.Doctor)
                                                  .Include(n => n.TcmClient.Client.Psychiatrist)
                                                  .FirstOrDefault(i => i.TcmClient.Id == id);
@@ -631,7 +631,7 @@ namespace KyoS.Web.Controllers
                                                           .ThenInclude(m => m.HealthInsurance)
                                                           .Include(m => m.Client.LegalGuardian)
                                                           .Include(n => n.Client.EmergencyContact)
-                                                          .Include(n => n.Client.Referred)
+                                                          .Include(n => n.Client.Client_Referred)
                                                           .Include(n => n.Client.Doctor)
                                                           .Include(n => n.Client.Psychiatrist)
                                                           .FirstOrDefaultAsync(n => n.Id == intakeViewModel.IdTCMClient);
@@ -1374,7 +1374,7 @@ namespace KyoS.Web.Controllers
                                                               .ThenInclude(m => m.HealthInsurance)
                                                               .Include(m => m.TcmClient.Client.LegalGuardian)
                                                               .Include(n => n.TcmClient.Client.EmergencyContact)
-                                                              .Include(n => n.TcmClient.Client.Referred)
+                                                              .Include(n => n.TcmClient.Client.Client_Referred)
                                                               .Include(n => n.TcmClient.Client.Doctor)
                                                               .Include(n => n.TcmClient.Client.Psychiatrist)
                                                               .FirstOrDefault(i => i.Id == id);
@@ -1446,7 +1446,7 @@ namespace KyoS.Web.Controllers
                                                           .ThenInclude(m => m.HealthInsurance)
                                                           .Include(m => m.Client.LegalGuardian)
                                                           .Include(n => n.Client.EmergencyContact)
-                                                          .Include(n => n.Client.Referred)
+                                                          .Include(n => n.Client.Client_Referred)
                                                           .Include(n => n.Client.Doctor)
                                                           .Include(n => n.Client.Psychiatrist)
                                                           .FirstOrDefaultAsync(n => n.Id == intakeViewModel.IdTCMClient);
@@ -3392,6 +3392,7 @@ namespace KyoS.Web.Controllers
 
                                                        .Include(t => t.TcmClient)
                                                        .ThenInclude(c => c.Client)
+                                                       .ThenInclude(cl => cl.Client_Referred)
                                                        .ThenInclude(cl => cl.Referred)
 
                                                        .Include(t => t.TcmClient)

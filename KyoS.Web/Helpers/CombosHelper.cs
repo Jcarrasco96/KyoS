@@ -645,7 +645,7 @@ namespace KyoS.Web.Helpers
 
             list.Insert(0, new SelectListItem
             {
-                Text = string.Empty,
+                Text = "[Select referred...]",
                 Value = "0"
             });
 
@@ -1431,6 +1431,15 @@ namespace KyoS.Web.Helpers
                 Text = "[Select client...]",
                 Value = "0"
             });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboServiceAgency()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = ServiceAgency.CMH.ToString(), Value = "0"},
+                                  new SelectListItem { Text = ServiceAgency.TCM.ToString(), Value = "1"}};
 
             return list;
         }

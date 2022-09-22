@@ -118,7 +118,7 @@ namespace KyoS.Web.Controllers
                         Approved = 0,
                         TcmClient = _context.TCMClient
                                             .Include(n => n.Client)
-                                            .ThenInclude(n => n.Referred)
+                                            .ThenInclude(n => n.Client_Referred)
                                             .FirstOrDefault(n => n.Id == id),
                         AreChild = false,
                         AreChildAddress = "",
@@ -596,7 +596,7 @@ namespace KyoS.Web.Controllers
                                                                 .ThenInclude(b => b.Client)
                                                                 .ThenInclude(b => b.Clients_Diagnostics)
                                                                 .ThenInclude(b => b.Diagnostic)
-                                                                .Include(b => b.TcmClient.Client.Referred)
+                                                                .Include(b => b.TcmClient.Client.Client_Referred)
                                                                 .Include(b => b.TcmClient.Client.Doctor)
                                                                 .Include(b => b.TcmClient.Client.Psychiatrist)
                                                                 .Include(b => b.IndividualAgencyList)
@@ -2312,7 +2312,7 @@ namespace KyoS.Web.Controllers
                                                                 .ThenInclude(b => b.Client)
                                                                 .ThenInclude(b => b.Clients_Diagnostics)
                                                                 .ThenInclude(b => b.Diagnostic)
-                                                                .Include(b => b.TcmClient.Client.Referred)
+                                                                .Include(b => b.TcmClient.Client.Client_Referred)
                                                                 .Include(b => b.TcmClient.Client.Doctor)
                                                                 .Include(b => b.TcmClient.Client.Psychiatrist)
                                                                 .Include(b => b.IndividualAgencyList)

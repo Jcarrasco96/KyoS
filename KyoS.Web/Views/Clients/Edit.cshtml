@@ -29,6 +29,7 @@
                     <li role="presentation"><a href="#others" aria-controls="others" role="tab" data-toggle="tab">Others</a></li>
                     <li role="presentation"><a href="#diagnostics" aria-controls="diagnostics" role="tab" data-toggle="tab">Diagnostics</a></li>
                     <li role="presentation"><a href="#documents" aria-controls="documents" role="tab" data-toggle="tab">Documents</a></li>
+                    <li role="presentation"><a href="#referreds" aria-controls="referreds" role="tab" data-toggle="tab">Referreds</a></li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content">
@@ -40,7 +41,7 @@
                         <input type="hidden" asp-for="CreatedBy" />
                         <input type="hidden" asp-for="CreatedOn" />
                         <input type="hidden" asp-for="Origin" />
-                        <input type="hidden" asp-for="IdFacilitatorPSR" />                        
+                        <input type="hidden" asp-for="IdFacilitatorPSR" />
                         <partial name="_Clients" />
                         <div class="form-group col-md-12">
                             <input type="submit" value="Save" class="btn btn-primary" />
@@ -63,6 +64,9 @@
                     <div role="tabpanel" class="tab-pane" id="documents">
                         <partial name="_ClientsDocuments" />
                     </div>
+                    <div role="tabpanel" class="tab-pane" id="referreds">
+                        <partial name="_ClientsReferreds" />
+                    </div>
                 </div>
             </div>
         </form>
@@ -79,7 +83,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-            //$('#MyTableDoc').DataTable({  
+            //$('#MyTableDoc').DataTable({
             //    "order": [[2, "desc"]],
             //    "pageLength": 100
             //});
@@ -90,7 +94,7 @@
 
                 if (File && File[0]) {
                     ReadImagePhoto(File[0]);
-                }                    
+                }
             });
 
             $("#signBrowser").change(function () {
@@ -101,7 +105,7 @@
                     ReadImageSign(File[0]);
                 }
             });
-            
+
         });
 
         var DeleteDocumentTemp = function (idDoc) {
@@ -109,14 +113,20 @@
             $.get(url, { id: idDoc }, function (data) {
                 $('#view-documents').html(data.html);
             });
-        }  
+        }
 
         var DeleteDiagnosticTemp = function (idDoc) {
             var url = "@Url.Action("DeleteDiagnosticTemp", "Clients")";
             $.get(url, { id: idDoc }, function (data) {
                 $('#view-diagnosis').html(data.html);
             });
-        } 
+        }
+         var DeleteReferredTemp = function (idDoc) {
+            var url = "@Url.Action("DeleteReferredTemp", "Clients")";
+            $.get(url, { id: idDoc }, function (data) {
+                $('#view-referreds').html(data.html);
+            });
+        }
 
         var ReadImagePhoto = function (file) {
         var reader = new FileReader;
@@ -156,7 +166,7 @@
                 $("#lbSign").show();
                }
             }
-        }  
+        }
 
         var ClearPreviewPhoto = function () {
             $("#photoBrowser").val('');

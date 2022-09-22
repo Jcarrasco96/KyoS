@@ -70,5 +70,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboServicesUsed(int idServicePlan);
         IEnumerable<SelectListItem> GetComboTCMNoteActivity(string codeDomain);
         IEnumerable<SelectListItem> GetComboTCMClientsByCaseManager(string user);
+        IEnumerable<SelectListItem> GetComboServiceAgency();
     }
 }

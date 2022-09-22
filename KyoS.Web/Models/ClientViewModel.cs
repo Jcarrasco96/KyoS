@@ -46,9 +46,9 @@ namespace KyoS.Web.Models
         public int IdPreferredLanguage { get; set; }
         public IEnumerable<SelectListItem> Languages { get; set; }
 
-        [Display(Name = "Referred")]
+       /* [Display(Name = "Referred")]
         public int IdReferred { get; set; }
-        public IEnumerable<SelectListItem> Referreds { get; set; }        
+        public IEnumerable<SelectListItem> Referreds { get; set; }    */    
 
         [Display(Name = "Emergency Contact")]
         public int IdEmergencyContact { get; set; }
@@ -79,6 +79,8 @@ namespace KyoS.Web.Models
         public IEnumerable<SelectListItem> Services { get; set; }
 
         public IEnumerable<DiagnosticTempEntity> DiagnosticTemp { get; set; }
+
+        public IEnumerable<ReferredTempEntity> ReferredTemp { get; set; }
 
         public IEnumerable<DocumentTempEntity> DocumentTemp { get; set; }
 
