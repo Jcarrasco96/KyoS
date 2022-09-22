@@ -12,29 +12,26 @@
         <span asp-validation-for="TcmClient.CaseNumber" class="text-danger"></span>
     </div>
 </div>
-
+<div class="col-md-12">
+    <hr />
+</div>
 <div class="col-md-12">
     <pre>
     <strong>MENTAL HEALTH ADVANCE DIRECTIVE ACKNOWLEDGEMENT</strong> 
     <u>(ADULT CLIENTS ONLY)</u>
 
-    A Mental Health Advance Directive is a legal document that lets you name another individual as agent
-    to make health care decisions for you if you become incapable of making your own decisions, or if you
-    want someone else to make those decisions for you even though you are still capable.
-    <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> does not require you to have a Mental Health Advance Directive, however
-    <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> will follow the terms of any Advance Directive that
-    you may have executed, to the extent permitted by the law.
-    If you already have a Mental Health Advance Directive, please provide <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
-    with a copy.
+    A Mental Health Advance Directive is a legal document that lets you name another individual as agent to make health care decisions for you if you become incapable of making
+    your own decisions, or if you want someone else to make those decisions for you even though you are still capable.
+    <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> does not require you to have a Mental Health Advance Directive, however <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> will follow the terms of any 
+    Advance Directive that you may have executed, to the extent permitted by the law.
+    If you already have a Mental Health Advance Directive, please provide <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> with a copy.
 
-    <input type="checkbox" asp-for="IHave" class="form-check-input">  I HAVE executed a Mental Health Advance Directive and will provide  <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> 
+    <input type="checkbox" asp-for="IHave" class="form-check-input">  I HAVE executed a Mental Health Advance Directive and will provide <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> 
     
     <input asp-for="TcmClient.Client.EmergencyContact.Name" readonly style="width:15%">     <input asp-for="TcmClient.Client.EmergencyContact.Telephone" readonly style="width:15%">     <input asp-for="TcmClient.Client.RelationShipOfEmergencyContact" readonly style="width:15%">
-    <strong>Name</strong>                                             <strong>Phone Number</strong>                                     <strong>RelatopnShip</strong> 
+    <strong>Name</strong>                             <strong>Phone Number</strong>                    <strong>Relationship</strong> 
     
-
-    <input type="checkbox" asp-for="IHaveNot" class="form-check-input"> I HAVE NOT executed a Mental Health Advance Directive, however I have read or been explained,
-        and understand my rights to have a Mental Health Advance Directive.
+    <input type="checkbox" asp-for="IHaveNot" class="form-check-input"> I HAVE NOT executed a Mental Health Advance Directive, however I have read or been explained, and understand my rights to have a Mental Health Advance Directive.
    
 </pre>
 </div>

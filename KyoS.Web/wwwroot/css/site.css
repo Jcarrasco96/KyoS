@@ -332,6 +332,18 @@ body {
     font-size: 11px;
 }
 
+.print-btn-dashboard {
+    position: absolute;
+    right: 6px;
+    top: 12px;
+    background-color: #777777;
+    color: #ffffff;
+    padding: 3px 5.5px;
+    border-radius: 50px;
+    line-height: 1;
+    font-size: 11px;
+}
+
 .notifications-counter {
     position: absolute;
     right: 6px;

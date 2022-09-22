@@ -23,170 +23,170 @@
 </div>
 
 
-    <div class="row">
-        <div class="container-fluid">
-            @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
+<div class="row">
+    <div class="container-fluid">
+        @if (Model.Status == KyoS.Common.Enums.StatusType.Open)
+        {
+            <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Open Binder - @Model.Client.Name</span></h4>
+        }
+        else
+        {
+            <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Close Binder - @Model.Client.Name</span></h4>
+        }
+    </div>
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div class="col-md-3">
+        &nbsp;
+    </div>
+    <div class="col-sm-3 col-md-2">
+        @if ((Model.TCMIntakeForm != null) && (Model.TcmIntakeConsentForTreatment != null) && (Model.TcmIntakeConsentForRelease != null) && (Model.TcmIntakeConsumerRights != null)
+       && (Model.TcmIntakeAcknowledgementHipa != null) && (Model.TCMIntakeOrientationChecklist != null) && (Model.TCMIntakeAdvancedDirective != null)
+       && (Model.TCMIntakeForeignLanguage != null) && (Model.TCMIntakeWelcome != null))
+        {
+            <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button">
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 1</h4>
+                </div>
+            </a>
+        }
+        else
+        {
+            <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button">
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 1</h4>
+                </div>
+            </a>
+        }
+    </div>
+    <div class="col-sm-3 col-md-2">
+        @if ((Model.Client.IntakeFeeAgreement != null) && (Model.TCMIntakeNonClinicalLog != null))
+        {
+            <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="2" asp-action="TCMIntakeSectionDashboard" role="button">
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 2</h4>
+                </div>
+            </a>
+        }
+        else
+        {
+            <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="2" asp-action="TCMIntakeSectionDashboard" role="button">
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 2</h4>
+                </div>
+            </a>
+        }
+    </div>
+    <div class="col-sm-3 col-md-2">
+        @if ((Model.Client.IntakeMedicalHistory != null) && (Model.Client.MedicationList.Count() != 0)
+       && (Model.TCMIntakeMiniMental != null) && (Model.TCMIntakeCoordinationCare != null))
+        {
+            <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="3" asp-action="TCMIntakeSectionDashboard" role="button">
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 3</h4>
+                </div>
+            </a>
+        }
+        else
+        {
+            <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="3" asp-action="TCMIntakeSectionDashboard" role="button">
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 3</h4>
+                </div>
+            </a>
+        }
+    </div>
+
+    <div class="col-md-3">
+        &nbsp;
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div class="col-md-3">
+        &nbsp;
+    </div>
+    <div class="col-sm-3 col-md-2">
+        @if ((Model.TcmIntakeAppendixJ != null) && (Model.TcmServicePlan != null) && (Model.TcmServicePlan.TCMAdendum.Count() > 0) && (Model.TcmServicePlan.TCMServicePlanReview != null))
+        {
+            <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="4" asp-action="TCMIntakeSectionDashboard" role="button">
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 4</h4>
+                </div>
+            </a>
+        }
+        else
+        {
+            <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="4" asp-action="TCMIntakeSectionDashboard" role="button">
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 4</h4>
+                </div>
+            </a>
+        }
+    </div>
+    <div class="col-sm-3 col-md-2">
+        @if ((Model.TcmInterventionLog != null) && (Model.TCMFarsFormList.Count() > 0))
+        {
+            <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="5" asp-action="TCMIntakeSectionDashboard" role="button">
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 5</h4>
+                </div>
+            </a>
+        }
+        else
+        {
+            <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="5" asp-action="TCMIntakeSectionDashboard" role="button">
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 5</h4>
+                </div>
+            </a>
+        }
+    </div>
+    <div class="col-sm-3 col-md-2">
+        @if ((Model.TCMNote.Count() > 0))
+        {
+            @if ((Model.TCMNote.Where(n => n.Status == KyoS.Common.Enums.NoteStatus.Edition).Count() > 0))
             {
-                <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Open Binder - @Model.Client.Name</span></h4>
-            }
-            else
-            {
-                <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default">Close Binder - @Model.Client.Name</span></h4>
-            }
-        </div>
-        <div class="col-md-12">
-            <hr />
-        </div>
-        <div class="col-md-3">
-            &nbsp;
-        </div>
-        <div class="col-sm-3 col-md-2">
-            @if ((Model.TCMIntakeForm != null) && (Model.TcmIntakeConsentForTreatment != null) && (Model.TcmIntakeConsentForRelease != null) && (Model.TcmIntakeConsumerRights != null)
-             && (Model.TcmIntakeAcknowledgementHipa != null) && (Model.TCMIntakeOrientationChecklist != null) && (Model.TCMIntakeAdvancedDirective != null)
-             && (Model.TCMIntakeForeignLanguage != null) && (Model.TCMIntakeWelcome != null))
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-success">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboard" role="button">
+                    <div class="thumbnail list-group-item list-group-item-warning">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6</h4>
                     </div>
                 </a>
             }
             else
             {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
-            }
-        </div>
-        <div class="col-sm-3 col-md-2">
-            @if ((Model.Client.IntakeFeeAgreement != null) && (Model.TCMIntakeNonClinicalLog != null))
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="2" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-success">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 2<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
-            }
-            else
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="2" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 2<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
-            }
-        </div>
-        <div class="col-sm-3 col-md-2">
-            @if ((Model.Client.IntakeMedicalHistory != null) && (Model.Client.MedicationList.Count() != 0)
-             && (Model.TCMIntakeMiniMental != null) && (Model.TCMIntakeCoordinationCare != null))
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="3" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-success">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 3<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
-            }
-            else
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="3" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 3<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
-            }
-        </div>
-        
-        <div class="col-md-3">
-            &nbsp;
-        </div>
-        <div class="col-md-12">
-            &nbsp;
-        </div>
-        <div class="col-md-3">
-            &nbsp;
-        </div>
-        <div class="col-sm-3 col-md-2">
-            @if ((Model.TcmIntakeAppendixJ != null) && (Model.TcmServicePlan != null) && (Model.TcmServicePlan.TCMAdendum.Count() > 0) && (Model.TcmServicePlan.TCMServicePlanReview != null))
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="4" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-success">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 4<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
-            }
-            else
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="4" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 4<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
-            }
-        </div>
-        <div class="col-sm-3 col-md-2">
-            @if ((Model.TcmInterventionLog != null) && (Model.TCMFarsFormList.Count() > 0))
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="5" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-success">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 5<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
-            }
-            else
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="5" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 5<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
-            }
-        </div>
-        <div class="col-sm-3 col-md-2">
-            @if ((Model.TCMNote.Count() > 0))
-            {
-                @if ((Model.TCMNote.Where(n => n.Status == KyoS.Common.Enums.NoteStatus.Edition).Count() > 0))
+                @if ((Model.TCMNote.Where(n => n.Status == KyoS.Common.Enums.NoteStatus.Pending).Count() > 0))
                 {
                     <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboard" role="button">
-                        <div class="thumbnail list-group-item list-group-item-warning">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6</h4>
                         </div>
                     </a>
                 }
                 else
                 {
-                    @if ((Model.TCMNote.Where(n => n.Status == KyoS.Common.Enums.NoteStatus.Pending).Count() > 0))
-                    {
-                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboard" role="button">
-                            <div class="thumbnail list-group-item list-group-item-info">
-                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                            </div>
-                        </a>
-                    }
-                    else
-                    { 
-                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboard" role="button">
-                            <div class="thumbnail list-group-item list-group-item-success">
-                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                            </div>
-                        </a>
-                    }
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboard" role="button">
+                        <div class="thumbnail list-group-item list-group-item-success">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6</h4>
+                        </div>
+                    </a>
                 }
+            }
 
-            }
-            else
-            {
-                <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboard" role="button">
-                    <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                </a>
-            }
-        </div>
-        <div class="col-md-3">
-            &nbsp;
-        </div>
+        }
+        else
+        {
+            <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboard" role="button">
+                <div class="thumbnail list-group-item list-group-item-text">
+                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6</h4>
+                </div>
+            </a>
+        }
     </div>
+    <div class="col-md-3">
+        &nbsp;
+    </div>
+</div>
 
 

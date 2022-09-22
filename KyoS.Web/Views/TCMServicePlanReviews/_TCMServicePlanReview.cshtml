@@ -1,91 +1,92 @@
 ﻿@model KyoS.Web.Models.TCMServicePlanReviewViewModel
 
-<div class="row col-md-12">
-    <div>
-        <form asp-action="Edit" asp-route-id="@Model.Id">
-            <div class="row">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="Id" />
-                <input type="hidden" asp-for="IdServicePlan" />
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label asp-for="TcmServicePlan.TcmClient.CaseNumber" class="control-label">Case Number</label>
-                    <input asp-for="TcmServicePlan.TcmClient.CaseNumber" class="form-control" readonly />
-                    <span asp-validation-for="TcmServicePlan.TcmClient.CaseNumber" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label asp-for="TcmServicePlan.TcmClient.Client.Name" class="control-label">Client Name</label>
-                    <input asp-for="TcmServicePlan.TcmClient.Client.Name" class="form-control" readonly />
-                    <span asp-validation-for="TcmServicePlan.TcmClient.Client.Name" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label asp-for="TcmServicePlan.TcmClient.Casemanager.Name" class="control-label">Casemanager Name</label>
-                    <input asp-for="TcmServicePlan.TcmClient.Casemanager.Name" class="form-control" readonly />
-                    <span asp-validation-for="TcmServicePlan.TcmClient.Casemanager.Name" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label asp-for="DateServicePlanReview" class="control-label">Service Plan Review Date</label>
-                    <input asp-for="DateServicePlanReview" class="form-control" readonly />
-                    <span asp-validation-for="DateServicePlanReview" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label asp-for="TcmServicePlan.DateServicePlan" class="control-label">Service Plan Date</label>
-                    <input asp-for="TcmServicePlan.DateServicePlan" class="form-control" readonly />
-                    <span asp-validation-for="TcmServicePlan.DateServicePlan" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label asp-for="TcmServicePlan.DateIntake" class="control-label">Opening Date</label>
-                    <input asp-for="TcmServicePlan.DateIntake" class="form-control" readonly />
-                    <span asp-validation-for="TcmServicePlan.DateIntake" class="text-danger"></span>
-                </div>
-            </div>
-            @if (User.IsInRole("CaseManager"))
-            {
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="Recomendation" class="control-label">Summary of Reipient's Progress and Current Assessment'</label>
-                        <textarea asp-for="Recomendation" class="form-control" rows="4"></textarea>
-                        <span asp-validation-for="Recomendation" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="SummaryProgress" class="control-label">Recommendations/Changes/Update to SERVICE PLAN</label>
-                        <textarea asp-for="SummaryProgress" class="form-control" rows="4"></textarea>
-                        <span asp-validation-for="SummaryProgress" class="text-danger"></span>
-                    </div>
-                </div>
-            }
-            else
-            {
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="Recomendation" class="control-label">Summary of Reipient's Progress and Current Assessment'</label>
-                        <textarea asp-for="Recomendation" class="form-control" rows="4" readonly></textarea>
-                        <span asp-validation-for="Recomendation" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="SummaryProgress" class="control-label">Recommendations/Changes/Update to SERVICE PLAN</label>
-                        <textarea asp-for="SummaryProgress" class="form-control" rows="4" readonly></textarea>
-                        <span asp-validation-for="SummaryProgress" class="text-danger"></span>
-                    </div>
-                </div>
-            }
-
-        </form>
+<div class="col-md-push-12">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="TcmServicePlan.TcmClient.Client.Name" class="control-label">Client Name</label>
+            <input asp-for="TcmServicePlan.TcmClient.Client.Name" class="form-control" readonly />
+            <span asp-validation-for="TcmServicePlan.TcmClient.Client.Name" class="text-danger"></span>
+        </div>
     </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="TcmServicePlan.TcmClient.CaseNumber" class="control-label">Case Number</label>
+            <input asp-for="TcmServicePlan.TcmClient.CaseNumber" class="form-control" readonly />
+            <span asp-validation-for="TcmServicePlan.TcmClient.CaseNumber" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="TcmServicePlan.TcmClient.Casemanager.Name" class="control-label">Case Manager</label>
+            <input asp-for="TcmServicePlan.TcmClient.Casemanager.Name" class="form-control" readonly />
+            <span asp-validation-for="TcmServicePlan.TcmClient.Casemanager.Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="DateServicePlanReview" class="control-label">Service Plan Review Date</label>
+            <input asp-for="DateServicePlanReview" class="form-control" readonly />
+            <span asp-validation-for="DateServicePlanReview" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="TcmServicePlan.DateServicePlan" class="control-label">Service Plan Date</label>
+            <input asp-for="TcmServicePlan.DateServicePlan" class="form-control" readonly />
+            <span asp-validation-for="TcmServicePlan.DateServicePlan" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="TcmServicePlan.DateIntake" class="control-label">Opening Date</label>
+            <input asp-for="TcmServicePlan.DateIntake" class="form-control" readonly />
+            <span asp-validation-for="TcmServicePlan.DateIntake" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="container-fluid">
+        &nbsp;
+    </div>
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+
+<div class="col-md-push-12">
+    @if (User.IsInRole("CaseManager"))
+    {
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Recomendation" class="control-label">Summary of Recipient's Progress and Current Assessment</label>
+                <textarea asp-for="Recomendation" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Recomendation" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="SummaryProgress" class="control-label">Recommendations/Changes/Update to Service Plan</label>
+                <textarea asp-for="SummaryProgress" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="SummaryProgress" class="text-danger"></span>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Recomendation" class="control-label">Summary of Recipient's Progress and Current Assessment'</label>
+                <textarea asp-for="Recomendation" class="form-control" rows="4" readonly></textarea>
+                <span asp-validation-for="Recomendation" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="SummaryProgress" class="control-label">Recommendations/Changes/Update to Service Plan</label>
+                <textarea asp-for="SummaryProgress" class="form-control" rows="4" readonly></textarea>
+                <span asp-validation-for="SummaryProgress" class="text-danger"></span>
+            </div>
+        </div>
+    }
 </div>
 

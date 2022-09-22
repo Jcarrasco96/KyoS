@@ -5656,8 +5656,8 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Outcome = model.Outcome,
-                CaseManager = _context.CaseManagers
-                                      .FirstOrDefault(n => n.Id == model.IdCaseManager),
+               // CaseManager = _context.CaseManagers
+                 //                     .FirstOrDefault(n => n.Id == model.IdCaseManager),
                 TCMNoteActivity = await _context.TCMNoteActivity.Where(n => n.TCMNote.Id == model.IdTCMNote).ToListAsync(),                
                 DateOfService = model.DateOfService,                
                 NextStep = model.NextStep,
@@ -5684,14 +5684,14 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
                 Outcome = model.Outcome,
-                CaseManager = model.CaseManager,
+                //CaseManager = model.CaseManager,
                 TCMNoteActivity = model.TCMNoteActivity,                
                 DateOfService = model.DateOfService,               
                 NextStep = model.NextStep,
                 ServiceCode = model.ServiceCode,
                 Status = model.Status,
                 TCMClient = model.TCMClient,
-                IdCaseManager = model.CaseManager.Id,
+                IdCaseManager = model.TCMClient.Casemanager.Id,
                 IdTCMClient = model.TCMClient.Id,
                 IdTCMNote = model.Id
                 
@@ -5856,7 +5856,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 TCMNote = (model.IdTCMNote != 0) ? await _context.TCMNote
-                                                                 .Include(wc => wc.CaseManager)
+                                                                 .Include(wc => wc.TCMClient.Casemanager)
                                                                  .FirstOrDefaultAsync(wc => wc.Id == model.IdTCMNote) : null,
                 TCMFarsForm = (model.IdTCMFarsForm != 0) ? await _context.TCMFarsForm
                                                                          .FirstOrDefaultAsync(a => a.Id == model.IdTCMFarsForm) : null,

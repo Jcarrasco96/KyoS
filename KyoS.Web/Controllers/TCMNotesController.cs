@@ -145,7 +145,6 @@ namespace KyoS.Web.Controllers
                                              .Include(n => n.Client)
                                              .ThenInclude(n => n.Clinic)
                                              .FirstOrDefault(n => n.Id == IdTCMClient),
-                        CaseManager = caseManager,
                         TCMNoteActivityTemp = _context.TCMNoteActivityTemp
                                                       .Where(na => na.UserName == user_logged.UserName)
                     };
@@ -817,8 +816,8 @@ namespace KyoS.Web.Controllers
         {
             TCMNoteEntity tcmNote = _context.TCMNote
                                             .Include(u => u.TCMClient)
+                                            .ThenInclude(u => u.Casemanager)
                                             .Include(u => u.TCMNoteActivity)
-                                            .Include(u => u.CaseManager)
                                             .FirstOrDefault(u => u.Id == id);
 
             if (tcmNote != null)
@@ -862,9 +861,10 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> ApprovedNote(int id, int origin = 0)
         {
             TCMNoteEntity tcmNote = _context.TCMNote
-                                            .Include(u => u.TCMClient)
                                             .Include(u => u.TCMNoteActivity)
-                                            .Include(u => u.CaseManager)
+                                            .ThenInclude(u => u.TCMDomain)
+                                            .Include(u => u.TCMClient)
+                                            .ThenInclude(u => u.Casemanager)
                                             .FirstOrDefault(u => u.Id == id);
 
             if (tcmNote != null)
@@ -876,6 +876,19 @@ namespace KyoS.Web.Controllers
 
                     if (user_logged.Clinic != null)
                     {
+                        TCMDomainEntity domain = new TCMDomainEntity();
+                        foreach (var item in tcmNote.TCMNoteActivity)
+                        {
+                            domain = await _context.TCMDomains.FindAsync(item.TCMDomain.Id);
+                            
+                            if (domain != null)
+                            {
+                                domain.Used = true;
+                                _context.Update(domain); 
+                                domain = new TCMDomainEntity();
+                            }
+                        
+                        }
                         tcmNote.Status = NoteStatus.Approved;
                         _context.Update(tcmNote);
                         try
@@ -1130,8 +1143,8 @@ namespace KyoS.Web.Controllers
         public IActionResult PrintNote(int id)
         {
             TCMNoteEntity note = _context.TCMNote
-
-                                         .Include(n => n.CaseManager)
+                                         .Include(n => n.TCMClient)
+                                         .ThenInclude(n => n.Casemanager)
                                          .ThenInclude(cm => cm.Clinic)
 
                                          .Include(n => n.TCMClient)
@@ -1146,13 +1159,13 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            if (note.CaseManager.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            if (note.TCMClient.Casemanager.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
                 Stream stream = _reportHelper.FloridaSocialHSTCMNoteReportSchema1(note);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
-            if (note.CaseManager.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+            if (note.TCMClient.Casemanager.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthTCMNoteReportSchema1(note);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
@@ -1211,7 +1224,7 @@ namespace KyoS.Web.Controllers
                 UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
                                                              .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
                 model.From = user_logged.UserName;
-                model.To = model.TCMNote.CaseManager.LinkedUser;
+                model.To = model.TCMNote.TCMClient.Casemanager.LinkedUser;
                 _context.Add(model);
                 await _context.SaveChangesAsync();
             }
@@ -1228,11 +1241,12 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("CaseManager"))
             {
                 List<TCMNoteEntity> salida = await _context.TCMNote
-                                                           .Include(wc => wc.CaseManager)
+                                                           .Include(wc => wc.TCMClient)
+                                                           .ThenInclude(wc => wc.Casemanager)
                                                            .Include(wc => wc.TCMClient)
                                                            .ThenInclude(wc => wc.Client)
                                                            .Include(wc => wc.TCMMessages.Where(m => m.Notification == false))
-                                                           .Where(wc => (wc.CaseManager.LinkedUser == User.Identity.Name
+                                                           .Where(wc => (wc.TCMClient.Casemanager.LinkedUser == User.Identity.Name
                                                                 && wc.Status == NoteStatus.Pending
                                                                 && wc.TCMMessages.Count() > 0))
                                                            .ToListAsync();
@@ -1248,11 +1262,11 @@ namespace KyoS.Web.Controllers
                 if (user_logged.Clinic != null)
                 {
                     List<TCMNoteEntity> salida = await _context.TCMNote
-                                                               .Include(wc => wc.CaseManager)
                                                                .Include(wc => wc.TCMClient)
                                                                .ThenInclude(wc => wc.Client)
+                                                               .Include(wc => wc.TCMClient.Casemanager)
                                                                .Include(wc => wc.TCMMessages.Where(m => m.Notification == false))
-                                                               .Where(wc => (wc.CaseManager.Clinic.Id == user_logged.Clinic.Id
+                                                               .Where(wc => (wc.TCMClient.Casemanager.Clinic.Id == user_logged.Clinic.Id
                                                                     && wc.Status == NoteStatus.Pending 
                                                                     && wc.TCMMessages.Count() > 0))
                                                                .ToListAsync();

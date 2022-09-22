@@ -76,31 +76,36 @@
         <span asp-validation-for="TcmClient.Client.OtherLanguage" class="text-danger"></span>
     </div>
     <div class="form-group col-md-1">
+        <br />
         <label asp-for="TcmClient.Client.OtherLanguage_Read" class="control-label">Read</label>
-        <input asp-for="TcmClient.Client.OtherLanguage_Read" readonly />
+        <input asp-for="TcmClient.Client.OtherLanguage_Read" disabled />
         <span asp-validation-for="TcmClient.Client.OtherLanguage_Read" class="text-danger"></span>
     </div>
     <div class="form-group col-md-1">
+        <br />
         <label asp-for="TcmClient.Client.OtherLanguage_Speak" class="control-label">Speak</label>
-        <input asp-for="TcmClient.Client.OtherLanguage_Speak" readonly />
+        <input asp-for="TcmClient.Client.OtherLanguage_Speak" disabled />
         <span asp-validation-for="TcmClient.Client.OtherLanguage_Speak" class="text-danger"></span>
     </div>
     <div class="col-md-2">
+        <br />
         <label asp-for="TcmClient.Client.OtherLanguage_Understand" class="control-label">Understand</label>
-        <input asp-for="TcmClient.Client.OtherLanguage_Understand" readonly />
+        <input asp-for="TcmClient.Client.OtherLanguage_Understand" disabled />
         <span asp-validation-for="TcmClient.Client.OtherLanguage_Understand" class="text-danger"></span>
     </div>
 </div>
 <div class="col-md-push-12">
     <div class="col-md-12">
     <pre>
-       <strong>Legal Decision-Maker or Authorized Representative (if applicable)</strong>
-       <input asp-for="LegalDecisionNone"> None         <input asp-for="LegalDecisionLegal"> Legal Guardian         <input asp-for="LegalDecisionAdLitem"> Guardian-ad-Litem          <input asp-for="LegalDecisionParent"> Parent         <input asp-for="LegalDecisionAttomey"> Attomey-in-fact        <input asp-for="LegalDecisionOther"> Other <input asp-for="LegalDecisionOtherExplain"  style="width:30%" />
+
+    <strong>Legal Decision-Maker or Authorized Representative (if applicable)</strong>
+
+    <input asp-for="LegalDecisionNone"> None         <input asp-for="LegalDecisionLegal"> Legal Guardian         <input asp-for="LegalDecisionAdLitem"> Guardian-ad-Litem          <input asp-for="LegalDecisionParent"> Parent         <input asp-for="LegalDecisionAttomey"> Attomey-in-fact        <input asp-for="LegalDecisionOther"> Other <input asp-for="LegalDecisionOtherExplain"  style="width:20%" />
     </pre>
     </div>
 </div>
 <div class="col-md-push-12">
-    <div class="form-group col-md-2">
+    <div class="form-group col-md-3">
         <label asp-for="LegalDecisionName" class="control-label">Name</label>
         <input asp-for="LegalDecisionName" class="form-control" readonly>
         <span asp-validation-for="LegalDecisionName" class="text-danger"></span>
@@ -110,7 +115,7 @@
         <input asp-for="LegalDecisionPhone" class="form-control" readonly>
         <span asp-validation-for="LegalDecisionPhone" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-3">
         <label asp-for="LegalDecisionAddress" class="control-label">Address</label>
         <input asp-for="LegalDecisionAddress" class="form-control" readonly>
         <span asp-validation-for="LegalDecisionAddress" class="text-danger"></span>
@@ -123,16 +128,18 @@
 </div>
 <div class="col-md-push-12">
     <div class="col-md-12">
-        <pre>
-        Need of Special Accommodations? <input type="checkbox" class="form-check-input" id="check101"> No        <input asp-for="LegalDecisionNone" class="form-check-input" id="check1"> Yes       Specify:  <input asp-for="NeedOfSpecialSpecify"  style="width:30%">
-        <strong>TYPE OF ASSESSMENT </strong>
-        <input asp-for="TypeOfAssessmentInitial"> Initial       <input asp-for="TypeOfAssessmentAnnual"> Annual         <input asp-for="TypeOfAssessmentSignificant"> Significant Change        <input asp-for="TypeOfAssessmentOther"> Other:  <input asp-for="TypeOfAssessmentOtherExplain"  style="width:30%">
-        <strong>*Is client currently receiving Case Management services through another provider?</strong>    <input asp-for="NeedOfSpecial" class="form-check-input" id="check2"> Yes       <input type="checkbox" class="form-check-input" id="check102"> No
+    <pre>
+    Need of Special Accommodations?     <input type="checkbox" class="form-check-input" id="check101"> No        <input asp-for="LegalDecisionNone" class="form-check-input" id="check1"> Yes       Specify:  <input asp-for="NeedOfSpecialSpecify"  style="width:30%">
+    
+    <strong>TYPE OF ASSESSMENT </strong>
+    <input asp-for="TypeOfAssessmentInitial"> Initial       <input asp-for="TypeOfAssessmentAnnual"> Annual          <input asp-for="TypeOfAssessmentSignificant"> Significant Change    <input asp-for="TypeOfAssessmentOther"> Other:  <input asp-for="TypeOfAssessmentOtherExplain"  style="width:30%">
+        
+    <strong>Is client currently receiving Case Management services through another provider?</strong>    <input asp-for="NeedOfSpecial" class="form-check-input" id="check2"> Yes       <input type="checkbox" class="form-check-input" id="check102"> No
     </pre>
     </div>
 </div>
 <div class="col-md-push-12">
-    <div class="form-group col-md-2">
+    <div class="form-group col-md-3">
         <label asp-for="TcmClient.Client.Referred.Name" class="control-label">Referred by</label>
         <input asp-for="TcmClient.Client.Referred.Name" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.Referred.Name" class="text-danger"></span>
@@ -142,7 +149,7 @@
         <input asp-for="TcmClient.Client.Referred.Telephone" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.Referred.Telephone" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-3">
         <label asp-for="TcmClient.Client.Referred.Address" class="control-label">Address</label>
         <input asp-for="TcmClient.Client.Referred.Address" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.Referred.Address" class="text-danger"></span>
@@ -160,10 +167,10 @@
 </div>
 <div class="col-md-push-12">
     <div class="col-md-12">
-        <pre>
-        <strong>This assessment was based on the information obtained from the following sources </strong> (check all that apply): 
-        <input asp-for="ClientInput">  Client’s input and own assessment       <input asp-for="Family"> Family and friends         <input asp-for="Referring"> Referring Agency/Provider        <input asp-for="School"> School
-        <input asp-for="Treating">  Treating Providers       <input asp-for="Caregiver">  Caregiver        <input asp-for="Review"> Review of client’s records        <input asp-for="Other"> Other: <input asp-for="OtherExplain"  style="width:30%">
+    <pre>
+    <strong>This assessment was based on the information obtained from the following sources </strong> (check all that apply): 
+    <input asp-for="ClientInput">  Client’s input and own assessment       <input asp-for="Family"> Family and friends         <input asp-for="Referring"> Referring Agency/Provider        <input asp-for="School"> School
+    <input asp-for="Treating">  Treating Providers                      <input asp-for="Caregiver">  Caregiver                 <input asp-for="Review"> Review of client’s records       <input asp-for="Other"> Other <input asp-for="OtherExplain"  style="width:30%">
     </pre>
     </div>
 </div>
