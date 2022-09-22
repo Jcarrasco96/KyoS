@@ -3392,6 +3392,7 @@ namespace KyoS.Web.Controllers
 
                                                        .Include(t => t.TcmClient)
                                                        .ThenInclude(c => c.Client)
+                                                       .ThenInclude(cl => cl.Client_Referred)
                                                        .ThenInclude(cl => cl.Referred)
 
                                                        .Include(t => t.TcmClient)

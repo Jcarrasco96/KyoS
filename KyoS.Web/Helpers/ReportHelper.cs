@@ -8931,7 +8931,7 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetReferredDS(intakeForm.TcmClient.Client.Referred));
+            dataSet.Tables.Add(GetReferredDS(intakeForm.TcmClient.Client.Client_Referred.Where(n => n.Service == Common.Enums.ServiceAgency.TCM).ElementAt(0).Referred));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Referreds");
 
             dataSet = new DataSet();
