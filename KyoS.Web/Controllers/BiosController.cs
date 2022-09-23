@@ -115,7 +115,8 @@ namespace KyoS.Web.Controllers
                         Client = _context.Clients.Include(n => n.LegalGuardian)
                                                  .Include(n => n.EmergencyContact)
                                                  .Include(n => n.MedicationList)
-                                                 .Include(n => n.Referred)
+                                                 .Include(n => n.Client_Referred)
+                                                 .ThenInclude(n => n.Referred)
                                                  .Include(n => n.List_BehavioralHistory)
                                                  .FirstOrDefault(n => n.Id == id),
                         AdultCurrentExperience = "",
@@ -152,10 +153,10 @@ namespace KyoS.Web.Controllers
                         Comments = "",
                         DateAbuse = DateTime.Now,
                         DateBio = DateTime.Now,
-                        //DateSignatureLicensedPractitioner = DateTime.Now,
+                        DateSignatureLicensedPractitioner = DateTime.Now,
                         DateSignaturePerson = DateTime.Now,
                         DateSignatureSupervisor = DateTime.Now,
-                        //DateSignatureUnlicensedTherapist = DateTime.Now,
+                        DateSignatureUnlicensedTherapist = DateTime.Now,
                         Details = "",
                         DoesClient = false,
                         DoesClientRequired = false,
@@ -322,10 +323,18 @@ namespace KyoS.Web.Controllers
                         model.Client.MedicationList = new List<MedicationEntity>();
                     if (model.Client.Doctor == null)
                         model.Client.Doctor = new DoctorEntity();
-                    if (model.Client.Referred == null)
-                        model.Client.Referred = new ReferredEntity();
-
-                    model.ReferralName = model.Client.Referred.Name;
+                    if (model.Client.Client_Referred == null || model.Client.Client_Referred.Count() == 0)
+                    {
+                        Client_Referred client_referred = new Client_Referred();
+                        model.Client.Client_Referred = new List<Client_Referred>();
+                        model.Client.Client_Referred.Add(client_referred);
+                        model.ReferralName = "Not have referred";
+                    }
+                    else
+                    {
+                        model.ReferralName = model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).ElementAt(0).Referred.Name;
+                    }
+                   
                     model.LegalGuardianName = model.Client.LegalGuardian.Name;
                     model.LegalGuardianTelephone = model.Client.LegalGuardian.Telephone;
                     model.EmergencyContactName = model.Client.EmergencyContact.Name;
@@ -390,7 +399,7 @@ namespace KyoS.Web.Controllers
                 Client = _context.Clients.Include(n => n.LegalGuardian)
                                                  .Include(n => n.EmergencyContact)
                                                  .Include(n => n.MedicationList)
-                                                 .Include(n => n.Referred)
+                                                 .Include(n => n.Client_Referred)
                                                  .Include(n => n.List_BehavioralHistory)
                                                  .FirstOrDefault(n => n.Id == bioViewModel.IdClient),
                 AdultCurrentExperience = "",
@@ -598,7 +607,8 @@ namespace KyoS.Web.Controllers
                                        .Include(n => n.Client.LegalGuardian)
                                        .Include(n => n.Client.EmergencyContact)
                                        .Include(n => n.Client.MedicationList)
-                                       .Include(n => n.Client.Referred)
+                                       .Include(n => n.Client.Client_Referred)
+                                       .ThenInclude(n => n.Referred)
                                        .Include(n => n.Client.List_BehavioralHistory)
 
                                        .FirstOrDefault(i => i.Client.Id == id);
@@ -629,8 +639,18 @@ namespace KyoS.Web.Controllers
                         model.Client.MedicationList = new List<MedicationEntity>();
                     if (model.Client.Doctor == null)
                         model.Client.Doctor = new DoctorEntity();
-                    if (model.Client.Referred == null)
-                        model.Client.Referred = new ReferredEntity();
+                    if (model.Client.Client_Referred == null || model.Client.Client_Referred.Count() == 0)
+                    {
+                        Client_Referred client_referred = new Client_Referred();
+                        model.Client.Client_Referred = new List<Client_Referred>();
+                        model.Client.Client_Referred.Add(client_referred);
+                        model.ReferralName = "Not have referred";
+                    }
+                    else
+                    {
+                        model.ReferralName = model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).ElementAt(0).Referred.Name;
+                    }
+
                     if (model.Client.FarsFormList == null)
                         model.Client.FarsFormList = new List<FarsFormEntity>();
                     if (model.Client.MedicationList == null)
@@ -638,7 +658,6 @@ namespace KyoS.Web.Controllers
                     if (model.Client.List_BehavioralHistory == null)
                         model.Client.List_BehavioralHistory = new List<Bio_BehavioralHistoryEntity>();
 
-                    model.ReferralName = model.Client.Referred.Name;
                     model.LegalGuardianName = model.Client.LegalGuardian.Name;
                     model.LegalGuardianTelephone = model.Client.LegalGuardian.Telephone;
                     model.EmergencyContactName = model.Client.EmergencyContact.Name;
@@ -1391,7 +1410,7 @@ namespace KyoS.Web.Controllers
                                        .Include(n => n.Client.LegalGuardian)
                                        .Include(n => n.Client.EmergencyContact)
                                        .Include(n => n.Client.MedicationList)
-                                       .Include(n => n.Client.Referred)
+                                       .Include(n => n.Client.Client_Referred)
                                        .Include(n => n.Client.List_BehavioralHistory)
 
                                        .FirstOrDefault(i => i.Id == id);
@@ -1422,8 +1441,13 @@ namespace KyoS.Web.Controllers
                         model.Client.MedicationList = new List<MedicationEntity>();
                     if (model.Client.Doctor == null)
                         model.Client.Doctor = new DoctorEntity();
-                    if (model.Client.Referred == null)
-                        model.Client.Referred = new ReferredEntity();
+                    if (model.Client.Client_Referred == null)
+                    {
+                        ReferredEntity referred = new ReferredEntity();
+                        Client_Referred client_referred = new Client_Referred();
+                        client_referred.Referred = referred;
+                        model.Client.Client_Referred.Add(client_referred);
+                    }
                     if (model.Client.FarsFormList == null)
                         model.Client.FarsFormList = new List<FarsFormEntity>();
                     if (model.Client.MedicationList == null)
@@ -1431,7 +1455,7 @@ namespace KyoS.Web.Controllers
                     if (model.Client.List_BehavioralHistory == null)
                         model.Client.List_BehavioralHistory = new List<Bio_BehavioralHistoryEntity>();
 
-                    model.ReferralName = model.Client.Referred.Name;
+                    model.ReferralName = model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).ElementAt(0).Referred.Name;
                     model.LegalGuardianName = model.Client.LegalGuardian.Name;
                     model.LegalGuardianTelephone = model.Client.LegalGuardian.Telephone;
                     model.EmergencyContactName = model.Client.EmergencyContact.Name;

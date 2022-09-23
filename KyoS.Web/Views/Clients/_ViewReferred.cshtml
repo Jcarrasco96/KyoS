@@ -1,0 +1,58 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.ReferredTempEntity>
+
+@if (Model != null)
+{
+    <div class="col-md-12">
+        <div class="form-group">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Referreds</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover table-responsive table-striped" id="MyTableDiag">
+                        <thead>
+                            <tr>
+                                <th class="col-md-1">
+                                    @Html.DisplayNameFor(model => model.Service)
+                                </th>
+                                <th class="col-md-2">
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </th>
+                                <th class="col-md-3">
+                                    @Html.DisplayNameFor(model => model.Agency)
+                                </th>
+                                <th class="col-md-5" style="text-align:center;">
+                                    Referred Note
+                                </th>
+                                <th class="col-md-1" style="text-align:center;">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Service)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Agency)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.ReferredNote)
+                                    </td>
+                                    <td align="right">
+                                        <button type="button" onclick="DeleteReferredTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete referred"><i class="glyphicon glyphicon-trash"></i></button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>    
+}

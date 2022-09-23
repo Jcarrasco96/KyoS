@@ -1,0 +1,98 @@
+﻿@model KyoS.Web.Models.ReferredTempViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+
+    <form asp-action="AddReferred" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostReferred(this);">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <div class="col-md-12">
+            <div class="col-md-8">
+                <label asp-for="Id_Referred" class="control-label"></label>
+                <select asp-for="Id_Referred" asp-items="Model.Referreds" class="form-control" id="Code_Name" onchange="getCode();"></select>
+                <span asp-validation-for="Id_Referred" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="IdServiceAgency" class="control-label">Service</label>
+                <select asp-for="IdServiceAgency" asp-items="Model.ServiceAgency" class="form-control"></select>
+                <span asp-validation-for="IdServiceAgency" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <label asp-for="Name" class="control-label"></label>
+                <textarea asp-for="Name" id="lbName" class="form-control" rows="1" readonly />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="col-md-2">
+                <label asp-for="Title" class="control-label"></label>
+                <textarea asp-for="Title" id="lbTitle" class="form-control" rows="1" readonly />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Agency" class="control-label"></label>
+                <textarea asp-for="Agency" id="lbAgency" class="form-control" rows="1" readonly />
+                <span asp-validation-for="Agency" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-9">
+                <label asp-for="Address" class="control-label"></label>
+                <textarea asp-for="Address" id="lbAddress" class="form-control" rows="1" readonly />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="Telephone" class="control-label"></label>
+                <textarea asp-for="Telephone" id="lbPhone" class="form-control" rows="1" readonly />
+                <span asp-validation-for="Telephone" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12">
+                <label asp-for="ReferredNote" class="control-label"></label>
+                <textarea asp-for="ReferredNote" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="ReferredNote" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-12">
+            &nbsp;
+        </div>
+        <div class="">
+            <div class="">
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+}
+<script type="text/javascript">
+    function getCode() {
+         var url = "@Url.Action("GetNameReferred", "Clients")";
+        $.get(url, { idReferred: $("#Code_Name").val() }, function (data) { $("#lbName").text(data); });
+         var url1 = "@Url.Action("GetTitleReferred", "Clients")";
+        $.get(url1, { idReferred: $("#Code_Name").val() }, function (data) { $("#lbTitle").text(data); });
+         var url2 = "@Url.Action("GetAgencyReferred", "Clients")";
+        $.get(url2, { idReferred: $("#Code_Name").val() }, function (data) { $("#lbAgency").text(data); });
+         var url3 = "@Url.Action("GetAddressReferred", "Clients")";
+        $.get(url3, { idReferred: $("#Code_Name").val() }, function (data) { $("#lbAddress").text(data); });
+        var url4 = "@Url.Action("GetPhoneReferred", "Clients")";
+         $.get(url4, { idReferred: $("#Code_Name").val() }, function (data) {$("#lbPhone").text(data);});
+     }
+</script>
+
+
+
+
+

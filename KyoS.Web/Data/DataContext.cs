@@ -42,6 +42,8 @@ namespace KyoS.Web.Data
         public DbSet<MessageEntity> Messages { get; set; }
         public DbSet<Workday_Activity_Facilitator> Workdays_Activities_Facilitators { get; set; }
         public DbSet<ReferredEntity> Referreds { get; set; }
+        public DbSet<Client_Referred> Clients_Referreds { get; set; }
+        public DbSet<ReferredTempEntity> ReferredsTemp { get; set; }
         public DbSet<LegalGuardianEntity> LegalGuardians { get; set; }
         public DbSet<EmergencyContactEntity> EmergencyContacts { get; set; }
         public DbSet<DoctorEntity> Doctors { get; set; }
@@ -559,6 +561,11 @@ namespace KyoS.Web.Data
                         .HasMany(c => c.TCMServiceActivity)
                         .WithOne(s => s.TcmService)
                         .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Client_Referred>()
+                       .HasOne(cd => cd.Client)
+                       .WithMany(c => c.Client_Referred)
+                       .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
