@@ -109,22 +109,18 @@
         <span asp-validation-for="IdPsychiatrist" class="text-danger"></span>
     </div>
     <div class="form-group col-md-3">
-        @*<label asp-for="Referred" class="control-label"></label>
-        <select asp-for="IdReferred" asp-items="Model.Referreds" class="form-control" disabled></select>
-        <span asp-validation-for="IdReferred" class="text-danger"></span>*@
-    </div>
-    <div class="form-group col-md-3">
         <label asp-for="IdEmergencyContact" class="control-label"></label>
         <select asp-for="IdEmergencyContact" asp-items="Model.EmergencyContacts" class="form-control" disabled></select>
         <span asp-validation-for="IdEmergencyContact" class="text-danger"></span>
     </div>
-</div>
-<div class="col-md-push-12">
     <div class="form-group col-md-3">
         <label asp-for="IdRelationshipEC" class="control-label"></label>
         <select asp-for="IdRelationshipEC" asp-items="Model.RelationshipsEC" class="form-control" disabled></select>
         <span asp-validation-for="IdRelationshipEC" class="text-danger"></span>
     </div>
+</div>
+<div class="col-md-push-12">
+   
     <div class="form-group col-md-3">
         <label asp-for="IdLegalGuardian" class="control-label"></label>
         <select asp-for="IdLegalGuardian" asp-items="Model.LegalsGuardians" class="form-control" disabled></select>
@@ -137,7 +133,7 @@
     </div>
     <div class="form-group col-md-3">
         <label asp-for="OnlyTCM" class="control-label">Only TCM</label><br />
-        <input type="checkbox" asp-for="OnlyTCM" class="form-check-input">
+        <input type="checkbox" asp-for="OnlyTCM" class="form-check-input" disabled>
     </div>
     @* Edit mode let change the therapy *@
 
@@ -151,12 +147,12 @@
     {
         <div class="form-group col-md-3">
             <label asp-for="IdService" class="control-label"></label>
-            <select asp-for="IdService" asp-items="Model.Services" class="form-control"></select>
+            <select asp-for="IdService" asp-items="Model.Services" class="form-control" disabled></select>
             <span asp-validation-for="IdService" class="text-danger"></span>
         </div>
         <div class="form-group col-md-3">
             <label asp-for="IdFacilitatorIT" class="control-label"></label>
-            <select asp-for="IdFacilitatorIT" asp-items="Model.ITFacilitators" class="form-control"></select>
+            <select asp-for="IdFacilitatorIT" asp-items="Model.ITFacilitators" class="form-control" disabled></select>
             <span asp-validation-for="IdFacilitatorIT" class="text-danger"></span>
         </div>
         <div class="form-group col-md-6">

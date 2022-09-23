@@ -80,6 +80,7 @@ namespace KyoS.Web.Controllers
 
             this.DeleteDiagnosticsTemp();
             this.DeleteDocumentsTemp();
+            this.DeleteReferredsTemp();
 
             ClientViewModel model = new ClientViewModel();
 
@@ -217,7 +218,23 @@ namespace KyoS.Web.Controllers
                         _context.DocumentsTemp.Remove(item);
                     }
 
-                    try
+                //update Client_Referred table with the news ReferredTemp
+                IQueryable<ReferredTempEntity> list_to_delete_referred = _context.ReferredsTemp;
+                Client_Referred clientReferred;
+                foreach (ReferredTempEntity item in list_to_delete_referred)
+                {
+                    clientReferred = new Client_Referred
+                    {
+                        Client = clientEntity,
+                        Referred = await _context.Referreds.FirstOrDefaultAsync(d => d.Id == item.IdReferred),
+                        Service = item.Service,
+                        ReferredNote = item.ReferredNote
+                    };
+                    _context.Add(clientReferred);
+                    _context.ReferredsTemp.Remove(item);
+                }
+
+                try
                     {
                         await _context.SaveChangesAsync();
                         return RedirectToAction("Create", new { id = 1 });
