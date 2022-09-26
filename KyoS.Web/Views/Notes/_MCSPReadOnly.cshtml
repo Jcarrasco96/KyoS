@@ -5,12 +5,36 @@
     <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
     <hr />
 </div>
-<div class="col-md-push-12">    
+<div class="col-md-push-12">
     <div class="form-group col-md-4">
         <label asp-for="Title" class="control-label">Note title</label>
-        <input asp-for="Title" class="form-control" readonly />        
+        <input asp-for="Title" class="form-control" readonly />
     </div>
-    <div class="form-group col-md-8">
+    <div class="form-group col-md-4">
+        <label asp-for="Setting" class="control-label"></label>
+        <br />
+        @if (Model.Setting == "53")
+        {
+            <input type="radio" name="Setting" value="53" checked="checked" disabled/>
+        }
+        else
+        {
+            <input type="radio" name="Setting" value="53" disabled/>
+        }
+        <strong>53</strong>&nbsp;Client in the clinic
+        &nbsp;
+        &nbsp;
+        @if (Model.Setting == "02")
+        {
+            <input type="radio" name="Setting" value="02" checked="checked" disabled/>
+        }
+        else
+        {
+            <input type="radio" name="Setting" value="02" disabled/>
+        }
+        <strong>02</strong>&nbsp;Remote
+    </div>
+    <div class="container-fluid">
         &nbsp;
     </div>
 </div>

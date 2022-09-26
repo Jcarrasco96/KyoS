@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="09/12/2022 13:47:00" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="09/25/2022 20:20:05" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u35GwvOdTeT+k0WlVPUSAQSw==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3TfN0BRuAV7BPtbV/4TAu/g==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -346,6 +346,19 @@
         <Column Name="RaterEducation" DataType="System.String"/>
         <Column Name="RaterFMHCertification" DataType="System.String"/>
       </TableDataSource>
+      <TableDataSource Name="Referreds" DataType="System.Int32" Enabled="true" TableName="Referreds">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="Agency" DataType="System.String"/>
+        <Column Name="Title" DataType="System.String"/>
+      </TableDataSource>
     </MsSqlDataConnection>
     <Parameter Name="nutritionScoreTotal" DataType="System.String"/>
   </Dictionary>
@@ -396,9 +409,9 @@
       </TableObject>
       <TextObject Name="Text467" Top="135.3" Width="270.5" Height="24.57" CanGrow="true" Text="1.   DEMOGRAPHIC DATA:" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold"/>
       <TableObject Name="Table50" Top="160.65" Width="774.9" Height="56.7">
-        <TableColumn Name="Column175" Width="296.1"/>
+        <TableColumn Name="Column175" Width="305.55"/>
         <TableColumn Name="Column176" Width="277.2"/>
-        <TableColumn Name="Column177" Width="201.6"/>
+        <TableColumn Name="Column177" Width="192.15"/>
         <TableRow Name="Row233">
           <TableCell Name="Cell1044" Border.Lines="All" Text="&lt;b&gt;Name:&lt;/b&gt; [Clients.Name]" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
           <TableCell Name="Cell1045" Border.Lines="All" Text="&lt;b&gt;Client Number:&lt;/b&gt; [Clients.Code]" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
@@ -407,7 +420,7 @@
           </TableCell>
         </TableRow>
         <TableRow Name="Row234">
-          <TableCell Name="Cell1049" Border.Lines="All" Text="&lt;b&gt;Referral Source:&lt;/b&gt; " Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell1049" Border.Lines="All" Text="&lt;b&gt;Referral Source:&lt;/b&gt; [Referreds.Name]" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
           <TableCell Name="Cell1050" Border.Lines="All" Text="&lt;b&gt;Legal Guardian:&lt;/b&gt; [LegalGuardians.Name]" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
           <TableCell Name="Cell1051" Border.Lines="All" Text="&lt;b&gt;L.Guardian Phone:&lt;/b&gt; [LegalGuardians.Telephone]" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
         </TableRow>

@@ -1048,6 +1048,7 @@ namespace KyoS.Web.Controllers
                     Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
                     Origin = origin,
                     Schema = workday_Client.Client.Clinic.Schema,
+                    Setting = "53",
 
                     Present1 = true,
                     Theme1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
@@ -1158,6 +1159,7 @@ namespace KyoS.Web.Controllers
                     PlanNote = note.PlanNote,
                     Status = note.Status,
                     Title = note.Title,
+                    Setting = note.Setting,
 
                     //mental client status
                     Attentive = note.Attentive,
@@ -1343,7 +1345,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> EditNoteP(NotePViewModel model)
+        public async Task<IActionResult> EditNoteP(NotePViewModel model, IFormCollection form)
         {
             Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
 
@@ -1388,14 +1390,14 @@ namespace KyoS.Web.Controllers
                         return RedirectToAction(nameof(EditNoteP), new { id = model.Id, error = 5, origin = model.Origin });
                     }
 
-                    noteEntity = await _converterHelper.ToNotePEntity(model, true);                                       
+                    noteEntity = await _converterHelper.ToNotePEntity(model, true);
+                    noteEntity.Setting = form["Setting"].ToString();
 
                     //vinculo el mtp activo del cliente a la nota que se creará
                     MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
                     if (mtp != null)
                     { 
-                        noteEntity.MTPId = mtp.Id;
-                        noteEntity.Setting = mtp.Setting;
+                        noteEntity.MTPId = mtp.Id;                        
                     }
 
                     //I verify that user selected at least a one progress, if no then I put minimal progress for default
@@ -1566,6 +1568,7 @@ namespace KyoS.Web.Controllers
 
                     note.Title = model.Title;
                     note.PlanNote = model.PlanNote;
+                    note.Setting = form["Setting"].ToString();
 
                     //mental client status
                     note.Attentive = model.Attentive;
@@ -1622,8 +1625,7 @@ namespace KyoS.Web.Controllers
                     MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
                     if (mtp != null)
                     {
-                        note.MTPId = mtp.Id;
-                        note.Setting = mtp.Setting;
+                        note.MTPId = mtp.Id;                        
                     }
 
                     // I will calculate the real units of the note
@@ -3496,6 +3498,7 @@ namespace KyoS.Web.Controllers
                     PlanNote = note.PlanNote,
                     Origin = origin,
                     Schema = note.Schema,
+                    Setting = note.Setting,
 
                     Title = note.Title,
 
@@ -8804,33 +8807,111 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> ApprovedNotesClinic(int id = 0)
+        public async Task<IActionResult> ApprovedNotesClinic(string dateInterval = "", int idFacilitator = 0, int idClient = 0)
         {
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
-            return View(await _context.Workdays_Clients.AsNoTracking()
+            IQueryable<Workday_Client> query = null;
 
-                                      .Include(wc => wc.Note).AsNoTracking()
+            if (dateInterval == string.Empty && idFacilitator == 0 && idClient == 0)
+            {
+                query = _context.Workdays_Clients
 
-                                      .Include(wc => wc. IndividualNote).AsNoTracking()
+                                .Include(wc => wc.Note)
 
-                                      .Include(wc => wc.GroupNote).AsNoTracking()
+                                .Include(wc => wc.IndividualNote)
 
-                                      .Include(wc => wc.NoteP).AsNoTracking()
+                                .Include(wc => wc.GroupNote)
 
-                                      .Include(wc => wc.Facilitator).AsNoTracking()
+                                .Include(wc => wc.NoteP)
 
-                                      .Include(wc => wc.Client).AsNoTracking()
+                                .Include(wc => wc.Facilitator)
 
-                                      .Include(wc => wc.Workday).AsNoTracking()
+                                .Include(wc => wc.Client)
 
-                                      .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                && (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved
-                                                                                          || wc.GroupNote.Status == NoteStatus.Approved
-                                                                                          || wc.NoteP.Status == NoteStatus.Approved)))
-                                      .ToListAsync());
+                                .Include(wc => wc.Workday)
+
+                                .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                            && (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved
+                                                                                    || wc.GroupNote.Status == NoteStatus.Approved
+                                                                                    || wc.NoteP.Status == NoteStatus.Approved)
+                                            && wc.Workday.Date >= DateTime.Now.AddMonths(-3)));
+
+                return View(new ApprovedNotesClinicViewModel
+                                {
+                                    DateIterval = $"{DateTime.Now.AddMonths(-3).ToShortDateString()} - {DateTime.Now.AddDays(6).ToShortDateString()}",
+                                    IdFacilitator = 0,
+                                    Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
+                                    IdClient = 0,
+                                    Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
+                                    WorkDaysClients = query.ToList()
+                                }
+                           );                
+            }
+
+            query = _context.Workdays_Clients
+
+                            .Include(wc => wc.Note)
+
+                            .Include(wc => wc.IndividualNote)
+
+                            .Include(wc => wc.GroupNote)
+
+                            .Include(wc => wc.NoteP)
+
+                            .Include(wc => wc.Facilitator)
+
+                            .Include(wc => wc.Client)
+
+                            .Include(wc => wc.Workday)
+
+                            .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                        && (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved
+                                                                                  || wc.GroupNote.Status == NoteStatus.Approved
+                                                                                  || wc.NoteP.Status == NoteStatus.Approved)));
+
+            if (dateInterval != string.Empty)
+            {
+                string[] date = dateInterval.Split(" - ");
+                query = query.Where(wc => (wc.Workday.Date >= Convert.ToDateTime(date[0]) && wc.Workday.Date <= Convert.ToDateTime(date[1])));
+            }
+
+            if (idFacilitator != 0)
+                query = query.Where(wc => wc.Facilitator.Id == idFacilitator);
+
+            if (idClient != 0)
+                query = query.Where(wc => wc.Client.Id == idClient);
+
+            ApprovedNotesClinicViewModel model = new ApprovedNotesClinicViewModel
+            {
+                DateIterval = dateInterval,
+                IdFacilitator = idFacilitator,
+                Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
+                IdClient = idClient,
+                Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
+                WorkDaysClients = query.ToList()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public IActionResult ApprovedNotesClinic(ApprovedNotesClinicViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(ApprovedNotesClinic), new { dateInterval = model.DateIterval, idFacilitator = model.IdFacilitator, idClient = model.IdClient });
+            }
+
+            return View(model);
         }
 
         [Authorize(Roles = "Supervisor, CaseManager")]
@@ -9509,7 +9590,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> BillingReport()
+        public async Task<IActionResult> BillingReport(string dateInterval = "")    
         {                     
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
@@ -9518,50 +9599,139 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
-            
-            return View(await _context.Weeks.AsNoTrackingWithIdentityResolution()
 
-                                      .Include(w => w.Days)
-                                      .ThenInclude(d => d.Workdays_Clients)
-                                      .ThenInclude(wc => wc.Client)
-                                      .ThenInclude(c => c.Group).AsNoTrackingWithIdentityResolution()
+            List<WeekEntity> list = new List<WeekEntity>();
+            if (dateInterval != string.Empty)
+            {
+                string[] date = dateInterval.Split(" - ");
+                
+                IQueryable<WeekEntity> query = _context.Weeks
 
-                                      .Include(w => w.Days)
-                                      .ThenInclude(d => d.Workdays_Clients)
-                                      .ThenInclude(g => g.Facilitator).AsNoTrackingWithIdentityResolution()
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.Client)
+                                                        .ThenInclude(c => c.Group)
 
-                                      .Include(w => w.Days)
-                                      .ThenInclude(d => d.Workdays_Clients)
-                                      .ThenInclude(wc => wc.Note).AsNoTrackingWithIdentityResolution()
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(g => g.Facilitator)
 
-                                      .Include(w => w.Days)
-                                      .ThenInclude(d => d.Workdays_Clients)
-                                      .ThenInclude(wc => wc.NoteP).AsNoTrackingWithIdentityResolution()
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.Note)
 
-                                      .Include(w => w.Days)
-                                      .ThenInclude(d => d.Workdays_Clients)
-                                      .ThenInclude(wc => wc.IndividualNote).AsNoTrackingWithIdentityResolution()
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.NoteP)
 
-                                      .Include(w => w.Days)
-                                      .ThenInclude(d => d.Workdays_Clients)
-                                      .ThenInclude(wc => wc.GroupNote).AsNoTrackingWithIdentityResolution()
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.IndividualNote)
 
-                                      .Include(w => w.Days)
-                                      .ThenInclude(d => d.Workdays_Clients)
-                                      .ThenInclude(wc => wc.Client)
-                                      .ThenInclude(c => c.MTPs).AsNoTrackingWithIdentityResolution()
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.GroupNote)
 
-                                      .Include(w => w.Days)
-                                      .ThenInclude(d => d.Workdays_Clients)
-                                      .ThenInclude(wc => wc.Client)
-                                      .ThenInclude(c => c.Clients_Diagnostics)
-                                      .ThenInclude(cd => cd.Diagnostic).AsNoTrackingWithIdentityResolution()
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.Client)
+                                                        .ThenInclude(c => c.MTPs)
 
-                                      .Include(w => w.Clinic).AsNoTrackingWithIdentityResolution()
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.Client)
+                                                        .ThenInclude(c => c.Clients_Diagnostics)
+                                                        .ThenInclude(cd => cd.Diagnostic)
 
-                                      .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
-                                      
-                                      .ToListAsync());            
+                                                        .Include(w => w.Clinic)
+
+                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= Convert.ToDateTime(date[0]) && w.FinalDate <= Convert.ToDateTime(date[1])));
+
+                BillingReportViewModel model = new BillingReportViewModel
+                {
+                    DateIterval = dateInterval,
+                    IdFacilitator = 0,
+                    Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
+                    IdClient = 0,
+                    Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
+                    Weeks = query.ToList()
+                };
+
+                return View(model);
+            }
+            else
+            {
+                IQueryable<WeekEntity> query = _context.Weeks
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.Client)
+                                                       .ThenInclude(c => c.Group)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(g => g.Facilitator)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.Note)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.NoteP)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.IndividualNote)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.GroupNote)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.Client)
+                                                       .ThenInclude(c => c.MTPs)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.Client)
+                                                       .ThenInclude(c => c.Clients_Diagnostics)
+                                                       .ThenInclude(cd => cd.Diagnostic)
+
+                                                       .Include(w => w.Clinic)
+
+                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= DateTime.Now.AddMonths(-3) && w.FinalDate <= DateTime.Now.AddDays(6)));
+
+                BillingReportViewModel model = new BillingReportViewModel
+                {
+                    DateIterval = $"{DateTime.Now.AddMonths(-3).ToShortDateString()} - {DateTime.Now.AddDays(6).ToShortDateString()}",
+                    IdFacilitator = 0,
+                    Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
+                    IdClient = 0,
+                    Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
+                    Weeks = query.ToList()
+                };
+
+                return View(model);
+            }            
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public IActionResult BillingReport(BillingReportViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(BillingReport), new { dateInterval = model.DateIterval });
+            }
+
+            return View(model);
         }
 
         [Authorize(Roles = "Manager")]
