@@ -275,7 +275,14 @@ namespace KyoS.Web.Controllers
                 if (idClient != 0)
                     query = query.Where(t => t.TCMClient.Id == idClient);
 
-                list = query.ToList();
+                try
+                {
+                    list = query.ToList();
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction(nameof(BillingForWeek));
+                }                
 
                 int minutes;
                 int totalUnits = 0;
@@ -292,7 +299,7 @@ namespace KyoS.Web.Controllers
                 ViewBag.Units = totalUnits.ToString();
                 ViewBag.Money = (totalUnits * 12).ToString();
             }
-
+            
             TCMBillingReportViewModel model = new TCMBillingReportViewModel
             {
                 DateIterval = dateInterval,
@@ -300,10 +307,10 @@ namespace KyoS.Web.Controllers
                 CaseManagers = _combosHelper.GetComboCaseMannagersByClinicFilter(user_logged.Clinic.Id),
                 IdClient = idClient,
                 Clients = _combosHelper.GetComboClientsForTCMCaseOpenFilter(user_logged.Clinic.Id),
-                TCMNotes = dateInterval != string.Empty ? list : new List<TCMNoteEntity>()
+                TCMNotes = list
             };
 
-            return View(model);
+            return View(model);                   
         }
 
         [HttpPost]

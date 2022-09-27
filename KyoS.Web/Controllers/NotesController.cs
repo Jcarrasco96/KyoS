@@ -8884,17 +8884,23 @@ namespace KyoS.Web.Controllers
             if (idClient != 0)
                 query = query.Where(wc => wc.Client.Id == idClient);
 
-            ApprovedNotesClinicViewModel model = new ApprovedNotesClinicViewModel
+            try
             {
-                DateIterval = dateInterval,
-                IdFacilitator = idFacilitator,
-                Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
-                IdClient = idClient,
-                Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                WorkDaysClients = query.ToList()
-            };
-
-            return View(model);
+                ApprovedNotesClinicViewModel model = new ApprovedNotesClinicViewModel
+                {
+                    DateIterval = dateInterval,
+                    IdFacilitator = idFacilitator,
+                    Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
+                    IdClient = idClient,
+                    Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
+                    WorkDaysClients = query.ToList()
+                };
+                return View(model);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction(nameof(ApprovedNotesClinic));
+            }         
         }
 
         [HttpPost]
@@ -9647,17 +9653,24 @@ namespace KyoS.Web.Controllers
 
                                                         .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= Convert.ToDateTime(date[0]) && w.FinalDate <= Convert.ToDateTime(date[1])));
 
-                BillingReportViewModel model = new BillingReportViewModel
+                try
                 {
-                    DateIterval = dateInterval,
-                    IdFacilitator = 0,
-                    Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
-                    IdClient = 0,
-                    Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                    Weeks = query.ToList()
-                };
+                    BillingReportViewModel model = new BillingReportViewModel
+                    {
+                        DateIterval = dateInterval,
+                        IdFacilitator = 0,
+                        Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
+                        IdClient = 0,
+                        Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
+                        Weeks = query.ToList()
+                    };
 
-                return View(model);
+                    return View(model);
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction(nameof(BillingReport));
+                }                
             }
             else
             {
