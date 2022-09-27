@@ -639,7 +639,7 @@ namespace KyoS.Web.Controllers
                         model.Client.MedicationList = new List<MedicationEntity>();
                     if (model.Client.Doctor == null)
                         model.Client.Doctor = new DoctorEntity();
-                    if (model.Client.Client_Referred == null || model.Client.Client_Referred.Count() == 0)
+                    if (model.Client.Client_Referred == null || model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).Count() == 0)
                     {
                         Client_Referred client_referred = new Client_Referred();
                         model.Client.Client_Referred = new List<Client_Referred>();
@@ -1401,7 +1401,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Manager, Facilitator")]
         public IActionResult EditReadOnly(int id = 0, int origi = 0)
         {
             BioEntity entity = _context.Bio
@@ -1411,6 +1411,7 @@ namespace KyoS.Web.Controllers
                                        .Include(n => n.Client.EmergencyContact)
                                        .Include(n => n.Client.MedicationList)
                                        .Include(n => n.Client.Client_Referred)
+                                       .ThenInclude(n => n.Referred)
                                        .Include(n => n.Client.List_BehavioralHistory)
 
                                        .FirstOrDefault(i => i.Id == id);
@@ -1422,8 +1423,7 @@ namespace KyoS.Web.Controllers
 
             BioViewModel model;
 
-            if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
-            {
+           
                 UserEntity user_logged = _context.Users
 
                                                  .Include(u => u.Clinic)
@@ -1442,7 +1442,7 @@ namespace KyoS.Web.Controllers
                     if (model.Client.Doctor == null)
                         model.Client.Doctor = new DoctorEntity();
                    
-                    if (model.Client.Client_Referred == null || model.Client.Client_Referred.Count() == 0)
+                    if (model.Client.Client_Referred == null || model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).Count() == 0)
                     {
                         Client_Referred client_referred = new Client_Referred();
                         model.Client.Client_Referred = new List<Client_Referred>();
@@ -1470,8 +1470,8 @@ namespace KyoS.Web.Controllers
                     ViewData["origi"] = origi;
                     return View(model);
                 }
-            }
 
+            ViewData["origi"] = origi;
             model = new BioViewModel();
             return View(model);
         }

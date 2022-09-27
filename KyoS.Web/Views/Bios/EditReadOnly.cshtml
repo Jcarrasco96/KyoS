@@ -69,8 +69,11 @@
             </div>
             <partial name="_Bios2ReadOnly" />
             <div class="form-group col-md-12">
-                <input type="submit" value="Approve" class="btn btn-primary" />
-                <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","Bios",new {id = Model.Id, origi = @ViewData["origi"]},Context.Request.Scheme)','Add message to document creator')" title="Not approved note due to problems">Review</a>
+                @if (User.IsInRole("Supervisor") && (Model.Status == KyoS.Common.Enums.BioStatus.Pending))
+                {
+                    <input type="submit" value="Approve" class="btn btn-primary" />
+                    <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","Bios",new {id = Model.Id, origi = @ViewData["origi"]},Context.Request.Scheme)','Add message to document creator')" title="Not approved note due to problems">Review</a>
+                }
                 @if (ViewData["origi"].ToString() == "0")
                 {
                     <a asp-action="Index" class="btn btn-success">Back</a>

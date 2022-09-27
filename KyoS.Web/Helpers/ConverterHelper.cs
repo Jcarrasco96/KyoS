@@ -5330,7 +5330,8 @@ namespace KyoS.Web.Helpers
                 NeedSome = model.NeedSome,
                 OtherReceiveExplain = model.OtherReceiveExplain,
                 Status = TCMDocumentStatus.Edition,
-                TCMSupervisor = model.TCMSupervisor
+                TCMSupervisor = model.TCMSupervisor,
+                Client_Referred_List = model.TcmClient.Client.Client_Referred.ToList()
 
             };
 

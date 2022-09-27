@@ -11,5 +11,7 @@ namespace KyoS.Web.Models
 {
     public class TCMAssessmentViewModel : TCMAssessmentEntity
     {
+
+        public List<Client_Referred> Client_Referred_List { get; set; }
     }
 }

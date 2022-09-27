@@ -354,14 +354,14 @@
                                                     <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
                                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                                @if (User.IsInRole("Supervisor") || (@item.CreatedBy == User.Identity.Name))
+                                               @* @if (User.IsInRole("Supervisor") || (@item.CreatedBy == User.Identity.Name))
                                                 {
                                                     <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
                                                 }
                                                 else
                                                 {
                                                     <a class="btn btn-danger disabled" title="Edit MTP"><i class="glyphicon glyphicon-trash"></i></a>
-                                                }
+                                                }*@
                                             </td>
                                         </tr>
 
@@ -520,14 +520,14 @@
                                                     <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
                                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                                @if (User.IsInRole("Supervisor") || (item.CreatedBy == User.Identity.Name))
+                                                @*@if (User.IsInRole("Supervisor") || (item.CreatedBy == User.Identity.Name))
                                                 {
                                                     <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
                                                 }
                                                 else
                                                 {
                                                     <a class="btn btn-danger disabled" title="Edit MTP"><i class="glyphicon glyphicon-trash"></i></a>
-                                                }
+                                                }*@
                                             </td>
                                         </tr>
 
@@ -773,14 +773,14 @@
                                                     <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
                                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                                @if (User.IsInRole("Supervisor"))
+                                                @*@if (User.IsInRole("Supervisor"))
                                                 {
                                                     <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
                                                 }
                                                 else
                                                 {
                                                     <a class="btn btn-danger disabled" title="Edit MTP"><i class="glyphicon glyphicon-trash"></i></a>
-                                                }
+                                                }*@
                                             </td>
                                         </tr>
                                     }
@@ -919,14 +919,14 @@
                                                     <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
                                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                                @if (User.IsInRole("Supervisor"))
+                                                @*@if (User.IsInRole("Supervisor"))
                                                 {
                                                     <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
                                                 }
                                                 else
                                                 {
                                                     <a class="btn btn-danger disabled" title="Edit MTP"><i class="glyphicon glyphicon-trash"></i></a>
-                                                }
+                                                }*@
                                             </td>
                                         </tr>
                                     }

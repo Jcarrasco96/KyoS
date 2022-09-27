@@ -149,12 +149,13 @@
                                             <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="Create BIO"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
                                         else
-                                        { 
+                                        {
                                             <a class="btn btn-warning disabled" title="Create BIO"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        }  
+                                        }
                                         <a class="btn btn-success disabled" title="Finish Editing BIO"><i class="glyphicon glyphicon-ok"></i></a>
-                                        <a class="btn btn-success disabled" title="Print BIO"><i class="glyphicon glyphicon-print"></i></a>                                        
-                                        </td>
+                                        <a asp-action="EditReadOnly" class="btn btn-info disabled" title="Details" ><i class="glyphicon glyphicon-align-justify"></i></a>
+                                        <a class="btn btn-success disabled" title="Print BIO"><i class="glyphicon glyphicon-print"></i></a>
+                                    </td>
                                 </tr>
                             }
                             else
@@ -298,6 +299,7 @@
                                             }
 
                                         }
+                                        <a asp-action="EditReadOnly" asp-route-id="@item.Bio.Id" asp-route-origi="0" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
                                         @if (item.Bio.Status == KyoS.Common.Enums.BioStatus.Approved)
                                         {
                                             <a asp-action="PrintBio" asp-route-id="@item.Bio.Id" class="btn btn-success" title="Print BIO" target="_blank"><i class="glyphicon glyphicon-print"></i></a>

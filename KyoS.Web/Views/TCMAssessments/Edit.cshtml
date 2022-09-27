@@ -41,6 +41,19 @@
             <div class="col-md-push-12">
                 <div class="">
                     <div class="col-md-12 form-group">
+                        <a onclick="showInPopup('@Url.Action("AddReferred", "TCMAssessments",new { id = @Model.TcmClient.Client.Id}, Context.Request.Scheme)','Create Referred')" class="btn btn-success" title="Create Referred"><i class="glyphicon glyphicon-plus"></i> Add Referred</a>
+                    </div>
+                </div>
+                <div class="">
+                    <div id="view-referreds">
+                        @await Html.PartialAsync("_ViewReferred", @Model.TcmClient.Client.Client_Referred.ToList())
+                    </div>
+                </div>
+            </div>
+            <partial name="_TCMAssessment0" />
+            <div class="col-md-push-12">
+                <div class="">
+                    <div class="col-md-12 form-group">
                         <a onclick="showInPopup('@Url.Action("CreateIndividualAgencyModal", "TCMAssessments",new { idAssessment = @Model.Id}, Context.Request.Scheme)','Create TCM Assessment')" class="btn btn-success" title="Create TCM Assessment"><i class="glyphicon glyphicon-plus"></i> Add Individual Agency</a>
                     </div>
                 </div>
@@ -173,6 +186,13 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
+
+          var DeleteReferredTemp = function (idDoc) {
+            var url = "@Url.Action("DeleteReferred", "TCMAssessments")";
+            $.get(url, { id: idDoc }, function (data) {
+                $('#view-referreds').html(data.html);
+            });
+        }
         check1.addEventListener('change', (e) => {
             if (check1.checked == true) {
                 check101.checked = false;

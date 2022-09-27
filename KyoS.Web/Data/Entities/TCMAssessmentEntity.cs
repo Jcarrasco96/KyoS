@@ -41,7 +41,7 @@ namespace KyoS.Web.Data.Entities
         public bool TypeOfAssessmentOther { get; set; }
         public string TypeOfAssessmentOtherExplain { get; set; }
         public bool IsClientCurrently { get; set; }
-
+        
         //SECTION 2
         public bool ClientInput { get; set; }
         public bool Family { get; set; }
