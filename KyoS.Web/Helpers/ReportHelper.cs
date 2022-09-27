@@ -7427,7 +7427,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Id", typeof(int));
             dt.Columns.Add("ClientId", typeof(int));
             dt.Columns.Add("Problem", typeof(string));
-            dt.Columns.Add("Date", typeof(DateTime));            
+            dt.Columns.Add("Date", typeof(string));            
 
             foreach (Bio_BehavioralHistoryEntity item in BehavioralHistoryList)
             {
