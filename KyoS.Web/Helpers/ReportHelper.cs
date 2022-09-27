@@ -3266,6 +3266,10 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetDocumentAssistantDS(bio.DocumentsAssistant));
             WebReport.Report.RegisterData(dataSet.Tables[0], "DocumentsAssistant");
 
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetReferredsListDS(bio.Client.Client_Referred.ToList(), ServiceAgency.CMH));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Referreds");
+
             int nutritionScoreTotal = 0;
             if (bio.HasAnIllnes)
             {
@@ -3389,6 +3393,10 @@ namespace KyoS.Web.Helpers
             dataSet = new DataSet();
             dataSet.Tables.Add(GetDocumentAssistantDS(bio.DocumentsAssistant));
             WebReport.Report.RegisterData(dataSet.Tables[0], "DocumentsAssistant");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetReferredsListDS(bio.Client.Client_Referred.ToList(), ServiceAgency.CMH));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Referreds");
 
             int nutritionScoreTotal = 0;
             if (bio.HasAnIllnes)
@@ -7419,7 +7427,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Id", typeof(int));
             dt.Columns.Add("ClientId", typeof(int));
             dt.Columns.Add("Problem", typeof(string));
-            dt.Columns.Add("Date", typeof(DateTime));            
+            dt.Columns.Add("Date", typeof(string));            
 
             foreach (Bio_BehavioralHistoryEntity item in BehavioralHistoryList)
             {

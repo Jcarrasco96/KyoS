@@ -1148,6 +1148,10 @@ namespace KyoS.Web.Controllers
 
                                        .Include(b => b.DocumentsAssistant)
 
+                                       .Include(b => b.Client)
+                                       .ThenInclude(c => c.Client_Referred)
+                                       .ThenInclude(cr => cr.Referred)
+
                                        .FirstOrDefault(i => (i.Id == id));
             if (entity == null)
             {

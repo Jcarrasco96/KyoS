@@ -22,7 +22,7 @@
         </button>
         <i class="icon-ok red"></i>
         <strong class="red">
-            Error. Approval by batch does not apply in a single note with review.
+            Error. Multiple approval does not apply in a single note with review.
         </strong>
     </div>
 }
@@ -159,7 +159,7 @@
                                     @if (User.IsInRole("Supervisor"))
                                     {
                                         <a asp-action="ApproveNote" asp-route-id="@day_client.Id" asp-route-origin="3" class="btn btn-primary" title="Approve Note"><i class="glyphicon glyphicon-ok"></i></a>
-                                        <a asp-action="ApproveNotePBatch" asp-route-id="@day_client.Id" asp-route-origin="3" class="btn btn-primary" title="Approve Note batch"><i class="glyphicon glyphicon-list"></i></a>
+                                        <a asp-action="ApproveNotePBatch" asp-route-id="@day_client.Id" asp-route-origin="3" class="btn btn-primary" title="Approve multiple notes"><i class="glyphicon glyphicon-list"></i></a>
                                     }
                                 </td>
                             </tr>
