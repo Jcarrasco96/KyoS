@@ -11,5 +11,7 @@ namespace KyoS.Web.Data.Entities
         public string Description { get; set; }
 
         public bool Principal { get; set; }
+
+        public string UserName { get; set; }
     }
 }

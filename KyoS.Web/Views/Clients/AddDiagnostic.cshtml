@@ -8,17 +8,18 @@
         <form asp-action="AddDiagnostic" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPost(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UserName" />
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="IdDiagnostic" class="control-label"></label>
                     <select asp-for="IdDiagnostic" asp-items="Model.Diagnostics" class="form-control"></select>
                     <span asp-validation-for="IdDiagnostic" class="text-danger"></span>
                 </div>
-            </div>           
+            </div>
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Principal" class="control-label"></label>
-                    <input type="checkbox" asp-for="Principal" class="checkbox"/>
+                    <input type="checkbox" asp-for="Principal" class="checkbox" />
                     <span asp-validation-for="Principal" class="text-danger"></span>
                 </div>
             </div>
