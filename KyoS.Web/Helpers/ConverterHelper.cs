@@ -5879,5 +5879,75 @@ namespace KyoS.Web.Helpers
                 Notification = model.Notification
             };
         }
+
+        public async Task<GoalsTempEntity> ToGoalTempEntity(GoalsTempViewModel model, bool isNew)
+        {
+            return new GoalsTempEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Number = model.Number,
+                Name = model.Name,
+                AreaOfFocus = model.AreaOfFocus,
+                Service = ServiceUtils.GetServiceByIndex(model.IdService),
+                IdClient = model.IdClient,
+                UserName = model.UserName,
+                numberMonths = model.numberMonths,
+                AdmissionDate = model.AdmissionDate
+            };
+        }
+
+        public GoalsTempViewModel ToGoalTempViewModel(GoalsTempEntity goalEntity)
+        {
+            GoalsTempViewModel model;
+            model = new GoalsTempViewModel
+            {
+                Id = goalEntity.Id,
+                Number = goalEntity.Number,
+                Name = goalEntity.Name,
+                AreaOfFocus = goalEntity.AreaOfFocus,
+                IdService = Convert.ToInt32(goalEntity.Service),
+                Services = _combosHelper.GetComboServices(),
+                IdClient = goalEntity.IdClient,
+                UserName = goalEntity.UserName,
+                numberMonths = goalEntity.numberMonths,
+                AdmissionDate = goalEntity.AdmissionDate
+            };
+           
+            return model;
+        }
+
+        public async Task<ObjectiveTempEntity> ToObjectiveTempEntity(ObjectiveTempViewModel model, bool isNew)
+        {
+            return new ObjectiveTempEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Objetive = model.Objetive,
+                DateOpened = model.DateOpened,
+                DateTarget = model.DateTarget,
+                DateResolved = model.DateResolved,
+                Description = model.Description,
+                Intervention = model.Intervention,
+                GoalTemp = await _context.GoalsTemp.FindAsync(model.IdGoal)
+                
+            };
+        }
+
+        public ObjectiveTempViewModel ToObjectiveTempViewModel(ObjectiveTempEntity objectiveEntity)
+        {
+            return new ObjectiveTempViewModel
+            {
+                Id = objectiveEntity.Id,
+                Objetive = objectiveEntity.Objetive,
+                GoalTemp = objectiveEntity.GoalTemp,
+                IdGoal = objectiveEntity.GoalTemp.Id,
+                DateOpened = objectiveEntity.DateOpened,
+                DateResolved = objectiveEntity.DateResolved,
+                DateTarget = objectiveEntity.DateTarget,
+                Description = objectiveEntity.Description,
+                Intervention = objectiveEntity.Intervention
+               
+            };
+        }
+
     }
 }
