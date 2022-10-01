@@ -99,7 +99,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public IActionResult Create(int id = 0, int idClient = 0, bool review = false)
+        public IActionResult Create(int id = 0, int idClient = 0, bool review = false, int origin = 0)
         {
             if (id == 1)
             {
@@ -113,7 +113,15 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    ViewBag.Creado = "N";
+                    if (id == 3)
+                    {
+                        ViewBag.Creado = "S";
+                    }
+                    else
+                    {
+                        ViewBag.Creado = "N";
+                    }
+                    
                 }
             }
 
@@ -204,7 +212,7 @@ namespace KyoS.Web.Controllers
                         model.Client.Clients_Diagnostics = new List<Client_Diagnostic>();
                         model.Client.Name = "null";
                     }
-
+                    ViewData["origin"] = origin;
                     return View(model);
                 }
             }
@@ -220,7 +228,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public async Task<IActionResult> Create(MTPViewModel mtpViewModel, IFormCollection form)
+        public async Task<IActionResult> Create(MTPViewModel mtpViewModel, IFormCollection form, int origin = 0)
         {
             if (ModelState.IsValid)
             {
@@ -324,7 +332,15 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Create", new { id = 1 });
+                    if (origin == 0)
+                    {
+                        return RedirectToAction("Create", new { id = 1 });
+                    }
+                    else 
+                    {
+                        return RedirectToAction("ClientsWithoutMTP", "Clients");
+                    }
+                    
                 }
                 catch (System.Exception ex)
                 {
@@ -3984,7 +4000,7 @@ namespace KyoS.Web.Controllers
         {
             if (idClient == 0)
             {
-                return RedirectToAction("Home/Error404");
+               return RedirectToAction("Create", new { id = 1});
             }
 
             UserEntity user_logged = await _context.Users
