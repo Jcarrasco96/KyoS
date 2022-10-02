@@ -37,7 +37,7 @@
             <input type="hidden" asp-for="AdmissionedFor" />
             <partial name="_TCMIntakeForeignLanguage" />
             <div class="form-group col-md-12">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Sign" class="btn btn-primary" />
                 <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.IdTCMClient" asp-route-section="1" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
             </div>
         </form>

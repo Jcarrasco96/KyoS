@@ -41,7 +41,7 @@
             <input type="hidden" asp-for="Approved" />
             <partial name="_TCMIntakeAppendixJ" />
             <div class="form-group col-md-12">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Sign" class="btn btn-primary" />
                 @if (Model.Approved == 0)
                 {
                     <a asp-action="FinishEditingAppendixJ" asp-route-id="@Model.Id" asp-controller="TCMIntakes" class="btn btn-warning ">Finish Edition</a>

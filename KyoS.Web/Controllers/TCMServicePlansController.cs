@@ -484,6 +484,10 @@ namespace KyoS.Web.Controllers
                             await _context.SaveChangesAsync();
                             if (origi == 0)
                             {
+                                return RedirectToAction("Index", "TCMServicePlans");
+                            }
+                            if (origi == 1)
+                            {
                                 return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = 1 });
                             }
                             if (origi == 3)

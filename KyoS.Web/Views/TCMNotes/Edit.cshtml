@@ -65,7 +65,7 @@
             </div>
             <partial name="_TCMNotes1" />
             <div class="col-md-12">
-                <input type="submit" value="Save" asp-route-origin="@ViewData["origin"]" class="btn btn-primary" />
+                <input type="submit" value="Save All" asp-route-origin="@ViewData["origin"]" class="btn btn-primary" />
                 @if (@ViewData["origin"].ToString() == "0")
                 {
                     <a asp-action="TCMNotesForCase" asp-route-idTCMClient="@Model.IdTCMClient" class="btn btn-success">Back</a>
@@ -89,6 +89,8 @@
                         <a asp-action="MessagesOfNotes" asp-controller="TCMMessages" class="btn btn-success">Back</a>
                     }
                 }
+                <input type="submit" value="Finish Editing" asp-route-origin="5" class="btn btn-warning" />
+                @*<a asp-action="FinishEditingNote" asp-route-id="@Model.Id" asp-route-origin="2" class="btn btn-warning">Finish Editing</a>*@
             </div>
         </form>
     </div>

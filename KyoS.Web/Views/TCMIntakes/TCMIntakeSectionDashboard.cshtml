@@ -276,7 +276,7 @@
                 &nbsp;
             </div>
             <div class="col-sm-3 col-md-2">
-                @if (Model.Client.Documents.Count() >= 0)
+                @if (Model.Client.Documents.Count() > 0)
                 {
                     <a style="text-decoration: none;" asp-route-id="@Model.Client.Id" asp-action="ClientsDocuments" asp-route-idTCMCLient="@Model.Id" role="button">
                         <div class="thumbnail list-group-item list-group-item-success">
