@@ -78,7 +78,7 @@
                         <td align="center">
                             <a onclick="showInPopup('@Url.Action("EditGoalModalTemp", "MTPs", new {id =  @item.Id}, Context.Request.Scheme)','Edit Goal')" class="btn btn-warning" title="Edit goal"><i class="glyphicon glyphicon-pencil"></i></a>
                             <a onclick="showInPopup('@Url.Action("CreateObjectiveModalTemp", "MTPs", new {idGoal =  @item.Id, idClient = @item.IdClient, nameGoal = @item.Name, numberGoal = @item.Number, number = item.numberMonths, admissisonDate = item.AdmissionDate}, Context.Request.Scheme)','Create Objective')" class="btn btn-info" title="Create objective"><i class="glyphicon glyphicon-plus"></i></a>
-                            <a asp-action="DeleteGoalTemp" asp-route-id="@item.Id" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete Goal"></i></a>
+                            <a asp-action="DeleteGoalTemp" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete Goal"></i></a>
                         </td>
                     </tr>
                 }

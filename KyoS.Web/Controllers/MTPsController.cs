@@ -4329,7 +4329,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public async Task<IActionResult> DeleteGoalTemp(int? id)
+        public async Task<IActionResult> DeleteGoalTemp(int? id, int origin = 0)
         {
             if (id == null)
             {
@@ -4351,10 +4351,10 @@ namespace KyoS.Web.Controllers
             }
             catch (Exception)
             {
-                return RedirectToAction("Create", new { idClient = idClient });
+                return RedirectToAction("Create", new { idClient = idClient, origin = origin });
             }
 
-            return RedirectToAction("Create", new { idClient = idClient });
+            return RedirectToAction("Create", new { idClient = idClient, origin = origin });
            
         }
 
@@ -4454,7 +4454,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public async Task<IActionResult> DeleteObjectiveTemp(int? id)
+        public async Task<IActionResult> DeleteObjectiveTemp(int? id, int origin = 0)
         {
             if (id == null)
             {
@@ -4479,10 +4479,10 @@ namespace KyoS.Web.Controllers
             }
             catch (Exception)
             {
-                return RedirectToAction("Create", new { idClient = goalTemp.IdClient });
+                return RedirectToAction("Create", new { idClient = goalTemp.IdClient, origin = origin });
             }
                 
-            return RedirectToAction("Create", new { idClient = goalTemp.IdClient });
+            return RedirectToAction("Create", new { idClient = goalTemp.IdClient, origin = origin });
         }
 
 
