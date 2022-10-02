@@ -108,7 +108,7 @@
                                             </span>
                                         }
                                         &nbsp;
-                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                        @if (item.Client.OnlyTCM == false)
                                         {
                                             <span class="label label-default">
                                                 CMH
@@ -182,12 +182,13 @@
                                             </span>
                                         }
                                         &nbsp;
-                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                        @if (item.Client.OnlyTCM == false)
                                         {
                                             <span class="label label-default">
                                                 CMH
                                             </span>
                                         }
+                                      
                                     </td>
                                     <td align="right">
                                         @if (User.IsInRole("CaseManager"))

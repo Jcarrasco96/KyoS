@@ -73,29 +73,25 @@
         }
     </div>
     <div class="row">
-        <form asp-action="Create">
+        <form asp-action="Create" asp-route-origin="@ViewData["origin"]">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Review" />
             <input type="hidden" asp-for="Client.Name" />
             <input type="hidden" asp-for="AdmissionedFor" />
             <partial name="_MTPs" />
-            <div class="col-md-push-12">
-                <div class="col-md-12 form-group">
-                    @if (Model.IdClient == 0)
-                    {
-                        <a asp-action="Create" asp-route-id="3" class="btn btn-success" title=" Add Goal"><i class="glyphicon glyphicon-plus"></i> Add Goal</a>
-                    }
-                    else
-                    {
+            @if (ViewData["origin"].ToString() == "1")
+            {
+                <div class="col-md-push-12">
+                    <div class="col-md-12 form-group">
                         <a onclick="showInPopup('@Url.Action("CreateGoalModalTemp", "MTPs", new { idClient = @Model.Client.Id, numberMonths = Model.NumberOfMonths, admissionDate = Model.AdmissionDateMTP }, Context.Request.Scheme)','Create goal of MTP')" class="btn btn-success" title="Create Goal of this MTP"><i class="glyphicon glyphicon-plus"></i> Add Goal</a>
-                    }
-                </div>
-                <div class="col-md-12">
-                    <div id="view-goalsTemp">
-                        @await Html.PartialAsync("_ViewGoalsTemp", Model.GoalTempList.ToList())
+                    </div>
+                    <div class="col-md-12">
+                        <div id="view-goalsTemp">
+                            @await Html.PartialAsync("_ViewGoalsTemp", Model.GoalTempList.ToList())
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
             <div class="form-group col-md-12">
                 <input type="submit" value="Create MTP" class="btn btn-primary" />
                 @if (ViewData["origin"].ToString() == "0")
