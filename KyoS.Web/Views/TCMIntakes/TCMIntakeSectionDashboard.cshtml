@@ -80,7 +80,7 @@
                         <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origin"]" asp-action="CreateTCMConsentForTreatment" role="button">
                             <h4 style="align-content:end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consent for<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treatment</h4>
                         </a>
-                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintTCMConsentForTreatment" role="button" title="Print Consent for Treatment and Receive Medication" target="_blank">
                             <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
                         </a>
                     </div>                    
@@ -101,9 +101,9 @@
                         <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="ListConsentForrelease" asp-route-origi="@ViewData["origin"]" role="button">
                             <h4 style="align-content:end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consent for<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Release</h4>
                         </a>
-                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
+                        @*<a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
                             <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
-                        </a>
+                        </a>*@
                     </div>                    
                 }
                 else
@@ -122,9 +122,9 @@
                         <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMConsumerRights" asp-route-origi="@ViewData["origin"]" role="button">
                             <h4 style="align-content:end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consumer<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rights</h4>
                         </a>
-                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
+                        @*<a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
                             <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
-                        </a>
+                        </a>*@
                     </div>                    
                 }
                 else
@@ -143,9 +143,9 @@
                         <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMAcknowledgementHippa" asp-route-origi="@ViewData["origin"]" role="button">
                             <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Acknowled.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hippa</h4>
                         </a>
-                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
+                        @*<a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
                             <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
-                        </a>
+                        </a>*@
                     </div>                    
                 }
                 else
@@ -173,9 +173,9 @@
                         <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMOrientationCheckList" asp-route-origi="@ViewData["origin"]" role="button">
                             <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Orientation<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checklist</h4>
                         </a>
-                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
+                        @*<a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
                             <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
-                        </a>
+                        </a>*@
                     </div>                    
                 }
                 else
@@ -194,9 +194,9 @@
                         <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMIntakeAdvenceDirective" asp-route-origi="@ViewData["origin"]" role="button">
                             <h4 style="align-content:end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Advance<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Directive</h4>
                         </a>
-                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
+                        @*<a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
                             <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
-                        </a>
+                        </a>*@
                     </div>                    
                 }
                 else
@@ -215,9 +215,9 @@
                         <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMForeignLanguage" asp-route-origi="@ViewData["origin"]" role="button">
                             <h4 style="align-content:end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Foreign Lang.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Acknowledgement</h4>
                         </a>
-                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
+                        @*<a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
                             <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
-                        </a>
+                        </a>*@
                     </div>                    
                 }
                 else
@@ -237,9 +237,9 @@
                             <br />
                             <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Correspondence</h4>
                         </a>
-                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
+                        @*<a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
                             <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
-                        </a>
+                        </a>*@
                     </div>                   
                 }
                 else
