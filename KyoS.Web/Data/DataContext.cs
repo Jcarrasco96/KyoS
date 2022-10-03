@@ -124,6 +124,8 @@ namespace KyoS.Web.Data
         public DbSet<TCMServiceActivityEntity> TCMServiceActivity { get; set; }
         public DbSet<TCMNoteActivityTempEntity> TCMNoteActivityTemp { get; set; }
         public DbSet<TCMMessageEntity> TCMMessages { get; set; }
+        public DbSet<GoalsTempEntity> GoalsTemp { get; set; }
+        public DbSet<ObjectiveTempEntity> ObjetivesTemp { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -565,6 +567,11 @@ namespace KyoS.Web.Data
             modelBuilder.Entity<Client_Referred>()
                        .HasOne(cd => cd.Client)
                        .WithMany(c => c.Client_Referred)
+                       .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ObjectiveTempEntity>()
+                       .HasOne(o => o.GoalTemp)
+                       .WithMany(g => g.ObjetiveTempList)
                        .OnDelete(DeleteBehavior.Cascade);
         }
     }

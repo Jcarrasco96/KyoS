@@ -1,0 +1,71 @@
+﻿@model KyoS.Web.Models.ObjectiveTempViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="CreateObjectiveModalTemp" onsubmit="return jQueryAjaxPostGoalTemp(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IdGoal" />
+            <div>
+                <div class="col-md-12">
+                    <h5 style="font-weight:bold;">Objective of Goal # @Model.NumberGoal - @Model.NameGoal</h5>
+                </div>
+            </div>
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+            <div class="col-md-push-12">
+                <div class="form-group col-md-4">
+                    <label asp-for="Objetive" class="control-label"></label>
+                    <input asp-for="Objetive" class="form-control" />
+                    <span asp-validation-for="Objetive" class="text-danger"></span>
+                </div>
+                <div class="container-fluid">
+                    &nbsp;
+                </div>
+            </div>
+            <div class="col-md-push-12">
+                <div class="form-group col-md-4">
+                    <label asp-for="DateOpened" class="control-label"></label>
+                    <input asp-for="DateOpened" class="form-control" />
+                    <span asp-validation-for="DateOpened" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="DateTarget" class="control-label"></label>
+                    <input asp-for="DateTarget" class="form-control" />
+                    <span asp-validation-for="DateTarget" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="DateResolved" class="control-label"></label>
+                    <input asp-for="DateResolved" class="form-control" />
+                    <span asp-validation-for="DateResolved" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-push-12">
+                <div class="form-group col-md-12">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-push-12">
+                <div class="form-group col-md-12">
+                    <label asp-for="Intervention" class="control-label"></label>
+                    <textarea asp-for="Intervention" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Intervention" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

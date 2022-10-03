@@ -184,5 +184,9 @@ namespace KyoS.Web.Helpers
         Task<TCMServiceActivityEntity> ToTCMServiceActivityEntity(TCMServiceActivityViewModel model, bool isNew, string userId);
         TCMServiceActivityViewModel ToTCMServiceActivityViewModel(TCMServiceActivityEntity model);
         Task<TCMMessageEntity> ToTCMMessageEntity(TCMMessageViewModel model, bool isNew);
+        Task<GoalsTempEntity> ToGoalTempEntity(GoalsTempViewModel model, bool isNew);
+        GoalsTempViewModel ToGoalTempViewModel(GoalsTempEntity model);
+        Task<ObjectiveTempEntity> ToObjectiveTempEntity(ObjectiveTempViewModel model, bool isNew);
+        ObjectiveTempViewModel ToObjectiveTempViewModel(ObjectiveTempEntity model);
     }
 }

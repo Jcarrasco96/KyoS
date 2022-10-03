@@ -7,12 +7,18 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("MTPs", "Index", "MTPs")
+            @if (ViewData["origin"].ToString() == "0")
+            {
+                @Html.ActionLink("MTPs", "Index", "MTPs")
+            }
+            else
+            {
+                @Html.ActionLink("Clients Without MTP", "ClientsWithoutMTP", "Clients")
+            }
         </li>
         <li class="active">Create</li>
     </ul><!--.breadcrumb-->
 </div>
-
 <h4>Create new master treatment plan</h4>
 <hr />
 <div>
@@ -53,18 +59,49 @@
                     Error. There are gender issues in: @ViewBag.errorText
                 </strong>
             </div>
+        }@if (ViewBag.Creado == "S")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok red"></i>
+                <strong class="red">
+                    Error. Select Client
+                </strong>
+            </div>
         }
     </div>
     <div class="row">
-        <form asp-action="Create">
+        <form asp-action="Create" asp-route-origin="@ViewData["origin"]">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Review" />
             <input type="hidden" asp-for="Client.Name" />
             <input type="hidden" asp-for="AdmissionedFor" />
             <partial name="_MTPs" />
+            @if (ViewData["origin"].ToString() == "1")
+            {
+                <div class="col-md-push-12">
+                    <div class="col-md-12 form-group">
+                        <a onclick="showInPopup('@Url.Action("CreateGoalModalTemp", "MTPs", new { idClient = @Model.Client.Id, numberMonths = Model.NumberOfMonths, admissionDate = Model.AdmissionDateMTP }, Context.Request.Scheme)','Create goal of MTP')" class="btn btn-success" title="Create Goal of this MTP"><i class="glyphicon glyphicon-plus"></i> Add Goal</a>
+                    </div>
+                    <div class="col-md-12">
+                        <div id="view-goalsTemp">
+                            @await Html.PartialAsync("_ViewGoalsTemp", Model.GoalTempList.ToList())
+                        </div>
+                    </div>
+                </div>
+            }
             <div class="form-group col-md-12">
                 <input type="submit" value="Create MTP" class="btn btn-primary" />
-                <a asp-action="ClientsWithoutMTP" asp-controller="Clients" class="btn btn-success">Back</a>
+                @if (ViewData["origin"].ToString() == "0")
+                {
+                    <a asp-action="Index" asp-controller="Mtps" class="btn btn-success">Back</a>
+                }
+                @if (ViewData["origin"].ToString() == "1")
+                {
+                    <a asp-action="ClientsWithoutMTP" asp-controller="Clients" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>
@@ -87,6 +124,18 @@
                 $("#txtDiagnosis").val(data);
                 });               
             })
+        });
+        $(function () {
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
         });
     </script>
 }

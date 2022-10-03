@@ -119,6 +119,7 @@ namespace KyoS.Web.Controllers
                         TcmClient = _context.TCMClient
                                             .Include(n => n.Client)
                                             .ThenInclude(n => n.Client_Referred)
+                                            .ThenInclude(n => n.Referred)
                                             .FirstOrDefault(n => n.Id == id),
                         AreChild = false,
                         AreChildAddress = "",
@@ -505,7 +506,8 @@ namespace KyoS.Web.Controllers
                         WhatPharmacy = "",
                         WhenWas = "",
                         CreatedBy = user_logged.UserName,
-                        CreatedOn = DateTime.Now
+                        CreatedOn = DateTime.Now,
+                        Client_Referred_List = new List<Client_Referred>()
                     };
                     if (model.IndividualAgencyList == null)
                         model.IndividualAgencyList = new List<TCMAssessmentIndividualAgencyEntity>();
@@ -597,6 +599,7 @@ namespace KyoS.Web.Controllers
                                                                 .ThenInclude(b => b.Clients_Diagnostics)
                                                                 .ThenInclude(b => b.Diagnostic)
                                                                 .Include(b => b.TcmClient.Client.Client_Referred)
+                                                                .ThenInclude(n => n.Referred)
                                                                 .Include(b => b.TcmClient.Client.Doctor)
                                                                 .Include(b => b.TcmClient.Client.Psychiatrist)
                                                                 .Include(b => b.IndividualAgencyList)
@@ -2384,6 +2387,96 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("TCMAssessmentApproved", new { approved = 1 });
 
             return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult AddReferred(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                ReferredTempViewModel model = new ReferredTempViewModel
+                {
+                    Id_Referred = 0,
+                    Referreds = _combosHelper.GetComboReferredsByClinic(user_logged.Id),
+                    IdServiceAgency = 1,
+                    ServiceAgency = _combosHelper.GetComboServiceAgency()
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                return View(new ReferredTempViewModel());
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> AddReferred(int id, ReferredTempViewModel referredTempViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (id > 0)
+                {
+                   Client_Referred Client_referred = new Client_Referred
+                    {
+                        Id = 0,
+                        Client = await _context.Clients.FirstOrDefaultAsync(d => d.Id == id),
+                        Referred = await _context.Referreds.FirstOrDefaultAsync(d => d.Id == referredTempViewModel.Id_Referred),
+                        ReferredNote = referredTempViewModel.ReferredNote,
+                        Service = ServiceAgency.TCM
+
+                   };
+                    _context.Add(Client_referred);
+                    await _context.SaveChangesAsync();
+                }
+                List <Client_Referred> clientList = await _context.Clients_Referreds
+                                                           .Include(m => m.Referred)
+                                                           .Where(n => n.Client.Id == id && n.Service == ServiceAgency.TCM)
+                                                           .ToListAsync();
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", clientList)});
+            }
+
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            ReferredTempViewModel model = new ReferredTempViewModel
+            {
+                IdReferred = 0,
+                Referreds = _combosHelper.GetComboReferredsByClinic(user_logged.Id),
+                IdServiceAgency = 0,
+                ServiceAgency = _combosHelper.GetComboServiceAgency()
+            };
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddReferred", model) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> DeleteReferred(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Client_Referred referred = await _context.Clients_Referreds.Include( n => n.Client ).FirstOrDefaultAsync(d => d.Id == id);
+            
+            if (referred == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+            int id_client = referred.Client.Id;
+
+            _context.Clients_Referreds.Remove(referred);
+            await _context.SaveChangesAsync();
+
+            List<Client_Referred> clientList = await _context.Clients_Referreds
+                                                          .Include(m => m.Referred)
+                                                          .Where(n => n.Client.Id == id_client && n.Service == ServiceAgency.TCM)
+                                                          .ToListAsync();
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", clientList) });
         }
 
     }

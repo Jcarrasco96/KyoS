@@ -364,6 +364,11 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction("MessagesOfNotes", "TCMMessages");
                     }
+                    if (origin == 5)
+                    {
+                        return RedirectToAction("FinishEditingNote", new { id = tcmNotesViewModel.Id, origin = 2 });
+                    }
+                    
                 }
                 catch (System.Exception ex)
                 {
@@ -843,7 +848,10 @@ namespace KyoS.Web.Controllers
                             {
                                 return RedirectToAction("NotesStatus", new { status = NoteStatus.Edition });
                             }
-
+                            if (origin == 2)
+                            {
+                                return RedirectToAction("Index", "TCMBilling");
+                            }
                         }
                         catch (System.Exception ex)
                         {

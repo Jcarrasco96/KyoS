@@ -108,7 +108,7 @@
                                             </span>
                                         }
                                         &nbsp;
-                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                        @if (item.Client.OnlyTCM == false)
                                         {
                                             <span class="label label-default">
                                                 CMH
@@ -119,13 +119,13 @@
                                     <td align="right">
                                         @if (User.IsInRole("CaseManager"))
                                         {
-                                            <a asp-action="TCMIntakeDashboard" asp-route-id="@item.Id" class="btn btn-warning" title="New Open Binder"><i class="glyphicon glyphicon-plus"></i></a>
+                                            <a asp-action="TCMIntakeDashboard" asp-route-id="@item.Id" class="btn btn-warning" title="New Binder"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
                                         else
                                         {
                                             <a class="btn btn-warning disabled" title="New Open Binder"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
-                                        @if ((item.TCMIntakeForm != null) && (item.TcmIntakeConsentForTreatment != null) && (item.TcmIntakeConsentForRelease != null) && (item.TcmIntakeConsumerRights != null)
+                                        @*@if ((item.TCMIntakeForm != null) && (item.TcmIntakeConsentForTreatment != null) && (item.TcmIntakeConsentForRelease != null) && (item.TcmIntakeConsumerRights != null)
                                          && (item.TcmIntakeAcknowledgementHipa != null) && (item.TCMIntakeOrientationChecklist != null) && (item.TCMIntakeAdvancedDirective != null)
                                          && (item.TCMIntakeForeignLanguage != null) && (item.TCMIntakeWelcome != null) && (item.Client.IntakeFeeAgreement != null)
                                          && (item.Client.IntakeMedicalHistory != null) && (item.Client.MedicationList.Count() != 0) && (item.TCMIntakeNonClinicalLog != null)
@@ -136,7 +136,7 @@
                                         else
                                         {
                                             <a class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                        }
+                                        }*@
                                     </td>
                                 </tr>
                             }
@@ -182,23 +182,24 @@
                                             </span>
                                         }
                                         &nbsp;
-                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                        @if (item.Client.OnlyTCM == false)
                                         {
                                             <span class="label label-default">
                                                 CMH
                                             </span>
                                         }
+                                      
                                     </td>
                                     <td align="right">
                                         @if (User.IsInRole("CaseManager"))
                                         {
-                                            <a asp-action="TCMIntakeDashboard" asp-route-id="@item.Id" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="TCMIntakeDashboard" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Binder"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
                                         else
                                         {
                                             <a asp-action="TCMIntakeDashboardReadOnly" asp-route-id="@item.Id" class="btn btn-warning" title="View item"><i class="glyphicon glyphicon-folder-open"></i></a>
                                         }
-                                        @if ((item.TCMIntakeForm != null) && (item.TcmIntakeConsentForTreatment != null) && (item.TcmIntakeConsentForRelease != null) && (item.TcmIntakeConsumerRights != null)
+                                        @*@if ((item.TCMIntakeForm != null) && (item.TcmIntakeConsentForTreatment != null) && (item.TcmIntakeConsentForRelease != null) && (item.TcmIntakeConsumerRights != null)
                                       && (item.TcmIntakeAcknowledgementHipa != null) && (item.TCMIntakeOrientationChecklist != null) && (item.TCMIntakeAdvancedDirective != null)
                                       && (item.TCMIntakeForeignLanguage != null) && (item.TCMIntakeWelcome != null) && (item.Client.IntakeFeeAgreement != null)
                                       && (item.Client.IntakeMedicalHistory != null) && (item.Client.MedicationList != null) && (item.TCMIntakeNonClinicalLog != null)
@@ -209,7 +210,7 @@
                                         else
                                         {
                                             <a class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                        }
+                                        }*@
                                     </td>
                                 </tr>
                             }

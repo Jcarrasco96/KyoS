@@ -99,7 +99,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public IActionResult Create(int id = 0, int idClient = 0, bool review = false)
+        public IActionResult Create(int id = 0, int idClient = 0, bool review = false, int origin = 0)
         {
             if (id == 1)
             {
@@ -113,9 +113,19 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    ViewBag.Creado = "N";
+                    if (id == 3)
+                    {
+                        ViewBag.Creado = "S";
+                    }
+                    else
+                    {
+                        ViewBag.Creado = "N";
+                    }
+                    
                 }
             }
+
+            //this.DeleteGoalsTemp(idClient);    //decide where to delete the temp
 
             MTPViewModel model = new MTPViewModel();
 
@@ -163,8 +173,9 @@ namespace KyoS.Web.Controllers
                                              .Include(c => c.Clients_Diagnostics)
                                              .ThenInclude(cd => cd.Diagnostic)
                                              .First(n => n.Id == idClient),
-                            AdmissionedFor = user_logged.FullName
-                        };
+                            AdmissionedFor = user_logged.FullName,
+                            GoalTempList = _context.GoalsTemp.Include(m => m.ObjetiveTempList).Where(m => m.IdClient == idClient && m.UserName == user_logged.UserName).ToList()
+                    };
                     }
                     else
                     {
@@ -194,13 +205,14 @@ namespace KyoS.Web.Controllers
                             Paint = false,
                             Other = false,
                             Client = new ClientEntity(),
-                            AdmissionedFor = user_logged.FullNameWithDocument
+                            AdmissionedFor = user_logged.FullNameWithDocument,
+                            GoalTempList = new List<GoalsTempEntity>()
 
                         };
                         model.Client.Clients_Diagnostics = new List<Client_Diagnostic>();
                         model.Client.Name = "null";
                     }
-
+                    ViewData["origin"] = origin;
                     return View(model);
                 }
             }
@@ -216,7 +228,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public async Task<IActionResult> Create(MTPViewModel mtpViewModel, IFormCollection form)
+        public async Task<IActionResult> Create(MTPViewModel mtpViewModel, IFormCollection form, int origin = 0)
         {
             if (ModelState.IsValid)
             {
@@ -248,6 +260,7 @@ namespace KyoS.Web.Controllers
                             Setting = form["Setting"].ToString(),
                             Review = mtpViewModel.Review,
                             AdmissionedFor = user_logged.FullNameWithDocument
+                           
                         };
                         return View(model);
                     }
@@ -268,11 +281,66 @@ namespace KyoS.Web.Controllers
                 {
                     mtpEntity.DocumentAssistant = documentAssistant;
                 }
+
+                //update Client_Referred table with the news ReferredTemp
+                IQueryable<GoalsTempEntity> list_to_delete_Goals = _context.GoalsTemp
+                                                                           .Include(n => n.ObjetiveTempList)
+                                                                           .Where(n => n.IdClient == mtpViewModel.IdClient);
+                GoalEntity goal = new GoalEntity();
+                mtpEntity.Goals = new List<GoalEntity>();
+                ObjetiveEntity objective = new ObjetiveEntity();
+                foreach (GoalsTempEntity item in list_to_delete_Goals)
+                {
+                    goal = new GoalEntity
+                    {
+                        Id = 0,
+                        AreaOfFocus = item.AreaOfFocus,
+                        Name = item.Name,
+                        Number = item.Number,
+                        MTP = mtpEntity,
+                        Service = item.Service,
+                        Objetives = new List<ObjetiveEntity>()
+                        
+                    };
+
+                    foreach (ObjectiveTempEntity product in item.ObjetiveTempList)
+                    {
+                        objective = new ObjetiveEntity
+                        {
+                            Id = 0,
+                            DateOpened = product.DateOpened,
+                            DateResolved = product.DateResolved,
+                            DateTarget = product.DateTarget,
+                            Description = product.Description,
+                            Goal = goal,
+                            Intervention = product.Intervention,
+                            Objetive = product.Objetive
+
+                        };
+                        _context.Add(objective);
+                        _context.ObjetivesTemp.Remove(product);
+                        objective = new ObjetiveEntity();
+                    }
+
+                    //mtpEntity.Goals.ToList().Add(goal);
+                    _context.Add(goal);
+                    _context.GoalsTemp.Remove(item);
+                    goal = new GoalEntity();
+                }
+
                 _context.Add(mtpEntity);
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Create", new { id = 1 });
+                    if (origin == 0)
+                    {
+                        return RedirectToAction("Create", new { id = 1 });
+                    }
+                    else 
+                    {
+                        return RedirectToAction("ClientsWithoutMTP", "Clients");
+                    }
+                    
                 }
                 catch (System.Exception ex)
                 {
@@ -3926,6 +3994,497 @@ namespace KyoS.Web.Controllers
 
             return View();
         }
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> CreateGoalModalTemp(DateTime admissionDate, int idClient = 0, int numberMonths = 0)
+        {
+            if (idClient == 0)
+            {
+               return RedirectToAction("Create", new { id = 1});
+            }
+
+            UserEntity user_logged = await _context.Users
+                                                      .Include(u => u.Clinic)
+                                                      .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            List<GoalsTempEntity> goaltemp = await _context.GoalsTemp
+                                                           .Where(m => (m.UserName == user_logged.UserName
+                                                                && m.IdClient == idClient))
+                                                           .ToListAsync();
+
+            if (goaltemp == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            GoalsTempViewModel model = new GoalsTempViewModel
+            {
+                Number = goaltemp.Count() + 1,
+                IdService = 0,
+                Services = _combosHelper.GetComboServices(),
+                IdClient = idClient,
+                UserName = user_logged.UserName,
+                numberMonths = numberMonths,
+                AdmissionDate = admissionDate
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> CreateGoalModalTemp(GoalsTempViewModel model)
+        {
+            UserEntity user_logged = await _context.Users
+                                                     .Include(u => u.Clinic)
+                                                     .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            ClientEntity client = await _context.Clients.FirstOrDefaultAsync(m => m.Id == model.IdClient);
+
+            if (ModelState.IsValid)
+            {
+                string gender_problems = string.Empty;
+                if (!string.IsNullOrEmpty(model.Name))
+                {
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
+                    if (this.GenderEvaluation(client.Gender, model.Name))
+                    {
+                        gender_problems = "Name";
+                    }
+                }
+                if (!string.IsNullOrEmpty(model.AreaOfFocus))
+                {
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
+                    if (this.GenderEvaluation(client.Gender, model.AreaOfFocus))
+                    {
+                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
+                    }
+                }
+                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
+                {
+                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
+                    model.Services = _combosHelper.GetComboServices();
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalModalTemp", model) });
+                    //return View(model);
+                }
+               
+                GoalsTempEntity goalTempEntity = await _converterHelper.ToGoalTempEntity(model, true);
+                _context.Add(goalTempEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<GoalsTempEntity> goalsTemp = await _context.GoalsTemp
+                                                                    .Include(g => g.ObjetiveTempList)
+                                                                    .Where(g => g.IdClient == model.IdClient && g.UserName == user_logged.UserName)
+                                                                    .ToListAsync();
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsTemp", goalsTemp) });
+
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+            }
+
+            model.Services = _combosHelper.GetComboServices();
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalModalTemp", model) });
+        }
+
+        [Authorize(Roles = "Documents_Assistant, Supervisor")]
+        public void DeleteGoalsTemp(int idClient = 0)
+        {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            //delete all ReferredsTemp
+            IQueryable<GoalsTempEntity> list_to_delete = _context.GoalsTemp;
+            foreach (GoalsTempEntity item in list_to_delete)
+            {
+                if (item.UserName == user_logged.UserName && item.IdClient == idClient)
+                {
+                    _context.GoalsTemp.Remove(item);
+                }
+            }
+            _context.SaveChanges();
+        }
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> EditGoalModalTemp(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            GoalsTempEntity goalTempEntity = await _context.GoalsTemp
+                                                           .FirstOrDefaultAsync(d => d.Id == id);
+
+            GoalsTempViewModel model = _converterHelper.ToGoalTempViewModel(goalTempEntity);
+            if (model == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> EditGoalModalTemp(int id, GoalsTempViewModel model)
+        {
+            if (id != model.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            ClientEntity client = await _context.Clients.FirstOrDefaultAsync(m => m.Id == model.IdClient);
+
+            if (ModelState.IsValid)
+            {
+                string gender_problems = string.Empty;
+                if (!string.IsNullOrEmpty(model.Name))
+                {
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
+                    if (this.GenderEvaluation(client.Gender, model.Name))
+                    {
+                        gender_problems = "Name";
+                    }
+                }
+                if (!string.IsNullOrEmpty(model.AreaOfFocus))
+                {
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
+                    if (this.GenderEvaluation(client.Gender, model.AreaOfFocus))
+                    {
+                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
+                    }
+                }
+                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
+                {
+                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
+                    model.Services = _combosHelper.GetComboServices();
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditGoalModalTemp", model) });
+                    //return View(model);
+                }
+
+                GoalsTempEntity goalEntity = await _converterHelper.ToGoalTempEntity(model, false);
+                _context.Update(goalEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                   
+                   List<GoalsTempEntity> goalsTemp = await _context.GoalsTemp
+                                                          .Include(g => g.ObjetiveTempList)
+                                                          .Where(g => g.IdClient == model.IdClient && g.UserName == user_logged.UserName)
+                                                          .ToListAsync();
+                   return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsTemp", goalsTemp) });
+                   
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Already exists the goals");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            model.Services = _combosHelper.GetComboServices();
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditGoalModalTemp", model) });
+        }
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> CreateObjectiveModalTemp(int? idGoal, int idClient, string nameGoal, int numberGoal, int number, DateTime  admissisonDate)
+        {
+            if (idGoal == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            GoalsTempEntity goalTempEntity = await _context.GoalsTemp
+                                                           .Include(g => g.ObjetiveTempList)
+                                                           .FirstOrDefaultAsync(m => m.Id == idGoal);
+
+            ClientEntity client = await _context.Clients
+                                                .FirstOrDefaultAsync(m => m.Id == idClient);
+
+            if (goalTempEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            string objetive = $"{goalTempEntity.Number}.{goalTempEntity.ObjetiveTempList.Count() + 1}";
+            ObjectiveTempViewModel model = new ObjectiveTempViewModel
+            {
+                GoalTemp = goalTempEntity,
+                IdGoal = goalTempEntity.Id,
+                DateOpened = admissisonDate,
+                DateResolved = admissisonDate.AddMonths(Convert.ToInt32(number)),
+                DateTarget = admissisonDate.AddMonths(Convert.ToInt32(number)),
+                Objetive = objetive,
+                NameGoal = nameGoal,
+                NumberGoal = numberGoal
+            };
+
+            MultiSelectList classification_list = new MultiSelectList(await _context.Classifications.ToListAsync(), "Id", "Name");
+            ViewData["classification"] = classification_list;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> CreateObjectiveModalTemp(ObjectiveTempViewModel model, IFormCollection form)
+        {
+            UserEntity user_logged = await _context.Users
+                                                     .Include(u => u.Clinic)
+                                                     .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                GoalsTempEntity goal = await _context.GoalsTemp
+                                                     .Include(g => g.ObjetiveTempList)
+                                                     .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
+                ClientEntity client = await _context.Clients
+                                                    .FirstOrDefaultAsync(m => m.Id == goal.IdClient);
+
+                string gender_problems = string.Empty;
+                if (!string.IsNullOrEmpty(model.Description))
+                {
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
+                    if (this.GenderEvaluation(client.Gender, model.Description))
+                    {
+                        gender_problems = "Description";
+                    }
+                }
+                if (!string.IsNullOrEmpty(model.Intervention))
+                {
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
+                    if (this.GenderEvaluation(client.Gender, model.Intervention))
+                    {
+                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
+                    }
+                }
+                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
+                {
+                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
+                    ObjectiveTempViewModel newmodel = new ObjectiveTempViewModel
+                    {
+                        GoalTemp = goal,
+                        IdGoal = goal.Id,
+                        DateOpened = model.DateOpened,
+                        DateResolved = model.DateResolved,
+                        DateTarget = model.DateTarget,
+                        Objetive = $"{goal.Number}.{goal.ObjetiveTempList.Count() + 1}",
+                        Description = model.Description,
+                        Intervention = model.Intervention
+                    };
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjectiveModalTemp", newmodel) });
+                    //return View(newmodel);
+                }
+
+                ObjectiveTempEntity objective = await _converterHelper.ToObjectiveTempEntity(model, true);
+                _context.Add(objective);
+
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<GoalsTempEntity> goalsTemp = await _context.GoalsTemp
+                                                                    .Include(g => g.ObjetiveTempList)
+                                                                    .Where(g => g.IdClient == goal.IdClient && g.UserName == user_logged.UserName)
+                                                                    .ToListAsync();
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsTemp", goalsTemp) });
+                  
+
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Already exists the objective");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            GoalsTempEntity goalTempEntity = await _context.GoalsTemp
+                                                           .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
+            model.GoalTemp = goalTempEntity;
+            model.IdGoal = goalTempEntity.Id;
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjectiveModalTemp", model) });
+        }
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> DeleteGoalTemp(int? id, int origin = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            GoalsTempEntity goalEntity = await _context.GoalsTemp
+                                                       .FirstOrDefaultAsync(g => g.Id == id);
+            int idClient = goalEntity.IdClient;
+            if (goalEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.GoalsTemp.Remove(goalEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Create", new { idClient = idClient, origin = origin });
+            }
+
+            return RedirectToAction("Create", new { idClient = idClient, origin = origin });
+           
+        }
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> EditObjectiveModalTemp(int? id, string nameGoal, int numberGoal)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ObjectiveTempEntity objectiveEntity = await _context.ObjetivesTemp
+                                                                .Include(o => o.GoalTemp)
+                                                                .FirstOrDefaultAsync(d => d.Id == id);
+
+            ObjectiveTempViewModel model = _converterHelper.ToObjectiveTempViewModel(objectiveEntity);
+            if (model == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+            model.NameGoal = nameGoal;
+            model.NumberGoal = numberGoal;
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> EditObjectiveModalTemp(ObjectiveTempViewModel model, IFormCollection form)
+        {
+            UserEntity user_logged = await _context.Users
+                                                     .Include(u => u.Clinic)
+                                                     .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            GoalsTempEntity goal = await _context.GoalsTemp
+                                                 .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
+            ClientEntity client = await _context.Clients
+                                                 .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
+            if (ModelState.IsValid)
+            {
+                string gender_problems = string.Empty;
+                if (!string.IsNullOrEmpty(model.Description))
+                {
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
+                    if (this.GenderEvaluation(client.Gender, model.Description))
+                    {
+                        gender_problems = "Description";
+                    }
+                }
+                if (!string.IsNullOrEmpty(model.Intervention))
+                {
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
+                    if (this.GenderEvaluation(client.Gender, model.Intervention))
+                    {
+                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
+                    }
+                }
+                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
+                {
+                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
+                    model.GoalTemp = goal;
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveModalTemp", model) });
+                   
+                }
+
+                ObjectiveTempEntity objectiveTemp = await _converterHelper.ToObjectiveTempEntity(model, false);
+                _context.Update(objectiveTemp);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<GoalsTempEntity> goalsTemp = await _context.GoalsTemp
+                                                                    .Include(g => g.ObjetiveTempList)
+                                                                    .Where(g => g.IdClient == goal.IdClient && g.UserName == user_logged.UserName)
+                                                                    .ToListAsync();
+                    
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsTemp", goalsTemp) });
+                    
+
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Already exists the objective");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            model.GoalTemp = goal;
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveModalTemp", model) });
+        }
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> DeleteObjectiveTemp(int? id, int origin = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ObjectiveTempEntity objectiveEntity = await _context.ObjetivesTemp
+                                                                .Include(o => o.GoalTemp)
+                                                                .FirstOrDefaultAsync(o => o.Id == id);
+            GoalsTempEntity goalTemp = await _context.GoalsTemp
+                                                     .FirstOrDefaultAsync(o => o.Id == objectiveEntity.GoalTemp.Id);
+
+            if (objectiveEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.ObjetivesTemp.Remove(objectiveEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Create", new { idClient = goalTemp.IdClient, origin = origin });
+            }
+                
+            return RedirectToAction("Create", new { idClient = goalTemp.IdClient, origin = origin });
+        }
+
 
     }
 }

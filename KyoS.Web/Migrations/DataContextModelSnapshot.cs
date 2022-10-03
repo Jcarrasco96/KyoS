@@ -1195,6 +1195,9 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Principal")
                         .HasColumnType("bit");
 
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("DiagnosticsTemp");
@@ -1470,6 +1473,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DocumentPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -1973,6 +1979,44 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("MTPId");
 
                     b.ToTable("Goals");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.GoalsTempEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("AdmissionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AreaOfFocus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IdClient")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Service")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("numberMonths")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GoalsTemp");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.GroupEntity", b =>
@@ -4464,6 +4508,44 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("ObjetiveId");
 
                     b.ToTable("Notes_Activities");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.ObjectiveTempEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("DateOpened")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateResolved")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateTarget")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("GoalTempId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Intervention")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Objetive")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GoalTempId");
+
+                    b.ToTable("ObjetivesTemp");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ObjetiveEntity", b =>
@@ -9612,6 +9694,16 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Objetive");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.ObjectiveTempEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.GoalsTempEntity", "GoalTemp")
+                        .WithMany("ObjetiveTempList")
+                        .HasForeignKey("GoalTempId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("GoalTemp");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.ObjetiveEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.GoalEntity", "Goal")
@@ -10495,6 +10587,11 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.GoalEntity", b =>
                 {
                     b.Navigation("Objetives");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.GoalsTempEntity", b =>
+                {
+                    b.Navigation("ObjetiveTempList");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.GroupEntity", b =>
