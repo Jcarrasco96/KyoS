@@ -7,8 +7,11 @@
     <div class="col-md-12">
         <form asp-action="EditStage" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMService(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-           
+
             <input type="hidden" asp-for="Id_TCMService" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="ID_Etapa" />
             <div class="">
                 <div class="form-group col-md-3">
                     <label class="control-label">Service Code</label>
