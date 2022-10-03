@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMIntakeConsentForReleaseEntity>
 @{
-    ViewData["Title"] = "TCM Intakes";
+    ViewData["Title"] = "TCM Consent for Release List";
 }
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
@@ -10,7 +10,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.First().TcmClient_FK, section = 1, origin = ViewData["origi"] })
         </li>
-        <li class="active">TCM Intakes</li>
+        <li class="active">TCM Consent for Release List</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -23,26 +23,22 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">TCM Intakes</h3>
+                <h3 class="panel-title">TCM Consent for Release List</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-3">
+                            <th class="col-md-6">
                                 @Html.DisplayNameFor(model => model.TcmClient.Client.Name)
-                            </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.TcmClient.Client.Code)
-                            </th>
+                            </th>                            
                             <th class="col-md-2" style="text-align:center;">
                                 Date
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Status
-                            </th>
-                            
-                            <th class="col-md-1" align="right">
+                            </th>                            
+                            <th class="col-md-2" align="right">
                             </th>
                         </tr>
                     </thead>
@@ -61,10 +57,9 @@
                                         }
                                         &nbsp;
                                         @Html.DisplayFor(modelItem => item.TcmClient.Client.Name)
-                                   </td>
-                                   <td align="center">
+                                        |
                                         @Html.DisplayFor(modelItem => item.TcmClient.Client.Code)
-                                    </td>
+                                   </td>                                   
                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.DateSignatureEmployee)
                                     </td>
@@ -83,7 +78,8 @@
                                         }
                                     </td>
                                    <td align="right">
-                                        <a asp-action="EditConsentForRelease" asp-route-id="@item.Id" asp-route-origi="@ViewData["origi"]" class="btn btn-warning" title="Edit TCM Intake Consent for Release"><i class="glyphicon glyphicon-pencil"></i></a>
+                                       <a asp-action="EditConsentForRelease" asp-route-id="@item.Id" asp-route-origi="@ViewData["origi"]" class="btn btn-warning" title="Edit TCM Consent for Release"><i class="glyphicon glyphicon-pencil"></i></a>
+                                       <a asp-action="PrintTCMConsentForRelease" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Consent for Release" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                    </td>
                                 </tr>
                         }
@@ -104,7 +100,7 @@
                         $(document).ready(function () {
                             $('#MyTable').DataTable({
                                 "order": [[0, "asc"]],
-                                "pageLength": 100
+                                "pageLength": 10
                             });
 
                             // Delete item

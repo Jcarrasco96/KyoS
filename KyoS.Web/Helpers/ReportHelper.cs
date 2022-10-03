@@ -8743,6 +8743,136 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMIntakeConsentForReleaseDS(TCMIntakeConsentForReleaseEntity intakeConsentForRelease)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakeConsentForRelease"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmClient_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("ToRelease", typeof(bool));
+            dt.Columns.Add("InForm_VerbalInformation", typeof(bool));
+            dt.Columns.Add("InForm_Facsimile", typeof(bool));
+            dt.Columns.Add("InForm_WrittenRecords", typeof(bool));
+            dt.Columns.Add("ForPurpose_Treatment", typeof(bool));
+            dt.Columns.Add("ForPurpose_CaseManagement", typeof(bool));
+            dt.Columns.Add("ForPurpose_Other", typeof(bool));
+            dt.Columns.Add("ForPurpose_OtherExplain", typeof(string));
+            dt.Columns.Add("Discharge", typeof(bool));
+            dt.Columns.Add("SchoolRecord", typeof(bool));
+            dt.Columns.Add("ProgressReports", typeof(bool));
+            dt.Columns.Add("IncidentReport", typeof(bool));
+            dt.Columns.Add("PsychologycalEvaluation", typeof(bool));
+            dt.Columns.Add("History", typeof(bool));
+            dt.Columns.Add("LabWork", typeof(bool));
+            dt.Columns.Add("HospitalRecord", typeof(bool));
+            dt.Columns.Add("Other", typeof(bool));
+            dt.Columns.Add("Other_Explain", typeof(string));
+            dt.Columns.Add("Documents", typeof(bool));
+            dt.Columns.Add("TcmClientId", typeof(int));
+            dt.Columns.Add("Address", typeof(string));
+            dt.Columns.Add("CityStateZip", typeof(string));
+            dt.Columns.Add("FaxNo", typeof(string));
+            dt.Columns.Add("NameOfFacility", typeof(string));
+            dt.Columns.Add("PhoneNo", typeof(string));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            if (intakeConsentForRelease != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intakeConsentForRelease.Id,
+                                            0,
+                                            intakeConsentForRelease.DateSignatureLegalGuardian,
+                                            intakeConsentForRelease.DateSignaturePerson,
+                                            intakeConsentForRelease.DateSignatureEmployee,
+                                            intakeConsentForRelease.AdmissionedFor,
+                                            intakeConsentForRelease.ToRelease,
+                                            intakeConsentForRelease.InForm_VerbalInformation,
+                                            intakeConsentForRelease.InForm_Facsimile,
+                                            intakeConsentForRelease.InForm_WrittenRecords,
+                                            intakeConsentForRelease.ForPurpose_Treatment,
+                                            intakeConsentForRelease.ForPurpose_CaseManagement,
+                                            intakeConsentForRelease.ForPurpose_Other,
+                                            intakeConsentForRelease.ForPurpose_OtherExplain,
+                                            intakeConsentForRelease.Discharge,
+                                            intakeConsentForRelease.SchoolRecord,
+                                            intakeConsentForRelease.ProgressReports,
+                                            intakeConsentForRelease.IncidentReport,
+                                            intakeConsentForRelease.PsychologycalEvaluation,
+                                            intakeConsentForRelease.History,
+                                            intakeConsentForRelease.LabWork,
+                                            intakeConsentForRelease.HospitalRecord,
+                                            intakeConsentForRelease.Other,
+                                            intakeConsentForRelease.Other_Explain,
+                                            intakeConsentForRelease.Documents,
+                                            0,
+                                            intakeConsentForRelease.Address,
+                                            intakeConsentForRelease.CityStateZip,
+                                            intakeConsentForRelease.FaxNo,
+                                            intakeConsentForRelease.NameOfFacility,
+                                            intakeConsentForRelease.PhoneNo,
+                                            intakeConsentForRelease.CreatedBy,
+                                            intakeConsentForRelease.CreatedOn,
+                                            intakeConsentForRelease.LastModifiedBy,
+                                            intakeConsentForRelease.LastModifiedOn,
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,                                            
+                                            new DateTime()
+                                       });
+            }
+
+            return dt;
+        }
+
         #endregion
 
         #region Approved TCM Notes reports
@@ -9218,7 +9348,71 @@ namespace KyoS.Web.Helpers
 
         public Stream TCMIntakeConsentForRelease(TCMIntakeConsentForReleaseEntity intakeConsentForRelease)
         {
-            throw new NotImplementedException();
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakeConsentForRelease.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intakeConsentForRelease.TcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(intakeConsentForRelease.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intakeConsentForRelease.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(intakeConsentForRelease.TcmClient.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(intakeConsentForRelease.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeConsentForReleaseDS(intakeConsentForRelease));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeConsentForRelease");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intakeConsentForRelease.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeConsentForRelease.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            PictureObject pic2 = WebReport.Report.FindObject("Picture2") as PictureObject;
+            pic2.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(intakeConsentForRelease.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeConsentForRelease.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
         }
 
         public Stream TCMIntakeAdvancedDirective(TCMIntakeAdvancedDirectiveEntity intakeAdvanced)

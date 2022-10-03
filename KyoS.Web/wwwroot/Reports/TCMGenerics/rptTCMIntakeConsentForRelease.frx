@@ -1,0 +1,390 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/02/2022 16:09:19" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b039b2OlFnNB3AMPA7XGVANWR">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="ClinicalDirector" DataType="System.String"/>
+        <Column Name="ProviderTaxId" DataType="System.String"/>
+        <Column Name="ProviderMedicaidId" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="IdFacilitatorPSR" DataType="System.Int32"/>
+        <Column Name="OtherLanguage_Read" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Speak" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Understand" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="MedicareId" DataType="System.String"/>
+        <Column Name="DateOfClose" DataType="System.DateTime"/>
+        <Column Name="OnlyTCM" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="CaseManagers" DataType="System.Int32" Enabled="true" TableName="CaseManagers">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="ProviderNumber" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="Credentials" DataType="System.String"/>
+        <Column Name="Money" DataType="System.Decimal"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMClient" DataType="System.Int32" Enabled="true" TableName="TCMClient">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CasemanagerId" DataType="System.Int32"/>
+        <Column Name="CaseNumber" DataType="System.String"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="DataClose" DataType="System.DateTime"/>
+        <Column Name="DataOpen" DataType="System.DateTime"/>
+        <Column Name="Period" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+      <TableDataSource Name="LegalGuardians" DataType="System.Int32" Enabled="true" TableName="LegalGuardians">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="AdressLine2" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMIntakeConsentForRelease" DataType="System.Int32" Enabled="true" TableName="TCMIntakeConsentForRelease">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="TcmClient_FK" DataType="System.Int32"/>
+        <Column Name="DateSignatureLegalGuardian" DataType="System.DateTime"/>
+        <Column Name="DateSignaturePerson" DataType="System.DateTime"/>
+        <Column Name="DateSignatureEmployee" DataType="System.DateTime"/>
+        <Column Name="AdmissionedFor" DataType="System.String"/>
+        <Column Name="ToRelease" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="InForm_VerbalInformation" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="InForm_Facsimile" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="InForm_WrittenRecords" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ForPurpose_Treatment" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ForPurpose_CaseManagement" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ForPurpose_Other" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ForPurpose_OtherExplain" DataType="System.String"/>
+        <Column Name="Discharge" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="SchoolRecord" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ProgressReports" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="IncidentReport" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="PsychologycalEvaluation" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="History" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="LabWork" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HospitalRecord" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Other" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Other_Explain" DataType="System.String"/>
+        <Column Name="Documents" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="TcmClientId" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CityStateZip" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="NameOfFacility" DataType="System.String"/>
+        <Column Name="PhoneNo" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="session1" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Image="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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//2Q==" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="79.6">
+      <TextObject Name="Textbox12" Left="170.1" Top="9.45" Width="402.8" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="170.1" Top="31.33" Width="402.8" Height="22" CanGrow="true" Text="Consent for Release and Request of Information" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <LineObject Name="Line3" Left="160.65" Top="14.45" Height="37.2"/>
+      <LineObject Name="Line4" Left="783.97" Top="73.15" Width="-785.45"/>
+      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15" Image=""/>
+      <LineObject Name="Line6" Left="159.65" Top="13.45" Height="37.8"/>
+      <LineObject Name="Line7" Left="784.35" Top="72.25" Width="-785.45"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="83.6" Width="778.3" Height="928.32" DataSource="TCMIntakeConsentForRelease">
+      <TextObject Name="Text284" Left="47.25" Top="903.75" Width="153.09" Height="24.57" CanGrow="true" Text="Staff Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line11" Left="296.95" Top="902.3" Width="-249.48"/>
+      <TextObject Name="Text285" Left="447.15" Top="903.75" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line12" Left="602.35" Top="902.3" Width="-154.98"/>
+      <TextObject Name="Text286" Left="447.15" Top="882.95" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeConsentForRelease.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text287" Left="47.25" Top="827.7" Width="379.89" Height="43.47" CanGrow="true" Text="Legal Guardian or Authorized Representative's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line13" Left="296.95" Top="826.25" Width="-249.48"/>
+      <TextObject Name="Text288" Left="447.15" Top="827.7" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line14" Left="602.35" Top="826.25" Width="-153.47"/>
+      <TextObject Name="Text289" Left="447.15" Top="806.9" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeConsentForRelease.DateSignatureLegalGuardian]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture3" Left="122.85" Top="843.6" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text290" Left="47.25" Top="754" Width="190.89" Height="24.57" CanGrow="true" Text="Recipient's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line15" Left="296.95" Top="752.55" Width="-249.48"/>
+      <TextObject Name="Text291" Left="447.15" Top="754" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line16" Left="602.35" Top="752.55" Width="-154.98"/>
+      <TextObject Name="Text292" Left="447.15" Top="733.2" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeConsentForRelease.DateSignaturePerson]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text40" Top="9.45" Width="66.15" Height="18.9" Text="Recipient:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text41" Left="456.6" Top="9.45" Width="94.5" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text42" Left="5" Top="51.7" Width="75.6" Height="18.9" Text="Address:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text43" Left="454.15" Top="51.7" Width="94.5" Height="18.9" Text="City, State, Zip:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text44" Left="60.7" Top="9.45" Width="396.9" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text45" Left="551.1" Top="9.45" Width="226.8" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMClient.CaseNumber]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text293" Left="60.86" Top="51.7" Width="396.9" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.FullAddress]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text294" Left="550.1" Top="51.7" Width="226.8" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.City], [Clients.State], [Clients.ZipCode]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text56" Left="23.9" Top="31.9" Width="47.25" Height="18.9" Text="DOB:" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text57" Left="60.7" Top="30.9" Width="396.9" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.DateOfBirth]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text60" Left="502.85" Top="30.9" Width="47.25" Height="18.9" Text="SSN:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text61" Left="550.1" Top="30.9" Width="226.8" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.SSN]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text295" Left="4.45" Top="85.05" Width="113.4" Height="18.9" Text="This will authorize:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text296" Left="113.4" Top="85.05" Width="663.39" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text132" Left="151.2" Top="103.95" Width="283.5" Height="18.9" Text="(Name of institution, agency or facility)" HorzAlign="Justify" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+      <TextObject Name="Text297" Left="6.45" Top="122.85" Width="75.6" Height="18.9" Text="Address:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text298" Left="455.6" Top="122.85" Width="94.5" Height="18.9" Text="City, State, Zip:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text299" Left="62.31" Top="122.85" Width="396.9" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.Address]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text300" Left="550.55" Top="122.85" Width="226.8" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.City], [Clinics.State], [Clinics.ZipCode]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text301" Left="6.45" Top="143.75" Width="75.6" Height="18.9" Text="Phone №:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text302" Left="455.6" Top="143.75" Width="94.5" Height="18.9" Text="Fax №:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text303" Left="68.76" Top="143.75" Width="390.1" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.Phone]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text304" Left="550.55" Top="143.75" Width="226.8" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.FaxNo]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text305" Left="22.35" Top="189" Width="47.25" Height="18.9" Text="Staff:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text306" Left="455.6" Top="189" Width="94.5" Height="18.9" Text="Department:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text307" Left="59.31" Top="189" Width="399.55" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text308" Left="550.55" Top="189" Width="226.8" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="Targeted Case Management" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text309" Left="410.9" Top="167.1" Width="47.25" Height="18.9" Text="and/or" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox27" Left="32.35" Top="218.35" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue"/>
+      <TextObject Name="Text310" Left="48.25" Top="213.9" Width="283.5" Height="18.9" Text="Same Address and Phone Number" HorzAlign="Justify" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+      <TextObject Name="Text311" Left="6.45" Top="236.25" Width="75.6" Height="18.9" Text="Address:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text312" Left="455.6" Top="236.25" Width="94.5" Height="18.9" Text="City, State, Zip:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text313" Left="62.31" Top="236.25" Width="396.9" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.Address]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text314" Left="550.55" Top="236.25" Width="226.8" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.City], [Clinics.State], [Clinics.ZipCode]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text315" Left="6.45" Top="257.15" Width="75.6" Height="18.9" Text="Phone №:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text316" Left="455.6" Top="257.15" Width="94.5" Height="18.9" Text="Fax №:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text317" Left="68.76" Top="257.15" Width="390.1" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.Phone]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text318" Left="550.55" Top="257.15" Width="226.8" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.FaxNo]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text319" Top="283.95" Width="774.9" Height="47.25" Text="To release/request general, medical, psychiatric/psychological, alcohol and drug abuse information and/or records in accordance with Florida Statutes 394, 459, 396, 11, 297, 053, 90.50 and 458.21 to/from: " HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text320" Top="337.2" Width="179.55" Height="18.9" Text="Facility, Individual or Agency:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text321" Left="165.1" Top="337.2" Width="612.36" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text322" Top="359.1" Width="75.6" Height="18.9" Text="Address:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text323" Left="449.15" Top="359.1" Width="94.5" Height="18.9" Text="City, State, Zip:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text324" Left="55.86" Top="359.1" Width="396.9" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.Address]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text325" Left="544.1" Top="359.1" Width="233.23" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.City], [Clinics.State], [Clinics.ZipCode]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text326" Top="380" Width="75.6" Height="18.9" Text="Phone №:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text327" Left="449.15" Top="380" Width="94.5" Height="18.9" Text="Fax №:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text328" Left="62.31" Top="380" Width="390.1" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.Phone]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text329" Left="544.1" Top="380" Width="232.47" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.FaxNo]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text330" Top="415.8" Width="94.5" Height="18.9" Text="In the form of:" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox28" Left="105.4" Top="418.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.InForm_VerbalInformation"/>
+      <TextObject Name="Text331" Left="117.85" Top="415.8" Width="122.85" Height="18.9" Text="Verbal Information" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox29" Left="238.7" Top="419.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.InForm_Facsimile"/>
+      <TextObject Name="Text332" Left="251.15" Top="416.8" Width="66.15" Height="18.9" Text="Facsimile" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox30" Left="327.75" Top="419.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue"/>
+      <TextObject Name="Text333" Left="340.2" Top="416.8" Width="122.85" Height="18.9" Text="Electronic Records" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox31" Left="470.5" Top="420.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.InForm_WrittenRecords"/>
+      <TextObject Name="Text334" Left="482.95" Top="417.8" Width="122.85" Height="18.9" Text="Written Records" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox32" Left="596.35" Top="420.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue"/>
+      <TextObject Name="Text335" Left="608.8" Top="417.8" Width="122.85" Height="18.9" Text="All of the above" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text336" Top="436.7" Width="113.4" Height="18.9" Text="For the purpose of:" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox33" Left="124.3" Top="439.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.ForPurpose_Treatment"/>
+      <TextObject Name="Text337" Left="136.75" Top="436.7" Width="179.55" Height="18.9" Text="Treatment/Treatment Planning" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox34" Left="327.75" Top="440.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.ForPurpose_CaseManagement"/>
+      <TextObject Name="Text338" Left="340.2" Top="437.7" Width="122.85" Height="18.9" Text="Case Management" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox35" Left="470.5" Top="440.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.ForPurpose_Other"/>
+      <TextObject Name="Text339" Left="482.95" Top="437.7" Width="47.25" Height="18.9" Text="Other:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text340" Left="525.2" Top="436.7" Width="251.37" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeConsentForRelease.ForPurpose_OtherExplain]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text341" Top="458.05" Width="349.65" Height="18.9" Text="I understand that the specific reports disclosed might include:" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox36" Left="5" Top="483.95" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.Discharge"/>
+      <TextObject Name="Text342" Left="17.45" Top="480.95" Width="198.45" Height="18.9" Text="Discharge/Termination summary " VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox37" Left="223.35" Top="484.95" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.ProgressReports"/>
+      <TextObject Name="Text343" Left="235.8" Top="481.95" Width="113.4" Height="18.9" Text="Progress Reports" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox38" Left="369.1" Top="484.95" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.PsychologycalEvaluation"/>
+      <TextObject Name="Text344" Left="381.55" Top="481.95" Width="236.25" Height="18.9" Text="Psychiatric/Psychological Evaluations" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox39" Left="5" Top="505.85" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.IncidentReport"/>
+      <TextObject Name="Text345" Left="17.45" Top="502.85" Width="122.85" Height="18.9" Text="Incident Reports" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox40" Left="138.3" Top="506.85" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.History"/>
+      <TextObject Name="Text346" Left="150.75" Top="503.85" Width="103.95" Height="18.9" Text="History, Physical" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox41" Left="274.6" Top="506.85" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.LabWork"/>
+      <TextObject Name="Text347" Left="287.05" Top="503.85" Width="85.05" Height="18.9" Text="Lab Works" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox42" Left="379.55" Top="507.85" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.HospitalRecord"/>
+      <TextObject Name="Text348" Left="392" Top="504.85" Width="122.85" Height="18.9" Text="Hospital Records" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox43" Left="524.3" Top="507.85" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.SchoolRecord"/>
+      <TextObject Name="Text349" Left="536.75" Top="504.85" Width="122.85" Height="18.9" Text="School Records" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox44" Left="4.91" Top="527.75" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.Other"/>
+      <TextObject Name="Text350" Left="17.39" Top="524.75" Width="122.85" Height="18.9" Text="Other (explain)" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text351" Left="106.4" Top="524.2" Width="669.82" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeConsentForRelease.Other_Explain]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text48" Top="557.55" Width="780.57" Height="122.85" Text="I understand this consent is revocable upon written notice to &lt;b&gt;&lt;u&gt;[Clinics.Name]&lt;/u&gt;&lt;/b&gt; except to the extent that action by &lt;b&gt;&lt;u&gt;[Clinics.Name]&lt;/u&gt;&lt;/b&gt; has been taken in reliance on this authorization and that this authorization shall remain in force for a twelve month period in order to effect the purpose for which it is given, unless resolved by recipient or legal representative, as above. &#13;&#10;&#13;&#10;Alcohol and drug abuse information if present may be disclosed from records whose confidentiality is protected by Federal regulations (42 CFR, Part II) prohibit making any further disclosure of records without the specific written authorization of the recipient or legal representative, or as otherwise permitted by such regulations. This information may not be used to criminally prosecute the recipient. " HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+    </DataBand>
+  </ReportPage>
+  <ReportPage Name="Page2" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Image="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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//2Q==" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle2" Width="778.3" Height="79.6">
+      <TextObject Name="Text1" Left="170.1" Top="9.45" Width="506.75" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text2" Left="170.1" Top="31.33" Width="506.75" Height="22" CanGrow="true" Text="Consentimiento para la Revelación y Solicitud de Información" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <LineObject Name="Line1" Left="160.65" Top="14.45" Height="37.2"/>
+      <LineObject Name="Line2" Left="783.97" Top="73.15" Width="-785.45"/>
+      <PictureObject Name="Picture2" Left="18.9" Top="5.45" Width="103.95" Height="66.15" Image=""/>
+      <LineObject Name="Line5" Left="159.65" Top="13.45" Height="37.8"/>
+      <LineObject Name="Line8" Left="784.35" Top="72.25" Width="-785.45"/>
+    </ReportTitleBand>
+    <DataBand Name="Data2" Top="83.6" Width="778.3" Height="928.32" DataSource="TCMIntakeConsentForRelease">
+      <TextObject Name="Text3" Left="47.25" Top="903.75" Width="153.09" Height="24.57" CanGrow="true" Text="Firma del Empleado" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line9" Left="296.95" Top="902.3" Width="-249.48"/>
+      <TextObject Name="Text4" Left="447.15" Top="903.75" Width="162.54" Height="24.57" CanGrow="true" Text="Fecha" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line10" Left="602.35" Top="902.3" Width="-154.98"/>
+      <TextObject Name="Text5" Left="447.15" Top="882.95" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeConsentForRelease.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text6" Left="47.25" Top="827.7" Width="379.89" Height="43.47" CanGrow="true" Text="Firma de Guardián Legal o Representante Autorizado" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line17" Left="296.95" Top="826.25" Width="-249.48"/>
+      <TextObject Name="Text7" Left="447.15" Top="827.7" Width="162.54" Height="24.57" CanGrow="true" Text="Fecha" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line18" Left="602.35" Top="826.25" Width="-153.47"/>
+      <TextObject Name="Text8" Left="447.15" Top="806.9" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeConsentForRelease.DateSignatureLegalGuardian]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture4" Left="122.85" Top="843.6" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text9" Left="47.25" Top="754" Width="190.89" Height="24.57" CanGrow="true" Text="Firma del Cliente" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line19" Left="296.95" Top="752.55" Width="-249.48"/>
+      <TextObject Name="Text10" Left="447.15" Top="754" Width="162.54" Height="24.57" CanGrow="true" Text="Fecha" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line20" Left="602.35" Top="752.55" Width="-154.98"/>
+      <TextObject Name="Text11" Left="447.15" Top="733.2" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeConsentForRelease.DateSignaturePerson]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text12" Left="-1" Top="9.45" Width="56.7" Height="18.9" Text="Cliente:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text13" Left="456.6" Top="9.45" Width="94.5" Height="18.9" Text="Caso №:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text14" Left="-2.45" Top="51.7" Width="75.6" Height="18.9" Text="Dirección:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text15" Left="425.8" Top="51.7" Width="122.85" Height="18.9" Text="Ciudad, Estado, Zip:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text16" Left="51.25" Top="9.45" Width="406.35" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text17" Left="551.1" Top="9.45" Width="226.8" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMClient.CaseNumber]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text18" Left="60.86" Top="51.7" Width="368.55" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.FullAddress]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text19" Left="550.1" Top="51.7" Width="226.8" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.City], [Clients.State], [Clients.ZipCode]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text20" Left="-3.45" Top="31.9" Width="132.3" Height="18.9" Text="Fecha de Nacimiento:" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text21" Left="126.85" Top="30.9" Width="330.75" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.DateOfBirth]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text22" Left="502.85" Top="30.9" Width="47.25" Height="18.9" Text="NSS:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text23" Left="550.1" Top="30.9" Width="226.8" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.SSN]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text24" Left="-2" Top="85.05" Width="160.65" Height="18.9" Text="Este documento autoriza a:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text25" Left="160.65" Top="85.05" Width="616.14" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text26" Left="170.1" Top="103.95" Width="283.5" Height="18.9" Text="(Nombre del centro, agencia o institución)" HorzAlign="Justify" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+      <TextObject Name="Text27" Left="0.45" Top="122.85" Width="75.6" Height="18.9" Text="Dirección:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text28" Left="427.25" Top="122.85" Width="122.85" Height="18.9" Text="Ciudad, Estado, Zip:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text29" Left="62.31" Top="122.85" Width="368.55" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.Address]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text30" Left="550.55" Top="122.85" Width="226.8" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.City], [Clinics.State], [Clinics.ZipCode]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text31" Left="0.45" Top="143.75" Width="75.6" Height="18.9" Text="Teléfono:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text32" Left="455.6" Top="143.75" Width="94.5" Height="18.9" Text="Fax №:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text33" Left="62.31" Top="143.75" Width="390.1" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.Phone]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text34" Left="550.55" Top="143.75" Width="226.8" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.FaxNo]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text35" Top="189" Width="75.6" Height="18.9" Text="Empleado:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text36" Left="455.6" Top="189" Width="94.5" Height="18.9" Text="Departamento:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text37" Left="68.76" Top="189" Width="390.1" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text38" Left="550.55" Top="189" Width="226.8" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="Targeted Case Management" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text39" Left="410.9" Top="167.1" Width="47.25" Height="18.9" Text="y/o" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox1" Left="32.35" Top="218.35" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue"/>
+      <TextObject Name="Text46" Left="48.25" Top="213.9" Width="283.5" Height="18.9" Text="La misma dirección y teléfono" HorzAlign="Justify" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+      <TextObject Name="Text47" Top="236.25" Width="85.05" Height="18.9" Text="Dirección:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text49" Left="427.25" Top="236.25" Width="122.85" Height="18.9" Text="Ciudad, Estado, Zip:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text50" Left="62.31" Top="236.25" Width="359.1" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.Address]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text51" Left="550.55" Top="236.25" Width="226.8" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.City], [Clinics.State], [Clinics.ZipCode]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text52" Top="257.15" Width="75.6" Height="18.9" Text="Teléfono:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text53" Left="455.6" Top="257.15" Width="94.5" Height="18.9" Text="Fax №:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text54" Left="62.31" Top="257.15" Width="359.1" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.Phone]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text55" Left="550.55" Top="257.15" Width="226.8" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.FaxNo]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text58" Top="283.95" Width="774.9" Height="47.25" Text="A revelar/solicitar información general, registros médicos, psiquiátricos/psicológicos, uso de alcohol y drogas, en  conformidad con los estatutos de la Florida 394, 459, 396, 11, 297, 053, 90.50 y 458.21 a/de: " HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text59" Top="337.2" Width="179.55" Height="18.9" Text="Centro, individuo o agencia:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text62" Left="165.1" Top="337.2" Width="612.36" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text63" Top="359.1" Width="75.6" Height="18.9" Text="Dirección:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text64" Left="411.35" Top="359.1" Width="132.3" Height="18.9" Text="Ciudad, Estado, Zip:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text65" Left="65.31" Top="359.1" Width="349.65" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.Address]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text66" Left="544.1" Top="359.1" Width="233.23" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.City], [Clinics.State], [Clinics.ZipCode]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text67" Top="380" Width="75.6" Height="18.9" Text="Teléfono:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text68" Left="449.15" Top="380" Width="94.5" Height="18.9" Text="Fax №:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text69" Left="65.31" Top="380" Width="352.3" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.Phone]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text70" Left="544.1" Top="380" Width="232.47" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clinics.FaxNo]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text71" Top="415.8" Width="103.95" Height="18.9" Text="En la forma de:" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox2" Left="105.4" Top="418.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.InForm_VerbalInformation"/>
+      <TextObject Name="Text72" Left="117.85" Top="415.8" Width="122.85" Height="18.9" Text="Información verbal" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox3" Left="241.7" Top="419.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.InForm_Facsimile"/>
+      <TextObject Name="Text73" Left="254.15" Top="416.8" Width="66.15" Height="18.9" Text="Facsimil" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox4" Left="318.75" Top="419.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue"/>
+      <TextObject Name="Text74" Left="331.2" Top="416.8" Width="132.3" Height="18.9" Text="Registros Electrónicos" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox5" Left="470.5" Top="420.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.InForm_WrittenRecords"/>
+      <TextObject Name="Text75" Left="482.95" Top="417.8" Width="122.85" Height="18.9" Text="Registros Escritos" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox6" Left="596.35" Top="420.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue"/>
+      <TextObject Name="Text76" Left="608.8" Top="417.8" Width="122.85" Height="18.9" Text="Todas las anteriores" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text77" Top="436.7" Width="132.3" Height="18.9" Text="Para el propósito de:" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox7" Left="133.75" Top="439.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.ForPurpose_Treatment"/>
+      <TextObject Name="Text78" Left="146.2" Top="436.7" Width="179.55" Height="18.9" Text="Tratamiento/planificación" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox8" Left="327.75" Top="440.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.ForPurpose_CaseManagement"/>
+      <TextObject Name="Text79" Left="340.2" Top="437.7" Width="122.85" Height="18.9" Text="Manejo de caso" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox9" Left="470.5" Top="440.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.ForPurpose_Other"/>
+      <TextObject Name="Text80" Left="482.95" Top="437.7" Width="47.25" Height="18.9" Text="Otro:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text81" Left="525.2" Top="436.7" Width="251.37" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeConsentForRelease.ForPurpose_OtherExplain]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text82" Top="458.05" Width="434.7" Height="18.9" Text="Entiendo que los informes específicos divulgados pueden incluir: " VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox10" Left="5" Top="483.95" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.Discharge"/>
+      <TextObject Name="Text83" Left="17.45" Top="480.95" Width="198.45" Height="18.9" Text="Resumen de egreso/terminación" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox11" Left="223.35" Top="484.95" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.ProgressReports"/>
+      <TextObject Name="Text84" Left="235.8" Top="481.95" Width="132.3" Height="18.9" Text="Informes de progreso&#13;&#10;" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox12" Left="378.55" Top="484.95" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.PsychologycalEvaluation"/>
+      <TextObject Name="Text85" Left="391" Top="481.95" Width="236.25" Height="18.9" Text="Evaluaciones psiquiátricas/psicológicas &#13;&#10;" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox13" Left="5" Top="505.85" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.IncidentReport"/>
+      <TextObject Name="Text86" Left="17.45" Top="502.85" Width="141.75" Height="18.9" Text="Informes de incidentes&#13;&#10;" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox14" Left="166.65" Top="506.85" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.History"/>
+      <TextObject Name="Text87" Left="179.1" Top="503.85" Width="103.95" Height="18.9" Text="Examen físico" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox15" Left="302.95" Top="506.85" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.LabWork"/>
+      <TextObject Name="Text88" Left="315.4" Top="503.85" Width="151.2" Height="18.9" Text="Resultados de laboratorio" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox16" Left="483.5" Top="507.85" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.HospitalRecord"/>
+      <TextObject Name="Text89" Left="495.95" Top="504.85" Width="132.3" Height="18.9" Text="Registros de hospital" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox17" Left="628.25" Top="507.85" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.SchoolRecord"/>
+      <TextObject Name="Text90" Left="640.7" Top="504.85" Width="132.3" Height="18.9" Text="Registros de escuela" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox18" Left="4.91" Top="527.75" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.Other"/>
+      <TextObject Name="Text91" Left="17.39" Top="524.75" Width="94.5" Height="18.9" Text="Otro (explicar)" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text92" Left="115.85" Top="524.2" Width="660.37" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeConsentForRelease.Other_Explain]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text93" Top="553.55" Width="780.57" Height="151.2" Text="Entiendo que este consentimiento es revocable mediante notificación por escrito a &lt;b&gt;&lt;u&gt;[Clinics.Name]&lt;/u&gt;&lt;/b&gt; excepto cuando ya la acción ha sido tomada por &lt;b&gt;&lt;u&gt;[Clinics.Name]&lt;/u&gt;&lt;/b&gt; al amparo de esta autorización y que esta autorización permanecerá en vigor por un período de doce meses para efectuar el propósito para el cual ha sido emitida, al menos que sea resuelto por el cliente o representante legal, como lo anterior. &#13;&#10;&#13;&#10;Información sobre el abuso de alcohol y drogas, si está presente, puede divulgarse de registros cuya confidencialidad está protegida por las regulaciones federales (42 CFR, parte II), que prohíben hacer cualquier divulgación posterior de registros sin la específica autorización por escrito del cliente o representante legal, o de lo contrario, como sea permitido por los reglamentos. Esta información no puede utilizarse para procesar penalmente al cliente. " HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+    </DataBand>
+  </ReportPage>
+</Report>
