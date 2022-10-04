@@ -8873,6 +8873,67 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMIntakeConsumerRightsDS(TCMIntakeConsumerRightsEntity intakeConsumerRights)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakeConsumerRights"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmClient_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("ServedOf", typeof(string));
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("Documents", typeof(bool));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            
+            if (intakeConsumerRights != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intakeConsumerRights.Id,
+                                            0,
+                                            intakeConsumerRights.DateSignatureLegalGuardian,
+                                            intakeConsumerRights.DateSignaturePerson,
+                                            intakeConsumerRights.DateSignatureEmployee,
+                                            intakeConsumerRights.ServedOf,
+                                            intakeConsumerRights.AdmissionedFor,
+                                            intakeConsumerRights.Documents,
+                                            intakeConsumerRights.CreatedBy,
+                                            intakeConsumerRights.CreatedOn,
+                                            intakeConsumerRights.LastModifiedBy,
+                                            intakeConsumerRights.LastModifiedOn
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            false,                                            
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()
+                                       });
+            }
+
+            return dt;
+        }
+
         private DataTable GetTCMFarsDS(TCMFarsFormEntity fars)
         {
             DataTable dt = new DataTable
@@ -9564,7 +9625,71 @@ namespace KyoS.Web.Helpers
 
         public Stream TCMIntakeConsumerRights(TCMIntakeConsumerRightsEntity intakeConsumerRights)
         {
-            throw new NotImplementedException();
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakeConsumerRights.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intakeConsumerRights.TcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(intakeConsumerRights.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intakeConsumerRights.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(intakeConsumerRights.TcmClient.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(intakeConsumerRights.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeConsumerRightsDS(intakeConsumerRights));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeConsumerRights");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intakeConsumerRights.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeConsumerRights.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            PictureObject pic2 = WebReport.Report.FindObject("Picture2") as PictureObject;
+            pic2.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(intakeConsumerRights.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeConsumerRights.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
         }
 
         public Stream TCMIntakeOrientationCheckList(TCMIntakeOrientationChecklistEntity intakeOrientation)
