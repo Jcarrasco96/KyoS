@@ -4,7 +4,7 @@
     <pre>
     <strong>MEDICAL HISTORY</strong>
 
-    Recipient: <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>                                    Case No: <input asp-for="Client.Code">
+    Recipient: <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>                                    Case No: @ViewData["CaseNumber"].ToString()
             
     Primary Care Physician: <input asp-for="PrimaryCarePhysician" style="width:20%">
             

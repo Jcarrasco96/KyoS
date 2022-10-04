@@ -711,5 +711,30 @@ namespace KyoS.Web.Controllers
             }
             return RedirectToAction("NotAuthorized", "Account");
         }
+
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> Clients(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+
+            return View(await _context.TCMClient
+                                      .Include(c => c.Client)
+                                      .ThenInclude(c => c.Clinic)
+                                      .Where(c => c.Casemanager.LinkedUser == user_logged.UserName)
+                                      .OrderBy(c => c.Client.Name).ToListAsync());
+        }
     }
 }

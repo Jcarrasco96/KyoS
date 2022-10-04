@@ -34,7 +34,7 @@ namespace KyoS.Web.Controllers
             _mimeType = mimeType;
         }
         
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -287,7 +287,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Manager, Supervisor")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
         public async Task<IActionResult> Edit(int? id, int origin = 0)
         {
             if (id == null)
@@ -349,7 +349,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Supervisor")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
         public async Task<IActionResult> Edit(int id, ClientViewModel clientViewModel)
         {
             if (id != clientViewModel.Id)
@@ -458,7 +458,11 @@ namespace KyoS.Web.Controllers
                     if (clientViewModel.Origin == 1)
                     {
                         return RedirectToAction(nameof(ClientsWithoutDOC));
-                    }                    
+                    }
+                    if (clientViewModel.Origin == 2)
+                    {
+                        return RedirectToAction("Clients","TCMClients");
+                    }
                 }
                 catch (System.Exception ex)
                 {
