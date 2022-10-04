@@ -3484,5 +3484,32 @@ namespace KyoS.Web.Controllers
             Stream stream = _reportHelper.TCMIntakeConsentForRelease(entity);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
+
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTCMConsumerRights(int id)
+        {
+            TCMIntakeConsumerRightsEntity entity = await _context.TCMIntakeConsumerRights
+
+                                                                 .Include(t => t.TcmClient)
+                                                                 .ThenInclude(c => c.Client)
+
+                                                                 .Include(t => t.TcmClient)
+                                                                 .ThenInclude(c => c.Client)
+                                                                 .ThenInclude(cl => cl.LegalGuardian)
+
+                                                                 .Include(t => t.TcmClient)
+                                                                 .ThenInclude(c => c.Casemanager)
+                                                                 .ThenInclude(cm => cm.Clinic)
+
+                                                                 .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMIntakeConsumerRights(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
     }
 }
