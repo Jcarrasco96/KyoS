@@ -115,8 +115,8 @@ namespace KyoS.Web.Helpers
         #endregion
 
         #region TCM Fars reports
-        Stream FloridaSocialHSFarsReport(TCMFarsFormEntity intake);
-        Stream DreamsMentalHealthFarsReport(TCMFarsFormEntity intake);
+        Stream TCMFloridaSocialHSFarsReport(TCMFarsFormEntity intake);
+        Stream TCMDreamsMentalHealthFarsReport(TCMFarsFormEntity intake);
         #endregion
     }
 }
