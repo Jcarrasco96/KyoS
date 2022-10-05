@@ -17,6 +17,16 @@ namespace KyoS.Web.Models
         public int IdTCMClient { get; set; }
 
         public IEnumerable<SelectListItem> TcmClients { get; set; }
+
+        [Display(Name = "Relationship with emergency contact")]
+        public int IdRelationshipEC { get; set; }
+        public IEnumerable<SelectListItem> RelationshipsEC { get; set; }
+
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public string EmergencyContactName { get; set; }
+
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public string EmergencyContacTelephone { get; set; }
     }
     
 }
