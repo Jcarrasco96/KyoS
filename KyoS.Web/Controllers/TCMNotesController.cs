@@ -1032,7 +1032,7 @@ namespace KyoS.Web.Controllers
 
             List<TCMNoteEntity> note = new List<TCMNoteEntity>();
 
-            if (User.IsInRole("Casemanager"))
+            if (User.IsInRole("CaseManager"))
             {
                 note = await _context.TCMNote
                                      .Include(w => w.TCMClient)

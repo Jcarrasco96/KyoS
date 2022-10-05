@@ -598,7 +598,14 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("CaseManager"))
             {
                 tcmDomainViewModel = _converterHelper.ToTCMDomainViewModel(tcmDomainEntity);
-               
+
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Insert(0, new SelectListItem
+                {
+                    Text = tcmDomainEntity.Code + ' '+ tcmDomainEntity.Name,
+                    Value = $"{tcmDomainEntity.Id}"
+                });
+                tcmDomainViewModel.Services = list;
             }
             ViewData["origi"] = origi;
             ViewData["aview"] = aview;
@@ -878,7 +885,7 @@ namespace KyoS.Web.Controllers
                         IdObjetive = tcmdomain.TCMObjetive.Count() + 1,
                         StartDate = DateTime.Today.Date,
                         TargetDate = DateTime.Today.Date,
-                        EndDate = DateTime.Today.Date,
+                        //EndDate = DateTime.Today.Date,
                         task = "es para que veas el problema del textarea",
                         Origi = Origin,
                         Origin = ""
