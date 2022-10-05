@@ -8934,6 +8934,128 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMIntakeAdvancedDirectiveDS(TCMIntakeAdvancedDirectiveEntity intakeAdvanceDirective)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakeAdvancedDirective"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmClient_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));            
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("Documents", typeof(bool));
+            dt.Columns.Add("IHave", typeof(bool));
+            dt.Columns.Add("IHaveNot", typeof(bool));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            if (intakeAdvanceDirective != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intakeAdvanceDirective.Id,
+                                            0,
+                                            intakeAdvanceDirective.DateSignatureLegalGuardian,
+                                            intakeAdvanceDirective.DateSignaturePerson,
+                                            intakeAdvanceDirective.DateSignatureEmployee,
+                                            intakeAdvanceDirective.AdmissionedFor,
+                                            intakeAdvanceDirective.Documents,
+                                            intakeAdvanceDirective.IHave,
+                                            intakeAdvanceDirective.IHaveNot,
+                                            intakeAdvanceDirective.CreatedBy,
+                                            intakeAdvanceDirective.CreatedOn,
+                                            intakeAdvanceDirective.LastModifiedBy,
+                                            intakeAdvanceDirective.LastModifiedOn
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()
+                                       });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetTCMIntakeAcknowledgementHippaDS(TCMIntakeAcknowledgementHippaEntity intakeAcknowledgement)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakeAcknowledgement"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmClient_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("Documents", typeof(bool));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            if (intakeAcknowledgement != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intakeAcknowledgement.Id,
+                                            0,
+                                            intakeAcknowledgement.DateSignatureLegalGuardian,
+                                            intakeAcknowledgement.DateSignaturePerson,
+                                            intakeAcknowledgement.DateSignatureEmployee,
+                                            intakeAcknowledgement.AdmissionedFor,
+                                            intakeAcknowledgement.Documents,
+                                            intakeAcknowledgement.CreatedBy,
+                                            intakeAcknowledgement.CreatedOn,
+                                            intakeAcknowledgement.LastModifiedBy,
+                                            intakeAcknowledgement.LastModifiedOn
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            false,                                            
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()
+                                       });
+            }
+
+            return dt;
+        }
+
         private DataTable GetTCMFarsDS(TCMFarsFormEntity fars)
         {
             DataTable dt = new DataTable
@@ -9620,7 +9742,68 @@ namespace KyoS.Web.Helpers
 
         public Stream TCMIntakeAdvancedDirective(TCMIntakeAdvancedDirectiveEntity intakeAdvanced)
         {
-            throw new NotImplementedException();
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakeAdvancedDirective.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intakeAdvanced.TcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(intakeAdvanced.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intakeAdvanced.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(intakeAdvanced.TcmClient.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(intakeAdvanced.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeAdvancedDirectiveDS(intakeAdvanced));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeAdvancedDirective");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intakeAdvanced.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeAdvanced.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);            
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(intakeAdvanced.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeAdvanced.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
         }
 
         public Stream TCMIntakeConsumerRights(TCMIntakeConsumerRightsEntity intakeConsumerRights)
@@ -9699,7 +9882,68 @@ namespace KyoS.Web.Helpers
 
         public Stream TCMIntakeAcknowledgementHippa(TCMIntakeAcknowledgementHippaEntity intakeAcknowledgement)
         {
-            throw new NotImplementedException();
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakeAcknowledgementHippa.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intakeAcknowledgement.TcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(intakeAcknowledgement.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intakeAcknowledgement.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(intakeAcknowledgement.TcmClient.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(intakeAcknowledgement.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeAcknowledgementHippaDS(intakeAcknowledgement));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeAcknowledgement");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intakeAcknowledgement.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeAcknowledgement.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);            
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(intakeAcknowledgement.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeAcknowledgement.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
         }
 
         public Stream TCMIntakeForeignLanguage(TCMIntakeForeignLanguageEntity intakeForeignLanguage)
@@ -9713,8 +9957,8 @@ namespace KyoS.Web.Helpers
         }
         #endregion
 
-        #region Fars Form reports
-        public Stream FloridaSocialHSFarsReport(TCMFarsFormEntity fars)
+        #region TCM Fars Form reports
+        public Stream TCMFloridaSocialHSFarsReport(TCMFarsFormEntity fars)
         {
             WebReport WebReport = new WebReport();
 
@@ -9752,7 +9996,7 @@ namespace KyoS.Web.Helpers
             return stream;
         }
 
-        public Stream DreamsMentalHealthFarsReport(TCMFarsFormEntity fars)
+        public Stream TCMDreamsMentalHealthFarsReport(TCMFarsFormEntity fars)
         {
             WebReport WebReport = new WebReport();
 
