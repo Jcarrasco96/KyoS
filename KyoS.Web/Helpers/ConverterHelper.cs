@@ -494,14 +494,16 @@ namespace KyoS.Web.Helpers
                                       .Where(n => n.Mtp.Id == model.Id)
                                       .ToList(),
                 Status = model.Status,
-                SupervisorDate = model.SupervisorDate
-              
+                SupervisorDate = model.SupervisorDate,
+                DocumentAssistant = await _context.DocumentsAssistant.FindAsync(model.IdDocumentAssistant)
+
             };
         }
 
         public MTPViewModel ToMTPViewModel(MTPEntity mtpEntity)
         {
-            return new MTPViewModel
+            MTPViewModel model;
+            model = new MTPViewModel
             {
                 Id = mtpEntity.Id,
                 IdClient = mtpEntity.Client.Id,
@@ -564,9 +566,20 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = mtpEntity.LastModifiedBy,
                 LastModifiedOn = mtpEntity.LastModifiedOn,
                 Status = mtpEntity.Status,
-                AdmissionedFor = mtpEntity.AdmissionedFor,
-                DocumentAssistant = mtpEntity.DocumentAssistant
+                AdmissionedFor = mtpEntity.AdmissionedFor
+                
             };
+
+            if (mtpEntity.DocumentAssistant == null)
+            {
+                model.IdDocumentAssistant = 0;
+            }
+            else
+            {
+                model.IdDocumentAssistant = mtpEntity.DocumentAssistant.Id;
+            }
+
+            return model;
         }        
 
         public async Task<GoalEntity> ToGoalEntity(GoalViewModel model, bool isNew)

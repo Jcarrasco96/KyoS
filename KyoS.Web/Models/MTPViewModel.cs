@@ -15,5 +15,7 @@ namespace KyoS.Web.Models
         public IEnumerable<GoalsTempEntity> GoalTempList { get; set; }
         public bool Review { get; set; }
 
+        public int IdDocumentAssistant { get; set; }
+
     }
 }
