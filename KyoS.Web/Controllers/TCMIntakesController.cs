@@ -3664,59 +3664,5 @@ namespace KyoS.Web.Controllers
             Stream stream = _reportHelper.TCMIntakeConsumerRights(entity);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
-
-        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
-        public async Task<IActionResult> PrintTCMAdvanceDirective(int id)
-        {
-            TCMIntakeAdvancedDirectiveEntity entity = await _context.TCMIntakeAdvancedDirective
-
-                                                                    .Include(t => t.TcmClient)
-                                                                    .ThenInclude(c => c.Client)
-
-                                                                    .Include(t => t.TcmClient)
-                                                                    .ThenInclude(c => c.Client)
-                                                                    .ThenInclude(cl => cl.EmergencyContact)
-
-                                                                    .Include(t => t.TcmClient)
-                                                                    .ThenInclude(c => c.Casemanager)
-                                                                    .ThenInclude(cm => cm.Clinic)
-
-                                                                    .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
-
-            if (entity == null)
-            {
-                return RedirectToAction("Home/Error404");
-            }
-
-            Stream stream = _reportHelper.TCMIntakeAdvancedDirective(entity);
-            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-        }
-        
-        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
-        public async Task<IActionResult> PrintTCMAcknowledgementHippa(int id)
-        {
-            TCMIntakeAcknowledgementHippaEntity entity = await _context.TCMIntakeAcknowledgement
-
-                                                                        .Include(t => t.TcmClient)
-                                                                        .ThenInclude(c => c.Client)
-
-                                                                        .Include(t => t.TcmClient)
-                                                                        .ThenInclude(c => c.Client)
-                                                                        .ThenInclude(cl => cl.LegalGuardian)
-
-                                                                        .Include(t => t.TcmClient)
-                                                                        .ThenInclude(c => c.Casemanager)
-                                                                        .ThenInclude(cm => cm.Clinic)
-
-                                                                        .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
-
-            if (entity == null)
-            {
-                return RedirectToAction("Home/Error404");
-            }
-
-            Stream stream = _reportHelper.TCMIntakeAcknowledgementHippa(entity);
-            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-        }
     }
 }

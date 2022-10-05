@@ -3,7 +3,7 @@
     <pre>
     <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)</strong>, recipient of services, and if applicable, <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.LegalGuardian.Name) </strong>legal guardian or authorized representative
 
-    Hereby acknowledge receipt of <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> Notice of Privacy Practices. This Notice of Privacy Practices provides detailed information about how 
+    Hereby acknowledge receipt of <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>  Notice of Privacy Practices. This Notice of Privacy Practices provides detailed information about how 
     <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>  may use and disclose my protected health and confidential information. The Notice contains a Client’s Rights section describing 
     your rights under the law. You have the right to review the Notice before signing this form. You have the right to request that we restrict how protected health information 
     about you is used or disclosed for treatment, payment, or health care operations.
@@ -15,7 +15,8 @@
     </pre>
 </div>
 <div class="col-md-12">
-    <pre>    
+    <pre>
+    
     <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
     <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>     
     

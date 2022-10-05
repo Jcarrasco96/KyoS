@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/05/2022 15:46:00" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/03/2022 17:31:18" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b03+FhY5b+IdzIN5EuQTDyKxb">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b03/06jaxLuC1oT8dpqtyIuxr">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -125,10 +125,6 @@
         <Column Name="LastModifiedBy" DataType="System.String"/>
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
-      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
-        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
-        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
-      </TableDataSource>
     </MsSqlDataConnection>
     <Parameter Name="session1" DataType="System.String"/>
   </Dictionary>
@@ -138,7 +134,7 @@
       <TextObject Name="Textbox64" Left="170.1" Top="31.33" Width="402.8" Height="22" CanGrow="true" Text="Consumer Rights" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
       <LineObject Name="Line3" Left="160.65" Top="14.45" Height="37.2"/>
       <LineObject Name="Line4" Left="774.52" Top="79.6" Width="-776"/>
-      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15"/>
+      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15" Image=""/>
       <LineObject Name="Line6" Left="159.65" Top="13.45" Height="37.8"/>
       <LineObject Name="Line7" Left="774.9" Top="78.7" Width="-776"/>
     </ReportTitleBand>
@@ -167,7 +163,7 @@
       <TextObject Name="Text2" Left="170.1" Top="31.33" Width="402.8" Height="22" CanGrow="true" Text="Consumer Rights (continued)" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
       <LineObject Name="Line1" Left="160.65" Top="14.45" Height="37.2"/>
       <LineObject Name="Line2" Left="774.52" Top="79.6" Width="-776"/>
-      <PictureObject Name="Picture2" Left="18.9" Top="5.45" Width="103.95" Height="66.15"/>
+      <PictureObject Name="Picture2" Left="18.9" Top="5.45" Width="103.95" Height="66.15" Image=""/>
       <LineObject Name="Line5" Left="159.65" Top="13.45" Height="37.8"/>
       <LineObject Name="Line8" Left="774.9" Top="78.7" Width="-776"/>
     </ReportTitleBand>
