@@ -132,9 +132,9 @@ namespace KyoS.Web.Controllers
                         Psychiatrists = _combosHelper.GetComboPsychiatristsByClinic(user_logged.Id),
                         IdLegalGuardian = 0,
                         LegalsGuardians = _combosHelper.GetComboLegalGuardiansByClinic(user_logged.Id),
-                        DiagnosticTemp = _context.DiagnosticsTemp,
-                        ReferredTemp = _context.ReferredsTemp,
-                        DocumentTemp = _context.DocumentsTemp,
+                        DiagnosticTemp = _context.DiagnosticsTemp.Where(n => n.UserName == user_logged.UserName),
+                        ReferredTemp = _context.ReferredsTemp.Where(n => n.CreatedBy == user_logged.UserName),
+                        DocumentTemp = _context.DocumentsTemp.Where(n => n.UserName == user_logged.UserName),
                         OtherLanguage_Read = false,
                         OtherLanguage_Speak = false,
                         OtherLanguage_Understand = false,
@@ -507,9 +507,11 @@ namespace KyoS.Web.Controllers
 
             this.DeleteDiagnosticsTemp();
             this.DeleteDocumentsTemp();
+            this.DeleteReferredsTemp();
 
             this.SetDiagnosticsTemp(clientEntity);
             this.SetDocumentsTemp(clientEntity);
+            this.SetReferredsTemp(clientEntity);
 
             ClientViewModel clientViewModel = await _converterHelper.ToClientViewModel(clientEntity, user_logged.Id);
                         

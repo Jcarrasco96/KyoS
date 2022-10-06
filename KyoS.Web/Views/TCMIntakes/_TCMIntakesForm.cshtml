@@ -65,7 +65,7 @@
         <input asp-for="TcmClient.Client.SSN" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.SSN" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-2">
+    <div class="form-group col-md-4">
         <label asp-for="TcmClient.Client.Email" class="control-label">Email Address</label>
         <input asp-for="TcmClient.Client.Email" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.Email" class="text-danger"></span>
@@ -80,13 +80,14 @@
         <input asp-for="TcmClient.Client.Ethnicity" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.Ethnicity" class="text-danger"></span>
     </div>
+    
+</div>
+<div class="col-md-push-12">
     <div class="form-group col-md-2">
         <label asp-for="TcmClient.Client.MaritalStatus" class="control-label">Marital Status</label>
         <input asp-for="TcmClient.Client.MaritalStatus" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.MaritalStatus" class="text-danger"></span>
     </div>
-</div>
-<div class="col-md-push-12">
     <div class="form-group col-md-2">
         <label asp-for="TcmClient.Client.PreferredLanguage" class="control-label">Primary Language</label>
         <input asp-for="TcmClient.Client.PreferredLanguage" class="form-control" readonly>
@@ -105,71 +106,81 @@
     <div class="form-group col-md-1">
         <label asp-for="TcmClient.Client.OtherLanguage_Speak" class="control-label">Speak  </label>
         <br />
-        <input type="checkbox" asp-for="TcmClient.Client.OtherLanguage_Speak" class="form-check-input" disabled>        
+        <input type="checkbox" asp-for="TcmClient.Client.OtherLanguage_Speak" class="form-check-input" disabled>
     </div>
     <div class="form-group col-md-1">
         <label asp-for="TcmClient.Client.OtherLanguage_Understand" class="control-label">Understand</label>
         <br />
         <input type="checkbox" asp-for="TcmClient.Client.OtherLanguage_Understand" class="form-check-input" disabled>
     </div>
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-5">
+        &nbsp;
+    </div>
+
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="IntakeDate" class="control-label">Intake Date</label>
+        <input asp-for="IntakeDate" class="form-control">
+        <span asp-validation-for="IntakeDate" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
         <label asp-for="LegalGuardianName" class="control-label">Legal Guardian</label>
-        <input asp-for="LegalGuardianName" class="form-control" >
+        <input asp-for="LegalGuardianName" class="form-control">
         <span asp-validation-for="LegalGuardianName" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
         <label asp-for="LegalGuardianTelephone" class="control-label">Legal Guardian Telephone</label>
-        <input asp-for="LegalGuardianTelephone" class="form-control" >
+        <input asp-for="LegalGuardianTelephone" class="form-control">
         <span asp-validation-for="LegalGuardianTelephone" class="text-danger"></span>
-    </div>    
-</div>
-<div class="col-md-push-12">
+    </div>
     <div class="form-group col-md-2">
         <label asp-for="IdRelationshipLG" class="control-label"></label>
         <select asp-for="IdRelationshipLG" asp-items="Model.RelationshipsLG" class="form-control"></select>
         <span asp-validation-for="IdRelationshipLG" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-2">
         <label asp-for="LegalGuardianAddress" class="control-label">Legal Guardian Address</label>
-        <input asp-for="LegalGuardianAddress" class="form-control" >
+        <input asp-for="LegalGuardianAddress" class="form-control">
         <span asp-validation-for="LegalGuardianAddress" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
         <label asp-for="LegalGuardianCity" class="control-label">Legal Guardian City</label>
-        <input asp-for="LegalGuardianCity" class="form-control" >
+        <input asp-for="LegalGuardianCity" class="form-control">
         <span asp-validation-for="LegalGuardianCity" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-3">
+   
+</div>
+
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
         <label asp-for="LegalGuardianState" class="control-label">Legal Guardian State</label>
-        <input asp-for="LegalGuardianState" class="form-control" >
+        <input asp-for="LegalGuardianState" class="form-control">
         <span asp-validation-for="LegalGuardianState" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
         <label asp-for="LegalGuardianZipCode" class="control-label">Legal Guardian Zip Code</label>
-        <input asp-for="LegalGuardianZipCode" class="form-control" >
+        <input asp-for="LegalGuardianZipCode" class="form-control">
         <span asp-validation-for="LegalGuardianZipCode" class="text-danger"></span>
     </div>
-</div>
-
-<div class="col-md-push-12">
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-2">
         <label asp-for="EducationLevel" class="control-label">Education Level</label>
         <input asp-for="EducationLevel" class="form-control">
         <span asp-validation-for="EducationLevel" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-2">
         <label asp-for="ReligionOrEspiritual" class="control-label">Religion or Spiritual Beliefs</label>
-        <input asp-for="ReligionOrEspiritual" class="form-control" >
+        <input asp-for="ReligionOrEspiritual" class="form-control">
         <span asp-validation-for="ReligionOrEspiritual" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-2">
         <label asp-for="EmploymentStatus" class="control-label">Employment Status</label>
-        <input asp-for="EmploymentStatus" class="form-control" >
+        <input asp-for="EmploymentStatus" class="form-control">
         <span asp-validation-for="EmploymentStatus" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-2">
         <label asp-for="ResidentialStatus" class="control-label">Residential Status</label>
-        <input asp-for="ResidentialStatus" class="form-control" >
+        <input asp-for="ResidentialStatus" class="form-control">
         <span asp-validation-for="ResidentialStatus" class="text-danger"></span>
     </div>
 </div>
