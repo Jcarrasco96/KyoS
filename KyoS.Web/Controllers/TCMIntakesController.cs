@@ -3718,5 +3718,55 @@ namespace KyoS.Web.Controllers
             Stream stream = _reportHelper.TCMIntakeAcknowledgementHippa(entity);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
+
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTCMOrientationChecklist(int id)
+        {
+            TCMIntakeOrientationChecklistEntity entity = await _context.TCMIntakeOrientationCheckList
+
+                                                                       .Include(t => t.TcmClient)
+                                                                       .ThenInclude(c => c.Client)
+
+                                                                       .Include(t => t.TcmClient)
+                                                                       .ThenInclude(c => c.Casemanager)
+                                                                       .ThenInclude(cm => cm.Clinic)
+
+                                                                       .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMIntakeOrientationCheckList(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
+
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTCMForeignLanguage(int id)
+        {
+            TCMIntakeForeignLanguageEntity entity = await _context.TCMIntakeForeignLanguage
+
+                                                                  .Include(t => t.TcmClient)
+                                                                  .ThenInclude(c => c.Client)
+
+                                                                  .Include(t => t.TcmClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.LegalGuardian)
+
+                                                                  .Include(t => t.TcmClient)
+                                                                  .ThenInclude(c => c.Casemanager)
+                                                                  .ThenInclude(cm => cm.Clinic)
+
+                                                                  .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMIntakeForeignLanguage(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
     }
 }
