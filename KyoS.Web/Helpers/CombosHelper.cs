@@ -853,7 +853,8 @@ namespace KyoS.Web.Helpers
                 new SelectListItem { Text = DocumentDescription.ServicePlan.ToString(), Value = "19"},
                 new SelectListItem { Text = DocumentDescription.ServicePlanReview.ToString(), Value = "20"},
                 new SelectListItem { Text = DocumentDescription.AppendixJ.ToString(), Value = "21"},
-                new SelectListItem { Text = DocumentDescription.Others.ToString(), Value = "22"}
+                new SelectListItem { Text = DocumentDescription.Binder.ToString(), Value = "22"},
+                new SelectListItem { Text = DocumentDescription.Others.ToString(), Value = "23"}
                 
             };
 

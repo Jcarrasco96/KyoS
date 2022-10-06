@@ -113,5 +113,10 @@ namespace KyoS.Web.Helpers
         Stream TCMIntakeForeignLanguage(TCMIntakeForeignLanguageEntity intakeForeignLanguage);
         Stream TCMIntakeWelcome(TCMIntakeWelcomeEntity intakeWelcome);
         #endregion
+
+        #region TCM Fars reports
+        Stream TCMFloridaSocialHSFarsReport(TCMFarsFormEntity intake);
+        Stream TCMDreamsMentalHealthFarsReport(TCMFarsFormEntity intake);
+        #endregion
     }
 }

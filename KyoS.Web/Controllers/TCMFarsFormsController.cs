@@ -413,37 +413,33 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
         public IActionResult PrintFarsForm(int id)
         {
-            FarsFormEntity entity = _context.FarsForm
+            TCMFarsFormEntity entity = _context.TCMFarsForm
+                                               .Include(f => f.TCMClient)
+                                               .ThenInclude(f => f.Client)
+                                               .ThenInclude(c => c.Clinic)
 
-                                            .Include(f => f.Client)
-                                            .ThenInclude(c => c.Clinic)
+                                               .Include(f => f.TCMClient)
+                                               .ThenInclude(f => f.Client)
+                                               .ThenInclude(c => c.EmergencyContact)
 
-                                            .Include(i => i.Client)
-                                            .ThenInclude(c => c.EmergencyContact)
+                                               .Include(f => f.TCMClient)
+                                               .ThenInclude(f => f.Client)
+                                               .ThenInclude(c => c.LegalGuardian)
 
-                                            .Include(i => i.Client)
-                                            .ThenInclude(c => c.LegalGuardian)
-
-                                            .FirstOrDefault(f => (f.Id == id));
+                                               .FirstOrDefault(f => (f.Id == id));
             if (entity == null)
             {
                 return RedirectToAction("Home/Error404");
             }
 
-            //if (entity.Client.Clinic.Name == "DAVILA")
-            //{
-            //    Stream stream = _reportHelper.FloridaSocialHSIntakeReport(entity);
-            //    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            //}
-
-            if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            if (entity.TCMClient.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
-                Stream stream = _reportHelper.FloridaSocialHSFarsReport(entity);
+                Stream stream = _reportHelper.TCMFloridaSocialHSFarsReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-            if (entity.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+            if (entity.TCMClient.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
-                Stream stream = _reportHelper.DreamsMentalHealthFarsReport(entity);
+                Stream stream = _reportHelper.TCMDreamsMentalHealthFarsReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 

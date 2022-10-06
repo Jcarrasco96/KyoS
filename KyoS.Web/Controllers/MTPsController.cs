@@ -411,6 +411,7 @@ namespace KyoS.Web.Controllers
                                                      .ThenInclude(c => c.Clients_Diagnostics)
                                                      .ThenInclude(c => c.Diagnostic)
                                                      .Include(m => m.MtpReviewList)
+                                                     .Include(m => m.DocumentAssistant)
                                                      .Include(m => m.Goals.Where(m => m.Adendum == null && m.IdMTPReview == 0))
                                                      .ThenInclude(c => c.Objetives)
                                                      .FirstOrDefaultAsync(m => m.Id == id);
@@ -488,7 +489,10 @@ namespace KyoS.Web.Controllers
                             LevelCare = mtpViewModel.LevelCare,
                             InitialDischargeCriteria = mtpViewModel.InitialDischargeCriteria,
                             Setting = form["Setting"].ToString(),
-                            AdmissionedFor = mtpViewModel.AdmissionedFor
+                            AdmissionedFor = mtpViewModel.AdmissionedFor,
+                            CreatedBy = mtpViewModel.CreatedBy,
+                            CreatedOn = mtpViewModel.CreatedOn,
+                            IdDocumentAssistant = mtpViewModel.IdDocumentAssistant
                         };
                         ViewData["origi"] = origi;
                         return View(model);
@@ -3682,6 +3686,7 @@ namespace KyoS.Web.Controllers
                                                      .ThenInclude(c => c.Clients_Diagnostics)
                                                      .ThenInclude(c => c.Diagnostic)
                                                      .Include(m => m.MtpReviewList)
+                                                     .Include(m => m.DocumentAssistant)
                                                      .Include(m => m.Goals.Where(m => m.Adendum == null && m.IdMTPReview == 0))
                                                      .ThenInclude(c => c.Objetives)
                                                      .FirstOrDefaultAsync(m => m.Id == id);
@@ -3711,96 +3716,6 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction(nameof(Index));
 
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> EditReadOnly(int id, MTPViewModel mtpViewModel, IFormCollection form, int origi = 0)
-        {
-            if (id != mtpViewModel.Id)
-            {
-                return RedirectToAction("Home/Error404");
-            }
-
-            if (ModelState.IsValid)
-            {
-                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-                if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
-                {
-                    mtpViewModel.InitialDischargeCriteria = (mtpViewModel.InitialDischargeCriteria.Last() == '.') ? mtpViewModel.InitialDischargeCriteria : $"{mtpViewModel.InitialDischargeCriteria}.";
-                }
-
-                MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, false, user_logged.UserName);
-
-                string gender_problems = string.Empty;
-                if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
-                {
-                    if (this.GenderEvaluation(mtpEntity.Client.Gender, mtpViewModel.InitialDischargeCriteria))
-                    {
-                        ModelState.AddModelError(string.Empty, "Error.There are gender issues in: Initial discharge criteria");
-                        List<SelectListItem> list = new List<SelectListItem>();
-                        list.Insert(0, new SelectListItem
-                        {
-                            Text = mtpEntity.Client.Name,
-                            Value = $"{mtpEntity.Client.Id}"
-                        });
-                        MTPViewModel model = new MTPViewModel
-                        {
-                            Clients = list,
-                            IdClient = mtpViewModel.IdClient,
-                            MTPDevelopedDate = mtpViewModel.MTPDevelopedDate,
-                            NumberOfMonths = mtpViewModel.NumberOfMonths,
-                            StartTime = mtpViewModel.StartTime,
-                            EndTime = mtpViewModel.EndTime,
-                            Modality = mtpViewModel.Modality,
-                            Frecuency = mtpViewModel.Frecuency,
-                            LevelCare = mtpViewModel.LevelCare,
-                            InitialDischargeCriteria = mtpViewModel.InitialDischargeCriteria,
-                            Setting = form["Setting"].ToString(),
-                            AdmissionedFor = mtpViewModel.AdmissionedFor
-                        };
-                        ViewData["origi"] = origi;
-                        return View(model);
-                    }
-                }
-                // mtpEntity.MtpReview = await _context.MTPReviews.FirstOrDefaultAsync(u => u.MTP_FK == mtpViewModel.Id);
-                if ((User.IsInRole("Supervisor")) || (User.IsInRole("Documents_Assistant"))) //|| ((mtpEntity.MtpReview != null) && (mtpEntity.MtpReview.CreatedBy == user_logged.Id)))
-                {
-                    mtpEntity.Setting = form["Setting"].ToString();
-                    _context.Update(mtpEntity);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-                        if (origi == 0)
-                        {
-                            return RedirectToAction(nameof(Index));
-                        }
-                        if (origi == 1)
-                        {
-                            return RedirectToAction(nameof(Pending));
-                        }
-                        if (origi == 2)
-                        {
-                            return RedirectToAction("Notifications","Messages");
-                        }
-                    }
-                    catch (System.Exception ex)
-                    {
-                        if (ex.InnerException.Message.Contains("duplicate"))
-                        {
-                            ModelState.AddModelError(string.Empty, $"Already exists the facilitator: {mtpEntity.Client.Name}");
-                        }
-                        else
-                        {
-                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                        }
-                    }
-                }
-            }
-            return View(mtpViewModel);
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]

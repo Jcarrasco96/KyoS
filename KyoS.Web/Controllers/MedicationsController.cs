@@ -99,7 +99,7 @@ namespace KyoS.Web.Controllers
                         Dosage = "",
                         Frequency = "",
                         Name = "",
-                        Prescriber = user_logged.FullName
+                        Prescriber = ""
 
                     };
                     if (model.Client.MedicationList == null)

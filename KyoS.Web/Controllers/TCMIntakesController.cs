@@ -151,6 +151,21 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(m => m.Client)
+                                                .ThenInclude(m => m.Clients_Diagnostics)
+                                                .ThenInclude(m => m.Diagnostic)
+                                                .Include(m => m.Client)
+                                                .ThenInclude(m => m.Clients_HealthInsurances)
+                                                .ThenInclude(m => m.HealthInsurance)
+                                                .Include(m => m.Client.LegalGuardian)
+                                                .Include(n => n.Client.EmergencyContact)
+                                                .Include(n => n.Client.Client_Referred)
+                                                .Include(n => n.Client.Doctor)
+                                                .Include(n => n.Client.Psychiatrist)
+                                                .Include(n => n.TCMIntakeCoordinationCare)
+                                                .FirstOrDefault(n => n.Id == id);
+
             TCMIntakeFormViewModel model;
 
             if (User.IsInRole("CaseManager"))
@@ -162,20 +177,7 @@ namespace KyoS.Web.Controllers
                     {
                         IdTCMClient = id,
                         TcmClient_FK = id,
-                        TcmClient = _context.TCMClient
-                                            .Include(m => m.Client)
-                                            .ThenInclude(m => m.Clients_Diagnostics)
-                                            .ThenInclude(m => m.Diagnostic)
-                                            .Include(m => m.Client)
-                                            .ThenInclude(m => m.Clients_HealthInsurances)
-                                            .ThenInclude(m => m.HealthInsurance)
-                                            .Include(m => m.Client.LegalGuardian)
-                                            .Include(n => n.Client.EmergencyContact)
-                                            .Include(n => n.Client.Client_Referred)
-                                            .Include(n => n.Client.Doctor)
-                                            .Include(n => n.Client.Psychiatrist)
-                                            .Include(n => n.TCMIntakeCoordinationCare)
-                                            .FirstOrDefault(n => n.Id == id),
+                        TcmClient = tcmClient,
                         Agency = "",
                         CaseManagerNotes = "",
                         Elibigility = "",
@@ -218,14 +220,29 @@ namespace KyoS.Web.Controllers
                         StausCitizen = false,
                         YearEnterUsa = "",
                         CreatedBy = user_logged.UserName,
-                        CreatedOn = DateTime.Now
+                        CreatedOn = DateTime.Now,
+                        IdRelationshipEC = 0,
+                        RelationshipsEC = _combosHelper.GetComboRelationships(),
+                        IdRelationshipLG = 0,
+                        RelationshipsLG = _combosHelper.GetComboRelationships()
 
                     };
-                    if (model.TcmClient.Client.LegalGuardian == null)
-                        model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
-                    if (model.TcmClient.Client.EmergencyContact == null)
+                    if (tcmClient.Client.LegalGuardian != null)
                     {
-                        model.TcmClient.Client.EmergencyContact = new EmergencyContactEntity();
+                        model.LegalGuardianName = tcmClient.Client.LegalGuardian.Name;
+                        model.LegalGuardianAddress = tcmClient.Client.LegalGuardian.Address;
+                        model.LegalGuardianTelephone = tcmClient.Client.LegalGuardian.Telephone;
+                        model.LegalGuardianCity = tcmClient.Client.LegalGuardian.City;
+                        model.LegalGuardianState = tcmClient.Client.LegalGuardian.State;
+                        model.LegalGuardianZipCode = tcmClient.Client.LegalGuardian.ZipCode;
+                        model.IdRelationshipLG = Convert.ToInt32(tcmClient.Client.RelationShipOfLegalGuardian);
+                    }
+                        
+                    if (tcmClient.Client.EmergencyContact != null)
+                    {
+                        model.EmergencyContacTelephone = tcmClient.Client.EmergencyContact.Telephone;
+                        model.EmergencyContactName = tcmClient.Client.EmergencyContact.Name;
+                        model.IdRelationshipEC = Convert.ToInt32(tcmClient.Client.RelationShipOfEmergencyContact);
                     }
                     if (model.TcmClient.Client.Clients_HealthInsurances.Count() == 0)
                     {
@@ -305,15 +322,29 @@ namespace KyoS.Web.Controllers
                 StatusOther_Explain = "",
                 StatusResident = false,
                 StausCitizen = false,
-                YearEnterUsa = ""
+                YearEnterUsa = "",
+                IdRelationshipEC = 0,
+                RelationshipsEC = _combosHelper.GetComboRelationships(),
+                IdRelationshipLG = 0,
+                RelationshipsLG = _combosHelper.GetComboRelationships()
 
             };
 
-            if (model.TcmClient.Client.LegalGuardian == null)
-                model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
-            if (model.TcmClient.Client.EmergencyContact == null)
+            if (tcmClient.Client.LegalGuardian != null)
             {
-                model.TcmClient.Client.EmergencyContact = new EmergencyContactEntity();
+                model.LegalGuardianName = tcmClient.Client.LegalGuardian.Name;
+                model.LegalGuardianAddress = tcmClient.Client.LegalGuardian.Address;
+                model.LegalGuardianTelephone = tcmClient.Client.LegalGuardian.Telephone;
+                model.LegalGuardianCity = tcmClient.Client.LegalGuardian.City;
+                model.LegalGuardianState = tcmClient.Client.LegalGuardian.State;
+                model.LegalGuardianZipCode = tcmClient.Client.LegalGuardian.ZipCode;
+                model.IdRelationshipLG = Convert.ToInt32(tcmClient.Client.RelationShipOfLegalGuardian);
+            }
+            if (tcmClient.Client.EmergencyContact != null)
+            {
+                model.EmergencyContacTelephone = tcmClient.Client.EmergencyContact.Telephone;
+                model.EmergencyContactName = tcmClient.Client.EmergencyContact.Name;
+                model.IdRelationshipEC = Convert.ToInt32(tcmClient.Client.RelationShipOfEmergencyContact);
             }
             if (model.TcmClient.Client.Clients_HealthInsurances.Count() == 0)
             {
@@ -336,6 +367,65 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                EmergencyContactEntity emergency = _context.EmergencyContacts.FirstOrDefault(n => (n.Name == IntakeViewModel.EmergencyContactName
+                                                                && n.Telephone == IntakeViewModel.EmergencyContacTelephone));
+                
+                LegalGuardianEntity legalGuardian = _context.LegalGuardians.FirstOrDefault(n => (n.Name == IntakeViewModel.LegalGuardianName
+                                                                && n.Telephone == IntakeViewModel.LegalGuardianTelephone));
+
+                TCMClientEntity tcmclient = _context.TCMClient
+                                                    .Include(n => n.Client)
+                                                    .FirstOrDefault(m => m.Id == IntakeViewModel.IdTCMClient);
+
+                ClientEntity client = _context.Clients.FirstOrDefault(n => n.Id == tcmclient.Client.Id);
+
+                if (emergency == null)
+                {
+                    emergency = new EmergencyContactEntity();
+                    emergency.Name = IntakeViewModel.EmergencyContactName;
+                    emergency.Telephone = IntakeViewModel.EmergencyContacTelephone;
+                    emergency.CreatedOn = DateTime.Now;
+                    emergency.CreatedBy = user_logged.Id;
+                    _context.EmergencyContacts.Add(emergency);
+                    client.EmergencyContact = emergency;
+                    client.RelationShipOfEmergencyContact = RelationshipUtils.GetRelationshipByIndex(IntakeViewModel.IdRelationshipEC);
+                    _context.Clients.Update(client);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    client.EmergencyContact = emergency;
+                    client.RelationShipOfEmergencyContact = RelationshipUtils.GetRelationshipByIndex(IntakeViewModel.IdRelationshipEC);
+                    _context.Clients.Update(client);
+                    await _context.SaveChangesAsync();
+                }
+
+                if (legalGuardian == null && IntakeViewModel.LegalGuardianName != null)
+                {
+                    legalGuardian = new LegalGuardianEntity();
+                    legalGuardian.Name = IntakeViewModel.LegalGuardianName;
+                    legalGuardian.Telephone = IntakeViewModel.LegalGuardianTelephone;
+                    legalGuardian.Address = IntakeViewModel.LegalGuardianAddress;
+                    legalGuardian.City = IntakeViewModel.LegalGuardianCity;
+                    legalGuardian.State = IntakeViewModel.LegalGuardianState;
+                    legalGuardian.ZipCode = IntakeViewModel.LegalGuardianZipCode;
+                    legalGuardian.CreatedOn = DateTime.Now;
+                    legalGuardian.CreatedBy = user_logged.Id;
+                    _context.LegalGuardians.Add(legalGuardian);
+                    client.LegalGuardian = legalGuardian;
+
+                    client.RelationShipOfLegalGuardian = RelationshipUtils.GetRelationshipByIndex(IntakeViewModel.IdRelationshipLG);
+                    _context.Clients.Update(client);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    client.LegalGuardian = legalGuardian;
+                    client.RelationShipOfEmergencyContact = RelationshipUtils.GetRelationshipByIndex(IntakeViewModel.IdRelationshipEC);
+                    _context.Clients.Update(client);
+                    await _context.SaveChangesAsync();
+                }
+
                 TCMIntakeFormEntity IntakeEntity = _context.TCMIntakeForms.Find(IntakeViewModel.Id);
                 if (IntakeEntity == null)
                 {
@@ -358,74 +448,25 @@ namespace KyoS.Web.Controllers
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", IntakeViewModel) });
                 }
             }
-            TCMIntakeFormViewModel model;
-            model = new TCMIntakeFormViewModel
-            {
-                IdTCMClient = IntakeViewModel.IdTCMClient,
-                TcmClient_FK = IntakeViewModel.TcmClient_FK,
-                TcmClient = _context.TCMClient
-                                            .Include(m => m.Client)
-                                            .ThenInclude(m => m.Clients_Diagnostics)
-                                            .ThenInclude(m => m.Diagnostic)
-                                            .Include(m => m.Client)
-                                            .ThenInclude(m => m.Clients_HealthInsurances)
-                                            .ThenInclude(m => m.HealthInsurance)
-                                            .Include(m => m.Client.LegalGuardian)
-                                            .Include(n => n.Client.EmergencyContact)
-                                            .Include(n => n.Client.Client_Referred)
-                                            .Include(n => n.Client.Doctor)
-                                            .Include(n => n.Client.Psychiatrist)
-                                            .FirstOrDefault(n => n.Id == IntakeViewModel.Id),
-                                             
-                Agency = "",
-                CaseManagerNotes = "",
-                Elibigility = "",
-                EmploymentStatus = "",
-                Grade = "",
-                IntakeDate = DateTime.Now,
-                IsClientCurrently = false,
-                LTC = false,
-                MMA = false,
-                MonthlyFamilyIncome = "",
-                NeedSpecial = false,
-                NeedSpecial_Specify = "",
-                Other = "",
-                Other_Address = "",
-                Other_City = "",
-                Other_Phone = "",
-                PrimarySourceIncome = "",
-                ResidentialStatus = "",
-                School = "",
-                School_EBD = false,
-                School_ESE = false,
-                School_ESOL = false,
-                School_HHIP = false,
-                School_Other = false,
-                School_Regular = false,
-                SecondaryContact = "",
-                SecondaryContact_Phone = "",
-                SecondaryContact_RelationShip = "",
-                TeacherCounselor_Name = "",
-                TeacherCounselor_Phone = "",
-                TitlePosition = "",
-                EducationLevel = "",
-                InsuranceOther = "",
-                ReligionOrEspiritual = "",
-                CountryOfBirth = "",
-                EmergencyContact = false,
-                StatusOther = false,
-                StatusOther_Explain = "",
-                StatusResident = false,
-                StausCitizen = false,
-                YearEnterUsa = ""
 
-            };
-            if (model.TcmClient.Client.LegalGuardian == null)
-                 model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
-            if (model.TcmClient.Client.EmergencyContact == null)
-                 model.TcmClient.Client.EmergencyContact = new EmergencyContactEntity();
-                
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
+            IntakeViewModel.TcmClient = _context.TCMClient
+                                                .Include(m => m.Client)
+                                                .ThenInclude(m => m.Clients_Diagnostics)
+                                                .ThenInclude(m => m.Diagnostic)
+                                                .Include(m => m.Client)
+                                                .ThenInclude(m => m.Clients_HealthInsurances)
+                                                .ThenInclude(m => m.HealthInsurance)
+                                                .Include(m => m.Client.LegalGuardian)
+                                                .Include(n => n.Client.EmergencyContact)
+                                                .Include(n => n.Client.Client_Referred)
+                                                .Include(n => n.Client.Doctor)
+                                                .Include(n => n.Client.Psychiatrist)
+                                                .FirstOrDefault(n => n.Id == IntakeViewModel.TcmClient_FK);
+
+            IntakeViewModel.RelationshipsEC = _combosHelper.GetComboRelationships();
+            IntakeViewModel.RelationshipsLG = _combosHelper.GetComboRelationships();
+
+            return View(IntakeViewModel);
         }
 
         [Authorize(Roles = "CaseManager")]
@@ -558,7 +599,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Create", new { id = id });
             }
 
-            TCMIntakeFormEntity model;
+            TCMIntakeFormViewModel model;
 
             if (User.IsInRole("CaseManager"))
             {
@@ -569,12 +610,22 @@ namespace KyoS.Web.Controllers
                 if (user_logged.Clinic != null)
                 {
                     model = _converterHelper.ToTCMIntakeFormViewModel(entity);
-                    if (model.TcmClient.Client.LegalGuardian == null)
-                        model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
-                    if (model.TcmClient.Client.EmergencyContact == null)
+
+                    if (entity.TcmClient.Client.LegalGuardian != null)
                     {
-                        model.TcmClient.Client.EmergencyContact = new EmergencyContactEntity();
-                        
+                        model.LegalGuardianName = entity.TcmClient.Client.LegalGuardian.Name;
+                        model.LegalGuardianTelephone = entity.TcmClient.Client.LegalGuardian.Telephone;
+                        model.LegalGuardianAddress = entity.TcmClient.Client.LegalGuardian.Address;
+                        model.LegalGuardianState = entity.TcmClient.Client.LegalGuardian.State;
+                        model.LegalGuardianCity = entity.TcmClient.Client.LegalGuardian.City;
+                        model.LegalGuardianZipCode = entity.TcmClient.Client.LegalGuardian.ZipCode;
+
+                    }
+                    if (entity.TcmClient.Client.EmergencyContact != null)
+                    {
+                        model.EmergencyContactName = entity.TcmClient.Client.EmergencyContact.Name;
+                        model.EmergencyContacTelephone = entity.TcmClient.Client.EmergencyContact.Telephone;
+
                     }
                     if (model.TcmClient.Client.Clients_Diagnostics.Count() == 0)
                     {
@@ -584,12 +635,19 @@ namespace KyoS.Web.Controllers
                         diagnostic.Diagnostic.Description = "";
                         model.TcmClient.Client.Clients_Diagnostics.Add(diagnostic);
                     }
+
+                    model.IdRelationshipLG = Convert.ToInt32(entity.TcmClient.Client.RelationShipOfLegalGuardian);
+                    model.RelationshipsLG = _combosHelper.GetComboRelationships();
+
+                    model.IdRelationshipEC = Convert.ToInt32(entity.TcmClient.Client.RelationShipOfLegalGuardian);
+                    model.RelationshipsEC = _combosHelper.GetComboRelationships();
+
                     ViewData["origi"] = origi;
                     return View(model);
                 }
             }
 
-            model = new TCMIntakeFormEntity();
+            model = new TCMIntakeFormViewModel();
             ViewData["origi"] = origi;
             return View(model);
         }
@@ -605,8 +663,68 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                EmergencyContactEntity emergency = _context.EmergencyContacts.FirstOrDefault(n => (n.Name == intakeViewModel.EmergencyContactName
+                                                               && n.Telephone == intakeViewModel.EmergencyContacTelephone));
+
+                LegalGuardianEntity legalGuardian = _context.LegalGuardians.FirstOrDefault(n => (n.Name == intakeViewModel.LegalGuardianName
+                                                               && n.Telephone == intakeViewModel.LegalGuardianTelephone));
+
+                TCMClientEntity tcmclient = _context.TCMClient
+                                                    .Include(n => n.Client)
+                                                    .FirstOrDefault(m => m.Id == intakeViewModel.IdTCMClient);
+
+                ClientEntity client = _context.Clients.FirstOrDefault(n => n.Id == tcmclient.Client.Id);
+
+                if (emergency == null)
+                {
+                    emergency = new EmergencyContactEntity();
+                    emergency.Name = intakeViewModel.EmergencyContactName;
+                    emergency.Telephone = intakeViewModel.EmergencyContacTelephone;
+                    emergency.CreatedOn = DateTime.Now;
+                    emergency.CreatedBy = user_logged.Id;
+                    _context.EmergencyContacts.Add(emergency);
+                    client.EmergencyContact = emergency;
+                    client.RelationShipOfEmergencyContact = RelationshipUtils.GetRelationshipByIndex(intakeViewModel.IdRelationshipEC);
+                    _context.Clients.Update(client);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    client.EmergencyContact = emergency;
+                    client.RelationShipOfEmergencyContact = RelationshipUtils.GetRelationshipByIndex(intakeViewModel.IdRelationshipEC);
+                    _context.Clients.Update(client);
+                    await _context.SaveChangesAsync();
+                }
+
+                if (legalGuardian == null && intakeViewModel.LegalGuardianName != null)
+                {
+                    legalGuardian = new LegalGuardianEntity();
+                    legalGuardian.Name = intakeViewModel.LegalGuardianName;
+                    legalGuardian.Telephone = intakeViewModel.LegalGuardianTelephone;
+                    legalGuardian.Address = intakeViewModel.LegalGuardianAddress;
+                    legalGuardian.City = intakeViewModel.LegalGuardianCity;
+                    legalGuardian.State = intakeViewModel.LegalGuardianState;
+                    legalGuardian.ZipCode = intakeViewModel.LegalGuardianZipCode;
+                    legalGuardian.CreatedOn = DateTime.Now;
+                    legalGuardian.CreatedBy = user_logged.Id;
+                    _context.LegalGuardians.Add(legalGuardian);
+                    client.LegalGuardian = legalGuardian;
+
+                    client.RelationShipOfLegalGuardian = RelationshipUtils.GetRelationshipByIndex(intakeViewModel.IdRelationshipLG);
+                    _context.Clients.Update(client);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    client.LegalGuardian = legalGuardian;
+                    client.RelationShipOfEmergencyContact = RelationshipUtils.GetRelationshipByIndex(intakeViewModel.IdRelationshipEC);
+                    _context.Clients.Update(client);
+                    await _context.SaveChangesAsync();
+                }
+
                 TCMIntakeFormEntity intakeEntity = await _converterHelper.ToTCMIntakeFormEntity(intakeViewModel, false, user_logged.UserName);
                 _context.TCMIntakeForms.Update(intakeEntity);
+
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -635,9 +753,12 @@ namespace KyoS.Web.Controllers
                                                           .Include(n => n.Client.Doctor)
                                                           .Include(n => n.Client.Psychiatrist)
                                                           .FirstOrDefaultAsync(n => n.Id == intakeViewModel.IdTCMClient);
-              
+
+                intakeViewModel.RelationshipsEC = _combosHelper.GetComboRelationships();
+                intakeViewModel.RelationshipsLG = _combosHelper.GetComboRelationships();
 
             }
+
             ViewData["origi"] = origi;
             return View(intakeViewModel);
            
@@ -1234,13 +1355,13 @@ namespace KyoS.Web.Controllers
             {
                 if (user_logged.Clinic != null)
                 {
-                    TCMIntakeAdvancedDirectiveEntity intakeConsent = _context.TCMIntakeAdvancedDirective
+                    TCMIntakeAdvancedDirectiveEntity AdvancedDirective = _context.TCMIntakeAdvancedDirective
                                                                              .Include(n => n.TcmClient)
                                                                              .ThenInclude(n => n.Client)
                                                                              .ThenInclude(n => n.LegalGuardian)
                                                                              .Include(n => n.TcmClient.Client.EmergencyContact)
                                                                              .FirstOrDefault(n => n.TcmClient.Id == id);
-                    if (intakeConsent == null)
+                    if (AdvancedDirective == null)
                     {
                         model = new TCMIntakeAdvancedDirectiveViewModel
                         {
@@ -1264,14 +1385,24 @@ namespace KyoS.Web.Controllers
                         };
                         if (model.TcmClient.Client.LegalGuardian == null)
                             model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
+                        if (model.TcmClient.Client.EmergencyContact == null)
+                        {
+                            model.TcmClient.Client.EmergencyContact = new EmergencyContactEntity();
+                            model.TcmClient.Client.EmergencyContact.Name = "N/A";
+                        }
                         ViewData["origi"] = origi;
                         return View(model);
                     }
                     else
                     {
-                        if (intakeConsent.TcmClient.Client.LegalGuardian == null)
-                            intakeConsent.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
-                        model = _converterHelper.ToTCMIntakeAdvancedDirectiveViewModel(intakeConsent);
+                        if (AdvancedDirective.TcmClient.Client.LegalGuardian == null)
+                            AdvancedDirective.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
+                        if (AdvancedDirective.TcmClient.Client.EmergencyContact == null)
+                        {
+                            AdvancedDirective.TcmClient.Client.EmergencyContact = new EmergencyContactEntity();
+                            AdvancedDirective.TcmClient.Client.EmergencyContact.Name = "N/A";
+                        }
+                        model = _converterHelper.ToTCMIntakeAdvancedDirectiveViewModel(AdvancedDirective);
                         ViewData["origi"] = origi;
                         return View(model);
                     }
@@ -1293,12 +1424,12 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeAdvancedDirectiveEntity IntakeConsumerEntity = await _converterHelper.ToTCMIntakeAdvancedDirectiveEntity(IntakeViewModel, false, user_logged.UserName);
+                TCMIntakeAdvancedDirectiveEntity IntakeAdvancedDirectiveEntity = await _converterHelper.ToTCMIntakeAdvancedDirectiveEntity(IntakeViewModel, false, user_logged.UserName);
 
-                if (IntakeConsumerEntity.Id == 0)
+                if (IntakeAdvancedDirectiveEntity.Id == 0)
                 {
-                    IntakeConsumerEntity.TcmClient = null;
-                    _context.TCMIntakeAdvancedDirective.Add(IntakeConsumerEntity);
+                    IntakeAdvancedDirectiveEntity.TcmClient = null;
+                    _context.TCMIntakeAdvancedDirective.Add(IntakeAdvancedDirectiveEntity);
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -1311,8 +1442,8 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    IntakeConsumerEntity.TcmClient = null;
-                    _context.TCMIntakeAdvancedDirective.Update(IntakeConsumerEntity);
+                    IntakeAdvancedDirectiveEntity.TcmClient = null;
+                    _context.TCMIntakeAdvancedDirective.Update(IntakeAdvancedDirectiveEntity);
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -2138,6 +2269,10 @@ namespace KyoS.Web.Controllers
 
             IntakeMedicalHistoryViewModel model;
 
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .FirstOrDefault(n => n.Id == idTCMClient);
+
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -2309,6 +2444,7 @@ namespace KyoS.Web.Controllers
                         if (model.Client.LegalGuardian == null)
                             model.Client.LegalGuardian = new LegalGuardianEntity();
                         model.IdTCMClient = idTCMClient;
+                        ViewData["CaseNumber"] = tcmClient.CaseNumber;
                         return View(model);
                     }
                     else
@@ -2317,6 +2453,7 @@ namespace KyoS.Web.Controllers
                             intakeMedicalHistory.Client.LegalGuardian = new LegalGuardianEntity();
                         model = _converterHelper.ToIntakeMedicalHistoryViewModel(intakeMedicalHistory);
                         model.IdTCMClient = idTCMClient;
+                        ViewData["CaseNumber"] = tcmClient.CaseNumber;
                         return View(model);
                     }
 
@@ -2382,6 +2519,10 @@ namespace KyoS.Web.Controllers
                                                  .Include(u => u.Clinic)
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            TCMClientEntity tcmClient = _context.TCMClient
+                                               .Include(n => n.Client)
+                                               .FirstOrDefault(n => n.Id == idTCMClient);
+
             MedicationViewModel model;
 
             if (User.IsInRole("CaseManager"))
@@ -2399,12 +2540,13 @@ namespace KyoS.Web.Controllers
                         Dosage = "",
                         Frequency = "",
                         Name = "",
-                        Prescriber = user_logged.FullName
+                        Prescriber = ""
 
                     };
                     if (model.Client.MedicationList == null)
                         model.Client.MedicationList = new List<MedicationEntity>();
                     model.IdTCMClient = idTCMClient;
+                    ViewData["CaseNumber"] = tcmClient.CaseNumber;
                     return View(model);
                 }
             }
@@ -2422,6 +2564,7 @@ namespace KyoS.Web.Controllers
             if (model.Client.MedicationList == null)
                 model.Client.MedicationList = new List<MedicationEntity>();
             model.IdTCMClient = idTCMClient;
+            ViewData["CaseNumber"] = tcmClient.CaseNumber;
             return View(model);
         }
 
@@ -2455,8 +2598,8 @@ namespace KyoS.Web.Controllers
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Already exists the Medication.");
-
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMMedication", MedicationViewModel) });
+                    return RedirectToAction("CreateTCMMedication", "MedicationViewModel", new { id = MedicationViewModel.IdClient, IdTCMClient = MedicationViewModel.IdTCMClient });
+                   // return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMMedication", MedicationViewModel, new { id = MedicationViewModel.IdClient, IdTCMClient = MedicationViewModel.IdTCMClient }) });
                 }
             }
             MedicationViewModel model;
@@ -2478,6 +2621,10 @@ namespace KyoS.Web.Controllers
         public IActionResult EditTCMMedication(int id = 0)
         {
             MedicationViewModel model;
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.MedicationList)
+                                                .FirstOrDefault(n => n.Client.MedicationList.Where(m => m.Id == id).Count() > 0);
 
             if (User.IsInRole("CaseManager") )
             {
@@ -2500,7 +2647,8 @@ namespace KyoS.Web.Controllers
                     {
 
                         model = _converterHelper.ToMedicationViewModel(Medication);
-
+                        model.IdTCMClient = _context.TCMClient.FirstOrDefault(n => n.Client.Id == Medication.Client.Id).Id;
+                        ViewData["CaseNumber"] = tcmClient.CaseNumber;
                         return View(model);
                     }
 
@@ -2508,6 +2656,7 @@ namespace KyoS.Web.Controllers
             }
 
             model = new MedicationViewModel();
+            ViewData["CaseNumber"] = tcmClient.CaseNumber;
             return View(model);
         }
 
@@ -2528,7 +2677,7 @@ namespace KyoS.Web.Controllers
                 {
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction("CreateTCMMedication", new { id = medicationViewModel.IdClient });
+                    return RedirectToAction("CreateTCMMedication", new { id = medicationViewModel.IdClient, IdTCMClient = medicationViewModel.IdTCMClient });
                 }
                 catch (System.Exception ex)
                 {
@@ -2563,8 +2712,12 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Index", new { idError = 1 });
             }
 
-             //return RedirectToAction(nameof(Create), new { id = medicationEntity.Client.Id });
-             return RedirectToAction("CreateTCMMedication", new { id = medicationEntity.Client.Id });
+            TCMClientEntity tcmClientEntity = await _context.TCMClient
+                                                            .Include(n => n.Client)
+                                                            .FirstOrDefaultAsync(s => s.Client.Id == medicationEntity.Client.Id);
+
+            //return RedirectToAction(nameof(Create), new { id = medicationEntity.Client.Id });
+            return RedirectToAction("CreateTCMMedication", new { id = medicationEntity.Client.Id, idTCMClient = tcmClientEntity.Id });
         }
 
         [Authorize(Roles = "CaseManager")]
@@ -3482,6 +3635,87 @@ namespace KyoS.Web.Controllers
             }
 
             Stream stream = _reportHelper.TCMIntakeConsentForRelease(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
+
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTCMConsumerRights(int id)
+        {
+            TCMIntakeConsumerRightsEntity entity = await _context.TCMIntakeConsumerRights
+
+                                                                 .Include(t => t.TcmClient)
+                                                                 .ThenInclude(c => c.Client)
+
+                                                                 .Include(t => t.TcmClient)
+                                                                 .ThenInclude(c => c.Client)
+                                                                 .ThenInclude(cl => cl.LegalGuardian)
+
+                                                                 .Include(t => t.TcmClient)
+                                                                 .ThenInclude(c => c.Casemanager)
+                                                                 .ThenInclude(cm => cm.Clinic)
+
+                                                                 .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMIntakeConsumerRights(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
+
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTCMAdvanceDirective(int id)
+        {
+            TCMIntakeAdvancedDirectiveEntity entity = await _context.TCMIntakeAdvancedDirective
+
+                                                                    .Include(t => t.TcmClient)
+                                                                    .ThenInclude(c => c.Client)
+
+                                                                    .Include(t => t.TcmClient)
+                                                                    .ThenInclude(c => c.Client)
+                                                                    .ThenInclude(cl => cl.EmergencyContact)
+
+                                                                    .Include(t => t.TcmClient)
+                                                                    .ThenInclude(c => c.Casemanager)
+                                                                    .ThenInclude(cm => cm.Clinic)
+
+                                                                    .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMIntakeAdvancedDirective(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
+        
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTCMAcknowledgementHippa(int id)
+        {
+            TCMIntakeAcknowledgementHippaEntity entity = await _context.TCMIntakeAcknowledgement
+
+                                                                        .Include(t => t.TcmClient)
+                                                                        .ThenInclude(c => c.Client)
+
+                                                                        .Include(t => t.TcmClient)
+                                                                        .ThenInclude(c => c.Client)
+                                                                        .ThenInclude(cl => cl.LegalGuardian)
+
+                                                                        .Include(t => t.TcmClient)
+                                                                        .ThenInclude(c => c.Casemanager)
+                                                                        .ThenInclude(cm => cm.Clinic)
+
+                                                                        .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMIntakeAcknowledgementHippa(entity);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
     }

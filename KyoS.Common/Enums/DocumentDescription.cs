@@ -24,6 +24,7 @@
         ServicePlan,
         ServicePlanReview,
         AppendixJ,
+        Binder,
         Others
     }
     public class DocumentUtils
@@ -52,7 +53,8 @@
                    (index == 19) ? DocumentDescription.ServicePlan :
                    (index == 20) ? DocumentDescription.ServicePlanReview :
                    (index == 21) ? DocumentDescription.AppendixJ :
-                   (index == 22) ? DocumentDescription.Others : DocumentDescription.Others;
+                   (index == 22) ? DocumentDescription.Binder :
+                   (index == 23) ? DocumentDescription.Others : DocumentDescription.Others;
         }
     }
 }

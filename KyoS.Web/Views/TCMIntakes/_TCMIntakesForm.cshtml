@@ -113,65 +113,44 @@
         <input type="checkbox" asp-for="TcmClient.Client.OtherLanguage_Understand" class="form-check-input" disabled>
     </div>
     <div class="form-group col-md-3">
-        <label asp-for="TcmClient.Client.LegalGuardian.Name" class="control-label">Legal Guardian</label>
-        <input asp-for="TcmClient.Client.LegalGuardian.Name" class="form-control" readonly>
-        <span asp-validation-for="TcmClient.Client.LegalGuardian.Name" class="text-danger"></span>
+        <label asp-for="LegalGuardianName" class="control-label">Legal Guardian</label>
+        <input asp-for="LegalGuardianName" class="form-control" >
+        <span asp-validation-for="LegalGuardianName" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="TcmClient.Client.LegalGuardian.Telephone" class="control-label">Legal Guardian Telephone</label>
-        <input asp-for="TcmClient.Client.LegalGuardian.Telephone" class="form-control" readonly>
-        <span asp-validation-for="TcmClient.Client.LegalGuardian.Telephone" class="text-danger"></span>
+        <label asp-for="LegalGuardianTelephone" class="control-label">Legal Guardian Telephone</label>
+        <input asp-for="LegalGuardianTelephone" class="form-control" >
+        <span asp-validation-for="LegalGuardianTelephone" class="text-danger"></span>
     </div>    
 </div>
 <div class="col-md-push-12">
-    <div class="form-group col-md-4">
-        <label asp-for="TcmClient.Client.LegalGuardian.Address" class="control-label">Legal Guardian Address</label>
-        <input asp-for="TcmClient.Client.LegalGuardian.Address" class="form-control" readonly>
-        <span asp-validation-for="TcmClient.Client.LegalGuardian.Address" class="text-danger"></span>
+    <div class="form-group col-md-2">
+        <label asp-for="IdRelationshipLG" class="control-label"></label>
+        <select asp-for="IdRelationshipLG" asp-items="Model.RelationshipsLG" class="form-control"></select>
+        <span asp-validation-for="IdRelationshipLG" class="text-danger"></span>
     </div>
     <div class="form-group col-md-3">
-        <label asp-for="TcmClient.Client.LegalGuardian.City" class="control-label">Legal Guardian City</label>
-        <input asp-for="TcmClient.Client.LegalGuardian.City" class="form-control" readonly>
-        <span asp-validation-for="TcmClient.Client.LegalGuardian.City" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-3">
-        <label asp-for="TcmClient.Client.State" class="control-label">Legal Guardian State</label>
-        <input asp-for="TcmClient.Client.State" class="form-control" readonly>
-        <span asp-validation-for="TcmClient.Client.State" class="text-danger"></span>
+        <label asp-for="LegalGuardianAddress" class="control-label">Legal Guardian Address</label>
+        <input asp-for="LegalGuardianAddress" class="form-control" >
+        <span asp-validation-for="LegalGuardianAddress" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="TcmClient.Client.LegalGuardian.ZipCode" class="control-label">Legal Guardian Zip Code</label>
-        <input asp-for="TcmClient.Client.LegalGuardian.ZipCode" class="form-control" readonly>
-        <span asp-validation-for="TcmClient.Client.LegalGuardian.ZipCode" class="text-danger"></span>
+        <label asp-for="LegalGuardianCity" class="control-label">Legal Guardian City</label>
+        <input asp-for="LegalGuardianCity" class="form-control" >
+        <span asp-validation-for="LegalGuardianCity" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="LegalGuardianState" class="control-label">Legal Guardian State</label>
+        <input asp-for="LegalGuardianState" class="form-control" >
+        <span asp-validation-for="LegalGuardianState" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="LegalGuardianZipCode" class="control-label">Legal Guardian Zip Code</label>
+        <input asp-for="LegalGuardianZipCode" class="form-control" >
+        <span asp-validation-for="LegalGuardianZipCode" class="text-danger"></span>
     </div>
 </div>
-<div class="col-md-push-12">
-    @*<div class="form-group col-md-2">
-            <label asp-for="TcmClient.Client.Referred.Name" class="control-label">Referred by</label>
-            <input asp-for="TcmClient.Client.Referred.Name" class="form-control" readonly>
-            <span asp-validation-for="TcmClient.Client.Referred.Name" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-2">
-            <label asp-for="TcmClient.Client.Referred.Telephone" class="control-label">Phone No.</label>
-            <input asp-for="TcmClient.Client.Referred.Telephone" class="form-control" readonly>
-            <span asp-validation-for="TcmClient.Client.Referred.Telephone" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-3">
-            <label asp-for="TcmClient.Client.Referred.Address" class="control-label">Referred Address</label>
-            <input asp-for="TcmClient.Client.Referred.Address" class="form-control" readonly>
-            <span asp-validation-for="TcmClient.Client.Referred.Address" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-2">
-            <label asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code" class="control-label">Diagnostic Code</label>
-            <input asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code" class="form-control" readonly>
-            <span asp-validation-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-3">
-            <label asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Description" class="control-label">Diagnostic Description</label>
-            <input asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Description" class="form-control" readonly>
-            <span asp-validation-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Description" class="text-danger"></span>
-        </div>*@
-</div>
+
 <div class="col-md-push-12">
     <div class="form-group col-md-3">
         <label asp-for="EducationLevel" class="control-label">Education Level</label>
@@ -286,19 +265,19 @@
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-2">
-        <label asp-for="TcmClient.Client.EmergencyContact.Name" class="control-label">Primary Contact</label>
-        <input asp-for="TcmClient.Client.EmergencyContact.Name" class="form-control" readonly>
-        <span asp-validation-for="TcmClient.Client.EmergencyContact.Name" class="text-danger"></span>
+        <label asp-for="EmergencyContactName" class="control-label">Primary Contact</label>
+        <input asp-for="EmergencyContactName" class="form-control">
+        <span asp-validation-for="EmergencyContactName" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="TcmClient.Client.EmergencyContact.Telephone" class="control-label">Phone No</label>
-        <input asp-for="TcmClient.Client.EmergencyContact.Telephone" class="form-control" readonly>
-        <span asp-validation-for="TcmClient.Client.EmergencyContact.Telephone" class="text-danger"></span>
+        <label asp-for="EmergencyContacTelephone" class="control-label">Phone No</label>
+        <input asp-for="EmergencyContacTelephone" class="form-control">
+        <span asp-validation-for="EmergencyContacTelephone" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="TcmClient.Client.RelationShipOfEmergencyContact" class="control-label">RelationShip</label>
-        <input asp-for="TcmClient.Client.RelationShipOfEmergencyContact" class="form-control" readonly>
-        <span asp-validation-for="TcmClient.Client.RelationShipOfEmergencyContact" class="text-danger"></span>
+        <label asp-for="IdRelationshipEC" class="control-label"></label>
+        <select asp-for="IdRelationshipEC" asp-items="Model.RelationshipsEC" class="form-control"></select>
+        <span asp-validation-for="IdRelationshipEC" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
         <label asp-for="SecondaryContact" class="control-label">Secondary Contact</label>

@@ -13,6 +13,13 @@
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="CreatedOn" />
             <div class="form-group">
+                <div class="col-md-12 form-group">
+                    <label asp-for="Id_Service" class="control-label">Service</label>&nbsp;*
+                    <select asp-for="Id_Service" asp-items="Model.Services" class="form-control"></select>
+                    <span asp-validation-for="Id_Service" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
                 <div class="col-md-3 form-group">
                     <label asp-for="Code" class="control-label">Service code</label>
                     <input asp-for="Code" class="form-control" readonly />
@@ -34,7 +41,7 @@
                 <div class="container-fluid">
                     &nbsp;
                 </div>
-            </div>        
+            </div>
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Needs_Identified" class="control-label">Need Identified</label>

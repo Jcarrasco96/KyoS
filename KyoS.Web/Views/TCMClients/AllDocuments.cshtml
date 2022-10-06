@@ -129,7 +129,7 @@
                                             }
                                             @if (item.TcmServicePlan.Approved == 2)
                                             {
-                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                                <a asp-action="PrintServicePlan" asp-route-id="@item.TcmServicePlan.Id" asp-controller="TCMServicePlans" class="btn btn-success" title="Print TCM Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
                                     </td>
@@ -229,7 +229,7 @@
                                             }
                                             else
                                             {
-                                                <a asp-action="TCMFarsForTCMClient" asp-route-id="@item.Id" asp-controller="TCMFarsForms" asp-route-idTCMClient="@item.Id" asp-route-origin="2" class="btn btn-default" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                                <a asp-action="TCMFarsForTCMClient" asp-route-id="@item.Id" asp-controller="TCMFarsForms" asp-route-idTCMClient="@item.Id" asp-route-origin="2" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-share"></i></a>
                                             }
                                         }
                                     </td>
