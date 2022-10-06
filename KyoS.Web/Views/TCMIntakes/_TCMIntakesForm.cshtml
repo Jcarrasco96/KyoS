@@ -198,18 +198,18 @@
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-5">
-        <label asp-for="TcmClient.Client.Clients_HealthInsurances.ElementAt(0).HealthInsurance.Name" class="control-label">Health Plan</label>
-        <input asp-for="TcmClient.Client.Clients_HealthInsurances.ElementAt(0).HealthInsurance.Name" class="form-control" readonly>
-        <span asp-validation-for="TcmClient.Client.Clients_HealthInsurances.ElementAt(0).HealthInsurance.Name" class="text-danger"></span>
+        <label asp-for="IdHealthPlan" class="control-label"></label>
+        <select asp-for="IdHealthPlan" asp-items="Model.HealthPlan" class="form-control"></select>
+        <span asp-validation-for="IdHealthPlan" class="text-danger"></span>
     </div>
     <div class="form-group col-md-3">
-        <label asp-for="TcmClient.Client.Clients_HealthInsurances.ElementAt(0).MemberId" class="control-label">Member ID</label>
-        <input asp-for="TcmClient.Client.Clients_HealthInsurances.ElementAt(0).MemberId" class="form-control" readonly>
-        <span asp-validation-for="TcmClient.Client.Clients_HealthInsurances.ElementAt(0).MemberId" class="text-danger"></span>
+        <label asp-for="HealthMemberId" class="control-label">Member ID</label>
+        <input asp-for="HealthMemberId" class="form-control">
+        <span asp-validation-for="HealthMemberId" class="text-danger"></span>
     </div>
     <div class="form-group col-md-4">
         <label asp-for="InsuranceOther" class="control-label">Insurance Other</label>
-        <input asp-for="InsuranceOther" class="form-control" >
+        <input asp-for="InsuranceOther" class="form-control">
         <span asp-validation-for="InsuranceOther" class="text-danger"></span>
     </div>
 </div>

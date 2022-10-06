@@ -156,7 +156,7 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(m => m.Clients_Diagnostics)
                                                 .ThenInclude(m => m.Diagnostic)
                                                 .Include(m => m.Client)
-                                                .ThenInclude(m => m.Clients_HealthInsurances)
+                                                .ThenInclude(m => m.Clients_HealthInsurances.Where(m => m.Active == true))
                                                 .ThenInclude(m => m.HealthInsurance)
                                                 .Include(m => m.Client.LegalGuardian)
                                                 .Include(n => n.Client.EmergencyContact)
@@ -224,7 +224,8 @@ namespace KyoS.Web.Controllers
                         IdRelationshipEC = 0,
                         RelationshipsEC = _combosHelper.GetComboRelationships(),
                         IdRelationshipLG = 0,
-                        RelationshipsLG = _combosHelper.GetComboRelationships()
+                        RelationshipsLG = _combosHelper.GetComboRelationships(),
+                        HealthPlan = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id)
 
                     };
                     if (tcmClient.Client.LegalGuardian != null)
@@ -237,18 +238,16 @@ namespace KyoS.Web.Controllers
                         model.LegalGuardianZipCode = tcmClient.Client.LegalGuardian.ZipCode;
                         model.IdRelationshipLG = Convert.ToInt32(tcmClient.Client.RelationShipOfLegalGuardian);
                     }
-                        
                     if (tcmClient.Client.EmergencyContact != null)
                     {
                         model.EmergencyContacTelephone = tcmClient.Client.EmergencyContact.Telephone;
                         model.EmergencyContactName = tcmClient.Client.EmergencyContact.Name;
                         model.IdRelationshipEC = Convert.ToInt32(tcmClient.Client.RelationShipOfEmergencyContact);
                     }
-                    if (model.TcmClient.Client.Clients_HealthInsurances.Count() == 0)
+                    if (tcmClient.Client.Clients_HealthInsurances.Count() > 0)
                     {
-                        Client_HealthInsurance temp = new Client_HealthInsurance();
-                        temp.HealthInsurance = new HealthInsuranceEntity();
-                        model.TcmClient.Client.Clients_HealthInsurances.Add(temp);
+                        model.HealthMemberId = tcmClient.Client.Clients_HealthInsurances.ElementAtOrDefault(0).MemberId;
+                        model.IdHealthPlan = tcmClient.Client.Clients_HealthInsurances.ElementAtOrDefault(0).HealthInsurance.Id;
                     }
                     if (model.TcmClient.Client.Clients_Diagnostics.Count() == 0)
                     {
@@ -258,6 +257,7 @@ namespace KyoS.Web.Controllers
                         diagnostic.Diagnostic.Description = "";
                         model.TcmClient.Client.Clients_Diagnostics.Add(diagnostic);
                     }
+               
                     ViewData["origi"] = origi;
                     return View(model);
                 }
@@ -272,7 +272,7 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(m => m.Clients_Diagnostics)
                                             .ThenInclude(m => m.Diagnostic)
                                             .Include(m => m.Client)
-                                            .ThenInclude(m => m.Clients_HealthInsurances)
+                                            .ThenInclude(m => m.Clients_HealthInsurances.Where(m => m.Active == true))
                                             .ThenInclude(m => m.HealthInsurance)
                                             .Include(m => m.Client.LegalGuardian)
                                             .Include(n => n.Client.EmergencyContact)
@@ -346,11 +346,10 @@ namespace KyoS.Web.Controllers
                 model.EmergencyContactName = tcmClient.Client.EmergencyContact.Name;
                 model.IdRelationshipEC = Convert.ToInt32(tcmClient.Client.RelationShipOfEmergencyContact);
             }
-            if (model.TcmClient.Client.Clients_HealthInsurances.Count() == 0)
+            if (tcmClient.Client.Clients_HealthInsurances.Count() > 0)
             {
-                Client_HealthInsurance temp = new Client_HealthInsurance();
-                temp.HealthInsurance = new HealthInsuranceEntity();
-                model.TcmClient.Client.Clients_HealthInsurances.Add(temp);
+                model.HealthMemberId = tcmClient.Client.Clients_HealthInsurances.ElementAtOrDefault(0).MemberId;
+                model.IdHealthPlan = tcmClient.Client.Clients_HealthInsurances.ElementAtOrDefault(0).HealthInsurance.Id;
             }
             ViewData["origi"] = origi;
             return View(model);
@@ -378,6 +377,11 @@ namespace KyoS.Web.Controllers
                                                     .FirstOrDefault(m => m.Id == IntakeViewModel.IdTCMClient);
 
                 ClientEntity client = _context.Clients.FirstOrDefault(n => n.Id == tcmclient.Client.Id);
+
+                Client_HealthInsurance client_health = _context.Clients_HealthInsurances
+                                                               .FirstOrDefault(n => (n.Client.Id == tcmclient.Client.Id
+                                                                        && n.Active == true
+                                                                        && n.HealthInsurance.Id == IntakeViewModel.IdHealthPlan));
 
                 if (emergency == null)
                 {
@@ -424,6 +428,44 @@ namespace KyoS.Web.Controllers
                     client.RelationShipOfEmergencyContact = RelationshipUtils.GetRelationshipByIndex(IntakeViewModel.IdRelationshipEC);
                     _context.Clients.Update(client);
                     await _context.SaveChangesAsync();
+                }
+
+                if (client_health != null && client_health.MemberId != IntakeViewModel.HealthMemberId)
+                {
+                    client_health.MemberId = IntakeViewModel.HealthMemberId;
+                    client_health.LastModifiedBy = user_logged.Id;
+                    client_health.LastModifiedOn = DateTime.Now;
+                    _context.Clients_HealthInsurances.Update(client_health);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    if (client_health == null && IntakeViewModel.IdHealthPlan > 0)
+                    {
+                        Client_HealthInsurance client_healthActive = _context.Clients_HealthInsurances
+                                                                             .FirstOrDefault(n => (n.Client.Id == tcmclient.Client.Id
+                                                                                 && n.Active == true));
+                        if (client_healthActive != null)
+                        {
+                            client_healthActive.Active = false;
+                            _context.Clients_HealthInsurances.Update(client_healthActive);
+                            await _context.SaveChangesAsync();
+                        }
+
+                        client_health = new Client_HealthInsurance();
+                        client_health.Active = true;
+                        client_health.ApprovedDate = DateTime.Now;
+                        client_health.Client = client;
+                        client_health.CreatedBy = user_logged.Id;
+                        client_health.CreatedOn = DateTime.Now;
+                        client_health.MemberId = IntakeViewModel.HealthMemberId;
+                        client_health.Units = 0;
+                        client_health.HealthInsurance = await _context.HealthInsurances.FirstOrDefaultAsync(hi => hi.Id == IntakeViewModel.IdHealthPlan);
+
+                        _context.Clients_HealthInsurances.Add(client_health);
+                        await _context.SaveChangesAsync();
+
+                    }
                 }
 
                 TCMIntakeFormEntity IntakeEntity = _context.TCMIntakeForms.Find(IntakeViewModel.Id);
@@ -586,7 +628,7 @@ namespace KyoS.Web.Controllers
                                                  .ThenInclude(m => m.Diagnostic)
                                                  .Include(m => m.TcmClient)
                                                  .ThenInclude(m => m.Client)
-                                                 .ThenInclude(m => m.Clients_HealthInsurances)
+                                                 .ThenInclude(m => m.Clients_HealthInsurances.Where(m => m.Active == true))
                                                  .ThenInclude(m => m.HealthInsurance)
                                                  .Include(m => m.TcmClient.Client.LegalGuardian)
                                                  .Include(n => n.TcmClient.Client.EmergencyContact)
@@ -627,6 +669,11 @@ namespace KyoS.Web.Controllers
                         model.EmergencyContacTelephone = entity.TcmClient.Client.EmergencyContact.Telephone;
 
                     }
+                    if (entity.TcmClient.Client.Clients_HealthInsurances != null)
+                    {
+                        model.HealthMemberId = entity.TcmClient.Client.Clients_HealthInsurances.ElementAtOrDefault(0).MemberId;
+                
+                    }
                     if (model.TcmClient.Client.Clients_Diagnostics.Count() == 0)
                     {
                         Client_Diagnostic diagnostic = new Client_Diagnostic();
@@ -641,6 +688,12 @@ namespace KyoS.Web.Controllers
 
                     model.IdRelationshipEC = Convert.ToInt32(entity.TcmClient.Client.RelationShipOfLegalGuardian);
                     model.RelationshipsEC = _combosHelper.GetComboRelationships();
+
+                    model.IdRelationshipEC = Convert.ToInt32(entity.TcmClient.Client.RelationShipOfLegalGuardian);
+                    model.HealthPlan = _combosHelper.GetComboRelationships();
+
+                    model.IdHealthPlan = entity.TcmClient.Client.Clients_HealthInsurances.ElementAtOrDefault(0).HealthInsurance.Id;
+                    model.HealthPlan = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id);
 
                     ViewData["origi"] = origi;
                     return View(model);
@@ -674,6 +727,11 @@ namespace KyoS.Web.Controllers
                                                     .FirstOrDefault(m => m.Id == intakeViewModel.IdTCMClient);
 
                 ClientEntity client = _context.Clients.FirstOrDefault(n => n.Id == tcmclient.Client.Id);
+
+                Client_HealthInsurance client_health = _context.Clients_HealthInsurances
+                                                               .FirstOrDefault(n => (n.Client.Id == tcmclient.Client.Id
+                                                                        && n.Active == true
+                                                                        && n.HealthInsurance.Id == intakeViewModel.IdHealthPlan));
 
                 if (emergency == null)
                 {
@@ -720,6 +778,44 @@ namespace KyoS.Web.Controllers
                     client.RelationShipOfEmergencyContact = RelationshipUtils.GetRelationshipByIndex(intakeViewModel.IdRelationshipEC);
                     _context.Clients.Update(client);
                     await _context.SaveChangesAsync();
+                }
+
+                if (client_health != null && client_health.MemberId != intakeViewModel.HealthMemberId)
+                {
+                    client_health.MemberId = intakeViewModel.HealthMemberId;
+                    client_health.LastModifiedBy = user_logged.Id;
+                    client_health.LastModifiedOn = DateTime.Now;
+                    _context.Clients_HealthInsurances.Update(client_health);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    if (client_health == null && intakeViewModel.IdHealthPlan > 0)
+                    {
+                        Client_HealthInsurance client_healthActive = _context.Clients_HealthInsurances
+                                                                             .FirstOrDefault(n => (n.Client.Id == tcmclient.Client.Id
+                                                                                 && n.Active == true));
+                        if (client_healthActive != null)
+                        {
+                            client_healthActive.Active = false;
+                            _context.Clients_HealthInsurances.Update(client_healthActive);
+                            await _context.SaveChangesAsync();
+                        }
+
+                        client_health = new Client_HealthInsurance();
+                        client_health.Active = true;
+                        client_health.ApprovedDate = DateTime.Now;
+                        client_health.Client = client;
+                        client_health.CreatedBy = user_logged.Id;
+                        client_health.CreatedOn = DateTime.Now;
+                        client_health.MemberId = intakeViewModel.HealthMemberId;
+                        client_health.Units = 0;
+                        client_health.HealthInsurance = await _context.HealthInsurances.FirstOrDefaultAsync(hi => hi.Id == intakeViewModel.IdHealthPlan);
+
+                        _context.Clients_HealthInsurances.Add(client_health);
+                        await _context.SaveChangesAsync();
+
+                    }
                 }
 
                 TCMIntakeFormEntity intakeEntity = await _converterHelper.ToTCMIntakeFormEntity(intakeViewModel, false, user_logged.UserName);
