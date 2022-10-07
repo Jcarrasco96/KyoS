@@ -45,6 +45,14 @@ namespace KyoS.Web.Models
         public IEnumerable<SelectListItem> HealthPlan { get; set; }
 
         public string HealthMemberId { get; set; }
+
+        [Display(Name = "Residential Status")]
+        public int IdResidentialStatus { get; set; }
+        public IEnumerable<SelectListItem> ResidentialStatus { get; set; }
+
+        [Display(Name = "Employed Status")]
+        public int IdEmployedStatus { get; set; }
+        public IEnumerable<SelectListItem> EmployedStatus { get; set; }
     }
     
 }
