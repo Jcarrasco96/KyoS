@@ -9056,6 +9056,191 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMIntakeOrientationCheckListDS(TCMIntakeOrientationChecklistEntity intakeOrientationChecklist)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakeOrientationCheckList"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmClient_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("TourFacility", typeof(bool));
+            dt.Columns.Add("Rights", typeof(bool));
+            dt.Columns.Add("PoliceGrievancce", typeof(bool));
+            dt.Columns.Add("Insent", typeof(bool));
+            dt.Columns.Add("Services", typeof(bool));
+            dt.Columns.Add("Access", typeof(bool));
+            dt.Columns.Add("Code", typeof(bool));
+            dt.Columns.Add("Confidentiality", typeof(bool));
+            dt.Columns.Add("Methods", typeof(bool));
+            dt.Columns.Add("Explanation", typeof(bool));
+            dt.Columns.Add("Fire", typeof(bool));
+            dt.Columns.Add("PoliceTobacco", typeof(bool));
+            dt.Columns.Add("PoliceIllicit", typeof(bool));
+            dt.Columns.Add("PoliceWeapons", typeof(bool));
+            dt.Columns.Add("Identification", typeof(bool));
+            dt.Columns.Add("Program", typeof(bool));
+            dt.Columns.Add("Purpose", typeof(bool));
+            dt.Columns.Add("IndividualPlan", typeof(bool));
+            dt.Columns.Add("Discharge", typeof(bool));
+            dt.Columns.Add("AgencyPolice", typeof(bool));
+            dt.Columns.Add("AgencyExpectation", typeof(bool));
+            dt.Columns.Add("Education", typeof(bool));
+            dt.Columns.Add("TheAbove", typeof(bool));
+            dt.Columns.Add("Documents", typeof(bool));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            if (intakeOrientationChecklist != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intakeOrientationChecklist.Id,
+                                            0,
+                                            intakeOrientationChecklist.DateSignatureLegalGuardian,
+                                            intakeOrientationChecklist.DateSignaturePerson,
+                                            intakeOrientationChecklist.DateSignatureEmployee,
+                                            intakeOrientationChecklist.AdmissionedFor,
+                                            intakeOrientationChecklist.TourFacility,
+                                            intakeOrientationChecklist.Rights,
+                                            intakeOrientationChecklist.PoliceGrievancce,
+                                            intakeOrientationChecklist.Insent,
+                                            intakeOrientationChecklist.Services,
+                                            intakeOrientationChecklist.Access,
+                                            intakeOrientationChecklist.Code,
+                                            intakeOrientationChecklist.Confidentiality,
+                                            intakeOrientationChecklist.Methods,
+                                            intakeOrientationChecklist.Explanation,
+                                            intakeOrientationChecklist.Fire,
+                                            intakeOrientationChecklist.PoliceTobacco,
+                                            intakeOrientationChecklist.PoliceIllicit,
+                                            intakeOrientationChecklist.PoliceWeapons,
+                                            intakeOrientationChecklist.Identification,
+                                            intakeOrientationChecklist.Program,
+                                            intakeOrientationChecklist.Purpose,
+                                            intakeOrientationChecklist.IndividualPlan,
+                                            intakeOrientationChecklist.Discharge,
+                                            intakeOrientationChecklist.AgencyPolice,
+                                            intakeOrientationChecklist.AgencyExpectation,
+                                            intakeOrientationChecklist.Education,
+                                            intakeOrientationChecklist.TheAbove,
+                                            intakeOrientationChecklist.Documents,
+                                            intakeOrientationChecklist.CreatedBy,
+                                            intakeOrientationChecklist.CreatedOn,
+                                            intakeOrientationChecklist.LastModifiedBy,
+                                            intakeOrientationChecklist.LastModifiedOn
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()
+                                       });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetTCMIntakeForeignLanguageDS(TCMIntakeForeignLanguageEntity foreignLanguage)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakeForeignLanguage"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmClient_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("Documents", typeof(bool));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            if (foreignLanguage != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            foreignLanguage.Id,
+                                            0,
+                                            foreignLanguage.DateSignatureLegalGuardian,
+                                            foreignLanguage.DateSignaturePerson,
+                                            foreignLanguage.DateSignatureEmployee,
+                                            foreignLanguage.AdmissionedFor,
+                                            foreignLanguage.Documents,
+                                            foreignLanguage.CreatedBy,
+                                            foreignLanguage.CreatedOn,
+                                            foreignLanguage.LastModifiedBy,
+                                            foreignLanguage.LastModifiedOn
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()
+                                       });
+            }
+
+            return dt;
+        }
+
         private DataTable GetTCMFarsDS(TCMFarsFormEntity fars)
         {
             DataTable dt = new DataTable
@@ -9877,7 +10062,64 @@ namespace KyoS.Web.Helpers
 
         public Stream TCMIntakeOrientationCheckList(TCMIntakeOrientationChecklistEntity intakeOrientation)
         {
-            throw new NotImplementedException();
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakeOrientationCheckList.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intakeOrientation.TcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(intakeOrientation.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intakeOrientation.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(intakeOrientation.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeOrientationCheckListDS(intakeOrientation));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeOrientationCheckList");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intakeOrientation.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeOrientation.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+            
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(intakeOrientation.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeOrientation.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
         }
 
         public Stream TCMIntakeAcknowledgementHippa(TCMIntakeAcknowledgementHippaEntity intakeAcknowledgement)
@@ -9948,7 +10190,68 @@ namespace KyoS.Web.Helpers
 
         public Stream TCMIntakeForeignLanguage(TCMIntakeForeignLanguageEntity intakeForeignLanguage)
         {
-            throw new NotImplementedException();
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakeForeignLanguage.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intakeForeignLanguage.TcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(intakeForeignLanguage.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intakeForeignLanguage.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(intakeForeignLanguage.TcmClient.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(intakeForeignLanguage.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeForeignLanguageDS(intakeForeignLanguage));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeForeignLanguage");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intakeForeignLanguage.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeForeignLanguage.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(intakeForeignLanguage.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeForeignLanguage.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
         }
 
         public Stream TCMIntakeWelcome(TCMIntakeWelcomeEntity intakeWelcome)

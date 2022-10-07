@@ -39,6 +39,12 @@ namespace KyoS.Web.Models
         public int IdRelationshipLG { get; set; }
         public IEnumerable<SelectListItem> RelationshipsLG { get; set; }
 
+        [Display(Name = "Health Plan")]
+        [Required(ErrorMessage = "The field is mandatory.")]
+        public int IdHealthPlan { get; set; }
+        public IEnumerable<SelectListItem> HealthPlan { get; set; }
+
+        public string HealthMemberId { get; set; }
     }
     
 }

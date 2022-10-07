@@ -173,9 +173,9 @@
                         <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMOrientationCheckList" asp-route-origi="@ViewData["origin"]" role="button">
                             <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Orientation<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checklist</h4>
                         </a>
-                        @*<a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintTCMOrientationChecklist" role="button" title="Print Orientation Checklist" target="_blank">
                             <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
-                        </a>*@
+                        </a>
                     </div>                    
                 }
                 else
@@ -215,9 +215,9 @@
                         <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMForeignLanguage" asp-route-origi="@ViewData["origin"]" role="button">
                             <h4 style="align-content:end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Foreign Lang.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Acknowledgement</h4>
                         </a>
-                        @*<a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="1" asp-action="TCMIntakeSectionDashboard" role="button" title="Print">
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintTCMForeignLanguage" role="button" title="Print Foreign Language Acknowledgement" target="_blank">
                             <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
-                        </a>*@
+                        </a>
                     </div>                    
                 }
                 else

@@ -52,30 +52,27 @@
             </div>
         </div>
         <div class="">
-            <div class="form-group col-md-7">
+            <div class="form-group col-md-6">
                 <label asp-for="task" class="control-label">Task/Case Management Strategy</label>&nbsp;*
                 <textarea asp-for="task" class="form-control" rows="5" />
                 <span asp-validation-for="task" class="text-danger"></span>
             </div>
-            <div class="form-group col-md-5">
+            <div class="form-group col-md-6">
                 <label asp-for="Responsible" class="control-label">Responsible Provider and Resources</label>&nbsp;*
                 <textarea asp-for="Responsible" class="form-control" rows="5" />
                 <span asp-validation-for="Responsible" class="text-danger"></span>
             </div>
         </div>
         <div>
-            <div class="col-md-offset-10">
+            <div class="col-md-offset-9">
                 @if (Model.Origi == 0) //viene de la pagina Index de las notas
                 {
                     <input type="submit" value="Submit" class="btn btn-primary" asp-all-route-id="model.tCMservice.Id" asp-route-Origin="0" />
-
                 }
                 @if (Model.Origi == 1) //viene de la pagina Index de las notas
                 {
                     <input type="submit" value="Submit" class="btn btn-primary" asp-route-id="model.tCMservice.Id" asp-route-idAddendum="@ViewData["idAddendum"]" asp-route-Origin="1" />
-
                 }
-
                 <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
             </div>
         </div>

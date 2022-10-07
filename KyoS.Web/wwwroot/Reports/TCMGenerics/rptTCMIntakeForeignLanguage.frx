@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/06/2022 11:45:03" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b0399x3ZM3K1k0ViG6IAIkNkE">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="ClinicalDirector" DataType="System.String"/>
+        <Column Name="ProviderTaxId" DataType="System.String"/>
+        <Column Name="ProviderMedicaidId" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="IdFacilitatorPSR" DataType="System.Int32"/>
+        <Column Name="OtherLanguage_Read" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Speak" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Understand" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="MedicareId" DataType="System.String"/>
+        <Column Name="DateOfClose" DataType="System.DateTime"/>
+        <Column Name="OnlyTCM" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="CaseManagers" DataType="System.Int32" Enabled="true" TableName="CaseManagers">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="ProviderNumber" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="Credentials" DataType="System.String"/>
+        <Column Name="Money" DataType="System.Decimal"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMClient" DataType="System.Int32" Enabled="true" TableName="TCMClient">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CasemanagerId" DataType="System.Int32"/>
+        <Column Name="CaseNumber" DataType="System.String"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="DataClose" DataType="System.DateTime"/>
+        <Column Name="DataOpen" DataType="System.DateTime"/>
+        <Column Name="Period" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+      <TableDataSource Name="LegalGuardians" DataType="System.Int32" Enabled="true" TableName="LegalGuardians">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="AdressLine2" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMIntakeForeignLanguage" DataType="System.Int32" Enabled="true" TableName="TCMIntakeForeignLanguage">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="TcmClient_FK" DataType="System.Int32"/>
+        <Column Name="DateSignatureLegalGuardian" DataType="System.DateTime"/>
+        <Column Name="DateSignaturePerson" DataType="System.DateTime"/>
+        <Column Name="DateSignatureEmployee" DataType="System.DateTime"/>
+        <Column Name="AdmissionedFor" DataType="System.String"/>
+        <Column Name="Documents" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="session1" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Image="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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//2Q==" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="87.6">
+      <TextObject Name="Textbox12" Left="170.1" Top="9.45" Width="402.8" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="170.1" Top="31.33" Width="402.8" Height="22" CanGrow="true" Text="ACUSE DE RECIBO DE IDIOMA EXTRANJERO" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <LineObject Name="Line3" Left="160.65" Top="14.45" Height="37.2"/>
+      <LineObject Name="Line4" Left="774.52" Top="79.6" Width="-776"/>
+      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15"/>
+      <LineObject Name="Line6" Left="159.65" Top="13.45" Height="37.8"/>
+      <LineObject Name="Line7" Left="774.9" Top="78.7" Width="-776"/>
+      <TextObject Name="Text308" Left="170.1" Top="52.8" Width="402.8" Height="22" CanGrow="true" Text="FOREIGN LANGUAGE ACKNOWLEDGEMENT " Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="91.6" Width="778.3" Height="808.8" DataSource="CaseManagers">
+      <TextObject Name="Text42" Top="28.35" Width="35.91" Height="26.46" Text="Yo," HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text43" Left="344.65" Top="33.35" Width="359.1" Height="26.46" Text=", cliente de &lt;b&gt;[Clinics.Name]&lt;/b&gt;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text44" Left="26.35" Top="29.8" Width="321.3" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text304" Top="53.7" Width="45.36" Height="17.01" Text="y yo, " HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text305" Left="34.8" Top="51.7" Width="313.36" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[LegalGuardians.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text307" Left="344.65" Top="54.25" Width="434.7" Height="26.46" Text=", custodio legal o representante autorizado &lt;i&gt;(en caso de ser aplicable)&lt;/i&gt;," HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text48" Left="-1" Top="74.6" Width="774.9" Height="85.05" Text="mediante la presente reconozco que toda la información presentada ante mí, incluyendo formularios, consentimientos legales y cualquier otro tipo de documentación perteneciente a mi caso, fue debidamente explicada a mí en toda su extensión &lt;b&gt;en mi idioma primario&lt;b&gt; (Español) y en términos que yo puedo entender. Mi firma en cada uno de los documentos indica que yo no solo &lt;b&gt;entiendo&lt;/b&gt; sino que también &lt;b&gt;estoy de acuerdo&lt;/b&gt; con su contenido. Copias de los documentos disponibles en &lt;b&gt;mi idioma primario&lt;/b&gt; (Español) fueron ofrecidas a mí. " HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text284" Left="330.75" Top="766.45" Width="190.89" Height="24.57" CanGrow="true" Text="Case Manager's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line11" Left="523.75" Top="765" Width="-192.78"/>
+      <TextObject Name="Text285" Left="551.1" Top="766.45" Width="162.54" Height="24.57" CanGrow="true" Text="Fecha / Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line12" Left="744.1" Top="765" Width="-192.78"/>
+      <TextObject Name="Text286" Left="551.1" Top="746.65" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeForeignLanguage.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text287" Left="28.35" Top="655.05" Width="274.05" Height="43.47" CanGrow="true" Text="Firma del Custodio Legal o Representante Autorizado&#13;&#10;Client’s Legal Guardian or Authorized Representative " Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line13" Left="296.95" Top="654.6" Width="-268.38"/>
+      <TextObject Name="Text288" Left="551.1" Top="656.05" Width="162.54" Height="24.57" CanGrow="true" Text="Fecha / Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line14" Left="744.1" Top="654.6" Width="-191.27"/>
+      <TextObject Name="Text289" Left="551.1" Top="635.25" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeForeignLanguage.DateSignatureLegalGuardian]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture3" Left="378" Top="704.85" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text290" Left="28.35" Top="559.45" Width="198.45" Height="24.57" CanGrow="true" Text="Firma del Cliente / Client's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line15" Left="296.95" Top="558" Width="-268.38"/>
+      <TextObject Name="Text291" Left="551.1" Top="559.45" Width="162.54" Height="24.57" CanGrow="true" Text="Fecha / Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line16" Left="744.1" Top="558" Width="-192.78"/>
+      <TextObject Name="Text292" Left="551.1" Top="539.65" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeForeignLanguage.DateSignaturePerson]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text309" Left="1" Top="207.9" Width="17.01" Height="26.46" Text="I," HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text310" Left="333.2" Top="212.9" Width="359.1" Height="17.01" Text=", recipient of services at &lt;b&gt;[Clinics.Name]&lt;/b&gt;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text311" Left="14.45" Top="209.35" Width="321.3" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text312" Left="1" Top="233.25" Width="45.36" Height="17.01" Text="and I, " HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text313" Left="40.25" Top="231.25" Width="313.36" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[LegalGuardians.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text314" Left="350.65" Top="233.8" Width="434.7" Height="26.46" Text=", legal guardian or authorized representative &lt;i&gt;(if applicable)&lt;/i&gt;," HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text315" Top="254.15" Width="774.9" Height="85.05" Text="do hereby acknowledge that all the information presented before me, including forms, legal consents and any other type documentation pertaining to my case, was duly explained to me in all its extent in &lt;b&gt;my primary language&lt;/b&gt; (Spanish) and in terms that I can understand. My signature on each of the documents indicates that I not only &lt;b&gt;understand&lt;/b&gt; but also &lt;b&gt;agree&lt;/b&gt; with all its content. Copy of documents available in &lt;b&gt;my primary language&lt;/b&gt; (Spanish) were offered to me." HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text316" Left="25.8" Top="766.9" Width="274.05" Height="24.57" CanGrow="true" Text="Nombre del Empleado / Employee’s Name  " Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line17" Left="294.4" Top="765.45" Width="-268.38"/>
+      <TextObject Name="Text317" Left="25.35" Top="746.55" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+    </DataBand>
+  </ReportPage>
+</Report>
