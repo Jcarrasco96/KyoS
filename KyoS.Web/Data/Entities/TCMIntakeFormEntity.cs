@@ -22,8 +22,8 @@ namespace KyoS.Web.Data.Entities
 
         public string EducationLevel { get; set; }
         public string ReligionOrEspiritual { get; set; }
-        public string EmploymentStatus { get; set; }
-        public string ResidentialStatus { get; set; }
+        public EmploymentStatus EmploymentStatus { get; set; }
+        public ResidentialStatus ResidentialStatus { get; set; }
         public string MonthlyFamilyIncome { get; set; }
         public string PrimarySourceIncome { get; set; }
 

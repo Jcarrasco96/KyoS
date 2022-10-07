@@ -3547,7 +3547,7 @@ namespace KyoS.Web.Helpers
                 Agency = model.Agency,
                 CaseManagerNotes = model.CaseManagerNotes,
                 Elibigility = model.Elibigility,
-                EmploymentStatus = model.EmploymentStatus,
+                EmploymentStatus = EmployedUtils.GetEmployedByIndex(model.IdEmployedStatus),
                 Grade = model.Grade,
                 IntakeDate = model.IntakeDate,
                 IsClientCurrently = model.IsClientCurrently,
@@ -3561,7 +3561,7 @@ namespace KyoS.Web.Helpers
                 Other_City = model.Other_City,
                 Other_Phone = model.Other_Phone,
                 PrimarySourceIncome = model.PrimarySourceIncome,
-                ResidentialStatus = model.ResidentialStatus,
+                ResidentialStatus = ResidentialUtils.GetResidentialByIndex(model.IdResidentialStatus),
                 School = model.School,
                 School_EBD = model.School_EBD,
                 School_ESE = model.School_ESE,
@@ -3601,7 +3601,8 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
                 IdTCMClient = model.TcmClient.Id,
-                
+                IdEmployedStatus = Convert.ToInt32(model.EmploymentStatus),
+                EmployedStatus = _combosHelper.GetComboEmployed(),
                 TcmClient_FK = model.TcmClient_FK,
                 TcmClient = model.TcmClient,
                 Agency = model.Agency,
@@ -3621,7 +3622,6 @@ namespace KyoS.Web.Helpers
                 Other_City = model.Other_City,
                 Other_Phone = model.Other_Phone,
                 PrimarySourceIncome = model.PrimarySourceIncome,
-                ResidentialStatus = model.ResidentialStatus,
                 School = model.School,
                 School_EBD = model.School_EBD,
                 School_ESE = model.School_ESE,
@@ -3644,8 +3644,11 @@ namespace KyoS.Web.Helpers
                 StatusOther_Explain = model.StatusOther_Explain,
                 StatusResident = model.StatusResident,
                 StausCitizen = model.StausCitizen,
-                YearEnterUsa = model.YearEnterUsa
-            
+                YearEnterUsa = model.YearEnterUsa,
+                IdResidentialStatus = Convert.ToInt32(model.ResidentialStatus),
+                ResidentialStatus = _combosHelper.GetComboResidential()
+                
+
             };
         }
 

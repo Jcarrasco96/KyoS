@@ -174,14 +174,14 @@
         <span asp-validation-for="ReligionOrEspiritual" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="EmploymentStatus" class="control-label">Employment Status</label>
-        <input asp-for="EmploymentStatus" class="form-control">
-        <span asp-validation-for="EmploymentStatus" class="text-danger"></span>
+        <label asp-for="IdEmployedStatus" class="control-label"></label>
+        <select asp-for="IdEmployedStatus" asp-items="Model.EmployedStatus" class="form-control"></select>
+        <span asp-validation-for="IdEmployedStatus" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="ResidentialStatus" class="control-label">Residential Status</label>
-        <input asp-for="ResidentialStatus" class="form-control">
-        <span asp-validation-for="ResidentialStatus" class="text-danger"></span>
+        <label asp-for="IdResidentialStatus" class="control-label"></label>
+        <select asp-for="IdResidentialStatus" asp-items="Model.ResidentialStatus" class="form-control"></select>
+        <span asp-validation-for="IdResidentialStatus" class="text-danger"></span>
     </div>
 </div>
 <div class="col-md-push-12">
