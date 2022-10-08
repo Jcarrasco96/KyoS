@@ -102,6 +102,11 @@ namespace KyoS.Web.Helpers
         Stream DreamsMentalHealthTCMServicePlan(TCMServicePlanEntity servicePlan);
         #endregion
 
+        #region TCM Fars Form
+        Stream TCMFloridaSocialHSFarsReport(TCMFarsFormEntity intake);
+        Stream TCMDreamsMentalHealthFarsReport(TCMFarsFormEntity intake);
+        #endregion
+
         #region TCM Binder Section #1
         Stream TCMIntakeFormReport(TCMIntakeFormEntity intakeForm);
         Stream TCMIntakeConsentForTreatmentReport(TCMIntakeConsentForTreatmentEntity intakeConsentForTreatment);
@@ -114,9 +119,8 @@ namespace KyoS.Web.Helpers
         Stream TCMIntakeWelcome(TCMIntakeWelcomeEntity intakeWelcome);
         #endregion
 
-        #region TCM Fars reports
-        Stream TCMFloridaSocialHSFarsReport(TCMFarsFormEntity intake);
-        Stream TCMDreamsMentalHealthFarsReport(TCMFarsFormEntity intake);
+        #region TCM Binder Section #4
+        Stream TCMIntakeAppendixJ(TCMIntakeAppendixJEntity intakeAppendixJ);        
         #endregion
     }
 }

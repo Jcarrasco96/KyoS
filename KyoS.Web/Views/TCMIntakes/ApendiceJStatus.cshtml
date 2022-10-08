@@ -118,7 +118,7 @@
                                         {
                                             <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Edit TCM Discharge"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-route-id="@item.TcmClient.Id" asp-action="PrintTCMAppendixJ" class="btn btn-success" title="Print Appendix J" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     }
                                     @if (User.IsInRole("TCMSupervisor"))

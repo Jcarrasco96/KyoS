@@ -9290,6 +9290,79 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMIntakeAppendixJDS(TCMIntakeAppendixJEntity intakeAppendixJ)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakeAppendixJ"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmClient_FK", typeof(int));            
+            dt.Columns.Add("IsAwaiting", typeof(bool));
+            dt.Columns.Add("HasBeen", typeof(bool));
+            dt.Columns.Add("HasHad", typeof(bool));
+            dt.Columns.Add("IsAt", typeof(bool));
+            dt.Columns.Add("IsExperiencing", typeof(bool));
+            dt.Columns.Add("Date", typeof(DateTime));
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("SupervisorSignatureDate", typeof(DateTime));
+            dt.Columns.Add("Approved", typeof(int));
+            dt.Columns.Add("TcmSupervisorId", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            if (intakeAppendixJ != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intakeAppendixJ.Id,
+                                            0,
+                                            intakeAppendixJ.IsAwaiting,
+                                            intakeAppendixJ.HasBeen,
+                                            intakeAppendixJ.HasHad,
+                                            intakeAppendixJ.IsAt,
+                                            intakeAppendixJ.IsExperiencing,
+                                            intakeAppendixJ.Date,
+                                            intakeAppendixJ.AdmissionedFor,
+                                            intakeAppendixJ.SupervisorSignatureDate,
+                                            intakeAppendixJ.Approved,
+                                            0,
+                                            intakeAppendixJ.CreatedBy,
+                                            intakeAppendixJ.CreatedOn,
+                                            intakeAppendixJ.LastModifiedBy,
+                                            intakeAppendixJ.LastModifiedOn
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()
+                                       });
+            }
+
+            return dt;
+        }
+
         private DataTable GetTCMFarsDS(TCMFarsFormEntity fars)
         {
             DataTable dt = new DataTable
@@ -9731,6 +9804,84 @@ namespace KyoS.Web.Helpers
             dataSet = new DataSet();
             dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
+
+        #region TCM Fars Form reports
+        public Stream TCMFloridaSocialHSFarsReport(TCMFarsFormEntity fars)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Fars\\rptFarsFloridaSocialHS.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(fars.TCMClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(fars.TCMClient.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(fars.TCMClient.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(fars.TCMClient.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMFarsDS(fars));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "FarsForm");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+
+        public Stream TCMDreamsMentalHealthFarsReport(TCMFarsFormEntity fars)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Fars\\rptFarsDreamsMentalHealth.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(fars.TCMClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(fars.TCMClient.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(fars.TCMClient.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(fars.TCMClient.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMFarsDS(fars));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "FarsForm");
 
             WebReport.Report.Prepare();
 
@@ -10366,73 +10517,68 @@ namespace KyoS.Web.Helpers
         }
         #endregion
 
-        #region TCM Fars Form reports
-        public Stream TCMFloridaSocialHSFarsReport(TCMFarsFormEntity fars)
+        #region TCM Binder Section #4
+        public Stream TCMIntakeAppendixJ(TCMIntakeAppendixJEntity intakeAppendixJ)
         {
             WebReport WebReport = new WebReport();
 
-            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Fars\\rptFarsFloridaSocialHS.frx";
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakeAppendixJ.frx";
 
             RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
             WebReport.Report.Load(rdlcFilePath);
 
             DataSet dataSet = new DataSet();
-            dataSet.Tables.Add(GetClientDS(fars.TCMClient.Client));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetClinicDS(fars.TCMClient.Client.Clinic));
+            dataSet.Tables.Add(GetClinicDS(intakeAppendixJ.TcmClient.Casemanager.Clinic));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetEmergencyContactDS(fars.TCMClient.Client.EmergencyContact));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+            dataSet.Tables.Add(GetTCMClientDS(intakeAppendixJ.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetLegalGuardianDS(fars.TCMClient.Client.LegalGuardian));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetTCMFarsDS(fars));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "FarsForm");
-
-            WebReport.Report.Prepare();
-
-            Stream stream = new MemoryStream();
-            WebReport.Report.Export(new PDFSimpleExport(), stream);
-            stream.Position = 0;
-
-            return stream;
-        }
-
-        public Stream TCMDreamsMentalHealthFarsReport(TCMFarsFormEntity fars)
-        {
-            WebReport WebReport = new WebReport();
-
-            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Fars\\rptFarsDreamsMentalHealth.frx";
-
-            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
-            WebReport.Report.Load(rdlcFilePath);
-
-            DataSet dataSet = new DataSet();
-            dataSet.Tables.Add(GetClientDS(fars.TCMClient.Client));
+            dataSet.Tables.Add(GetClientDS(intakeAppendixJ.TcmClient.Client));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetClinicDS(fars.TCMClient.Client.Clinic));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+            dataSet.Tables.Add(GetCaseManagerDS(intakeAppendixJ.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetEmergencyContactDS(fars.TCMClient.Client.EmergencyContact));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+            dataSet.Tables.Add(GetTCMSupervisorDS(intakeAppendixJ.TcmSupervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMSupervisors");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetLegalGuardianDS(fars.TCMClient.Client.LegalGuardian));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+            dataSet.Tables.Add(GetTCMIntakeAppendixJDS(intakeAppendixJ));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeAppendixJ");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intakeAppendixJ.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeAppendixJ.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(intakeAppendixJ.TcmSupervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeAppendixJ.TcmSupervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(intakeAppendixJ.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeAppendixJ.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetTCMFarsDS(fars));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "FarsForm");
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
 
             WebReport.Report.Prepare();
 

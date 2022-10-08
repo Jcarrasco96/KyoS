@@ -3891,5 +3891,30 @@ namespace KyoS.Web.Controllers
             Stream stream = _reportHelper.TCMIntakeWelcome(entity);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
+        
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTCMAppendixJ(int id)
+        {
+            TCMIntakeAppendixJEntity entity = await _context.TCMIntakeAppendixJ
+
+                                                            .Include(t => t.TcmClient)
+                                                            .ThenInclude(c => c.Client)
+
+                                                            .Include(t => t.TcmClient)
+                                                            .ThenInclude(c => c.Casemanager)
+                                                            .ThenInclude(cm => cm.Clinic)
+
+                                                            .Include(t => t.TcmSupervisor)
+
+                                                            .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMIntakeAppendixJ(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
     }
 }
