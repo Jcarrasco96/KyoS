@@ -13,5 +13,15 @@ namespace KyoS.Web.Models
     {
 
         public List<Client_Referred> Client_Referred_List { get; set; }
+
+        public string Psychiatrist_Name { get; set; }
+        public string Psychiatrist_Phone { get; set; }
+        public string Psychiatrist_Address { get; set; }
+        public string Psychiatrist_CityStateZip { get; set; }
+
+        public string PCP_Name { get; set; }
+        public string PCP_Phone { get; set; }
+        public string PCP_Address { get; set; }
+        public string PCP_CityStateZip { get; set; }
     }
 }

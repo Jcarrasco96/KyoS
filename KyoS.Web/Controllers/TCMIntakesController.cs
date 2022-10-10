@@ -2877,6 +2877,8 @@ namespace KyoS.Web.Controllers
                                                             .ThenInclude(d => d.Clinic)
                                                             .Include(n => n.TCMIntakeForm)
                                                             .FirstOrDefault(n => n.Id == id);
+                        if (tcmClient.TCMIntakeForm == null)
+                            tcmClient.TCMIntakeForm = new TCMIntakeFormEntity();
 
                         model = new TCMIntakeCoordinationCareViewModel
                         {

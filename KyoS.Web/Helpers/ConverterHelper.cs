@@ -4970,7 +4970,6 @@ namespace KyoS.Web.Helpers
                                       .Where(n => n.TCMAssessment.Id == model.Id)
                                       .ToList()
 
-
             };
         }
 
@@ -5370,7 +5369,7 @@ namespace KyoS.Web.Helpers
                 Status = TCMDocumentStatus.Edition,
                 TCMSupervisor = model.TCMSupervisor,
                 Client_Referred_List = model.TcmClient.Client.Client_Referred.ToList()
-
+                
             };
 
             return salida;
