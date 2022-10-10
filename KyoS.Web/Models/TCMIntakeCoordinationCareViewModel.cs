@@ -15,5 +15,11 @@ namespace KyoS.Web.Models
         [Range(1, int.MaxValue, ErrorMessage = "You must select a Client.")]
 
         public int IdTCMClient { get; set; }
+
+        public string PCP_Name { get; set; }
+        public string PCP_Address { get; set; }
+        public string PCP_CityStateZip { get; set; }
+        public string PCP_Phone { get; set; }
+        public string PCP_FaxNumber { get; set; }
     }
 }

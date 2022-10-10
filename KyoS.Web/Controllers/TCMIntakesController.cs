@@ -165,6 +165,10 @@ namespace KyoS.Web.Controllers
                                                 .Include(n => n.Client.Psychiatrist)
                                                 .Include(n => n.TCMIntakeCoordinationCare)
                                                 .FirstOrDefault(n => n.Id == id);
+            if (tcmClient.Client.Doctor == null)
+                tcmClient.Client.Doctor = new DoctorEntity();
+            if (tcmClient.Client.Psychiatrist == null)
+                tcmClient.Client.Psychiatrist = new PsychiatristEntity();
 
             TCMIntakeFormViewModel model;
 
@@ -227,8 +231,17 @@ namespace KyoS.Web.Controllers
                         RelationshipsEC = _combosHelper.GetComboRelationships(),
                         IdRelationshipLG = 0,
                         RelationshipsLG = _combosHelper.GetComboRelationships(),
-                        HealthPlan = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id)
-
+                        HealthPlan = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id),
+                        PCP_Name = tcmClient.Client.Doctor.Name,
+                        PCP_Address = tcmClient.Client.Doctor.Address,
+                        PCP_Phone = tcmClient.Client.Doctor.Telephone,
+                        PCP_CityStateZip = tcmClient.Client.Doctor.Address,
+                        PCP_Place = "",
+                        PCP_FaxNumber = tcmClient.Client.Doctor.FaxNumber,
+                        Psychiatrist_Name = tcmClient.Client.Psychiatrist.Name,
+                        Psychiatrist_Address = tcmClient.Client.Psychiatrist.Address,
+                        Psychiatrist_Phone = tcmClient.Client.Psychiatrist.Telephone,
+                        Psychiatrist_CityStateZip = tcmClient.Client.Psychiatrist.Address
                     };
                     if (tcmClient.Client.LegalGuardian != null)
                     {
@@ -330,7 +343,17 @@ namespace KyoS.Web.Controllers
                 IdRelationshipEC = 0,
                 RelationshipsEC = _combosHelper.GetComboRelationships(),
                 IdRelationshipLG = 0,
-                RelationshipsLG = _combosHelper.GetComboRelationships()
+                RelationshipsLG = _combosHelper.GetComboRelationships(),
+                PCP_Name = tcmClient.Client.Doctor.Name,
+                PCP_Address = tcmClient.Client.Doctor.Address,
+                PCP_Phone = tcmClient.Client.Doctor.Telephone,
+                PCP_CityStateZip = tcmClient.Client.Doctor.Telephone,
+                PCP_Place = "",
+                Psychiatrist_Name = tcmClient.Client.Psychiatrist.Name,
+                Psychiatrist_Address = tcmClient.Client.Psychiatrist.Address,
+                Psychiatrist_Phone = tcmClient.Client.Psychiatrist.Telephone,
+                Psychiatrist_CityStateZip = tcmClient.Client.Psychiatrist.Telephone,
+                PCP_FaxNumber = tcmClient.Client.Doctor.FaxNumber
 
             };
 
@@ -2842,23 +2865,22 @@ namespace KyoS.Web.Controllers
                                                                                  .ThenInclude(n => n.Casemanager)
                                                                                  .ThenInclude(n => n.Clinic)
                                                                                  .Include(n => n.TcmClient)
-                                                                                 .ThenInclude(n => n.Client)
-                                                                                 .ThenInclude(n => n.Doctor)
+                                                                                 .ThenInclude(n => n.TCMIntakeForm)
                                                                                  .FirstOrDefault(n => n.TcmClient.Id == id);
 
                     if (intakeCoordination == null)
                     {
+                        TCMClientEntity tcmClient = _context.TCMClient
+                                                            .Include(d => d.Client)
+                                                            .ThenInclude(d => d.LegalGuardian)
+                                                            .Include(d => d.Casemanager)
+                                                            .ThenInclude(d => d.Clinic)
+                                                            .Include(n => n.TCMIntakeForm)
+                                                            .FirstOrDefault(n => n.Id == id);
 
                         model = new TCMIntakeCoordinationCareViewModel
                         {
-                            TcmClient = _context.TCMClient
-                                                .Include(d => d.Client)
-                                                .ThenInclude(d => d.LegalGuardian)
-                                                .Include(d => d.Casemanager)
-                                                .ThenInclude(d => d.Clinic)
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.Doctor)
-                                                .FirstOrDefault(n => n.Id == id),
+                            TcmClient = tcmClient,
                             Date = DateTime.Now,
                             Id = 0,
                             CreatedBy = user_logged.UserName,
@@ -2882,26 +2904,34 @@ namespace KyoS.Web.Controllers
                             IRefuse = true,
                             PCP = true,
                             Specialist = false,
-                            SpecialistText = ""
-                            
-
-
+                            SpecialistText = "",
+                            PCP_Name = tcmClient.TCMIntakeForm.PCP_Name,
+                            PCP_Address = tcmClient.TCMIntakeForm.PCP_Address,
+                            PCP_Phone = tcmClient.TCMIntakeForm.PCP_Phone,
+                            PCP_CityStateZip = tcmClient.TCMIntakeForm.PCP_CityStateZip,
+                            PCP_FaxNumber = tcmClient.TCMIntakeForm.PCP_FaxNumber,
 
                         };
                         if (model.TcmClient.Client.LegalGuardian == null)
                             model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
-                        if (model.TcmClient.Client.Doctor == null)
-                            model.TcmClient.Client.Doctor = new DoctorEntity();
+                       
                         return View(model);
                     }
                     else
                     {
                         if (intakeCoordination.TcmClient.Client.LegalGuardian == null)
                             intakeCoordination.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
-                        if (intakeCoordination.TcmClient.Client.Doctor == null)
-                            intakeCoordination.TcmClient.Client.Doctor = new DoctorEntity();
+                        
                         model = _converterHelper.ToTCMIntakeCoordinationCareViewModel(intakeCoordination);
-
+                        
+                        if (intakeCoordination.TcmClient.TCMIntakeForm != null)
+                        {
+                            model.PCP_Name = intakeCoordination.TcmClient.TCMIntakeForm.PCP_Name;
+                            model.PCP_Address = intakeCoordination.TcmClient.TCMIntakeForm.PCP_Address;
+                            model.PCP_Phone = intakeCoordination.TcmClient.TCMIntakeForm.PCP_Phone;
+                            model.PCP_CityStateZip = intakeCoordination.TcmClient.TCMIntakeForm.PCP_CityStateZip;
+                            model.PCP_FaxNumber = intakeCoordination.TcmClient.TCMIntakeForm.PCP_FaxNumber;
+                        }
                         return View(model);
                     }
 
@@ -2920,10 +2950,25 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            TCMIntakeFormEntity intake = _context.TCMIntakeForms
+                                                 .FirstOrDefault(u => u.TcmClient.Id == IntakeViewModel.IdTCMClient);
+
             if (ModelState.IsValid)
             {
                 TCMIntakeCoordinationCareEntity IntakeCoordination = await _converterHelper.ToTCMIntakeCoordinationCareEntity(IntakeViewModel, false, user_logged.UserName);
 
+                if (intake != null)
+                {
+                    intake.PCP_Name = IntakeViewModel.PCP_Name;
+                    intake.PCP_Address = IntakeViewModel.PCP_Address;
+                    intake.PCP_Phone = IntakeViewModel.PCP_Phone;
+                    intake.PCP_FaxNumber = IntakeViewModel.PCP_FaxNumber;
+                    intake.PCP_CityStateZip = IntakeViewModel.PCP_CityStateZip;
+                    
+                    _context.TCMIntakeForms.Update(intake);
+                    await _context.SaveChangesAsync();
+                }
+               
                 if (IntakeCoordination.Id == 0)
                 {
                     IntakeCoordination.TcmClient = null;

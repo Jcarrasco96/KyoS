@@ -3543,7 +3543,7 @@ namespace KyoS.Web.Helpers
                                           .Include(n => n.Client.Client_Referred)
                                           .Include(n => n.Client.Doctor)
                                           .Include(n => n.Client.Psychiatrist)
-                                          .FirstOrDefaultAsync(n => n.Id == model.Id),
+                                          .FirstOrDefaultAsync(n => n.Id == model.IdTCMClient),
                 Agency = model.Agency,
                 CaseManagerNotes = model.CaseManagerNotes,
                 Elibigility = model.Elibigility,
@@ -3584,7 +3584,18 @@ namespace KyoS.Web.Helpers
                 StatusOther_Explain = model.StatusOther_Explain,
                 StatusResident = model.StatusResident,
                 StausCitizen = model.StausCitizen,
-                YearEnterUsa = model.YearEnterUsa
+                YearEnterUsa = model.YearEnterUsa,
+                PCP_Name = model.PCP_Name,
+                PCP_Address = model.PCP_Address,
+                PCP_Phone = model.PCP_Phone,
+                PCP_CityStateZip = model.PCP_CityStateZip,
+                PCP_Place = model.PCP_Place,
+                PCP_FaxNumber = model.PCP_FaxNumber,
+                Psychiatrist_Name = model.Psychiatrist_Name,
+                Psychiatrist_Address = model.Psychiatrist_Address,
+                Psychiatrist_Phone = model.Psychiatrist_Phone,
+                Psychiatrist_CityStateZip = model.Psychiatrist_CityStateZip
+
 
             };
 
@@ -3646,8 +3657,17 @@ namespace KyoS.Web.Helpers
                 StausCitizen = model.StausCitizen,
                 YearEnterUsa = model.YearEnterUsa,
                 IdResidentialStatus = Convert.ToInt32(model.ResidentialStatus),
-                ResidentialStatus = _combosHelper.GetComboResidential()
-                
+                ResidentialStatus = _combosHelper.GetComboResidential(),
+                PCP_Name = model.PCP_Name,
+                PCP_Address = model.PCP_Address,
+                PCP_Phone = model.PCP_Phone,
+                PCP_CityStateZip = model.PCP_CityStateZip,
+                PCP_Place = model.PCP_Place,
+                PCP_FaxNumber = model.PCP_FaxNumber,
+                Psychiatrist_Name = model.Psychiatrist_Name,
+                Psychiatrist_Address = model.Psychiatrist_Address,
+                Psychiatrist_Phone = model.Psychiatrist_Phone,
+                Psychiatrist_CityStateZip = model.Psychiatrist_CityStateZip
 
             };
         }

@@ -30,11 +30,12 @@
             <input type="hidden" asp-for="TcmClient_FK" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="PCP_FaxNumber" />
             <partial name="_TCMIntakesForm" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Create" class="btn btn-primary" />
                 <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.IdTCMClient" asp-route-section="1" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
-               
+
             </div>
         </form>
     </div>
