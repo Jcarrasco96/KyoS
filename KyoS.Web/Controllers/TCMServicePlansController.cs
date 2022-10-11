@@ -211,7 +211,7 @@ namespace KyoS.Web.Controllers
                         await _context.SaveChangesAsync();
                         if (origin == 0)
                         {
-                            return RedirectToAction("Index", "TCMServicePlans", new { caseNumber = tcmServicePlanEntity.TcmClient.CaseNumber });
+                            return RedirectToAction("TCMIntakeSectionDashboard","TCMIntakes", new { id = tcmServicePlanViewModel.ID_TcmClient, section = 4 }); ;
                         }
                         else
                         {
@@ -371,7 +371,6 @@ namespace KyoS.Web.Controllers
                     if (origin == 0)
                     {
                         return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = tcmServicePlanEntity.TcmClient.Id, section = 4 });
-                        //return RedirectToAction("Index", "TCMServicePlans", new { caseNumber = tcmServicePlanEntity.TcmClient.CaseNumber });
                     }
                     else
                     {
