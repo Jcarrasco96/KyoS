@@ -1308,12 +1308,17 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult CreateAdendum(string idClient = "")
+        public IActionResult CreateAdendum(string caseNumber = "", int idTcmClient = 0)
         {
             TCMAdendumViewModel model = null;
             UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                               .FirstOrDefault(u => u.UserName == User.Identity.Name);
             CaseMannagerEntity caseManager = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+
+            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == idTcmClient);
+            if (tcmServicePlan == null)
+                tcmServicePlan = new TCMServicePlanEntity();
+
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -1324,9 +1329,9 @@ namespace KyoS.Web.Controllers
                         ID_TcmDominio = 0,
                         CreatedBy = user_logged.UserName,
                         CreatedOn = DateTime.Now,
-                        TcmDominio = _combosHelper.GetComboTCMServices(),
+                        TcmDominio = _combosHelper.GetComboServicesNotUsed(tcmServicePlan.Id),
                         ID_TcmServicePlan = 0,
-                        ListTcmServicePlan = _combosHelper.GetComboServicesPlan(user_logged.Clinic.Id, caseManager.Id, idClient),
+                        ListTcmServicePlan = _combosHelper.GetComboServicesPlan(user_logged.Clinic.Id, caseManager.Id, caseNumber),
                         
 
                     };

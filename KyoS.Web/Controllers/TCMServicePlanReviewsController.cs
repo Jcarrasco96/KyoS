@@ -784,6 +784,8 @@ namespace KyoS.Web.Controllers
                                                             .Include(u => u.TcmServicePlan)
                                                             .ThenInclude(g => g.TcmClient)
                                                             .ThenInclude(g => g.Client)
+                                                            .Include(u => u.TcmServicePlan)
+                                                            .ThenInclude(g => g.TCMService)
                                                             .FirstOrDefaultAsync(s => s.Id == id);
             if (tcmDomainEntity == null)
             {
@@ -799,7 +801,7 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("CaseManager"))
             {
                 tcmDomainViewModel = _converterHelper.ToTCMDomainViewModel(tcmDomainEntity);
-                
+                tcmDomainViewModel.Id_Service = _context.TCMServices.First(n => n.Code == tcmDomainEntity.Code).Id;
             }
 
             return View(tcmDomainViewModel);

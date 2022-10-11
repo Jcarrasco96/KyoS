@@ -117,13 +117,13 @@
                             {
                                 @if (item.TcmDomain.Origin == "Service Plan Review")
                                 {
-                                    <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlanReviews", new { id = item.TcmDomain.Id }, Context.Request.Scheme)','Create Objetive of Service Plan Review')" class="btn btn-warning" title="Create Objetive of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
+                                    <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlanReviews", new { id = item.TcmDomain.Id }, Context.Request.Scheme)','Edit Objetive of Service Plan Review')" class="btn btn-warning" title="Edit Objetive of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
                                     <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlanReviews", new { id = item.TcmDomain.Id, origen = 1, idServicePlanReview = item.TcmServicePlanReview.Id }, Context.Request.Scheme)','Create Objetive of Service Plan Review')" class="btn btn-info" title="Create Objetive of this Service Plan Review"><i class="glyphicon glyphicon-plus"></i> </a>
                                     <a asp-action="DeleteDomain" asp-route-id="@item.Id" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete Domain"></i></a>
                                 }
                                 else
                                 {
-                                    <a onclick="showInPopup('@Url.Action("EditDomainReadOnly", "TCMServicePlanReviews", new { id = item.TcmDomain.Id }, Context.Request.Scheme)','Create Objetive of Service Plan Review')" class="btn btn-warning" title="Create Objetive of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
+                                    <a onclick="showInPopup('@Url.Action("EditDomainReadOnly", "TCMServicePlanReviews", new { id = item.TcmDomain.Id }, Context.Request.Scheme)','Edit Objetive of Service Plan Review')" class="btn btn-warning" title="Edit Objetive of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
                                     <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlanReviews", new { id = item.TcmDomain.Id, idServicePlanReview = item.TcmServicePlanReview.Id }, Context.Request.Scheme)','Create Objetive of Service Plan Review')" class="btn btn-info" title="Create Objetive of this Service Plan Review"><i class="glyphicon glyphicon-plus"></i> </a>
                                     <a asp-action="DeleteDomain" asp-route-id="@item.Id" class="btn btn-danger disabled"><i class="glyphicon glyphicon-trash" title="Delete Service PLan Review Domain"></i></a>
                                 }

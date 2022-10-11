@@ -135,7 +135,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMServiceEntity tcmServiceEntity = await _context.TCMServices.FirstOrDefaultAsync(s => s.Name == tcmServiceViewModel.Name);
+                TCMServiceEntity tcmServiceEntity = await _context.TCMServices.FirstOrDefaultAsync(s => s.Code == tcmServiceViewModel.Code);
                 if (tcmServiceEntity == null)
                 {
                     tcmServiceEntity = await _converterHelper.ToTCMServiceEntity(tcmServiceViewModel, true, user_logged.UserName);
