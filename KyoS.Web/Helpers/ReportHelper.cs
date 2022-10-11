@@ -8553,6 +8553,16 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("StatusResident", typeof(bool));
             dt.Columns.Add("StausCitizen", typeof(bool));
             dt.Columns.Add("YearEnterUsa", typeof(string));
+            dt.Columns.Add("PCP_Address", typeof(string));
+            dt.Columns.Add("PCP_CityStateZip", typeof(string));
+            dt.Columns.Add("PCP_Name", typeof(string));
+            dt.Columns.Add("PCP_Phone", typeof(string));
+            dt.Columns.Add("PCP_Place", typeof(string));
+            dt.Columns.Add("Psychiatrist_Address", typeof(string));
+            dt.Columns.Add("Psychiatrist_CityStateZip", typeof(string));
+            dt.Columns.Add("Psychiatrist_Name", typeof(string));
+            dt.Columns.Add("Psychiatrist_Phone", typeof(string));
+            dt.Columns.Add("PCP_FaxNumber", typeof(string));
 
             if (intakeForm != null)
             {
@@ -8604,13 +8614,23 @@ namespace KyoS.Web.Helpers
                                             intakeForm.StatusOther_Explain,
                                             intakeForm.StatusResident,
                                             intakeForm.StausCitizen,
-                                            intakeForm.YearEnterUsa
-                                            });
+                                            intakeForm.YearEnterUsa,
+                                            intakeForm.PCP_Address,
+                                            intakeForm.PCP_CityStateZip,
+                                            intakeForm.PCP_Name,
+                                            intakeForm.PCP_Phone,
+                                            intakeForm.PCP_Place,
+                                            intakeForm.Psychiatrist_Address,
+                                            intakeForm.Psychiatrist_CityStateZip,
+                                            intakeForm.Psychiatrist_Name,
+                                            intakeForm.Psychiatrist_Phone,
+                                            intakeForm.PCP_FaxNumber
+                                        });
             }
             else
             {
                 dt.Rows.Add(new object[]
-                                            {
+                                        {
                                             0,
                                             0,
                                             new DateTime(),
@@ -8657,8 +8677,18 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             false,
                                             false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
                                             string.Empty
-                                            });
+                                       });
             }
 
             return dt;
@@ -9937,15 +9967,7 @@ namespace KyoS.Web.Helpers
 
             dataSet = new DataSet();
             dataSet.Tables.Add(GetEmergencyContactDS(intakeForm.TcmClient.Client.EmergencyContact));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
-            
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetPsychiatristDS(intakeForm.TcmClient.Client.Psychiatrist));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Psychiatrists");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetDoctorDS(intakeForm.TcmClient.Client.Doctor));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Doctors");
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");           
 
             dataSet = new DataSet();
             dataSet.Tables.Add(GetTCMIntakeFormDS(intakeForm));
