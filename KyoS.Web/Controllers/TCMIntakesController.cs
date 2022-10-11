@@ -696,10 +696,11 @@ namespace KyoS.Web.Controllers
                         model.EmergencyContacTelephone = entity.TcmClient.Client.EmergencyContact.Telephone;
 
                     }
-                    if (entity.TcmClient.Client.Clients_HealthInsurances != null)
+                    if (entity.TcmClient.Client.Clients_HealthInsurances.Count > 0)
                     {
                         model.HealthMemberId = entity.TcmClient.Client.Clients_HealthInsurances.ElementAtOrDefault(0).MemberId;
-                
+                        model.IdHealthPlan = entity.TcmClient.Client.Clients_HealthInsurances.ElementAtOrDefault(0).HealthInsurance.Id;
+
                     }
                     if (model.TcmClient.Client.Clients_Diagnostics.Count() == 0)
                     {
@@ -719,7 +720,6 @@ namespace KyoS.Web.Controllers
                     model.IdRelationshipEC = Convert.ToInt32(entity.TcmClient.Client.RelationShipOfLegalGuardian);
                     model.HealthPlan = _combosHelper.GetComboRelationships();
 
-                    model.IdHealthPlan = entity.TcmClient.Client.Clients_HealthInsurances.ElementAtOrDefault(0).HealthInsurance.Id;
                     model.HealthPlan = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id);
 
                     ViewData["origi"] = origi;
