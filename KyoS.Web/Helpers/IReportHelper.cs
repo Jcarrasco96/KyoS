@@ -120,7 +120,8 @@ namespace KyoS.Web.Helpers
         #endregion
 
         #region TCM Binder Section #4
-        Stream TCMIntakeAppendixJ(TCMIntakeAppendixJEntity intakeAppendixJ);        
+        Stream TCMIntakeAppendixJ(TCMIntakeAppendixJEntity intakeAppendixJ);
+        Stream TCMDischarge(TCMDischargeEntity intakeDischarge);
         #endregion
     }
 }

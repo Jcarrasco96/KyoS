@@ -724,7 +724,7 @@
                         @if (Model.TcmServicePlan.TCMDischarge.Approved == 2)
                         {
                             <div class="thumbnail list-group-item list-group-item-success">
-                                <a style="text-decoration: none;" asp-action="PrintDischarge" asp-controller="TCMIntakes" asp-route-id="@Model.TcmServicePlan.TCMDischarge.Id" asp-route-IdServicePlan="@Model.TcmServicePlan.Id" role="button">
+                                <a style="text-decoration: none;" asp-action="PrintDischarge" asp-controller="TCMIntakes" asp-route-id="@Model.TcmServicePlan.TCMDischarge.Id" asp-route-IdServicePlan="@Model.TcmServicePlan.Id" role="button" target="_blank">
                                     <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Discharge<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>                                    
                                 </a>
                                 <a style="text-decoration: none;" asp-controller="TCMIntakes" asp-route-id="@Model.TcmServicePlan.TCMDischarge.Id" asp-action="PrintDischarge" role="button" title="Print Discharge" target="_blank">
