@@ -460,10 +460,13 @@ namespace KyoS.Web.Controllers
             {
                 
                 List<ClientEntity> ClientList = await _context.Clients
-                                                          .Include(n => n.FarsFormList)
-                                                          .Where(n => n.FarsFormList.Count == 0 && n.Clinic.Id == user_logged.Clinic.Id
-                                                             && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
-                                                          .ToListAsync();
+                                                              .Include(n => n.FarsFormList)
+                                                              .Where(n => n.FarsFormList.Count == 0 
+                                                                 && n.Clinic.Id == user_logged.Clinic.Id
+                                                                 && (n.IdFacilitatorPSR == facilitator.Id 
+                                                                    || n.IndividualTherapyFacilitator.Id == facilitator.Id)
+                                                                 && n.OnlyTCM == false)
+                                                              .ToListAsync();
 
                 return View(ClientList);
             }
@@ -471,7 +474,9 @@ namespace KyoS.Web.Controllers
             {
                 List<ClientEntity> ClientList = await _context.Clients
                                                           .Include(n => n.FarsFormList)
-                                                          .Where(n => n.FarsFormList.Count == 0 && n.Clinic.Id == user_logged.Clinic.Id)
+                                                          .Where(n => n.FarsFormList.Count == 0 
+                                                              && n.Clinic.Id == user_logged.Clinic.Id
+                                                              && n.OnlyTCM == false)
                                                           .ToListAsync();
 
                 return View(ClientList);

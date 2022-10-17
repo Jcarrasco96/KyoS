@@ -9782,6 +9782,8 @@ namespace KyoS.Web.Controllers
                                                  && wc.Workday.Week.Id == id
                                                  && wc.Present == true
                                                  && wc.Client != null))
+                                      .OrderBy(m => m.Facilitator)
+                                      .OrderBy(m => m.Client.Name)
                                       .ToListAsync());
         }
 
