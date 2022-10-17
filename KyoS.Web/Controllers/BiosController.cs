@@ -1195,7 +1195,9 @@ namespace KyoS.Web.Controllers
 
             List<ClientEntity> ClientList = await _context.Clients
                                                           .Include(n => n.Bio)
-                                                          .Where(n => n.Bio == null && n.Clinic.Id == user_logged.Clinic.Id)
+                                                          .Where(n => n.Bio == null 
+                                                            && n.Clinic.Id == user_logged.Clinic.Id
+                                                            && n.OnlyTCM == false)
                                                           .ToListAsync();
 
             return View(ClientList);
