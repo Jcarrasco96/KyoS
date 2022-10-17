@@ -81,17 +81,32 @@
                                     <div style="display:none">
                                         <table class="table table-striped table-bordered">
                                             <tr>
-                                                <th class="col-md-6">Client Name</th>
-                                                <th class="col-md-3" style="text-align:center;">Date of birth</th>
+                                                <th class="col-md-3">Client Name</th>
+                                                <th class="col-md-2" style="text-align:center;">Code</th>
+                                                <th class="col-md-2" style="text-align:center;">Dx</th>
+                                                <th class="col-md-2" style="text-align:center;">Date of birth</th>
                                                 <th class="col-md-3" style="text-align:center;">Medical ID</th>
                                             </tr>
                                             @foreach (var client in item.Clients)
                                             {
-                                        <tr>
-                                            <td>@Html.DisplayFor(modelItem => client.Name)</td>
-                                            <td align="center">@Html.DisplayFor(modelItem => client.DateOfBirth)</td>
-                                            <td align="center">@Html.DisplayFor(modelItem => client.MedicaidID)</td>
-                                        </tr>
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => client.Name)
+                                                    </td>
+                                                    <td align="center">
+                                                        @Html.DisplayFor(modelItem => client.Code)
+                                                    </td>
+                                                    @if (client.Clients_Diagnostics.Count() == 0)
+                                                    {
+                                                        <td align="center"></td>
+                                                    }
+                                                    else
+                                                    { 
+                                                        <td align="center">@Html.DisplayFor(modelItem => client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code)</td>
+                                                    }
+                                                    <td align="center">@Html.DisplayFor(modelItem => client.DateOfBirth)</td>
+                                                    <td align="center">@Html.DisplayFor(modelItem => client.MedicaidID)</td>
+                                                </tr>
                                             }
                                         </table>
                                     </div>

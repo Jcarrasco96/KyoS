@@ -342,7 +342,8 @@ namespace KyoS.Web.Controllers
 
                 ViewBag.MedicalHistoryMissing = _context.Clients
                                                         .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                              && wc.IntakeMedicalHistory == null)).ToString();
+                                                              && wc.IntakeMedicalHistory == null
+                                                              && wc.OnlyTCM == false)).ToString();
 
                 ViewBag.PendingMtp = _context.MTPs
                                              .Count(m => (m.Client.Clinic.Id == user_logged.Clinic.Id

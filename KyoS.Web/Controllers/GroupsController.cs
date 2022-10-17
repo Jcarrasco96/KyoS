@@ -58,29 +58,35 @@ namespace KyoS.Web.Controllers
 
             if (user_logged.UserType.ToString() == "Manager")
             {
-                return View(await _context.Groups
+                List<GroupEntity> group = await _context.Groups
 
-                                          .Include(g => g.Facilitator)
+                                                        .Include(g => g.Facilitator)
 
-                                          .Include(g => g.Clients)
+                                                        .Include(g => g.Clients)
+                                                        .ThenInclude(g => g.Clients_Diagnostics)
+                                                        .ThenInclude(g => g.Diagnostic)
+                                                        .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id && g.Service == Common.Enums.ServiceType.PSR))
+                                                        .OrderBy(g => g.Facilitator.Name)
+                                                        .ToListAsync();
 
-                                          .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id && g.Service == Common.Enums.ServiceType.PSR))
-                                          .OrderBy(g => g.Facilitator.Name)
-                                          .ToListAsync());
+                return View(group);
             }
             if (user_logged.UserType.ToString() == "Facilitator")
             {
-                return View(await _context.Groups
+                List<GroupEntity> group = await _context.Groups
 
-                                      .Include(g => g.Facilitator)
+                                                        .Include(g => g.Facilitator)
 
-                                      .Include(g => g.Clients)
+                                                        .Include(g => g.Clients)
+                                                        .ThenInclude(g => g.Clients_Diagnostics)
+                                                        .ThenInclude(g => g.Diagnostic)
+                                                        .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id 
+                                                             && g.Service == Common.Enums.ServiceType.PSR)
+                                                             && g.Facilitator.LinkedUser == user_logged.UserName)
+                                                        .OrderBy(g => g.Facilitator.Name)
+                                                        .ToListAsync();
 
-                                      .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id 
-                                                    && g.Service == Common.Enums.ServiceType.PSR)
-                                                    && g.Facilitator.LinkedUser == user_logged.UserName)
-                                      .OrderBy(g => g.Facilitator.Name)
-                                      .ToListAsync());
+                return View(group);
             }
 
             return RedirectToAction("Home/Error404");
