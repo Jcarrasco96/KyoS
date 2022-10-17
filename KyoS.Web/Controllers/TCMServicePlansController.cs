@@ -2289,7 +2289,7 @@ namespace KyoS.Web.Controllers
                                                        .Include(sp => sp.TcmClient)
                                                        .ThenInclude(c => c.Casemanager)
 
-                                                       .Include(sp => sp.TCMDomain)
+                                                       .Include(sp => sp.TCMDomain.Where(d => d.Origin == "Service Plan"))
                                                        .ThenInclude(d => d.TCMObjetive)
 
                                                        .FirstOrDefault(sp => (sp.Id == id && sp.Approved == 2));
