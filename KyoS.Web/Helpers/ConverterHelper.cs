@@ -3543,11 +3543,11 @@ namespace KyoS.Web.Helpers
                                           .Include(n => n.Client.Client_Referred)
                                           .Include(n => n.Client.Doctor)
                                           .Include(n => n.Client.Psychiatrist)
-                                          .FirstOrDefaultAsync(n => n.Id == model.Id),
+                                          .FirstOrDefaultAsync(n => n.Id == model.IdTCMClient),
                 Agency = model.Agency,
                 CaseManagerNotes = model.CaseManagerNotes,
                 Elibigility = model.Elibigility,
-                EmploymentStatus = model.EmploymentStatus,
+                EmploymentStatus = EmployedUtils.GetEmployedByIndex(model.IdEmployedStatus),
                 Grade = model.Grade,
                 IntakeDate = model.IntakeDate,
                 IsClientCurrently = model.IsClientCurrently,
@@ -3561,7 +3561,7 @@ namespace KyoS.Web.Helpers
                 Other_City = model.Other_City,
                 Other_Phone = model.Other_Phone,
                 PrimarySourceIncome = model.PrimarySourceIncome,
-                ResidentialStatus = model.ResidentialStatus,
+                ResidentialStatus = ResidentialUtils.GetResidentialByIndex(model.IdResidentialStatus),
                 School = model.School,
                 School_EBD = model.School_EBD,
                 School_ESE = model.School_ESE,
@@ -3584,7 +3584,18 @@ namespace KyoS.Web.Helpers
                 StatusOther_Explain = model.StatusOther_Explain,
                 StatusResident = model.StatusResident,
                 StausCitizen = model.StausCitizen,
-                YearEnterUsa = model.YearEnterUsa
+                YearEnterUsa = model.YearEnterUsa,
+                PCP_Name = model.PCP_Name,
+                PCP_Address = model.PCP_Address,
+                PCP_Phone = model.PCP_Phone,
+                PCP_CityStateZip = model.PCP_CityStateZip,
+                PCP_Place = model.PCP_Place,
+                PCP_FaxNumber = model.PCP_FaxNumber,
+                Psychiatrist_Name = model.Psychiatrist_Name,
+                Psychiatrist_Address = model.Psychiatrist_Address,
+                Psychiatrist_Phone = model.Psychiatrist_Phone,
+                Psychiatrist_CityStateZip = model.Psychiatrist_CityStateZip
+
 
             };
 
@@ -3601,7 +3612,8 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
                 IdTCMClient = model.TcmClient.Id,
-                
+                IdEmployedStatus = Convert.ToInt32(model.EmploymentStatus),
+                EmployedStatus = _combosHelper.GetComboEmployed(),
                 TcmClient_FK = model.TcmClient_FK,
                 TcmClient = model.TcmClient,
                 Agency = model.Agency,
@@ -3621,7 +3633,6 @@ namespace KyoS.Web.Helpers
                 Other_City = model.Other_City,
                 Other_Phone = model.Other_Phone,
                 PrimarySourceIncome = model.PrimarySourceIncome,
-                ResidentialStatus = model.ResidentialStatus,
                 School = model.School,
                 School_EBD = model.School_EBD,
                 School_ESE = model.School_ESE,
@@ -3644,8 +3655,20 @@ namespace KyoS.Web.Helpers
                 StatusOther_Explain = model.StatusOther_Explain,
                 StatusResident = model.StatusResident,
                 StausCitizen = model.StausCitizen,
-                YearEnterUsa = model.YearEnterUsa
-            
+                YearEnterUsa = model.YearEnterUsa,
+                IdResidentialStatus = Convert.ToInt32(model.ResidentialStatus),
+                ResidentialStatus = _combosHelper.GetComboResidential(),
+                PCP_Name = model.PCP_Name,
+                PCP_Address = model.PCP_Address,
+                PCP_Phone = model.PCP_Phone,
+                PCP_CityStateZip = model.PCP_CityStateZip,
+                PCP_Place = model.PCP_Place,
+                PCP_FaxNumber = model.PCP_FaxNumber,
+                Psychiatrist_Name = model.Psychiatrist_Name,
+                Psychiatrist_Address = model.Psychiatrist_Address,
+                Psychiatrist_Phone = model.Psychiatrist_Phone,
+                Psychiatrist_CityStateZip = model.Psychiatrist_CityStateZip
+
             };
         }
 
@@ -4947,7 +4970,6 @@ namespace KyoS.Web.Helpers
                                       .Where(n => n.TCMAssessment.Id == model.Id)
                                       .ToList()
 
-
             };
         }
 
@@ -5347,7 +5369,7 @@ namespace KyoS.Web.Helpers
                 Status = TCMDocumentStatus.Edition,
                 TCMSupervisor = model.TCMSupervisor,
                 Client_Referred_List = model.TcmClient.Client.Client_Referred.ToList()
-
+                
             };
 
             return salida;

@@ -32,27 +32,32 @@
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-2">
-        <label asp-for="TcmClient.Client.Psychiatrist.Name" class="control-label">Psychiatrist:</label>
-        <input asp-for="TcmClient.Client.Psychiatrist.Name" class="form-control" readonly>
-        <span asp-validation-for="TcmClient.Client.Psychiatrist.Name" class="text-danger"></span>
+        <label asp-for="Psychiatrist_Name" class="control-label">Psychiatrist:</label>
+        <input asp-for="Psychiatrist_Name" class="form-control" >
+        <span asp-validation-for="Psychiatrist_Name" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="TcmClient.Client.Psychiatrist.Telephone" class="control-label">Phone No</label>
-        <input asp-for="TcmClient.Client.Psychiatrist.Telephone" class="form-control" readonly>
-        <span asp-validation-for="TcmClient.Client.Psychiatrist.Telephone" class="text-danger"></span>
+        <label asp-for="Psychiatrist_Phone" class="control-label">Phone No</label>
+        <input asp-for="Psychiatrist_Phone" class="form-control" >
+        <span asp-validation-for="Psychiatrist_Phone" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-4">
-        <label asp-for="TcmClient.Client.Psychiatrist.Address" class="control-label">Address</label>
-        <input asp-for="TcmClient.Client.Psychiatrist.Address" class="form-control" readonly>
-        <span asp-validation-for="TcmClient.Client.Psychiatrist.Address" class="text-danger"></span>
+    <div class="form-group col-md-2">
+        <label asp-for="Psychiatrist_Address" class="control-label">Address</label>
+        <input asp-for="Psychiatrist_Address" class="form-control" >
+        <span asp-validation-for="Psychiatrist_Address" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Psychiatrist_CityStateZip" class="control-label">City, State, Zip</label>
+        <input asp-for="Psychiatrist_CityStateZip" class="form-control" >
+        <span asp-validation-for="Psychiatrist_CityStateZip" class="text-danger"></span>
     </div>
     <div class="form-group col-md-1">
-        <label asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code" class="control-label">Address</label>
+        <label asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code" class="control-label">Dx: Code</label>
         <input asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code" class="text-danger"></span>
     </div>
     <div class="form-group col-md-3">
-        <label asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Description" class="control-label">Address</label>
+        <label asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Description" class="control-label">Dx: Description</label>
         <input asp-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Description" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Description" class="text-danger"></span>
     </div>

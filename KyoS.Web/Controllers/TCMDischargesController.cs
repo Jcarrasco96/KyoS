@@ -88,7 +88,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult Create(int id = 0)
+        public IActionResult Create(int id = 0, int origin = 0)
         {
 
             TCMDischargeViewModel model;
@@ -146,7 +146,7 @@ namespace KyoS.Web.Controllers
                         {
                             model.Id = tcmDischarge.Id;
                         }
-
+                        ViewData["origin"] = origin;
 
                         return View(model);
                     }
@@ -164,7 +164,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> Create(TCMDischargeViewModel tcmDischargeViewModel)
+        public async Task<IActionResult> Create(TCMDischargeViewModel tcmDischargeViewModel, int origin = 0)
          {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -187,8 +187,14 @@ namespace KyoS.Web.Controllers
                                                                        .Include(n => n.TcmDischargeFollowUp)
                                                                        .FirstOrDefaultAsync(m => m.TcmServicePlan.TcmClient.Casemanager.LinkedUser == user_logged.UserName
                                                                             && m.TcmServicePlan.Id == tcmDischargeViewModel.IdServicePlan);
-
-                        return RedirectToAction("Index", "TCMDischarges", new { idTCMClient = tcmDischarge.TcmServicePlan.TcmClient.Id});
+                        if (origin == 1)
+                        {
+                            return RedirectToAction("Index", "TCMDischarges", new { idTCMClient = tcmDischarge.TcmServicePlan.TcmClient.Id });
+                        }
+                        else
+                        {
+                            return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = tcmDischarge.TcmServicePlan.TcmClient_FK, section = 4 }); ;
+                        }
                     }
                     catch (System.Exception ex)
                     {
@@ -298,7 +304,8 @@ namespace KyoS.Web.Controllers
 
                     if (origi == 0)
                     {
-                        return RedirectToAction("Index", "TCMDischarges", new { idTCMClient = tcmDischargeEntity.TcmServicePlan.TcmClient.Id });
+                        return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = tcmDischargeEntity.TcmServicePlan.TcmClient_FK, section = 4 }); ;
+                        //return RedirectToAction("Index", "TCMDischarges", new { idTCMClient = tcmDischargeEntity.TcmServicePlan.TcmClient.Id });
                     }
                     else
                     {

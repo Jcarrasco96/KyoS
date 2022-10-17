@@ -152,7 +152,7 @@ namespace KyoS.Web.Data
                         .IsUnique();
 
             modelBuilder.Entity<TCMServiceEntity>()
-                        .HasIndex(s => s.Name)
+                        .HasIndex(s => s.Code)
                         .IsUnique();
 
             modelBuilder.Entity<TCMStageEntity>()

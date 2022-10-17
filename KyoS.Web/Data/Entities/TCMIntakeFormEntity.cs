@@ -22,8 +22,8 @@ namespace KyoS.Web.Data.Entities
 
         public string EducationLevel { get; set; }
         public string ReligionOrEspiritual { get; set; }
-        public string EmploymentStatus { get; set; }
-        public string ResidentialStatus { get; set; }
+        public EmploymentStatus EmploymentStatus { get; set; }
+        public ResidentialStatus ResidentialStatus { get; set; }
         public string MonthlyFamilyIncome { get; set; }
         public string PrimarySourceIncome { get; set; }
 
@@ -68,6 +68,16 @@ namespace KyoS.Web.Data.Entities
         public string NeedSpecial_Specify { get; set; }
         public string CaseManagerNotes { get; set; }
 
-       
+        public string Psychiatrist_Name { get; set; }
+        public string Psychiatrist_Phone { get; set; }
+        public string Psychiatrist_Address { get; set; }
+        public string Psychiatrist_CityStateZip { get; set; }
+
+        public string PCP_Name { get; set; }
+        public string PCP_Phone { get; set; }
+        public string PCP_Place { get; set; }
+        public string PCP_Address { get; set; }
+        public string PCP_CityStateZip { get; set; }
+        public string PCP_FaxNumber { get; set; }
     }
 }

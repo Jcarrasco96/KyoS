@@ -36,9 +36,13 @@
             <input type="hidden" asp-for="TcmClient_FK" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="Psychiatrist_Name" />
+            <input type="hidden" asp-for="Psychiatrist_Address" />
+            <input type="hidden" asp-for="Psychiatrist_CityStateZip" />
+            <input type="hidden" asp-for="Psychiatrist_Phone" />
 
             <partial name="_TCMAssessment" />
-            
+
             <div class="form-group col-md-12">
                 <input type="submit" value="Create" class="btn btn-primary" />
                 @if (ViewData["origi"].ToString() == "0")

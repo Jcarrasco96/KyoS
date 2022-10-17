@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221010020343_TCMClient_PCP_Psysiatrist")]
+    partial class TCMClient_PCP_Psysiatrist
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -7442,9 +7444,6 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("PCP_CityStateZip")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PCP_FaxNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PCP_Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -8216,8 +8215,8 @@ namespace KyoS.Web.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasMaxLength(4)
-                        .HasColumnType("nvarchar(4)");
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -8246,7 +8245,7 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("ClinicId");
 
-                    b.HasIndex("Code")
+                    b.HasIndex("Name")
                         .IsUnique();
 
                     b.HasIndex("TCMServicePlanEntityId");

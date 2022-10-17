@@ -1444,5 +1444,37 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboResidential()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = ResidentialStatus.LivingAlone.ToString(), Value = "0"},
+                new SelectListItem { Text = ResidentialStatus.livingWithRelatives.ToString(), Value = "1"},
+                new SelectListItem { Text = ResidentialStatus.livingWithNoRelatives.ToString(), Value = "2"},
+                new SelectListItem { Text = ResidentialStatus.AsistedLivingFacility.ToString(), Value = "3"},
+                new SelectListItem { Text = ResidentialStatus.FosterCare_GroupHome.ToString(), Value = "4"},
+                new SelectListItem { Text = ResidentialStatus.Hospital_NursingHome.ToString(), Value = "5"},
+                new SelectListItem { Text = ResidentialStatus.ResidentialProgram.ToString(), Value = "6"}
+            };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboEmployed()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = EmploymentStatus.EmployetFT.ToString(), Value = "0"},
+                new SelectListItem { Text = EmploymentStatus.EmployetPT.ToString(), Value = "1"},
+                new SelectListItem { Text = EmploymentStatus.Retired.ToString(), Value = "2"},
+                new SelectListItem { Text = EmploymentStatus.Disabled.ToString(), Value = "3"},
+                new SelectListItem { Text = EmploymentStatus.Homemaker.ToString(), Value = "4"},
+                new SelectListItem { Text = EmploymentStatus.Student.ToString(), Value = "5"},
+                new SelectListItem { Text = EmploymentStatus.Unemployed.ToString(), Value = "6"}
+            };
+
+            return list;
+        }
     }
 }

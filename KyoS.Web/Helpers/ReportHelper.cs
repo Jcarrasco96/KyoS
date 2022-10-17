@@ -8553,6 +8553,16 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("StatusResident", typeof(bool));
             dt.Columns.Add("StausCitizen", typeof(bool));
             dt.Columns.Add("YearEnterUsa", typeof(string));
+            dt.Columns.Add("PCP_Address", typeof(string));
+            dt.Columns.Add("PCP_CityStateZip", typeof(string));
+            dt.Columns.Add("PCP_Name", typeof(string));
+            dt.Columns.Add("PCP_Phone", typeof(string));
+            dt.Columns.Add("PCP_Place", typeof(string));
+            dt.Columns.Add("Psychiatrist_Address", typeof(string));
+            dt.Columns.Add("Psychiatrist_CityStateZip", typeof(string));
+            dt.Columns.Add("Psychiatrist_Name", typeof(string));
+            dt.Columns.Add("Psychiatrist_Phone", typeof(string));
+            dt.Columns.Add("PCP_FaxNumber", typeof(string));
 
             if (intakeForm != null)
             {
@@ -8604,13 +8614,23 @@ namespace KyoS.Web.Helpers
                                             intakeForm.StatusOther_Explain,
                                             intakeForm.StatusResident,
                                             intakeForm.StausCitizen,
-                                            intakeForm.YearEnterUsa
-                                            });
+                                            intakeForm.YearEnterUsa,
+                                            intakeForm.PCP_Address,
+                                            intakeForm.PCP_CityStateZip,
+                                            intakeForm.PCP_Name,
+                                            intakeForm.PCP_Phone,
+                                            intakeForm.PCP_Place,
+                                            intakeForm.Psychiatrist_Address,
+                                            intakeForm.Psychiatrist_CityStateZip,
+                                            intakeForm.Psychiatrist_Name,
+                                            intakeForm.Psychiatrist_Phone,
+                                            intakeForm.PCP_FaxNumber
+                                        });
             }
             else
             {
                 dt.Rows.Add(new object[]
-                                            {
+                                        {
                                             0,
                                             0,
                                             new DateTime(),
@@ -8657,8 +8677,18 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             false,
                                             false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
                                             string.Empty
-                                            });
+                                       });
             }
 
             return dt;
@@ -9241,6 +9271,306 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMIntakeWelcomeDS(TCMIntakeWelcomeEntity intakeWelcome)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakeWelcome"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmClient_FK", typeof(int));
+            dt.Columns.Add("Date", typeof(DateTime));            
+            dt.Columns.Add("AdmissionedFor", typeof(string));           
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            if (intakeWelcome != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intakeWelcome.Id,
+                                            0,
+                                            intakeWelcome.Date,
+                                            intakeWelcome.AdmissionedFor,
+                                            intakeWelcome.CreatedBy,
+                                            intakeWelcome.CreatedOn,
+                                            intakeWelcome.LastModifiedBy,
+                                            intakeWelcome.LastModifiedOn
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),                                            
+                                            string.Empty,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()
+                                       });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetTCMIntakeAppendixJDS(TCMIntakeAppendixJEntity intakeAppendixJ)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakeAppendixJ"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmClient_FK", typeof(int));            
+            dt.Columns.Add("IsAwaiting", typeof(bool));
+            dt.Columns.Add("HasBeen", typeof(bool));
+            dt.Columns.Add("HasHad", typeof(bool));
+            dt.Columns.Add("IsAt", typeof(bool));
+            dt.Columns.Add("IsExperiencing", typeof(bool));
+            dt.Columns.Add("Date", typeof(DateTime));
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("SupervisorSignatureDate", typeof(DateTime));
+            dt.Columns.Add("Approved", typeof(int));
+            dt.Columns.Add("TcmSupervisorId", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            if (intakeAppendixJ != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intakeAppendixJ.Id,
+                                            0,
+                                            intakeAppendixJ.IsAwaiting,
+                                            intakeAppendixJ.HasBeen,
+                                            intakeAppendixJ.HasHad,
+                                            intakeAppendixJ.IsAt,
+                                            intakeAppendixJ.IsExperiencing,
+                                            intakeAppendixJ.Date,
+                                            intakeAppendixJ.AdmissionedFor,
+                                            intakeAppendixJ.SupervisorSignatureDate,
+                                            intakeAppendixJ.Approved,
+                                            0,
+                                            intakeAppendixJ.CreatedBy,
+                                            intakeAppendixJ.CreatedOn,
+                                            intakeAppendixJ.LastModifiedBy,
+                                            intakeAppendixJ.LastModifiedOn
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()
+                                       });
+            }
+
+            return dt;
+        }
+        
+        private DataTable GetTCMDischargeFollowUpListDS(List<TCMDischargeFollowUpEntity> dischargeFollowUp)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMDischargeFollowUp"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("ProviderAgency", typeof(string));
+            dt.Columns.Add("TypeService", typeof(string));
+            dt.Columns.Add("Address_Location", typeof(string));
+            dt.Columns.Add("PhoneNumber", typeof(string));
+            dt.Columns.Add("NextAppt", typeof(string));
+            dt.Columns.Add("TcmDischargeId", typeof(int));            
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            foreach (TCMDischargeFollowUpEntity item in dischargeFollowUp)
+            {
+                dt.Rows.Add(new object[]
+                {
+                                            item.Id,
+                                            item.ProviderAgency,
+                                            item.TypeService,
+                                            item.Address_Location,
+                                            item.PhoneNumber,
+                                            item.NextAppt,
+                                            0,
+                                            item.CreatedBy,
+                                            item.CreatedOn,
+                                            item.LastModifiedBy,
+                                            item.LastModifiedOn
+                });
+            }
+
+            return dt;
+        }
+        
+        private DataTable GetTCMDischargeServiceStatusListDS(List<TCMDischargeServiceStatusEntity> dischargeServices)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMDischargeServiceStatus"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("CodeService", typeof(string));
+            dt.Columns.Add("NameService", typeof(string));
+            dt.Columns.Add("Status", typeof(bool));            
+            dt.Columns.Add("TcmDischargeId", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            foreach (TCMDischargeServiceStatusEntity item in dischargeServices)
+            {
+                dt.Rows.Add(new object[]
+                {
+                                            item.Id,
+                                            item.CodeService,
+                                            item.NameService,
+                                            item.Status,                                            
+                                            0,
+                                            item.CreatedBy,
+                                            item.CreatedOn,
+                                            item.LastModifiedBy,
+                                            item.LastModifiedOn
+                });
+            }
+
+            return dt;
+        }
+        
+        private DataTable GetTCMDischargeDS(TCMDischargeEntity discharge)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMDischarge"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmServicePlanId", typeof(int));
+            dt.Columns.Add("StaffingDate", typeof(DateTime));
+            dt.Columns.Add("DischargeDate", typeof(DateTime));
+            dt.Columns.Add("PresentProblems", typeof(string));
+            dt.Columns.Add("ProgressToward", typeof(string));
+            dt.Columns.Add("StaffSignatureDate", typeof(DateTime));
+            dt.Columns.Add("SupervisorSignatureDate", typeof(DateTime));            
+            dt.Columns.Add("AllServiceInPlace", typeof(bool));
+            dt.Columns.Add("Referred", typeof(bool));
+            dt.Columns.Add("ClientLeftVoluntarily", typeof(bool));
+            dt.Columns.Add("NonComplianceWithAgencyRules", typeof(bool));
+            dt.Columns.Add("ClientMovedOutArea", typeof(bool));
+            dt.Columns.Add("LackOfProgress", typeof(bool));
+            dt.Columns.Add("Other", typeof(bool));
+            dt.Columns.Add("Other_Explain", typeof(string));
+            dt.Columns.Add("AdministrativeDischarge", typeof(bool));
+            dt.Columns.Add("AdministrativeDischarge_Explain", typeof(string));
+            dt.Columns.Add("Approved", typeof(int));            
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("TcmServicePlan_FK", typeof(int));
+            dt.Columns.Add("TCMSupervisorId", typeof(int));
+
+            if (discharge != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            discharge.Id,
+                                            0,
+                                            discharge.StaffingDate,
+                                            discharge.DischargeDate,
+                                            discharge.PresentProblems,
+                                            discharge.ProgressToward,
+                                            discharge.StaffSignatureDate,
+                                            discharge.SupervisorSignatureDate,
+                                            discharge.AllServiceInPlace,
+                                            discharge.Referred,
+                                            discharge.ClientLeftVoluntarily,
+                                            discharge.NonComplianceWithAgencyRules,
+                                            discharge.ClientMovedOutArea,
+                                            discharge.LackOfProgress,
+                                            discharge.Other,
+                                            discharge.Other_Explain,
+                                            discharge.AdministrativeDischarge,
+                                            discharge.AdministrativeDischarge_Explain,
+                                            discharge.Approved,
+                                            discharge.CreatedBy,
+                                            discharge.CreatedOn,
+                                            discharge.LastModifiedBy,
+                                            discharge.LastModifiedOn,
+                                            0,
+                                            0
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            0,
+                                            0
+                                       });
+            }
+
+            return dt;
+        }
+
         private DataTable GetTCMFarsDS(TCMFarsFormEntity fars)
         {
             DataTable dt = new DataTable
@@ -9693,6 +10023,84 @@ namespace KyoS.Web.Helpers
         }
         #endregion
 
+        #region TCM Fars Form reports
+        public Stream TCMFloridaSocialHSFarsReport(TCMFarsFormEntity fars)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Fars\\rptFarsFloridaSocialHS.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(fars.TCMClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(fars.TCMClient.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(fars.TCMClient.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(fars.TCMClient.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMFarsDS(fars));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "FarsForm");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+
+        public Stream TCMDreamsMentalHealthFarsReport(TCMFarsFormEntity fars)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Fars\\rptFarsDreamsMentalHealth.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(fars.TCMClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(fars.TCMClient.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(fars.TCMClient.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(fars.TCMClient.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMFarsDS(fars));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "FarsForm");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
+
         #region TCM Binder Section #1
         public Stream TCMIntakeFormReport(TCMIntakeFormEntity intakeForm)
         {
@@ -9737,15 +10145,7 @@ namespace KyoS.Web.Helpers
 
             dataSet = new DataSet();
             dataSet.Tables.Add(GetEmergencyContactDS(intakeForm.TcmClient.Client.EmergencyContact));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
-            
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetPsychiatristDS(intakeForm.TcmClient.Client.Psychiatrist));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Psychiatrists");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetDoctorDS(intakeForm.TcmClient.Client.Doctor));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Doctors");
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");           
 
             dataSet = new DataSet();
             dataSet.Tables.Add(GetTCMIntakeFormDS(intakeForm));
@@ -10256,39 +10656,129 @@ namespace KyoS.Web.Helpers
 
         public Stream TCMIntakeWelcome(TCMIntakeWelcomeEntity intakeWelcome)
         {
-            throw new NotImplementedException();
-        }
-        #endregion
-
-        #region TCM Fars Form reports
-        public Stream TCMFloridaSocialHSFarsReport(TCMFarsFormEntity fars)
-        {
             WebReport WebReport = new WebReport();
 
-            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Fars\\rptFarsFloridaSocialHS.frx";
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakeWelcome.frx";
 
             RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
             WebReport.Report.Load(rdlcFilePath);
 
             DataSet dataSet = new DataSet();
-            dataSet.Tables.Add(GetClientDS(fars.TCMClient.Client));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetClinicDS(fars.TCMClient.Client.Clinic));
+            dataSet.Tables.Add(GetClinicDS(intakeWelcome.TcmClient.Casemanager.Clinic));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetEmergencyContactDS(fars.TCMClient.Client.EmergencyContact));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+            dataSet.Tables.Add(GetTCMClientDS(intakeWelcome.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetLegalGuardianDS(fars.TCMClient.Client.LegalGuardian));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+            dataSet.Tables.Add(GetClientDS(intakeWelcome.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetTCMFarsDS(fars));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "FarsForm");
+            dataSet.Tables.Add(GetCaseManagerDS(intakeWelcome.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeWelcomeDS(intakeWelcome));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeOrientationCheckList");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intakeWelcome.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeWelcome.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(intakeWelcome.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeWelcome.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
+
+        #region TCM Binder Section #4
+        public Stream TCMIntakeAppendixJ(TCMIntakeAppendixJEntity intakeAppendixJ)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakeAppendixJ.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intakeAppendixJ.TcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(intakeAppendixJ.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intakeAppendixJ.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(intakeAppendixJ.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMSupervisorDS(intakeAppendixJ.TcmSupervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMSupervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeAppendixJDS(intakeAppendixJ));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeAppendixJ");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intakeAppendixJ.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeAppendixJ.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(intakeAppendixJ.TcmSupervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeAppendixJ.TcmSupervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(intakeAppendixJ.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeAppendixJ.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
 
             WebReport.Report.Prepare();
 
@@ -10299,34 +10789,153 @@ namespace KyoS.Web.Helpers
             return stream;
         }
 
-        public Stream TCMDreamsMentalHealthFarsReport(TCMFarsFormEntity fars)
+        public Stream TCMDischarge(TCMDischargeEntity intakeDischarge)
         {
             WebReport WebReport = new WebReport();
 
-            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Fars\\rptFarsDreamsMentalHealth.frx";
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMDischarge.frx";
 
             RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
             WebReport.Report.Load(rdlcFilePath);
 
             DataSet dataSet = new DataSet();
-            dataSet.Tables.Add(GetClientDS(fars.TCMClient.Client));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetClinicDS(fars.TCMClient.Client.Clinic));
+            dataSet.Tables.Add(GetClinicDS(intakeDischarge.TcmServicePlan.TcmClient.Casemanager.Clinic));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetEmergencyContactDS(fars.TCMClient.Client.EmergencyContact));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+            dataSet.Tables.Add(GetTCMClientDS(intakeDischarge.TcmServicePlan.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetLegalGuardianDS(fars.TCMClient.Client.LegalGuardian));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+            dataSet.Tables.Add(GetClientDS(intakeDischarge.TcmServicePlan.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetTCMFarsDS(fars));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "FarsForm");
+            dataSet.Tables.Add(GetCaseManagerDS(intakeDischarge.TcmServicePlan.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMSupervisorDS(intakeDischarge.TCMSupervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMSupervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMDischargeFollowUpListDS(intakeDischarge.TcmDischargeFollowUp));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMDischargeFollowUp");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMDischargeServiceStatusListDS(intakeDischarge.TcmDischargeServiceStatus));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMDischargeServiceStatus");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMDischargeDS(intakeDischarge));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMDischarge");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intakeDischarge.TcmServicePlan.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeDischarge.TcmServicePlan.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (intakeDischarge.TCMSupervisor != null)
+            {
+                if (!string.IsNullOrEmpty(intakeDischarge.TCMSupervisor.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeDischarge.TCMSupervisor.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+            
+            if (!string.IsNullOrEmpty(intakeDischarge.TcmServicePlan.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeDischarge.TcmServicePlan.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            bool mentalHealth = false;
+            if (intakeDischarge.TcmServicePlan.TCMDomain.Where(d => (d.Code == "01" && d.Used == true)).Count() > 0)
+            {
+                mentalHealth = true;
+            }
+            bool physicalHealth = false;
+            if (intakeDischarge.TcmServicePlan.TCMDomain.Where(d => (d.Code == "02" && d.Used == true)).Count() > 0)
+            {
+                physicalHealth = true;
+            }
+            bool vocational = false;
+            if (intakeDischarge.TcmServicePlan.TCMDomain.Where(d => (d.Code == "03" && d.Used == true)).Count() > 0)
+            {
+                vocational = true;
+            }
+            bool school = false;
+            if (intakeDischarge.TcmServicePlan.TCMDomain.Where(d => (d.Code == "04" && d.Used == true)).Count() > 0)
+            {
+                school = true;
+            }
+            bool environmental = false;
+            if (intakeDischarge.TcmServicePlan.TCMDomain.Where(d => (d.Code == "05" && d.Used == true)).Count() > 0)
+            {
+                environmental = true;
+            }
+            bool activities = false;
+            if (intakeDischarge.TcmServicePlan.TCMDomain.Where(d => (d.Code == "06" && d.Used == true)).Count() > 0)
+            {
+                activities = true;
+            }
+            bool housing = false;
+            if (intakeDischarge.TcmServicePlan.TCMDomain.Where(d => (d.Code == "07" && d.Used == true)).Count() > 0)
+            {
+                housing = true;
+            }
+            bool economic = false;
+            if (intakeDischarge.TcmServicePlan.TCMDomain.Where(d => (d.Code == "08" && d.Used == true)).Count() > 0)
+            {
+                economic = true;
+            }
+            bool basicNeed = false;
+            if (intakeDischarge.TcmServicePlan.TCMDomain.Where(d => (d.Code == "09" && d.Used == true)).Count() > 0)
+            {
+                basicNeed = true;
+            }
+            bool transportation = false;
+            if (intakeDischarge.TcmServicePlan.TCMDomain.Where(d => (d.Code == "10" && d.Used == true)).Count() > 0)
+            {
+                transportation = true;
+            }
+            bool legal = false;
+            if (intakeDischarge.TcmServicePlan.TCMDomain.Where(d => (d.Code == "11" && d.Used == true)).Count() > 0)
+            {
+                legal = true;
+            }
+            bool other = false;
+            if (intakeDischarge.TcmServicePlan.TCMDomain.Where(d => (d.Code == "12" && d.Used == true)).Count() > 0)
+            {
+                other = true;
+            }
+
+            WebReport.Report.SetParameterValue("mentalHealth", mentalHealth);
+            WebReport.Report.SetParameterValue("physicalHealth", physicalHealth);
+            WebReport.Report.SetParameterValue("vocational", vocational);
+            WebReport.Report.SetParameterValue("school", school);
+            WebReport.Report.SetParameterValue("environmental", environmental);
+            WebReport.Report.SetParameterValue("activities", activities);
+            WebReport.Report.SetParameterValue("housing", housing);
+            WebReport.Report.SetParameterValue("economic", economic);
+            WebReport.Report.SetParameterValue("basicNeed", basicNeed);
+            WebReport.Report.SetParameterValue("transportation", transportation);
+            WebReport.Report.SetParameterValue("legal", legal);
+            WebReport.Report.SetParameterValue("other", other);            
 
             WebReport.Report.Prepare();
 

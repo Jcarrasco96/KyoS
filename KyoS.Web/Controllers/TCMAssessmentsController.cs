@@ -112,15 +112,20 @@ namespace KyoS.Web.Controllers
 
                 if (user_logged.Clinic != null)
                 {
+                    TCMClientEntity tcmClient = _context.TCMClient
+                                                        .Include(n => n.Client)
+                                                        .ThenInclude(n => n.Client_Referred)
+                                                        .ThenInclude(n => n.Referred)
+                                                        .Include(n => n.TCMIntakeForm)
+                                                        .FirstOrDefault(n => n.Id == id);
+
+                    if (tcmClient.TCMIntakeForm == null)
+                        tcmClient.TCMIntakeForm = new TCMIntakeFormEntity();
 
                     model = new TCMAssessmentViewModel
                     {
                         Approved = 0,
-                        TcmClient = _context.TCMClient
-                                            .Include(n => n.Client)
-                                            .ThenInclude(n => n.Client_Referred)
-                                            .ThenInclude(n => n.Referred)
-                                            .FirstOrDefault(n => n.Id == id),
+                        TcmClient = tcmClient,
                         AreChild = false,
                         AreChildAddress = "",
                         AreChildCity = "",
@@ -507,7 +512,16 @@ namespace KyoS.Web.Controllers
                         WhenWas = "",
                         CreatedBy = user_logged.UserName,
                         CreatedOn = DateTime.Now,
-                        Client_Referred_List = new List<Client_Referred>()
+                        Client_Referred_List = new List<Client_Referred>(),
+                        Psychiatrist_Name = tcmClient.TCMIntakeForm.Psychiatrist_Name,
+                        Psychiatrist_Address = tcmClient.TCMIntakeForm.Psychiatrist_Address,
+                        Psychiatrist_CityStateZip = tcmClient.TCMIntakeForm.Psychiatrist_CityStateZip,
+                        Psychiatrist_Phone = tcmClient.TCMIntakeForm.Psychiatrist_Phone,
+                        PCP_Name = tcmClient.TCMIntakeForm.PCP_Name,
+                        PCP_Address = tcmClient.TCMIntakeForm.PCP_Address,
+                        PCP_CityStateZip = tcmClient.TCMIntakeForm.PCP_CityStateZip,
+                        PCP_Phone = tcmClient.TCMIntakeForm.PCP_Phone
+
                     };
                     if (model.IndividualAgencyList == null)
                         model.IndividualAgencyList = new List<TCMAssessmentIndividualAgencyEntity>();
@@ -533,8 +547,27 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            TCMIntakeFormEntity intake = _context.TCMIntakeForms
+                                                .FirstOrDefault(u => u.TcmClient.Id == tcmAssessmentViewModel.TcmClient_FK);
+
             if (ModelState.IsValid)
             {
+                if (intake != null)
+                {
+                    intake.Psychiatrist_Name = tcmAssessmentViewModel.Psychiatrist_Name;
+                    intake.Psychiatrist_Address = tcmAssessmentViewModel.Psychiatrist_Address;
+                    intake.Psychiatrist_Phone = tcmAssessmentViewModel.Psychiatrist_Phone;
+                    intake.Psychiatrist_CityStateZip = tcmAssessmentViewModel.Psychiatrist_CityStateZip;
+
+                    intake.PCP_Name = tcmAssessmentViewModel.PCP_Name;
+                    intake.PCP_Address = tcmAssessmentViewModel.PCP_Address;
+                    intake.PCP_Phone = tcmAssessmentViewModel.PCP_Phone;
+                    intake.PCP_CityStateZip = tcmAssessmentViewModel.PCP_CityStateZip;
+
+                    _context.TCMIntakeForms.Update(intake);
+                    await _context.SaveChangesAsync();
+                }
+
                 TCMAssessmentEntity tcmAssessmentEntity = _context.TCMAssessment.Find(tcmAssessmentViewModel.Id);
                 if (tcmAssessmentEntity == null)
                 {
@@ -610,6 +643,8 @@ namespace KyoS.Web.Controllers
                                                                 .Include(b => b.DrugList)
                                                                 .Include(b => b.MedicalProblemList)
                                                                 .Include(b => b.SurgeryList)
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.TCMIntakeForm)
                                                                 .FirstOrDefault(m => m.Id == id);
                     if (TcmAssessment == null)
                     {
@@ -619,6 +654,19 @@ namespace KyoS.Web.Controllers
                     {
 
                         model = _converterHelper.ToTCMAssessmentViewModel(TcmAssessment);
+
+                        if (TcmAssessment.TcmClient.TCMIntakeForm != null)
+                        {
+                            model.Psychiatrist_Name = model.TcmClient.TCMIntakeForm.Psychiatrist_Name;
+                            model.Psychiatrist_Address = model.TcmClient.TCMIntakeForm.Psychiatrist_Address;
+                            model.Psychiatrist_Phone = model.TcmClient.TCMIntakeForm.Psychiatrist_Phone;
+                            model.Psychiatrist_CityStateZip = model.TcmClient.TCMIntakeForm.Psychiatrist_CityStateZip;
+
+                            model.PCP_Name = model.TcmClient.TCMIntakeForm.PCP_Name;
+                            model.PCP_Address = model.TcmClient.TCMIntakeForm.PCP_Address;
+                            model.PCP_Phone = model.TcmClient.TCMIntakeForm.PCP_Phone;
+                            model.PCP_CityStateZip = model.TcmClient.TCMIntakeForm.PCP_CityStateZip;
+                        }
                         ViewData["origi"] = origi;
                         return View(model);
                     }
@@ -639,8 +687,27 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            TCMIntakeFormEntity intake = _context.TCMIntakeForms
+                                                .FirstOrDefault(u => u.TcmClient.Id == tcmAssessmentViewModel.TcmClient_FK);
+
             if (ModelState.IsValid)
             {
+                if (intake != null)
+                {
+                    intake.Psychiatrist_Name = tcmAssessmentViewModel.Psychiatrist_Name;
+                    intake.Psychiatrist_Address = tcmAssessmentViewModel.Psychiatrist_Address;
+                    intake.Psychiatrist_Phone = tcmAssessmentViewModel.Psychiatrist_Phone;
+                    intake.Psychiatrist_CityStateZip = tcmAssessmentViewModel.Psychiatrist_CityStateZip;
+
+                    intake.PCP_Name = tcmAssessmentViewModel.PCP_Name;
+                    intake.PCP_Address = tcmAssessmentViewModel.PCP_Address;
+                    intake.PCP_Phone = tcmAssessmentViewModel.PCP_Phone;
+                    intake.PCP_CityStateZip = tcmAssessmentViewModel.PCP_CityStateZip;
+
+                    _context.TCMIntakeForms.Update(intake);
+                    await _context.SaveChangesAsync();
+                }
+
                 TCMAssessmentEntity tcmAssessmentEntity = await _converterHelper.ToTCMAssessmentEntity(tcmAssessmentViewModel, false, user_logged.UserName);
                 if (tcmAssessmentEntity.Approved != 1)
                 {
