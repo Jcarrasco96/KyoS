@@ -164,62 +164,62 @@ namespace KyoS.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                /*ClientEntity client = await _context.Clients.FirstOrDefaultAsync(c => c.Name == clientViewModel.Name);
-                if (client == null)
-                {*/
-                    string photoPath = string.Empty;
-                    string signPath = string.Empty;
+                string photoPath = string.Empty;
+                string signPath = string.Empty;
 
-                    if (clientViewModel.PhotoFile != null)
+                if (clientViewModel.PhotoFile != null)
+                {
+                    photoPath = await _imageHelper.UploadImageAsync(clientViewModel.PhotoFile, "Clients");
+                }
+                if (clientViewModel.SignFile != null)
+                {
+                    signPath = await _imageHelper.UploadImageAsync(clientViewModel.SignFile, "Clients");
+                }
+
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                ClientEntity clientEntity = await _converterHelper.ToClientEntity(clientViewModel, true, photoPath, signPath, user_logged.Id);
+                _context.Add(clientEntity);
+
+                //----------update Client_Diagnostic table-------------//
+                IQueryable<DiagnosticTempEntity> list_to_delete = _context.DiagnosticsTemp
+                                                                          .Where(d => d.UserName == user_logged.UserName);
+                Client_Diagnostic clientDiagnostic;
+                foreach (DiagnosticTempEntity item in list_to_delete)
+                {
+                    clientDiagnostic = new Client_Diagnostic
                     {
-                        photoPath = await _imageHelper.UploadImageAsync(clientViewModel.PhotoFile, "Clients");
-                    }
-                    if (clientViewModel.SignFile != null)
+                        Client = clientEntity,
+                        Diagnostic = await _context.Diagnostics.FirstOrDefaultAsync(d => d.Code == item.Code),
+                        Principal = item.Principal
+                    };
+                    _context.Add(clientDiagnostic);
+                    _context.DiagnosticsTemp.Remove(item);
+                }
+
+                //----------update Documents table---------------------//
+                IQueryable<DocumentTempEntity> list_to_delete_doc = _context.DocumentsTemp
+                                                                            .Where(d => d.UserName == user_logged.UserName); 
+                DocumentEntity document;
+                foreach (DocumentTempEntity item in list_to_delete_doc)
+                {
+                    document = new DocumentEntity
                     {
-                        signPath = await _imageHelper.UploadImageAsync(clientViewModel.SignFile, "Clients");
-                    }
-
-                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-                    ClientEntity clientEntity = await _converterHelper.ToClientEntity(clientViewModel, true, photoPath, signPath, user_logged.Id);
-                    _context.Add(clientEntity);
-
-                    //----------update Client_Diagnostic table-------------//
-                    IQueryable<DiagnosticTempEntity> list_to_delete = _context.DiagnosticsTemp;
-                    Client_Diagnostic clientDiagnostic;
-                    foreach (DiagnosticTempEntity item in list_to_delete)
-                    {
-                        clientDiagnostic = new Client_Diagnostic
-                        {
-                            Client = clientEntity,
-                            Diagnostic = await _context.Diagnostics.FirstOrDefaultAsync(d => d.Code == item.Code),
-                            Principal = item.Principal
-                        };
-                        _context.Add(clientDiagnostic);
-                        _context.DiagnosticsTemp.Remove(item);
-                    }
-
-                    //----------update Documents table-------------//
-                    IQueryable<DocumentTempEntity> list_to_delete_doc = _context.DocumentsTemp;
-                    DocumentEntity document;
-                    foreach (DocumentTempEntity item in list_to_delete_doc)
-                    {
-                        document = new DocumentEntity
-                        {
-                            Client = clientEntity,
-                            FileName = item.DocumentName,
-                            Description = item.Description,
-                            FileUrl = item.DocumentPath,
-                            CreatedBy = user_logged.Id,
-                            CreatedOn = DateTime.Now
-                        };
-                        _context.Add(document);
-                        _context.DocumentsTemp.Remove(item);
-                    }
+                        Client = clientEntity,
+                        FileName = item.DocumentName,
+                        Description = item.Description,
+                        FileUrl = item.DocumentPath,
+                        CreatedBy = user_logged.Id,
+                        CreatedOn = DateTime.Now
+                    };
+                    _context.Add(document);
+                    _context.DocumentsTemp.Remove(item);
+                }
 
                 //update Client_Referred table with the news ReferredTemp
-                IQueryable<ReferredTempEntity> list_to_delete_referred = _context.ReferredsTemp.Where(n => n.CreatedBy == user_logged.UserName);
+                IQueryable<ReferredTempEntity> list_to_delete_referred = _context.ReferredsTemp
+                                                                                 .Where(n => n.CreatedBy == user_logged.UserName);
                 Client_Referred clientReferred;
                 foreach (ReferredTempEntity item in list_to_delete_referred)
                 {
@@ -235,26 +235,21 @@ namespace KyoS.Web.Controllers
                 }
 
                 try
-                    {
-                        await _context.SaveChangesAsync();
-                        return RedirectToAction("Create", new { id = 1 });
-                    }
-                    catch (System.Exception ex)
-                    {
-                        if (ex.InnerException.Message.Contains("duplicate"))
-                        {
-                            ModelState.AddModelError(string.Empty, $"Already exists the client: {clientEntity.Name}");
-                        }
-                        else
-                        {
-                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                        }
-                    }
-                /*}
-                else
                 {
-                    return RedirectToAction("Create", new { id = 2 });
-                }*/
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Create", new { id = 1 });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the client: {clientEntity.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }                
             }
             return View(clientViewModel);
         }
@@ -390,7 +385,8 @@ namespace KyoS.Web.Controllers
                 _context.Clients_Diagnostics.RemoveRange(list_to_delete);
 
                 //update Client_Diagnostic table with the news DiagnosticsTemp
-                IQueryable<DiagnosticTempEntity> listDiagnosticTemp = _context.DiagnosticsTemp;
+                IQueryable<DiagnosticTempEntity> listDiagnosticTemp = _context.DiagnosticsTemp
+                                                                              .Where(d => d.UserName == user_logged.UserName);
                 Client_Diagnostic clientDiagnostic;
                 foreach (DiagnosticTempEntity item in listDiagnosticTemp)
                 {
@@ -411,7 +407,8 @@ namespace KyoS.Web.Controllers
                 _context.Clients_Referreds.RemoveRange(listReferred_to_delete);
 
                 //update Client_Referred table with the news ReferredTemp
-                IQueryable<ReferredTempEntity> listReferredTemp = _context.ReferredsTemp;
+                IQueryable<ReferredTempEntity> listReferredTemp = _context.ReferredsTemp
+                                                                          .Where(d => d.CreatedBy == user_logged.UserName); 
                 Client_Referred clientReferred;
                 foreach (ReferredTempEntity item1 in listReferredTemp)
                 {
@@ -427,7 +424,8 @@ namespace KyoS.Web.Controllers
                 }
 
                 //update Documents table with the news DocumentsTemp
-                IQueryable<DocumentTempEntity> listDocumentTemp = _context.DocumentsTemp;
+                IQueryable<DocumentTempEntity> listDocumentTemp = _context.DocumentsTemp
+                                                                          .Where(d => d.UserName == user_logged.UserName);
                 DocumentEntity document;
                 foreach (DocumentTempEntity item in listDocumentTemp)
                 {
@@ -625,6 +623,9 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Manager, Supervisor, CaseManager")]
         public async Task<IActionResult> AddDiagnostic(int id, DiagnosticTempViewModel diagnosticTempViewModel)
         {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (ModelState.IsValid)
             {
                 if (id == 0)
@@ -641,11 +642,9 @@ namespace KyoS.Web.Controllers
                     _context.Add(diagnosticTemp);
                     await _context.SaveChangesAsync();
                 }
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.DiagnosticsTemp.ToList()) });
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.DiagnosticsTemp.Where(d => d.UserName == user_logged.UserName).ToList()) });
             }
-
-            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            
             DiagnosticTempViewModel model = new DiagnosticTempViewModel
             {
                 IdDiagnostic = 0,
@@ -681,6 +680,9 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Manager, Supervisor, CaseManager")]
         public async Task<IActionResult> AddDocument(int id, DocumentTempViewModel documentTempViewModel)
         {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (ModelState.IsValid)
             {
                 string documentPath = string.Empty;
@@ -703,7 +705,7 @@ namespace KyoS.Web.Controllers
                     _context.Add(documentTemp);
                     await _context.SaveChangesAsync();
                 }
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.OrderByDescending(d => d.CreatedOn).ToList()) });
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.Where(d => d.UserName == user_logged.UserName).OrderByDescending(d => d.CreatedOn).ToList()) });
             }
             DocumentTempViewModel salida = new DocumentTempViewModel()
             {
@@ -718,6 +720,10 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Manager, Supervisor, CaseManager")]
         public async Task<IActionResult> DeleteDiagnosticTemp(int? id)
         {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
             if (id == null)
             {
                 return RedirectToAction("Home/Error404");
@@ -732,12 +738,16 @@ namespace KyoS.Web.Controllers
             _context.DiagnosticsTemp.Remove(diagnostic);
             await _context.SaveChangesAsync();
 
-            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.DiagnosticsTemp.ToList()) });
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.DiagnosticsTemp.Where(d => d.UserName == user_logged.UserName).ToList()) });
         }
 
         [Authorize(Roles = "Manager, Supervisor, CaseManager")]
         public async Task<IActionResult> DeleteDocumentTemp(int? id)
         {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
             if (id == null)
             {
                 return RedirectToAction("Home/Error404");
@@ -757,7 +767,31 @@ namespace KyoS.Web.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.OrderByDescending(d => d.CreatedOn).ToList()) });
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.Where(d => d.UserName == user_logged.UserName).OrderByDescending(d => d.CreatedOn).ToList()) });
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        public async Task<IActionResult> DeleteReferredTemp(int? id)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ReferredTempEntity referred = await _context.ReferredsTemp.FirstOrDefaultAsync(d => d.Id == id);
+            if (referred == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            _context.ReferredsTemp.Remove(referred);
+            await _context.SaveChangesAsync();
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", _context.ReferredsTemp.Where(d => d.CreatedBy == user_logged.UserName).ToList()) });
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator")]
@@ -777,17 +811,38 @@ namespace KyoS.Web.Controllers
         public void DeleteDiagnosticsTemp()
         {
             UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
-            //delete all DiagnosticsTemp
-            IQueryable<DiagnosticTempEntity> list_to_delete = _context.DiagnosticsTemp;
-            foreach (DiagnosticTempEntity item in list_to_delete)
-            {
-                if (item.UserName == user_logged.UserName)
-                {
-                    _context.DiagnosticsTemp.Remove(item);
-                }
-                
-            }
+                                                   .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            //delete all DiagnosticsTemp by UserName
+            List<DiagnosticTempEntity> list_to_delete = _context.DiagnosticsTemp
+                                                                .Where(d => d.UserName == user_logged.UserName)
+                                                                .ToList();
+            _context.DiagnosticsTemp.RemoveRange(list_to_delete);
+            _context.SaveChanges();
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        public void DeleteDocumentsTemp()
+        {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                   .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            //delete all DocumentsTemp by UserName
+            List<DocumentTempEntity> list_to_delete = _context.DocumentsTemp
+                                                              .Where(d => d.UserName == user_logged.UserName)
+                                                              .ToList();
+            _context.DocumentsTemp.RemoveRange(list_to_delete);
+            _context.SaveChanges();
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        public void DeleteReferredsTemp()
+        {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                   .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            //delete all ReferredsTemp by UserName
+            List<ReferredTempEntity> list_to_delete = _context.ReferredsTemp
+                                                              .Where(d => d.CreatedBy == user_logged.UserName)
+                                                              .ToList();
+            _context.ReferredsTemp.RemoveRange(list_to_delete);
             _context.SaveChanges();
         }
 
@@ -847,20 +902,35 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, Supervisor, CaseManager")]
-        public void DeleteDocumentsTemp()
+        public void SetReferredsTemp(ClientEntity client)
         {
-            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                          .FirstOrDefault(u => u.UserName == User.Identity.Name);
-            //delete all DiagnosticsTemp
-            IQueryable<DocumentTempEntity> list_to_delete = _context.DocumentsTemp;
-            foreach (DocumentTempEntity item in list_to_delete)
+            List<Client_Referred> clientsReferreds = _context.Clients_Referreds
+                                                             .Include(cd => cd.Referred)
+                                                             .Where(cd => cd.Client == client).ToList();
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (clientsReferreds.Count() > 0)
             {
-                if (item.UserName == user_logged.UserName)
+                ReferredTempEntity referred;
+                foreach (var item in clientsReferreds)
                 {
-                    _context.DocumentsTemp.Remove(item);
+                    referred = new ReferredTempEntity
+                    {
+                        Title = item.Referred.Title,
+                        Agency = item.Referred.Agency,
+                        Service = item.Service,
+                        Name = item.Referred.Name,
+                        ReferredNote = item.ReferredNote,
+                        Telephone = item.Referred.Telephone,
+                        IdReferred = item.Referred.Id,
+                        CreatedBy = user_logged.UserName
+                    };
+                    _context.Add(referred);
                 }
+                _context.SaveChanges();
             }
-            _context.SaveChanges();
         }
 
         [Authorize(Roles = "Manager, Supervisor")]
@@ -1067,6 +1137,9 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Manager, Supervisor, CaseManager")]
         public async Task<IActionResult> AddReferred(int id, ReferredTempViewModel referredTempViewModel)
         {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (ModelState.IsValid)
             {
                 if (id == 0)
@@ -1091,11 +1164,9 @@ namespace KyoS.Web.Controllers
                     await _context.SaveChangesAsync();
                 }
                 
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", _context.ReferredsTemp.ToList()) });
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", _context.ReferredsTemp.Where(r => r.CreatedBy == user_logged.UserName).ToList()) });
             }
-
-            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                       
             ReferredTempViewModel model = new ReferredTempViewModel
             {
                 IdReferred = 0,
@@ -1106,75 +1177,7 @@ namespace KyoS.Web.Controllers
                 CreatedBy = referredTempViewModel.CreatedBy
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddReferred", model) });
-        }
-
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
-        public async Task<IActionResult> DeleteReferredTemp(int? id)
-        {
-            if (id == null)
-            {
-                return RedirectToAction("Home/Error404");
-            }
-
-            ReferredTempEntity referred = await _context.ReferredsTemp.FirstOrDefaultAsync(d => d.Id == id);
-            if (referred == null)
-            {
-                return RedirectToAction("Home/Error404");
-            }
-
-            _context.ReferredsTemp.Remove(referred);
-            await _context.SaveChangesAsync();
-
-            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", _context.ReferredsTemp.ToList()) });
-        }
-
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
-        public void DeleteReferredsTemp()
-        {
-            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
-            //delete all ReferredsTemp
-            IQueryable<ReferredTempEntity> list_to_delete = _context.ReferredsTemp;
-            foreach (ReferredTempEntity item in list_to_delete)
-            {
-                if (item.CreatedBy == user_logged.UserName)
-                {
-                    _context.ReferredsTemp.Remove(item);
-                }
-            }
-            _context.SaveChanges();
-        }
-
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
-        public void SetReferredsTemp(ClientEntity client)
-        {
-            List<Client_Referred> clientsReferreds = _context.Clients_Referreds
-                                                             .Include(cd => cd.Referred)
-                                                             .Where(cd => cd.Client == client).ToList();
-            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                      .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-            if (clientsReferreds.Count() > 0)
-            {
-                ReferredTempEntity referred;
-                foreach (var item in clientsReferreds)
-                {
-                    referred = new ReferredTempEntity
-                    {
-                        Title = item.Referred.Title,
-                        Agency = item.Referred.Agency,
-                        Service = item.Service,
-                        Name = item.Referred.Name,
-                        ReferredNote = item.ReferredNote,
-                        Telephone = item.Referred.Telephone,
-                        IdReferred = item.Referred.Id,
-                        CreatedBy = user_logged.UserName
-                    };
-                    _context.Add(referred);
-                }
-                _context.SaveChanges();
-            }
-        }
+        }        
 
         public JsonResult GetNameReferred(int idReferred)
         {
