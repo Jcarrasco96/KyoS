@@ -359,6 +359,15 @@ namespace KyoS.Web.Controllers
                 ViewBag.errorText = "Unable to create a new week. Please contact the administrator";
             }
 
+            //Imposible to create new workdays due to the facilitator has any created workday_client on that dates
+            if (error == 3)
+            {
+                FacilitatorEntity facilitator = _context.Facilitators
+                                                        .FirstOrDefault(f => f.Id == idFacilitator);
+                ViewBag.Error = "2";
+                ViewBag.errorText = $"Error. The facilitator {facilitator.Name} has individual therapy already on those dates";
+            }
+
             WeekViewModel model;
 
             UserEntity user_logged = _context.Users
@@ -426,9 +435,22 @@ namespace KyoS.Web.Controllers
 
                 if (!string.IsNullOrEmpty(entity.Workdays) && !string.IsNullOrEmpty(form["facilitators"]))
                 {
+                    string[] facilitators = form["facilitators"].ToString().Split(',');
                     workdays = entity.Workdays.ToString().Split(',');
                     foreach (string value in workdays)
                     {
+                        //Checking if each facilitator doesn't have any element at the same date, and service
+                        foreach (string item in facilitators)
+                        {
+                            if (_context.Workdays_Clients.Where(wc => (wc.Workday.Date == Convert.ToDateTime(value)
+                                                                    && wc.Workday.Service == ServiceType.Individual)
+                                                                    && wc.Facilitator.Id == Convert.ToInt32(item))
+                                                         .Count() > 0)
+                            {
+                                return RedirectToAction(nameof(CreateIndividual), new { error = 3, idFacilitator = Convert.ToInt32(item) });
+                            }
+                        }                        
+
                         datelist.Add(Convert.ToDateTime(value));
                     }
 
@@ -499,7 +521,6 @@ namespace KyoS.Web.Controllers
                                     }
                                     _context.Add(workday);
 
-                                    string[] facilitators = form["facilitators"].ToString().Split(',');
                                     FacilitatorEntity facilitator;                                    
                                     foreach (var value in facilitators)
                                     {
@@ -585,7 +606,6 @@ namespace KyoS.Web.Controllers
                                 }
                                 else
                                 {
-                                    string[] facilitators = form["facilitators"].ToString().Split(',');
                                     FacilitatorEntity facilitator;
                                     foreach (var value in facilitators)
                                     {
