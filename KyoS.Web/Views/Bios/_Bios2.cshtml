@@ -203,8 +203,12 @@
 </div>
 <div class="col-md-12">
     <pre>
-<strong>13. DIAGNOSTIC IMPRESSION:</strong> (use client’s own words)
+<strong>13. DIAGNOSTIC IMPRESSION:</strong> 
 
+    @if (Model.Client.Clients_Diagnostics.Count() > 0)
+    { 
+    <strong>Code: </strong>@Model.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code     <strong>Description: </strong>@Model.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Description <br />
+    }
     <strong>TREATMENT RECOMMENDATIOS:</strong>
     <textarea asp-for="Treatmentrecomendations" style="width:90%" rows="8"></textarea>   
     </pre>

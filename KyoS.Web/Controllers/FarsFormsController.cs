@@ -361,7 +361,10 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction("Notifications", "Messages");
                     }
-
+                    if (farsFormViewModel.Origin == 4)
+                    {
+                        return RedirectToAction(nameof(EditionFars));
+                    }
                     return RedirectToAction(nameof(Index));
                 }
                 catch (System.Exception ex)
@@ -495,14 +498,14 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                fars.Status = FarsStatus.Pending;
+                fars.Status = FarsStatus.Approved;  //the FARS no have approved for Supervisor
             }
 
             _context.Update(fars);
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(EditionFars));
         }
 
         [Authorize(Roles = "Supervisor")]
@@ -647,6 +650,56 @@ namespace KyoS.Web.Controllers
                                                 && (n.Client.IdFacilitatorPSR == facilitator.Id || n.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
                                               .OrderBy(f => f.Client.Name)
                                               .ToListAsync());
+                }
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Supervisor, Manager, Facilitator, Documents_Assistant")]
+        public async Task<IActionResult> EditionFars(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                  .Include(u => u.Clinic)
+                                                  .ThenInclude(c => c.Setting)
+                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if (clinic != null)
+                {
+                    if (User.IsInRole("Manager"))
+                    {
+                        return View(await _context.FarsForm
+
+                                              .Include(f => f.Client)
+                                              .ThenInclude(f => f.Clinic)
+
+                                              .Include(f => f.Messages.Where(m => m.Notification == false))
+
+                                              .Where(f => (f.Client.Clinic.Id == clinic.Id)
+                                                        && f.Status == FarsStatus.Edition)
+                                              .ToListAsync());
+                    }
+                    else
+                    {
+                        return View(await _context.FarsForm
+
+                                                  .Include(f => f.Client)
+                                                  .ThenInclude(f => f.Clinic)
+
+                                                  .Include(f => f.Messages.Where(m => m.Notification == false))
+
+                                                  .Where(f => (f.Client.Clinic.Id == clinic.Id)
+                                                            && f.Status == FarsStatus.Edition
+                                                            && f.CreatedBy == user_logged.UserName)
+                                                  .ToListAsync());
+                    }
+                    
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");
