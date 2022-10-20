@@ -60,6 +60,7 @@ namespace KyoS.Web.Controllers
                     return View(await _context.Clients
 
                                               .Include(f => f.Clients_Diagnostics)
+                                              .ThenInclude(f => f.Diagnostic)
                                               .Include(g => g.Bio)
                                               .Include(g => g.List_BehavioralHistory)
 
@@ -71,6 +72,7 @@ namespace KyoS.Web.Controllers
                     return View(await _context.Clients
 
                                               .Include(f => f.Clients_Diagnostics)
+                                              .ThenInclude(f => f.Diagnostic)
                                               .Include(g => g.Bio)
                                               .Include(g => g.List_BehavioralHistory)
 
@@ -83,6 +85,7 @@ namespace KyoS.Web.Controllers
                     return View(await _context.Clients
 
                                               .Include(f => f.Clients_Diagnostics)
+                                              .ThenInclude(f => f.Diagnostic)
                                               .Include(g => g.Bio)
                                               .Include(g => g.List_BehavioralHistory)
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
@@ -118,6 +121,8 @@ namespace KyoS.Web.Controllers
                                                  .Include(n => n.Client_Referred)
                                                  .ThenInclude(n => n.Referred)
                                                  .Include(n => n.List_BehavioralHistory)
+                                                 .Include(f => f. Clients_Diagnostics)
+                                                 .ThenInclude(f => f.Diagnostic)
                                                  .FirstOrDefault(n => n.Id == id),
                         AdultCurrentExperience = "",
                         Affect_Angry = false,
@@ -610,7 +615,9 @@ namespace KyoS.Web.Controllers
                                        .Include(n => n.Client.Client_Referred)
                                        .ThenInclude(n => n.Referred)
                                        .Include(n => n.Client.List_BehavioralHistory)
-
+                                       .Include(f => f.Client)
+                                       .ThenInclude(f => f.Clients_Diagnostics)
+                                       .ThenInclude(f => f.Diagnostic)
                                        .FirstOrDefault(i => i.Client.Id == id);
 
             if (entity == null)
@@ -1419,6 +1426,9 @@ namespace KyoS.Web.Controllers
                                        .Include(n => n.Client.Client_Referred)
                                        .ThenInclude(n => n.Referred)
                                        .Include(n => n.Client.List_BehavioralHistory)
+                                       .Include(m => m.Client)
+                                       .ThenInclude(n => n.Clients_Diagnostics)
+                                       .ThenInclude(n => n.Diagnostic)
 
                                        .FirstOrDefault(i => i.Id == id);
 
@@ -1467,7 +1477,7 @@ namespace KyoS.Web.Controllers
                     if (model.Client.List_BehavioralHistory == null)
                         model.Client.List_BehavioralHistory = new List<Bio_BehavioralHistoryEntity>();
 
-                   model.LegalGuardianName = model.Client.LegalGuardian.Name;
+                    model.LegalGuardianName = model.Client.LegalGuardian.Name;
                     model.LegalGuardianTelephone = model.Client.LegalGuardian.Telephone;
                     model.EmergencyContactName = model.Client.EmergencyContact.Name;
                     model.EmergencyContactTelephone = model.Client.EmergencyContact.Telephone;

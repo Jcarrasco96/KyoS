@@ -7604,7 +7604,7 @@ namespace KyoS.Web.Helpers
 
             dt.Columns.Add("HasTheClientVisitedPhysician_Reason", typeof(string));
 
-            dt.Columns.Add("HasTheClientVisitedPhysician_Date", typeof(DateTime));
+            dt.Columns.Add("HasTheClientVisitedPhysician_Date", typeof(string));
 
             dt.Columns.Add("DoesTheClientExperience", typeof(bool));
 

@@ -8,7 +8,26 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("Fars Forms", "Index", "FarsForms")
+            @if (Model.Origin == 0)
+            {
+                @Html.ActionLink("Fars Forms", "Index", "FarsForms")
+            }
+            @if (Model.Origin == 1)
+            {
+                @Html.ActionLink("Pending Fars Forms", "PendingFars", "FarsForms")
+            }
+            @if (Model.Origin == 2)
+            {
+                @Html.ActionLink("Messages", "MessagesOfFars", "Messages")
+            }
+            @if (Model.Origin == 3)
+            {
+                @Html.ActionLink("Notifications", "Notifications", "Messages")
+            }
+            @if (Model.Origin == 4)
+            {
+                @Html.ActionLink("Edition Fars Forms", "Editionfars", "FarsForms")
+            }
         </li>
         <li class="active">Edit Fars Form</li>
     </ul><!--.breadcrumb-->
@@ -50,6 +69,10 @@
             @if (Model.Origin == 3)
             {
                 <a asp-action="Notifications" asp-controller="Messages" class="btn btn-success">Back</a>
+            }
+            @if (Model.Origin == 4)
+            {
+                <a asp-action="EditionFars"  class="btn btn-success">Back</a>
             }
         </div>
     </form>        

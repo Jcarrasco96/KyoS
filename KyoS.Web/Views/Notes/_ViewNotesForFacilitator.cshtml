@@ -49,7 +49,7 @@
                                             {
                                                 <tr>
                                                     <td align="center">
-                                                        @if (day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() != 0)
+                                                        @if (day.Workdays_Clients.Where(wc => wc.Facilitator.Id.ToString() == @ViewData["facilitatorId"].ToString()).Count() != 0)
                                                         {
                                                             <a class="icon-plus-sign-alt"></a>
                                                         }
@@ -64,7 +64,7 @@
                                                                     <th class="col-md-2"></th>
                                                                     <th></th>
                                                                 </tr>
-                                                                @foreach (var day_client in day.Workdays_Clients.Where(dc => dc.Facilitator.LinkedUser == User.Identity.Name).OrderBy(n => n.Session))
+                                                                @foreach (var day_client in day.Workdays_Clients.Where(dc => dc.Facilitator.Id.ToString() == @ViewData["facilitatorId"].ToString()).OrderBy(n => n.Session))
                                                                 {
                                                                     @if (day_client.Present)
                                                                     {
@@ -283,10 +283,28 @@
                                                         @Html.DisplayFor(modelItem => day.Day)
                                                     </td>
                                                     <td align="center">
-                                                        @day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR) && (wc.Session == "AM")).Count()
+                                                        @if (@day.Workdays_Clients.Where(wc => (wc.Facilitator.Id.ToString() == @ViewData["facilitatorId"].ToString()) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR) && (wc.Session == "AM")).Count() > 12)
+                                                        {
+                                                            <span class="label label-danger">
+                                                                @day.Workdays_Clients.Where(wc => (wc.Facilitator.Id.ToString() == @ViewData["facilitatorId"].ToString()) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR) && (wc.Session == "AM")).Count()
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            @day.Workdays_Clients.Where(wc => (wc.Facilitator.Id.ToString() == @ViewData["facilitatorId"].ToString()) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR) && (wc.Session == "AM")).Count()
+                                                        }
                                                     </td>
                                                     <td align="center">
-                                                        @day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR) && (wc.Session == "PM")).Count()
+                                                        @if (@day.Workdays_Clients.Where(wc => (wc.Facilitator.Id.ToString() == @ViewData["facilitatorId"].ToString()) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR) && (wc.Session == "PM")).Count() > 12)
+                                                        {
+                                                            <span class="label label-danger">
+                                                                @day.Workdays_Clients.Where(wc => (wc.Facilitator.Id.ToString() == @ViewData["facilitatorId"].ToString()) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR) && (wc.Session == "PM")).Count()
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            @day.Workdays_Clients.Where(wc => (wc.Facilitator.Id.ToString() == @ViewData["facilitatorId"].ToString()) && (wc.Workday.Service == KyoS.Common.Enums.ServiceType.PSR) && (wc.Session == "PM")).Count()
+                                                        }
                                                     </td>
                                                     <td align="right">
                                                         @if ((day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() == (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Present == false)).Count() + day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && ((wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Approved) || (wc.NoteP != null && wc.NoteP.Status == KyoS.Common.Enums.NoteStatus.Approved)))).Count())) && (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && ((wc.Note != null && wc.Note.Status == KyoS.Common.Enums.NoteStatus.Approved) || (wc.NoteP != null && wc.NoteP.Status == KyoS.Common.Enums.NoteStatus.Approved)))).Count() > 0))
