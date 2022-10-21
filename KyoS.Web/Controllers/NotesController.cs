@@ -10581,6 +10581,94 @@ namespace KyoS.Web.Controllers
             return View(week);
         }
 
+        [Authorize(Roles = "Manager")]
+        public IActionResult PSRAssistanceModifications(bool update = false, int affected_rows = 0)
+        {
+            //success
+            if (update)
+            {
+                ViewBag.Error = "1";
+                ViewBag.Text = $"Succesfully updated {affected_rows} rows";
+            }
 
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            MultiSelectList facilitator_list;
+            List<FacilitatorEntity> facilitators = _context.Facilitators
+                                                           .Where(f => (f.Clinic.Id == user_logged.Clinic.Id && f.Status == StatusType.Open))
+                                                           .OrderBy(c => c.Name).ToList();
+            
+            facilitator_list = new MultiSelectList(facilitators, "Id", "Name");
+            ViewData["facilitators"] = facilitator_list;
+
+            return View(new AssistanceModificationsViewModel { });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> PSRAssistanceModifications(AssistanceModificationsViewModel model, IFormCollection form)
+        {
+            string[] workdays = model.Workdays.ToString().Split(',');
+            string[] facilitators = form["facilitators"].ToString().Split(',');            
+            IQueryable<Workday_Client> workdayClient;
+            int rows_affected = 0;
+            bool present = true;
+
+            switch (form["Present"])
+            {
+                case "present":
+                    {
+                        present = true;
+                        break;
+                    }
+                case "nopresent":
+                    {
+                        present = false;
+                        break;
+                    }
+                default:
+                    break;
+            }
+
+            foreach (string value in workdays)
+            {
+                foreach (string item in facilitators)
+                {
+                    workdayClient =  _context.Workdays_Clients
+                                             .Where(wc => (wc.Facilitator.Id == Convert.ToInt32(item) 
+                                                        && wc.Workday.Date == Convert.ToDateTime(value)
+                                                        && wc.Workday.Service == ServiceType.PSR));
+
+                    rows_affected += workdayClient.Count();
+
+                    await workdayClient.ForEachAsync(wc => wc.Present = present);
+                    _context.UpdateRange(workdayClient);                              
+                }               
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(PSRAssistanceModifications), new { update = true, affected_rows = rows_affected });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+            }
+
+            return RedirectToAction(nameof(PSRAssistanceModifications));
+        }
     }
 }
