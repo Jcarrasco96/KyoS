@@ -1234,5 +1234,53 @@ namespace KyoS.Web.Controllers
             return Json(text);
         }
 
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        public async Task<IActionResult> ClientHistory(int idClient = 0)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            ClientEntity client = await _context.Clients
+                                                .Include(w => w.MTPs)
+                                                .ThenInclude(w => w.MtpReviewList)
+
+                                                .Include(w => w.DischargeList)
+                                                .Include(w => w.FarsFormList)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.Workday)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.Facilitator)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.NoteP)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.IndividualNote)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.Note)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.GroupNote)
+
+                                                .FirstOrDefaultAsync(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                   && w.Id == idClient));
+
+
+
+            return View(client);
+        }
+
     }
 }
