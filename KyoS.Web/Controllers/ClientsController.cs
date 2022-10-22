@@ -51,12 +51,52 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.Delete = "N";
             }
+            if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+            {
+                return View(await _context.Clients
+                                          .Include(c => c.Clinic)
+                                          .Include(c => c.IndividualTherapyFacilitator)
+                                          .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
+                                          .OrderBy(c => c.Name).ToListAsync());
+            }
+            if (User.IsInRole("Documents_Assistant"))
+            {
+                return View(await _context.Clients
+                                          .Include(c => c.Clinic)
+                                          .Include(c => c.IndividualTherapyFacilitator)
+                                          .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                && (c.Bio.CreatedBy == user_logged.UserName
+                                                     || c.MTPs.Where(m => m.CreatedBy == user_logged.UserName).Count() > 0)))
+                                          .OrderBy(c => c.Name).ToListAsync());
+            }
+            if (User.IsInRole("Facilitator"))
+            {
+                FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
 
-            return View(await _context.Clients
-                                      .Include(c => c.Clinic)
-                                      .Include(c => c.IndividualTherapyFacilitator)
-                                      .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
-                                      .OrderBy(c => c.Name).ToListAsync());
+                return View(await _context.Clients
+                                          .Include(c => c.Clinic)
+                                          .Include(c => c.IndividualTherapyFacilitator)
+                                          .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                && (c.Workdays_Clients.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0)))
+                                          .OrderBy(c => c.Name).ToListAsync());
+            }
+            if (User.IsInRole("CaseManager"))
+            {
+                CaseMannagerEntity casemanager = await _context.CaseManagers.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
+                
+                TCMClientEntity tcmClient = await _context.TCMClient
+                                                          
+                                                          .Include(n => n.Client)
+                                                          .ThenInclude(n => n.Clinic)
+                                                          
+                                                          .Include(n => n.Client)
+                                                          .ThenInclude(c => c.IndividualTherapyFacilitator)
+                                                          .FirstOrDefaultAsync(f => f.Casemanager.Id == casemanager.Id);
+
+                return View(tcmClient.Client);
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
         }
 
         [Authorize(Roles = "Manager, Supervisor")]
@@ -477,7 +517,7 @@ namespace KyoS.Web.Controllers
             return View(clientViewModel);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager")]
         public async Task<IActionResult> Details(int? id, int origin = 0)
         {
             if (id == null)
@@ -1234,7 +1274,8 @@ namespace KyoS.Web.Controllers
             return Json(text);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant" +
+            "")]
         public async Task<IActionResult> ClientHistory(int idClient = 0)
         {
             UserEntity user_logged = _context.Users
@@ -1253,8 +1294,9 @@ namespace KyoS.Web.Controllers
                                                 .Include(w => w.MTPs)
                                                 .ThenInclude(w => w.MtpReviewList)
 
-                                                .Include(w => w.DischargeList)
+                                                .Include(w => w.Bio)
                                                 .Include(w => w.FarsFormList)
+                                                .Include(w => w.DischargeList)
 
                                                 .Include(w => w.Workdays_Clients)
                                                 .ThenInclude(w => w.Workday)

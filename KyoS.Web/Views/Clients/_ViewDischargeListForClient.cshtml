@@ -23,7 +23,10 @@
                             <th class="col-md-2" style="text-align:center">
                                 Admissioned for
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
+                                MH Therapy
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
                             <th class="col-md-1">
@@ -56,6 +59,9 @@
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.AdmissionedFor)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.TypeService)
                                 </td>
                                 <td align="center">
                                     @if (item.Status == KyoS.Common.Enums.DischargeStatus.Edition)
