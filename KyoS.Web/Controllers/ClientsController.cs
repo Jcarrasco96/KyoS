@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using KyoS.Web.Data.Contracts;
 
 namespace KyoS.Web.Controllers
 {
@@ -1274,8 +1275,7 @@ namespace KyoS.Web.Controllers
             return Json(text);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant" +
-            "")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> ClientHistory(int idClient = 0)
         {
             UserEntity user_logged = _context.Users
@@ -1324,5 +1324,361 @@ namespace KyoS.Web.Controllers
             return View(client);
         }
 
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        public async Task<IActionResult> ClientProblemList(int idClient = 0)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            ClientEntity client = await _context.Clients
+                                                .Include(w => w.MTPs)
+                                                .ThenInclude(w => w.MtpReviewList)
+
+                                                .Include(w => w.Bio)
+                                                .Include(w => w.FarsFormList)
+                                                .Include(w => w.DischargeList)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.Workday)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.Facilitator)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.NoteP)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.IndividualNote)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.Note)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.GroupNote)
+
+                                                .FirstOrDefaultAsync(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                   && w.Id == idClient));
+
+            int cant_Fars = 0;
+            Problem tempProblem = new Problem();
+
+            List<Problem> problem = new List<Problem>();
+
+            if (client.MTPs.Count() > 0 && client.Bio != null)
+            {
+                if (client.AdmisionDate > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
+                {
+                    tempProblem.Name = "Date MTP";
+                    tempProblem.Description = "La fecha del MTP es anterior a la fecha de admision";
+                    tempProblem.Active = 0;
+                }
+                else
+                {
+                    if (client.Bio.DateBio > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
+                    {
+                        tempProblem.Name = "Date MTP";
+                        tempProblem.Description = "La fecha del MTP es anterior a la fecha del BIO";
+                        tempProblem.Active = 0;
+                    }
+                    else
+                    {
+                        tempProblem.Name = "Date MTP";
+                        tempProblem.Description = "La fecha del MTP es posterior a la fecha de admision y la fecha del BIO";
+                        tempProblem.Active = 2;
+                    }
+                    
+                }
+                problem.Add(tempProblem);
+                cant_Fars++;
+                tempProblem = new Problem();
+            }
+            else
+            {
+                if (client.MTPs.Count() == 0)
+                {
+                    tempProblem.Name = "MTP";
+                    tempProblem.Description = "No existe MTP";
+                    tempProblem.Active = 0;
+                }
+                else
+                {
+                    if (client.AdmisionDate > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
+                    {
+                        tempProblem.Name = "Date MTP";
+                        tempProblem.Description = "La fecha del MTP es anterior a la fecha de admision";
+                        tempProblem.Active = 0;
+                    }
+                    else
+                    {
+                        tempProblem.Name = "Date MTP";
+                        tempProblem.Description = "La fecha del MTP es posterior a la fecha de admision y la fecha del BIO";
+                        tempProblem.Active = 2;
+                    }
+                    cant_Fars++;
+                }
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+            
+
+            if (client.Bio != null)
+            {
+                if (client.AdmisionDate > client.Bio.DateBio)
+                {
+                    tempProblem.Name = "Date BIO";
+                    tempProblem.Description = "La fecha del BIO es anterior a la fecha de admision";
+                    tempProblem.Active = 0;
+                }
+                else
+                {
+                    tempProblem.Name = "Date BIO";
+                    tempProblem.Description = "La fecha del BIO es posterior a la fecha de admision";
+                    tempProblem.Active = 2;
+                }
+            }
+            else
+            {
+                tempProblem.Name = "Date BIO";
+                tempProblem.Description = "No existe BIO";
+                tempProblem.Active = 0;
+            }
+            problem.Add(tempProblem);
+            tempProblem = new Problem();
+
+            if (client.FarsFormList.Count() > 0 && client.Bio != null )
+            {
+                if (client.FarsFormList.ElementAtOrDefault(0).EvaluationDate != client.Bio.DateBio)
+                {
+                    tempProblem.Name = "Initial FARS";
+                    tempProblem.Description = "La fecha del FARS inicial no coincide con el BIO";
+                    tempProblem.Active = 0;
+                }
+                else
+                {
+                    tempProblem.Name = "Initial FARS";
+                    tempProblem.Description = "La fecha del FARS inicial coincide con el BIO";
+                    tempProblem.Active = 2;
+                }
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+
+            if (client.MTPs.Count() > 0 && client.MTPs.ElementAtOrDefault(0).MtpReviewList.Count() > 0)
+            {
+                if (client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP.AddMonths(client.MTPs.ElementAtOrDefault(0).NumberOfMonths.Value) < client.MTPs.ElementAtOrDefault(0).MtpReviewList.Min(n => n.DataOfService))
+                {
+                    tempProblem.Name = "MTPR";
+                    tempProblem.Description = "La fecha del MTPR esta fuera de termino";
+                    tempProblem.Active = 0;
+                }
+                else
+                {
+                    tempProblem.Name = "MTPR";
+                    tempProblem.Description = "La fecha del MTPR esta en termino";
+                    tempProblem.Active = 2;
+                }
+                problem.Add(tempProblem);
+                cant_Fars++;
+            }
+            
+            tempProblem = new Problem();
+
+            if (client.Status == StatusType.Close)
+            {
+                if (client.MTPs.Count() > 0)
+                {
+                    DateTime date = new DateTime();
+                    if (client.MTPs.ElementAtOrDefault(0).MtpReviewList.Count() > 0)
+                    {
+                        if (client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP.AddMonths(client.MTPs.ElementAtOrDefault(0).NumberOfMonths.Value + client.MTPs.ElementAtOrDefault(0).MtpReviewList.ElementAtOrDefault(0).MonthOfTreatment) < client.DateOfClose)
+                        {
+                            tempProblem.Name = "Date Close";
+                            tempProblem.Description = "La fecha de cierre esta fuera de termino";
+                            tempProblem.Active = 0;
+                        }
+                        else
+                        {
+                            if (client.DateOfClose == null || client.DateOfClose == date)
+                            {
+                                tempProblem.Name = "Date Close";
+                                tempProblem.Description = "La fecha de cierre esta fuera de termino";
+                                tempProblem.Active = 0;
+                            }
+                            else
+                            {
+                                tempProblem.Name = "Date Close";
+                                tempProblem.Description = "La fecha de cierre esta en termino";
+                                tempProblem.Active = 2;
+                            }
+                            
+                        }
+                    }
+                    else
+                    {
+                        if (client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP.AddMonths(client.MTPs.ElementAtOrDefault(0).NumberOfMonths.Value) < client.DateOfClose)
+                        {
+                            tempProblem.Name = "Date Close";
+                            tempProblem.Description = "La fecha de cierre esta fuera de termino";
+                            tempProblem.Active = 0;
+                        }
+                        else
+                        {
+                            if (client.DateOfClose == null || client.DateOfClose == date)
+                            {
+                                tempProblem.Name = "Date Close";
+                                tempProblem.Description = "La fecha de cierre esta fuera de termino";
+                                tempProblem.Active = 0;
+                            }
+                            else
+                            {
+                                tempProblem.Name = "Date Close";
+                                tempProblem.Description = "La fecha de cierre esta en termino";
+                                tempProblem.Active = 2;
+                            }
+                            
+                        }
+                    }
+                    problem.Add(tempProblem);
+                }
+            }
+            tempProblem = new Problem();
+
+            if (client.Status == StatusType.Close)
+            {
+                int cant_Discharge = 0;
+                if (client.Workdays_Clients.Where(n => n.Note != null).Count() > 0 || client.Workdays_Clients.Where(n => n.NoteP != null).Count() > 0)
+                {
+                   cant_Discharge++;
+                }
+                if (client.Workdays_Clients.Where(n => n.IndividualNote != null).Count() > 0)
+                {
+                    cant_Discharge++;
+                }
+                if (client.Workdays_Clients.Where(n => n.GroupNote != null).Count() > 0)
+                {
+                    cant_Discharge++;
+                }
+
+                if (client.DischargeList.Count() != cant_Discharge)
+                {
+                    tempProblem.Name = "Discharge";
+                    tempProblem.Description = "Faltan Discharge";
+                    tempProblem.Active = 0;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+
+                    if (client.DischargeList.Count() > 0)
+                    {
+                        bool salida = false;
+                        foreach (var item in client.DischargeList)
+                        {
+                            if (item.DateDischarge != client.DateOfClose)
+                            {
+                                tempProblem.Name = "Discharge";
+                                tempProblem.Description = "Revisar fecha de discharge no coincide con fecha de cierre";
+                                tempProblem.Active = 1;
+                                salida = true;
+                                break;
+                            }
+                        }
+                        if (salida == false)
+                        {
+                            tempProblem.Name = "Discharge";
+                            tempProblem.Description = "Revisar fecha de discharge coincide con fecha de cierre";
+                            tempProblem.Active = 1;
+                        }
+                        problem.Add(tempProblem);
+                        tempProblem = new Problem();
+                    }
+                }
+                else
+                {
+                    if (client.DischargeList.Count() > 0)
+                    {
+                        bool salida = false;
+                        foreach (var item in client.DischargeList)
+                        {
+                            if (item.DateDischarge != client.DateOfClose)
+                            {
+                                tempProblem.Name = "Discharge";
+                                tempProblem.Description = "Revisar fecha de discharge no coincide con fecha de cierre";
+                                tempProblem.Active = 0;
+                                salida = true;
+                                break;
+                            }
+                        }
+                        if (salida == false)
+                        {
+                            tempProblem.Name = "Discharge";
+                            tempProblem.Description = "Revisar fecha de discharge coincide con fecha de cierre";
+                            tempProblem.Active = 1;
+                        }
+                        problem.Add(tempProblem);
+                        tempProblem = new Problem();
+                    }
+                }
+               
+                cant_Fars++;
+
+            }
+
+            if (client.FarsFormList.Count() != cant_Fars)
+            {
+                tempProblem.Name = "Count FARS";
+                tempProblem.Description = "Faltan FARS (deben ser " + cant_Fars+")";
+                tempProblem.Active = 0;
+            }
+            else
+            {
+                tempProblem.Name = "Count FARS";
+                tempProblem.Description = "La cantidad de FARS es correcta";
+                tempProblem.Active = 2;
+            }
+            problem.Add(tempProblem);
+            tempProblem = new Problem();
+
+            if (client.MTPs.Count() > 0 && client.Bio != null)
+            {
+                if (client.Workdays_Clients.Where(d => d.Workday.Date <= client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP).Count() > 0 || client.Workdays_Clients.Where(d => d.Workday.Date <= client.Bio.DateBio).Count() > 0)
+                {
+                    tempProblem.Name = "Notes";
+                    tempProblem.Description = "Notas fuera de termino(before)";
+                    tempProblem.Active = 0;
+                }
+                else
+                {
+                    tempProblem.Name = "Notes";
+                    tempProblem.Description = "Notas en termino";
+                    tempProblem.Active = 2;
+                }
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+
+            if (client.Workdays_Clients.Where(d => d.Workday.Date > client.DateOfClose).Count() > 0)
+            {
+                tempProblem.Name = "Notes";
+                tempProblem.Description = "Notas fuera de termino(after)";
+                tempProblem.Active = 0;
+            }
+            else
+            {
+                tempProblem.Name = "Notes";
+                tempProblem.Description = "Notas en termino";
+                tempProblem.Active = 2;
+            }
+            problem.Add(tempProblem);
+
+            return View(problem);
+        }
     }
 }

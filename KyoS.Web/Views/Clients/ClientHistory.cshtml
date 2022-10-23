@@ -32,6 +32,16 @@
             </div>
             <div class="col-md-push-12">
                 <div class="">
+                    <div class="col-md-12 form-group">
+                        @if (Model.Clinic.Setting.MHProblems == true)
+                        {
+                            <a onclick="showInPopup('@Url.Action("ClientProblemList", "Clients", new { idClient = @Model.Id }, Context.Request.Scheme)','View List Problem')" class="btn btn-danger" title="View List Problem"><i class="glyphicon glyphicon-alert"></i> View List Problem</a>
+                        }
+                        else
+                        {
+                            <a onclick="showInPopup('@Url.Action("ClientProblemList", "Clients", new { idClient = @Model.Id }, Context.Request.Scheme)','View List Problem')" class="btn btn-danger disabled" title="View List Problem"><i class="glyphicon glyphicon-alert"></i> View List Problem</a>
+                        }
+                    </div>
                     <div id="view-farsForClient">
                         @if (Model.FarsFormList.Count() > 0)
                         {
@@ -70,6 +80,8 @@
     </div>
 </body>
 </html>
+
+<partial name="_ModalPopup" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
