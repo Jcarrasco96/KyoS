@@ -1,0 +1,188 @@
+﻿@model KyoS.Web.Data.Entities.ClientEntity
+@if (Model != null)
+{
+    var Therapy = "";
+
+    @if (Model.Workdays_Clients.Where(n => n.NoteP != null).Count() > 0)
+    {
+        Therapy = "PSR";
+        @if (Model.Workdays_Clients.Where(n => n.IndividualNote != null).Count() > 0)
+        {
+            Therapy = Therapy + " / Ind";
+            @if (Model.Workdays_Clients.Where(n => n.GroupNote != null).Count() > 0)
+            {
+                Therapy = Therapy + " / Group";
+            }
+        }
+    }
+    else
+    {
+        @if (Model.Workdays_Clients.Where(n => n.GroupNote != null).Count() > 0)
+        {
+            Therapy = Therapy + "Group";
+            @if (Model.Workdays_Clients.Where(n => n.IndividualNote != null).Count() > 0)
+            {
+                Therapy = Therapy + " / Ind";
+            }
+        }
+        else
+        {
+            @if (Model.Workdays_Clients.Where(n => n.IndividualNote != null).Count() > 0)
+            {
+                Therapy = Therapy + "Ind";
+            }
+        }
+    }
+
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="Name" class="control-label">Client Name</label>
+        <input asp-for="Name" class="form-control" readonly>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="AdmisionDate" class="control-label">Admission Date</label>
+        <input asp-for="AdmisionDate" class="form-control" readonly>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Bio.DateBio" class="control-label">Date BIO</label>
+        <input asp-for="Bio.DateBio" class="form-control" readonly>
+    </div>
+    @if (Model.MTPs.Count() > 0)
+    {
+        @if (Model.MTPs.ElementAt(0).MtpReviewList.Count() == 0)
+        {
+            <div class="form-group col-md-2">
+                <label asp-for="MTPs.ElementAt(0).AdmissionDateMTP" class="control-label">Date MTP</label>
+                <input asp-for="MTPs.ElementAt(0).AdmissionDateMTP" class="form-control" readonly>
+            </div>
+            <div class="form-group col-md-1">
+                <label asp-for="MTPs.ElementAt(0).NumberOfMonths" class="control-label">Months MTP</label>
+                <input asp-for="MTPs.ElementAt(0).NumberOfMonths" class="form-control" readonly>
+            </div>
+            <div class="form-group col-md-2">
+                <label class="control-label">Date MTPR</label>
+                <input class="form-control" readonly>
+            </div>
+            <div class="form-group col-md-1">
+                <label class="control-label">Months MTPR</label>
+                <input class="form-control" readonly>
+            </div>
+        }
+        else
+        {
+            <div class="form-group col-md-2">
+                <label asp-for="MTPs.ElementAt(0).AdmissionDateMTP" class="control-label">Date MTP</label>
+                <input asp-for="MTPs.ElementAt(0).AdmissionDateMTP" class="form-control" readonly>
+            </div>
+            <div class="form-group col-md-1">
+                <label asp-for="MTPs.ElementAt(0).NumberOfMonths" class="control-label">Months MTP</label>
+                <input asp-for="MTPs.ElementAt(0).NumberOfMonths" class="form-control" readonly>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="MTPs.ElementAt(0).MtpReviewList.ElementAt(0).DataOfService" class="control-label">Date MTPR</label>
+                <input asp-for="MTPs.ElementAt(0).MtpReviewList.ElementAt(0).DataOfService" class="form-control" readonly>
+            </div>
+            <div class="form-group col-md-1">
+                <label asp-for="MTPs.ElementAt(0).MtpReviewList.ElementAt(0).MonthOfTreatment" class="control-label">Months MTPR</label>
+                <input asp-for="MTPs.ElementAt(0).MtpReviewList.ElementAt(0).MonthOfTreatment" class="form-control" readonly>
+            </div>
+        }
+
+    }
+    else
+    {
+        <div class="form-group col-md-2">
+            <label class="control-label">Date MTP</label>
+            <input class="form-control" readonly>
+        </div>
+        <div class="form-group col-md-2">
+            <label class="control-label">Months of mounth MTP</label>
+            <input class="form-control" readonly>
+        </div>
+        <div class="form-group col-md-2">
+            <label class="control-label">Date MTPR</label>
+            <input class="form-control" readonly>
+        </div>
+        <div class="form-group col-md-2">
+            <label class="control-label">Number Of mounth MTPR</label>
+            <input class="form-control" readonly>
+        </div>
+    }
+    <div class="form-group col-md-2">
+        <label asp-for="Status" class="control-label"></label>
+        <input asp-for="Status" class="form-control" readonly>
+    </div>
+    <div class="form-group col-md-2">
+        <label class="control-label">Therapy</label>
+        <input asp-for="@Therapy" class="form-control" readonly>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="DateOfClose" class="control-label"></label>
+        <input asp-for="DateOfClose" class="form-control" readonly>
+    </div>
+    @if (Model.DischargeList.Count() > 0)
+    {
+        @if (Model.DischargeList.FirstOrDefault(n => n.TypeService == KyoS.Common.Enums.ServiceType.PSR) != null)
+        {
+            <div class="form-group col-md-2">
+                <label asp-for="DischargeList.FirstOrDefault(n => n.TypeService == KyoS.Common.Enums.ServiceType.PSR).DateDischarge" class="control-label">Dischage PSR</label>
+                <input asp-for="DischargeList.FirstOrDefault(n => n.TypeService == KyoS.Common.Enums.ServiceType.PSR).DateDischarge" class="form-control" readonly>
+            </div>
+        }
+        else
+        {
+            <div class="form-group col-md-2">
+                <label class="control-label">Dischage PSR</label>
+                <input class="form-control" readonly>
+            </div>
+        }
+        @if (Model.DischargeList.FirstOrDefault(n => n.TypeService == KyoS.Common.Enums.ServiceType.Individual) != null)
+        {
+            <div class="form-group col-md-2">
+                <label asp-for="DischargeList.FirstOrDefault(n => n.TypeService == KyoS.Common.Enums.ServiceType.Individual).DateDischarge" class="control-label">Dischage Individual</label>
+                <input asp-for="DischargeList.FirstOrDefault(n => n.TypeService == KyoS.Common.Enums.ServiceType.Individual).DateDischarge" class="form-control" readonly>
+            </div>
+        }
+        else
+        {
+            <div class="form-group col-md-2">
+                <label class="control-label">Dischage Individual</label>
+                <input class="form-control" readonly>
+            </div>
+        }
+        @if (Model.DischargeList.FirstOrDefault(n => n.TypeService == KyoS.Common.Enums.ServiceType.Group) != null)
+        {
+            <div class="form-group col-md-2">
+                <label asp-for="DischargeList.FirstOrDefault(n => n.TypeService == KyoS.Common.Enums.ServiceType.Group).DateDischarge" class="control-label">Dischage Individual</label>
+                <input asp-for="DischargeList.FirstOrDefault(n => n.TypeService == KyoS.Common.Enums.ServiceType.Group).DateDischarge" class="form-control" readonly>
+            </div>
+        }
+        else
+        {
+            <div class="form-group col-md-2">
+                <label class="control-label">Dischage Group</label>
+                <input class="form-control" readonly>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="form-group col-md-2">
+            <label class="control-label">Dischage PSR</label>
+            <input class="form-control" readonly>
+        </div>
+        <div class="form-group col-md-2">
+            <label class="control-label">Dischage Individual</label>
+            <input class="form-control" readonly>
+        </div>
+        <div class="form-group col-md-2">
+            <label class="control-label">Dischage Group</label>
+            <input class="form-control" readonly>
+        </div>
+    }
+
+</div>
+}
+
+
+

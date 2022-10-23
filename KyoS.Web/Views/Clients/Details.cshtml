@@ -11,7 +11,14 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("Clients", "Index", "Clients")
+            @if (Model.Origin == 0)
+            {
+                @Html.ActionLink("Clients", "Index", "Clients")
+            }
+            @if (Model.Origin == 1)
+            {
+                @Html.ActionLink("TCM Clients", "Clients", "TCMClients")
+            }
         </li>
         <li class="active">Details</li>
     </ul><!--.breadcrumb-->
@@ -46,6 +53,10 @@
                             @if (Model.Origin == 0) //viene de la pagina Index de los clientes
                             {
                                 <a asp-action="Index" class="btn btn-success">Back</a>
+                            }
+                            @if (Model.Origin == 1) //viene de la pagina TCMClient/Clients de los TCM
+                            {
+                                <a asp-action="Clients" asp-controller="TCMClients" class="btn btn-success">Back</a>
                             }
                         </div>
                     </div>
