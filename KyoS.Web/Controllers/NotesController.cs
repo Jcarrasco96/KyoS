@@ -10611,7 +10611,12 @@ namespace KyoS.Web.Controllers
             facilitator_list = new MultiSelectList(facilitators, "Id", "Name");
             ViewData["facilitators"] = facilitator_list;
 
-            return View(new AssistanceModificationsViewModel { });
+            AssistanceModificationsViewModel model = new AssistanceModificationsViewModel
+            {
+                CauseOfNotPresent = "The facilitator did not work on that date." 
+            };
+
+            return View(model);
         }
 
         [HttpPost]
@@ -10619,56 +10624,76 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> PSRAssistanceModifications(AssistanceModificationsViewModel model, IFormCollection form)
         {
-            string[] workdays = model.Workdays.ToString().Split(',');
-            string[] facilitators = form["facilitators"].ToString().Split(',');            
-            IQueryable<Workday_Client> workdayClient;
-            int rows_affected = 0;
-            bool present = true;
-
-            switch (form["Present"])
+            if (ModelState.IsValid && !string.IsNullOrEmpty(form["facilitators"].ToString())) 
             {
-                case "present":
-                    {
-                        present = true;
-                        break;
-                    }
-                case "nopresent":
-                    {
-                        present = false;
-                        break;
-                    }
-                default:
-                    break;
-            }
+                string[] workdays = model.Workdays.ToString().Split(',');
+                string[] facilitators = form["facilitators"].ToString().Split(',');
+                IQueryable<Workday_Client> workdayClient;
+                int rows_affected = 0;
+                bool present = true;
 
-            foreach (string value in workdays)
-            {
-                foreach (string item in facilitators)
+                switch (form["Present"])
                 {
-                    workdayClient =  _context.Workdays_Clients
-                                             .Where(wc => (wc.Facilitator.Id == Convert.ToInt32(item) 
-                                                        && wc.Workday.Date == Convert.ToDateTime(value)
-                                                        && wc.Workday.Service == ServiceType.PSR));
+                    case "present":
+                        {
+                            present = true;
+                            break;
+                        }
+                    case "nopresent":
+                        {
+                            present = false;
+                            break;
+                        }
+                    default:
+                        break;
+                }
 
-                    rows_affected += workdayClient.Count();
+                foreach (string value in workdays)
+                {
+                    foreach (string item in facilitators)
+                    {
+                        workdayClient = _context.Workdays_Clients
+                                                 .Where(wc => (wc.Facilitator.Id == Convert.ToInt32(item)
+                                                            && wc.Workday.Date == Convert.ToDateTime(value)
+                                                            && wc.Workday.Service == ServiceType.PSR));
 
-                    await workdayClient.ForEachAsync(wc => wc.Present = present);
-                    _context.UpdateRange(workdayClient);                              
-                }               
+                        rows_affected += workdayClient.Count();
+
+                        await workdayClient.ForEachAsync(wc => wc.Present = present);
+                        await workdayClient.ForEachAsync(wc => wc.CauseOfNotPresent = (present == true) ? string.Empty : model.CauseOfNotPresent);
+
+                        _context.UpdateRange(workdayClient);
+                    }
+                }
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(PSRAssistanceModifications), new { update = true, affected_rows = rows_affected });
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+                return RedirectToAction(nameof(PSRAssistanceModifications));
             }
 
-            try
-            {
-                await _context.SaveChangesAsync();
+            UserEntity user_logged = _context.Users
 
-                return RedirectToAction(nameof(PSRAssistanceModifications), new { update = true, affected_rows = rows_affected });
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-            }
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
 
-            return RedirectToAction(nameof(PSRAssistanceModifications));
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            MultiSelectList facilitator_list;
+            List<FacilitatorEntity> facilitatorsList = _context.Facilitators
+                                                           .Where(f => (f.Clinic.Id == user_logged.Clinic.Id && f.Status == StatusType.Open))
+                                                           .OrderBy(c => c.Name).ToList();
+
+            facilitator_list = new MultiSelectList(facilitatorsList, "Id", "Name");
+            ViewData["facilitators"] = facilitator_list;
+
+            return View(model);            
         }
     }
 }

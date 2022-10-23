@@ -3103,6 +3103,52 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetFarsDS(fars));
             WebReport.Report.RegisterData(dataSet.Tables[0], "FarsForm");
 
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;            
+
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .FirstOrDefault(f => f.LinkedUser == fars.CreatedBy);
+            if (facilitator != null)
+            {
+                if (!string.IsNullOrEmpty(facilitator.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+            else
+            {
+                SupervisorEntity supervisor = _context.Supervisors
+                                                      .FirstOrDefault(f => f.LinkedUser == fars.CreatedBy);
+                if (supervisor != null)
+                {
+                    if (!string.IsNullOrEmpty(supervisor.SignaturePath))
+                    {
+                        path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(supervisor.SignaturePath)}");
+                        stream2 = _imageHelper.ImageToByteArray(path);
+                    }
+                }
+                else
+                {
+                    DocumentsAssistantEntity assistant = _context.DocumentsAssistant
+                                                                 .FirstOrDefault(f => f.LinkedUser == fars.CreatedBy);
+                    if (assistant != null)
+                    {
+                        if (!string.IsNullOrEmpty(assistant.SignaturePath))
+                        {
+                            path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(assistant.SignaturePath)}");
+                            stream2 = _imageHelper.ImageToByteArray(path);
+                        }
+                    }
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
             WebReport.Report.Prepare();
 
             Stream stream = new MemoryStream();
@@ -3141,6 +3187,52 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetFarsDS(fars));
             WebReport.Report.RegisterData(dataSet.Tables[0], "FarsForm");
 
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .FirstOrDefault(f => f.LinkedUser == fars.CreatedBy);
+            if (facilitator != null)
+            {
+                if (!string.IsNullOrEmpty(facilitator.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+            else
+            {
+                SupervisorEntity supervisor = _context.Supervisors
+                                                      .FirstOrDefault(f => f.LinkedUser == fars.CreatedBy);
+                if (supervisor != null)
+                {
+                    if (!string.IsNullOrEmpty(supervisor.SignaturePath))
+                    {
+                        path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(supervisor.SignaturePath)}");
+                        stream2 = _imageHelper.ImageToByteArray(path);
+                    }
+                }
+                else
+                {
+                    DocumentsAssistantEntity assistant = _context.DocumentsAssistant
+                                                                 .FirstOrDefault(f => f.LinkedUser == fars.CreatedBy);
+                    if (assistant != null)
+                    {
+                        if (!string.IsNullOrEmpty(assistant.SignaturePath))
+                        {
+                            path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(assistant.SignaturePath)}");
+                            stream2 = _imageHelper.ImageToByteArray(path);
+                        }
+                    }
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
             WebReport.Report.Prepare();
 
             Stream stream = new MemoryStream();
@@ -3173,6 +3265,35 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetSupervisorDS(discharge.Supervisor));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
 
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+
+            if (discharge.Supervisor != null)
+            {
+                if (!string.IsNullOrEmpty(discharge.Supervisor.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Supervisor.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .FirstOrDefault(f => f.LinkedUser == discharge.CreatedBy);
+            if (facilitator != null)
+            {
+                if (!string.IsNullOrEmpty(facilitator.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                }
+            }         
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
             WebReport.Report.Prepare();
 
             Stream stream = new MemoryStream();
@@ -3201,6 +3322,35 @@ namespace KyoS.Web.Helpers
             dataSet = new DataSet();
             dataSet.Tables.Add(GetSupervisorDS(discharge.Supervisor));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+
+            if (discharge.Supervisor != null)
+            {
+                if (!string.IsNullOrEmpty(discharge.Supervisor.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Supervisor.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .FirstOrDefault(f => f.LinkedUser == discharge.CreatedBy);
+            if (facilitator != null)
+            {
+                if (!string.IsNullOrEmpty(facilitator.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
 
             WebReport.Report.Prepare();
 

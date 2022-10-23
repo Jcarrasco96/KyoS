@@ -6,5 +6,7 @@ namespace KyoS.Web.Models
     {
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string Workdays { get; set; }
+
+        public string CauseOfNotPresent { get; set; }
     }
 }

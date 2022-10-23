@@ -58,13 +58,18 @@
                 <label class="control-label">Facilitators</label>&nbsp;*
                 @Html.ListBox("facilitators", ViewData["facilitators"] as MultiSelectList, new { @class = "chosen-select", @style = "width:100%;" })
             </div>
-            <div class="col-md-12">                
-               <input type="radio" name="Present" value="present" id="rPresent" />
+            <div class="col-md-12 form-group">                
+               <input type="radio" name="Present" value="present" id="rPresent"/>
                <label style="font-weight: bold;"> Present</label>
                <br />
                <input type="radio" name="Present" value="nopresent" id="rNoPresent" checked="checked" />                
                <label style="font-weight: bold;"> Not Present</label>
-            </div>         
+            </div>        
+            <div class="col-md-12">
+                <label asp-for="CauseOfNotPresent" class="control-label">Cause of not present</label>
+                <textarea asp-for="CauseOfNotPresent" class="form-control" rows="2" id="txtCause"></textarea>                
+                <span asp-validation-for="CauseOfNotPresent" class="text-danger"></span>
+            </div>
             <div class="col-md-12 form-group">
                 &nbsp;
             </div>                        
@@ -83,6 +88,16 @@
         <script src="~/js/chosen.jquery.js" type="text/javascript"></script>
         <script src="~/js/prism.js" type="text/javascript" charset="utf-8"></script>
         <script src="~/js/init.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+            $("#rPresent").click(function () {
+                $("#txtCause").val("");
+                $("#txtCause").prop('disabled', true);
+            })
+            $("#rNoPresent").click(function () {
+                $("#txtCause").val("The facilitator did not work on that date.");
+                $("#txtCause").prop('disabled', false);
+            })
+        </script>
     }
 </body>
 </html>
