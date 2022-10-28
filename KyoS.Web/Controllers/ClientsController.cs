@@ -1339,6 +1339,8 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
+            DateTime date = new DateTime();
+
             ClientEntity client = await _context.Clients
                                                 .Include(w => w.MTPs)
                                                 .ThenInclude(w => w.MtpReviewList)
@@ -1372,7 +1374,7 @@ namespace KyoS.Web.Controllers
             Problem tempProblem = new Problem();
 
             List<Problem> problem = new List<Problem>();
-
+            //BIO
             if (client.MTPs.Count() > 0 && client.Bio != null)
             {
                 if (client.AdmisionDate > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
@@ -1428,8 +1430,7 @@ namespace KyoS.Web.Controllers
                 problem.Add(tempProblem);
                 tempProblem = new Problem();
             }
-            
-
+           
             if (client.Bio != null)
             {
                 if (client.AdmisionDate > client.Bio.DateBio)
@@ -1454,6 +1455,7 @@ namespace KyoS.Web.Controllers
             problem.Add(tempProblem);
             tempProblem = new Problem();
 
+            //FARS
             if (client.FarsFormList.Count() > 0 && client.Bio != null )
             {
                 if (client.FarsFormList.ElementAtOrDefault(0).EvaluationDate != client.Bio.DateBio)
@@ -1496,7 +1498,7 @@ namespace KyoS.Web.Controllers
             {
                 if (client.MTPs.Count() > 0)
                 {
-                    DateTime date = new DateTime();
+                    
                     if (client.MTPs.ElementAtOrDefault(0).MtpReviewList.Count() > 0)
                     {
                         if (client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP.AddMonths(client.MTPs.ElementAtOrDefault(0).NumberOfMonths.Value + client.MTPs.ElementAtOrDefault(0).MtpReviewList.ElementAtOrDefault(0).MonthOfTreatment) < client.DateOfClose)
@@ -1646,6 +1648,38 @@ namespace KyoS.Web.Controllers
             problem.Add(tempProblem);
             tempProblem = new Problem();
 
+            bool dischargeEdition = false;
+            bool dischargePending = false;
+            foreach (var item in client.DischargeList)
+            {
+                if (item.Status == DischargeStatus.Edition)
+                {
+                    dischargeEdition = true;
+                }
+                if (item.Status == DischargeStatus.Pending)
+                {
+                    dischargePending = true;
+                }
+            }
+
+            if (dischargeEdition == true)
+            {
+                tempProblem.Name = "Discharge";
+                tempProblem.Description = "Existe Discharge en edicion";
+                tempProblem.Active = 1;
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+
+            if (dischargePending == true)
+            {
+                tempProblem.Name = "Discharge";
+                tempProblem.Description = "Existe Discharge pendiente de aprobacion";
+                tempProblem.Active = 1;
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+
             if (client.MTPs.Count() > 0 && client.Bio != null)
             {
                 if (client.Workdays_Clients.Where(d => d.Workday.Date <= client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP).Count() > 0 || client.Workdays_Clients.Where(d => d.Workday.Date <= client.Bio.DateBio).Count() > 0)
@@ -1657,27 +1691,154 @@ namespace KyoS.Web.Controllers
                 else
                 {
                     tempProblem.Name = "Notes";
-                    tempProblem.Description = "Notas en termino";
+                    tempProblem.Description = "Notas en termino(before)";
                     tempProblem.Active = 2;
                 }
                 problem.Add(tempProblem);
                 tempProblem = new Problem();
             }
 
-            if (client.Workdays_Clients.Where(d => d.Workday.Date > client.DateOfClose).Count() > 0)
+            if (client.Status == StatusType.Close)
+            {
+                if (client.Workdays_Clients.Where(d => d.Workday.Date > client.DateOfClose).Count() > 0)
+                {
+                    tempProblem.Name = "Notes";
+                    tempProblem.Description = "Notas fuera de termino(after)";
+                    tempProblem.Active = 0;
+                }
+                else
+                {
+                    tempProblem.Name = "Notes";
+                    tempProblem.Description = "Notas en termino(after)";
+                    tempProblem.Active = 2;
+                }
+            }
+            else
             {
                 tempProblem.Name = "Notes";
-                tempProblem.Description = "Notas fuera de termino(after)";
+                tempProblem.Description = "Notas en termino(after)";
+                tempProblem.Active = 2;
+            }
+
+            problem.Add(tempProblem);
+            tempProblem = new Problem();
+
+            List<Workday_Client> not_started_list;
+            not_started_list = await _context.Workdays_Clients
+                                                    .Include(wc => wc.Note)
+                                                    .Include(wc => wc.NoteP)
+                                                    .Where(wc => (wc.Client.Id == idClient
+                                                               && wc.Present == true
+                                                               && wc.Workday.Service == ServiceType.PSR)).ToListAsync();
+            not_started_list = not_started_list.Where(wc => (wc.Note == null && wc.NoteP == null)).ToList();
+
+            if (not_started_list.Count() > 0)
+            {
+                tempProblem.Name = "Notes";
+                tempProblem.Description = "Notas no iniciadas (" + not_started_list.Count() + ")";
                 tempProblem.Active = 0;
             }
             else
             {
                 tempProblem.Name = "Notes";
-                tempProblem.Description = "Notas en termino";
+                tempProblem.Description = "Notas no iniciadas (0)";
                 tempProblem.Active = 2;
             }
-            problem.Add(tempProblem);
 
+            problem.Add(tempProblem);
+            tempProblem = new Problem();
+
+            bool noteEdition = false;
+            bool notePending = false;
+            int editionCountNote = 0;
+            int pendingCountNote = 0;
+            foreach (var item in client.Workdays_Clients)
+            {
+                if (item.Note != null)
+                {
+                    if (item.Note.Status == NoteStatus.Edition)
+                    {
+                        noteEdition = true;
+                        editionCountNote++;
+                    }
+                }
+                if (item.NoteP != null)
+                {
+                    if (item.NoteP.Status == NoteStatus.Edition)
+                    {
+                        noteEdition = true;
+                        editionCountNote++;
+                    }
+                }
+                if (item.IndividualNote != null)
+                {
+                    if (item.IndividualNote.Status == NoteStatus.Edition)
+                    {
+                        noteEdition = true;
+                        editionCountNote++;
+                    }
+                }
+                if (item.GroupNote != null)
+                {
+                    if (item.GroupNote.Status == NoteStatus.Edition)
+                    {
+                        noteEdition = true;
+                        editionCountNote++;
+                    }
+                }
+
+                if (item.Note != null)
+                {
+                    if (item.Note.Status == NoteStatus.Pending)
+                    {
+                        notePending = true;
+                        pendingCountNote++;
+                    }
+                }
+                if (item.NoteP != null)
+                {
+                    if (item.NoteP.Status == NoteStatus.Pending)
+                    {
+                        notePending = true;
+                        pendingCountNote++;
+                    }
+                }
+                if (item.IndividualNote != null)
+                {
+                    if (item.IndividualNote.Status == NoteStatus.Pending)
+                    {
+                        notePending = true;
+                        pendingCountNote++;
+                    }
+                }
+                if (item.GroupNote != null)
+                {
+                    if (item.GroupNote.Status == NoteStatus.Pending)
+                    {
+                        notePending = true;
+                        pendingCountNote++;
+                    }
+                }
+            }
+
+            if (noteEdition == true)
+            {
+                tempProblem.Name = "Notes";
+                tempProblem.Description = "Notas en edicion (" + editionCountNote + ")";
+                tempProblem.Active = 0;
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            } 
+
+            if (notePending == true)
+            {
+                tempProblem.Name = "Notes";
+                tempProblem.Description = "Notas pendientes por aprobacion (" + pendingCountNote + ")";
+                tempProblem.Active = 0;
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+           
             return View(problem);
         }
     }
