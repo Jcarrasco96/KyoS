@@ -1379,22 +1379,22 @@ namespace KyoS.Web.Controllers
             {
                 if (client.AdmisionDate > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
                 {
-                    tempProblem.Name = "Date MTP";
-                    tempProblem.Description = "La fecha del MTP es anterior a la fecha de admision";
+                    tempProblem.Name = "MTP Date";
+                    tempProblem.Description = "MTP date is prior to admission date";
                     tempProblem.Active = 0;
                 }
                 else
                 {
                     if (client.Bio.DateBio > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
                     {
-                        tempProblem.Name = "Date MTP";
-                        tempProblem.Description = "La fecha del MTP es anterior a la fecha del BIO";
+                        tempProblem.Name = "MTP Date";
+                        tempProblem.Description = "MTP date is prior to BIO date";
                         tempProblem.Active = 0;
                     }
                     else
                     {
-                        tempProblem.Name = "Date MTP";
-                        tempProblem.Description = "La fecha del MTP es posterior a la fecha de admision y la fecha del BIO";
+                        tempProblem.Name = "MTP Date";
+                        tempProblem.Description = "MTP date is posterior to admision date and BIO date";
                         tempProblem.Active = 2;
                     }
                     
@@ -1408,21 +1408,21 @@ namespace KyoS.Web.Controllers
                 if (client.MTPs.Count() == 0)
                 {
                     tempProblem.Name = "MTP";
-                    tempProblem.Description = "No existe MTP";
+                    tempProblem.Description = "MTP doesn't exist";
                     tempProblem.Active = 0;
                 }
                 else
                 {
                     if (client.AdmisionDate > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
                     {
-                        tempProblem.Name = "Date MTP";
-                        tempProblem.Description = "La fecha del MTP es anterior a la fecha de admision";
+                        tempProblem.Name = "MTP Date";
+                        tempProblem.Description = "MTP date is prior to admission date";
                         tempProblem.Active = 0;
                     }
                     else
                     {
-                        tempProblem.Name = "Date MTP";
-                        tempProblem.Description = "La fecha del MTP es posterior a la fecha de admision y la fecha del BIO";
+                        tempProblem.Name = "MTP Date";
+                        tempProblem.Description = "MTP date is posterior to admision date and BIO date";
                         tempProblem.Active = 2;
                     }
                     cant_Fars++;
@@ -1435,21 +1435,21 @@ namespace KyoS.Web.Controllers
             {
                 if (client.AdmisionDate > client.Bio.DateBio)
                 {
-                    tempProblem.Name = "Date BIO";
-                    tempProblem.Description = "La fecha del BIO es anterior a la fecha de admision";
+                    tempProblem.Name = "BIO Date";
+                    tempProblem.Description = "BIO date is prior to admission date";
                     tempProblem.Active = 0;
                 }
                 else
                 {
-                    tempProblem.Name = "Date BIO";
-                    tempProblem.Description = "La fecha del BIO es posterior a la fecha de admision";
+                    tempProblem.Name = "BIO Date";
+                    tempProblem.Description = "BIO date is posterior to admission date";
                     tempProblem.Active = 2;
                 }
             }
             else
             {
-                tempProblem.Name = "Date BIO";
-                tempProblem.Description = "No existe BIO";
+                tempProblem.Name = "BIO Date";
+                tempProblem.Description = "BIO doesn't exist";
                 tempProblem.Active = 0;
             }
             problem.Add(tempProblem);
@@ -1461,13 +1461,13 @@ namespace KyoS.Web.Controllers
                 if (client.FarsFormList.ElementAtOrDefault(0).EvaluationDate != client.Bio.DateBio)
                 {
                     tempProblem.Name = "Initial FARS";
-                    tempProblem.Description = "La fecha del FARS inicial no coincide con el BIO";
+                    tempProblem.Description = "Initial FARS date doesn't match with the BIO document";
                     tempProblem.Active = 0;
                 }
                 else
                 {
                     tempProblem.Name = "Initial FARS";
-                    tempProblem.Description = "La fecha del FARS inicial coincide con el BIO";
+                    tempProblem.Description = "Initial FARS date match with the BIO document";
                     tempProblem.Active = 2;
                 }
                 problem.Add(tempProblem);
@@ -1478,14 +1478,14 @@ namespace KyoS.Web.Controllers
             {
                 if (client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP.AddMonths(client.MTPs.ElementAtOrDefault(0).NumberOfMonths.Value) < client.MTPs.ElementAtOrDefault(0).MtpReviewList.Min(n => n.DataOfService))
                 {
-                    tempProblem.Name = "MTPR";
-                    tempProblem.Description = "La fecha del MTPR esta fuera de termino";
+                    tempProblem.Name = "MTP Review";
+                    tempProblem.Description = "MTP Review date is out of term";
                     tempProblem.Active = 0;
                 }
                 else
                 {
-                    tempProblem.Name = "MTPR";
-                    tempProblem.Description = "La fecha del MTPR esta en termino";
+                    tempProblem.Name = "MTP Review";
+                    tempProblem.Description = "MTP Review date is in term";
                     tempProblem.Active = 2;
                 }
                 problem.Add(tempProblem);
@@ -1503,22 +1503,22 @@ namespace KyoS.Web.Controllers
                     {
                         if (client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP.AddMonths(client.MTPs.ElementAtOrDefault(0).NumberOfMonths.Value + client.MTPs.ElementAtOrDefault(0).MtpReviewList.ElementAtOrDefault(0).MonthOfTreatment) < client.DateOfClose)
                         {
-                            tempProblem.Name = "Date Close";
-                            tempProblem.Description = "La fecha de cierre esta fuera de termino";
+                            tempProblem.Name = "Date of Close";
+                            tempProblem.Description = "Date of close is out of term";
                             tempProblem.Active = 0;
                         }
                         else
                         {
                             if (client.DateOfClose == null || client.DateOfClose == date)
                             {
-                                tempProblem.Name = "Date Close";
-                                tempProblem.Description = "La fecha de cierre esta fuera de termino";
+                                tempProblem.Name = "Date of Close";
+                                tempProblem.Description = "Date of close is out of term";
                                 tempProblem.Active = 0;
                             }
                             else
                             {
-                                tempProblem.Name = "Date Close";
-                                tempProblem.Description = "La fecha de cierre esta en termino";
+                                tempProblem.Name = "Date of Close";
+                                tempProblem.Description = "Date of close is in term";
                                 tempProblem.Active = 2;
                             }
                             
@@ -1528,22 +1528,22 @@ namespace KyoS.Web.Controllers
                     {
                         if (client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP.AddMonths(client.MTPs.ElementAtOrDefault(0).NumberOfMonths.Value) < client.DateOfClose)
                         {
-                            tempProblem.Name = "Date Close";
-                            tempProblem.Description = "La fecha de cierre esta fuera de termino";
+                            tempProblem.Name = "Date of Close";
+                            tempProblem.Description = "Date of close is out of term";
                             tempProblem.Active = 0;
                         }
                         else
                         {
                             if (client.DateOfClose == null || client.DateOfClose == date)
                             {
-                                tempProblem.Name = "Date Close";
-                                tempProblem.Description = "La fecha de cierre esta fuera de termino";
+                                tempProblem.Name = "Date of Close";
+                                tempProblem.Description = "Date of close is out of term";
                                 tempProblem.Active = 0;
                             }
                             else
                             {
-                                tempProblem.Name = "Date Close";
-                                tempProblem.Description = "La fecha de cierre esta en termino";
+                                tempProblem.Name = "Date of Close";
+                                tempProblem.Description = "Date of close is in term";
                                 tempProblem.Active = 2;
                             }
                             
@@ -1573,7 +1573,7 @@ namespace KyoS.Web.Controllers
                 if (client.DischargeList.Count() != cant_Discharge)
                 {
                     tempProblem.Name = "Discharge";
-                    tempProblem.Description = "Faltan Discharge";
+                    tempProblem.Description = "The amount of discharge is not correct";
                     tempProblem.Active = 0;
                     problem.Add(tempProblem);
                     tempProblem = new Problem();
@@ -1586,7 +1586,7 @@ namespace KyoS.Web.Controllers
                             if (item.DateDischarge != client.DateOfClose)
                             {
                                 tempProblem.Name = "Discharge";
-                                tempProblem.Description = "Revisar fecha de discharge no coincide con fecha de cierre";
+                                tempProblem.Description = "Discharge date doesn't match with date of close";
                                 tempProblem.Active = 1;
                                 salida = true;
                                 break;
@@ -1595,7 +1595,7 @@ namespace KyoS.Web.Controllers
                         if (salida == false)
                         {
                             tempProblem.Name = "Discharge";
-                            tempProblem.Description = "Revisar fecha de discharge coincide con fecha de cierre";
+                            tempProblem.Description = "Discharge date match with date of close";
                             tempProblem.Active = 1;
                         }
                         problem.Add(tempProblem);
@@ -1612,7 +1612,7 @@ namespace KyoS.Web.Controllers
                             if (item.DateDischarge != client.DateOfClose)
                             {
                                 tempProblem.Name = "Discharge";
-                                tempProblem.Description = "Revisar fecha de discharge no coincide con fecha de cierre";
+                                tempProblem.Description = "Discharge date doesn't match with date of close";
                                 tempProblem.Active = 0;
                                 salida = true;
                                 break;
@@ -1621,7 +1621,7 @@ namespace KyoS.Web.Controllers
                         if (salida == false)
                         {
                             tempProblem.Name = "Discharge";
-                            tempProblem.Description = "Revisar fecha de discharge coincide con fecha de cierre";
+                            tempProblem.Description = "Discharge date match with date of close";
                             tempProblem.Active = 1;
                         }
                         problem.Add(tempProblem);
@@ -1635,14 +1635,14 @@ namespace KyoS.Web.Controllers
 
             if (client.FarsFormList.Count() != cant_Fars)
             {
-                tempProblem.Name = "Count FARS";
-                tempProblem.Description = "Faltan FARS (deben ser " + cant_Fars+")";
+                tempProblem.Name = "Amount of FARS";
+                tempProblem.Description = "The amount of FARS is not correct (must be " + cant_Fars+")";
                 tempProblem.Active = 0;
             }
             else
             {
-                tempProblem.Name = "Count FARS";
-                tempProblem.Description = "La cantidad de FARS es correcta";
+                tempProblem.Name = "Amount of FARS";
+                tempProblem.Description = "The amount of FARS is correct";
                 tempProblem.Active = 2;
             }
             problem.Add(tempProblem);
@@ -1665,7 +1665,7 @@ namespace KyoS.Web.Controllers
             if (dischargeEdition == true)
             {
                 tempProblem.Name = "Discharge";
-                tempProblem.Description = "Existe Discharge en edicion";
+                tempProblem.Description = "Discharge in edition";
                 tempProblem.Active = 1;
                 problem.Add(tempProblem);
                 tempProblem = new Problem();
@@ -1674,7 +1674,7 @@ namespace KyoS.Web.Controllers
             if (dischargePending == true)
             {
                 tempProblem.Name = "Discharge";
-                tempProblem.Description = "Existe Discharge pendiente de aprobacion";
+                tempProblem.Description = "Pending for approval discharge";
                 tempProblem.Active = 1;
                 problem.Add(tempProblem);
                 tempProblem = new Problem();
@@ -1685,13 +1685,13 @@ namespace KyoS.Web.Controllers
                 if (client.Workdays_Clients.Where(d => d.Workday.Date <= client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP).Count() > 0 || client.Workdays_Clients.Where(d => d.Workday.Date <= client.Bio.DateBio).Count() > 0)
                 {
                     tempProblem.Name = "Notes";
-                    tempProblem.Description = "Notas fuera de termino(before)";
+                    tempProblem.Description = "Notes are overdue (before)";
                     tempProblem.Active = 0;
                 }
                 else
                 {
                     tempProblem.Name = "Notes";
-                    tempProblem.Description = "Notas en termino(before)";
+                    tempProblem.Description = "Notes are in term (before)";
                     tempProblem.Active = 2;
                 }
                 problem.Add(tempProblem);
@@ -1703,20 +1703,20 @@ namespace KyoS.Web.Controllers
                 if (client.Workdays_Clients.Where(d => d.Workday.Date > client.DateOfClose).Count() > 0)
                 {
                     tempProblem.Name = "Notes";
-                    tempProblem.Description = "Notas fuera de termino(after)";
+                    tempProblem.Description = "Notes are overdue (after)";
                     tempProblem.Active = 0;
                 }
                 else
                 {
                     tempProblem.Name = "Notes";
-                    tempProblem.Description = "Notas en termino(after)";
+                    tempProblem.Description = "Notes are in term (after)";
                     tempProblem.Active = 2;
                 }
             }
             else
             {
                 tempProblem.Name = "Notes";
-                tempProblem.Description = "Notas en termino(after)";
+                tempProblem.Description = "Notes are in term (after)";
                 tempProblem.Active = 2;
             }
 
@@ -1735,13 +1735,13 @@ namespace KyoS.Web.Controllers
             if (not_started_list.Count() > 0)
             {
                 tempProblem.Name = "Notes";
-                tempProblem.Description = "Notas no iniciadas (" + not_started_list.Count() + ")";
+                tempProblem.Description = "Not started Notes (" + not_started_list.Count() + ")";
                 tempProblem.Active = 0;
             }
             else
             {
                 tempProblem.Name = "Notes";
-                tempProblem.Description = "Notas no iniciadas (0)";
+                tempProblem.Description = "Not started Notes (0)";
                 tempProblem.Active = 2;
             }
 
@@ -1824,7 +1824,7 @@ namespace KyoS.Web.Controllers
             if (noteEdition == true)
             {
                 tempProblem.Name = "Notes";
-                tempProblem.Description = "Notas en edicion (" + editionCountNote + ")";
+                tempProblem.Description = "Notes in edition (" + editionCountNote + ")";
                 tempProblem.Active = 0;
                 problem.Add(tempProblem);
                 tempProblem = new Problem();
@@ -1833,7 +1833,7 @@ namespace KyoS.Web.Controllers
             if (notePending == true)
             {
                 tempProblem.Name = "Notes";
-                tempProblem.Description = "Notas pendientes por aprobacion (" + pendingCountNote + ")";
+                tempProblem.Description = "Pending for approval Notes (" + pendingCountNote + ")";
                 tempProblem.Active = 0;
                 problem.Add(tempProblem);
                 tempProblem = new Problem();

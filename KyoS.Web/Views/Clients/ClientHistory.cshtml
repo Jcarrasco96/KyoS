@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Data.Entities.ClientEntity
 @{
-    ViewData["Title"] = "ClientHistory";
+    ViewData["Title"] = "Client History";
 }
 
 <!DOCTYPE html>
@@ -35,12 +35,15 @@
                     <div class="col-md-12 form-group">
                         @if (Model.Clinic.Setting.MHProblems == true)
                         {
-                            <a onclick="showInPopup('@Url.Action("ClientProblemList", "Clients", new { idClient = @Model.Id }, Context.Request.Scheme)','View List Problem')" class="btn btn-danger" title="View List Problem"><i class="glyphicon glyphicon-alert"></i> View List Problem</a>
+                        <a onclick="showInPopupLg('@Url.Action("ClientProblemList", "Clients", new { idClient = @Model.Id }, Context.Request.Scheme)','Audit Documents')" class="btn btn-danger" title="Audit the documentation"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Documents</a>
                         }
                         else
                         {
-                            <a onclick="showInPopup('@Url.Action("ClientProblemList", "Clients", new { idClient = @Model.Id }, Context.Request.Scheme)','View List Problem')" class="btn btn-danger disabled" title="View List Problem"><i class="glyphicon glyphicon-alert"></i> View List Problem</a>
+                            <a onclick="showInPopupLg('@Url.Action("ClientProblemList", "Clients", new { idClient = @Model.Id }, Context.Request.Scheme)','Audit Documents')" class="btn btn-danger disabled" title="Audit the documentation"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Documents</a>
                         }
+                    </div>
+                    <div class="col-md-12">
+                        <hr />
                     </div>
                     <div id="view-farsForClient">
                         @if (Model.FarsFormList.Count() > 0)
@@ -81,7 +84,7 @@
 </body>
 </html>
 
-<partial name="_ModalPopup" />
+<partial name="_ModalPopupLg" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
