@@ -9768,6 +9768,9 @@ namespace KyoS.Web.Controllers
                                       .Include(wc => wc.Facilitator)
 
                                       .Include(wc => wc.Note)
+                                      .Include(wc => wc.NoteP)
+                                      .Include(wc => wc.IndividualNote)
+                                      .Include(wc => wc.GroupNote)
 
                                       .Include(wc => wc.IndividualNote)                                      
 
