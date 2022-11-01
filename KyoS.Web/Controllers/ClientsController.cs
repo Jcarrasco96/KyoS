@@ -1554,6 +1554,7 @@ namespace KyoS.Web.Controllers
             }
             tempProblem = new Problem();
 
+            //Discharge
             if (client.Status == StatusType.Close)
             {
                 int cant_Discharge = 0;
@@ -1633,21 +1634,6 @@ namespace KyoS.Web.Controllers
 
             }
 
-            if (client.FarsFormList.Count() != cant_Fars)
-            {
-                tempProblem.Name = "Amount of FARS";
-                tempProblem.Description = "The amount of FARS is not correct (must be " + cant_Fars+")";
-                tempProblem.Active = 0;
-            }
-            else
-            {
-                tempProblem.Name = "Amount of FARS";
-                tempProblem.Description = "The amount of FARS is correct";
-                tempProblem.Active = 2;
-            }
-            problem.Add(tempProblem);
-            tempProblem = new Problem();
-
             bool dischargeEdition = false;
             bool dischargePending = false;
             foreach (var item in client.DischargeList)
@@ -1675,6 +1661,54 @@ namespace KyoS.Web.Controllers
             {
                 tempProblem.Name = "Discharge";
                 tempProblem.Description = "Pending for approval discharge";
+                tempProblem.Active = 1;
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+
+            //FARS continued
+            if (client.FarsFormList.Count() != cant_Fars)
+            {
+                tempProblem.Name = "Amount of FARS";
+                tempProblem.Description = "The amount of FARS is not correct (must be " + cant_Fars + ")";
+                tempProblem.Active = 0;
+            }
+            else
+            {
+                tempProblem.Name = "Amount of FARS";
+                tempProblem.Description = "The amount of FARS is correct";
+                tempProblem.Active = 2;
+            }
+            problem.Add(tempProblem);
+            tempProblem = new Problem();
+
+            bool farsEdition = false;
+            bool farsPending = false;
+            foreach (var item in client.FarsFormList)
+            {
+                if (item.Status == FarsStatus.Edition)
+                {
+                    farsEdition = true;
+                }
+                if (item.Status == FarsStatus.Pending)
+                {
+                    farsPending = true;
+                }
+            }
+
+            if (farsEdition == true)
+            {
+                tempProblem.Name = "FARS";
+                tempProblem.Description = "FARS in edition";
+                tempProblem.Active = 1;
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+
+            if (farsPending == true)
+            {
+                tempProblem.Name = "FARS";
+                tempProblem.Description = "Pending for approval FARS";
                 tempProblem.Active = 1;
                 problem.Add(tempProblem);
                 tempProblem = new Problem();
