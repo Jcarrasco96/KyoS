@@ -1502,7 +1502,7 @@ namespace KyoS.Web.Controllers
                     
                     if (client.MTPs.ElementAtOrDefault(0).MtpReviewList.Count() > 0)
                     {
-                        if (client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP.AddMonths(client.MTPs.ElementAtOrDefault(0).NumberOfMonths.Value + client.MTPs.ElementAtOrDefault(0).MtpReviewList.ElementAtOrDefault(0).MonthOfTreatment) < client.DateOfClose)
+                        if (client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP.AddMonths(client.MTPs.ElementAtOrDefault(0).NumberOfMonths.Value + client.MTPs.ElementAtOrDefault(0).MtpReviewList.ElementAtOrDefault(0).MonthOfTreatment) > client.DateOfClose)
                         {
                             tempProblem.Name = "Date of Close";
                             tempProblem.Description = "Date of close is out of term";
@@ -1527,7 +1527,7 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-                        if (client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP.AddMonths(client.MTPs.ElementAtOrDefault(0).NumberOfMonths.Value) < client.DateOfClose)
+                        if (client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP.AddMonths(client.MTPs.ElementAtOrDefault(0).NumberOfMonths.Value) > client.DateOfClose)
                         {
                             tempProblem.Name = "Date of Close";
                             tempProblem.Description = "Date of close is out of term";
