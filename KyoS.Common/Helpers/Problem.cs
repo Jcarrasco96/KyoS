@@ -1,7 +1,4 @@
-﻿using KyoS.Common.Enums;
-using System.ComponentModel.DataAnnotations;
-
-namespace KyoS.Web.Data.Contracts
+﻿namespace KyoS.Common.Helpers
 {
     public class Problem
     {

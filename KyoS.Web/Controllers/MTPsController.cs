@@ -23,13 +23,15 @@ namespace KyoS.Web.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly IRenderHelper _renderHelper;
         private readonly IReportHelper _reportHelper;
-        public MTPsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IReportHelper reportHelper)
+        private readonly ITranslateHelper _translateHelper;
+        public MTPsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IReportHelper reportHelper, ITranslateHelper translateHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _renderHelper = renderHelper;
             _reportHelper = reportHelper;
+            _translateHelper = translateHelper;
         }
 
         [Authorize(Roles = "Supervisor, Manager, Facilitator, Documents_Assistant")]
@@ -4400,6 +4402,9 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Create", new { idClient = goalTemp.IdClient, origin = origin });
         }
 
-
+        public JsonResult Translate(string text)
+        {
+            return Json(text = _translateHelper.TranslateText("es", "en", text));
+        }
     }
 }
