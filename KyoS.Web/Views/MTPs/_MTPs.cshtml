@@ -92,16 +92,24 @@
     <div class="col-md-6">
         <div class="form-group">
             <label asp-for="ClientStrengths" class="control-label">Client’s Strengths</label>
-            <textarea asp-for="ClientStrengths" class="form-control" rows="2"></textarea>
+            <textarea asp-for="ClientStrengths" class="form-control" rows="2" id="clientStrengths"></textarea>
             <span asp-validation-for="ClientStrengths" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-6">
         <div class="form-group">
             <label asp-for="ClientLimitation" class="control-label">Client’s Limitations</label>
-            <textarea asp-for="ClientLimitation" class="form-control" rows="2"></textarea>
+            <textarea asp-for="ClientLimitation" class="form-control" rows="2" id="clientLimitation"></textarea>
             <span asp-validation-for="ClientLimitation" class="text-danger"></span>
         </div>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <a class="btn btn-info" id="EnglishClientStrengths">English</a>
+    </div>
+    <div class="form-group col-md-6">
+        <a class="btn btn-info" id="EnglishClientLimitation">English</a>
     </div>
 </div>
 <div class="col-md-push-12">
@@ -120,10 +128,18 @@
     <div class="col-md-12">
         <div class="form-group">
             <label asp-for="RationaleForUpdate" class="control-label">Rationale for Update</label>
-            <textarea asp-for="RationaleForUpdate" class="form-control" rows="2"></textarea>
+            <textarea asp-for="RationaleForUpdate" class="form-control" rows="2" id="rationaleForUpdate"></textarea>
             <span asp-validation-for="RationaleForUpdate" class="text-danger"></span>
         </div>
     </div>    
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <a class="btn btn-info" id="EnglishRationaleForUpdate">English</a>
+    </div>
+    <div class="container-fluid">
+        &nbsp;
+    </div>
 </div>
 <div class="col-md-push-12">
     <div class="col-md-12">
@@ -149,9 +165,17 @@
     <div class="col-md-12">
         <div class="form-group">
             <label asp-for="AdditionalRecommended" class="control-label">Additional recommended services outside of clinic (indicate the service and referrals necessary and where client was referred to. Please have client sign a release of information for each service) </label>
-            <textarea asp-for="AdditionalRecommended" class="form-control" rows="2"></textarea>
+            <textarea asp-for="AdditionalRecommended" class="form-control" rows="2" id="additionalRecommended"></textarea>
             <span asp-validation-for="AdditionalRecommended" class="text-danger"></span>
         </div>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <a class="btn btn-info" id="EnglishAdditionalRecommended">English</a>
+    </div>
+    <div class="container-fluid">
+        &nbsp;
     </div>
 </div>
 <div class="col-md-push-12">
@@ -176,12 +200,22 @@
     <div class="col-md-12">
         <div class="form-group">
             <label asp-for="InitialDischargeCriteria" class="control-label">Transition or discontinuation of services criteria and plan (Initial discharge criteria)</label>
-            <textarea asp-for="InitialDischargeCriteria" class="form-control" rows="4"></textarea>
+            <textarea asp-for="InitialDischargeCriteria" class="form-control" rows="4" id="initialDischargeCriteria"></textarea>
             <span asp-validation-for="InitialDischargeCriteria" class="text-danger"></span>
         </div>
     </div>
 </div>
-
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <a class="btn btn-info" id="EnglishInitialDischargeCriteria">English</a>
+    </div>
+    <div class="container-fluid">
+        &nbsp;
+    </div>
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
 <script>
     check1.addEventListener('change', (e) => {
         if (check1.checked == true) {

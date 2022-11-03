@@ -143,7 +143,7 @@ namespace KyoS.Web.Helpers
         {
             List<SelectListItem> list = _context.Themes.Where(t => (t.Clinic.Id == idClinic && t.Day == null)).Select(t => new SelectListItem
             {
-                Text = $"{t.Name}",
+                Text = $"{t.Name + " | " + t.Id}",
                 Value = $"{t.Id}"
             }).ToList();
 

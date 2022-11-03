@@ -34,7 +34,7 @@
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Edit master treament plan</h4>
+    <h4>Edit Master Treatment Plan</h4>
     <hr />
     <div class="row">
         <form asp-action="Edit" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
@@ -102,6 +102,37 @@
                 var url = "@Url.Action("DeleteGoalOfAddendum", "MTPs")";
                 window.location.href = url + '/' + item_to_delete;
             });
+
+            $("#EnglishClientStrengths").click(function () {
+                var url = "@Url.Action("Translate", "MTPs")";
+                $.get(url, { text: $("#clientStrengths").val() }, function (data) {
+                    $("#clientStrengths").val(data);
+                });
+            })
+            $("#EnglishClientLimitation").click(function () {
+                var url = "@Url.Action("Translate", "MTPs")";
+                $.get(url, { text: $("#clientLimitation").val() }, function (data) {
+                    $("#clientLimitation").val(data);
+                });
+            })
+            $("#EnglishRationaleForUpdate").click(function () {
+                var url = "@Url.Action("Translate", "MTPs")";
+                $.get(url, { text: $("#rationaleForUpdate").val() }, function (data) {
+                    $("#rationaleForUpdate").val(data);
+                });
+            })
+            $("#EnglishAdditionalRecommended").click(function () {
+                var url = "@Url.Action("Translate", "MTPs")";
+                $.get(url, { text: $("#additionalRecommended").val() }, function (data) {
+                    $("#additionalRecommended").val(data);
+                });
+            })
+            $("#EnglishInitialDischargeCriteria").click(function () {
+                var url = "@Url.Action("Translate", "MTPs")";
+                $.get(url, { text: $("#initialDischargeCriteria").val() }, function (data) {
+                    $("#initialDischargeCriteria").val(data);
+                });
+            })
         });
         $(function () {
             //Assign Click event to Plus Image.

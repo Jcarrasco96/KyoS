@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using KyoS.Web.Data.Contracts;
+using KyoS.Common.Helpers;
 
 namespace KyoS.Web.Controllers
 {
@@ -51,12 +53,52 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.Delete = "N";
             }
+            if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+            {
+                return View(await _context.Clients
+                                          .Include(c => c.Clinic)
+                                          .Include(c => c.IndividualTherapyFacilitator)
+                                          .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
+                                          .OrderBy(c => c.Name).ToListAsync());
+            }
+            if (User.IsInRole("Documents_Assistant"))
+            {
+                return View(await _context.Clients
+                                          .Include(c => c.Clinic)
+                                          .Include(c => c.IndividualTherapyFacilitator)
+                                          .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                && (c.Bio.CreatedBy == user_logged.UserName
+                                                     || c.MTPs.Where(m => m.CreatedBy == user_logged.UserName).Count() > 0)))
+                                          .OrderBy(c => c.Name).ToListAsync());
+            }
+            if (User.IsInRole("Facilitator"))
+            {
+                FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
 
-            return View(await _context.Clients
-                                      .Include(c => c.Clinic)
-                                      .Include(c => c.IndividualTherapyFacilitator)
-                                      .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
-                                      .OrderBy(c => c.Name).ToListAsync());
+                return View(await _context.Clients
+                                          .Include(c => c.Clinic)
+                                          .Include(c => c.IndividualTherapyFacilitator)
+                                          .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                && (c.Workdays_Clients.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0)))
+                                          .OrderBy(c => c.Name).ToListAsync());
+            }
+            if (User.IsInRole("CaseManager"))
+            {
+                CaseMannagerEntity casemanager = await _context.CaseManagers.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
+                
+                TCMClientEntity tcmClient = await _context.TCMClient
+                                                          
+                                                          .Include(n => n.Client)
+                                                          .ThenInclude(n => n.Clinic)
+                                                          
+                                                          .Include(n => n.Client)
+                                                          .ThenInclude(c => c.IndividualTherapyFacilitator)
+                                                          .FirstOrDefaultAsync(f => f.Casemanager.Id == casemanager.Id);
+
+                return View(tcmClient.Client);
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
         }
 
         [Authorize(Roles = "Manager, Supervisor")]
@@ -477,7 +519,7 @@ namespace KyoS.Web.Controllers
             return View(clientViewModel);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager")]
         public async Task<IActionResult> Details(int? id, int origin = 0)
         {
             if (id == null)
@@ -1234,5 +1276,605 @@ namespace KyoS.Web.Controllers
             return Json(text);
         }
 
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        public async Task<IActionResult> ClientHistory(int idClient = 0)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            ClientEntity client = await _context.Clients
+                                                .Include(w => w.MTPs)
+                                                .ThenInclude(w => w.MtpReviewList)
+
+                                                .Include(w => w.Bio)
+                                                .Include(w => w.FarsFormList)
+                                                .Include(w => w.DischargeList)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.Workday)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.Facilitator)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.NoteP)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.IndividualNote)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.Note)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.GroupNote)
+
+                                                .FirstOrDefaultAsync(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                   && w.Id == idClient));
+
+
+
+            return View(client);
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        public async Task<IActionResult> ClientProblemList(int idClient = 0)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            DateTime date = new DateTime();
+
+            ClientEntity client = await _context.Clients
+                                                .Include(w => w.MTPs)
+                                                .ThenInclude(w => w.MtpReviewList)
+
+                                                .Include(w => w.Bio)
+                                                .Include(w => w.FarsFormList)
+                                                .Include(w => w.DischargeList)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.Workday)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.Facilitator)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.NoteP)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.IndividualNote)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.Note)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.GroupNote)
+
+                                                .FirstOrDefaultAsync(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                   && w.Id == idClient));
+
+            int cant_Fars = 0;
+            Problem tempProblem = new Problem();
+
+            List<Problem> problem = new List<Problem>();
+            //BIO
+            if (client.MTPs.Count() > 0 && client.Bio != null)
+            {
+                if (client.AdmisionDate > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
+                {
+                    tempProblem.Name = "MTP Date";
+                    tempProblem.Description = "MTP date is prior to admission date";
+                    tempProblem.Active = 0;
+                }
+                else
+                {
+                    if (client.Bio.DateBio > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
+                    {
+                        tempProblem.Name = "MTP Date";
+                        tempProblem.Description = "MTP date is prior to BIO date";
+                        tempProblem.Active = 0;
+                    }
+                    else
+                    {
+                        tempProblem.Name = "MTP Date";
+                        tempProblem.Description = "MTP date is posterior to admision date and BIO date";
+                        tempProblem.Active = 2;
+                    }
+                    
+                }
+                problem.Add(tempProblem);
+                cant_Fars++;
+                tempProblem = new Problem();
+            }
+            else
+            {
+                if (client.MTPs.Count() == 0)
+                {
+                    tempProblem.Name = "MTP";
+                    tempProblem.Description = "MTP doesn't exist";
+                    tempProblem.Active = 0;
+                }
+                else
+                {
+                    if (client.AdmisionDate > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
+                    {
+                        tempProblem.Name = "MTP Date";
+                        tempProblem.Description = "MTP date is prior to admission date";
+                        tempProblem.Active = 0;
+                    }
+                    else
+                    {
+                        tempProblem.Name = "MTP Date";
+                        tempProblem.Description = "MTP date is posterior to admision date and BIO date";
+                        tempProblem.Active = 2;
+                    }
+                    cant_Fars++;
+                }
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+           
+            if (client.Bio != null)
+            {
+                if (client.AdmisionDate > client.Bio.DateBio)
+                {
+                    tempProblem.Name = "BIO Date";
+                    tempProblem.Description = "BIO date is prior to admission date";
+                    tempProblem.Active = 0;
+                }
+                else
+                {
+                    tempProblem.Name = "BIO Date";
+                    tempProblem.Description = "BIO date is posterior to admission date";
+                    tempProblem.Active = 2;
+                }
+            }
+            else
+            {
+                tempProblem.Name = "BIO Date";
+                tempProblem.Description = "BIO doesn't exist";
+                tempProblem.Active = 0;
+            }
+            problem.Add(tempProblem);
+            tempProblem = new Problem();
+
+            //FARS
+            if (client.FarsFormList.Count() > 0 && client.Bio != null )
+            {
+                if (client.FarsFormList.ElementAtOrDefault(0).EvaluationDate != client.Bio.DateBio)
+                {
+                    tempProblem.Name = "Initial FARS";
+                    tempProblem.Description = "Initial FARS date doesn't match with the BIO document";
+                    tempProblem.Active = 0;
+                }
+                else
+                {
+                    tempProblem.Name = "Initial FARS";
+                    tempProblem.Description = "Initial FARS date match with the BIO document";
+                    tempProblem.Active = 2;
+                }
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+
+            if (client.MTPs.Count() > 0 && client.MTPs.ElementAtOrDefault(0).MtpReviewList.Count() > 0)
+            {
+                if (client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP.AddMonths(client.MTPs.ElementAtOrDefault(0).NumberOfMonths.Value) < client.MTPs.ElementAtOrDefault(0).MtpReviewList.Min(n => n.DataOfService))
+                {
+                    tempProblem.Name = "MTP Review";
+                    tempProblem.Description = "MTP Review date is out of term";
+                    tempProblem.Active = 0;
+                }
+                else
+                {
+                    tempProblem.Name = "MTP Review";
+                    tempProblem.Description = "MTP Review date is in term";
+                    tempProblem.Active = 2;
+                }
+                problem.Add(tempProblem);
+                cant_Fars++;
+            }
+            
+            tempProblem = new Problem();
+
+            if (client.Status == StatusType.Close)
+            {
+                if (client.MTPs.Count() > 0)
+                {
+                    
+                    if (client.MTPs.ElementAtOrDefault(0).MtpReviewList.Count() > 0)
+                    {
+                        if (client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP.AddMonths(client.MTPs.ElementAtOrDefault(0).NumberOfMonths.Value + client.MTPs.ElementAtOrDefault(0).MtpReviewList.ElementAtOrDefault(0).MonthOfTreatment) > client.DateOfClose)
+                        {
+                            tempProblem.Name = "Date of Close";
+                            tempProblem.Description = "Date of close is out of term";
+                            tempProblem.Active = 0;
+                        }
+                        else
+                        {
+                            if (client.DateOfClose == null || client.DateOfClose == date)
+                            {
+                                tempProblem.Name = "Date of Close";
+                                tempProblem.Description = "Date of close is out of term";
+                                tempProblem.Active = 0;
+                            }
+                            else
+                            {
+                                tempProblem.Name = "Date of Close";
+                                tempProblem.Description = "Date of close is in term";
+                                tempProblem.Active = 2;
+                            }
+                            
+                        }
+                    }
+                    else
+                    {
+                        if (client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP.AddMonths(client.MTPs.ElementAtOrDefault(0).NumberOfMonths.Value) > client.DateOfClose)
+                        {
+                            tempProblem.Name = "Date of Close";
+                            tempProblem.Description = "Date of close is out of term";
+                            tempProblem.Active = 0;
+                        }
+                        else
+                        {
+                            if (client.DateOfClose == null || client.DateOfClose == date)
+                            {
+                                tempProblem.Name = "Date of Close";
+                                tempProblem.Description = "Date of close is out of term";
+                                tempProblem.Active = 0;
+                            }
+                            else
+                            {
+                                tempProblem.Name = "Date of Close";
+                                tempProblem.Description = "Date of close is in term";
+                                tempProblem.Active = 2;
+                            }
+                            
+                        }
+                    }
+                    problem.Add(tempProblem);
+                }
+            }
+            tempProblem = new Problem();
+
+            //Discharge
+            if (client.Status == StatusType.Close)
+            {
+                int cant_Discharge = 0;
+                if (client.Workdays_Clients.Where(n => n.Note != null).Count() > 0 || client.Workdays_Clients.Where(n => n.NoteP != null).Count() > 0)
+                {
+                   cant_Discharge++;
+                }
+                if (client.Workdays_Clients.Where(n => n.IndividualNote != null).Count() > 0)
+                {
+                    cant_Discharge++;
+                }
+                if (client.Workdays_Clients.Where(n => n.GroupNote != null).Count() > 0)
+                {
+                    cant_Discharge++;
+                }
+
+                if (client.DischargeList.Count() != cant_Discharge)
+                {
+                    tempProblem.Name = "Discharge";
+                    tempProblem.Description = "The amount of discharge is not correct";
+                    tempProblem.Active = 0;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+
+                    if (client.DischargeList.Count() > 0)
+                    {
+                        bool salida = false;
+                        foreach (var item in client.DischargeList)
+                        {
+                            if (item.DateDischarge != client.DateOfClose)
+                            {
+                                tempProblem.Name = "Discharge";
+                                tempProblem.Description = "Discharge date doesn't match with date of close";
+                                tempProblem.Active = 1;
+                                salida = true;
+                                break;
+                            }
+                        }
+                        if (salida == false)
+                        {
+                            tempProblem.Name = "Discharge";
+                            tempProblem.Description = "Discharge date match with date of close";
+                            tempProblem.Active = 1;
+                        }
+                        problem.Add(tempProblem);
+                        tempProblem = new Problem();
+                    }
+                }
+                else
+                {
+                    if (client.DischargeList.Count() > 0)
+                    {
+                        bool salida = false;
+                        foreach (var item in client.DischargeList)
+                        {
+                            if (item.DateDischarge != client.DateOfClose)
+                            {
+                                tempProblem.Name = "Discharge";
+                                tempProblem.Description = "Discharge date doesn't match with date of close";
+                                tempProblem.Active = 0;
+                                salida = true;
+                                break;
+                            }
+                        }
+                        if (salida == false)
+                        {
+                            tempProblem.Name = "Discharge";
+                            tempProblem.Description = "Discharge date match with date of close";
+                            tempProblem.Active = 1;
+                        }
+                        problem.Add(tempProblem);
+                        tempProblem = new Problem();
+                    }
+                }
+               
+                cant_Fars++;
+
+            }
+
+            bool dischargeEdition = false;
+            bool dischargePending = false;
+            foreach (var item in client.DischargeList)
+            {
+                if (item.Status == DischargeStatus.Edition)
+                {
+                    dischargeEdition = true;
+                }
+                if (item.Status == DischargeStatus.Pending)
+                {
+                    dischargePending = true;
+                }
+            }
+
+            if (dischargeEdition == true)
+            {
+                tempProblem.Name = "Discharge";
+                tempProblem.Description = "Discharge in edition";
+                tempProblem.Active = 1;
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+
+            if (dischargePending == true)
+            {
+                tempProblem.Name = "Discharge";
+                tempProblem.Description = "Pending for approval discharge";
+                tempProblem.Active = 1;
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+
+            //FARS continued
+            if (client.FarsFormList.Count() != cant_Fars)
+            {
+                tempProblem.Name = "Amount of FARS";
+                tempProblem.Description = "The amount of FARS is not correct (must be " + cant_Fars + ")";
+                tempProblem.Active = 0;
+            }
+            else
+            {
+                tempProblem.Name = "Amount of FARS";
+                tempProblem.Description = "The amount of FARS is correct";
+                tempProblem.Active = 2;
+            }
+            problem.Add(tempProblem);
+            tempProblem = new Problem();
+
+            bool farsEdition = false;
+            bool farsPending = false;
+            foreach (var item in client.FarsFormList)
+            {
+                if (item.Status == FarsStatus.Edition)
+                {
+                    farsEdition = true;
+                }
+                if (item.Status == FarsStatus.Pending)
+                {
+                    farsPending = true;
+                }
+            }
+
+            if (farsEdition == true)
+            {
+                tempProblem.Name = "FARS";
+                tempProblem.Description = "FARS in edition";
+                tempProblem.Active = 1;
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+
+            if (farsPending == true)
+            {
+                tempProblem.Name = "FARS";
+                tempProblem.Description = "Pending for approval FARS";
+                tempProblem.Active = 1;
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+
+            if (client.MTPs.Count() > 0 && client.Bio != null)
+            {
+                if (client.Workdays_Clients.Where(d => d.Workday.Date <= client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP).Count() > 0 || client.Workdays_Clients.Where(d => d.Workday.Date <= client.Bio.DateBio).Count() > 0)
+                {
+                    tempProblem.Name = "Notes";
+                    tempProblem.Description = "Notes are overdue (before)";
+                    tempProblem.Active = 0;
+                }
+                else
+                {
+                    tempProblem.Name = "Notes";
+                    tempProblem.Description = "Notes are in term (before)";
+                    tempProblem.Active = 2;
+                }
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+
+            if (client.Status == StatusType.Close)
+            {
+                if (client.Workdays_Clients.Where(d => d.Workday.Date > client.DateOfClose).Count() > 0)
+                {
+                    tempProblem.Name = "Notes";
+                    tempProblem.Description = "Notes are overdue (after)";
+                    tempProblem.Active = 0;
+                }
+                else
+                {
+                    tempProblem.Name = "Notes";
+                    tempProblem.Description = "Notes are in term (after)";
+                    tempProblem.Active = 2;
+                }
+            }
+            else
+            {
+                tempProblem.Name = "Notes";
+                tempProblem.Description = "Notes are in term (after)";
+                tempProblem.Active = 2;
+            }
+
+            problem.Add(tempProblem);
+            tempProblem = new Problem();
+
+            List<Workday_Client> not_started_list;
+            not_started_list = await _context.Workdays_Clients
+                                                    .Include(wc => wc.Note)
+                                                    .Include(wc => wc.NoteP)
+                                                    .Where(wc => (wc.Client.Id == idClient
+                                                               && wc.Present == true
+                                                               && wc.Workday.Service == ServiceType.PSR)).ToListAsync();
+            not_started_list = not_started_list.Where(wc => (wc.Note == null && wc.NoteP == null)).ToList();
+
+            if (not_started_list.Count() > 0)
+            {
+                tempProblem.Name = "Notes";
+                tempProblem.Description = "Not started Notes (" + not_started_list.Count() + ")";
+                tempProblem.Active = 0;
+            }
+            else
+            {
+                tempProblem.Name = "Notes";
+                tempProblem.Description = "Not started Notes (0)";
+                tempProblem.Active = 2;
+            }
+
+            problem.Add(tempProblem);
+            tempProblem = new Problem();
+
+            bool noteEdition = false;
+            bool notePending = false;
+            int editionCountNote = 0;
+            int pendingCountNote = 0;
+            foreach (var item in client.Workdays_Clients)
+            {
+                if (item.Note != null)
+                {
+                    if (item.Note.Status == NoteStatus.Edition)
+                    {
+                        noteEdition = true;
+                        editionCountNote++;
+                    }
+                }
+                if (item.NoteP != null)
+                {
+                    if (item.NoteP.Status == NoteStatus.Edition)
+                    {
+                        noteEdition = true;
+                        editionCountNote++;
+                    }
+                }
+                if (item.IndividualNote != null)
+                {
+                    if (item.IndividualNote.Status == NoteStatus.Edition)
+                    {
+                        noteEdition = true;
+                        editionCountNote++;
+                    }
+                }
+                if (item.GroupNote != null)
+                {
+                    if (item.GroupNote.Status == NoteStatus.Edition)
+                    {
+                        noteEdition = true;
+                        editionCountNote++;
+                    }
+                }
+
+                if (item.Note != null)
+                {
+                    if (item.Note.Status == NoteStatus.Pending)
+                    {
+                        notePending = true;
+                        pendingCountNote++;
+                    }
+                }
+                if (item.NoteP != null)
+                {
+                    if (item.NoteP.Status == NoteStatus.Pending)
+                    {
+                        notePending = true;
+                        pendingCountNote++;
+                    }
+                }
+                if (item.IndividualNote != null)
+                {
+                    if (item.IndividualNote.Status == NoteStatus.Pending)
+                    {
+                        notePending = true;
+                        pendingCountNote++;
+                    }
+                }
+                if (item.GroupNote != null)
+                {
+                    if (item.GroupNote.Status == NoteStatus.Pending)
+                    {
+                        notePending = true;
+                        pendingCountNote++;
+                    }
+                }
+            }
+
+            if (noteEdition == true)
+            {
+                tempProblem.Name = "Notes";
+                tempProblem.Description = "Notes in edition (" + editionCountNote + ")";
+                tempProblem.Active = 0;
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            } 
+
+            if (notePending == true)
+            {
+                tempProblem.Name = "Notes";
+                tempProblem.Description = "Pending for approval Notes (" + pendingCountNote + ")";
+                tempProblem.Active = 0;
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+           
+            return View(problem);
+        }
     }
 }

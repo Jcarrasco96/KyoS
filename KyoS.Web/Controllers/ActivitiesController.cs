@@ -1706,6 +1706,26 @@ namespace KyoS.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> SearchTopic()
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+            if (clinic != null)
+                return View(await _context.Themes
+                                          .Include(t => t.Clinic)
+                                          .Where(t => (t.Clinic.Id == clinic.Id && t.Day == null))
+                                          .OrderBy(f => f.Day).ToListAsync());
+            else
+                return View(await _context.Themes
+                                          .Include(t => t.Clinic)
+                                          .Where(t => t.Day == null)
+                                          .OrderBy(t => t.Day).ToListAsync());
+        }
+
         #region Utils functions
         public bool WorkdayReadOnly(WorkdayEntity workday)
         {

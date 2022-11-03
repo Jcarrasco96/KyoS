@@ -108,14 +108,14 @@
                                     </td>
                                     @if (User.IsInRole("CaseManager"))
                                     {
-                                        <td align="right">
+                                        @*<td align="right">
                                             <a asp-action="Edit" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="2" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
                                         </td>
                                     }
                                     else
-                                    {
+                                    {*@
                                         <td align="right">
-                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                            <a asp-action="Details" asp-controller="Clients" asp-route-id="@item.Id" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
                                         </td>
                                     }
                                 </tr>
@@ -160,14 +160,14 @@
                                     </td>
                                     @if (User.IsInRole("CaseManager"))
                                     {
-                                        <td align="right">
+                                        @*<td align="right">
                                             <a asp-action="Edit" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="2" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
                                        </td>
                                     }
                                     else
-                                    {
+                                    {*@
                                         <td align="right">
-                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                            <a asp-action="Details" asp-controller="Clients" asp-route-origin="1" asp-route-id="@item.Id" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
                                         </td>
                                     }
                                 </tr>

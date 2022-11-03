@@ -620,8 +620,16 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> ApproveDischarge(int id, int origin = 0)
         {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+
+            SupervisorEntity supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
             DischargeEntity discharge = await _context.Discharge.FirstOrDefaultAsync(n => n.Id == id);
             discharge.Status = DischargeStatus.Approved;
+            discharge.Supervisor = supervisor;
             _context.Update(discharge);
 
             await _context.SaveChangesAsync();

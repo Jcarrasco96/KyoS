@@ -16,10 +16,11 @@
                             <th class="col-md-2">Client Name</th>
                             <th class="col-md-1" style="text-align:center;">Therapy</th>
                             <th class="col-md-1" style="text-align:center;">Date</th>
+                            <th class="col-md-1" style="text-align:center;">Birth Date</th>
                             <th class="col-md-1" style="text-align:center;">Medical ID</th>
                             <th class="col-md-1" style="text-align:center;">Billed</th>
                             <th class="col-md-1" style="text-align:center;">Payment</th>
-                            <th class="col-md-3"></th>
+                            <th class="col-md-2"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -31,14 +32,83 @@
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Client.Name)
-                                    | 
+                                    |
+                                    @if (item.Client.Clients_Diagnostics.Count() > 0)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code)
+                                    }
+                                    |
                                     @Html.DisplayFor(modelItem => item.Client.Code)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Client.Service)
+                                    @if (item.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Workday.Service)
+                                    }
+                                    else
+                                    {
+                                        @if (item.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.Workday.Service)
+                                        }
+                                        else
+                                        {
+                                            <label>Ind</label>
+                                        }
+                                    }
+                                    |
+                                    @if (item.Note != null)
+                                    {
+                                        if ((item.Note.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (item.Note.Schema == KyoS.Common.Enums.SchemaType.Schema2))
+                                        {
+                                            <label>16</label>
+                                        }
+                                        if ((item.Note.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                        {
+                                            <label>12</label>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @if (item.NoteP != null)
+                                        {
+                                            if (item.NoteP.Schema == KyoS.Common.Enums.SchemaType.Schema3)
+                                            {
+                                                <label>@item.NoteP.RealUnits</label>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if ((item.IndividualNote != null) || (item.Workday.Service == KyoS.Common.Enums.ServiceType.Individual))
+                                            {
+                                                <label>4</label>
+                                            }
+                                            else
+                                            {
+                                                if ((item.GroupNote != null) || (item.Workday.Service == KyoS.Common.Enums.ServiceType.Group))
+                                                {
+                                                    <label>8</label>
+                                                }
+                                                else
+                                                {
+                                                    if ((item.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (item.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (item.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                    {
+                                                        <label>16</label>
+                                                    }
+                                                    if ((item.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                    {
+                                                        <label>12</label>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Workday.Date)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Client.DateOfBirth)
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Client.MedicaidID)
@@ -65,9 +135,9 @@
                                 </td>
                                 <td align="right">
                                     <a asp-action="BillNoteToday" asp-route-id="@item.Id" class="btn btn-warning" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
-                                    <a onclick="showInPopup('@Url.Action("BillNote","Notes",new {id = item.Id}, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i> Bill</a>
+                                    <a onclick="showInPopup('@Url.Action("BillNote","Notes",new {id = item.Id}, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
                                     <a asp-action="PaymentReceivedToday" asp-route-id="@item.Id" class="btn btn-success" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
-                                    <a onclick="showInPopup('@Url.Action("PaymentReceived","Notes",new {id = item.Id}, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-calendar"></i> Received</a>
+                                    <a onclick="showInPopup('@Url.Action("PaymentReceived","Notes",new {id = item.Id}, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
                                 </td>
                             </tr>
                         }

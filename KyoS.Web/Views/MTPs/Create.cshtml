@@ -19,7 +19,7 @@
         <li class="active">Create</li>
     </ul><!--.breadcrumb-->
 </div>
-<h4>Create new master treatment plan</h4>
+<h4>Create Master Treatment Plan</h4>
 <hr />
 <div>
     <div>
@@ -111,7 +111,7 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script type="text/javascript">    
+<script type="text/javascript">
         $(document).ready(function () {
             $("#cbClient").change(function () {
                 var url = "@Url.Action("GetCodeByClient", "MTPs")";
@@ -122,7 +122,37 @@
                 var url = "@Url.Action("GetDiagnosisByClient", "MTPs")";
                 $.get(url, { idClient: $("#cbClient").val() }, function (data) {
                 $("#txtDiagnosis").val(data);
-                });               
+                });
+            })
+            $("#EnglishClientStrengths").click(function () {
+                var url = "@Url.Action("Translate", "MTPs")";
+                $.get(url, { text: $("#clientStrengths").val() }, function (data) {
+                    $("#clientStrengths").val(data);
+                });
+            })
+            $("#EnglishClientLimitation").click(function () {
+                var url = "@Url.Action("Translate", "MTPs")";
+                $.get(url, { text: $("#clientLimitation").val() }, function (data) {
+                    $("#clientLimitation").val(data);
+                });
+            })
+            $("#EnglishRationaleForUpdate").click(function () {
+                var url = "@Url.Action("Translate", "MTPs")";
+                $.get(url, { text: $("#rationaleForUpdate").val() }, function (data) {
+                    $("#rationaleForUpdate").val(data);
+                });
+            })
+            $("#EnglishAdditionalRecommended").click(function () {
+                var url = "@Url.Action("Translate", "MTPs")";
+                $.get(url, { text: $("#additionalRecommended").val() }, function (data) {
+                    $("#additionalRecommended").val(data);
+                });
+            })
+            $("#EnglishInitialDischargeCriteria").click(function () {
+                var url = "@Url.Action("Translate", "MTPs")";
+                $.get(url, { text: $("#initialDischargeCriteria").val() }, function (data) {
+                    $("#initialDischargeCriteria").val(data);
+                });
             })
         });
         $(function () {
@@ -137,6 +167,6 @@
                 $(this).closest("tr").next().remove();
             });
         });
-    </script>
+</script>
 }
 

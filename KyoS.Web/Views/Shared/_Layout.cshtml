@@ -208,7 +208,13 @@
                                             <li>@Html.ActionLink("Group", "GroupWorkdays", "Workdays")</li>
                                         </ul>
                                     </li>
-                                    <li>@Html.ActionLink("Session Changes", "ChangeNotes", "Notes")</li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Notes Changes</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("Session changes", "ChangeNotes", "Notes")</li>
+                                            <li>@Html.ActionLink("PSR Assistance modifications", "PSRAssistanceModifications", "Notes")</li>
+                                        </ul>
+                                    </li>                                    
                                     <li role="separator" class="divider"></li>
                                     <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
                                     <li class="dropdown-submenu">

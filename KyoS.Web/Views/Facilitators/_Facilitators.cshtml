@@ -1,7 +1,7 @@
 ﻿@model KyoS.Web.Models.FacilitatorViewModel
 <div class="col-md-4 form-group">
     <label asp-for="Name" class="control-label"></label>
-    <input asp-for="Name" class="form-control" />
+    <input asp-for="Name" class="form-control" required/>
     <span asp-validation-for="Name" class="text-danger"></span>
 </div>
 <div class="col-md-3 form-group">

@@ -11,5 +11,6 @@ namespace KyoS.Web.Data.Entities
         public bool MentalHealthClinic { get; set; }
         public bool TCMClinic { get; set; }
         public bool MHClassificationOfGoals { get; set; }
+        public bool MHProblems { get; set; }
     }
 }

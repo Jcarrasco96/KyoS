@@ -178,20 +178,20 @@
                                 <td align="right">
                                     @if (User.IsInRole("Supervisor"))
                                     {
-                                        <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a asp-action="ApproveDischarge" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-success" title="Approve Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-success" title="Edit Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                        @*<a asp-action="ApproveDischarge" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-success" title="Approve Discharge"><i class="glyphicon glyphicon-ok"></i></a>*@
                                     }
                                     else
                                     {
                                         @if (User.IsInRole("Facilitator"))
                                         {
                                             <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-warning" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a class="btn btn-success disabled" title="Approve FARS"><i class="glyphicon glyphicon-ok"></i></a>
+                                            @*<a class="btn btn-success disabled" title="Approve FARS"><i class="glyphicon glyphicon-ok"></i></a>*@
                                         }
                                         else
                                         {
                                             <a class="btn btn-warning disabled" title="Edit Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a class="btn btn-success disabled" title="Approve Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                            @*<a class="btn btn-success disabled" title="Approve Discharge"><i class="glyphicon glyphicon-ok"></i></a>*@
                                         }
                                     }
                                 </td>
