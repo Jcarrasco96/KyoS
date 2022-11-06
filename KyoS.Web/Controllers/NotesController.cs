@@ -8837,11 +8837,11 @@ namespace KyoS.Web.Controllers
                                             && (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved
                                                                                     || wc.GroupNote.Status == NoteStatus.Approved
                                                                                     || wc.NoteP.Status == NoteStatus.Approved)
-                                            && wc.Workday.Date >= DateTime.Now.AddMonths(-3)));
+                                            && wc.Workday.Date >= DateTime.Now.AddMonths(-1)));
 
                 return View(new ApprovedNotesClinicViewModel
                                 {
-                                    DateIterval = $"{DateTime.Now.AddMonths(-3).ToShortDateString()} - {DateTime.Now.AddDays(6).ToShortDateString()}",
+                                    DateIterval = $"{DateTime.Now.AddMonths(-1).ToShortDateString()} - {DateTime.Now.AddDays(6).ToShortDateString()}",
                                     IdFacilitator = 0,
                                     Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
                                     IdClient = 0,
@@ -9714,11 +9714,11 @@ namespace KyoS.Web.Controllers
 
                                                        .Include(w => w.Clinic)
 
-                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= DateTime.Now.AddMonths(-3) && w.FinalDate <= DateTime.Now.AddDays(6)));
+                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= DateTime.Now.AddMonths(-1) && w.FinalDate <= DateTime.Now.AddDays(6)));
 
                 BillingReportViewModel model = new BillingReportViewModel
                 {
-                    DateIterval = $"{DateTime.Now.AddMonths(-3).ToShortDateString()} - {DateTime.Now.AddDays(6).ToShortDateString()}",
+                    DateIterval = $"{DateTime.Now.AddMonths(-1).ToShortDateString()} - {DateTime.Now.AddDays(6).ToShortDateString()}",
                     IdFacilitator = 0,
                     Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
                     IdClient = 0,
