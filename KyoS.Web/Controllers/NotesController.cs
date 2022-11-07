@@ -9629,20 +9629,7 @@ namespace KyoS.Web.Controllers
                                                         .Include(w => w.Days)
                                                         .ThenInclude(d => d.Workdays_Clients)
                                                         .ThenInclude(wc => wc.NoteP)
-
-                                                        .Include(w => w.Days)
-                                                        .ThenInclude(d => d.Workdays_Clients)
-                                                        .ThenInclude(wc => wc.IndividualNote)
-
-                                                        .Include(w => w.Days)
-                                                        .ThenInclude(d => d.Workdays_Clients)
-                                                        .ThenInclude(wc => wc.GroupNote)
-
-                                                        .Include(w => w.Days)
-                                                        .ThenInclude(d => d.Workdays_Clients)
-                                                        .ThenInclude(wc => wc.Client)
-                                                        .ThenInclude(c => c.MTPs)
-
+   
                                                         .Include(w => w.Days)
                                                         .ThenInclude(d => d.Workdays_Clients)
                                                         .ThenInclude(wc => wc.Client)
@@ -9692,19 +9679,6 @@ namespace KyoS.Web.Controllers
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
                                                        .ThenInclude(wc => wc.NoteP)
-
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.IndividualNote)
-
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.GroupNote)
-
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.Client)
-                                                       .ThenInclude(c => c.MTPs)
 
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)

@@ -184,13 +184,13 @@
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    if ((workdayClient.IndividualNote != null) || (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Individual))
+                                                                                    if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
                                                                                     {
                                                                                         <label>4</label>
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        if ((workdayClient.GroupNote != null) || (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group))
+                                                                                        if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                                                                         {
                                                                                             <label>8</label>
                                                                                         }
@@ -251,13 +251,13 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                    if ((workdayClient.IndividualNote != null) || (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Individual))
+                                                                    if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
                                                                     {
                                                                         units = units + 4;
                                                                     }
                                                                     else
                                                                     {
-                                                                        if ((workdayClient.GroupNote != null) || (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group))
+                                                                        if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                                                         {
                                                                             units = units + 8;
                                                                         }
