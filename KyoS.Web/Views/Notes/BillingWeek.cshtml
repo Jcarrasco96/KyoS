@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.Workday_Client>
 @{
     ViewData["Title"] = "Billing Week";
 }
@@ -9,7 +9,7 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("Billing Report", "BillingReport", "Notes")
+            @Html.ActionLink("Billing Report", "BillingReport1", "Notes", new { idWeek = Model.ElementAt(0).Workday.Week.Id})
         </li>
         @if (ViewData["Billed"].ToString() == "0")
         {
@@ -32,13 +32,13 @@
         <div class="col-md-1">
             <div class="thumbnail list-group-item list-group-item-danger">
                 <p style="text-align:center">Clients</p>
-                <h4 style="text-align:center; font-weight:bold;">@Model.Count()</h4>
+                <h4 style="text-align:center; font-weight:bold;">@Model.Distinct().GroupBy(n => n.ClientName).Count()</h4>
             </div>
         </div>
         <div class="col-md-1">
             <div class="thumbnail list-group-item list-group-item-danger">
                 <p style="text-align:center">Notes</p>
-                <h4 style="text-align:center; font-weight:bold;">@Model.Sum(m => m.Workdays_Clients.Where(n => n.Workday.Week.Id.ToString() == ViewData["idWeek"].ToString()).Count())</h4>
+                <h4 style="text-align:center; font-weight:bold;">@Model.Count()</h4>
             </div>
         </div>
         <div class="col-md-1">
@@ -53,13 +53,13 @@
         <div class="col-md-1">
             <div class="thumbnail list-group-item list-group-item-success">
                 <p style="text-align:center">Clients</p>
-                <h4 style="text-align:center; font-weight:bold;">@Model.Count()</h4>
+                <h4 style="text-align:center; font-weight:bold;">@Model.Distinct().GroupBy(n => n.ClientName).Count()</h4>
             </div>
         </div>
         <div class="col-md-1">
             <div class="thumbnail list-group-item list-group-item-success">
                 <p style="text-align:center">Notes</p>
-                <h4 style="text-align:center; font-weight:bold;">@Model.Sum(m => m.Workdays_Clients.Where(n => n.Workday.Week.Id.ToString() == ViewData["idWeek"].ToString()).Count())</h4>
+                <h4 style="text-align:center; font-weight:bold;">@Model.Count()</h4>
             </div>
         </div>
         <div class="col-md-1">

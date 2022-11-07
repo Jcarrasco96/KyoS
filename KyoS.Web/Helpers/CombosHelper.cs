@@ -1476,5 +1476,23 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboWeeksName()
+        {
+            List<SelectListItem> list = _context.Weeks.Select(c => new SelectListItem
+            {
+                Text = $"{c.InitDate.ToShortDateString()} - {c.FinalDate.ToShortDateString()}",
+                Value = $"{c.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select week...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
     }
 }

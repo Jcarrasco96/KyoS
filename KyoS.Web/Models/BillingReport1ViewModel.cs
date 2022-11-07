@@ -5,11 +5,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Models
 {
-    public class BillingReportViewModel
+    public class BillingReport1ViewModel
     {
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public string DateIterval { get; set; }
-
+        
         public int IdFacilitator { get; set; }
         public IEnumerable<SelectListItem> Facilitators { get; set; }
 
@@ -18,5 +16,7 @@ namespace KyoS.Web.Models
 
         public List<WeekEntity> Weeks { get; set; }
 
+        public int IdWeek { get; set; }
+        public IEnumerable<SelectListItem> WeeksListName { get; set; }
     }
 }
