@@ -9656,39 +9656,56 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                int max = _context.Weeks.Max(m => m.Id);
-                WeekEntity query = _context.Weeks
+                IQueryable<WeekEntity> query = _context.Weeks
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(g => g.Facilitator)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.Client)
+                                                        .ThenInclude(c => c.Group)
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.Note)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(g => g.Facilitator)
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.NoteP)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.Note)
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.Client)
-                                                       .ThenInclude(c => c.Clients_Diagnostics)
-                                                       .ThenInclude(cd => cd.Diagnostic)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.NoteP)
 
-                                                       .Include(w => w.Clinic)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.IndividualNote)
 
-                                                       .First(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == max));
-                list.Add(query);
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.GroupNote)
+
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.Client)
+                                                        .ThenInclude(c => c.MTPs)
+
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.Client)
+                                                        .ThenInclude(c => c.Clients_Diagnostics)
+                                                        .ThenInclude(cd => cd.Diagnostic)
+
+                                                        .Include(w => w.Clinic)
+
+                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= DateTime.Now.AddMonths(-1) && w.FinalDate <= DateTime.Now.AddDays(6)));
+               
                 BillingReportViewModel model = new BillingReportViewModel
                 {
-                    DateIterval = $"{query.InitDate.Date} - {query.FinalDate.Date}",
+                    DateIterval = $"{DateTime.Now.AddMonths(-3).ToShortDateString()} - {DateTime.Now.AddDays(6).ToShortDateString()}",
                     IdFacilitator = 0,
                     Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
                     IdClient = 0,
                     Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                    Weeks = list
+                    Weeks = query.ToList()
                 };
 
                 return View(model);

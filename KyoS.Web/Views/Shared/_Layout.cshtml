@@ -187,9 +187,14 @@
                                     CMH <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
-                                    <li><a asp-area="" asp-controller="Facilitators" asp-action="Index">Facilitators</a></li>
-                                    <li><a asp-area="" asp-controller="DocumentsAssistants" asp-action="Index">Documents Assistants</a></li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Employees</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
+                                            <li><a asp-area="" asp-controller="Facilitators" asp-action="Index">Facilitators</a></li>
+                                            <li><a asp-area="" asp-controller="DocumentsAssistants" asp-action="Index">Documents Assistants</a></li>
+                                        </ul>
+                                    </li>
                                     <li role="separator" class="divider"></li>
                                     <li>@Html.ActionLink("Topics / Themes", "Index", "Themes")</li>
                                     <li role="separator" class="divider"></li>
@@ -214,7 +219,7 @@
                                             <li>@Html.ActionLink("Session changes", "ChangeNotes", "Notes")</li>
                                             <li>@Html.ActionLink("PSR Assistance modifications", "PSRAssistanceModifications", "Notes")</li>
                                         </ul>
-                                    </li>                                    
+                                    </li>
                                     <li role="separator" class="divider"></li>
                                     <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
                                     <li class="dropdown-submenu">
@@ -263,7 +268,15 @@
                                             <li>@Html.ActionLink("All Discharges", "Index", "Discharge")</li>
                                         </ul>
                                     </li>
-                                    <li>@Html.ActionLink("All Documents", "AllDocuments", "Clients")</li>
+                                    <li role="separator" class="divider"></li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">History</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("Billing Report", "BillingReport", "Notes")</li>
+                                            <li>@Html.ActionLink("All Documents", "AllDocuments", "Clients")</li>
+                                        </ul>
+                                    </li>
+
                                 </ul>
                             </li>
                         }
