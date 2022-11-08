@@ -89,14 +89,27 @@
                                         }
                                     }
                                 </td>
-                                <td align="center">
+                                <td align="right">
                                     @if (item.Status == KyoS.Common.Enums.DischargeStatus.Approved)
                                     {
-                                        <a asp-action="PrintDischarge" asp-controller="Discharge" asp-route-id="@item.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>     
+                                        <a asp-action="ReturnTo" asp-controller="Discharge" asp-route-id="@item.Id" asp-route-clientId="@item.Client_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                        <a asp-action="PrintDischarge" asp-controller="Discharge" asp-route-id="@item.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        <a asp-action="Delete" asp-controller="Discharge" asp-route-id="@item.Id" asp-route-clientId="@item.Client_FK" class="btn btn-danger" title="Delete Discharge"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                     else
                                     {
-                                        <a asp-action="PrintDischarge" asp-controller="Discharge" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>     
+                                        @if (item.Status == KyoS.Common.Enums.DischargeStatus.Pending)
+                                        {
+                                            <a asp-action="ReturnTo" asp-controller="Discharge" asp-route-id="@item.Id" asp-route-clientId="@item.Client_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                            <a asp-action="PrintDischarge" asp-controller="Discharge" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="Delete" asp-controller="Discharge" asp-route-id="@item.Id" asp-route-clientId="@item.Client_FK" class="btn btn-danger" title="Delete Discharge"><i class="glyphicon glyphicon-trash"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="ReturnTo" asp-controller="Discharge" asp-route-id="@item.Id" asp-route-clientId="@item.Client_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                            <a asp-action="PrintDischarge" asp-controller="Discharge" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="Delete" asp-controller="Discharge" asp-route-id="@item.Id" asp-route-clientId="@item.Client_FK" class="btn btn-danger" title="Delete Discharge"><i class="glyphicon glyphicon-trash"></i></a>
+                                        }
                                     }
                                 </td>
                             </tr>

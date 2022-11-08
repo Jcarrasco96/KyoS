@@ -1295,6 +1295,9 @@ namespace KyoS.Web.Controllers
                                                 .Include(w => w.MTPs)
                                                 .ThenInclude(w => w.MtpReviewList)
 
+                                                .Include(w => w.MTPs)
+                                                .ThenInclude(w => w.AdendumList)
+
                                                 .Include(w => w.Bio)
                                                 .Include(w => w.FarsFormList)
                                                 .Include(w => w.DischargeList)
