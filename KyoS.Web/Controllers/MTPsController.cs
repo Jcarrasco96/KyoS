@@ -4406,5 +4406,96 @@ namespace KyoS.Web.Controllers
         {
             return Json(text = _translateHelper.TranslateText("es", "en", text));
         }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ReturnTo(int? id, int clientId = 0, MTPStatus aStatus = MTPStatus.Edition)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            MTPEntity mtpEntity = await _context.MTPs
+                                                .Include(m => m.Client)
+                                                .FirstOrDefaultAsync(t => t.Id == id);
+            if (mtpEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+ 
+            try
+            {
+                mtpEntity.Status = aStatus;
+                _context.MTPs.Update(mtpEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ReturnAddendumsTo(int? id, int clientId = 0, AdendumStatus aStatus = AdendumStatus.Edition)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            AdendumEntity adendumEntity = await _context.Adendums
+                                                        .Include(m => m.Mtp)
+                                                        .FirstOrDefaultAsync(t => t.Id == id);
+            if (adendumEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                adendumEntity.Status = aStatus;
+                _context.Adendums.Update(adendumEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ReturnMtpReviewTo(int? id, int clientId = 0, AdendumStatus aStatus = AdendumStatus.Edition)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            MTPReviewEntity mtprEntity = await _context.MTPReviews
+                                                        .Include(m => m.Mtp)
+                                                        .FirstOrDefaultAsync(t => t.Id == id);
+            if (mtprEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                mtprEntity.Status = aStatus;
+                _context.MTPReviews.Update(mtprEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+        }
+
     }
 }

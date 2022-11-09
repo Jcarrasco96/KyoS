@@ -23,10 +23,10 @@
                             <th class="col-md-2" style="text-align:center">
                                 Admissioned for
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
-                            <th class="col-md-1">
+                            <th class="col-md-2">
                             </th>
                         </tr>
                     </thead>
@@ -83,14 +83,27 @@
                                         }
                                     }
                                 </td>
-                                <td align="center">
+                                <td align="right">
                                     @if (item.Status == KyoS.Common.Enums.FarsStatus.Approved)
                                     {
-                                        <a asp-action="PrintFarsForm" asp-controller="FarsForms" asp-route-id="@item.Id" class="btn btn-success" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>     
+                                        <a asp-action="ReturnTo" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                        <a asp-action="PrintFarsForm" asp-controller="FarsForms" asp-route-id="@item.Id" class="btn btn-success" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        <a asp-action="Delete" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                     else
                                     {
-                                        <a asp-action="PrintFarsForm" asp-controller="FarsForms" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>     
+                                        @if (item.Status == KyoS.Common.Enums.FarsStatus.Pending)
+                                        {
+                                            <a asp-action="ReturnTo" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                            <a asp-action="PrintFarsForm" asp-controller="FarsForms" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="Delete" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="ReturnTo" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                            <a asp-action="PrintFarsForm" asp-controller="FarsForms" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="Delete" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                        }
                                     }
                                 </td>
                             </tr>

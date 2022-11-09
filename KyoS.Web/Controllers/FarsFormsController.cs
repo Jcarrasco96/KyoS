@@ -377,8 +377,8 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", farsFormViewModel) });
         }
 
-        [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Delete(int? id, int clientId = 0)
         {
             if (id == null)
             {
@@ -401,7 +401,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Index", new { idError = 1 });
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
@@ -703,6 +703,34 @@ namespace KyoS.Web.Controllers
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ReturnTo(int? id, int clientId = 0, FarsStatus aStatus = FarsStatus.Edition)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            FarsFormEntity farsFormEntity = await _context.FarsForm.FirstOrDefaultAsync(s => s.Id == id);
+            if (farsFormEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                farsFormEntity.Status = aStatus;
+                _context.FarsForm.Update(farsFormEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
         }
 
     }

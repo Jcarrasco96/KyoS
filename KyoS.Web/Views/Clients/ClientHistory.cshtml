@@ -35,16 +35,34 @@
                     <div class="col-md-12 form-group">
                         @if (Model.Clinic.Setting.MHProblems == true)
                         {
-                        <a onclick="showInPopupLg('@Url.Action("ClientProblemList", "Clients", new { idClient = @Model.Id }, Context.Request.Scheme)','Audit Documents')" class="btn btn-danger" title="Audit the documentation"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Documents</a>
+                            <a onclick="showInPopupLg('@Url.Action("ClientProblemList", "Clients", new { idClient = @Model.Id }, Context.Request.Scheme)','Audit Documents')" class="btn btn-danger" title="Audit the documentation"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Documents</a>
                         }
                         else
                         {
                             <a onclick="showInPopupLg('@Url.Action("ClientProblemList", "Clients", new { idClient = @Model.Id }, Context.Request.Scheme)','Audit Documents')" class="btn btn-danger disabled" title="Audit the documentation"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Documents</a>
                         }
                     </div>
-                    <div class="col-md-12">
-                        <hr />
+                </div>
+            </div>
+            <div class="col-md-12">
+                <hr />
+            </div>
+            <div class="col-md-push-12">
+                <div class="">
+                    <div id="view-farsForClient">
+                        @if (Model.MTPs.Count() > 0)
+                        {
+                            @await Html.PartialAsync("_ViewMtpListForClient", Model.MTPs.ToList())
+                        }
                     </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <hr />
+            </div>
+            <div class="col-md-push-12">
+                <div class="">
                     <div id="view-farsForClient">
                         @if (Model.FarsFormList.Count() > 0)
                         {
@@ -59,10 +77,11 @@
             <div class="col-md-push-12">
                 <div class="">
                     <div id="view-farsForClient">
-                        @if (Model.FarsFormList.Count() > 0)
+                        @if (Model.DischargeList.Count() > 0)
                         {
                             @await Html.PartialAsync("_ViewDischargeListForClient", Model.DischargeList.ToList())
                         }
+
                     </div>
                 </div>
             </div>
@@ -110,7 +129,22 @@
             //    autoClose: true
             //})
         });
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan='999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
     </script>
+   
+
 }
 
 
