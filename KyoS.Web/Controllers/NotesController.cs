@@ -9841,6 +9841,8 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
+            WeekEntity week = _context.Weeks.FirstOrDefault(n => n.Id == id);
+
             if (billed == 0)
             {
                 List<Workday_Client> work_client = await _context.Workdays_Clients
@@ -9857,6 +9859,8 @@ namespace KyoS.Web.Controllers
                                                                  .Include(wc => wc.Workday)
                                                                  .ThenInclude(w => w.Week)
 
+                                                                 .Include(wc => wc.Facilitator)
+
                                                                  .Where(wc => (wc.Workday.Week.Clinic.Id == user_logged.Clinic.Id
                                                                             && wc.Workday.Week.Id == id
                                                                             && wc.Present == true
@@ -9868,6 +9872,7 @@ namespace KyoS.Web.Controllers
                                                                  .ToListAsync();
 
                 ViewData["idWeek"] = id;
+                ViewData["range"] = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
                 int cantUnit = 0;
                 int money = 0;
                 foreach (var item in work_client)
@@ -9929,6 +9934,8 @@ namespace KyoS.Web.Controllers
                                                                  .Include(wc => wc.Workday)
                                                                  .ThenInclude(w => w.Week)
 
+                                                                 .Include(wc => wc.Facilitator)
+
                                                                  .Where(wc => (wc.Workday.Week.Clinic.Id == user_logged.Clinic.Id
                                                                             && wc.Workday.Week.Id == id
                                                                             && wc.Present == true
@@ -9940,6 +9947,7 @@ namespace KyoS.Web.Controllers
                                                                  .ToListAsync();
 
                 ViewData["idWeek"] = id;
+                ViewData["range"] = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
                 int cantUnit = 0;
                 int money = 0;
                 foreach (var item in work_client)

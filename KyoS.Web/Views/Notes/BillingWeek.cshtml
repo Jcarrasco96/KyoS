@@ -44,7 +44,8 @@
     </div>
     <div class="col-md-5">
         <center>
-            @Model.First().Workday.Week.InitDate.ToLongDateString() - @Model.First().Workday.Week.FinalDate.ToLongDateString()
+            @*@Model.First().Workday.Week.InitDate.ToLongDateString() - @Model.First().Workday.Week.FinalDate.ToLongDateString()*@
+            @ViewData["range"].ToString()
         </center>
     </div>
     <div class="col-md-3">
