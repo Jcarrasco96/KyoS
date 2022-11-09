@@ -9346,18 +9346,17 @@ namespace KyoS.Web.Controllers
                                                    .Include(u => u.Clinic)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
-            return View(await _context.Workdays_Clients.Include(wc => wc.Note)
+            return View(await _context.Workdays_Clients.AsNoTracking()
+                                      
+                                      .Include(wc => wc.Facilitator).AsNoTracking()
 
-                                                       .Include(wc => wc.Facilitator)
+                                      .Include(wc => wc.Client).AsNoTracking()
 
-                                                       .Include(wc => wc.Client)
-
-                                                       .Include(wc => wc.Workday)
-                                                       .ThenInclude(w => w.Week)
-
-                                                       .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                                  && wc.Present == false))
-                                                       .ToListAsync());
+                                      .Include(wc => wc.Workday).AsNoTracking()
+                                                       
+                                      .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                 && wc.Present == false)).AsNoTracking()
+                                      .ToListAsync());
         }
 
         [Authorize(Roles = "Facilitator, Manager")]
@@ -9660,11 +9659,6 @@ namespace KyoS.Web.Controllers
 
                                                         .Include(w => w.Days)
                                                         .ThenInclude(d => d.Workdays_Clients)
-                                                        .ThenInclude(wc => wc.Client)
-                                                        .ThenInclude(c => c.Group)
-
-                                                        .Include(w => w.Days)
-                                                        .ThenInclude(d => d.Workdays_Clients)
                                                         .ThenInclude(g => g.Facilitator)
 
                                                         .Include(w => w.Days)
@@ -9677,27 +9671,14 @@ namespace KyoS.Web.Controllers
 
                                                         .Include(w => w.Days)
                                                         .ThenInclude(d => d.Workdays_Clients)
-                                                        .ThenInclude(wc => wc.IndividualNote)
-
-                                                        .Include(w => w.Days)
-                                                        .ThenInclude(d => d.Workdays_Clients)
-                                                        .ThenInclude(wc => wc.GroupNote)
-
-                                                        .Include(w => w.Days)
-                                                        .ThenInclude(d => d.Workdays_Clients)
-                                                        .ThenInclude(wc => wc.Client)
-                                                        .ThenInclude(c => c.MTPs)
-
-                                                        .Include(w => w.Days)
-                                                        .ThenInclude(d => d.Workdays_Clients)
                                                         .ThenInclude(wc => wc.Client)
                                                         .ThenInclude(c => c.Clients_Diagnostics)
                                                         .ThenInclude(cd => cd.Diagnostic)
 
                                                         .Include(w => w.Clinic)
 
-                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= DateTime.Now.AddMonths(-1) && w.FinalDate <= DateTime.Now.AddDays(6)));
-               
+                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= DateTime.Now.AddMonths(-3) && w.FinalDate <= DateTime.Now.AddDays(6)));                                              
+
                 BillingReportViewModel model = new BillingReportViewModel
                 {
                     DateIterval = $"{DateTime.Now.AddMonths(-3).ToShortDateString()} - {DateTime.Now.AddDays(6).ToShortDateString()}",
@@ -9867,9 +9848,7 @@ namespace KyoS.Web.Controllers
                                                                  .Include(wc => wc.Note)
                                                                  .Include(wc => wc.NoteP)
                                                                  .Include(wc => wc.IndividualNote)
-                                                                 .Include(wc => wc.GroupNote)
-
-                                                                 .Include(wc => wc.IndividualNote)
+                                                                 .Include(wc => wc.GroupNote)                                                                 
 
                                                                  .Include(wc => wc.Client)
                                                                  .ThenInclude(c => c.Clients_Diagnostics)
@@ -9885,6 +9864,7 @@ namespace KyoS.Web.Controllers
                                                                             && wc.BilledDate == null))
                                                                  .OrderBy(m => m.Facilitator)
                                                                  .OrderBy(m => m.Client.Name)
+                                                                 .OrderBy(m => m.Workday.Date)
                                                                  .ToListAsync();
 
                 ViewData["idWeek"] = id;
@@ -9940,9 +9920,7 @@ namespace KyoS.Web.Controllers
                                                                  .Include(wc => wc.Note)
                                                                  .Include(wc => wc.NoteP)
                                                                  .Include(wc => wc.IndividualNote)
-                                                                 .Include(wc => wc.GroupNote)
-
-                                                                 .Include(wc => wc.IndividualNote)
+                                                                 .Include(wc => wc.GroupNote)                                                                
 
                                                                  .Include(wc => wc.Client)
                                                                  .ThenInclude(c => c.Clients_Diagnostics)
@@ -9958,6 +9936,7 @@ namespace KyoS.Web.Controllers
                                                                             && wc.BilledDate != null))
                                                                  .OrderBy(m => m.Facilitator)
                                                                  .OrderBy(m => m.Client.Name)
+                                                                 .OrderBy(m => m.Workday.Date)
                                                                  .ToListAsync();
 
                 ViewData["idWeek"] = id;

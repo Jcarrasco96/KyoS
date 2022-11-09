@@ -1,6 +1,13 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.Workday_Client>
 @{
-    ViewData["Title"] = "Billing Week";
+    @if (ViewData["Billed"].ToString() == "0")
+    {
+        ViewData["Title"] = "Unbilled Clients";
+    }
+    else
+    {
+        ViewData["Title"] = "Billed Clients";
+    }
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -21,18 +28,32 @@
         </li>
         @if (ViewData["Billed"].ToString() == "0")
         {
-            <li class="active">Unbilled</li>
+            <li class="active">Unbilled Clients</li>
         }
         else
-        { 
-            <li class="active">Billed</li>
+        {
+            <li class="active">Billed Clients</li>
         }
 
     </ul><!--.breadcrumb-->
 </div>
 
 <div class="row">
+    <div class="col-md-4">
+        &nbsp;
+    </div>
+    <div class="col-md-5">
+        <center>
+            @Model.First().Workday.Week.InitDate.ToLongDateString() - @Model.First().Workday.Week.FinalDate.ToLongDateString()
+        </center>
+    </div>
     <div class="col-md-3">
+        &nbsp;
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div class="col-md-4">
         &nbsp;
     </div>
     @if (ViewData["Billed"].ToString() == "0")
@@ -91,29 +112,30 @@
             }
         </div>
     </div>
-    <div class="col-md-1">
-        @if (ViewData["Billed"].ToString() == "0")
-        {
-            <div class="thumbnail list-group-item list-group-item-success">
-                <a style="text-align: center;" asp-controller="Notes" asp-action="BillingWeek" asp-route-id="@ViewData["idWeek"]" asp-route-billed="1" role="button">Switch</a>
-                <h4 style="text-align:center; font-weight:bold;">Billed</h4>
-            </div>
-        }
-        else
-        {
-            <div class="thumbnail list-group-item list-group-item-danger">
-                <a style="text-align: center;" asp-controller="Notes" asp-action="BillingWeek" asp-route-id="@ViewData["idWeek"]" asp-route-billed="0" role="button">Switch</a>
-                <h4 style="text-align:center; font-weight:bold;">Unbilled</h4>
-            </div>
-        }
-    </div>
     <div class="col-md-3">
         &nbsp;
     </div>
-    <div class="col-md-12">
+    <div class="col-md-4">
+        &nbsp;
+    </div>
+    <div class="col-md-5">
+        <br />
+        <center>
+            @if (ViewData["Billed"].ToString() == "0")
+            {
+                <a class="btn btn-default" asp-controller="Notes" asp-action="BillingWeek" asp-route-id="@ViewData["idWeek"]" asp-route-billed="1" role="button"><i class="glyphicon glyphicon-log-in"></i>&nbsp;&nbsp;Switch to Billed Clients</a>
+            }
+            else
+            {
+                <a class="btn btn-default" asp-controller="Notes" asp-action="BillingWeek" asp-route-id="@ViewData["idWeek"]" asp-route-billed="0" role="button"><i class="glyphicon glyphicon-log-in"></i>&nbsp;&nbsp;Switch to Unbilled Clients</a>
+            }
+        </center>
         @*<h4 style="font-weight:bold;"><span class="label label-default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Week&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></h4>*@
         @*<h5>&nbsp;<b>Init Date:</b> @Model.First().Workdays_Clients.First().Workday.Week.InitDate.ToShortDateString()&nbsp;&nbsp;<b>Final Date:</b> @Model.First().Workdays_Clients.First().Workday.Week.FinalDate.ToShortDateString()</h5>*@
         <hr />
+    </div>
+    <div class="col-md-3">
+        &nbsp;
     </div>
     <div id="view-templates">
         @await Html.PartialAsync("_BillingWeek", Model)
@@ -124,14 +146,14 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/jquery.dataTables.min.js"></script>    
     <script type="text/javascript">
-        $(document).ready(function () {
+        $(document).ready(function () {         
             $('#MyTable').DataTable({
                 "order": [[0, "asc"]],
                 "lengthMenu": [[100, 200, 400, -1], [100, 200, 400, "All"]],
                 "pageLength": 400
-            });        
+            });
         });
         $(function () {
 

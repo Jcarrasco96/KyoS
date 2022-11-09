@@ -1481,13 +1481,13 @@ namespace KyoS.Web.Helpers
         {
             List<SelectListItem> list = _context.Weeks.Select(c => new SelectListItem
             {
-                Text = $"{c.InitDate.ToShortDateString()} - {c.FinalDate.ToShortDateString()}",
+                Text = $"{c.InitDate.ToLongDateString()} - {c.FinalDate.ToLongDateString()}",
                 Value = $"{c.Id}"
             }).ToList();
 
             list.Insert(0, new SelectListItem
             {
-                Text = "[Select week...]",
+                Text = "[Select date range...]",
                 Value = "0"
             });
 
