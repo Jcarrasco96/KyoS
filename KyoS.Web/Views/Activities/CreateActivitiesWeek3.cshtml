@@ -53,6 +53,32 @@
                     </div>
                 </div>
                 <div class="col-md-push-12">
+                    @if (ViewData["edit"].ToString() == "1")
+                    {
+                        <div class="form-group col-md-6">
+                            <label asp-for="AM" class="control-label">Session AM</label><br />
+                            <input type="checkbox" asp-for="AM" class="form-check-input">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="PM" class="control-label">Session PM</label><br />
+                            <input type="checkbox" asp-for="PM" class="form-check-input">
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group col-md-6">
+                            <label asp-for="AM" class="control-label">Session AM</label><br />
+                            <input type="checkbox" asp-for="AM" class="form-check-input" disabled>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="PM" class="control-label">Session PM</label><br />
+                            <input type="checkbox" asp-for="PM" class="form-check-input" disabled>
+                        </div>
+                        <input type="hidden" asp-for="AM" />
+                        <input type="hidden" asp-for="PM" />
+                    }
+                </div>
+                <div class="col-md-push-12">
                     <div class="form-group col-md-6">
                         <label class="control-label">Group 1 Theme</label>
                         <select asp-for="IdTopic1" asp-items="Model.Topics1" class="form-control" id="cbTopic1"></select>

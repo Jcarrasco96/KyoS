@@ -100,5 +100,8 @@ namespace KyoS.Web.Models
         public bool activityDailyLiving4 { get; set; }
         public bool socialSkills4 { get; set; }
         public bool lifeSkills4 { get; set; }
+
+        public bool AM { get; set; }
+        public bool PM { get; set; }
     }
 }

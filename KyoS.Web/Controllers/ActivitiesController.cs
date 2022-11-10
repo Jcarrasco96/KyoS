@@ -47,9 +47,9 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction(nameof(Index3), "Activities");
             }
-                        
+
             if (user_logged.Clinic == null)
-            { 
+            {
                 return View(await _context.Activities
                                           .Include(a => a.Theme)
                                           .ThenInclude(t => t.Clinic)
@@ -59,8 +59,8 @@ namespace KyoS.Web.Controllers
                                         .Include(a => a.Theme)
                                         .ThenInclude(t => t.Clinic)
                                         .Where(a => a.Theme.Clinic.Id == user_logged.Clinic.Id)
-                                        .OrderBy(a => a.Theme.Name).ToListAsync());                
-            
+                                        .OrderBy(a => a.Theme.Name).ToListAsync());
+
         }
 
         [Authorize(Roles = "Facilitator")]
@@ -86,7 +86,7 @@ namespace KyoS.Web.Controllers
             return View(await _context.Activities
                                         .Include(a => a.Theme)
                                         .ThenInclude(t => t.Clinic)
-                                        .Where(a =>(a.Theme.Clinic.Id == user_logged.Clinic.Id && a.Theme.Day == null))
+                                        .Where(a => (a.Theme.Clinic.Id == user_logged.Clinic.Id && a.Theme.Day == null))
                                         .OrderBy(a => a.Theme.Name).ToListAsync());
 
         }
@@ -118,10 +118,10 @@ namespace KyoS.Web.Controllers
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic != null)
-                {                   
+                {
                     model = new ActivityViewModel
                     {
-                        Themes = _combosHelper.GetComboThemesByClinic(user_logged.Clinic.Id)                        
+                        Themes = _combosHelper.GetComboThemesByClinic(user_logged.Clinic.Id)
                     };
                     return View(model);
                 }
@@ -329,12 +329,12 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    if(activityViewModel.Origin == 0)
+                    if (activityViewModel.Origin == 0)
                         return RedirectToAction(nameof(Index));
                     if (activityViewModel.Origin == 1)
                         return RedirectToAction(nameof(ActivitiesSupervision));
                     if (activityViewModel.Origin == 2)
-                        return RedirectToAction(nameof(ActivitiesSupervision), new {pending = 1});
+                        return RedirectToAction(nameof(ActivitiesSupervision), new { pending = 1 });
                 }
                 catch (System.Exception ex)
                 {
@@ -427,12 +427,17 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> ActivitiesPerWeek()
+        public async Task<IActionResult> ActivitiesPerWeek(int idError = 0)
         {
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.NoDelete = "N";
+            }
+
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
                                                    .ThenInclude(c => c.Setting)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);           
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic == null)
                 return View(null);
@@ -442,6 +447,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
+            ViewData["delete"] = 0;
             return View(await _context.Weeks
 
                                       .Include(w => w.Days)
@@ -451,11 +457,11 @@ namespace KyoS.Web.Controllers
 
                                       .Include(w => w.Days)
                                       .ThenInclude(d => d.Workdays_Activities_Facilitators)
-                                      .ThenInclude(waf =>waf.Facilitator)
+                                      .ThenInclude(waf => waf.Facilitator)
 
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                 && w.Days.Where(d => (d.Service == ServiceType.PSR && d.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))
-                                      .ToListAsync());            
+                                      .ToListAsync());
         }
 
         [Authorize(Roles = "Facilitator")]
@@ -492,7 +498,7 @@ namespace KyoS.Web.Controllers
 
         //Schema 1 and schema 2
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> CreateActivitiesWeek(int id = 0)
+        public async Task<IActionResult> CreateActivitiesWeek(int id = 0, bool am = false, bool pm = false)
         {
             List<ThemeEntity> topics;
             List<SelectListItem> list1 = new List<SelectListItem>();
@@ -500,7 +506,7 @@ namespace KyoS.Web.Controllers
             List<SelectListItem> list3 = new List<SelectListItem>();
             List<SelectListItem> list4 = new List<SelectListItem>();
             Workday_Activity_FacilitatorViewModel model;
-            
+
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
                                                    .ThenInclude(c => c.Setting)
@@ -513,12 +519,12 @@ namespace KyoS.Web.Controllers
 
             WorkdayEntity workday = await _context.Workdays.Include(wd => wd.Week)
                                                            .ThenInclude(w => w.Clinic)
-                                                           
+
                                                            .Include(wd => wd.Workdays_Clients)
                                                            .ThenInclude(wc => wc.Note)
 
                                                            .FirstOrDefaultAsync(w => w.Id == id);
-            
+
             //el workday ya tiene notas creadas por el facilitator logueado por tanto no es posible su edición
             if (WorkdayReadOnly(workday))
             {
@@ -532,16 +538,18 @@ namespace KyoS.Web.Controllers
             if ((workday == null) || (facilitator_logged == null))
             {
                 return RedirectToAction("Home/Error404");
-            }                               
-            
+            }
+
             List<Workday_Activity_Facilitator> activities_list = await _context.Workdays_Activities_Facilitators
                                                                                .Include(waf => waf.Activity)
                                                                                .ThenInclude(a => a.Theme)
 
                                                                                .Where(waf => (waf.Workday.Id == workday.Id
-                                                                                           && waf.Facilitator.Id == facilitator_logged.Id))
+                                                                                           && waf.Facilitator.Id == facilitator_logged.Id
+                                                                                           && waf.AM == am
+                                                                                           && waf.PM == pm))
                                                                                .ToListAsync();
-            
+
             //No hay creadas actividades del facilitador logueado en la fecha seleccionada
             if (activities_list.Count() == 0)
             {
@@ -632,7 +640,7 @@ namespace KyoS.Web.Controllers
             {
                 if (activities_list[0].Schema == SchemaType.Schema3)
                 {
-                    return RedirectToAction(nameof(CreateActivitiesWeek3), "Activities", new { id = id });
+                    return RedirectToAction(nameof(CreateActivitiesWeek3), "Activities", new { id = id, am = am, pm = pm });
                 }
 
                 if (activities_list[0].Schema == SchemaType.Schema4)
@@ -715,7 +723,7 @@ namespace KyoS.Web.Controllers
                     IdActivity4 = (activities_list.Count > 3) ? activities_list[3].Activity.Id : 0,
                     Activities4 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 3) ? activities_list[3].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
                 };
-            }            
+            }
 
             return View(model);
         }
@@ -738,7 +746,7 @@ namespace KyoS.Web.Controllers
                 {
                     return RedirectToAction("Home/Error404");
                 }
-                
+
                 List<Workday_Activity_Facilitator> activities_list = await _context.Workdays_Activities_Facilitators
                                                                                    .Where(waf => (waf.Workday.Id == model.IdWorkday
                                                                                                && waf.Facilitator.Id == facilitator_logged.Id))
@@ -803,7 +811,7 @@ namespace KyoS.Web.Controllers
 
         //Schema 3
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> CreateActivitiesWeek3(int id = 0, int error = 0)
+        public async Task<IActionResult> CreateActivitiesWeek3(int id = 0, int error = 0, bool am = false, bool pm = false)
         {
             //The user must select at least one skill adressed per theme 
             if (error == 1)
@@ -815,7 +823,7 @@ namespace KyoS.Web.Controllers
             IEnumerable<SelectListItem> list4;
 
             Workday_Activity_Facilitator3ViewModel model;
-            
+
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
                                                    .ThenInclude(c => c.Setting)
@@ -827,7 +835,7 @@ namespace KyoS.Web.Controllers
             }
 
             WorkdayEntity workday = await _context.Workdays
-                                                  
+
                                                   .Include(wd => wd.Week)
                                                   .ThenInclude(w => w.Clinic)
 
@@ -865,6 +873,7 @@ namespace KyoS.Web.Controllers
             list3 = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id);
             list4 = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id);
 
+            ViewData["edit"] = 1;
             //No hay creadas actividades del facilitador logueado en la fecha seleccionada
             if (activities_list.Count() == 0)
             {
@@ -889,72 +898,129 @@ namespace KyoS.Web.Controllers
                     IdTopic4 = 0,
                     Topics4 = list4,
                     Activities4 = null,
+
+                    AM = true,
+                    PM = true
                 };
             }
             else
             {
-                model = new Workday_Activity_Facilitator3ViewModel
+                if (activities_list.Count() == 4 && (activities_list.ElementAtOrDefault(0).AM == false || activities_list.ElementAtOrDefault(0).PM == false))
                 {
-                    IdWorkday = id,
-                    Date = workday.Date.ToShortDateString(),
-                    Day = workday.Date.DayOfWeek.ToString(),
+                    model = new Workday_Activity_Facilitator3ViewModel
+                    {
+                        IdWorkday = id,
+                        Date = workday.Date.ToShortDateString(),
+                        Day = workday.Date.DayOfWeek.ToString(),
 
-                    IdTopic1 = (activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0,
-                    Topics1 = list1,
-                    IdActivity1 = (activities_list.Count > 0) ? activities_list[0].Activity.Id : 0,
-                    Activities1 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
-                    activityDailyLiving1 = activities_list[0].activityDailyLiving == null ? false : Convert.ToBoolean(activities_list[0].activityDailyLiving),
-                    communityResources1 = activities_list[0].communityResources == null ? false : Convert.ToBoolean(activities_list[0].communityResources),
-                    copingSkills1 = activities_list[0].copingSkills == null ? false : Convert.ToBoolean(activities_list[0].copingSkills),
-                    diseaseManagement1 = activities_list[0].diseaseManagement == null ? false : Convert.ToBoolean(activities_list[0].diseaseManagement),
-                    healthyLiving1 = activities_list[0].healthyLiving == null ? false : Convert.ToBoolean(activities_list[0].healthyLiving),
-                    lifeSkills1 = activities_list[0].lifeSkills == null ? false : Convert.ToBoolean(activities_list[0].lifeSkills),
-                    relaxationTraining1 = activities_list[0].relaxationTraining == null ? false : Convert.ToBoolean(activities_list[0].relaxationTraining),
-                    socialSkills1 = activities_list[0].socialSkills == null ? false : Convert.ToBoolean(activities_list[0].socialSkills),
-                    stressManagement1 = activities_list[0].stressManagement == null ? false : Convert.ToBoolean(activities_list[0].stressManagement),
+                        IdTopic1 = 0,
+                        Topics1 = list1,
+                        Activities1 = null,
 
-                    IdTopic2 = (activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0,
-                    Topics2 = list2,
-                    IdActivity2 = (activities_list.Count > 1) ? activities_list[1].Activity.Id : 0,
-                    Activities2 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
-                    activityDailyLiving2 = activities_list[1].activityDailyLiving == null ? false : Convert.ToBoolean(activities_list[1].activityDailyLiving),
-                    communityResources2 = activities_list[1].communityResources == null ? false : Convert.ToBoolean(activities_list[1].communityResources),
-                    copingSkills2 = activities_list[1].copingSkills == null ? false : Convert.ToBoolean(activities_list[1].copingSkills),
-                    diseaseManagement2 = activities_list[1].diseaseManagement == null ? false : Convert.ToBoolean(activities_list[1].diseaseManagement),
-                    healthyLiving2 = activities_list[1].healthyLiving == null ? false : Convert.ToBoolean(activities_list[1].healthyLiving),
-                    lifeSkills2 = activities_list[1].lifeSkills == null ? false : Convert.ToBoolean(activities_list[1].lifeSkills),
-                    relaxationTraining2 = activities_list[1].relaxationTraining == null ? false : Convert.ToBoolean(activities_list[1].relaxationTraining),
-                    socialSkills2 = activities_list[1].socialSkills == null ? false : Convert.ToBoolean(activities_list[1].socialSkills),
-                    stressManagement2 = activities_list[1].stressManagement == null ? false : Convert.ToBoolean(activities_list[1].stressManagement),
+                        IdTopic2 = 0,
+                        Topics2 = list2,
+                        Activities2 = null,
 
-                    IdTopic3 = (activities_list.Count > 2) ? activities_list[2].Activity.Theme.Id : 0,
-                    Topics3 = list3,
-                    IdActivity3 = (activities_list.Count > 2) ? activities_list[2].Activity.Id : 0,
-                    Activities3 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 2) ? activities_list[2].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
-                    activityDailyLiving3 = activities_list[2].activityDailyLiving == null ? false : Convert.ToBoolean(activities_list[2].activityDailyLiving),
-                    communityResources3 = activities_list[2].communityResources == null ? false : Convert.ToBoolean(activities_list[2].communityResources),
-                    copingSkills3 = activities_list[2].copingSkills == null ? false : Convert.ToBoolean(activities_list[2].copingSkills),
-                    diseaseManagement3 = activities_list[2].diseaseManagement == null ? false : Convert.ToBoolean(activities_list[2].diseaseManagement),
-                    healthyLiving3 = activities_list[2].healthyLiving == null ? false : Convert.ToBoolean(activities_list[2].healthyLiving),
-                    lifeSkills3 = activities_list[2].lifeSkills == null ? false : Convert.ToBoolean(activities_list[2].lifeSkills),
-                    relaxationTraining3 = activities_list[2].relaxationTraining == null ? false : Convert.ToBoolean(activities_list[2].relaxationTraining),
-                    socialSkills3 = activities_list[2].socialSkills == null ? false : Convert.ToBoolean(activities_list[2].socialSkills),
-                    stressManagement3 = activities_list[2].stressManagement == null ? false : Convert.ToBoolean(activities_list[2].stressManagement),
+                        IdTopic3 = 0,
+                        Topics3 = list3,
+                        Activities3 = null,
 
-                    IdTopic4 = (activities_list.Count > 3) ? activities_list[3].Activity.Theme.Id : 0,
-                    Topics4 = list4,
-                    IdActivity4 = (activities_list.Count > 3) ? activities_list[3].Activity.Id : 0,
-                    Activities4 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 3) ? activities_list[3].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
-                    activityDailyLiving4 = activities_list[3].activityDailyLiving == null ? false : Convert.ToBoolean(activities_list[3].activityDailyLiving),
-                    communityResources4 = activities_list[3].communityResources == null ? false : Convert.ToBoolean(activities_list[3].communityResources),
-                    copingSkills4 = activities_list[3].copingSkills == null ? false : Convert.ToBoolean(activities_list[3].copingSkills),
-                    diseaseManagement4 = activities_list[3].diseaseManagement == null ? false : Convert.ToBoolean(activities_list[3].diseaseManagement),
-                    healthyLiving4 = activities_list[3].healthyLiving == null ? false : Convert.ToBoolean(activities_list[3].healthyLiving),
-                    lifeSkills4 = activities_list[3].lifeSkills == null ? false : Convert.ToBoolean(activities_list[3].lifeSkills),
-                    relaxationTraining4 = activities_list[3].relaxationTraining == null ? false : Convert.ToBoolean(activities_list[3].relaxationTraining),
-                    socialSkills4 = activities_list[3].socialSkills == null ? false : Convert.ToBoolean(activities_list[3].socialSkills),
-                    stressManagement4 = activities_list[3].stressManagement == null ? false : Convert.ToBoolean(activities_list[3].stressManagement),
-                };
+                        IdTopic4 = 0,
+                        Topics4 = list4,
+                        Activities4 = null,
+
+                        AM = activities_list.ElementAtOrDefault(0).PM,
+                        PM = activities_list.ElementAtOrDefault(0).AM
+                    };
+                    ViewData["edit"] = 0;
+                }
+                else
+                {
+                    if (activities_list.Count() == 8)
+                    {
+                        activities_list = await _context.Workdays_Activities_Facilitators
+
+                                                    .Include(waf => waf.Activity)
+                                                    .ThenInclude(a => a.Theme)
+
+                                                    .Where(waf => (waf.Workday.Id == workday.Id
+                                                        && waf.Facilitator.Id == facilitator_logged.Id
+                                                        && waf.AM == am
+                                                        && waf.PM == pm))
+                                                    .ToListAsync();
+                    }
+                    if (activities_list.Count() == 4)
+                    {
+                        ViewData["edit"] = 0;
+                    }
+                    
+                    model = new Workday_Activity_Facilitator3ViewModel
+                    {
+                        IdWorkday = id,
+                        Date = workday.Date.ToShortDateString(),
+                        Day = workday.Date.DayOfWeek.ToString(),
+
+                        IdTopic1 = (activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0,
+                        Topics1 = list1,
+                        IdActivity1 = (activities_list.Count > 0) ? activities_list[0].Activity.Id : 0,
+                        Activities1 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
+                        activityDailyLiving1 = activities_list[0].activityDailyLiving == null ? false : Convert.ToBoolean(activities_list[0].activityDailyLiving),
+                        communityResources1 = activities_list[0].communityResources == null ? false : Convert.ToBoolean(activities_list[0].communityResources),
+                        copingSkills1 = activities_list[0].copingSkills == null ? false : Convert.ToBoolean(activities_list[0].copingSkills),
+                        diseaseManagement1 = activities_list[0].diseaseManagement == null ? false : Convert.ToBoolean(activities_list[0].diseaseManagement),
+                        healthyLiving1 = activities_list[0].healthyLiving == null ? false : Convert.ToBoolean(activities_list[0].healthyLiving),
+                        lifeSkills1 = activities_list[0].lifeSkills == null ? false : Convert.ToBoolean(activities_list[0].lifeSkills),
+                        relaxationTraining1 = activities_list[0].relaxationTraining == null ? false : Convert.ToBoolean(activities_list[0].relaxationTraining),
+                        socialSkills1 = activities_list[0].socialSkills == null ? false : Convert.ToBoolean(activities_list[0].socialSkills),
+                        stressManagement1 = activities_list[0].stressManagement == null ? false : Convert.ToBoolean(activities_list[0].stressManagement),
+
+                        IdTopic2 = (activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0,
+                        Topics2 = list2,
+                        IdActivity2 = (activities_list.Count > 1) ? activities_list[1].Activity.Id : 0,
+                        Activities2 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
+                        activityDailyLiving2 = activities_list[1].activityDailyLiving == null ? false : Convert.ToBoolean(activities_list[1].activityDailyLiving),
+                        communityResources2 = activities_list[1].communityResources == null ? false : Convert.ToBoolean(activities_list[1].communityResources),
+                        copingSkills2 = activities_list[1].copingSkills == null ? false : Convert.ToBoolean(activities_list[1].copingSkills),
+                        diseaseManagement2 = activities_list[1].diseaseManagement == null ? false : Convert.ToBoolean(activities_list[1].diseaseManagement),
+                        healthyLiving2 = activities_list[1].healthyLiving == null ? false : Convert.ToBoolean(activities_list[1].healthyLiving),
+                        lifeSkills2 = activities_list[1].lifeSkills == null ? false : Convert.ToBoolean(activities_list[1].lifeSkills),
+                        relaxationTraining2 = activities_list[1].relaxationTraining == null ? false : Convert.ToBoolean(activities_list[1].relaxationTraining),
+                        socialSkills2 = activities_list[1].socialSkills == null ? false : Convert.ToBoolean(activities_list[1].socialSkills),
+                        stressManagement2 = activities_list[1].stressManagement == null ? false : Convert.ToBoolean(activities_list[1].stressManagement),
+
+                        IdTopic3 = (activities_list.Count > 2) ? activities_list[2].Activity.Theme.Id : 0,
+                        Topics3 = list3,
+                        IdActivity3 = (activities_list.Count > 2) ? activities_list[2].Activity.Id : 0,
+                        Activities3 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 2) ? activities_list[2].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
+                        activityDailyLiving3 = activities_list[2].activityDailyLiving == null ? false : Convert.ToBoolean(activities_list[2].activityDailyLiving),
+                        communityResources3 = activities_list[2].communityResources == null ? false : Convert.ToBoolean(activities_list[2].communityResources),
+                        copingSkills3 = activities_list[2].copingSkills == null ? false : Convert.ToBoolean(activities_list[2].copingSkills),
+                        diseaseManagement3 = activities_list[2].diseaseManagement == null ? false : Convert.ToBoolean(activities_list[2].diseaseManagement),
+                        healthyLiving3 = activities_list[2].healthyLiving == null ? false : Convert.ToBoolean(activities_list[2].healthyLiving),
+                        lifeSkills3 = activities_list[2].lifeSkills == null ? false : Convert.ToBoolean(activities_list[2].lifeSkills),
+                        relaxationTraining3 = activities_list[2].relaxationTraining == null ? false : Convert.ToBoolean(activities_list[2].relaxationTraining),
+                        socialSkills3 = activities_list[2].socialSkills == null ? false : Convert.ToBoolean(activities_list[2].socialSkills),
+                        stressManagement3 = activities_list[2].stressManagement == null ? false : Convert.ToBoolean(activities_list[2].stressManagement),
+
+                        IdTopic4 = (activities_list.Count > 3) ? activities_list[3].Activity.Theme.Id : 0,
+                        Topics4 = list4,
+                        IdActivity4 = (activities_list.Count > 3) ? activities_list[3].Activity.Id : 0,
+                        Activities4 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 3) ? activities_list[3].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
+                        activityDailyLiving4 = activities_list[3].activityDailyLiving == null ? false : Convert.ToBoolean(activities_list[3].activityDailyLiving),
+                        communityResources4 = activities_list[3].communityResources == null ? false : Convert.ToBoolean(activities_list[3].communityResources),
+                        copingSkills4 = activities_list[3].copingSkills == null ? false : Convert.ToBoolean(activities_list[3].copingSkills),
+                        diseaseManagement4 = activities_list[3].diseaseManagement == null ? false : Convert.ToBoolean(activities_list[3].diseaseManagement),
+                        healthyLiving4 = activities_list[3].healthyLiving == null ? false : Convert.ToBoolean(activities_list[3].healthyLiving),
+                        lifeSkills4 = activities_list[3].lifeSkills == null ? false : Convert.ToBoolean(activities_list[3].lifeSkills),
+                        relaxationTraining4 = activities_list[3].relaxationTraining == null ? false : Convert.ToBoolean(activities_list[3].relaxationTraining),
+                        socialSkills4 = activities_list[3].socialSkills == null ? false : Convert.ToBoolean(activities_list[3].socialSkills),
+                        stressManagement4 = activities_list[3].stressManagement == null ? false : Convert.ToBoolean(activities_list[3].stressManagement),
+
+                        AM = activities_list.ElementAtOrDefault(0).AM,
+                        PM = activities_list.ElementAtOrDefault(0).PM
+                    };
+                }
+                
             }
 
             return View(model);
@@ -967,6 +1033,11 @@ namespace KyoS.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (model.AM == false && model.PM == false)
+                {
+                    
+                    return RedirectToAction("CreateActivitiesWeek","Activities", new { id = model.IdWorkday});
+                }
                 //The user must select at least one skill adressed per theme 
                 if ((!model.activityDailyLiving1 && !model.communityResources1 && !model.copingSkills1 && !model.diseaseManagement1 && !model.healthyLiving1 && !model.lifeSkills1 && !model.relaxationTraining1 && !model.socialSkills1 && !model.stressManagement1)
                     || (!model.activityDailyLiving2 && !model.communityResources2 && !model.copingSkills2 && !model.diseaseManagement2 && !model.healthyLiving2 && !model.lifeSkills2 && !model.relaxationTraining2 && !model.socialSkills2 && !model.stressManagement2)
@@ -992,7 +1063,9 @@ namespace KyoS.Web.Controllers
 
                 List<Workday_Activity_Facilitator> activities_list = await _context.Workdays_Activities_Facilitators
                                                                                    .Where(waf => (waf.Workday.Id == model.IdWorkday
-                                                                                               && waf.Facilitator.Id == facilitator_logged.Id))
+                                                                                               && waf.Facilitator.Id == facilitator_logged.Id
+                                                                                               && waf.AM == model.AM
+                                                                                               && waf.PM == model.PM))
                                                                                    .ToListAsync();
                 //elimino las actividades que tiene asociada ese facilitator en ese dia
                 _context.RemoveRange(activities_list);
@@ -1012,7 +1085,10 @@ namespace KyoS.Web.Controllers
                     lifeSkills = model.lifeSkills1,
                     relaxationTraining = model.relaxationTraining1,
                     socialSkills = model.socialSkills1,
-                    stressManagement = model.stressManagement1
+                    stressManagement = model.stressManagement1,
+                    AM = model.AM,
+                    PM = model.PM
+
                 };
                 _context.Add(activity);
                 activity = new Workday_Activity_Facilitator
@@ -1029,7 +1105,9 @@ namespace KyoS.Web.Controllers
                     lifeSkills = model.lifeSkills2,
                     relaxationTraining = model.relaxationTraining2,
                     socialSkills = model.socialSkills2,
-                    stressManagement = model.stressManagement2
+                    stressManagement = model.stressManagement2,
+                    AM = model.AM,
+                    PM = model.PM
                 };
                 _context.Add(activity);
                 activity = new Workday_Activity_Facilitator
@@ -1046,7 +1124,9 @@ namespace KyoS.Web.Controllers
                     lifeSkills = model.lifeSkills3,
                     relaxationTraining = model.relaxationTraining3,
                     socialSkills = model.socialSkills3,
-                    stressManagement = model.stressManagement3
+                    stressManagement = model.stressManagement3,
+                    AM = model.AM,
+                    PM = model.PM
                 };
                 _context.Add(activity);
                 activity = new Workday_Activity_Facilitator
@@ -1063,7 +1143,9 @@ namespace KyoS.Web.Controllers
                     lifeSkills = model.lifeSkills4,
                     relaxationTraining = model.relaxationTraining4,
                     socialSkills = model.socialSkills4,
-                    stressManagement = model.stressManagement4
+                    stressManagement = model.stressManagement4,
+                    AM = model.AM,
+                    PM = model.PM
                 };
                 _context.Add(activity);
 
@@ -1724,6 +1806,54 @@ namespace KyoS.Web.Controllers
                                           .Include(t => t.Clinic)
                                           .Where(t => t.Day == null)
                                           .OrderBy(t => t.Day).ToListAsync());
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> DeleteActivityPerWeek(int? idWorkday)
+        {
+            UserEntity user_logged = await _context.Users
+                                                  .Include(u => u.Clinic)
+                                                  .ThenInclude(c => c.Setting)
+                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (idWorkday == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            List <Workday_Activity_Facilitator> workdayActivityFacilitator = await _context.Workdays_Activities_Facilitators
+                                                                                           .Include(n => n.Workday)
+                                                                                           .Where(t => (t.Workday.Id == idWorkday
+                                                                                                && t.Facilitator.LinkedUser == user_logged.UserName))
+                                                                                           .ToListAsync();
+
+            List<Workday_Client> workdayClient = await _context.Workdays_Clients
+                                                               .Include(n => n.Workday)
+                                                               .Include(n => n.Note)
+                                                               .Include(n => n.NoteP)
+                                                               .Include(n => n.IndividualNote)
+                                                               .Include(n => n.GroupNote)
+                                                               .Where(t => (t.Workday.Id == idWorkday
+                                                                    && t.Facilitator.LinkedUser == user_logged.UserName
+                                                                    && (t.Note != null
+                                                                    || t.NoteP != null
+                                                                    || t.IndividualNote != null
+                                                                    || t.GroupNote != null)))
+                                                               .ToListAsync();
+
+            if (workdayClient.Count() > 0)
+            {
+                return RedirectToAction("ActivitiesPerWeek", "Activities", new { idError = 1});
+            }
+
+            foreach (var item in workdayActivityFacilitator)
+            {
+                _context.Workdays_Activities_Facilitators.Remove(item);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ActivitiesPerWeek", "Activities");
         }
 
         #region Utils functions

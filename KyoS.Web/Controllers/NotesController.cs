@@ -914,10 +914,12 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> EditNoteP(int id, int error = 0, int origin = 0, string errorText = "")
         {
             NotePViewModel noteViewModel;
-            
+            bool am = false;
+            bool pm = false;
+           
             //la nota no tiene linkeado ningun goal
             if (error == 1)
-                ViewBag.Error = "0";
+            ViewBag.Error = "0";
 
             //la nota no esta completa, faltan campos por editar
             if (error == 2)
@@ -967,11 +969,23 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
+            if (workday_Client.Session == "AM")
+            {
+                am = true;
+            }
+            else
+            {
+                pm = true;
+             }
+
             FacilitatorEntity facilitator_logged = _context.Facilitators
                                                            .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
 
             //el dia no tiene actividad asociada para el facilitator logueado por lo tanto no se puede crear la nota
-            if (workday_Client.Workday.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator == facilitator_logged).Count() == 0)
+            List<Workday_Activity_Facilitator> workday_Activity_Facilitators = workday_Client.Workday.Workdays_Activities_Facilitators
+                                                                                                     .Where(waf => waf.Facilitator == facilitator_logged)   
+                                                                                                     .ToList();
+            if (workday_Activity_Facilitators.Count() == 0)
             {
                 ViewBag.Error = "1";
                 noteViewModel = new NotePViewModel
@@ -979,6 +993,34 @@ namespace KyoS.Web.Controllers
                     Id = workday_Client.Workday.Id,
                 };
                 return View(noteViewModel);
+            }
+            else
+            {
+                if (am == true)
+                {
+                    
+                    if (workday_Activity_Facilitators.Where(n => n.AM == am).Count() == 0)
+                    {
+                        ViewBag.Error = "1";
+                        noteViewModel = new NotePViewModel
+                        {
+                            Id = workday_Client.Workday.Id,
+                        };
+                        return View(noteViewModel);
+                    }
+                }
+                if (pm == true)
+                {
+                    if (workday_Activity_Facilitators.Where(n => n.PM == pm).Count() == 0)
+                    {
+                        ViewBag.Error = "1";
+                        noteViewModel = new NotePViewModel
+                        {
+                            Id = workday_Client.Workday.Id,
+                        };
+                        return View(noteViewModel);
+                    }
+                }
             }
 
             //el cliente no tiene mtp activos
@@ -1010,10 +1052,23 @@ namespace KyoS.Web.Controllers
             MTPEntity mtp = _context.MTPs
                                     .FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
 
-            List<Workday_Activity_Facilitator> activities = workday_Client.Workday
-                                                                          .Workdays_Activities_Facilitators
-                                                                          .Where(waf => waf.Facilitator == facilitator_logged)
-                                                                          .ToList();
+            List<Workday_Activity_Facilitator> activities;
+            if (am == true)
+            {
+                 activities = workday_Client.Workday
+                                            .Workdays_Activities_Facilitators
+                                            .Where(waf => (waf.Facilitator == facilitator_logged
+                                                && waf.AM == true))
+                                            .ToList();
+            }
+            else
+            {
+                activities = workday_Client.Workday
+                                           .Workdays_Activities_Facilitators
+                                           .Where(waf => (waf.Facilitator == facilitator_logged
+                                               && waf.PM == true))
+                                           .ToList();
+            }
 
             //Evaluate setting for goals's classification
             SettingEntity setting = _context.Settings
