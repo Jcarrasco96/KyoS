@@ -3723,7 +3723,26 @@ namespace KyoS.Web.Helpers
 
             dataSet = new DataSet();
             dataSet.Tables.Add(GetObjetivesListDS(objetives3));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives3");            
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives3");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if ((addendum.Supervisor != null) && (!string.IsNullOrEmpty(addendum.Supervisor.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(addendum.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if ((addendum.Facilitator != null) && (!string.IsNullOrEmpty(addendum.Facilitator.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(addendum.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
 
             WebReport.Report.Prepare();
 
@@ -3836,6 +3855,25 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetObjetivesListDS(objetives3));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives3");
 
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if ((addendum.Supervisor != null) && (!string.IsNullOrEmpty(addendum.Supervisor.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(addendum.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if ((addendum.Facilitator != null) && (!string.IsNullOrEmpty(addendum.Facilitator.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(addendum.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
             WebReport.Report.Prepare();
 
             Stream stream = new MemoryStream();
@@ -3879,7 +3917,32 @@ namespace KyoS.Web.Helpers
             dataSet = new DataSet();
             dataSet.Tables.Add(GetMTPReviewDS(review));
             WebReport.Report.RegisterData(dataSet.Tables[0], "MTPReviews");
-            
+
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .FirstOrDefault(f => f.Name == review.Therapist);            
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            //if ((addendum.Supervisor != null) && (!string.IsNullOrEmpty(addendum.Supervisor.SignaturePath)))
+            //{
+            //    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(addendum.Supervisor.SignaturePath)}");
+            //    stream1 = _imageHelper.ImageToByteArray(path);
+            //}
+            if ((facilitator != null) && (!string.IsNullOrEmpty(facilitator.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
             WebReport.Report.Prepare();
 
             Stream stream = new MemoryStream();
@@ -3920,6 +3983,27 @@ namespace KyoS.Web.Helpers
             dataSet = new DataSet();
             dataSet.Tables.Add(GetMTPReviewDS(review));
             WebReport.Report.RegisterData(dataSet.Tables[0], "MTPReviews");
+
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .FirstOrDefault(f => f.Name == review.Therapist);
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            //if ((addendum.Supervisor != null) && (!string.IsNullOrEmpty(addendum.Supervisor.SignaturePath)))
+            //{
+            //    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(addendum.Supervisor.SignaturePath)}");
+            //    stream1 = _imageHelper.ImageToByteArray(path);
+            //}
+            if ((facilitator != null) && (!string.IsNullOrEmpty(facilitator.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
 
             WebReport.Report.Prepare();
 
