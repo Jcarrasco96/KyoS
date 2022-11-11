@@ -181,7 +181,7 @@
                                                 }
                                             }
                                         }
-
+                                        <a asp-action="DeleteNote" asp-controller="Notes" asp-route-idWorkday_client="@day_client.Id" class="btn btn-danger" title="Delete note" ><i class="glyphicon glyphicon-trash"></i></a>
                                     </td>
                                 </tr>
 
@@ -249,12 +249,13 @@
                                             }
                                         }
                                         else
-                                        { 
+                                        {
                                             <a asp-action="PrintNote" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print PSR note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
+                                        <a asp-action="DeleteNote" asp-controller="Notes" asp-route-idWorkday_client="@day_client.Id" class="btn btn-danger" title="Delete note"><i class="glyphicon glyphicon-trash"></i></a>
+
                                     </td>
                                 </tr>
-
                             }
                         }
                     </tbody>

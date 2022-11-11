@@ -11017,5 +11017,35 @@ namespace KyoS.Web.Controllers
 
             return View(model);            
         }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeleteNote(int? idWorkday_client)
+        {
+            UserEntity user_logged = await _context.Users
+                                                  .Include(u => u.Clinic)
+                                                  .ThenInclude(c => c.Setting)
+                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (idWorkday_client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Workday_Client workday_Client = await _context.Workdays_Clients
+                                                          .Include(n => n.Client)
+                                                          .FirstAsync(t => t.Id == idWorkday_client);
+
+
+            if (workday_Client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            _context.Workdays_Clients.Remove(workday_Client);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = workday_Client.Client.Id });
+        }
+
     }
 }
