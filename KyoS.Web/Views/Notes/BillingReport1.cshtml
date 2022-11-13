@@ -23,25 +23,20 @@
     <form asp-action="BillingReport1" enctype="multipart/form-data">
         <div class="form-group col-md-5">
             <label asp-for="IdWeek" class="control-label">Date Range</label>&nbsp;*
-            <select asp-for="IdWeek" asp-items="Model.WeeksListName" class="form-control"></select>
-            <span asp-validation-for="IdWeek" class="text-danger"></span>
-        </div>
-        @*<div class="form-group col-md-3">
-            <label asp-for="IdFacilitator" class="control-label">Select Facilitator</label>
-            <select asp-for="IdFacilitator" asp-items="Model.Facilitators" class="form-control"></select>
-            <span asp-validation-for="IdFacilitator" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-3">
-            <label asp-for="IdClient" class="control-label">Select client</label>
-            <select asp-for="IdClient" asp-items="Model.Clients" class="form-control"></select>
-            <span asp-validation-for="IdClient" class="text-danger"></span>
-        </div>*@
-        <div class="container-fluid">
-            &nbsp;
-        </div>
-        <div class="col-md-12">
-            <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-filter"></i> Filter</button>
-        </div>
+            <table border="0" width="100%">
+                <tr>
+                    <td>
+                        <select asp-for="IdWeek" asp-items="Model.WeeksListName" class="form-control" id="cbWeek"></select>                        
+                    </td>
+                    <td>
+                        &nbsp;&nbsp;
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success" title="Refresh"><i class="glyphicon glyphicon-refresh"></i></button>
+                    </td>
+                </tr>                
+            </table>
+        </div>        
     </form>
     <div class="col-md-12">
         <hr />
@@ -401,10 +396,7 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script src="~/js/moment.min.js"></script>
     <script src="~/js/datetime-moment.js"></script>
-    <script src="~/js/datepicker.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="~/js/datepicker.en.js" type="text/javascript" charset="utf-8"></script>
-
-
+   
     <script type="text/javascript">
         $(document).ready(function () {
 
@@ -415,17 +407,15 @@
                 "pageLength": 100
             });
 
-            // Delete item
-            var item_to_delete;
-
-            $('.deleteItem').click((e) => {
-                item_to_delete = e.currentTarget.dataset.id;
-            });
-
-            $("#btnYesDelete").click(function () {
-                var url = "@Url.Action("Delete", "WorkDays")";
-                window.location.href = url + '/' + item_to_delete;
-            });
+            $("#cbWeek").change(function () {
+                var url = "@Url.Action("BillingReport1", "Notes")";                
+                var wwwUrlPath = window.document.location.href;
+                var pathName = window.document.location.pathname;
+                var pos = wwwUrlPath.indexOf(pathName);
+                var localhostPath = wwwUrlPath.substring(0, pos);
+                var url = 'Notes/BillingReport1';
+                window.location.href = localhostPath + '/' + url + '?idWeek=' + $("#cbWeek").val();
+            })
         });
         $(function () {
 
