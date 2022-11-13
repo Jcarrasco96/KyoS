@@ -840,7 +840,7 @@ namespace KyoS.Web.Controllers
                                                   .ThenInclude(w => w.Clinic)
 
                                                   .Include(wd => wd.Workdays_Clients)
-                                                  .ThenInclude(wc => wc.Note)
+                                                  .ThenInclude(wc => wc.NoteP)
 
                                                   .FirstOrDefaultAsync(w => w.Id == id);
 
@@ -1822,17 +1822,13 @@ namespace KyoS.Web.Controllers
             }
 
             List <Workday_Activity_Facilitator> workdayActivityFacilitator = await _context.Workdays_Activities_Facilitators
-                                                                                           .Include(n => n.Workday)
+                                                                                           
                                                                                            .Where(t => (t.Workday.Id == idWorkday
                                                                                                 && t.Facilitator.LinkedUser == user_logged.UserName))
                                                                                            .ToListAsync();
 
-            List<Workday_Client> workdayClient = await _context.Workdays_Clients
-                                                               .Include(n => n.Workday)
-                                                               .Include(n => n.Note)
-                                                               .Include(n => n.NoteP)
-                                                               .Include(n => n.IndividualNote)
-                                                               .Include(n => n.GroupNote)
+            List<Workday_Client> workdayClient = await _context.Workdays_Clients     
+                
                                                                .Where(t => (t.Workday.Id == idWorkday
                                                                     && t.Facilitator.LinkedUser == user_logged.UserName
                                                                     && (t.Note != null

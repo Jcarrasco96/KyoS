@@ -1477,13 +1477,15 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboWeeksName()
+        public IEnumerable<SelectListItem> GetComboWeeksNameByClinic(int idClinic)
         {
-            List<SelectListItem> list = _context.Weeks.Select(c => new SelectListItem
-            {
-                Text = $"{c.InitDate.ToLongDateString()} - {c.FinalDate.ToLongDateString()}",
-                Value = $"{c.Id}"
-            }).ToList();
+            List<SelectListItem> list = _context.Weeks
+                                                .Where(w => w.Clinic.Id == idClinic)
+                                                .Select(c => new SelectListItem
+                                            {
+                                                Text = $"{c.InitDate.ToLongDateString()} - {c.FinalDate.ToLongDateString()}",
+                                                Value = $"{c.Id}"
+                                            }).ToList();
 
             list.Insert(0, new SelectListItem
             {
