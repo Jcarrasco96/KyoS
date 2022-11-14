@@ -408,11 +408,9 @@
             });
 
             $("#cbWeek").change(function () {
-                var url = "@Url.Action("BillingReport1", "Notes")";                
                 var wwwUrlPath = window.document.location.href;
-                var pathName = window.document.location.pathname;
-                var pos = wwwUrlPath.indexOf(pathName);
-                var localhostPath = wwwUrlPath.substring(0, pos);
+                var pos = wwwUrlPath.indexOf('/Notes/BillingReport1');
+                var localhostPath = wwwUrlPath.substring(0, pos);                
                 var url = 'Notes/BillingReport1';
                 window.location.href = localhostPath + '/' + url + '?idWeek=' + $("#cbWeek").val();
             })
