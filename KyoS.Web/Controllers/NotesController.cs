@@ -10207,7 +10207,7 @@ namespace KyoS.Web.Controllers
 
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                 && w.Days.Where(d => d.Service == ServiceType.PSR).Count() > 0))
-                                      .ToListAsync());
+                                      .ToListAsync());                                      
         }
 
         [Authorize(Roles = "Manager")]
@@ -10220,21 +10220,23 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
-            return View(await _context.Weeks.Include(w => w.Days)
-                                            .ThenInclude(d => d.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Client)                                            
+            return View(await _context.Weeks                                    
 
-                                            .Include(w => w.Days)
-                                            .ThenInclude(d => d.Workdays_Clients)
-                                            .ThenInclude(g => g.Facilitator)
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(wc => wc.Client)                                            
 
-                                            .Include(w => w.Days)
-                                            .ThenInclude(d => d.Workdays_Clients)
-                                            .ThenInclude(wc => wc.IndividualNote)
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(g => g.Facilitator)
 
-                                            .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
-                                                      && w.Days.Where(d => d.Service == ServiceType.Individual).Count() > 0))
-                                            .ToListAsync());
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(wc => wc.IndividualNote)
+
+                                      .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                && w.Days.Where(d => d.Service == ServiceType.Individual).Count() > 0))
+                                      .ToListAsync());
         }
 
         [Authorize(Roles = "Manager")]
@@ -10248,21 +10250,23 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            return View(await _context.Weeks.Include(w => w.Days)
-                                            .ThenInclude(d => d.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Client)
+            return View(await _context.Weeks                                     
 
-                                            .Include(w => w.Days)
-                                            .ThenInclude(d => d.Workdays_Clients)
-                                            .ThenInclude(g => g.Facilitator)
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(wc => wc.Client)
 
-                                            .Include(w => w.Days)
-                                            .ThenInclude(d => d.Workdays_Clients)
-                                            .ThenInclude(wc => wc.GroupNote)
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(g => g.Facilitator)
 
-                                            .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
-                                                      && w.Days.Where(d => d.Service == ServiceType.Group).Count() > 0))
-                                            .ToListAsync());
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(wc => wc.GroupNote)
+
+                                      .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                && w.Days.Where(d => d.Service == ServiceType.Group).Count() > 0))
+                                      .ToListAsync());
         }
 
         [Authorize(Roles = "Facilitator")]
