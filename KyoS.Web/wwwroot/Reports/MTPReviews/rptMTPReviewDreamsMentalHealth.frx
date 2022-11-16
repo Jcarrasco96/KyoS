@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="11/10/2022 13:00:55" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="11/15/2022 17:56:01" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3ChwypQpblJuji8S8d3Pt6g==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3KAZpRYS8UIgFNXDjPzG3rQ==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -229,7 +229,6 @@
       <TextObject Name="Text815" Left="245.7" Top="642.15" Width="132.3" Height="18.9" Text="[MTPReviews.DateClinicalDirector]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text816" Left="633.15" Top="641.7" Width="141.75" Height="18.9" Text="[MTPReviews.DateLicensedPractitioner]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
       <PictureObject Name="Picture5" Left="463.05" Top="527.65" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
-      <PictureObject Name="Picture6" Left="61.15" Top="601.8" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
       <PictureObject Name="Picture7" Left="463.05" Top="601.8" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
     </DataBand>
   </ReportPage>
