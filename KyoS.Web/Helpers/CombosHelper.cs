@@ -282,6 +282,7 @@ namespace KyoS.Web.Helpers
         public IEnumerable<SelectListItem> GetComboClientsForIndNotes(int idClinic, int idWeek, int idFacilitator)
         {
             List<ClientEntity> clients = _context.Clients
+                                                 .Include(n => n.DischargeList)
                                                  .Where(c => (c.Clinic.Id == idClinic
                                                            && c.MTPs.Where(m => m.Active == true).Count() > 0 && c.Status == StatusType.Open
                                                            && c.IndividualTherapyFacilitator.Id == idFacilitator))
@@ -290,7 +291,7 @@ namespace KyoS.Web.Helpers
             List<Workday_Client> workdays_clients = _context.Workdays_Clients
 
                                                             .Include(wc => wc.Client)
-
+                                                            .ThenInclude(n => n.DischargeList)
                                                             .Where(wc => (wc.Workday.Week.Id == idWeek && wc.Workday.Service == ServiceType.Individual))
                                                             .ToList();
 
@@ -298,10 +299,13 @@ namespace KyoS.Web.Helpers
             {
                 if (item.Client != null)
                 {
-                    if (clients.Exists(c => c.Id == item.Client.Id))
+                    if (clients.Exists(c => c.Id == item.Client.Id ))
                         clients.Remove(item.Client);
+
                 }
             }
+
+            clients = clients.Where(n => n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() == 0).OrderBy(n => n.Name).ToList();
 
             List<SelectListItem> list = clients.Select(c => new SelectListItem
                                                 {
