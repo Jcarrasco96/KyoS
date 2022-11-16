@@ -1,9 +1,10 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.WeekEntity>
+﻿@model KyoS.Web.Models.BillingReportViewModel
 @{
     ViewData["Title"] = "PSR notes summary";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/css/datepicker.min.css">
 
 <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
@@ -16,6 +17,32 @@
 </div>
 
 <div class="row">
+    <form asp-action="NotesSummaryDetails" enctype="multipart/form-data">
+        <div class="form-group col-md-4">
+            <label class="control-label">Date Range</label>&nbsp;*<br />
+            <table border="0" width="100%">
+                <tr>
+                    <td>
+                        <input type="text"
+                               asp-for="DateIterval"
+                               data-range="true"
+                               data-multiple-dates-separator=" - "
+                               data-language="en"
+                               class="form-control datepicker-here" />
+                    </td>
+                    <td>
+                        &nbsp;&nbsp;
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success" title="Filter"><i class="glyphicon glyphicon-filter"></i> Filter</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+    <div class="col-md-12">
+        <hr />
+    </div>
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -43,11 +70,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                       @foreach (var item in Model.OrderBy(w => w.WeekOfYear))
+                        @foreach (var item in Model.Weeks.OrderBy(w => w.WeekOfYear))
                         {
                             <tr>
                                 <td align="center">
-                                   @if (item.Clinic.Facilitators.Where(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id)).Count() != 0).Count() != 0)
+                                    @if (item.Clinic.Facilitators.Where(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id)).Count() != 0).Count() != 0)
                                     {
                                         <a class="icon-plus-sign-alt"></a>
                                     }
@@ -62,7 +89,7 @@
                                                 <th class="col-md-1" style="text-align:center;">Approved</th>
                                                 <th class="col-md-1" style="text-align:center;">Absent</th>
                                             </tr>
-                                           @foreach (var facilitator in item.Clinic.Facilitators.OrderByDescending(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id)).Count()))
+                                            @foreach (var facilitator in item.Clinic.Facilitators.OrderByDescending(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id)).Count()))
                                             {
                                                 <tr>
                                                     <td>
@@ -124,73 +151,73 @@
                                     </div>
                                 </td>
                                 <td>
-                                   @if (item.MonthYear.Contains("January"))
+                                    @if (item.MonthYear.Contains("January"))
                                     {
                                         <span class="label label-default">
                                             @Html.DisplayFor(modelItem => item.MonthYear)
                                         </span>
                                     }
-                                   @if (item.MonthYear.Contains("February"))
+                                    @if (item.MonthYear.Contains("February"))
                                     {
                                         <span class="label label-info">
                                             @Html.DisplayFor(modelItem => item.MonthYear)
                                         </span>
                                     }
-                                   @if (item.MonthYear.Contains("March"))
+                                    @if (item.MonthYear.Contains("March"))
                                     {
                                         <span class="label label-primary">
                                             @Html.DisplayFor(modelItem => item.MonthYear)
                                         </span>
                                     }
-                                   @if (item.MonthYear.Contains("April"))
+                                    @if (item.MonthYear.Contains("April"))
                                     {
                                         <span class="label label-warning">
                                             @Html.DisplayFor(modelItem => item.MonthYear)
                                         </span>
                                     }
-                                   @if (item.MonthYear.Contains("May"))
+                                    @if (item.MonthYear.Contains("May"))
                                     {
                                         <span class="label label-success">
                                             @Html.DisplayFor(modelItem => item.MonthYear)
                                         </span>
                                     }
-                                   @if (item.MonthYear.Contains("June"))
+                                    @if (item.MonthYear.Contains("June"))
                                     {
                                         <span class="label label-default">
                                             @Html.DisplayFor(modelItem => item.MonthYear)
                                         </span>
                                     }
-                                   @if (item.MonthYear.Contains("July"))
+                                    @if (item.MonthYear.Contains("July"))
                                     {
                                         <span class="label label-info">
                                             @Html.DisplayFor(modelItem => item.MonthYear)
                                         </span>
                                     }
-                                   @if (item.MonthYear.Contains("August"))
+                                    @if (item.MonthYear.Contains("August"))
                                     {
                                         <span class="label label-primary">
                                             @Html.DisplayFor(modelItem => item.MonthYear)
                                         </span>
                                     }
-                                   @if (item.MonthYear.Contains("September"))
+                                    @if (item.MonthYear.Contains("September"))
                                     {
                                         <span class="label label-warning">
                                             @Html.DisplayFor(modelItem => item.MonthYear)
                                         </span>
                                     }
-                                   @if (item.MonthYear.Contains("October"))
+                                    @if (item.MonthYear.Contains("October"))
                                     {
                                         <span class="label label-success">
                                             @Html.DisplayFor(modelItem => item.MonthYear)
                                         </span>
                                     }
-                                   @if (item.MonthYear.Contains("November"))
+                                    @if (item.MonthYear.Contains("November"))
                                     {
                                         <span class="label label-default">
                                             @Html.DisplayFor(modelItem => item.MonthYear)
                                         </span>
                                     }
-                                   @if (item.MonthYear.Contains("December"))
+                                    @if (item.MonthYear.Contains("December"))
                                     {
                                         <span class="label label-info">
                                             @Html.DisplayFor(modelItem => item.MonthYear)
@@ -223,11 +250,13 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script src="~/js/moment.min.js"></script>
     <script src="~/js/datetime-moment.js"></script>
+    <script src="~/js/datepicker.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="~/js/datepicker.en.js" type="text/javascript" charset="utf-8"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
 
-            $.fn.dataTable.moment('MM/DD/YYYY');       
+            $.fn.dataTable.moment('MM/DD/YYYY');
 
             $('#MyTable').DataTable({
                 "order": [[3, "asc"]],
