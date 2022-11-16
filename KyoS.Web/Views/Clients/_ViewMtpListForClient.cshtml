@@ -93,26 +93,35 @@
                                                         }
                                                     </td>
                                                     <td align="right">
-                                                        @if (element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
-                                                        {
-                                                            <a asp-action="ReturnMtpReviewTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
-                                                            <a asp-action="PrintMTPReview" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                            <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
-                                                        }
-                                                        else
+                                                        @if (User.IsInRole("Manager"))
                                                         {
                                                             @if (element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
                                                             {
                                                                 <a asp-action="ReturnMtpReviewTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
-                                                                <a asp-action="PrintMTPReview" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                                <a asp-action="PrintMTPReview" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                                 <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
                                                             }
                                                             else
                                                             {
-                                                                <a asp-action="ReturnMtpReviewTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
-                                                                <a asp-action="PrintMTPReview" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                                <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                                                @if (element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                                {
+                                                                    <a asp-action="ReturnMtpReviewTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                                                    <a asp-action="PrintMTPReview" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                                    <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a asp-action="ReturnMtpReviewTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                                                    <a asp-action="PrintMTPReview" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                                    <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                                                }
                                                             }
+                                                        }
+                                                        else
+                                                        {
+                                                            <a asp-action="ReturnMtpReviewTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                                            <a asp-action="PrintMTPReview" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                            <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
                                                         }
                                                     </td>
                                                 </tr>
@@ -177,26 +186,35 @@
                                                     }
                                                 </td>
                                                 <td align="right">
-                                                    @if (element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
-                                                    {
-                                                        <a asp-action="ReturnAddendumsTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
-                                                        <a asp-action="PrintAdendum" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                        <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
-                                                    }
-                                                    else
+                                                    @if (User.IsInRole("Manager"))
                                                     {
                                                         @if (element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
                                                         {
                                                             <a asp-action="ReturnAddendumsTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
-                                                            <a asp-action="PrintAdendum" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                            <a asp-action="PrintAdendum" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                             <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
                                                         }
                                                         else
                                                         {
-                                                            <a asp-action="ReturnAddendumsTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
-                                                            <a asp-action="PrintAdendum" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                            <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                                            @if (element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                            {
+                                                                <a asp-action="ReturnAddendumsTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                                                <a asp-action="PrintAdendum" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                                <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a asp-action="ReturnAddendumsTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                                                <a asp-action="PrintAdendum" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                                <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                                            }
                                                         }
+                                                    }
+                                                    else
+                                                    {
+                                                        <a asp-action="ReturnAddendumsTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                                        <a asp-action="PrintAdendum" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                        <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
                                                     }
                                                 </td>
                                             </tr>
@@ -254,26 +272,35 @@
                                     }
                                 </td>
                                 <td align="right">
-                                    @if (item.Status == KyoS.Common.Enums.MTPStatus.Approved)
+                                    @if (User.IsInRole("Manager"))
                                     {
-                                        <a asp-action="ReturnTo" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
-                                        <a asp-action="PrintMTP" asp-controller="Mtps" asp-route-id="@item.Id" class="btn btn-success" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                        <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
-                                    }
-                                    else
-                                    {
-                                        @if (item.Status == KyoS.Common.Enums.MTPStatus.Pending)
+                                        @if (item.Status == KyoS.Common.Enums.MTPStatus.Approved)
                                         {
                                             <a asp-action="ReturnTo" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
-                                            <a asp-action="PrintMTP" asp-controller="Mtps" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintMTP" asp-controller="Mtps" asp-route-id="@item.Id" class="btn btn-success" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
                                         }
                                         else
                                         {
-                                            <a asp-action="ReturnTo" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
-                                            <a asp-action="PrintMTP" asp-controller="Mtps" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                            <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                            @if (item.Status == KyoS.Common.Enums.MTPStatus.Pending)
+                                            {
+                                                <a asp-action="ReturnTo" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                                <a asp-action="PrintMTP" asp-controller="Mtps" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="ReturnTo" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                                <a asp-action="PrintMTP" asp-controller="Mtps" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                            }
                                         }
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="ReturnTo" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                        <a asp-action="PrintMTP" asp-controller="Mtps" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                 </td>
                             </tr>
