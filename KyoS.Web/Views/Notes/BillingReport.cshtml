@@ -21,31 +21,27 @@
 
 <div class="row">
     <form asp-action="BillingReport" enctype="multipart/form-data">
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-4">
             <label class="control-label">Date Range</label>&nbsp;*<br />
-            <input type="text"
-                   asp-for="DateIterval"
-                   data-range="true"
-                   data-multiple-dates-separator=" - "
-                   data-language="en"
-                   class="form-control datepicker-here" />
-        </div>
-        @*<div class="form-group col-md-3">
-            <label asp-for="IdFacilitator" class="control-label">Select Facilitator</label>
-            <select asp-for="IdFacilitator" asp-items="Model.Facilitators" class="form-control"></select>
-            <span asp-validation-for="IdFacilitator" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-3">
-            <label asp-for="IdClient" class="control-label">Select client</label>
-            <select asp-for="IdClient" asp-items="Model.Clients" class="form-control"></select>
-            <span asp-validation-for="IdClient" class="text-danger"></span>
-        </div>*@
-        <div class="container-fluid">
-            &nbsp;
-        </div>
-        <div class="col-md-12">
-            <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-filter"></i> Filter</button>
-        </div>
+            <table border="0" width="100%">
+                <tr>
+                    <td>
+                        <input type="text"
+                               asp-for="DateIterval"
+                               data-range="true"
+                               data-multiple-dates-separator=" - "
+                               data-language="en"
+                               class="form-control datepicker-here" />
+                    </td>
+                    <td>
+                        &nbsp;&nbsp;
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success" title="Filter"><i class="glyphicon glyphicon-filter"></i> Filter</button>
+                    </td>
+                </tr>
+            </table>
+        </div>        
     </form>
     <div class="col-md-12">
         <hr />
