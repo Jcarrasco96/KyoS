@@ -11273,10 +11273,128 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
+            IndividualNoteEntity indNotes = await _context.IndividualNotes
+                                                     .FirstAsync(t => t.Workday_Client_FK == idWorkday_client);
+
+            if (indNotes != null)
+            {
+                _context.Remove(indNotes);
+                workday_Client.Client = null;
+                _context.Update(workday_Client);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = idWorkday_client });
+            }
+
+
             _context.Workdays_Clients.Remove(workday_Client);
             await _context.SaveChangesAsync();
 
             return RedirectToAction("ClientHistory", "Clients", new { idClient = workday_Client.Client.Id });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ReturnTo(int? id, int clientId = 0, NoteStatus aStatus = NoteStatus.Edition)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            NotePEntity notePEntity = await _context.NotesP
+                                                  .FirstOrDefaultAsync(t => t.Workday_Client_FK == id);
+            if (notePEntity == null)
+            {
+                NoteEntity noteEntity = await _context.Notes
+                                                  .FirstOrDefaultAsync(t => t.Workday_Client_FK == id);
+                if (noteEntity == null)
+                {
+                    return RedirectToAction("Home/Error404");
+                }
+                try
+                {
+                    noteEntity.Status = aStatus;
+                    _context.Notes.Update(noteEntity);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+                }
+
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+            }
+
+            try
+            {
+                notePEntity.Status = aStatus;
+                _context.NotesP.Update(notePEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+            }
+
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ReturnIndNoteTo(int? id, int clientId = 0, NoteStatus aStatus = NoteStatus.Edition)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            IndividualNoteEntity noteIndEntity = await _context.IndividualNotes
+                                                               .FirstOrDefaultAsync(t => t.Workday_Client_FK == id);
+            if (noteIndEntity == null)
+            {
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+            }
+
+            try
+            {
+                noteIndEntity.Status = aStatus;
+                _context.IndividualNotes.Update(noteIndEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+            }
+
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ReturnGroupNoteTo(int? id, int clientId = 0, NoteStatus aStatus = NoteStatus.Edition)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            GroupNoteEntity noteGroupEntity = await _context.GroupNotes
+                                                               .FirstOrDefaultAsync(t => t.Workday_Client_FK == id);
+            if (noteGroupEntity == null)
+            {
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+            }
+
+            try
+            {
+                noteGroupEntity.Status = aStatus;
+                _context.GroupNotes.Update(noteGroupEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+            }
+
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
         }
 
     }
